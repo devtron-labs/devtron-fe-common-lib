@@ -1,11 +1,12 @@
-import { AriaAttributes, HTMLAttributes } from 'react'
+import { AriaAttributes, useRef } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
+import { getUniqueId } from '@Shared/Helpers'
 
 import { Icon } from '../Icon'
-import { INDETERMINATE_ICON_WIDTH_MAP, LOADING_COLOR_MAP, SQUARE_ICON_DIMENSION_MAP } from './constants'
+import { INDETERMINATE_ICON_WIDTH_MAP, LOADING_COLOR_MAP } from './constants'
 import { SwitchProps } from './types'
 import { getSwitchContainerClass, getSwitchIconColor, getSwitchThumbClass, getSwitchTrackColor } from './utils'
 
@@ -22,8 +23,11 @@ const Switch = ({
     iconName,
     indeterminate = false,
     size = ComponentSizeType.medium,
+    name,
     onChange,
 }: SwitchProps) => {
+    const inputId = useRef(getUniqueId())
+
     const getAriaCheckedValue = (): AriaAttributes['aria-checked'] => {
         if (!isChecked) {
             return false
@@ -35,7 +39,6 @@ const Switch = ({
     const ariaCheckedValue = getAriaCheckedValue()
 
     const showIndeterminateIcon = ariaCheckedValue === 'mixed'
-    const role: HTMLAttributes<HTMLButtonElement>['role'] = showIndeterminateIcon ? 'checkbox' : 'switch'
 
     const renderContent = () => {
         if (isLoading) {
@@ -69,7 +72,7 @@ const Switch = ({
                             iconName && (
                                 <motion.span
                                     key="icon"
-                                    className={`${SQUARE_ICON_DIMENSION_MAP[size]} flex dc__fill-available-space dc__no-shrink`}
+                                    className="icon-dim-12 flex dc__fill-available-space dc__no-shrink"
                                     initial={{ scale: 0.8, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     exit={{ scale: 0.8, opacity: 0 }}
@@ -91,23 +94,37 @@ const Switch = ({
         )
     }
 
-    // TODO: Can add hidden input for accessibility in case name [for forms] is given
     return (
         <Tooltip alwaysShowTippyOnHover={!!tooltipContent} content={tooltipContent}>
-            <div className={`${getSwitchContainerClass({ shape, size })} flex dc__no-shrink py-2`}>
+            <label
+                htmlFor={inputId.current}
+                className={`${getSwitchContainerClass({ shape, size })} flex dc__no-shrink py-2`}
+            >
+                <input
+                    type="checkbox"
+                    id={inputId.current}
+                    name={name}
+                    checked={isChecked}
+                    disabled={isDisabled}
+                    readOnly
+                    hidden
+                />
+
                 <button
                     type="button"
-                    role={role}
+                    role="checkbox"
                     aria-checked={ariaCheckedValue}
+                    aria-labelledby={inputId.current}
                     aria-label={isLoading ? 'Loading...' : ariaLabel}
                     data-testid={dataTestId}
                     disabled={isDisabled || isLoading}
+                    aria-disabled={isDisabled}
                     className={`p-0-imp h-100 flex flex-grow-1 dc__transparent ${isDisabled ? 'dc__disabled' : ''} dc__fill-available-space`}
                     onClick={onChange}
                 >
                     {renderContent()}
                 </button>
-            </div>
+            </label>
         </Tooltip>
     )
 }

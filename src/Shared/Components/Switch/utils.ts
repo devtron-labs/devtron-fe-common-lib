@@ -7,6 +7,7 @@ import {
     SQUARE_SWITCH_SIZE_MAP,
     SQUARE_SWITCH_TRACK_COLOR_MAP,
     SWITCH_HEIGHT_MAP,
+    SWITCH_THUMB_PADDING_MAP,
 } from './constants'
 import { SwitchProps } from './types'
 
@@ -34,7 +35,7 @@ export const getSwitchThumbClass = ({
         return 'w-100 h-100 flex'
     }
 
-    return `flex p-3 ${shape === 'rounded' ? `dc__border-radius-50-per ${ROUNDED_SWITCH_THUMB_SIZE_MAP[size]}` : 'br-3'} bg__white`
+    return `flex ${SWITCH_THUMB_PADDING_MAP[size]} ${shape === 'rounded' ? `dc__border-radius-50-per ${ROUNDED_SWITCH_THUMB_SIZE_MAP[size]}` : 'br-3'} bg__white`
 }
 
 export const getSwitchIconColor = ({

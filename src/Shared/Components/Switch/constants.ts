@@ -53,7 +53,7 @@ export const INDETERMINATE_ICON_WIDTH_MAP: Record<SwitchProps['size'], string> =
     [ComponentSizeType.small]: 'w-10',
 }
 
-export const SQUARE_ICON_DIMENSION_MAP: Record<SwitchProps['size'], string> = {
-    [ComponentSizeType.medium]: 'icon-dim-12',
-    [ComponentSizeType.small]: 'icon-dim-8',
+export const SWITCH_THUMB_PADDING_MAP: Record<SwitchProps['size'], string> = {
+    [ComponentSizeType.medium]: 'p-3',
+    [ComponentSizeType.small]: 'p-1',
 }

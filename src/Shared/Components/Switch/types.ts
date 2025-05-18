@@ -66,8 +66,14 @@ type SwitchShapeProps =
 export type SwitchProps = {
     /**
      * The ARIA label for the switch, used for accessibility purposes.
+     * Please provide this when there is no clear label for the switch.
      */
-    ariaLabel: string
+    ariaLabel?: string
+
+    /**
+     * Used in forms to identify the switch.
+     */
+    name: string
 
     /**
      * A unique identifier for testing purposes.
