@@ -16,6 +16,8 @@
 
 import { Dispatch, ReactElement, SetStateAction } from 'react'
 
+import { TabProps } from '@Shared/Components'
+
 import { NodeActionRequest } from './ResourceBrowser.Types'
 
 export enum ClusterFiltersType {
@@ -99,3 +101,5 @@ export interface AdditionalConfirmationModalOptionsProps<T = unknown> {
     setOptionsData: Dispatch<SetStateAction<T>>
     children?: ReactElement
 }
+
+export type NodeDetailTabsInfoType = (Pick<TabProps, 'label' | 'icon'> & { id: string; node: () => JSX.Element })[]

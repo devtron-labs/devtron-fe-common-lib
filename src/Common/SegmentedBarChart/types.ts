@@ -20,8 +20,17 @@ export type Entity = {
     value: number
 }
 
-export interface SegmentedBarChartProps {
-    entities: NonNullable<Entity[]>
+type EntityPropType =
+    | {
+          hideLegend?: false
+          entities: NonNullable<Entity[]>
+      }
+    | {
+          hideLegend: true
+          entities: NonNullable<Omit<Entity, 'label'> & { label?: never }>[]
+      }
+
+export type SegmentedBarChartProps = {
     rootClassName?: string
     countClassName?: string
     labelClassName?: string
@@ -29,4 +38,4 @@ export interface SegmentedBarChartProps {
     swapLegendAndBar?: boolean
     showAnimationOnBar?: boolean
     isLoading?: boolean
-}
+} & EntityPropType
