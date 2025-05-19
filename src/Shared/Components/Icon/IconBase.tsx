@@ -16,6 +16,7 @@
 
 import { ConditionalWrap } from '@Common/Helper'
 import { Tooltip } from '@Common/Tooltip'
+import { isNullOrUndefined } from '@Shared/Helpers'
 
 import { ICON_STROKE_WIDTH_MAP } from './constants'
 import { IconBaseProps } from './types'
@@ -28,7 +29,16 @@ const conditionalWrap = (tooltipProps: IconBaseProps['tooltipProps']) => (childr
     </Tooltip>
 )
 
-export const IconBase = ({ name, iconMap, size = 16, tooltipProps, color, dataTestId }: IconBaseProps) => {
+export const IconBase = ({
+    name,
+    iconMap,
+    size = 16,
+    tooltipProps,
+    color,
+    dataTestId,
+    rotateBy,
+    fillSpace = false,
+}: IconBaseProps) => {
     const IconComponent = iconMap[name]
 
     if (!IconComponent) {
@@ -39,12 +49,13 @@ export const IconBase = ({ name, iconMap, size = 16, tooltipProps, color, dataTe
         <ConditionalWrap condition={!!tooltipProps?.content} wrap={conditionalWrap(tooltipProps)}>
             <IconComponent
                 data-testid={dataTestId}
-                className={`${size ? `icon-dim-${size}` : ''} ${color ? 'icon-component-color' : ''} ${ICON_STROKE_WIDTH_MAP[size] ? 'icon-component-stroke-width' : ''} dc__no-shrink`}
+                className={`${size ? `icon-dim-${size}` : ''} ${color ? 'icon-component-color' : ''} ${ICON_STROKE_WIDTH_MAP[size] ? 'icon-component-stroke-width' : ''} ${!isNullOrUndefined(rotateBy) ? 'rotate' : ''} ${fillSpace ? 'dc__fill-available-space' : ''} dc__no-shrink`}
                 style={{
                     ...(color ? { ['--iconColor' as string]: `var(--${color})` } : {}),
                     ...(ICON_STROKE_WIDTH_MAP[size]
                         ? { ['--strokeWidth' as string]: ICON_STROKE_WIDTH_MAP[size] }
                         : {}),
+                    ...(!isNullOrUndefined(rotateBy) ? { ['--rotateBy' as string]: `${rotateBy}deg` } : {}),
                 }}
             />
         </ConditionalWrap>

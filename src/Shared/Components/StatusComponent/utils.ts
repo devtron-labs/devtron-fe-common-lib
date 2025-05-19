@@ -72,6 +72,10 @@ export const getIconName = (status: string, showAnimatedIcon: boolean): IconName
             return 'ic-timeout-dash'
         case 'unable_to_fetch':
             return 'ic-disconnect'
+        case 'deleting':
+            return 'ic-delete-dots'
+        case 'deleted':
+            return 'ic-delete'
         default:
             return null
     }
@@ -95,6 +99,8 @@ export const getIconColor = (status: string): IconsProps['color'] => {
         case 'unable_to_fetch':
         case 'timedout':
         case 'timed_out':
+        case 'deleting':
+        case 'deleted':
             return 'R500'
         default:
             return null

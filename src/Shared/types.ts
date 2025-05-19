@@ -487,6 +487,7 @@ export enum ResourceKindType {
     releaseChannel = 'release-channel',
     tenant = 'tenant',
     installation = 'installation',
+    infrastructureInstallation = 'installations',
     environment = 'environment',
     cdPipeline = 'cd-pipeline',
     ciPipeline = 'ci-pipeline',
@@ -1119,6 +1120,11 @@ export type CountryISO2Type = ParsedCountry['iso2']
 
 export enum ResponseHeaders {
     LICENSE_STATUS = 'X-License-Status',
+}
+
+export enum InstallationClusterType {
+    EKS_AUTO_CLUSTER = 'eksAutoCluster',
+    EKS_MANUAL_CLUSTER = 'eksManualCluster',
 }
 
 export type IconBaseSizeType =
