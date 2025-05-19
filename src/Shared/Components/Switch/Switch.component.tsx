@@ -98,7 +98,7 @@ const Switch = ({
         <Tooltip alwaysShowTippyOnHover={!!tooltipContent} content={tooltipContent}>
             <label
                 htmlFor={inputId.current}
-                className={`${getSwitchContainerClass({ shape, size })} flex dc__no-shrink py-2`}
+                className={`${getSwitchContainerClass({ shape, size })} flex dc__no-shrink py-2 m-0`}
             >
                 <input
                     type="checkbox"
