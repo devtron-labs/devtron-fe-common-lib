@@ -20,7 +20,6 @@ import Tippy from '@tippyjs/react'
 
 import { ReactComponent as ICCaretDownSmall } from '@Icons/ic-caret-down-small.svg'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
-import { ReactComponent as Question } from '@Icons/ic-help-outline.svg'
 import { ReactComponent as ICMediumPaintBucket } from '@IconsV2/ic-medium-paintbucket.svg'
 
 import { getAlphabetIcon, TippyCustomized, TippyTheme } from '../../../Common'
@@ -29,7 +28,7 @@ import { useMainContext, useTheme, useUserEmail } from '../../Providers'
 import GettingStartedCard from '../GettingStartedCard/GettingStarted'
 import { InfoIconTippy } from '../InfoIconTippy'
 import LogoutCard from '../LogoutCard'
-import HelpNav from './HelpNav'
+import { HelpButton } from './HelpButton'
 import { IframePromoButton } from './IframePromoButton'
 import { getServerInfo } from './service'
 import { InstallationType, PageHeaderType, ServerInfo } from './types'
@@ -50,19 +49,12 @@ const PageHeader = ({
     markAsBeta,
     tippyProps,
 }: PageHeaderType) => {
-    const {
-        loginCount,
-        setLoginCount,
-        showGettingStartedCard,
-        setShowGettingStartedCard,
-        setGettingStartedClicked,
-        licenseData,
-    } = useMainContext()
+    const { loginCount, setLoginCount, showGettingStartedCard, setShowGettingStartedCard, licenseData } =
+        useMainContext()
     const { showSwitchThemeLocationTippy, handleShowSwitchThemeLocationTippyChange } = useTheme()
 
     const { isTippyCustomized, tippyRedirectLink, TippyIcon, tippyMessage, onClickTippyButton, additionalContent } =
         tippyProps || {}
-    const [showHelpCard, setShowHelpCard] = useState(false)
     const [showLogOutCard, setShowLogOutCard] = useState(false)
     const { email } = useUserEmail()
     const [currentServerInfo, setCurrentServerInfo] = useState<{ serverInfo: ServerInfo; fetchingServerInfo: boolean }>(
@@ -108,24 +100,22 @@ const PageHeader = ({
     const onClickLogoutButton = () => {
         handleCloseSwitchThemeLocationTippyChange()
         setShowLogOutCard(!showLogOutCard)
-        if (showHelpCard) {
-            setShowHelpCard(false)
-        }
         setActionWithExpiry('clickedOkay', 1)
         hideGettingStartedCard()
     }
 
-    const onClickHelp = async () => {
+    const onHelpButtonClick = async () => {
         if (
             !window._env_.K8S_CLIENT &&
             currentServerInfo.serverInfo?.installationType !== InstallationType.ENTERPRISE
         ) {
             await getCurrentServerInfo()
         }
-        setShowHelpCard(!showHelpCard)
+
         if (showLogOutCard) {
             setShowLogOutCard(false)
         }
+
         setActionWithExpiry('clickedOkay', 1)
         hideGettingStartedCard()
         await handlePostHogEventUpdate(POSTHOG_EVENT_ONBOARDING.HELP)
@@ -144,18 +134,11 @@ const PageHeader = ({
 
     const renderLogoutHelpSection = () => (
         <>
-            <div className="flex left cursor dc__gap-8" onClick={onClickHelp}>
-                <span className="icon-dim-24 fcn-9">
-                    <Question />
-                </span>
-                <span className="fs-13 cn-9" data-testid="go-to-get-started">
-                    Help
-                </span>
-                <ICCaretDownSmall
-                    style={{ ['--rotateBy' as any]: `${180 * Number(showHelpCard)}deg` }}
-                    className="scn-7 icon-dim-16 rotate pointer"
-                />
-            </div>
+            <HelpButton
+                serverInfo={currentServerInfo.serverInfo}
+                fetchingServerInfo={currentServerInfo.fetchingServerInfo}
+                onClick={onHelpButtonClick}
+            />
             {!window._env_.K8S_CLIENT && (
                 <TippyCustomized
                     theme={TippyTheme.black}
@@ -274,16 +257,6 @@ const PageHeader = ({
                 )}
             </h1>
             {showTabs && renderHeaderTabs()}
-            {showHelpCard && (
-                <HelpNav
-                    className={`help-card__more-option ${showingLicenseBar ? 'with-bar' : ''} ${window._env_.K8S_CLIENT ? 'k8s-client-view' : ''}`}
-                    setShowHelpCard={setShowHelpCard}
-                    serverInfo={currentServerInfo.serverInfo}
-                    fetchingServerInfo={currentServerInfo.fetchingServerInfo}
-                    setGettingStartedClicked={setGettingStartedClicked}
-                    showHelpCard={showHelpCard}
-                />
-            )}
             {!window._env_.K8S_CLIENT &&
                 showGettingStartedCard &&
                 loginCount >= 0 &&

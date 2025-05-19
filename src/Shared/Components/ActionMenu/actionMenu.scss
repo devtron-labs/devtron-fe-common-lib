@@ -1,20 +1,35 @@
 .action-menu {
+    list-style: none;
+
     &__group {
         border-top: 1px solid var(--border-secondary-translucent);
 
         &:first-child {
             border-top: none;
-            padding-top: 0;
-        }
-
-        &:last-child {
-            padding-bottom: 0;
         }
     }
 
+    &__group-list {
+        list-style: none;
+    }
+
     &__option {
-        & + .action-menu__group {
-            margin-top: 4px;
+        &--focused {
+            background-color: var(--bg-hover);
         }
+
+        &--focused-negative {
+            background-color: var(--R50);
+        }
+
+        > button {
+            text-align: left;
+        }
+    }
+
+    &__searchbox input {
+        border: none;
+        padding: 8px 12px;
+        background-color: transparent;
     }
 }
