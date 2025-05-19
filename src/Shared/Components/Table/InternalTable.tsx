@@ -94,16 +94,6 @@ const InternalTable = ({
         [],
     )
 
-    const sortByToColumnIndexMap: Record<string, number> = useMemo(
-        () =>
-            visibleColumns.reduce((acc, column, index) => {
-                acc[column.field] = index
-
-                return acc
-            }, {}),
-        [visibleColumns],
-    )
-
     const [_areFilteredRowsLoading, filteredRows, filteredRowsError, reloadFilteredRows] = useAsync(async () => {
         if (!rows && !getRows) {
             throw NO_ROWS_OR_GET_ROWS_ERROR
@@ -112,18 +102,20 @@ const InternalTable = ({
         return getFilteringPromise({
             searchSortTimeoutRef,
             callback: rows
-                ? () => {
-                      const sortByColumnIndex = sortByToColumnIndexMap[sortBy]
-
-                      return searchAndSortRows(rows, filter, filterData, visibleColumns[sortByColumnIndex]?.comparator)
-                  }
+                ? () =>
+                      searchAndSortRows(
+                          rows,
+                          filter,
+                          filterData,
+                          visibleColumns.find(({ field }) => field === sortBy)?.comparator,
+                      )
                 : () => getRows(filterData),
         })
-    }, [searchKey, sortBy, sortOrder, rows, sortByToColumnIndexMap, JSON.stringify(otherFilters)])
+    }, [searchKey, sortBy, sortOrder, rows, JSON.stringify(otherFilters)])
 
     const areFilteredRowsLoading = _areFilteredRowsLoading || filteredRowsError === NO_ROWS_OR_GET_ROWS_ERROR
 
-    const bulkSelectionCount = getSelectedIdentifiersCount?.() ?? 0
+    const bulkSelectionCount = isBulkSelectionApplied && rows ? rows.length : (getSelectedIdentifiersCount?.() ?? 0)
 
     const visibleRows = useMemo(() => {
         const normalizedFilteredRows = filteredRows ?? []
@@ -196,13 +188,11 @@ const InternalTable = ({
                         gridTemplateColumns,
                     }}
                 >
-                    {visibleColumns.map(({ horizontallySticky, label }) => (
-                        <div
-                            key={label}
-                            className={`${horizontallySticky ? 'dc__position-sticky dc__left-0 dc__zi-1' : ''} pr-12 py-12 flex`}
-                            aria-label="Loading..."
-                        >
-                            <div className="shimmer h-16 w-100" />
+                    {visibleColumns.map(({ label, field }) => (
+                        <div key={label} className="pr-6 py-12 flex" aria-label="Loading...">
+                            <div
+                                className={`shimmer h-16 ${field === BULK_ACTION_GUTTER_LABEL ? 'w-20 mr-6' : 'w-100'}`}
+                            />
                         </div>
                     ))}
                 </div>

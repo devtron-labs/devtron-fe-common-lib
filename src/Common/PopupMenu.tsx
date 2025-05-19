@@ -167,7 +167,7 @@ const Button = forwardRef(({
     const { handleOpen, popupPosition, buttonRef, initialiseButtonWidth } = usePopupContext()
 
     const refCallback = (node) => {
-        initialiseButtonWidth.current = node
+        buttonRef.current = node
 
         if (typeof forwardedRef === 'function') {
             forwardedRef(node)
