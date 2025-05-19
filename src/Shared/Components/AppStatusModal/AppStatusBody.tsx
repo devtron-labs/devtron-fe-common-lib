@@ -18,7 +18,7 @@ import { getAppStatusMessageFromAppDetails } from './utils'
 
 const InfoCardItem = ({ heading, value, isLast = false }: { heading: string; value: ReactNode; isLast?: boolean }) => (
     <div
-        className={`py-12 px-16 dc__grid dc__column-gap-16 info-card-item dc__align-items-center ${!isLast ? 'border__secondary--bottom' : ''}`}
+        className={`py-12 px-16 dc__grid dc__column-gap-16 info-card-item ${!isLast ? 'border__secondary--bottom' : ''}`}
     >
         <Tooltip content={heading}>
             <h3 className="cn-9 fs-13 fw-4 lh-1-5 dc__truncate m-0 dc__no-shrink">{heading}</h3>

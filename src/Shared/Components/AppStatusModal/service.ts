@@ -39,7 +39,7 @@ export const getAppDetails = async ({
 
     return {
         ...(appDetails.result || ({} as AppDetails)),
-        resourceTree: resourceTree.result,
+        resourceTree: resourceTree?.result,
         appType: AppType.DEVTRON_APP,
     }
 }

@@ -341,12 +341,12 @@ const AppStatusModal = ({
     return (
         <Drawer position="right" width="1024px" onClose={handleClose} onEscape={handleClose}>
             <div
-                className="flexbox-col dc__content-space h-100 border__primary--left bg__modal--primary shadow__modal app-status-modal"
+                className="flexbox-col dc__content-space h-100 bg__modal--primary shadow__modal app-status-modal"
                 onClick={stopPropagation}
             >
                 <div className="app-status-modal__header pt-12 flexbox-col px-20 dc__gap-12 border__primary--bottom dc__no-shrink">
-                    <div className="flexbox dc__content-space">
-                        <h2 className="m-0 dc__truncate fs-16 fw-6 lh-1-5 dc__gap-4">
+                    <div className="flexbox dc__content-space dc__gap-4">
+                        <h2 className="m-0 dc__truncate fs-16 fw-6 lh-1-5 dc__gap-4 flexbox cn-9">
                             {filteredTitleSegments.map((segment, index) => (
                                 <Fragment key={segment}>
                                     {segment}
