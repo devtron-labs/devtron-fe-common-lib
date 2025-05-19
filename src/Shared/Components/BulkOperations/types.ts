@@ -17,7 +17,7 @@
 import { ReactNode } from 'react'
 
 import { APIOptions, DrawerProps } from '@Common/index'
-import { SegmentedBarChartProps } from '@Common/SegmentedBarChart'
+import { Entity } from '@Common/SegmentedBarChart/types'
 
 import { ConfirmationModalProps } from '../ConfirmationModal/types'
 import { getProgressingStateForStatus } from '../Security'
@@ -64,7 +64,7 @@ export interface OperationResultStoreType {
     getResults: (
         sortComparator: (a: BulkOperationResultType, b: BulkOperationResultType) => number,
     ) => BulkOperationResultWithIdType[]
-    getBarChartEntities: () => SegmentedBarChartProps['entities']
+    getBarChartEntities: () => NonNullable<Entity[]>
     getResultsStatusCount: () => Record<BulkOperationResultType['status'], number>
     getSize: () => number
     updateResultStatus: (
