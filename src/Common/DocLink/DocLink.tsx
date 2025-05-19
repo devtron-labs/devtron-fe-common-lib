@@ -13,11 +13,12 @@ export const DocLink = ({
     size = ComponentSizeType.medium,
     variant = ButtonVariantType.text,
     isEnterprise = false,
+    isExternalLink = false,
 }: DocLinkProps) => (
     <Button
         component={ButtonComponentType.anchor}
         anchorProps={{
-            href: getDocumentationUrl({ docLinkKey, isEnterprise }),
+            href: getDocumentationUrl({ docLinkKey, isEnterprise, isExternalLink }),
         }}
         onClick={onClick}
         dataTestId={dataTestId}

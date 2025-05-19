@@ -79,6 +79,8 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
             additionalContent,
             documentationLink,
             documentationLinkText,
+            isEnterprise,
+            isExternalLink,
         } = props
         return (
             <>
@@ -158,11 +160,13 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                 {documentationLink && (
                     <div className="px-12 pb-12 flexbox">
                         <DocLink
-                            docLinkKey={documentationLink as keyof typeof DOCUMENTATION}
+                            docLinkKey={documentationLink}
                             text={documentationLinkText}
                             dataTestId="learn-more-about-tippy-link"
                             showExternalIcon
                             onClick={closeTippy}
+                            isEnterprise={isEnterprise}
+                            isExternalLink={isExternalLink}
                         />
                     </div>
                 )}

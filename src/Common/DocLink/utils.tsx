@@ -3,8 +3,12 @@ import { DOCUMENTATION_HOME_PAGE, DOCUMENTATION_VERSION } from '@Common/Constant
 import { DOCUMENTATION } from './constants'
 import { DocumentationUrlParamsType } from './types'
 
-export const getDocumentationUrl = ({ docLinkKey, isEnterprise = false }: DocumentationUrlParamsType) => {
-    if (DOCUMENTATION[docLinkKey].startsWith('http')) {
+export const getDocumentationUrl = ({
+    docLinkKey,
+    isEnterprise = false,
+    isExternalLink = false,
+}: DocumentationUrlParamsType) => {
+    if (DOCUMENTATION[docLinkKey]?.startsWith('http') || isExternalLink) {
         return DOCUMENTATION[docLinkKey]
     }
     return `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/${DOCUMENTATION[docLinkKey]}?utm_source=product_${isEnterprise ? 'ent' : 'oss'}`

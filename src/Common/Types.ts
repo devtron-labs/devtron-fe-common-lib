@@ -150,6 +150,7 @@ export interface TippyCustomizedProps extends Pick<TippyProps, 'appendTo'> {
     children: React.ReactElement<any>
     disableClose?: boolean
     isEnterprise?: boolean
+    isExternalLink?: boolean
 }
 
 export interface InfoIconTippyProps
@@ -165,6 +166,7 @@ export interface InfoIconTippyProps
         | 'headingInfo'
         | 'documentationLink'
         | 'isEnterprise'
+        | 'isExternalLink'
     > {
     dataTestid?: string
     children?: TippyCustomizedProps['children']

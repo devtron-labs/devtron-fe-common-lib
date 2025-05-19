@@ -31,7 +31,7 @@ export const DOCUMENTATION = {
         'usage/applications/creating-application/workflow/ci-pipeline/ci-build-pre-post-plugins#execute-custom-script',
     EXTERNAL_LINKS: 'getting-started/global-configurations/external-links',
     EXTERNAL_SECRET: 'usage/applications/creating-application/secrets#external-secrets',
-    HOME_PAGE: 'https://docs.devtron.ai',
+    HOME_PAGE: 'https://devtron.ai',
     KUBE_CONFIG: 'usage/resource-browser#running-kubectl-commands-locally',
 
     // Global Configurations
@@ -69,6 +69,7 @@ export const DOCUMENTATION = {
 
     // ENTERPRISE
     CEL: 'https://github.com/google/cel-spec/blob/master/doc/langdef.md',
+    KUBERNETES_LABELS: 'https://kubernetes.io/docs/concepts/overview/working-with-objects/labels',
     IMAGE_PROMOTION: 'global-configurations/image-promotion-policy',
     IMAGE_PROMOTION_ASSIGN_TO: 'global-configurations/image-promotion-policy#applying-an-image-promotion-policy',
     TAGS: 'usage/applications/create-application#tags',
