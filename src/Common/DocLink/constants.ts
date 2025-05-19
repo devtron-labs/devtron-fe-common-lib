@@ -20,6 +20,7 @@ export const DOCUMENTATION = {
     BULK_UPDATE: 'usage/bulk-update',
     CHART_GROUP: 'usage/deploy-chart/chart-group',
     CHART_LIST: 'usage/deploy-chart/overview-of-charts',
+    CHART_STORE_METRICS_SERVER: 'dashboard//chart-store/discover?appStoreName=metrics-server',
     CUSTOM_VALUES: 'usage/deploy-chart/overview-of-charts#custom-values',
     DEPLOYMENT: 'usage/applications/creating-application/deployment-template/deployment',
     DEPLOYMENT_TEMPLATE: 'usage/applications/creating-application/deployment-template',
@@ -30,6 +31,7 @@ export const DOCUMENTATION = {
         'usage/applications/creating-application/workflow/ci-pipeline/ci-build-pre-post-plugins#execute-custom-script',
     EXTERNAL_LINKS: 'getting-started/global-configurations/external-links',
     EXTERNAL_SECRET: 'usage/applications/creating-application/secrets#external-secrets',
+    HOME_PAGE: 'https://docs.devtron.ai',
     KUBE_CONFIG: 'usage/resource-browser#running-kubectl-commands-locally',
 
     // Global Configurations
@@ -49,12 +51,12 @@ export const DOCUMENTATION = {
     GLOBAL_CONFIG_GROUPS: 'getting-started/global-configurations/authorization/permission-groups',
     GLOBAL_CONFIG_HOST_URL: 'getting-started/global-configurations/host-url',
     GLOBAL_CONFIG_NOTIFICATION: 'getting-started/global-configurations/manage-notification',
-    GLOBAL_CONFIG_PERMISSION: `global-configurations/authorization/user-access#devtron-apps-permissions`,
+    GLOBAL_CONFIG_PERMISSION: 'global-configurations/authorization/user-access#devtron-apps-permissions',
     GLOBAL_CONFIG_PROJECT: 'getting-started/global-configurations/projects',
     GLOBAL_CONFIG_SSO: 'getting-started/global-configurations/sso-login',
     GLOBAL_CONFIG_SCOPED_VARIABLES: 'getting-started/global-configurations/scoped-variables',
     GLOBAL_CONFIG_USER: 'getting-started/global-configurations/authorization/user-access',
-    HYPERION: `usage/applications#view-external-helm-app-listing`,
+    HYPERION: 'usage/applications#view-external-helm-app-listing',
     JOB_CRONJOB: 'usage/applications/creating-application/deployment-template/job-and-cronjob',
     JOB_SOURCE_CODE: 'usage/jobs/configuration-job',
     JOB_WORKFLOW_EDITOR: 'usage/jobs/workflow-editor-job',
@@ -66,11 +68,11 @@ export const DOCUMENTATION = {
     TENANT_INSTALLATION: 'usage/software-distribution-hub/tenants',
 
     // ENTERPRISE
-
+    CEL: 'https://github.com/google/cel-spec/blob/master/doc/langdef.md',
     IMAGE_PROMOTION: 'global-configurations/image-promotion-policy',
     IMAGE_PROMOTION_ASSIGN_TO: 'global-configurations/image-promotion-policy#applying-an-image-promotion-policy',
     TAGS: 'usage/applications/create-application#tags',
-    TAGS_POLICY: `global-configurations/tags-policy`,
+    TAGS_POLICY: 'global-configurations/tags-policy',
     RESOURCE_WATCHER: 'usage/resource-watcher',
     GITOPS_BITBUCKET: 'global-configurations/gitops#bitbucket',
     DEPLOYMENT_CONFIGS: 'resources/glossary#base-deployment-template',

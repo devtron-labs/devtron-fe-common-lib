@@ -24,7 +24,6 @@ const ModalSidebarPanel = ({
     icon,
     children,
     documentationLink,
-    hideVersion,
 }: ModalSidebarPanelProps) => (
     <div className={`flexbox-col w-250 dc__gap-24 dc__modal-gradient ${rootClassName}`}>
         <div className="flexbox-col dc__gap-12">
@@ -41,9 +40,8 @@ const ModalSidebarPanel = ({
             <DocLink
                 docLinkKey={documentationLink}
                 text="View documentation"
-                dataTestId="learn-more-about-creating-job-link"
+                dataTestId="learn-more-about-modal-sidebar-panel-link"
                 showExternalIcon
-                hideVersion={hideVersion}
             />
         </div>
     </div>

@@ -34,7 +34,7 @@ const FeatureDescriptionModalContent = ({
     imageVariant,
     SVGImage,
     imageStyles = {},
-    hideVersion,
+    isEnterprise,
 }: Required<Omit<FeatureDescriptionModalProps, 'tabsConfig' | 'title'>>) => {
     const renderImage = () => {
         if (!SVGImage) {
@@ -69,8 +69,8 @@ const FeatureDescriptionModalContent = ({
                     text={BUTTON_TEXT.VIEW_DOCUMENTATION}
                     dataTestId="feature-desc__view-doc"
                     showExternalIcon
-                    hideVersion={hideVersion}
                     variant={ButtonVariantType.secondary}
+                    isEnterprise={isEnterprise}
                 />
             )}
             <Button
@@ -100,7 +100,7 @@ export const FeatureDescriptionModal = ({
     SVGImage,
     imageStyles = {},
     tabsConfig,
-    hideVersion,
+    isEnterprise,
 }: FeatureDescriptionModalProps) => {
     const [selectedTabId, setSelectedTabId] = useState(tabsConfig?.[0]?.id ?? null)
     const selectedTab = tabsConfig?.find((tab) => tab.id === selectedTabId) ?? null
@@ -143,7 +143,7 @@ export const FeatureDescriptionModal = ({
                                 renderDescriptionContent={selectedTab.renderDescriptionContent}
                                 closeModal={closeModal}
                                 closeModalText={closeModalText}
-                                hideVersion={hideVersion}
+                                isEnterprise={isEnterprise}
                             />
                         </>
                     )
@@ -156,7 +156,7 @@ export const FeatureDescriptionModal = ({
                         imageStyles={imageStyles}
                         imageVariant={imageVariant}
                         renderDescriptionContent={renderDescriptionContent}
-                        hideVersion={hideVersion}
+                        isEnterprise={isEnterprise}
                     />
                 )}
             </div>

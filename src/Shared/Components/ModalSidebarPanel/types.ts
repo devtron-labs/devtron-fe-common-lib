@@ -18,7 +18,7 @@ import { ReactNode } from 'react'
 
 import { DocLinkProps } from '@Common/DocLink/types'
 
-export interface ModalSidebarPanelProps extends Partial<Pick<DocLinkProps, 'hideVersion'>> {
+export interface ModalSidebarPanelProps {
     rootClassName?: string
     heading: string | null
     icon?: JSX.Element

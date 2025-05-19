@@ -33,6 +33,7 @@ import {
     ACTION_STATE,
     DEPLOYMENT_WINDOW_TYPE,
     DockerConfigOverrideType,
+    DOCUMENTATION,
     RefVariableType,
     SortingOrder,
     TaskErrorObj,
@@ -144,11 +145,11 @@ export interface TippyCustomizedProps extends Pick<TippyProps, 'appendTo'> {
     animation?: string
     duration?: number
     additionalContent?: ReactNode
-    documentationLink?: string
+    documentationLink?: keyof typeof DOCUMENTATION
     documentationLinkText?: string
     children: React.ReactElement<any>
     disableClose?: boolean
-    hideVersion?: boolean
+    isEnterprise?: boolean
 }
 
 export interface InfoIconTippyProps
@@ -162,8 +163,8 @@ export interface InfoIconTippyProps
         | 'placement'
         | 'Icon'
         | 'headingInfo'
-        | 'hideVersion'
         | 'documentationLink'
+        | 'isEnterprise'
     > {
     dataTestid?: string
     children?: TippyCustomizedProps['children']

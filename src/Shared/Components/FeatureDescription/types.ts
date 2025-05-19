@@ -55,7 +55,7 @@ export type FeatureDescriptionModalProps = {
     title: string
     closeModalText?: string
     closeModal?: () => void
-    hideVersion?: DocLinkProps['hideVersion']
+    isEnterprise?: boolean
 } & (
     | (BaseFeatureDescriptionModalProps & {
           tabsConfig?: never
@@ -84,4 +84,5 @@ export type DescriptorProps = (
      * @default false
      */
     showInfoIcon?: boolean
+    isEnterprise?: boolean
 }

@@ -7,8 +7,7 @@ export interface DocLinkProps
     docLinkKey: keyof typeof DOCUMENTATION
     text?: string
     showExternalIcon?: boolean
-    hideVersion?: boolean
     isEnterprise?: boolean
 }
 
-export interface DocumentationUrlParamsType extends Pick<DocLinkProps, 'docLinkKey' | 'hideVersion' | 'isEnterprise'> {}
+export interface DocumentationUrlParamsType extends Pick<DocLinkProps, 'docLinkKey' | 'isEnterprise'> {}

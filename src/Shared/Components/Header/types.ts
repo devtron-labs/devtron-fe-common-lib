@@ -16,7 +16,7 @@
 
 import { ModuleStatus } from '@Shared/types'
 
-import { ResponseType, TippyCustomizedProps } from '../../../Common'
+import { DOCUMENTATION, ResponseType, TippyCustomizedProps } from '../../../Common'
 import { ActionMenuProps } from '../ActionMenu'
 
 export enum InstallationType {
@@ -38,7 +38,7 @@ export interface PageHeaderType {
     markAsBeta?: boolean
     tippyProps?: Pick<TippyCustomizedProps, 'additionalContent'> & {
         isTippyCustomized?: boolean
-        tippyRedirectLink?: string
+        tippyRedirectLink?: keyof typeof DOCUMENTATION
         TippyIcon?: React.FunctionComponent<any>
         tippyMessage?: string
         onClickTippyButton?: () => void

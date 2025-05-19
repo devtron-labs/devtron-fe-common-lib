@@ -79,7 +79,6 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
             additionalContent,
             documentationLink,
             documentationLinkText,
-            hideVersion,
         } = props
         return (
             <>
@@ -161,10 +160,9 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                         <DocLink
                             docLinkKey={documentationLink as keyof typeof DOCUMENTATION}
                             text={documentationLinkText}
-                            dataTestId="learn-more-about-creating-job-link"
+                            dataTestId="learn-more-about-tippy-link"
                             showExternalIcon
                             onClick={closeTippy}
-                            hideVersion={hideVersion}
                         />
                     </div>
                 )}
