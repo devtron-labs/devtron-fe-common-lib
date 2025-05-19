@@ -215,7 +215,7 @@ const PageHeader = ({
                                 heading={headerName}
                                 iconClassName="icon-dim-20 ml-8 fcn-5"
                                 documentationLink={tippyRedirectLink}
-                                documentationLinkText="Learn More"
+                                documentationLinkText="View Documentation"
                                 additionalContent={additionalContent}
                             >
                                 {TippyIcon && (
