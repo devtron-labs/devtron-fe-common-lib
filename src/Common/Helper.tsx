@@ -451,7 +451,7 @@ export function useAsync<T>(
             setState((state) => ({ ...state, loading: false }))
             return
         }
-        setState((state) => ({ ...state, loading: true, dependencies: dependencyArray }))
+        setState((state) => ({ ...state, dependencies: dependencyArray }))
         reload()
         return () =>
             setState((state) => ({
@@ -1002,7 +1002,7 @@ export const getBranchIcon = (sourceType, _isRegex?: boolean, webhookEventName?:
             return <ICPullRequest className="scn-6" />
         }
         if (webhookEventName === WebhookEventNameType.TAG_CREATION) {
-        return <ICTag className="scn-6" />
+            return <ICTag className="scn-6" />
         }
         return <ICWebhook />
     }
