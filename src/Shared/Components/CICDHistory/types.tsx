@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { CSSProperties, ReactElement, ReactNode } from 'react'
+import { CSSProperties, MutableRefObject, ReactElement, ReactNode } from 'react'
 
 import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
 
@@ -834,6 +834,7 @@ export interface LogStageAccordionProps extends StageDetailType, Pick<LogsRender
      */
     isLoading: boolean
     searchIndex: string
+    logsRendererRef: MutableRefObject<HTMLDivElement>
 }
 
 export interface CreateMarkupReturnType {
