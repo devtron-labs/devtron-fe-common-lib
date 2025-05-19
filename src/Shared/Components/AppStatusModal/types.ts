@@ -98,3 +98,10 @@ export interface StatusHeadingContainerProps extends PropsWithChildren<Pick<AppS
     envId?: number
     actionItem?: ReactNode
 }
+
+export interface InfoCardItemProps {
+    heading: string
+    value: ReactNode
+    isLast?: boolean
+    alignCenter?: boolean
+}

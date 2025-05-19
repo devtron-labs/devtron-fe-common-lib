@@ -51,6 +51,9 @@ const DeploymentDetailSteps = ({
     const [deploymentListLoader, setDeploymentListLoader] = useState<boolean>(
         deploymentStatus?.toUpperCase() !== TIMELINE_STATUS.ABORTED,
     )
+    /**
+     * Only present for helm apps history
+     */
     const appDetails = IndexStore.getAppDetails()
     const isVirtualEnv = useRef(isVirtualEnvironment)
     const isDeploymentWithoutApprovalRef = useRef(isDeploymentWithoutApproval)

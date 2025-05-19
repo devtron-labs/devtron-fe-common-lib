@@ -1,4 +1,4 @@
-import { ComponentProps, ReactNode } from 'react'
+import { ComponentProps } from 'react'
 
 import { getAIAnalyticsEvents } from '@Common/Helper'
 import { Tooltip } from '@Common/Tooltip'
@@ -7,18 +7,19 @@ import { getAppDetailsURL } from '@Shared/Helpers'
 
 import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
 import { DeploymentStatusDetailBreakdown } from '../CICDHistory'
+import { DEPLOYMENT_STATUS_TEXT_MAP } from '../DeploymentStatusBreakdown'
 import { ErrorBar } from '../Error'
 import { Icon } from '../Icon'
 import { ShowMoreText } from '../ShowMoreText'
 import { AppStatus, DeploymentStatus, StatusType } from '../StatusComponent'
 import AppStatusContent from './AppStatusContent'
 import { APP_STATUS_CUSTOM_MESSAGES } from './constants'
-import { AppStatusBodyProps, AppStatusModalTabType, StatusHeadingContainerProps } from './types'
+import { AppStatusBodyProps, AppStatusModalTabType, InfoCardItemProps, StatusHeadingContainerProps } from './types'
 import { getAppStatusMessageFromAppDetails } from './utils'
 
-const InfoCardItem = ({ heading, value, isLast = false }: { heading: string; value: ReactNode; isLast?: boolean }) => (
+const InfoCardItem = ({ heading, value, isLast = false, alignCenter = false }: InfoCardItemProps) => (
     <div
-        className={`py-12 px-16 dc__grid dc__column-gap-16 info-card-item ${!isLast ? 'border__secondary--bottom' : ''}`}
+        className={`py-12 px-16 dc__grid dc__column-gap-16 info-card-item ${alignCenter ? 'dc__align-items-center' : ''} ${!isLast ? 'border__secondary--bottom' : ''} ${alignCenter ? 'dc__align-center' : ''}`}
     >
         <Tooltip content={heading}>
             <h3 className="cn-9 fs-13 fw-4 lh-1-5 dc__truncate m-0 dc__no-shrink">{heading}</h3>
@@ -149,6 +150,11 @@ export const AppStatusBody = ({
                               {deploymentStatusDetailsBreakdownData?.deploymentStatus ? (
                                   <DeploymentStatus
                                       status={deploymentStatusDetailsBreakdownData.deploymentStatus}
+                                      message={
+                                          DEPLOYMENT_STATUS_TEXT_MAP[
+                                              deploymentStatusDetailsBreakdownData.deploymentStatus
+                                          ]
+                                      }
                                       showAnimatedIcon
                                   />
                               ) : (
@@ -170,6 +176,7 @@ export const AppStatusBody = ({
                             heading={item.heading}
                             value={item.value}
                             isLast={index === infoCardItems.length - 1}
+                            alignCenter={item.heading !== 'Message'}
                         />
                     ))}
                 </div>
