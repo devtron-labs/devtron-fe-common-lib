@@ -1,8 +1,9 @@
-import { ReactElement } from 'react'
+import { ReactElement, useMemo } from 'react'
 
 import { Tooltip } from '@Common/Tooltip'
 import { Icon } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
+import { getUniqueId } from '@Shared/Helpers'
 
 import { ConditionalWrap } from '../Helper'
 import { COMPONENT_SIZE_TO_ICON_CLASS_MAP, COMPONENT_SIZE_TO_SEGMENT_CLASS_MAP } from './constants'
@@ -24,6 +25,8 @@ const Segment = ({
     size,
     disabled,
 }: SegmentProps) => {
+    const inputId = useMemo(getUniqueId, [])
+
     const { value, icon, isError, label, tooltipProps, ariaLabel } = segment
     const handleChange = () => {
         onChange(segment)
@@ -32,13 +35,13 @@ const Segment = ({
     return (
         <ConditionalWrap key={value} condition={!!tooltipProps?.content} wrap={wrapWithTooltip(tooltipProps)}>
             <div
-                className={`dc__position-rel dc__text-center ${fullWidth ? 'flex-grow-1' : ''}`}
+                className={`dc__position-rel dc__text-center dc__no-shrink ${fullWidth ? 'flex-grow-1' : ''}`}
                 ref={selectedSegmentRef}
             >
                 <input
                     type="radio"
                     value={value}
-                    id={`${name}-${value}`}
+                    id={inputId}
                     name={name}
                     onChange={handleChange}
                     checked={isSelected}
@@ -47,7 +50,7 @@ const Segment = ({
                 />
 
                 <label
-                    htmlFor={`${name}-${value}`}
+                    htmlFor={inputId}
                     className={`pointer m-0 flex ${!fullWidth ? 'left' : ''} dc__gap-4 br-4 segmented-control__segment segmented-control__segment--${size} ${isSelected ? 'fw-6 segmented-control__segment--selected' : 'fw-4'} ${segment.isError ? 'cr-5' : 'cn-9'} ${disabled ? 'cursor-not-allowed' : ''} ${COMPONENT_SIZE_TO_SEGMENT_CLASS_MAP[size]}`}
                     aria-label={ariaLabel}
                 >

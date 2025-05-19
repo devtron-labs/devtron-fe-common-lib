@@ -16,12 +16,24 @@
 
 import { Dispatch, ReactElement, SetStateAction } from 'react'
 
+import { InstallationClusterType } from '@Shared/types'
+
 import { NodeActionRequest } from './ResourceBrowser.Types'
 
 export enum ClusterFiltersType {
     ALL_CLUSTERS = 'all',
     HEALTHY = 'healthy',
     UNHEALTHY = 'unhealthy',
+}
+
+export enum InstallationClusterStatus {
+    Creating = 'Creating',
+    Updated = 'Updated',
+    Updating = 'Updating',
+    Installed = 'Installed',
+    Failed = 'Failed',
+    Deleting = 'Deleting',
+    Deleted = 'Deleted',
 }
 
 export enum ClusterStatusType {
@@ -65,6 +77,7 @@ export interface ClusterCapacityType {
     nodeErrors: Record<string, string>[]
     status?: ClusterStatusType
     isProd: boolean
+    installationId?: number
 }
 
 export interface ClusterDetail extends ClusterCapacityType {
@@ -98,4 +111,36 @@ export interface AdditionalConfirmationModalOptionsProps<T = unknown> {
     optionsData: T
     setOptionsData: Dispatch<SetStateAction<T>>
     children?: ReactElement
+}
+
+export interface InstallationClusterStepType {
+    lastTransitionTime: string
+    lastProbeTime: string
+    message: string
+    reason: string
+    status: 'False' | 'True' | 'Unknown'
+    type: string
+}
+
+export interface InstallationClusterConfigDTO {
+    installationId: number
+    installationStatus: InstallationClusterStatus
+    name: string
+    values: string
+    valuesSchema: string
+    isProd: boolean
+    installationType: InstallationClusterType
+    conditions: InstallationClusterStepType[]
+    // NOTE: for installation cluster, that is creating this will be 0
+    installedEntityId: number | 0
+}
+
+export interface InstallationClusterConfigType
+    extends Pick<InstallationClusterConfigDTO, 'installationType' | 'conditions'> {
+    schema: object
+    values: object
+    installationId: number
+    name: string
+    status: InstallationClusterStatus
+    correspondingClusterId: number | 0
 }

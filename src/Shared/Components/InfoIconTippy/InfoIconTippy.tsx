@@ -31,6 +31,7 @@ const InfoIconTippy = ({
     dataTestid = 'info-tippy-button',
     children,
     headingInfo,
+    buttonPadding = 'p-0',
 }: InfoIconTippyProps) => (
     <TippyCustomized
         theme={TippyTheme.white}
@@ -53,7 +54,7 @@ const InfoIconTippy = ({
         {children || (
             <button
                 type="button"
-                className="p-0 dc__no-background dc__no-border dc__outline-none-imp flex dc__tab-focus dc__no-shrink"
+                className={`${buttonPadding} dc__no-background dc__no-border dc__outline-none-imp flex dc__tab-focus dc__no-shrink`}
                 aria-label="Info Icon"
                 data-testid={dataTestid}
             >
