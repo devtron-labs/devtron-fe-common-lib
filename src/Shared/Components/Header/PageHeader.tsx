@@ -48,6 +48,7 @@ const PageHeader = ({
     onClose,
     markAsBeta,
     tippyProps,
+    isEnterprise,
 }: PageHeaderType) => {
     const { loginCount, setLoginCount, showGettingStartedCard, setShowGettingStartedCard, licenseData } =
         useMainContext()
@@ -154,6 +155,7 @@ const PageHeader = ({
                     interactive
                     arrow
                     onClose={handleCloseSwitchThemeLocationTippyChange}
+                    isEnterprise={isEnterprise}
                 >
                     <button
                         type="button"

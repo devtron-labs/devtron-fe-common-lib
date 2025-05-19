@@ -43,6 +43,7 @@ export interface PageHeaderType {
         tippyMessage?: string
         onClickTippyButton?: () => void
     }
+    isEnterprise?: boolean
 }
 
 export interface ServerInfo {
