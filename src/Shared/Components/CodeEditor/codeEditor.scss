@@ -131,6 +131,10 @@
 
     .cm-panels-top {
         border-bottom: none;
+
+        &:has(.code-editor__search) {
+            z-index: 0;
+        }
     }
 
     // TOOLTIPS
