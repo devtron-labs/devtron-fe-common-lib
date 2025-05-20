@@ -49,6 +49,8 @@ import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
 import { ReactComponent as ICFastForward } from '@IconsV2/ic-fast-forward.svg'
 import { ReactComponent as ICFileKey } from '@IconsV2/ic-file-key.svg'
+import { ReactComponent as ICFilter } from '@IconsV2/ic-filter.svg'
+import { ReactComponent as ICFilterApplied } from '@IconsV2/ic-filter-applied.svg'
 import { ReactComponent as ICFlask } from '@IconsV2/ic-flask.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
 import { ReactComponent as ICGear } from '@IconsV2/ic-gear.svg'
@@ -181,6 +183,8 @@ export const iconMap = {
     'ic-failure': ICFailure,
     'ic-fast-forward': ICFastForward,
     'ic-file-key': ICFileKey,
+    'ic-filter-applied': ICFilterApplied,
+    'ic-filter': ICFilter,
     'ic-flask': ICFlask,
     'ic-folder-user': ICFolderUser,
     'ic-gear': ICGear,
