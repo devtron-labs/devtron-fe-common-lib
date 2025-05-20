@@ -59,7 +59,7 @@ export interface GenericInfoCardListingProps
         Record<'id', string>)[]
     emptyStateConfig: Pick<GenericEmptyStateType, 'title' | 'subTitle' | 'image' | 'renderButton' | 'renderButton'>
     searchKey?: string
-    reloadList?: () => void
+    reloadList: () => void
     error?: APIResponseHandlerProps['error']
     isLoading?: boolean
 }

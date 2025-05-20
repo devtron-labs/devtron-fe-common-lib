@@ -29,7 +29,7 @@ export const GenericInfoCardListing = ({
         }
 
         const loweredSearchKey = searchKey.toLowerCase()
-        return list.filter(({ title }) => title.toLowerCase().includes(loweredSearchKey))
+        return sanitizedList.filter(({ title }) => title.toLowerCase().includes(loweredSearchKey))
     }, [searchKey, list, error])
 
     if (isLoading) {

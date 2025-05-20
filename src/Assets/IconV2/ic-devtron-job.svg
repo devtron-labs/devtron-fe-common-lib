@@ -1,15 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
-  <rect width="24" height="24" fill="#E5F2FF" rx="6"/>
-  <g clip-path="url(#a)">
-    <path fill="#023E8A" d="M5.333 14.222h4.444v4.444H5.333z"/>
-    <path fill="#0077B6" d="M5.333 9.777h4.444v4.444H5.333zm4.445 4.445h4.444v4.444H9.778z"/>
-    <path fill="#0096C7" d="M9.778 9.777h4.444v4.444H9.778zm4.444 4.445h4.444v4.444h-4.444z"/>
-    <path fill="#00B4D8" d="M14.222 9.777h4.444v4.444h-4.444z"/>
-    <path fill="#48CAE4" d="M14.222 5.333h4.444v4.444h-4.444z"/>
-  </g>
-  <defs>
-    <clipPath id="a">
-      <path fill="#fff" d="M4 4h16v16H4z"/>
-    </clipPath>
-  </defs>
+<svg width="40" height="40" viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+<rect width="40" height="40" rx="8" fill="#E6FBFF"/>
+<rect x="10.8333" y="23.0559" width="6.11111" height="6.11111" fill="#023E8A"/>
+<rect x="10.8333" y="16.9442" width="6.11111" height="6.11111" fill="#0077B6"/>
+<rect x="16.9443" y="23.0559" width="6.11111" height="6.11111" fill="#0077B6"/>
+<rect x="16.9443" y="16.9442" width="6.11111" height="6.11111" fill="#0096C7"/>
+<rect x="23.0557" y="23.0559" width="6.11111" height="6.11111" fill="#0096C7"/>
+<rect x="23.0557" y="16.9442" width="6.11111" height="6.11111" fill="#00B4D8"/>
+<rect x="23.0557" y="10.8334" width="6.11111" height="6.11111" fill="#48CAE4"/>
 </svg>
