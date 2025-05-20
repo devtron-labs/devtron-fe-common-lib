@@ -36,7 +36,7 @@ const ModalSidebarPanel = ({
             )}
             {children && <div className="fs-13 fw-4 lh-1-5 cn-7">{children}</div>}
         </div>
-        <div className="flexbox-col dc__gap-4">
+        <div className="flexbox-col dc__gap-4 dc__align-start">
             <span className="fs-13 fw-6 lh-20 cn-9">📙 Need help?</span>
             <DocLink
                 docLinkKey={documentationLink}
