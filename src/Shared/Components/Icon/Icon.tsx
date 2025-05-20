@@ -7,6 +7,7 @@ import { ReactComponent as ICApica } from '@IconsV2/ic-apica.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
 import { ReactComponent as ICArrowClockwise } from '@IconsV2/ic-arrow-clockwise.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
+import { ReactComponent as ICArrowsClockwise } from '@IconsV2/ic-arrows-clockwise.svg'
 import { ReactComponent as ICArrowsLeftRight } from '@IconsV2/ic-arrows-left-right.svg'
 import { ReactComponent as ICAther } from '@IconsV2/ic-ather.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
@@ -67,6 +68,7 @@ import { ReactComponent as ICHelm } from '@IconsV2/ic-helm.svg'
 import { ReactComponent as ICHelpFilled } from '@IconsV2/ic-help-filled.svg'
 import { ReactComponent as ICHelpOutline } from '@IconsV2/ic-help-outline.svg'
 import { ReactComponent as ICHibernate } from '@IconsV2/ic-hibernate.svg'
+import { ReactComponent as ICHibernateCircle } from '@IconsV2/ic-hibernate-circle.svg'
 import { ReactComponent as ICInProgress } from '@IconsV2/ic-in-progress.svg'
 import { ReactComponent as ICInfoFilled } from '@IconsV2/ic-info-filled.svg'
 import { ReactComponent as ICInfoOutline } from '@IconsV2/ic-info-outline.svg'
@@ -87,6 +89,7 @@ import { ReactComponent as ICMemory } from '@IconsV2/ic-memory.svg'
 import { ReactComponent as ICMicrosoft } from '@IconsV2/ic-microsoft.svg'
 import { ReactComponent as ICMissing } from '@IconsV2/ic-missing.svg'
 import { ReactComponent as ICMonitoring } from '@IconsV2/ic-monitoring.svg'
+import { ReactComponent as ICMoreVertical } from '@IconsV2/ic-more-vertical.svg'
 import { ReactComponent as ICNew } from '@IconsV2/ic-new.svg'
 import { ReactComponent as ICNodeScript } from '@IconsV2/ic-node-script.svg'
 import { ReactComponent as ICOidc } from '@IconsV2/ic-oidc.svg'
@@ -114,6 +117,7 @@ import { ReactComponent as ICStrategyCanary } from '@IconsV2/ic-strategy-canary.
 import { ReactComponent as ICStrategyRecreate } from '@IconsV2/ic-strategy-recreate.svg'
 import { ReactComponent as ICStrategyRolling } from '@IconsV2/ic-strategy-rolling.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
+import { ReactComponent as ICSun } from '@IconsV2/ic-sun.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICTata1mg } from '@IconsV2/ic-tata1mg.svg'
 import { ReactComponent as ICTerminalFill } from '@IconsV2/ic-terminal-fill.svg'
@@ -121,6 +125,7 @@ import { ReactComponent as ICThumbDown } from '@IconsV2/ic-thumb-down.svg'
 import { ReactComponent as ICThumbUp } from '@IconsV2/ic-thumb-up.svg'
 import { ReactComponent as ICTimeoutDash } from '@IconsV2/ic-timeout-dash.svg'
 import { ReactComponent as ICTimer } from '@IconsV2/ic-timer.svg'
+import { ReactComponent as ICTrafficSignal } from '@IconsV2/ic-traffic-signal.svg'
 import { ReactComponent as ICTravclan } from '@IconsV2/ic-travclan.svg'
 import { ReactComponent as ICUnknown } from '@IconsV2/ic-unknown.svg'
 import { ReactComponent as ICUserKey } from '@IconsV2/ic-user-key.svg'
@@ -139,6 +144,7 @@ export const iconMap = {
     'ic-app-group': ICAppGroup,
     'ic-arrow-clockwise': ICArrowClockwise,
     'ic-arrow-right': ICArrowRight,
+    'ic-arrows-clockwise': ICArrowsClockwise,
     'ic-arrows-left-right': ICArrowsLeftRight,
     'ic-ather': ICAther,
     'ic-azure': ICAzure,
@@ -198,6 +204,7 @@ export const iconMap = {
     'ic-helm': ICHelm,
     'ic-help-filled': ICHelpFilled,
     'ic-help-outline': ICHelpOutline,
+    'ic-hibernate-circle': ICHibernateCircle,
     'ic-hibernate': ICHibernate,
     'ic-in-progress': ICInProgress,
     'ic-info-filled': ICInfoFilled,
@@ -219,6 +226,7 @@ export const iconMap = {
     'ic-microsoft': ICMicrosoft,
     'ic-missing': ICMissing,
     'ic-monitoring': ICMonitoring,
+    'ic-more-vertical': ICMoreVertical,
     'ic-new': ICNew,
     'ic-node-script': ICNodeScript,
     'ic-oidc': ICOidc,
@@ -246,6 +254,7 @@ export const iconMap = {
     'ic-strategy-recreate': ICStrategyRecreate,
     'ic-strategy-rolling': ICStrategyRolling,
     'ic-success': ICSuccess,
+    'ic-sun': ICSun,
     'ic-suspended': ICSuspended,
     'ic-tata1mg': ICTata1mg,
     'ic-terminal-fill': ICTerminalFill,
@@ -253,6 +262,7 @@ export const iconMap = {
     'ic-thumb-up': ICThumbUp,
     'ic-timeout-dash': ICTimeoutDash,
     'ic-timer': ICTimer,
+    'ic-traffic-signal': ICTrafficSignal,
     'ic-travclan': ICTravclan,
     'ic-unknown': ICUnknown,
     'ic-user-key': ICUserKey,
