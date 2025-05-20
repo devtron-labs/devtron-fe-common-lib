@@ -8,6 +8,7 @@ import {
     SQUARE_SWITCH_TRACK_COLOR_MAP,
     SWITCH_HEIGHT_MAP,
     SWITCH_THUMB_PADDING_MAP,
+    THUMB_OUTER_PADDING_MAP,
 } from './constants'
 import { SwitchProps } from './types'
 
@@ -18,9 +19,14 @@ export const getSwitchTrackColor = ({
     shape,
     variant,
     isChecked,
-}: Required<Pick<SwitchProps, 'shape' | 'variant' | 'isChecked'>>): `var(--${IconBaseColorType})` => {
+    isLoading,
+}: Required<Pick<SwitchProps, 'shape' | 'variant' | 'isChecked' | 'isLoading'>>): string => {
+    if (isLoading) {
+        return 'dc__transparent--unstyled'
+    }
+
     if (!isChecked) {
-        return 'var(--N200)'
+        return 'bcn-2'
     }
 
     return shape === 'rounded' ? ROUNDED_SWITCH_TRACK_COLOR_MAP[variant] : SQUARE_SWITCH_TRACK_COLOR_MAP[variant]
@@ -48,4 +54,23 @@ export const getSwitchIconColor = ({
     }
 
     return iconColor || (variant === 'theme' ? 'B500' : 'G500')
+}
+
+export const getThumbPosition = ({
+    isLoading,
+    isChecked,
+}: Pick<SwitchProps, 'isLoading' | 'isChecked'>): 'left' | 'right' | 'center' => {
+    if (isLoading) {
+        return 'center'
+    }
+
+    return isChecked ? 'right' : 'left'
+}
+
+export const getThumbPadding = ({ shape, isLoading }: Pick<SwitchProps, 'shape' | 'isLoading'>): string => {
+    if (isLoading) {
+        return ''
+    }
+
+    return THUMB_OUTER_PADDING_MAP[shape]
 }

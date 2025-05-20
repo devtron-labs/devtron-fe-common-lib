@@ -8,7 +8,14 @@ import { getUniqueId } from '@Shared/Helpers'
 import { Icon } from '../Icon'
 import { INDETERMINATE_ICON_WIDTH_MAP, LOADING_COLOR_MAP } from './constants'
 import { SwitchProps } from './types'
-import { getSwitchContainerClass, getSwitchIconColor, getSwitchThumbClass, getSwitchTrackColor } from './utils'
+import {
+    getSwitchContainerClass,
+    getSwitchIconColor,
+    getSwitchThumbClass,
+    getSwitchTrackColor,
+    getThumbPadding,
+    getThumbPosition,
+} from './utils'
 
 const Switch = ({
     ariaLabel,
@@ -40,24 +47,26 @@ const Switch = ({
 
     const showIndeterminateIcon = ariaCheckedValue === 'mixed'
 
-    const renderContent = () => {
-        if (isLoading) {
-            return <Icon name="ic-circle-loader" color={LOADING_COLOR_MAP[variant]} />
-        }
-
-        return (
-            <motion.span
-                className={`flex flex-grow-1 ${shape === 'rounded' ? 'p-2 br-12' : 'p-1 br-4'} ${isChecked ? 'right' : 'left'}`}
-                layout
-                animate={{
-                    backgroundColor: getSwitchTrackColor({ shape, variant, isChecked }),
-                }}
-                transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-            >
+    const renderContent = () => (
+        <motion.span
+            className={`flex flex-grow-1 ${getThumbPadding({ shape, isLoading })} ${getThumbPosition({ isChecked, isLoading })}`}
+            layout
+            transition={{ ease: 'easeInOut', duration: 0.2 }}
+        >
+            {isLoading ? (
                 <motion.span
+                    transition={{ ease: 'easeInOut', duration: 0.2 }}
+                    layoutId="loader"
+                    className="flex-grow-1 h-100 dc__fill-available-space dc__no-shrink"
+                >
+                    <Icon key="progressing" name="ic-circle-loader" color={LOADING_COLOR_MAP[variant]} size={null} />
+                </motion.span>
+            ) : (
+                <motion.span
+                    layoutId="thumb"
                     className={getSwitchThumbClass({ shape, size, showIndeterminateIcon })}
                     layout
-                    transition={{ type: 'spring', stiffness: 500, damping: 35 }}
+                    transition={{ ease: 'easeInOut', duration: 0.2 }}
                 >
                     <AnimatePresence>
                         {showIndeterminateIcon ? (
@@ -84,15 +93,16 @@ const Switch = ({
                                             iconColor,
                                             variant,
                                         })}
+                                        size={null}
                                     />
                                 </motion.span>
                             )
                         )}
                     </AnimatePresence>
                 </motion.span>
-            </motion.span>
-        )
-    }
+            )}
+        </motion.span>
+    )
 
     return (
         <Tooltip alwaysShowTippyOnHover={!!tooltipContent} content={tooltipContent}>
@@ -119,7 +129,7 @@ const Switch = ({
                     data-testid={dataTestId}
                     disabled={isDisabled || isLoading}
                     aria-disabled={isDisabled}
-                    className={`p-0-imp h-100 flex flex-grow-1 dc__transparent ${isDisabled ? 'dc__disabled' : ''} dc__fill-available-space`}
+                    className={`p-0-imp h-100 flex flex-grow-1 dc__no-border ${shape === 'rounded' ? 'br-12' : 'br-4'} ${getSwitchTrackColor({ shape, variant, isChecked, isLoading })} ${isDisabled ? 'dc__disabled' : ''} dc__fill-available-space`}
                     onClick={onChange}
                 >
                     {renderContent()}

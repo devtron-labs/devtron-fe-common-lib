@@ -33,14 +33,14 @@ export const LOADING_COLOR_MAP: Record<SwitchProps['variant'], IconBaseColorType
     positive: 'G500',
 }
 
-export const ROUNDED_SWITCH_TRACK_COLOR_MAP: Record<SwitchProps['variant'], `var(--${IconBaseColorType})`> = {
-    theme: 'var(--B500)',
-    positive: 'var(--G500)',
+export const ROUNDED_SWITCH_TRACK_COLOR_MAP: Record<SwitchProps['variant'], string> = {
+    theme: 'bcb-5',
+    positive: 'bcg-5',
 }
 
 export const SQUARE_SWITCH_TRACK_COLOR_MAP: typeof ROUNDED_SWITCH_TRACK_COLOR_MAP = {
-    theme: 'var(--B300)',
-    positive: 'var(--G300)',
+    theme: 'bcb-3',
+    positive: 'bcg-3',
 }
 
 export const ROUNDED_SWITCH_THUMB_SIZE_MAP: Record<SwitchProps['size'], string> = {
@@ -56,4 +56,9 @@ export const INDETERMINATE_ICON_WIDTH_MAP: Record<SwitchProps['size'], string> =
 export const SWITCH_THUMB_PADDING_MAP: Record<SwitchProps['size'], string> = {
     [ComponentSizeType.medium]: 'p-3',
     [ComponentSizeType.small]: 'p-1',
+}
+
+export const THUMB_OUTER_PADDING_MAP: Record<SwitchProps['shape'], string> = {
+    rounded: 'p-2',
+    square: 'p-1',
 }
