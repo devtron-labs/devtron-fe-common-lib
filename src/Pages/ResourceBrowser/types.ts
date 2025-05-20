@@ -102,4 +102,7 @@ export interface AdditionalConfirmationModalOptionsProps<T = unknown> {
     children?: ReactElement
 }
 
-export type NodeDetailTabsInfoType = (Pick<TabProps, 'label' | 'icon'> & { id: string; node: () => JSX.Element })[]
+export type NodeDetailTabsInfoType = (Pick<TabProps, 'label' | 'icon'> & {
+    id: string
+    renderComponent: () => JSX.Element
+})[]
