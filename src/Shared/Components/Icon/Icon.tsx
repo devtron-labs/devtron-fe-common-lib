@@ -108,6 +108,7 @@ import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICTata1mg } from '@IconsV2/ic-tata1mg.svg'
 import { ReactComponent as ICTerminalFill } from '@IconsV2/ic-terminal-fill.svg'
+import { ReactComponent as ICThermometer } from '@IconsV2/ic-thermometer.svg'
 import { ReactComponent as ICThumbDown } from '@IconsV2/ic-thumb-down.svg'
 import { ReactComponent as ICThumbUp } from '@IconsV2/ic-thumb-up.svg'
 import { ReactComponent as ICTimeoutDash } from '@IconsV2/ic-timeout-dash.svg'
@@ -231,6 +232,7 @@ export const iconMap = {
     'ic-suspended': ICSuspended,
     'ic-tata1mg': ICTata1mg,
     'ic-terminal-fill': ICTerminalFill,
+    'ic-thermometer': ICThermometer,
     'ic-thumb-down': ICThumbDown,
     'ic-thumb-up': ICThumbUp,
     'ic-timeout-dash': ICTimeoutDash,
