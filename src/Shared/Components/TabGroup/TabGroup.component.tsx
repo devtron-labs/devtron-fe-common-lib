@@ -56,6 +56,7 @@ const Tab = ({
     shouldWrapTooltip,
     tooltipProps,
     uniqueGroupId,
+    iconElement,
 }: TabProps & Pick<TabGroupProps, 'size' | 'hideTopPadding'> & AdditionalTabProps) => {
     const { pathname, search } = useLocation()
     const ref = useRef<HTMLAnchorElement>(null)
@@ -88,7 +89,7 @@ const Tab = ({
         const content = (
             <>
                 <span className="m-0 flexbox dc__align-items-center dc__gap-6">
-                    {getTabIcon({ className: iconClassName, icon, showError, showWarning, size, active })}
+                    {getTabIcon({ className: iconClassName, icon, showError, showWarning, size, active, iconElement })}
                     <Tooltip content={label}>
                         <span className="dc__truncate">{label}</span>
                     </Tooltip>

@@ -27,6 +27,7 @@ import { ReactComponent as ICCaretLeft } from '@IconsV2/ic-caret-left.svg'
 import { ReactComponent as ICCaretRight } from '@IconsV2/ic-caret-right.svg'
 import { ReactComponent as ICCd } from '@IconsV2/ic-cd.svg'
 import { ReactComponent as ICChatCircleDots } from '@IconsV2/ic-chat-circle-dots.svg'
+import { ReactComponent as ICChatCircleOnline } from '@IconsV2/ic-chat-circle-online.svg'
 import { ReactComponent as ICCheck } from '@IconsV2/ic-check.svg'
 import { ReactComponent as ICChecks } from '@IconsV2/ic-checks.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
@@ -36,6 +37,7 @@ import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
 import { ReactComponent as ICCloseLarge } from '@IconsV2/ic-close-large.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
 import { ReactComponent as ICCloudVms } from '@IconsV2/ic-cloud-vms.svg'
+import { ReactComponent as ICCluster } from '@IconsV2/ic-cluster.svg'
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICCookr } from '@IconsV2/ic-cookr.svg'
@@ -44,19 +46,27 @@ import { ReactComponent as ICCpu } from '@IconsV2/ic-cpu.svg'
 import { ReactComponent as ICCrown } from '@IconsV2/ic-crown.svg'
 import { ReactComponent as ICCube } from '@IconsV2/ic-cube.svg'
 import { ReactComponent as ICDelete } from '@IconsV2/ic-delete.svg'
+import { ReactComponent as ICDeleteDots } from '@IconsV2/ic-delete-dots.svg'
 import { ReactComponent as ICDeleteLightning } from '@IconsV2/ic-delete-lightning.svg'
 import { ReactComponent as ICDelhivery } from '@IconsV2/ic-delhivery.svg'
 import { ReactComponent as ICDevtron } from '@IconsV2/ic-devtron.svg'
 import { ReactComponent as ICDevtronHeaderLogo } from '@IconsV2/ic-devtron-header-logo.svg'
 import { ReactComponent as ICDisconnect } from '@IconsV2/ic-disconnect.svg'
+import { ReactComponent as ICDiscordFill } from '@IconsV2/ic-discord-fill.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
+import { ReactComponent as ICEdit } from '@IconsV2/ic-edit.svg'
+import { ReactComponent as ICEnterpriseFeat } from '@IconsV2/ic-enterprise-feat.svg'
+import { ReactComponent as ICEnterpriseTag } from '@IconsV2/ic-enterprise-tag.svg'
 import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
 import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICExpandRightSm } from '@IconsV2/ic-expand-right-sm.svg'
 import { ReactComponent as ICExpandSm } from '@IconsV2/ic-expand-sm.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
+import { ReactComponent as ICFile } from '@IconsV2/ic-file.svg'
+import { ReactComponent as ICFileEdit } from '@IconsV2/ic-file-edit.svg'
 import { ReactComponent as ICFileKey } from '@IconsV2/ic-file-key.svg'
+import { ReactComponent as ICFiles } from '@IconsV2/ic-files.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
 import { ReactComponent as ICGear } from '@IconsV2/ic-gear.svg'
 import { ReactComponent as ICGift } from '@IconsV2/ic-gift.svg'
@@ -91,11 +101,11 @@ import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
 import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
 import { ReactComponent as ICLightningFill } from '@IconsV2/ic-lightning-fill.svg'
 import { ReactComponent as ICLivspace } from '@IconsV2/ic-livspace.svg'
-import { ReactComponent as ICLoginDevtronLogo } from '@IconsV2/ic-login-devtron-logo.svg'
 import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
 import { ReactComponent as ICMediumDelete } from '@IconsV2/ic-medium-delete.svg'
 import { ReactComponent as ICMediumPaintbucket } from '@IconsV2/ic-medium-paintbucket.svg'
 import { ReactComponent as ICMegaphoneLeft } from '@IconsV2/ic-megaphone-left.svg'
+import { ReactComponent as ICMegaphoneRight } from '@IconsV2/ic-megaphone-right.svg'
 import { ReactComponent as ICMemory } from '@IconsV2/ic-memory.svg'
 import { ReactComponent as ICMicrosoft } from '@IconsV2/ic-microsoft.svg'
 import { ReactComponent as ICMinikube } from '@IconsV2/ic-minikube.svg'
@@ -110,6 +120,7 @@ import { ReactComponent as ICOpenInNew } from '@IconsV2/ic-open-in-new.svg'
 import { ReactComponent as ICOpenshift } from '@IconsV2/ic-openshift.svg'
 import { ReactComponent as ICOutOfSync } from '@IconsV2/ic-out-of-sync.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
+import { ReactComponent as ICPath } from '@IconsV2/ic-path.svg'
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
@@ -173,6 +184,7 @@ export const iconMap = {
     'ic-caret-right': ICCaretRight,
     'ic-cd': ICCd,
     'ic-chat-circle-dots': ICChatCircleDots,
+    'ic-chat-circle-online': ICChatCircleOnline,
     'ic-check': ICCheck,
     'ic-checks': ICChecks,
     'ic-ci-linked': ICCiLinked,
@@ -182,6 +194,7 @@ export const iconMap = {
     'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
     'ic-cloud-vms': ICCloudVms,
+    'ic-cluster': ICCluster,
     'ic-code': ICCode,
     'ic-container': ICContainer,
     'ic-cookr': ICCookr,
@@ -189,20 +202,28 @@ export const iconMap = {
     'ic-cpu': ICCpu,
     'ic-crown': ICCrown,
     'ic-cube': ICCube,
+    'ic-delete-dots': ICDeleteDots,
     'ic-delete-lightning': ICDeleteLightning,
     'ic-delete': ICDelete,
     'ic-delhivery': ICDelhivery,
     'ic-devtron-header-logo': ICDevtronHeaderLogo,
     'ic-devtron': ICDevtron,
     'ic-disconnect': ICDisconnect,
+    'ic-discord-fill': ICDiscordFill,
     'ic-dockerhub': ICDockerhub,
     'ic-ecr': ICEcr,
+    'ic-edit': ICEdit,
+    'ic-enterprise-feat': ICEnterpriseFeat,
+    'ic-enterprise-tag': ICEnterpriseTag,
     'ic-env': ICEnv,
     'ic-error': ICError,
     'ic-expand-right-sm': ICExpandRightSm,
     'ic-expand-sm': ICExpandSm,
     'ic-failure': ICFailure,
+    'ic-file-edit': ICFileEdit,
     'ic-file-key': ICFileKey,
+    'ic-file': ICFile,
+    'ic-files': ICFiles,
     'ic-folder-user': ICFolderUser,
     'ic-gear': ICGear,
     'ic-gift-gradient': ICGiftGradient,
@@ -237,11 +258,11 @@ export const iconMap = {
     'ic-lightning-fill': ICLightningFill,
     'ic-lightning': ICLightning,
     'ic-livspace': ICLivspace,
-    'ic-login-devtron-logo': ICLoginDevtronLogo,
     'ic-logout': ICLogout,
     'ic-medium-delete': ICMediumDelete,
     'ic-medium-paintbucket': ICMediumPaintbucket,
     'ic-megaphone-left': ICMegaphoneLeft,
+    'ic-megaphone-right': ICMegaphoneRight,
     'ic-memory': ICMemory,
     'ic-microsoft': ICMicrosoft,
     'ic-minikube': ICMinikube,
@@ -256,6 +277,7 @@ export const iconMap = {
     'ic-openshift': ICOpenshift,
     'ic-out-of-sync': ICOutOfSync,
     'ic-paper-plane-color': ICPaperPlaneColor,
+    'ic-path': ICPath,
     'ic-pencil': ICPencil,
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,

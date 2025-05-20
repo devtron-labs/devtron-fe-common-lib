@@ -73,6 +73,11 @@ type MenuListFooterConfigType =
               variant: ButtonVariantType.primary | ButtonVariantType.borderLess
           } & Omit<ButtonProps<ButtonComponentType>, 'size' | 'fullWidth' | 'icon' | 'endIcon' | 'variant' | 'style'>
       }
+    | {
+          type: 'customNode'
+          value: ReactElement
+          buttonProps?: never
+      }
 
 declare module 'react-select/base' {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

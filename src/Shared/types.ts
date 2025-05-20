@@ -14,10 +14,12 @@
  * limitations under the License.
  */
 
+import { ReactNode } from 'react'
 import { ParsedCountry } from 'react-international-phone'
 import { Dayjs } from 'dayjs'
 
 import { APIOptions, ApprovalConfigDataType } from '@Common/Types'
+import { ReleaseMode } from '@Pages/index'
 
 import {
     CommonNodeAttr,
@@ -33,8 +35,8 @@ import {
     VariableType,
     VulnerabilityType,
 } from '../Common'
-import { SelectPickerOptionType } from './Components'
-import { BASE_CONFIGURATION_ENV_ID, EnvironmentTypeEnum, PatchOperationType } from './constants'
+import { SelectPickerOptionType, WorkflowRunnerStatusDTO } from './Components'
+import { BASE_CONFIGURATION_ENV_ID, DEPLOYMENT_STATUS, EnvironmentTypeEnum, PatchOperationType } from './constants'
 
 export enum EnvType {
     CHART = 'helm_charts',
@@ -172,6 +174,7 @@ export interface ResourceTree {
     podMetadata: Array<PodMetaData>
     status: string
     resourcesSyncResult?: Record<string, string>
+    wfrId?: number
 }
 
 export enum AppType {
@@ -245,6 +248,8 @@ export interface AppDetails {
     chartAvatar?: string
     fluxTemplateType?: string
     FluxAppStatusDetail?: FluxAppStatusDetail
+    isPipelineTriggered?: boolean
+    releaseMode?: ReleaseMode
 }
 
 export interface ConfigDriftModalProps extends Required<Pick<AppDetails, 'appId'>> {
@@ -482,6 +487,7 @@ export enum ResourceKindType {
     releaseChannel = 'release-channel',
     tenant = 'tenant',
     installation = 'installation',
+    infrastructureInstallation = 'installations',
     environment = 'environment',
     cdPipeline = 'cd-pipeline',
     ciPipeline = 'ci-pipeline',
@@ -1116,6 +1122,11 @@ export enum ResponseHeaders {
     LICENSE_STATUS = 'X-License-Status',
 }
 
+export enum InstallationClusterType {
+    EKS_AUTO_CLUSTER = 'eksAutoCluster',
+    EKS_MANUAL_CLUSTER = 'eksManualCluster',
+}
+
 export type IconBaseSizeType =
     | 6
     | 8
@@ -1157,6 +1168,122 @@ export interface GetTimeDifferenceParamsType {
 export enum RegistryCredentialsType {
     USERNAME_PASSWORD = 'username_password',
     ANONYMOUS = 'anonymous',
+}
+
+export interface SyncStageResourceDetail {
+    id: number
+    cdWorkflowRunnerId: number
+    resourceGroup: string
+    resourceKind: string
+    resourceName: string
+    resourcePhase: string
+    resourceStatus: string
+    statusMessage: string
+}
+
+export enum TIMELINE_STATUS {
+    DEPLOYMENT_INITIATED = 'DEPLOYMENT_INITIATED',
+    GIT_COMMIT = 'GIT_COMMIT',
+    GIT_COMMIT_FAILED = 'GIT_COMMIT_FAILED',
+    ARGOCD_SYNC = 'ARGOCD_SYNC',
+    ARGOCD_SYNC_FAILED = 'ARGOCD_SYNC_FAILED',
+    KUBECTL_APPLY = 'KUBECTL_APPLY',
+    KUBECTL_APPLY_STARTED = 'KUBECTL_APPLY_STARTED',
+    KUBECTL_APPLY_SYNCED = 'KUBECTL_APPLY_SYNCED',
+    HEALTHY = 'HEALTHY',
+    APP_HEALTH = 'APP_HEALTH',
+    DEPLOYMENT_FAILED = 'FAILED',
+    FETCH_TIMED_OUT = 'TIMED_OUT',
+    UNABLE_TO_FETCH_STATUS = 'UNABLE_TO_FETCH_STATUS',
+    DEGRADED = 'DEGRADED',
+    DEPLOYMENT_SUPERSEDED = 'DEPLOYMENT_SUPERSEDED',
+    ABORTED = 'ABORTED',
+    INPROGRESS = 'INPROGRESS',
+    HELM_PACKAGE_GENERATED = 'HELM_PACKAGE_GENERATED',
+    HELM_PACKAGE_GENERATION_FAILED = 'HELM_PACKAGE_GENERATION_FAILED',
+    HELM_MANIFEST_PUSHED_TO_HELM_REPO = 'HELM_MANIFEST_PUSHED_TO_HELM_REPO',
+    HELM_MANIFEST_PUSHED_TO_HELM_REPO_FAILED = 'HELM_MANIFEST_PUSHED_TO_HELM_REPO_FAILED',
+}
+
+export interface DeploymentStatusDetailsTimelineType
+    extends Pick<SyncStageResourceDetail, 'id' | 'cdWorkflowRunnerId'> {
+    status: TIMELINE_STATUS
+    statusDetail: string
+    statusTime: string
+    resourceDetails?: SyncStageResourceDetail[]
+}
+
+export interface DeploymentStatusDetailsType {
+    deploymentFinishedOn: string
+    deploymentStartedOn: string
+    triggeredBy: string
+    statusFetchCount: number
+    statusLastFetchedAt: string
+    timelines: DeploymentStatusDetailsTimelineType[]
+    wfrStatus?: WorkflowRunnerStatusDTO
+    isDeploymentWithoutApproval: boolean
+}
+
+export type DeploymentStatusTimelineType =
+    | TIMELINE_STATUS.DEPLOYMENT_INITIATED
+    | TIMELINE_STATUS.GIT_COMMIT
+    | TIMELINE_STATUS.ARGOCD_SYNC
+    | TIMELINE_STATUS.KUBECTL_APPLY
+    | TIMELINE_STATUS.APP_HEALTH
+    | TIMELINE_STATUS.HELM_PACKAGE_GENERATED
+    | TIMELINE_STATUS.HELM_MANIFEST_PUSHED_TO_HELM_REPO
+
+export type DeploymentStatusBreakdownItemIconType =
+    | 'success'
+    | 'failed'
+    | 'unknown'
+    | 'inprogress'
+    | 'unreachable'
+    // Loading is for subSteps
+    | 'loading'
+    | 'disconnect'
+    | 'timed_out'
+    | ''
+
+export enum DeploymentPhaseType {
+    PRE_SYNC = 'PreSync',
+    SYNC = 'Sync',
+    POST_SYNC = 'PostSync',
+    SKIP = 'Skip',
+    SYNC_FAIL = 'SyncFail',
+}
+
+export interface DeploymentStatusBreakdownItemType {
+    icon: DeploymentStatusBreakdownItemIconType
+    displayText: ReactNode
+    displaySubText: string
+    time: string
+    /**
+     * Shown in accordion details if type is TIMELINE_STATUS.KUBECTL_APPLY to display resource details
+     */
+    resourceDetails?: SyncStageResourceDetail[]
+    isCollapsed?: boolean
+    /**
+     * Sub-Steps in accordion details in case type is TIMELINE_STATUS.KUBECTL_APPLY
+     */
+    subSteps?: { icon: DeploymentStatusBreakdownItemIconType; message: string; phase?: DeploymentPhaseType }[]
+    /**
+     * To be shown in accordion details below heading tile
+     */
+    timelineStatus?: ReactNode
+    showHelmManifest?: boolean
+}
+
+export interface DeploymentStatusDetailsBreakdownDataType {
+    deploymentStatus: (typeof DEPLOYMENT_STATUS)[keyof typeof DEPLOYMENT_STATUS]
+    deploymentTriggerTime: string
+    deploymentEndTime: string
+    triggeredBy: string
+    deploymentStatusBreakdown: Partial<Record<DeploymentStatusTimelineType, DeploymentStatusBreakdownItemType>>
+    errorBarConfig?: {
+        deploymentErrorMessage: string
+        nextTimelineToProcess: DeploymentStatusTimelineType
+    } | null
 }
 
 export interface IntelligenceConfig {
