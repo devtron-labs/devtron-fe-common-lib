@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useRef } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 
 import { Checkbox } from '@Common/Checkbox'
 import { DEFAULT_BASE_PAGE_SIZE } from '@Common/Constants'
@@ -16,7 +16,7 @@ import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
 import { BulkSelection } from '../BulkSelection'
 import BulkSelectionActionWidget from './BulkSelectionActionWidget'
 import { BULK_ACTION_GUTTER_LABEL, EVENT_TARGET, NO_ROWS_OR_GET_ROWS_ERROR, SHIMMER_DUMMY_ARRAY } from './constants'
-import { FiltersTypeEnum, InternalTableProps, PaginationEnum, SignalsType } from './types'
+import { BulkActionStateType, FiltersTypeEnum, InternalTableProps, PaginationEnum, SignalsType } from './types'
 import useTableWithKeyboardShortcuts from './useTableWithKeyboardShortcuts'
 import { getFilteringPromise, searchAndSortRows } from './utils'
 
@@ -42,13 +42,20 @@ const InternalTable = ({
     handleToggleBulkSelectionOnRow,
     paginationVariant,
     RowActionsOnHoverComponent,
-    children,
 }: InternalTableProps) => {
     const rowsContainerRef = useRef<HTMLDivElement>(null)
     const parentRef = useRef<HTMLDivElement>(null)
     const activeRowRef = useRef<HTMLDivElement>(null)
+    const bulkSelectionButtonRef = useRef<HTMLButtonElement>(null)
 
-    const { BulkActionsComponent } = bulkSelectionConfig ?? {}
+    const [bulkActionState, setBulkActionState] = useState<BulkActionStateType>(null)
+
+    const {
+        BulkActionsComponent,
+        bulkActionsData = null,
+        BulkOperationModal,
+        bulkOperationModalData = null,
+    } = bulkSelectionConfig ?? {}
 
     const { showSeparatorBetweenRows = true } = stylesConfig ?? {}
 
@@ -115,7 +122,8 @@ const InternalTable = ({
 
     const areFilteredRowsLoading = _areFilteredRowsLoading || filteredRowsError === NO_ROWS_OR_GET_ROWS_ERROR
 
-    const bulkSelectionCount = isBulkSelectionApplied && rows ? rows.length : (getSelectedIdentifiersCount?.() ?? 0)
+    const bulkSelectionCount =
+        isBulkSelectionApplied && rows ? filteredRows.length : (getSelectedIdentifiersCount?.() ?? 0)
 
     const visibleRows = useMemo(() => {
         const normalizedFilteredRows = filteredRows ?? []
@@ -128,9 +136,14 @@ const InternalTable = ({
         return paginatedRows
     }, [paginationVariant, offset, pageSize, filteredRows])
 
+    const showPagination =
+        paginationVariant === PaginationEnum.PAGINATED && filteredRows?.length > DEFAULT_BASE_PAGE_SIZE
+
     const { activeRowIndex, setActiveRowIndex } = useTableWithKeyboardShortcuts(
         { bulkSelectionConfig, bulkSelectionReturnValue, handleToggleBulkSelectionOnRow },
         visibleRows,
+        showPagination,
+        bulkSelectionButtonRef,
     )
 
     useEffectAfterMount(() => {
@@ -161,8 +174,17 @@ const InternalTable = ({
         activeRowRef.current?.focus()
     }, [activeRowIndex])
 
-    const showPagination =
-        paginationVariant === PaginationEnum.PAGINATED && filteredRows?.length > DEFAULT_BASE_PAGE_SIZE
+    const onBulkOperationModalClose = () => {
+        setBulkActionState(null)
+    }
+
+    const getBulkSelections = () => {
+        if (isBulkSelectionApplied && rows) {
+            return filteredRows
+        }
+
+        return Object.values(bulkSelectionState)
+    }
 
     const renderRows = () => {
         if (loading) {
@@ -308,7 +330,13 @@ const InternalTable = ({
                                     const isResizable = !!size?.range
 
                                     if (field === BULK_ACTION_GUTTER_LABEL) {
-                                        return <BulkSelection key={field} showPagination={showPagination} />
+                                        return (
+                                            <BulkSelection
+                                                ref={bulkSelectionButtonRef}
+                                                key={field}
+                                                showPagination={showPagination}
+                                            />
+                                        )
                                     }
 
                                     return (
@@ -344,6 +372,8 @@ const InternalTable = ({
                             handleClearBulkSelection={handleClearBulkSelection}
                             parentRef={parentRef}
                             BulkActionsComponent={BulkActionsComponent}
+                            setBulkActionState={setBulkActionState}
+                            bulkActionsData={bulkActionsData}
                         />
                     )}
                 </div>
@@ -359,7 +389,15 @@ const InternalTable = ({
                     />
                 )}
 
-                {children}
+                {bulkActionState && (
+                    <BulkOperationModal
+                        action={bulkActionState}
+                        onClose={onBulkOperationModalClose}
+                        bulkOperationModalData={bulkOperationModalData}
+                        isBulkSelectionApplied={isBulkSelectionApplied}
+                        selections={getBulkSelections()}
+                    />
+                )}
             </div>
         )
     }

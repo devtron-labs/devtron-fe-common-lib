@@ -89,6 +89,7 @@ import { ReactComponent as ICHelpOutline } from '@IconsV2/ic-help-outline.svg'
 import { ReactComponent as ICHibernate } from '@IconsV2/ic-hibernate.svg'
 import { ReactComponent as ICInProgress } from '@IconsV2/ic-in-progress.svg'
 import { ReactComponent as ICInfoFilled } from '@IconsV2/ic-info-filled.svg'
+import { ReactComponent as ICInfoFilledColor } from '@IconsV2/ic-info-filled-color.svg'
 import { ReactComponent as ICInfoOutline } from '@IconsV2/ic-info-outline.svg'
 import { ReactComponent as ICInstall } from '@IconsV2/ic-install.svg'
 import { ReactComponent as ICJobColor } from '@IconsV2/ic-job-color.svg'
@@ -245,6 +246,7 @@ export const iconMap = {
     'ic-help-outline': ICHelpOutline,
     'ic-hibernate': ICHibernate,
     'ic-in-progress': ICInProgress,
+    'ic-info-filled-color': ICInfoFilledColor,
     'ic-info-filled': ICInfoFilled,
     'ic-info-outline': ICInfoOutline,
     'ic-install': ICInstall,

@@ -14,6 +14,8 @@ const useTableWithKeyboardShortcuts = (
         bulkSelectionReturnValue,
     }: Pick<InternalTableProps, 'bulkSelectionConfig' | 'bulkSelectionReturnValue' | 'handleToggleBulkSelectionOnRow'>,
     visibleRows: RowsType,
+    showPagination: boolean,
+    bulkSelectionButtonRef: React.RefObject<HTMLButtonElement>,
 ) => {
     const isBulkSelectionConfigured = !!bulkSelectionConfig
 
@@ -151,6 +153,20 @@ const useTableWithKeyboardShortcuts = (
         })
 
         registerShortcut({
+            keys: ['Control', 'A'],
+            callback: () => {
+                if (showPagination) {
+                    bulkSelectionButtonRef.current?.click()
+                    return
+                }
+
+                handleBulkSelection({
+                    action: BulkSelectionEvents.SELECT_ALL_ON_PAGE,
+                })
+            },
+        })
+
+        registerShortcut({
             keys: ['Shift', 'ArrowUp'],
             callback: () => {
                 const { consecutiveSequencesForBulkSelection, activeRowIndex: newActiveRowIndex } =
@@ -186,6 +202,7 @@ const useTableWithKeyboardShortcuts = (
             unregisterShortcut(['Shift', 'ArrowUp'])
             unregisterShortcut(['Shift', 'ArrowDown'])
             unregisterShortcut(['X'])
+            unregisterShortcut(['Control', 'A'])
         }
     }, [
         getMoveFocusToNextRowHandler,
@@ -193,6 +210,8 @@ const useTableWithKeyboardShortcuts = (
         activeRowIndex,
         visibleRows,
         handleToggleBulkSelectionOnRow,
+        handleBulkSelection,
+        showPagination,
     ])
 
     return {

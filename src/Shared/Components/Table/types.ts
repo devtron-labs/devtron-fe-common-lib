@@ -1,4 +1,4 @@
-import { Dispatch, FunctionComponent, PropsWithChildren, SetStateAction } from 'react'
+import { Dispatch, FunctionComponent, MouseEvent, PropsWithChildren, SetStateAction } from 'react'
 
 import { GenericFilterEmptyStateProps } from '@Common/EmptyState/types'
 import {
@@ -120,9 +120,26 @@ export type Column = Pick<SortableTableHeaderCellProps, 'showTippyOnTruncate'> &
           }
     )
 
-type BulkSelectionConfigType = Pick<UseBulkSelectionProps<unknown>, 'getSelectAllDialogStatus'> & {
-    BulkActionsComponent: FunctionComponent<{}>
+export interface BulkActionsComponentProps {
+    onActionClick: (event: MouseEvent<HTMLButtonElement>) => void
+    bulkActionsData: unknown
 }
+
+type BulkSelectionReturnValueType = ReturnType<typeof useBulkSelection>
+
+export interface BulkOperationModalProps<T = string>
+    extends Pick<BulkSelectionReturnValueType, 'isBulkSelectionApplied'> {
+    action: T
+    onClose: () => void
+    selections: RowsType | null
+    bulkOperationModalData: unknown
+}
+
+type BulkSelectionConfigType = Pick<UseBulkSelectionProps<unknown>, 'getSelectAllDialogStatus'> & {
+    BulkActionsComponent: FunctionComponent<BulkActionsComponentProps>
+    BulkOperationModal: FunctionComponent<BulkOperationModalProps>
+} & Pick<BulkActionsComponentProps, 'bulkActionsData'> &
+    Pick<BulkOperationModalProps, 'bulkOperationModalData'>
 
 export enum PaginationEnum {
     PAGINATED = 'paginated',
@@ -159,109 +176,107 @@ export type ViewWrapperProps<T = FiltersTypeEnum.STATE> = PropsWithChildren<
         } & (T extends FiltersTypeEnum.URL ? Pick<UseUrlFiltersReturnType<string>, 'updateSearchParams'> : {})
 >
 
-export type InternalTableProps = PropsWithChildren<
-    Required<Pick<ConfigurableColumnsType, 'visibleColumns' | 'setVisibleColumns'>> & {
-        id: `table__${string}`
+export type InternalTableProps = Required<Pick<ConfigurableColumnsType, 'visibleColumns' | 'setVisibleColumns'>> & {
+    id: `table__${string}`
 
-        loading?: boolean
+    loading?: boolean
 
-        paginationVariant: PaginationEnum
+    paginationVariant: PaginationEnum
 
-        /**
-         * Memoize columns before passing as props.
-         *
-         * For columns from backend: initialize as empty array and set loading
-         * to true until API call completes.
-         */
-        columns: Column[]
+    /**
+     * Memoize columns before passing as props.
+     *
+     * For columns from backend: initialize as empty array and set loading
+     * to true until API call completes.
+     */
+    columns: Column[]
 
-        /** If bulk selections are not a concern omit this prop */
-        bulkSelectionConfig?: BulkSelectionConfigType
+    /** If bulk selections are not a concern omit this prop */
+    bulkSelectionConfig?: BulkSelectionConfigType
 
-        emptyStateConfig: {
-            noRowsConfig: Omit<GenericEmptyStateType, 'children'>
-            noRowsForFilterConfig?: Pick<GenericFilterEmptyStateProps, 'title' | 'subTitle'> & {
-                clearFilters: () => void
-            }
+    emptyStateConfig: {
+        noRowsConfig: Omit<GenericEmptyStateType, 'children'>
+        noRowsForFilterConfig?: Pick<GenericFilterEmptyStateProps, 'title' | 'subTitle'> & {
+            clearFilters: () => void
         }
+    }
 
-        filterData: UseFiltersReturnType | null
+    filterData: UseFiltersReturnType | null
 
-        resizableConfig: ReturnType<typeof useResizableTableConfig> | null
+    resizableConfig: ReturnType<typeof useResizableTableConfig> | null
 
-        /**
-         * Enable this to let users choose which columns to display.
-         * Example: Resource Browser > Node Listing
-         *
-         * Using the provided id for this table, we will store the user's preference in localStorage
-         */
-        areColumnsConfigurable?: boolean
+    /**
+     * Enable this to let users choose which columns to display.
+     * Example: Resource Browser > Node Listing
+     *
+     * Using the provided id for this table, we will store the user's preference in localStorage
+     */
+    areColumnsConfigurable?: boolean
 
-        additionalProps?: AdditionalProps
+    additionalProps?: AdditionalProps
 
-        /** Control the look of the table using this prop */
-        stylesConfig?: {
-            showSeparatorBetweenRows: boolean
-        }
+    /** Control the look of the table using this prop */
+    stylesConfig?: {
+        showSeparatorBetweenRows: boolean
+    }
 
-        /**
-         * Use this component to display additional content at the end of a row when it is hovered over.
-         */
-        RowActionsOnHoverComponent?: FunctionComponent<{ row: RowType }>
+    /**
+     * Use this component to display additional content at the end of a row when it is hovered over.
+     */
+    RowActionsOnHoverComponent?: FunctionComponent<{ row: RowType }>
 
-        bulkSelectionReturnValue: ReturnType<typeof useBulkSelection> | null
+    bulkSelectionReturnValue: BulkSelectionReturnValueType | null
 
-        handleClearBulkSelection: () => void
+    handleClearBulkSelection: () => void
 
-        handleToggleBulkSelectionOnRow: (row: RowType) => void
+    handleToggleBulkSelectionOnRow: (row: RowType) => void
 
-        ViewWrapper?: FunctionComponent<ViewWrapperProps>
-    } & (
-            | {
-                  /**
-                   * Direct rows data for frontend-only datasets like resource browser.
-                   */
-                  rows: RowsType
-                  /**
-                   * Use `getRows` function instead for data that needs to be fetched from backend with pagination/sorting/filtering.
-                   */
-                  getRows?: never
-              }
-            | {
-                  rows?: never
-                  /** NOTE: Sorting on frontend is only handled if rows is provided instead of getRows */
-                  getRows: (props: GetRowsProps) => Promise<RowsType>
-              }
-        ) &
-        (
-            | {
-                  filtersVariant: FiltersTypeEnum.URL
+    ViewWrapper?: FunctionComponent<ViewWrapperProps>
+} & (
+        | {
+              /**
+               * Direct rows data for frontend-only datasets like resource browser.
+               */
+              rows: RowsType
+              /**
+               * Use `getRows` function instead for data that needs to be fetched from backend with pagination/sorting/filtering.
+               */
+              getRows?: never
+          }
+        | {
+              rows?: never
+              /** NOTE: Sorting on frontend is only handled if rows is provided instead of getRows */
+              getRows: (props: GetRowsProps) => Promise<RowsType>
+          }
+    ) &
+    (
+        | {
+              filtersVariant: FiltersTypeEnum.URL
 
-                  /**
-                   * props for useUrlFilters/useStateFilters hooks
-                   */
-                  additionalFilterProps?: AdditionalFilterPropsType<FiltersTypeEnum.URL>
+              /**
+               * props for useUrlFilters/useStateFilters hooks
+               */
+              additionalFilterProps?: AdditionalFilterPropsType<FiltersTypeEnum.URL>
 
-                  /**
-                   * This func is used to filter the rows based on filter data.
-                   * Only applicable if filtersVariant is NOT set to NONE
-                   *
-                   * If filter is only being used for sorting, then send `noop` in this prop
-                   */
-                  filter: (row: RowType, filterData: UseFiltersReturnType) => boolean
-              }
-            | {
-                  filtersVariant: FiltersTypeEnum.STATE
-                  additionalFilterProps?: AdditionalFilterPropsType<FiltersTypeEnum.STATE>
-                  filter: (row: RowType, filterData: UseFiltersReturnType) => boolean
-              }
-            | {
-                  filtersVariant: FiltersTypeEnum.NONE
-                  additionalFilterProps?: never
-                  filter?: never
-              }
-        )
->
+              /**
+               * This func is used to filter the rows based on filter data.
+               * Only applicable if filtersVariant is NOT set to NONE
+               *
+               * If filter is only being used for sorting, then send `noop` in this prop
+               */
+              filter: (row: RowType, filterData: UseFiltersReturnType) => boolean
+          }
+        | {
+              filtersVariant: FiltersTypeEnum.STATE
+              additionalFilterProps?: AdditionalFilterPropsType<FiltersTypeEnum.STATE>
+              filter: (row: RowType, filterData: UseFiltersReturnType) => boolean
+          }
+        | {
+              filtersVariant: FiltersTypeEnum.NONE
+              additionalFilterProps?: never
+              filter?: never
+          }
+    )
 
 export type UseResizableTableConfigWrapperProps = Omit<InternalTableProps, 'resizableConfig'>
 
@@ -292,13 +307,17 @@ export type TableProps = Pick<
     | 'RowActionsOnHoverComponent'
     | 'loading'
     | 'ViewWrapper'
-    | 'children'
 >
 
-export interface BulkSelectionActionWidgetProps extends Pick<BulkSelectionConfigType, 'BulkActionsComponent'> {
+export type BulkActionStateType = string | null
+
+export interface BulkSelectionActionWidgetProps
+    extends Pick<BulkSelectionConfigType, 'BulkActionsComponent' | 'bulkActionsData'> {
     count: number
     handleClearBulkSelection: () => void
     parentRef: React.RefObject<HTMLDivElement>
+    /** If it is null, we can say no bulk action has been selected yet */
+    setBulkActionState: Dispatch<SetStateAction<BulkActionStateType>>
 }
 
 export type ConfigurableColumnsConfigType = Record<string, ConfigurableColumnsType['visibleColumns']>
