@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { CSSProperties, ReactElement, ReactNode } from 'react'
+import { CSSProperties, MutableRefObject, ReactElement, ReactNode } from 'react'
 
 import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
 
@@ -33,6 +33,10 @@ import {
 import { DeploymentStageType } from '../../constants'
 import {
     AggregationKeys,
+    AppDetails,
+    DeploymentStatusDetailsBreakdownDataType,
+    DeploymentStatusDetailsType,
+    DeploymentStatusTimelineType,
     GitTriggers,
     Node,
     NodeType,
@@ -371,66 +375,7 @@ export type FinishedType = { artifact: string; type: HistoryComponentType } & (
       }
 )
 
-export interface SyncStageResourceDetail {
-    id: number
-    cdWorkflowRunnerId: number
-    resourceGroup: string
-    resourceKind: string
-    resourceName: string
-    resourcePhase: string
-    resourceStatus: string
-    statusMessage: string
-}
-
-export interface DeploymentStatusDetailsTimelineType {
-    id: number
-    cdWorkflowRunnerId: number
-    status: string
-    statusDetail: string
-    statusTime: string
-    resourceDetails?: SyncStageResourceDetail[]
-}
-export interface DeploymentStatusDetailsType extends Pick<History, 'isDeploymentWithoutApproval'> {
-    deploymentFinishedOn: string
-    deploymentStartedOn: string
-    triggeredBy: string
-    statusFetchCount: number
-    statusLastFetchedAt: string
-    timelines: DeploymentStatusDetailsTimelineType[]
-    wfrStatus?: string
-}
-
-export interface DeploymentStatusDetailsResponse extends ResponseType {
-    result?: DeploymentStatusDetailsType
-}
-
-interface DeploymentStatusDetailRow {
-    icon: string
-    displayText: ReactNode
-    displaySubText: string
-    time: string
-    resourceDetails?: any
-    isCollapsed?: boolean
-    kubeList?: { icon: any; message: string }[]
-    timelineStatus?: string
-}
-export interface DeploymentStatusDetailsBreakdownDataType {
-    deploymentStatus: string
-    deploymentStatusText: string
-    deploymentTriggerTime: string
-    deploymentEndTime: string
-    deploymentError: string
-    triggeredBy: string
-    nonDeploymentError: string
-    deploymentStatusBreakdown: {
-        DEPLOYMENT_INITIATED: DeploymentStatusDetailRow
-        GIT_COMMIT?: DeploymentStatusDetailRow
-        ARGOCD_SYNC?: DeploymentStatusDetailRow
-        KUBECTL_APPLY?: DeploymentStatusDetailRow
-        APP_HEALTH?: DeploymentStatusDetailRow
-        HELM_PACKAGE_GENERATED?: DeploymentStatusDetailRow
-    }
-}
+export type DeploymentStatusDetailsResponse = ResponseType<DeploymentStatusDetailsType>
 
 export interface DeploymentDetailStepsType extends Pick<History, 'isDeploymentWithoutApproval'> {
     deploymentStatus?: string
@@ -570,20 +515,17 @@ export interface LogsRendererType
 export interface DeploymentStatusDetailBreakdownType {
     deploymentStatusDetailsBreakdownData: DeploymentStatusDetailsBreakdownDataType
     isVirtualEnvironment?: boolean
+    /**
+     * Won't be available if coming directly to deployment history from url
+     */
+    appDetails: AppDetails | null
+    rootClassName?: string
 }
 
-export interface DeploymentStatusDetailRowType {
-    type: string
+export interface DeploymentStatusDetailRowType extends Pick<DeploymentStatusDetailBreakdownType, 'appDetails'> {
+    type: DeploymentStatusTimelineType
     hideVerticalConnector?: boolean
     deploymentDetailedData: DeploymentStatusDetailsBreakdownDataType
-}
-
-export interface ErrorInfoStatusBarType {
-    nonDeploymentError: string
-    type: string
-    errorMessage: string
-    hideVerticalConnector?: boolean
-    hideErrorIcon?: boolean
 }
 
 export interface DeploymentConfigurationsRes extends ResponseType {
@@ -892,6 +834,7 @@ export interface LogStageAccordionProps extends StageDetailType, Pick<LogsRender
      */
     isLoading: boolean
     searchIndex: string
+    logsRendererRef: MutableRefObject<HTMLDivElement>
 }
 
 export interface CreateMarkupReturnType {

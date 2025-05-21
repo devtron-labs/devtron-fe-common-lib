@@ -173,6 +173,8 @@ const useCIEventSource = (url: string, maxLength?: number): [string[], EventSour
 
 const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, fullScreenView }: LogsRendererType) => {
     const { pipelineId, envId, appId } = useParams<DeploymentHistoryBaseParamsType>()
+    const logsRendererRef = useRef<HTMLDivElement>(null)
+
     const logsURL =
         parentType === HistoryComponentType.CI
             ? `${Host}/${ROUTES.CI_CONFIG_GET}/${pipelineId}/workflow/${triggerDetails.id}/logs`
@@ -573,6 +575,7 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
                                     isLoading={index === stageList.length - 1 && areEventsProgressing}
                                     fullScreenView={fullScreenView}
                                     searchIndex={searchResults[currentSearchIndex]}
+                                    logsRendererRef={logsRendererRef}
                                 />
                             ),
                         )}
@@ -609,7 +612,10 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
     }
 
     return (
-        <div className={`flexbox-col flex-grow-1 ${getComponentSpecificThemeClass(AppThemeType.dark)}`}>
+        <div
+            className={`flexbox-col flex-grow-1 ${getComponentSpecificThemeClass(AppThemeType.dark)}`}
+            ref={logsRendererRef}
+        >
             {triggerDetails.podStatus !== POD_STATUS.PENDING &&
             logsNotAvailable &&
             (!isBlobStorageConfigured || !triggerDetails.blobStorageEnabled)
