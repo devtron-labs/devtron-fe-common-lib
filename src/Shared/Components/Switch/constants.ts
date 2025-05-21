@@ -1,19 +1,19 @@
 import { ComponentSizeType } from '@Shared/constants'
 import { IconBaseColorType } from '@Shared/types'
 
-import { SwitchProps } from './types'
+import { DTSwitchProps } from './types'
 
-export const SWITCH_VARIANTS: Readonly<Record<SwitchProps['variant'], null>> = {
+export const SWITCH_VARIANTS: Readonly<Record<DTSwitchProps['variant'], null>> = {
     theme: null,
     positive: null,
 }
 
-export const SWITCH_SHAPES: Readonly<Record<SwitchProps['shape'], null>> = {
+export const SWITCH_SHAPES: Readonly<Record<DTSwitchProps['shape'], null>> = {
     rounded: null,
     square: null,
 }
 
-export const ROUNDED_SWITCH_SIZE_MAP: Readonly<Record<SwitchProps['size'], string>> = {
+export const ROUNDED_SWITCH_SIZE_MAP: Readonly<Record<DTSwitchProps['size'], string>> = {
     [ComponentSizeType.medium]: 'w-32',
     [ComponentSizeType.small]: 'w-24',
 }
@@ -23,17 +23,17 @@ export const SQUARE_SWITCH_SIZE_MAP: typeof ROUNDED_SWITCH_SIZE_MAP = {
     [ComponentSizeType.small]: 'w-24',
 }
 
-export const SWITCH_HEIGHT_MAP: Readonly<Record<SwitchProps['size'], string>> = {
+export const SWITCH_HEIGHT_MAP: Readonly<Record<DTSwitchProps['size'], string>> = {
     [ComponentSizeType.medium]: 'h-24',
     [ComponentSizeType.small]: 'h-20',
 }
 
-export const LOADING_COLOR_MAP: Record<SwitchProps['variant'], IconBaseColorType> = {
+export const LOADING_COLOR_MAP: Record<DTSwitchProps['variant'], IconBaseColorType> = {
     theme: 'B500',
     positive: 'G500',
 }
 
-export const ROUNDED_SWITCH_TRACK_COLOR_MAP: Record<SwitchProps['variant'], string> = {
+export const ROUNDED_SWITCH_TRACK_COLOR_MAP: Record<DTSwitchProps['variant'], string> = {
     theme: 'bcb-5',
     positive: 'bcg-5',
 }
@@ -43,22 +43,22 @@ export const SQUARE_SWITCH_TRACK_COLOR_MAP: typeof ROUNDED_SWITCH_TRACK_COLOR_MA
     positive: 'bcg-3',
 }
 
-export const ROUNDED_SWITCH_THUMB_SIZE_MAP: Record<SwitchProps['size'], string> = {
+export const ROUNDED_SWITCH_THUMB_SIZE_MAP: Record<DTSwitchProps['size'], string> = {
     [ComponentSizeType.medium]: 'icon-dim-16',
     [ComponentSizeType.small]: 'icon-dim-12',
 }
 
-export const INDETERMINATE_ICON_WIDTH_MAP: Record<SwitchProps['size'], string> = {
+export const INDETERMINATE_ICON_WIDTH_MAP: Record<DTSwitchProps['size'], string> = {
     [ComponentSizeType.medium]: 'w-12',
     [ComponentSizeType.small]: 'w-10',
 }
 
-export const SWITCH_THUMB_PADDING_MAP: Record<SwitchProps['size'], string> = {
+export const SWITCH_THUMB_PADDING_MAP: Record<DTSwitchProps['size'], string> = {
     [ComponentSizeType.medium]: 'p-3',
     [ComponentSizeType.small]: 'p-1',
 }
 
-export const THUMB_OUTER_PADDING_MAP: Record<SwitchProps['shape'], string> = {
+export const THUMB_OUTER_PADDING_MAP: Record<DTSwitchProps['shape'], string> = {
     rounded: 'p-2',
     square: 'p-1',
 }

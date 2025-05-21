@@ -63,7 +63,7 @@ type SwitchShapeProps =
 /**
  * Represents the properties for the `Switch` component.
  */
-export type SwitchProps = {
+export type DTSwitchProps = {
     /**
      * The ARIA label for the switch, used for accessibility purposes.
      */

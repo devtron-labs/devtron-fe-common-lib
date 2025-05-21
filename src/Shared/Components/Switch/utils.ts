@@ -10,9 +10,9 @@ import {
     SWITCH_THUMB_PADDING_MAP,
     THUMB_OUTER_PADDING_MAP,
 } from './constants'
-import { SwitchProps } from './types'
+import { DTSwitchProps } from './types'
 
-export const getSwitchContainerClass = ({ shape, size }: Required<Pick<SwitchProps, 'shape' | 'size'>>): string =>
+export const getSwitchContainerClass = ({ shape, size }: Required<Pick<DTSwitchProps, 'shape' | 'size'>>): string =>
     `${SWITCH_HEIGHT_MAP[size]} ${shape === 'rounded' ? ROUNDED_SWITCH_SIZE_MAP[size] : SQUARE_SWITCH_SIZE_MAP[size]}`
 
 export const getSwitchTrackColor = ({
@@ -20,7 +20,7 @@ export const getSwitchTrackColor = ({
     variant,
     isChecked,
     isLoading,
-}: Required<Pick<SwitchProps, 'shape' | 'variant' | 'isChecked' | 'isLoading'>>): string => {
+}: Required<Pick<DTSwitchProps, 'shape' | 'variant' | 'isChecked' | 'isLoading'>>): string => {
     if (isLoading) {
         return 'dc__transparent--unstyled'
     }
@@ -36,7 +36,7 @@ export const getSwitchThumbClass = ({
     shape,
     size,
     showIndeterminateIcon,
-}: Pick<SwitchProps, 'shape' | 'size'> & { showIndeterminateIcon: boolean }) => {
+}: Pick<DTSwitchProps, 'shape' | 'size'> & { showIndeterminateIcon: boolean }) => {
     if (showIndeterminateIcon) {
         return 'w-100 h-100 flex'
     }
@@ -48,7 +48,7 @@ export const getSwitchIconColor = ({
     iconColor,
     isChecked,
     variant,
-}: Pick<SwitchProps, 'iconColor' | 'isChecked' | 'variant'>): IconBaseColorType => {
+}: Pick<DTSwitchProps, 'iconColor' | 'isChecked' | 'variant'>): IconBaseColorType => {
     if (!isChecked) {
         return 'N200'
     }
@@ -59,7 +59,7 @@ export const getSwitchIconColor = ({
 export const getThumbPosition = ({
     isLoading,
     isChecked,
-}: Pick<SwitchProps, 'isLoading' | 'isChecked'>): 'left' | 'right' | 'center' => {
+}: Pick<DTSwitchProps, 'isLoading' | 'isChecked'>): 'left' | 'right' | 'center' => {
     if (isLoading) {
         return 'center'
     }
@@ -67,7 +67,7 @@ export const getThumbPosition = ({
     return isChecked ? 'right' : 'left'
 }
 
-export const getThumbPadding = ({ shape, isLoading }: Pick<SwitchProps, 'shape' | 'isLoading'>): string => {
+export const getThumbPadding = ({ shape, isLoading }: Pick<DTSwitchProps, 'shape' | 'isLoading'>): string => {
     if (isLoading) {
         return ''
     }

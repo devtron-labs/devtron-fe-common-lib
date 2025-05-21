@@ -7,7 +7,7 @@ import { getUniqueId } from '@Shared/Helpers'
 
 import { Icon } from '../Icon'
 import { INDETERMINATE_ICON_WIDTH_MAP, LOADING_COLOR_MAP } from './constants'
-import { SwitchProps } from './types'
+import { DTSwitchProps } from './types'
 import {
     getSwitchContainerClass,
     getSwitchIconColor,
@@ -32,7 +32,7 @@ const Switch = ({
     size = ComponentSizeType.medium,
     name,
     onChange,
-}: SwitchProps) => {
+}: DTSwitchProps) => {
     const inputId = useRef(getUniqueId())
 
     const getAriaCheckedValue = (): AriaAttributes['aria-checked'] => {
