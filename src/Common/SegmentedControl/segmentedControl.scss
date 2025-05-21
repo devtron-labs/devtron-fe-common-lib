@@ -7,6 +7,13 @@
         --segmented-control-highlight-width: auto;
         --segmented-control-highlight-x-position: 0;
 
+        &:has(input[type='radio']:checked:focus-visible) {
+            .segmented-control__segment--selected {
+                outline: 2px solid var(--B500) !important;
+                outline-offset: 2px;
+            }
+        }
+
         &::before {
             content: '';
             background: var(--bg-primary);
@@ -39,7 +46,7 @@
         transition: color 0.3s ease;
 
         &:hover:not(#{$parent-selector}--selected):not(.cursor-not-allowed) {
-            background-color: var(--bg-secondary);
+            background-color: var(--bg-hover);
         }
 
         &--selected {

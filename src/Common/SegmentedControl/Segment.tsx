@@ -45,7 +45,7 @@ const Segment = ({
                     name={name}
                     onChange={handleChange}
                     checked={isSelected}
-                    className="dc__opacity-0 m-0-imp dc__top-0 dc__left-0 dc__position-abs dc__bottom-0 dc__right-0 w-100 pointer h-100 dc__visibility-hidden"
+                    className="sr-only"
                     disabled={disabled}
                 />
 
