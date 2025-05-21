@@ -262,7 +262,7 @@ const InternalTable = ({
                         if (isBulkActionGutter) {
                             return (
                                 <div
-                                    className={`flex ${stickyClassName}`}
+                                    className={`flexbox dc__align-items-center ${stickyClassName}`}
                                     style={{ left: stickyLeftValue }}
                                     key={field}
                                 >
@@ -330,8 +330,9 @@ const InternalTable = ({
                         <div className="bg__primary dc__min-width-fit-content px-20 border__secondary--bottom dc__position-sticky dc__zi-2 dc__top-0">
                             {loading ? (
                                 <div className="flexbox py-12 dc__gap-16">
+                                    {isBulkSelectionConfigured ? <div className="shimmer w-20 mr-20" /> : null}
                                     {SHIMMER_DUMMY_ARRAY.map((label) => (
-                                        <div key={label} className="shimmer w-180" />
+                                        <div key={label} className="shimmer w-200" />
                                     ))}
                                 </div>
                             ) : (
