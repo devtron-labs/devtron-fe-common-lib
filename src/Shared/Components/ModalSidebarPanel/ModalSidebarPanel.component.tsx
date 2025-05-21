@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { DocLink } from '@Common/DocLink'
+import { DocLink } from '@Shared/DocLink'
 
 import { ModalSidebarPanelProps } from './types'
 

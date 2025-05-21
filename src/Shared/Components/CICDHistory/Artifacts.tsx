@@ -24,7 +24,7 @@ import folder from '@Icons/ic-folder.svg'
 import { ReactComponent as ICHelpOutline } from '@Icons/ic-help.svg'
 import { ReactComponent as MechanicalOperation } from '@Icons/ic-mechanical-operation.svg'
 import noartifact from '@Images/no-artifact.webp'
-import { DocLink } from '@Common/DocLink'
+import { DocLink } from '@Shared/DocLink'
 import { getIsApprovalPolicyConfigured } from '@Shared/Helpers'
 import { useDownload } from '@Shared/Hooks'
 

@@ -156,6 +156,7 @@ const PageHeader = ({
                     arrow
                     onClose={handleCloseSwitchThemeLocationTippyChange}
                     isEnterprise={isEnterprise}
+                    documentationLink={tippyRedirectLink}
                 >
                     <button
                         type="button"

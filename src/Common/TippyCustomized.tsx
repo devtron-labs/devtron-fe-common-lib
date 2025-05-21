@@ -23,11 +23,11 @@ import 'tippy.js/animations/shift-toward-subtle.css'
 import 'tippy.js/animations/shift-toward.css'
 import { TippyCustomizedProps, TippyTheme } from './Types'
 import { not, stopPropagation } from './Helper'
-import { DocLink, DOCUMENTATION } from './DocLink'
+import { DocLink } from '../Shared/DocLink'
 
 // This component will handle some of the new tippy designs and interactions
 // So this can be updated to support further for new features or interactions
-export const TippyCustomized = (props: TippyCustomizedProps) => {
+export const TippyCustomized = <T extends boolean = false>(props: TippyCustomizedProps<T>) => {
     const tippyRef = useRef(null)
     const [showHeadingInfo, setShowHeadingInfo] = useState(false)
     const isWhiteTheme = props.theme === TippyTheme.white
@@ -160,13 +160,13 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                 {documentationLink && (
                     <div className="px-12 pb-12 flexbox">
                         <DocLink
-                            docLinkKey={documentationLink}
                             text={documentationLinkText}
                             dataTestId="learn-more-about-tippy-link"
                             showExternalIcon
                             onClick={closeTippy}
                             isEnterprise={isEnterprise}
                             isExternalLink={isExternalLink}
+                            docLinkKey={documentationLink}
                         />
                     </div>
                 )}

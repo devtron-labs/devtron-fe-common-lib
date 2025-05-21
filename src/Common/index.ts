@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+export * from '../Shared/DocLink'
 export * from './AddCDButton'
 export * from './API'
 export { BreadCrumb, useBreadcrumb } from './BreadCrumb/BreadCrumb'
@@ -30,7 +31,6 @@ export * from './DeleteCINodeButton'
 export { default as DevtronCopyright } from './DevtronCopyright'
 export * from './DevtronProgressing'
 export * from './Dialogs'
-export * from './DocLink'
 export * from './DraggableWrapper'
 export * from './Drawer'
 export * from './EmptyState'

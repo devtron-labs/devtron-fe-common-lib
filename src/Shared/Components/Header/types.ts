@@ -25,7 +25,7 @@ export enum InstallationType {
     ENTERPRISE = 'enterprise',
 }
 
-export interface PageHeaderType {
+export interface PageHeaderType<T extends boolean = false> {
     headerName?: string
     showTabs?: boolean
     additionalHeaderInfo?: () => JSX.Element
@@ -36,7 +36,7 @@ export interface PageHeaderType {
     showCloseButton?: boolean
     onClose?: () => void
     markAsBeta?: boolean
-    tippyProps?: Pick<TippyCustomizedProps, 'additionalContent'> & {
+    tippyProps?: Pick<TippyCustomizedProps<T>, 'additionalContent'> & {
         isTippyCustomized?: boolean
         tippyRedirectLink?: keyof typeof DOCUMENTATION
         TippyIcon?: React.FunctionComponent<any>

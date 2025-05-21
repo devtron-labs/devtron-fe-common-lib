@@ -120,56 +120,62 @@ export interface CheckboxProps {
     children?: ReactNode
 }
 
-export interface TippyCustomizedProps extends Pick<TippyProps, 'appendTo'> {
-    theme: TippyTheme
-    visible?: boolean
-    heading?: ReactNode | string
-    headingInfo?: ReactNode | string
-    noHeadingBorder?: boolean
-    infoTextHeading?: string
-    hideHeading?: boolean
-    placement?: TippyProps['placement']
-    className?: string
-    Icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
-    iconPath?: string
-    iconClass?: string
-    iconSize?: number // E.g. 16, 20, etc.. Currently, there are around 12 sizes supported. Check `icons.css` or `base.scss` for supported sizes or add new size (class names starts with `icon-dim-`).
-    onImageLoadError?: (e) => void
-    onClose?: () => void
-    infoText?: React.ReactNode
-    showCloseButton?: boolean
-    arrow?: boolean
-    interactive?: boolean
-    showOnCreate?: boolean
-    trigger?: string
-    animation?: string
-    duration?: number
-    additionalContent?: ReactNode
-    documentationLink?: keyof typeof DOCUMENTATION
-    documentationLinkText?: string
-    children: React.ReactElement<any>
-    disableClose?: boolean
+export type TippyWithBaseDocLinkTypes<T extends boolean> = {
+    isExternalLink?: T
     isEnterprise?: boolean
-    isExternalLink?: boolean
+    documentationLink: T extends true ? string : keyof typeof DOCUMENTATION
 }
 
-export interface InfoIconTippyProps
-    extends Pick<
-        TippyCustomizedProps,
-        | 'heading'
-        | 'infoText'
-        | 'iconClass'
-        | 'documentationLinkText'
-        | 'additionalContent'
-        | 'placement'
-        | 'Icon'
-        | 'headingInfo'
-        | 'documentationLink'
-        | 'isEnterprise'
-        | 'isExternalLink'
+export type TippyCustomizedProps<T extends boolean> = Pick<TippyProps, 'appendTo'> &
+    TippyWithBaseDocLinkTypes<T> & {
+        theme: TippyTheme
+        visible?: boolean
+        heading?: ReactNode | string
+        headingInfo?: ReactNode | string
+        noHeadingBorder?: boolean
+        infoTextHeading?: string
+        hideHeading?: boolean
+        placement?: TippyProps['placement']
+        className?: string
+        Icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
+        iconPath?: string
+        iconClass?: string
+        iconSize?: number // E.g. 16, 20, etc.. Currently, there are around 12 sizes supported. Check `icons.css` or `base.scss` for supported sizes or add new size (class names starts with `icon-dim-`).
+        onImageLoadError?: (e) => void
+        onClose?: () => void
+        infoText?: React.ReactNode
+        showCloseButton?: boolean
+        arrow?: boolean
+        interactive?: boolean
+        showOnCreate?: boolean
+        trigger?: string
+        animation?: string
+        duration?: number
+        additionalContent?: ReactNode
+        documentationLinkText?: string
+        children: React.ReactElement<any>
+        disableClose?: boolean
+    }
+
+export interface InfoIconTippyProps<T extends boolean = false>
+    extends Partial<
+        Pick<
+            TippyCustomizedProps<T>,
+            | 'heading'
+            | 'infoText'
+            | 'iconClass'
+            | 'documentationLinkText'
+            | 'additionalContent'
+            | 'placement'
+            | 'Icon'
+            | 'headingInfo'
+            | 'documentationLink'
+            | 'isEnterprise'
+            | 'isExternalLink'
+        >
     > {
     dataTestid?: string
-    children?: TippyCustomizedProps['children']
+    children?: TippyCustomizedProps<T>['children']
     iconClassName?: string
     buttonPadding?: string
 }
