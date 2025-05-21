@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useRef, useState } from 'react'
 
 import { ComponentSizeType } from '@Shared/constants'
 
@@ -25,16 +25,6 @@ const SegmentedControl = ({
     const selectedSegmentRef = useRef<HTMLDivElement>(null)
     const [selectedSegmentValue, setSelectedSegmentValue] = useState<SegmentType['value'] | null>(segments[0].value)
     const segmentValue = isUnControlledComponent ? selectedSegmentValue : controlledValue
-
-    useEffect(() => {
-        if (segmentValue) {
-            const { offsetWidth, offsetLeft } = selectedSegmentRef.current
-            const { style } = segmentedControlRefContainer.current
-
-            style.setProperty('--segmented-control-highlight-width', `${offsetWidth}px`)
-            style.setProperty('--segmented-control-highlight-x-position', `${offsetLeft}px`)
-        }
-    }, [segmentValue, size, fullWidth])
 
     const handleSegmentChange = (updatedSegment: SegmentType) => {
         if (isUnControlledComponent) {
