@@ -277,7 +277,7 @@ const InternalTable = ({
                         }
 
                         return (
-                            <div className={`${stickyClassName}`} style={{ left: stickyLeftValue }} key={field}>
+                            <div className={`${stickyClassName} flexbox`} style={{ left: stickyLeftValue }} key={field}>
                                 {CellComponent ? (
                                     <CellComponent
                                         field={field}
