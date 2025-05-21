@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-export { default as AppStatusDetailsChart } from './AppStatusDetailsChart'
 export { default as Artifacts } from './Artifacts'
 export { default as CDEmptyState } from './CDEmptyState'
 export * from './CiPipelineSourceConfig'

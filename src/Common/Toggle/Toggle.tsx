@@ -17,6 +17,7 @@
 import React, { SyntheticEvent, useCallback } from 'react'
 import { Icon as IconComponent } from '@Shared/Components'
 import { throttle, useEffectAfterMount } from '../Helper'
+import { CHECKBOX_VALUE } from '@Common/Types'
 import './Toggle.scss'
 
 const Toggle = ({
@@ -31,12 +32,14 @@ const Toggle = ({
     throttleOnChange = false,
     shouldToggleValueOnLabelClick = false,
     isLoading = false,
+    value = CHECKBOX_VALUE.CHECKED,
+    isControlled = false,
     ...props
 }) => {
     const [active, setActive] = React.useState(selected)
 
     useEffectAfterMount(() => {
-        if (typeof onSelect === 'function') {
+        if (typeof onSelect === 'function' && !isControlled) {
             if (active !== selected) {
                 onSelect(active)
             }
@@ -49,7 +52,11 @@ const Toggle = ({
 
     function handleClick() {
         if (!disabled) {
-            setActive((active) => !active)
+            if (isControlled) {
+                onSelect(!active)
+            } else {
+                setActive((active) => !active)
+            }
         }
     }
 
@@ -70,8 +77,26 @@ const Toggle = ({
         }
     }
 
+    const isIntermediateView = selected && value === CHECKBOX_VALUE.INTERMEDIATE
+
+    const renderIcon = () => {
+        if (isIntermediateView) {
+            return (
+                <div className="w-100 h-100 dc__position-abs flex">
+                    <div className="w-8 h-2 br-4 dc__no-shrink bg__white" />
+                </div>
+            )
+        }
+
+        if (Icon) {
+            return <Icon className={`icon-dim-20 br-4 p-2 ${iconClass}`} />
+        }
+
+        return null
+    }
+
     return isLoading ? (
-        <IconComponent name='ic-circle-loader' color='B500' size={20} />
+        <IconComponent name="ic-circle-loader" color="B500" size={20} />
     ) : (
         <label
             {...props}
@@ -80,8 +105,11 @@ const Toggle = ({
             {...(shouldToggleValueOnLabelClick ? { onClick: handleLabelClick } : {})}
         >
             <input type="checkbox" checked={!!active} onChange={handleChange} className="toggle__input" />
-            <span className={`toggle__slider ${Icon ? 'with-icon br-4 dc__border' : 'round'}`} data-testid={dataTestId}>
-                {Icon && <Icon className={`icon-dim-20 br-4 p-2 ${iconClass}`} />}
+            <span
+                className={`toggle__slider ${isIntermediateView ? 'intermediate' : ''} ${Icon ? 'with-icon br-4 dc__border' : 'round'}`}
+                data-testid={dataTestId}
+            >
+                {renderIcon()}
             </span>
         </label>
     )

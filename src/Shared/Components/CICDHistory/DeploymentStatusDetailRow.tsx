@@ -20,120 +20,125 @@ import { useParams } from 'react-router-dom'
 import moment from 'moment'
 
 import { ShowMoreText } from '@Shared/Components/ShowMoreText'
+import { AppType, TIMELINE_STATUS } from '@Shared/types'
 
 import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { DATE_TIME_FORMATS, showError } from '../../../Common'
-import { DEPLOYMENT_STATUS, statusIcon, TIMELINE_STATUS } from '../../constants'
-import AppStatusDetailsChart from './AppStatusDetailsChart'
-import { MANIFEST_STATUS_HEADERS, TERMINAL_STATUS_MAP } from './constants'
-import { ErrorInfoStatusBar } from './ErrorInfoStatusBar'
+import { ComponentSizeType, DEPLOYMENT_STATUS } from '../../constants'
+import { AppStatusContent } from '../AppStatusModal'
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
+import { APP_HEALTH_DROP_DOWN_LIST, MANIFEST_STATUS_HEADERS, TERMINAL_STATUS_MAP } from './constants'
 import { getManualSync } from './service'
 import { DeploymentStatusDetailRowType } from './types'
-import { renderIcon } from './utils'
+import { getDeploymentTimelineBGColorFromIcon, renderDeploymentTimelineIcon } from './utils'
 
 export const DeploymentStatusDetailRow = ({
     type,
     hideVerticalConnector,
     deploymentDetailedData,
+    appDetails,
 }: DeploymentStatusDetailRowType) => {
-    const { appId, envId } = useParams<{ appId: string; envId: string }>()
+    // Won't be available in release, but appDetails will be available in the component in that case
+    // Can't use appDetails directly as in case of deployment history, appDetails will be null
+    const { appId: paramAppId, envId: paramEnvId } = useParams<{ appId: string; envId: string }>()
+
+    const [isManualSyncLoading, setIsManualSyncLoading] = useState<boolean>(false)
+
     const statusBreakDownType = deploymentDetailedData.deploymentStatusBreakdown[type]
-    const [collapsed, toggleCollapsed] = useState<boolean>(statusBreakDownType.isCollapsed)
-    const appHealthDropDownlist = ['inprogress', 'failed', 'disconnect', 'timed_out']
-    const isHelmManifestPushFailed =
-        type === TIMELINE_STATUS.HELM_MANIFEST_PUSHED_TO_HELM_REPO &&
-        deploymentDetailedData.deploymentStatus === statusIcon.failed
+    const [isCollapsed, setIsCollapsed] = useState<boolean>(statusBreakDownType.isCollapsed)
 
     useEffect(() => {
-        toggleCollapsed(statusBreakDownType.isCollapsed)
+        setIsCollapsed(statusBreakDownType.isCollapsed)
     }, [statusBreakDownType.isCollapsed])
 
-    async function manualSyncData() {
+    const manualSyncData = async () => {
         try {
-            // eslint-disable-next-line @typescript-eslint/no-unused-vars
-            const response = await getManualSync({ appId, envId })
+            setIsManualSyncLoading(true)
+            const { appId: appDetailsAppId, appType, environmentId: appDetailsEnvId, installedAppId } = appDetails || {}
+            const parsedAppIdFromAppDetails = appType === AppType.DEVTRON_HELM_CHART ? installedAppId : appDetailsAppId
+
+            const appId = paramAppId || String(parsedAppIdFromAppDetails)
+            const envId = paramEnvId || String(appDetailsEnvId)
+
+            await getManualSync({ appId, envId })
         } catch (error) {
             showError(error)
+        } finally {
+            setIsManualSyncLoading(false)
         }
     }
     const toggleDropdown = () => {
-        toggleCollapsed(!collapsed)
+        setIsCollapsed((prevState) => !prevState)
     }
 
-    const renderDetailedData = () =>
-        !collapsed ? (
-            <div className="bg__primary en-2 detail-tab_border bw-1">
-                {statusBreakDownType.timelineStatus && (
-                    <div
-                        className={`flex left pt-8 pl-12 pb-8 lh-20 ${
-                            statusBreakDownType.icon !== 'inprogress' ? 'bcr-1' : 'bcy-2'
-                        }`}
-                    >
-                        {deploymentDetailedData.deploymentStatusBreakdown[type].timelineStatus}
-                        {(deploymentDetailedData.deploymentStatus === DEPLOYMENT_STATUS.TIMED_OUT ||
-                            deploymentDetailedData.deploymentStatus === DEPLOYMENT_STATUS.UNABLE_TO_FETCH) && (
-                            <span className="cb-5 fw-6 ml-8 cursor" onClick={manualSyncData}>
-                                Try now
-                            </span>
-                        )}
+    const renderDetailedData = () => {
+        if (type !== TIMELINE_STATUS.KUBECTL_APPLY) {
+            return null
+        }
+
+        return (
+            <div className="px-8 py-12">
+                {statusBreakDownType.subSteps?.map((items, index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <div key={`item-${index}`}>
+                        <div className="flex left lh-20 mb-8">
+                            {renderDeploymentTimelineIcon(items.icon)}
+                            <span className="ml-12">{items.message}</span>
+                        </div>
                     </div>
-                )}
-                {type === TIMELINE_STATUS.KUBECTL_APPLY && (
-                    <div className="pr-8 pl-8 pt-12 pb-12">
-                        <div className="">
-                            {deploymentDetailedData.deploymentStatusBreakdown[
-                                TIMELINE_STATUS.KUBECTL_APPLY
-                            ].kubeList?.map((items, index) => (
+                ))}
+                {statusBreakDownType.resourceDetails?.length ? (
+                    <div className="pl-32">
+                        <div className="app-status-row dc__border-bottom py-8">
+                            {MANIFEST_STATUS_HEADERS.map((headerKey, index) => (
                                 // eslint-disable-next-line react/no-array-index-key
-                                <div className="flex left lh-20 mb-8" key={`item-${index}`}>
-                                    {renderIcon(items.icon)}
-                                    <span className="ml-12">{items.message}</span>
+                                <div className="fs-13 fw-6 cn-7" key={`header_${index}`}>
+                                    {headerKey}
                                 </div>
                             ))}
                         </div>
-                        {statusBreakDownType.resourceDetails?.length ? (
-                            <div className="pl-32">
-                                <div className="app-status-row dc__border-bottom pt-8 pb-8">
-                                    {MANIFEST_STATUS_HEADERS.map((headerKey, index) => (
-                                        // eslint-disable-next-line react/no-array-index-key
-                                        <div className="fs-13 fw-6 cn-7" key={`header_${index}`}>
-                                            {headerKey}
-                                        </div>
-                                    ))}
+                        <div className="resource-list fs-13">
+                            {statusBreakDownType.resourceDetails.map((nodeDetails) => (
+                                <div
+                                    className="app-status-row py-8"
+                                    key={`${nodeDetails.resourceKind}/${nodeDetails.resourceName}`}
+                                >
+                                    <div className="dc__break-word">{nodeDetails.resourceKind}</div>
+                                    <div className="dc__break-word">{nodeDetails.resourceName}</div>
+                                    <div
+                                        className={`app-summary__status-name f-${
+                                            nodeDetails.resourceStatus
+                                                ? nodeDetails.resourceStatus.toLowerCase() ===
+                                                  TERMINAL_STATUS_MAP.RUNNING
+                                                    ? TERMINAL_STATUS_MAP.PROGRESSING
+                                                    : nodeDetails.resourceStatus.toLowerCase()
+                                                : ''
+                                        }`}
+                                    >
+                                        {nodeDetails.resourceStatus}
+                                    </div>
+                                    <ShowMoreText text={nodeDetails.statusMessage} />
                                 </div>
-                                <div className="resource-list fs-13">
-                                    {statusBreakDownType.resourceDetails.map((nodeDetails) => (
-                                        <div
-                                            className="app-status-row pt-8 pb-8"
-                                            key={`${nodeDetails.resourceKind}/${nodeDetails.resourceName}`}
-                                        >
-                                            <div className="dc__break-word">{nodeDetails.resourceKind}</div>
-                                            <div className="dc__break-word">{nodeDetails.resourceName}</div>
-                                            <div
-                                                className={`app-summary__status-name f-${
-                                                    nodeDetails.resourceStatus
-                                                        ? nodeDetails.resourceStatus.toLowerCase() ===
-                                                          TERMINAL_STATUS_MAP.RUNNING
-                                                            ? TERMINAL_STATUS_MAP.PROGRESSING
-                                                            : nodeDetails.resourceStatus.toLowerCase()
-                                                        : ''
-                                                }`}
-                                            >
-                                                {nodeDetails.resourceStatus}
-                                            </div>
-                                            <ShowMoreText text={nodeDetails.statusMessage} />
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        ) : null}
+                            ))}
+                        </div>
                     </div>
-                )}
+                ) : null}
             </div>
-        ) : null
+        )
+    }
 
-    const renderDetailChart = () =>
-        !collapsed && (
+    const isAccordion =
+        !!statusBreakDownType.subSteps?.length ||
+        (type === TIMELINE_STATUS.APP_HEALTH && APP_HEALTH_DROP_DOWN_LIST.includes(statusBreakDownType.icon)) ||
+        ((type === TIMELINE_STATUS.GIT_COMMIT || type === TIMELINE_STATUS.ARGOCD_SYNC) &&
+            statusBreakDownType.icon === 'failed')
+
+    const renderAccordionDetails = () => {
+        if (isCollapsed) {
+            return null
+        }
+
+        return (
             <div className="bg__primary en-2 detail-tab_border bw-1">
                 {statusBreakDownType.timelineStatus && (
                     <div
@@ -142,82 +147,90 @@ export const DeploymentStatusDetailRow = ({
                         }`}
                     >
                         {statusBreakDownType.timelineStatus}
+
                         {(deploymentDetailedData.deploymentStatus === DEPLOYMENT_STATUS.TIMED_OUT ||
                             deploymentDetailedData.deploymentStatus === DEPLOYMENT_STATUS.UNABLE_TO_FETCH) && (
-                            <span className="cb-5 fw-6 ml-8 cursor" onClick={manualSyncData}>
-                                Try now
-                            </span>
+                            <Button
+                                dataTestId="manual-sync-resource-status"
+                                text="Try now"
+                                variant={ButtonVariantType.text}
+                                size={ComponentSizeType.xxs}
+                                onClick={manualSyncData}
+                                isLoading={isManualSyncLoading}
+                            />
                         )}
                     </div>
                 )}
-                <div>
-                    <AppStatusDetailsChart filterRemoveHealth showFooter={false} />
-                </div>
+
+                {type === TIMELINE_STATUS.APP_HEALTH ? (
+                    <div>
+                        <AppStatusContent appDetails={appDetails} filterHealthyNodes isCardLayout={false} />
+                    </div>
+                ) : (
+                    renderDetailedData()
+                )}
             </div>
         )
-
-    const renderErrorInfoBar = () => (
-        <ErrorInfoStatusBar
-            type={TIMELINE_STATUS.HELM_MANIFEST_PUSHED_TO_HELM_REPO}
-            nonDeploymentError={deploymentDetailedData.nonDeploymentError}
-            errorMessage={deploymentDetailedData.deploymentError}
-            hideVerticalConnector
-            hideErrorIcon
-        />
-    )
+    }
 
     return (
         <>
             <div className="bw-1 en-2">
                 <div
-                    className={`deployment-status-breakdown-row pt-8 pb-8 pl-8 pr-8 bg__primary  ${
-                        collapsed ? (!isHelmManifestPushFailed ? 'br-4' : '') : 'border-collapse'
-                    }`}
+                    className={`flexbox dc__align-items-center dc__content-space dc__gap-12 py-8 px-8 bg__primary ${isCollapsed ? 'br-4' : 'border-collapse'}`}
                 >
-                    {renderIcon(statusBreakDownType.icon)}
-                    <span className="ml-12 mr-12 fs-13">
-                        <span data-testid="deployment-status-step-name" className="flex left">
-                            {statusBreakDownType.displayText}
-                        </span>
-                        {statusBreakDownType.displaySubText && (
-                            <span className={`ml-12 f-${statusBreakDownType.icon || 'waiting'}`}>
-                                {statusBreakDownType.displaySubText}
+                    <div className="flexbox dc__align-items-center dc__gap-12 flex-grow-1">
+                        {renderDeploymentTimelineIcon(statusBreakDownType.icon)}
+                        <span className="fs-13 flexbox dc__gap-6">
+                            <span data-testid="deployment-status-step-name" className="dc__truncate flexbox">
+                                {statusBreakDownType.displayText}
                             </span>
-                        )}
-                    </span>
-
-                    {statusBreakDownType.time !== '' && statusBreakDownType.icon !== 'inprogress' && (
-                        <span
-                            data-testid="deployment-status-kubernetes-dropdown"
-                            className={`pl-8 pr-8 pt-4 pb-4 br-12 ${
-                                statusBreakDownType.icon === 'failed' ? 'bcr-1 cr-5' : 'bcg-1 cg-7'
-                            }`}
-                        >
-                            {moment(statusBreakDownType.time, 'YYYY-MM-DDTHH:mm:ssZ').format(
-                                DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT,
+                            {statusBreakDownType.displaySubText && (
+                                <span
+                                    className={`app-summary__status-name dc__first-letter-capitalize--imp f-${statusBreakDownType.icon || 'waiting'}`}
+                                >
+                                    {statusBreakDownType.displaySubText}
+                                </span>
                             )}
                         </span>
-                    )}
-                    {((type === TIMELINE_STATUS.KUBECTL_APPLY && statusBreakDownType.kubeList?.length) ||
-                        (type === TIMELINE_STATUS.APP_HEALTH &&
-                            appHealthDropDownlist.includes(statusBreakDownType.icon)) ||
-                        ((type === TIMELINE_STATUS.GIT_COMMIT || type === TIMELINE_STATUS.ARGOCD_SYNC) &&
-                            statusBreakDownType.icon === 'failed')) && (
-                        <DropDownIcon
-                            style={{ marginLeft: 'auto', ['--rotateBy' as any]: `${180 * Number(!collapsed)}deg` }}
-                            className="icon-dim-24 rotate pointer"
+
+                        {statusBreakDownType.time !== '' && statusBreakDownType.icon !== 'inprogress' && (
+                            <span
+                                data-testid="deployment-status-kubernetes-dropdown dc__no-shrink"
+                                className={`px-8 py-4 br-12 ${getDeploymentTimelineBGColorFromIcon(
+                                    statusBreakDownType.icon,
+                                )}`}
+                            >
+                                {moment(statusBreakDownType.time, 'YYYY-MM-DDTHH:mm:ssZ').format(
+                                    DATE_TIME_FORMATS.TWELVE_HOURS_FORMAT,
+                                )}
+                            </span>
+                        )}
+                    </div>
+                    {isAccordion && (
+                        <Button
+                            dataTestId="steps-deployment-history-dropdown"
                             onClick={toggleDropdown}
-                            data-testid="steps-deployment-history-dropdown"
+                            variant={ButtonVariantType.borderLess}
+                            style={ButtonStyleType.neutral}
+                            size={ComponentSizeType.small}
+                            icon={
+                                <DropDownIcon
+                                    style={{
+                                        marginLeft: 'auto',
+                                        ['--rotateBy' as any]: `${180 * Number(!isCollapsed)}deg`,
+                                    }}
+                                    className="rotate"
+                                />
+                            }
+                            ariaLabel="Toggle dropdown"
+                            showAriaLabelInTippy={false}
                         />
                     )}
                 </div>
-                {isHelmManifestPushFailed && renderErrorInfoBar()}
             </div>
 
-            {type === TIMELINE_STATUS.GIT_COMMIT && renderDetailedData()}
-            {type === TIMELINE_STATUS.ARGOCD_SYNC && renderDetailedData()}
-            {type === TIMELINE_STATUS.KUBECTL_APPLY && renderDetailedData()}
-            {type === TIMELINE_STATUS.APP_HEALTH && renderDetailChart()}
+            {renderAccordionDetails()}
             {!hideVerticalConnector && <div className="vertical-connector" />}
         </>
     )
