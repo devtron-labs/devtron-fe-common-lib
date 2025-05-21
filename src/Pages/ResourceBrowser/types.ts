@@ -16,6 +16,7 @@
 
 import { Dispatch, ReactElement, SetStateAction } from 'react'
 
+import { TabProps } from '@Shared/Components'
 import { InstallationClusterType } from '@Shared/types'
 
 import { NodeActionRequest } from './ResourceBrowser.Types'
@@ -112,6 +113,11 @@ export interface AdditionalConfirmationModalOptionsProps<T = unknown> {
     setOptionsData: Dispatch<SetStateAction<T>>
     children?: ReactElement
 }
+
+export type NodeDetailTabsInfoType = (Pick<TabProps, 'label' | 'icon'> & {
+    id: string
+    renderComponent: () => JSX.Element
+})[]
 
 export interface InstallationClusterStepType {
     lastTransitionTime: string

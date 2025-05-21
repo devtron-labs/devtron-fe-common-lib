@@ -23,6 +23,7 @@ import { Entity, SegmentedBarChartProps } from './types'
 import './styles.scss'
 
 const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
+    hideLegend,
     entities: userEntities = [FALLBACK_ENTITY],
     rootClassName,
     countClassName,
@@ -36,7 +37,7 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
     const total = entities.reduce((sum, entity) => entity.value + sum, 0)
     const filteredEntities = entities.filter((entity) => !!entity.value)
 
-    const calcSegmentWidth = (entity: Entity) => `${(entity.value / total) * 100}%`
+    const calcSegmentWidth = (entityValue: Entity['value']) => `${(entityValue / total) * 100}%`
 
     const renderLabel = (label: Entity['label']) =>
         isLoading ? (
@@ -88,11 +89,17 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
         ))
     }
 
-    const renderLegend = () => (
-        <div className={`flexbox flex-wrap dc__row-gap-4 ${isProportional ? 'dc__gap-24' : 'dc__gap-16'}`}>
-            {renderContent()}
-        </div>
-    )
+    const renderLegend = () => {
+        if (hideLegend) {
+            return null
+        }
+
+        return (
+            <div className={`flexbox flex-wrap dc__row-gap-4 ${isProportional ? 'dc__gap-24' : 'dc__gap-16'}`}>
+                {renderContent()}
+            </div>
+        )
+    }
 
     const renderBar = () => (
         <motion.div
@@ -112,7 +119,7 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
                     className={`h-8 ${index === 0 ? 'dc__left-radius-4' : ''} ${
                         index === map.length - 1 ? 'dc__right-radius-4' : ''
                     } ${isLoading ? 'shimmer' : ''}`}
-                    style={{ backgroundColor: entity.color, width: calcSegmentWidth(entity) }}
+                    style={{ backgroundColor: entity.color, width: calcSegmentWidth(entity.value) }}
                 />
             ))}
         </motion.div>
