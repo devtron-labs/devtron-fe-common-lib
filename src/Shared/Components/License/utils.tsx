@@ -34,7 +34,7 @@ const getDevtronLicenseStatus = ({
     return LicenseStatus.ACTIVE
 }
 
-const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard extends boolean = false>(
+export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard extends boolean = false>(
     licenseDTO: DevtronLicenseDTO<isCentralDashboard>,
     currentUserEmail?: isCentralDashboard extends true ? string : never,
 ): Omit<DevtronLicenseCardProps, 'appTheme'> => {

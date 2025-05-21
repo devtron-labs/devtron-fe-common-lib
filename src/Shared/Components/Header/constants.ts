@@ -14,45 +14,89 @@
  * limitations under the License.
  */
 
+import { DISCORD_LINK, DOCUMENTATION_HOME_PAGE, URLS } from '@Common/Constants'
 import { CONTACT_SUPPORT_LINK, OPEN_NEW_TICKET, RAISE_ISSUE, VIEW_ALL_TICKETS } from '@Shared/constants'
 
-import { ReactComponent as Chat } from '../../../Assets/Icon/ic-chat-circle-dots.svg'
-import { ReactComponent as EditFile } from '../../../Assets/Icon/ic-edit-file.svg'
-import { ReactComponent as Files } from '../../../Assets/Icon/ic-files.svg'
-import { DISCORD_LINK } from '../../../Common'
-import { HelpOptionType } from './types'
+import { HelpButtonActionMenuProps, HelpMenuItems } from './types'
 
-export const EnterpriseHelpOptions: HelpOptionType[] = [
+export const COMMON_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options'][number]['items'] = [
+    ...((!window._env_?.K8S_CLIENT
+        ? [
+              {
+                  id: HelpMenuItems.GETTING_STARTED,
+                  label: 'Getting started',
+                  startIcon: { name: 'ic-path' },
+                  componentType: 'link',
+                  to: `/${URLS.GETTING_STARTED}`,
+              },
+          ]
+        : []) satisfies HelpButtonActionMenuProps['options'][number]['items']),
     {
-        name: 'Open new ticket',
-        link: OPEN_NEW_TICKET,
-        icon: EditFile,
+        id: HelpMenuItems.VIEW_DOCUMENTATION,
+        label: 'View documentation',
+        startIcon: { name: 'ic-book-open' },
+        componentType: 'anchor',
+        href: DOCUMENTATION_HOME_PAGE,
     },
     {
-        name: 'View all tickets',
-        link: VIEW_ALL_TICKETS,
-        icon: Files,
+        id: HelpMenuItems.JOIN_DISCORD_COMMUNITY,
+        label: 'Join discord community',
+        startIcon: { name: 'ic-discord-fill' },
+        componentType: 'anchor',
+        href: DISCORD_LINK,
+    },
+    {
+        id: HelpMenuItems.ABOUT_DEVTRON,
+        label: 'About Devtron',
+        startIcon: { name: 'ic-devtron' },
     },
 ]
 
-export const OSSHelpOptions: HelpOptionType[] = [
+export const OSS_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options'][number]['items'] = [
     {
-        name: 'Chat with support',
-        link: DISCORD_LINK,
-        icon: Chat,
+        id: HelpMenuItems.CHAT_WITH_SUPPORT,
+        label: 'Chat with support',
+        componentType: 'anchor',
+        href: DISCORD_LINK,
+        startIcon: { name: 'ic-chat-circle-online' },
     },
-
     {
-        name: 'Raise an issue/request',
-        link: RAISE_ISSUE,
-        icon: EditFile,
+        id: HelpMenuItems.RAISE_ISSUE_REQUEST,
+        label: 'Raise an issue/request',
+        startIcon: { name: 'ic-file-edit' },
+        componentType: 'anchor',
+        href: RAISE_ISSUE,
     },
 ]
 
-export const TrialHelpOptions: HelpOptionType[] = [
+export const ENTERPRISE_TRIAL_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options'][number]['items'] = [
     {
-        name: 'Request Support',
-        link: CONTACT_SUPPORT_LINK,
-        icon: EditFile,
+        id: HelpMenuItems.REQUEST_SUPPORT,
+        label: 'Request Support',
+        startIcon: { name: 'ic-file-edit' },
+        componentType: 'anchor',
+        href: CONTACT_SUPPORT_LINK,
+    },
+]
+
+export const ENTERPRISE_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options'][number]['items'] = [
+    {
+        id: HelpMenuItems.OPEN_NEW_TICKET,
+        label: 'Open new ticket',
+        startIcon: { name: 'ic-edit' },
+        componentType: 'anchor',
+        href: OPEN_NEW_TICKET,
+    },
+    {
+        id: HelpMenuItems.VIEW_ALL_TICKETS,
+        label: 'View all tickets',
+        startIcon: { name: 'ic-files' },
+        componentType: 'anchor',
+        href: VIEW_ALL_TICKETS,
+    },
+    {
+        id: HelpMenuItems.GIVE_FEEDBACK,
+        label: 'Give feedback',
+        startIcon: { name: 'ic-megaphone-right' },
     },
 ]

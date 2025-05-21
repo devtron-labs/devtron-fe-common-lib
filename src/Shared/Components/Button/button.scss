@@ -79,7 +79,7 @@
 
         @if ($color) {
             color: $color;
-    
+
             @include svg-styles($color);
         }
     }
@@ -216,6 +216,14 @@
         &--neutral {
             @include button-variant-styles($background, var(--N700), $border-color);
         }
+
+        &--neutral-n0 {
+            @include button-variant-styles($background, var(--N0), $border-color);
+        }
+
+        &--neutral-white {
+            @include button-variant-styles($background, var(--white), $border-color);
+        }
     }
 
     // Pseudo states for border-less button
@@ -243,6 +251,14 @@
         &--neutral {
             @include pseudo-states(var(--N100), var(--N200));
         }
+
+        &--neutral-n0 {
+            @include pseudo-states(var(--N000), var(--N100));
+        }
+
+        &--neutral-white {
+            @include pseudo-states(var(--white), var(--N100));
+        }
     }
 
     // Overrides for text button
@@ -253,7 +269,9 @@
         &--negative-grey,
         &--positive,
         &--warning,
-        &--neutral {
+        &--neutral,
+        &--neutral-n0,
+        &--neutral-white {
             padding: 0 !important;
             min-width: 0 !important;
             border: none;

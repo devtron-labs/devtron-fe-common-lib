@@ -17,6 +17,7 @@
 import { ModuleStatus } from '@Shared/types'
 
 import { ResponseType, TippyCustomizedProps } from '../../../Common'
+import { ActionMenuProps } from '../ActionMenu'
 
 export enum InstallationType {
     OSS_KUBECTL = 'oss_kubectl',
@@ -35,7 +36,6 @@ export interface PageHeaderType {
     showCloseButton?: boolean
     onClose?: () => void
     markAsBeta?: boolean
-    showAnnouncementHeader?: boolean
     tippyProps?: Pick<TippyCustomizedProps, 'additionalContent'> & {
         isTippyCustomized?: boolean
         tippyRedirectLink?: string
@@ -56,17 +56,23 @@ export interface ServerInfoResponse extends ResponseType {
     result?: ServerInfo
 }
 
-export interface HelpNavType {
-    className: string
-    setShowHelpCard: React.Dispatch<React.SetStateAction<boolean>>
+export interface HelpButtonProps {
     serverInfo: ServerInfo
     fetchingServerInfo: boolean
-    setGettingStartedClicked: (isClicked: boolean) => void
-    showHelpCard: boolean
+    onClick: () => void
 }
 
-export interface HelpOptionType {
-    name: string
-    link: string
-    icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
+export enum HelpMenuItems {
+    GETTING_STARTED = 'getting-started',
+    VIEW_DOCUMENTATION = 'view-documentation',
+    JOIN_DISCORD_COMMUNITY = 'join-discord-community',
+    ABOUT_DEVTRON = 'about-devtron',
+    REQUEST_SUPPORT = 'request-support',
+    OPEN_NEW_TICKET = 'open-new-ticket',
+    VIEW_ALL_TICKETS = 'view-all-tickets',
+    GIVE_FEEDBACK = 'give-feedback',
+    CHAT_WITH_SUPPORT = 'chat-with-support',
+    RAISE_ISSUE_REQUEST = 'raise-issue-request',
 }
+
+export type HelpButtonActionMenuProps = ActionMenuProps<HelpMenuItems>

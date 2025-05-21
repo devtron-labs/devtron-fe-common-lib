@@ -88,7 +88,7 @@ export default defineConfig({
                         return '@vendor'
                     }
 
-                    if (id.includes('codemirror') || id.includes('src/Common/CodeMirror')) {
+                    if (id.match('codemirror') || id.includes('src/Shared/Components/CodeEditor')) {
                         return '@code-editor'
                     }
 
