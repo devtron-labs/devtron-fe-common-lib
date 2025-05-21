@@ -16,16 +16,7 @@ const wrapWithTooltip = (tooltipProps: SegmentType['tooltipProps']) => (children
     </Tooltip>
 )
 
-const Segment = ({
-    segment,
-    isSelected,
-    name,
-    selectedSegmentRef,
-    onChange,
-    fullWidth,
-    size,
-    disabled,
-}: SegmentProps) => {
+const Segment = ({ segment, isSelected, name, onChange, fullWidth, size, disabled }: SegmentProps) => {
     const inputId = useMemo(getUniqueId, [])
 
     const { value, icon, isError, label, tooltipProps, ariaLabel } = segment
@@ -35,10 +26,7 @@ const Segment = ({
 
     return (
         <ConditionalWrap key={value} condition={!!tooltipProps?.content} wrap={wrapWithTooltip(tooltipProps)}>
-            <div
-                className={`dc__position-rel dc__text-center dc__no-shrink ${fullWidth ? 'flex-grow-1' : ''}`}
-                ref={selectedSegmentRef}
-            >
+            <div className={`dc__position-rel dc__text-center dc__no-shrink ${fullWidth ? 'flex-grow-1' : ''}`}>
                 <input
                     type="radio"
                     value={value}
