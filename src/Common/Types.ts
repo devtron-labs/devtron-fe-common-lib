@@ -117,6 +117,7 @@ export interface CheckboxProps {
     onClick?: (event) => void
     id?: string
     dataTestId?: string
+    error?: boolean
 }
 
 export interface TippyCustomizedProps extends Pick<TippyProps, 'appendTo'> {
