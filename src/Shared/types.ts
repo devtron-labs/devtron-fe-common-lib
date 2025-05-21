@@ -1159,3 +1159,9 @@ export interface IntelligenceConfig {
     prompt: string
     analyticsCategory: string
 }
+
+export type DeploymentStrategyType = 'CANARY' | 'ROLLING' | 'RECREATE' | 'BLUE-GREEN'
+
+export type DeploymentStrategyTypeWithDefault = DeploymentStrategyType | 'DEFAULT'
+
+export type PipelineIdsVsDeploymentStrategyMap = Record<number, DeploymentStrategyType>

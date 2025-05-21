@@ -28,6 +28,7 @@ import {
     ButtonProps,
     ComponentLayoutType,
     StatusType,
+    DeploymentStrategyType,
 } from '../Shared'
 import {
     ACTION_STATE,
@@ -116,6 +117,7 @@ export interface CheckboxProps {
     onClick?: (event) => void
     id?: string
     dataTestId?: string
+    error?: boolean
 }
 
 export interface TippyCustomizedProps extends Pick<TippyProps, 'appendTo'> {
@@ -845,7 +847,7 @@ export interface AppEnvironment {
 }
 
 export interface Strategy {
-    deploymentTemplate: string
+    deploymentTemplate: DeploymentStrategyType
     config: any
     default?: boolean
 }

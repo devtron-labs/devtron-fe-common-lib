@@ -98,7 +98,7 @@ const SortableTableHeaderCell = ({
         <div className={`flex dc__content-space dc__gap-6 dc__position-rel ${isResizable ? 'w-100 h-100' : ''}`}>
             <button
                 type="button"
-                className={`dc__transparent p-0 cn-7 flex dc__content-start dc__gap-4 dc__select-text ${!isSortable ? 'cursor-default' : ''} dc__position-rel`}
+                className={`dc__transparent p-0 cn-7 flex dc__content-start dc__gap-4 dc__select-text fw-6 ${!isSortable ? 'cursor-default' : ''} dc__position-rel`}
                 onClick={isSortable ? triggerSorting : noop}
                 disabled={disabled}
                 tabIndex={disabled || !isSortable ? -1 : 0}

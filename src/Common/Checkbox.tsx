@@ -35,7 +35,7 @@ export class Checkbox extends Component<CheckboxProps> {
                 <input
                     {...(this.props.name ? { name: this.props.name } : {})}
                     type="checkbox"
-                    className="form__checkbox"
+                    className={`form__checkbox ${this.props.error ? 'error': ''}`}
                     disabled={this.props.disabled}
                     value={this.props.value}
                     onChange={this.props.onChange}
