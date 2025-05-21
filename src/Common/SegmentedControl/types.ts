@@ -56,6 +56,9 @@ export type SegmentedControlProps = {
      * List of segments to be displayed
      */
     segments: SegmentType[]
+    /**
+     * Please make sure this is unique
+     */
     name: string
     size?: Extract<ComponentSizeType, ComponentSizeType.xs | ComponentSizeType.small | ComponentSizeType.medium>
     fullWidth?: boolean

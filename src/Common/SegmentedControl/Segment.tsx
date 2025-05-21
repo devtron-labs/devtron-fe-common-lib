@@ -54,13 +54,12 @@ const Segment = ({
                     htmlFor={inputId}
                     layout
                     className={`pointer m-0 dc__position-rel flex ${!fullWidth ? 'left' : ''} dc__gap-4 br-4 segmented-control__segment segmented-control__segment--${size} ${isSelected ? 'fw-6 segmented-control__segment--selected' : 'fw-4'} ${segment.isError ? 'cr-5' : 'cn-9'} ${disabled ? 'cursor-not-allowed' : ''} ${COMPONENT_SIZE_TO_SEGMENT_CLASS_MAP[size]}`}
-                    whileTap={{ scale: 0.95 }}
                     key={inputId}
                     aria-label={ariaLabel}
                 >
                     {isSelected && (
                         <motion.div
-                            layoutId="active-segment-control"
+                            layoutId={`active-segment-control-${name}`}
                             className="dc__position-abs active-mask dc__top-0 dc__left-0 dc__right-0 dc__bottom-0 bg__primary br-4"
                         />
                     )}
