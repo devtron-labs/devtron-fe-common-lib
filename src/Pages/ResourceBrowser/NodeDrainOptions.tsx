@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ChangeEvent, FocusEvent } from 'react'
+import { ChangeEvent, FocusEvent, useEffect } from 'react'
 
 import { ReactComponent as ICTimer } from '@Icons/ic-timer.svg'
 import { Checkbox } from '@Common/Checkbox'
@@ -36,6 +36,10 @@ const NodeDrainOptions = ({
         force: false,
         ignoreAllDaemonSets: false,
     }
+
+    useEffect(() => {
+        setNodeDrainOptions(nodeDrainOptions)
+    }, [])
 
     const handleGracePeriodOnChange = (e: ChangeEvent<HTMLInputElement>) => {
         setNodeDrainOptions({
