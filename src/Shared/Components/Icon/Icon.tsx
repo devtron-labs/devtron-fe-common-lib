@@ -59,6 +59,8 @@ import { ReactComponent as ICEdit } from '@IconsV2/ic-edit.svg'
 import { ReactComponent as ICEnterpriseFeat } from '@IconsV2/ic-enterprise-feat.svg'
 import { ReactComponent as ICEnterpriseTag } from '@IconsV2/ic-enterprise-tag.svg'
 import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
+import { ReactComponent as ICEnvironment } from '@IconsV2/ic-environment.svg'
+import { ReactComponent as ICEnvironmentIsolated } from '@IconsV2/ic-environment-isolated.svg'
 import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICExpandRightSm } from '@IconsV2/ic-expand-right-sm.svg'
 import { ReactComponent as ICExpandSm } from '@IconsV2/ic-expand-sm.svg'
@@ -126,6 +128,7 @@ import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
 import { ReactComponent as ICRocketLaunch } from '@IconsV2/ic-rocket-launch.svg'
 import { ReactComponent as ICSelected } from '@IconsV2/ic-selected.svg'
+import { ReactComponent as ICShapes } from '@IconsV2/ic-shapes.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
 import { ReactComponent as ICSlidersVertical } from '@IconsV2/ic-sliders-vertical.svg'
 import { ReactComponent as ICSortAscending } from '@IconsV2/ic-sort-ascending.svg'
@@ -149,6 +152,7 @@ import { ReactComponent as ICUnknown } from '@IconsV2/ic-unknown.svg'
 import { ReactComponent as ICUserCircle } from '@IconsV2/ic-user-circle.svg'
 import { ReactComponent as ICUserKey } from '@IconsV2/ic-user-key.svg'
 import { ReactComponent as ICUsers } from '@IconsV2/ic-users.svg'
+import { ReactComponent as ICVirtualCluster } from '@IconsV2/ic-virtual-cluster.svg'
 import { ReactComponent as ICWarning } from '@IconsV2/ic-warning.svg'
 import { ReactComponent as ICWifiSlash } from '@IconsV2/ic-wifi-slash.svg'
 
@@ -216,6 +220,8 @@ export const iconMap = {
     'ic-enterprise-feat': ICEnterpriseFeat,
     'ic-enterprise-tag': ICEnterpriseTag,
     'ic-env': ICEnv,
+    'ic-environment-isolated': ICEnvironmentIsolated,
+    'ic-environment': ICEnvironment,
     'ic-error': ICError,
     'ic-expand-right-sm': ICExpandRightSm,
     'ic-expand-sm': ICExpandSm,
@@ -283,6 +289,7 @@ export const iconMap = {
     'ic-quote': ICQuote,
     'ic-rocket-launch': ICRocketLaunch,
     'ic-selected': ICSelected,
+    'ic-shapes': ICShapes,
     'ic-shield-check': ICShieldCheck,
     'ic-sliders-vertical': ICSlidersVertical,
     'ic-sort-ascending': ICSortAscending,
@@ -306,6 +313,7 @@ export const iconMap = {
     'ic-user-circle': ICUserCircle,
     'ic-user-key': ICUserKey,
     'ic-users': ICUsers,
+    'ic-virtual-cluster': ICVirtualCluster,
     'ic-warning': ICWarning,
     'ic-wifi-slash': ICWifiSlash,
 }
