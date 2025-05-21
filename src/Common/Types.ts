@@ -123,7 +123,7 @@ export interface CheckboxProps {
 export type TippyWithBaseDocLinkTypes<T extends boolean> = {
     isExternalLink?: T
     isEnterprise?: boolean
-    documentationLink: T extends true ? string : keyof typeof DOCUMENTATION
+    documentationLink?: T extends true ? string : keyof typeof DOCUMENTATION
 }
 
 export type TippyCustomizedProps<T extends boolean> = Pick<TippyProps, 'appendTo'> &
@@ -158,21 +158,19 @@ export type TippyCustomizedProps<T extends boolean> = Pick<TippyProps, 'appendTo
     }
 
 export interface InfoIconTippyProps<T extends boolean = false>
-    extends Partial<
-        Pick<
-            TippyCustomizedProps<T>,
-            | 'heading'
-            | 'infoText'
-            | 'iconClass'
-            | 'documentationLinkText'
-            | 'additionalContent'
-            | 'placement'
-            | 'Icon'
-            | 'headingInfo'
-            | 'documentationLink'
-            | 'isEnterprise'
-            | 'isExternalLink'
-        >
+    extends Pick<
+        TippyCustomizedProps<T>,
+        | 'heading'
+        | 'infoText'
+        | 'iconClass'
+        | 'documentationLinkText'
+        | 'additionalContent'
+        | 'placement'
+        | 'Icon'
+        | 'headingInfo'
+        | 'documentationLink'
+        | 'isEnterprise'
+        | 'isExternalLink'
     > {
     dataTestid?: string
     children?: TippyCustomizedProps<T>['children']
