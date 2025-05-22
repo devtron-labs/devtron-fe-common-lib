@@ -29,6 +29,12 @@ export interface ReloadVersionConfigTypes {
     updateToastRef: MutableRefObject<ReturnType<typeof ToastManager.showToast>> | null
     isRefreshing: boolean
 }
+
+export interface SidePanelConfig {
+    open: boolean
+    docLink?: string | null
+}
+
 export interface MainContext {
     serverMode: SERVER_MODE
     setServerMode: (serverMode: SERVER_MODE) => void
@@ -78,6 +84,9 @@ export interface MainContext {
     reloadVersionConfig: ReloadVersionConfigTypes
     intelligenceConfig: IntelligenceConfig
     setIntelligenceConfig: Dispatch<SetStateAction<IntelligenceConfig>>
+
+    sidePanelConfig: SidePanelConfig
+    setSidePanelConfig: Dispatch<SetStateAction<SidePanelConfig>>
 }
 
 export interface MainContextProviderProps {
