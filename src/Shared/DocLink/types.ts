@@ -18,4 +18,9 @@ export type DocLinkProps<T extends boolean> = Pick<
         text?: string
         showExternalIcon?: boolean
         onClick?: (e: MouseEvent<HTMLButtonElement> | MouseEvent<HTMLAnchorElement>) => void
+        /**
+         * If `true`, disables opening the documentation link in side panel.
+         * @default false
+         */
+        disableSidePanelOpen?: boolean
     }
