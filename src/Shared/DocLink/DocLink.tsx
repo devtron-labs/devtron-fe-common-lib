@@ -17,6 +17,7 @@ export const DocLink = <T extends boolean = false>({
     variant = ButtonVariantType.text,
     isEnterprise = false,
     isExternalLink,
+    disableSidePanelOpen = false,
 }: DocLinkProps<T>) => {
     // HOOKS
     const { setSidePanelConfig } = useMainContext()
@@ -36,7 +37,7 @@ export const DocLink = <T extends boolean = false>({
 
     return (
         <Button
-            {...(isExternalLink
+            {...(isExternalLink || disableSidePanelOpen
                 ? {
                       component: ButtonComponentType.anchor,
                       anchorProps: {
