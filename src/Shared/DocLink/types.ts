@@ -1,3 +1,5 @@
+import { MouseEvent } from 'react'
+
 import { ButtonComponentType, ButtonProps } from '@Shared/Components'
 
 import { DOCUMENTATION } from './constants'
@@ -10,9 +12,10 @@ export type BaseDocLink<T extends boolean> = {
 
 export type DocLinkProps<T extends boolean> = Pick<
     ButtonProps<ButtonComponentType.anchor>,
-    'onClick' | 'dataTestId' | 'size' | 'variant'
+    'dataTestId' | 'size' | 'variant'
 > &
     BaseDocLink<T> & {
         text?: string
         showExternalIcon?: boolean
+        onClick?: (e: MouseEvent<HTMLButtonElement> | MouseEvent<HTMLAnchorElement>) => void
     }
