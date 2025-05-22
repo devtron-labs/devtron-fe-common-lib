@@ -37,19 +37,22 @@ export const getShowReplaceField = (state: EditorState) => {
     return curState || false
 }
 
-export const openSearchPanel: Command = (view: EditorView) => {
-    view.dispatch({
-        effects: [setShowReplaceField.of(searchPanelOpen(view.state) ? getShowReplaceField(view.state) : false)],
-    })
-    cmOpenSearchPanel(view)
-    return true
-}
+export const getOpenSearchPanel: (onOpenSearchPanel: () => void) => Command =
+    (onOpenSearchPanel: () => void) => (view: EditorView) => {
+        view.dispatch({
+            effects: [setShowReplaceField.of(searchPanelOpen(view.state) ? getShowReplaceField(view.state) : false)],
+        })
+        cmOpenSearchPanel(view)
+        onOpenSearchPanel()
+        return true
+    }
 
-export const openSearchPanelWithReplace: Command = (view: EditorView) => {
-    openSearchPanel(view)
-    view.dispatch({ effects: [setShowReplaceField.of(!view.state.readOnly && true)] })
-    return true
-}
+export const getOpenSearchPanelWithReplace: (onOpenSearchPanel: () => void) => Command =
+    (onOpenSearchPanel: () => void) => (view: EditorView) => {
+        getOpenSearchPanel(onOpenSearchPanel)(view)
+        view.dispatch({ effects: [setShowReplaceField.of(!view.state.readOnly && true)] })
+        return true
+    }
 
 export const replaceAll: Command = (view: EditorView) => {
     const isReplaceEnabled = getShowReplaceField(view.state)

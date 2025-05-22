@@ -78,6 +78,7 @@ export type CodeEditorProps<DiffView extends boolean = false> = {
     disableSearch?: boolean
     diffView?: DiffView
     theme?: AppThemeType
+    onOpenSearchPanel?: () => void
 } & CodeEditorPropsBasedOnDiffView<DiffView>
 
 export interface GetCodeEditorHeightReturnType {

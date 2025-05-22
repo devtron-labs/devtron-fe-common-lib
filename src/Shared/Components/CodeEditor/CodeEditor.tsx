@@ -33,7 +33,7 @@ import {
 } from '@uiw/react-codemirror'
 
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
-import { cleanKubeManifest } from '@Common/Helper'
+import { cleanKubeManifest, noop } from '@Common/Helper'
 import { getUniqueId } from '@Shared/Helpers'
 import { AppThemeType, useTheme } from '@Shared/Providers'
 
@@ -43,8 +43,8 @@ import { getCodeEditorTheme } from './CodeEditor.theme'
 import { CodeEditorRenderer } from './CodeEditorRenderer'
 import {
     blurOnEscape,
-    openSearchPanel,
-    openSearchPanelWithReplace,
+    getOpenSearchPanel,
+    getOpenSearchPanelWithReplace,
     replaceAll,
     showReplaceFieldState,
 } from './Commands'
@@ -89,6 +89,7 @@ const CodeEditor = <DiffView extends boolean = false>({
     onFocus,
     autoFocus,
     disableSearch = false,
+    onOpenSearchPanel = noop,
 }: CodeEditorProps<DiffView>) => {
     // HOOKS
     const { appTheme } = useTheme()
@@ -203,9 +204,11 @@ const CodeEditor = <DiffView extends boolean = false>({
         themeExtension,
         keymap.of([
             ...vscodeKeymap.filter(({ key }) => key !== 'Mod-Alt-Enter' && key !== 'Mod-Enter' && key !== 'Mod-f'),
-            ...(!disableSearch ? [{ key: 'Mod-f', run: openSearchPanel, scope: 'editor search-panel' }] : []),
+            ...(!disableSearch
+                ? [{ key: 'Mod-f', run: getOpenSearchPanel(onOpenSearchPanel), scope: 'editor search-panel' }]
+                : []),
             { key: 'Mod-Enter', run: replaceAll, scope: 'editor search-panel' },
-            { key: 'Mod-Alt-f', run: openSearchPanelWithReplace, scope: 'editor search-panel' },
+            { key: 'Mod-Alt-f', run: getOpenSearchPanelWithReplace(onOpenSearchPanel), scope: 'editor search-panel' },
             { key: 'Escape', run: blurOnEscape, stopPropagation: true },
         ]),
         indentationMarkers(),
