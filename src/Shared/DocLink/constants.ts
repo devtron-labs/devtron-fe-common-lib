@@ -33,6 +33,7 @@ export const DOCUMENTATION = {
     EXTERNAL_SECRET: 'usage/applications/creating-application/secrets#external-secrets',
     HOME_PAGE: 'https://devtron.ai',
     KUBE_CONFIG: 'usage/resource-browser#running-kubectl-commands-locally',
+    TAINT: 'usage/resource-browser#taint-a-node',
 
     // Global Configurations
     GLOBAL_CONFIG_API_TOKEN: 'getting-started/global-configurations/authorization/api-tokens',
