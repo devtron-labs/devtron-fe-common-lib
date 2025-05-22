@@ -16,8 +16,8 @@
 
 import { FC, SVGProps } from 'react'
 
-import { TooltipProps } from '@Common/Tooltip/types'
-import { IconBaseColorType, IconBaseSizeType } from '@Shared/index'
+import { TooltipProps } from '@Common/Tooltip'
+import { IconBaseColorType, IconBaseSizeType } from '@Shared/types'
 
 type IconMap = Record<string, FC<SVGProps<SVGSVGElement>>>
 
