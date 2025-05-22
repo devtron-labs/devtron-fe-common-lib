@@ -13,20 +13,26 @@ const queryClient = new QueryClient({
         queries: {
             cacheTime: 0,
             refetchOnWindowFocus: false,
+            refetchOnReconnect: false,
+            retry: false,
+            meta: { showToastError: true },
+        },
+        mutations: {
+            cacheTime: 0,
+            retry: false,
+            meta: { showToastError: true },
         },
     },
     queryCache: new QueryCache({
         onError: (error, query) => {
-            const showToastError = query.meta?.showError ?? true
-            if (showToastError) {
+            if (query.meta.showToastError) {
                 showError(error)
             }
         },
     }),
     mutationCache: new MutationCache({
         onError: (error, _variables, _context, mutation) => {
-            const showToastError = mutation.meta?.showError ?? true
-            if (showToastError) {
+            if (mutation.meta.showToastError) {
                 showError(error)
             }
         },

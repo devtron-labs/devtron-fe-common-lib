@@ -176,14 +176,14 @@ declare module '@tanstack/react-query' {
          * Optional flag indicating whether to display a toast notification for errors.
          * @default true
          */
-        showError?: boolean
+        showToastError?: boolean
     }
     export interface MutationMeta {
         /**
          * Optional flag indicating whether to display a toast notification for errors.
          * @default true
          */
-        showError?: boolean
+        showToastError?: boolean
     }
 }
 
