@@ -2,7 +2,7 @@
  * Copyright (c) 2024. Devtron Inc.
  */
 
-import { useEffect } from 'react'
+import { MouseEvent, useEffect } from 'react'
 
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { DraggableButton, DraggablePositionVariant, DraggableWrapper } from '@Common/DraggableWrapper'
@@ -18,6 +18,8 @@ const BulkSelectionActionWidget = ({
     handleClearBulkSelection,
     parentRef,
     BulkActionsComponent,
+    bulkActionsData,
+    setBulkActionState,
 }: BulkSelectionActionWidgetProps) => {
     const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
 
@@ -28,6 +30,13 @@ const BulkSelectionActionWidget = ({
             unregisterShortcut(['Escape'])
         }
     }, [])
+
+    const onActionClick = (event: MouseEvent<HTMLButtonElement>) => {
+        const {
+            dataset: { key },
+        } = event.currentTarget
+        setBulkActionState(key)
+    }
 
     return (
         <DraggableWrapper
@@ -46,7 +55,7 @@ const BulkSelectionActionWidget = ({
                     </div>
                 </div>
 
-                <BulkActionsComponent />
+                <BulkActionsComponent onActionClick={onActionClick} bulkActionsData={bulkActionsData} />
 
                 <Button
                     icon={<ICClose />}
