@@ -30,7 +30,7 @@
         "noFallthroughCasesInSwitch": false,
         "types": ["vite/client"]
     },
-    "include": ["src", "src/custom.d.ts", "src/react-query.d.ts"],
+    "include": ["src"],
     "exclude": ["src/**/*.spec.ts", "src/**/*.spec.tsx", "src/**/*.test.ts", "src/**/*.test.tsx"],
     "references": [
         {
