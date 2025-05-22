@@ -23,6 +23,7 @@ import { ReactComponent as ICArrow } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICCollapseAll } from '@Icons/ic-collapse-all.svg'
 import { ReactComponent as ICExpandAll } from '@Icons/ic-expand-all.svg'
 import { ANSI_UP_REGEX, ComponentSizeType } from '@Shared/constants'
+import { DocLink } from '@Shared/DocLink'
 import { escapeRegExp, sanitizeTargetPlatforms } from '@Shared/Helpers'
 import { AppThemeType, getComponentSpecificThemeClass } from '@Shared/Providers'
 
@@ -30,7 +31,6 @@ import { ReactComponent as OpenInNew } from '../../../Assets/Icon/ic-arrow-out.s
 import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
 import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-filled.svg'
 import {
-    DOCUMENTATION,
     Host,
     Progressing,
     ROUTES,
@@ -82,14 +82,8 @@ const renderBlobNotConfigured = (): JSX.Element => (
         <div className="flexbox configure-blob-container pt-8 pr-12 pb-8 pl-12 bcv-1 br-4">
             <HelpIcon className="icon-dim-20 fcv-5" />
             <span className="fs-13 fw-4 mr-8 ml-8 text__white">Want to store logs to view later?</span>
-            <a
-                className="fs-13 fw-6 cb-5 dc__no-decor"
-                href={DOCUMENTATION.BLOB_STORAGE}
-                target="_blank"
-                rel="noreferrer"
-            >
-                Configure blob storage
-            </a>
+
+            <DocLink docLinkKey="BLOB_STORAGE" text="Configure blob storage" dataTestId="configure-blob-storage" />
             <OpenInNew className="icon-dim-20 ml-8" />
         </div>
     </>

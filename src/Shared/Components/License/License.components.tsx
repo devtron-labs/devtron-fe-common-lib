@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from 'react'
 
 import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
 import { ReactComponent as ICClipboard } from '@Icons/ic-copy.svg'
-import { DOCUMENTATION } from '@Common/Constants'
 import { ClipboardButton, copyToClipboard, showError } from '@Common/index'
 
 import { Backdrop, Button, ButtonStyleType, ButtonVariantType, Icon, InfoIconTippy, QRCode } from '..'
@@ -90,7 +89,7 @@ const InstallationFingerprintInfo = ({ fingerprint, showHelpTooltip = false }: I
                     documentationLinkText="Documentation"
                     iconClassName="icon-dim-20 fcn-6"
                     placement="right"
-                    documentationLink={DOCUMENTATION.ENTERPRISE_LICENSE}
+                    documentationLink="ENTERPRISE_LICENSE"
                 />
             )}
         </div>
