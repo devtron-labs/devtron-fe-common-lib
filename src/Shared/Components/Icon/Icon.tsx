@@ -119,6 +119,7 @@ import { ReactComponent as ICOpenBox } from '@IconsV2/ic-open-box.svg'
 import { ReactComponent as ICOpenInNew } from '@IconsV2/ic-open-in-new.svg'
 import { ReactComponent as ICOpenshift } from '@IconsV2/ic-openshift.svg'
 import { ReactComponent as ICOutOfSync } from '@IconsV2/ic-out-of-sync.svg'
+import { ReactComponent as ICPaperPlane } from '@IconsV2/ic-paper-plane.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
 import { ReactComponent as ICPath } from '@IconsV2/ic-path.svg'
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
@@ -277,6 +278,7 @@ export const iconMap = {
     'ic-openshift': ICOpenshift,
     'ic-out-of-sync': ICOutOfSync,
     'ic-paper-plane-color': ICPaperPlaneColor,
+    'ic-paper-plane': ICPaperPlane,
     'ic-path': ICPath,
     'ic-pencil': ICPencil,
     'ic-quay': ICQuay,
