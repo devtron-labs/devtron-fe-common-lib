@@ -14,17 +14,7 @@
  * limitations under the License.
  */
 
-import {
-    createElement,
-    createRef,
-    Fragment,
-    ReactElement,
-    RefObject,
-    useEffect,
-    useMemo,
-    useRef,
-    useState,
-} from 'react'
+import { createElement, createRef, Fragment, ReactElement, RefObject, useEffect, useMemo, useRef } from 'react'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { followCursor } from 'tippy.js'
 
@@ -73,8 +63,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     trailingCellIcon,
     buttonCellWrapComponent,
     focusableFieldKey,
-    isAddRowButtonClicked,
-    setIsAddRowButtonClicked,
+    shouldAutoFocusOnMount = false,
 }: DynamicDataTableRowProps<K, CustomStateType>) => {
     // CONSTANTS
     const isFirstRowEmpty = headers.every(({ key }) => !rows[0]?.data[key].value)
@@ -88,25 +77,18 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
         isDeletionNotAllowed || readOnly,
     )
 
-    // STATES
-    const [isRowAdded, setIsRowAdded] = useState(false)
-
     // CELL REFS
-    const cellRef = useRef<Record<string | number, Record<K, RefObject<HTMLTextAreaElement>>>>()
+    const shouldAutoFocusNewRowRef = useRef(shouldAutoFocusOnMount)
+    const cellRef = useRef<Record<string | number, Record<K, RefObject<HTMLTextAreaElement>>>>(null)
     if (!cellRef.current) {
-        cellRef.current = rows.reduce(
-            (acc, curr) => ({
-                ...acc,
-                [curr.id]: headers.reduce((headerAcc, { key }) => ({ ...headerAcc, [key]: createRef() }), {}),
-            }),
-            {},
-        )
+        cellRef.current = rows.reduce((acc, curr) => {
+            acc[curr.id] = headers.reduce((headerAcc, { key }) => ({ ...headerAcc, [key]: createRef() }), {})
+            return acc
+        }, {})
     }
     const rowIds = useMemo(() => rows.map(({ id }) => id), [rows])
 
     useEffect(() => {
-        setIsRowAdded(rows.length > 0 && Object.keys(cellRef.current).length < rows.length)
-
         // When a new row is added, we create references for its cells.
         // This logic ensures that references are created only for the newly added row, while retaining the existing references.
         const updatedCellRef = rowIds.reduce((acc, curr) => {
@@ -120,18 +102,6 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
 
         cellRef.current = updatedCellRef
     }, [JSON.stringify(rowIds)])
-
-    useEffect(() => {
-        if (isAddRowButtonClicked && isRowAdded) {
-            // Using the below logic to ensure the cell is focused after row addition.
-            const cell = cellRef.current[rows[0].id][focusableFieldKey || headers[0].key].current
-            if (cell) {
-                cell.focus()
-                setIsRowAdded(false)
-                setIsAddRowButtonClicked(false)
-            }
-        }
-    }, [isRowAdded, isAddRowButtonClicked])
 
     // METHODS
     const onChange =
@@ -163,14 +133,30 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     }
 
     // RENDERERS
-    const renderCellContent = (row: DynamicDataTableRowType<K, CustomStateType>, key: K) => {
+    const renderCellContent = (row: DynamicDataTableRowType<K, CustomStateType>, key: K, index: number) => {
         const isDisabled = readOnly || row.data[key].disabled
+        const autoFocus =
+            shouldAutoFocusNewRowRef.current && key === (focusableFieldKey ?? headers[0].key) && index === 0
+
+        // This logic ensures only newly added rows get autofocus.
+        // On the initial mount, all rows are treated as new, so autofocus is enabled.
+        // After the first render, when cellRef is set (DOM rendered), we set shouldAutoFocusNewRowRef to true,
+        // so autofocus is applied only to the correct cell in any subsequently added row.
+        if (
+            !shouldAutoFocusOnMount &&
+            !shouldAutoFocusNewRowRef.current &&
+            index === 0 &&
+            cellRef?.current?.[row.id]?.[key].current
+        ) {
+            shouldAutoFocusNewRowRef.current = true
+        }
 
         switch (row.data[key].type) {
             case DynamicDataTableRowDataType.DROPDOWN:
                 return (
                     <div className="w-100 h-100 flex top dc__align-self-start">
                         <SelectPicker<string, false>
+                            autoFocus={autoFocus}
                             {...row.data[key].props}
                             inputId={`data-table-${row.id}-${key}-cell`}
                             classNamePrefix="dynamic-data-table__cell__select-picker"
@@ -193,6 +179,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                 return (
                     <div className="w-100 h-100 flex top dc__align-self-start">
                         <SelectPickerTextArea
+                            autoFocus={autoFocus}
                             isCreatable={isCreatable}
                             isClearable
                             {...props}
@@ -248,6 +235,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
             default:
                 return (
                     <ResizableTagTextArea
+                        autoFocus={autoFocus}
                         {...row.data[key].props}
                         id={`data-table-${row.id}-${key}-cell`}
                         className={`dynamic-data-table__cell-input placeholder-cn5 p-8 cn-9 fs-13 lh-20 dc__align-self-start dc__no-border-radius ${isDisabled ? 'cursor-not-allowed' : ''}`}
@@ -329,7 +317,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                     className={`dynamic-data-table__cell bg__primary flexbox dc__align-items-center dc__gap-4 dc__position-rel ${isDisabled ? 'cursor-not-allowed no-hover' : ''} ${!isDisabled && hasError ? 'dynamic-data-table__cell--error no-hover' : ''} ${!rowTypeHasInputField(row.data[key].type) ? 'no-hover no-focus' : ''}`}
                 >
                     {renderCellIcon(row, key, true)}
-                    {renderCellContent(row, key)}
+                    {renderCellContent(row, key, index)}
                     {renderAsterisk(row, key)}
                     {renderCellIcon(row, key)}
                     {renderErrorMessages(row, key)}
