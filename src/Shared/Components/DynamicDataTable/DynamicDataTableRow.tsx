@@ -18,7 +18,6 @@ import { createElement, createRef, Fragment, ReactElement, RefObject, useEffect,
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { followCursor } from 'tippy.js'
 
-import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ResizableTagTextArea } from '@Common/CustomTagSelector'
 import { ConditionalWrap } from '@Common/Helper'
 import { Tooltip } from '@Common/Tooltip'
@@ -26,6 +25,7 @@ import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { FileUpload } from '../FileUpload'
+import { Icon } from '../Icon'
 import {
     getSelectPickerOptionByValue,
     SelectPicker,
@@ -271,8 +271,8 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     }
 
     const renderErrorMessage = (errorMessage: string) => (
-        <div key={errorMessage} className="flexbox align-items-center dc__gap-4">
-            <ICClose className="icon-dim-16 fcr-5 dc__align-self-start dc__no-shrink" />
+        <div key={errorMessage} className="flexbox dc__gap-4">
+            <Icon name="ic-close-small" color="R500" />
             <p className="fs-12 lh-16 cn-7 m-0">{errorMessage}</p>
         </div>
     )
@@ -371,7 +371,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                                     dataTestId="dynamic-data-table-row-delete-btn"
                                     ariaLabel="Delete Row"
                                     showAriaLabelInTippy={false}
-                                    icon={<ICClose />}
+                                    icon={<Icon name="ic-close-large" color={null} />}
                                     disabled={disableDeleteRow || row.disableDelete}
                                     onClick={onDelete(row)}
                                     variant={ButtonVariantType.borderLess}
