@@ -24,7 +24,7 @@
                     "description": "Maximum allowed GPU",
                     "updatePath": "/gpu/resources/limits"
                 },
-                "requestes": {
+                "requests": {
                     "type": "string",
                     "description": "Requested GPU value",
                     "updatePath": "/gpu/resources/requests"
