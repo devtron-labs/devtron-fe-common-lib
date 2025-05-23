@@ -1164,4 +1164,4 @@ export type DeploymentStrategyType = 'CANARY' | 'ROLLING' | 'RECREATE' | 'BLUE-G
 
 export type DeploymentStrategyTypeWithDefault = DeploymentStrategyType | 'DEFAULT'
 
-export type PipelineIdsVsDeploymentStrategyMap = Record<number, DeploymentStrategyType>
+export type PipelineIdsVsDeploymentStrategyMap = Record<number, DeploymentStrategyTypeWithDefault>
