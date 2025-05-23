@@ -15,9 +15,12 @@ export enum WorkflowRunnerStatusDTO {
     STARTING = 'Starting',
     QUEUED = 'Queued',
     INITIATING = 'Initiating',
-    // Not found on BE but added for Backward compatibility
+    // Coming in specific cases of helm apps
     HEALTHY = 'Healthy',
     DEGRADED = 'Degraded',
+    MISSING = 'Missing',
+    UNKNOWN = 'Unknown',
+    SUSPENDED = 'Suspended',
 }
 
 export interface ProcessUnableToFetchOrTimedOutStatusType {
