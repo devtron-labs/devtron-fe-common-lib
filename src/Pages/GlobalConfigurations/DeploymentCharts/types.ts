@@ -39,4 +39,5 @@ export enum DEVTRON_DEPLOYMENT_CHART_NAMES {
     ROLLOUT_DEPLOYMENT = 'Rollout Deployment',
     DEPLOYMENT = 'Deployment',
     STATEFUL_SET = 'StatefulSet',
+    GPU_WORKLOAD = 'GPU-Workload',
 }

@@ -17,6 +17,7 @@
 import { versionComparatorBySortOrder } from '@Shared/Helpers'
 
 import fallbackGuiSchema from './basicViewSchema.json'
+import gpuWorkloadSchema from './gpuWorkloadSchema.json'
 import {
     DeploymentChartListDTO,
     DeploymentChartType,
@@ -67,6 +68,8 @@ export const getGuiSchemaFromChartName = (chartName: string) => {
         case DEVTRON_DEPLOYMENT_CHART_NAMES.ROLLOUT_DEPLOYMENT:
         case DEVTRON_DEPLOYMENT_CHART_NAMES.STATEFUL_SET:
             return fallbackGuiSchema
+        case DEVTRON_DEPLOYMENT_CHART_NAMES.GPU_WORKLOAD:
+            return gpuWorkloadSchema
         default:
             return {}
     }
