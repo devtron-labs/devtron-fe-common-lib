@@ -6,6 +6,7 @@ import { ReactComponent as ICAdd } from '@IconsV2/ic-add.svg'
 import { ReactComponent as ICAmazonEks } from '@IconsV2/ic-amazon-eks.svg'
 import { ReactComponent as ICApica } from '@IconsV2/ic-apica.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
+import { ReactComponent as ICAppTemplate } from '@IconsV2/ic-app-template.svg'
 import { ReactComponent as ICArrowClockwise } from '@IconsV2/ic-arrow-clockwise.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICArrowSquareOut } from '@IconsV2/ic-arrow-square-out.svg'
@@ -50,7 +51,9 @@ import { ReactComponent as ICDeleteDots } from '@IconsV2/ic-delete-dots.svg'
 import { ReactComponent as ICDeleteLightning } from '@IconsV2/ic-delete-lightning.svg'
 import { ReactComponent as ICDelhivery } from '@IconsV2/ic-delhivery.svg'
 import { ReactComponent as ICDevtron } from '@IconsV2/ic-devtron.svg'
+import { ReactComponent as ICDevtronApp } from '@IconsV2/ic-devtron-app.svg'
 import { ReactComponent as ICDevtronHeaderLogo } from '@IconsV2/ic-devtron-header-logo.svg'
+import { ReactComponent as ICDevtronJob } from '@IconsV2/ic-devtron-job.svg'
 import { ReactComponent as ICDisconnect } from '@IconsV2/ic-disconnect.svg'
 import { ReactComponent as ICDiscordFill } from '@IconsV2/ic-discord-fill.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
@@ -139,7 +142,9 @@ import { ReactComponent as ICStamp } from '@IconsV2/ic-stamp.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICTata1mg } from '@IconsV2/ic-tata1mg.svg'
+import { ReactComponent as ICTerminal } from '@IconsV2/ic-terminal.svg'
 import { ReactComponent as ICTerminalFill } from '@IconsV2/ic-terminal-fill.svg'
+import { ReactComponent as ICThermometer } from '@IconsV2/ic-thermometer.svg'
 import { ReactComponent as ICThumbDown } from '@IconsV2/ic-thumb-down.svg'
 import { ReactComponent as ICThumbUp } from '@IconsV2/ic-thumb-up.svg'
 import { ReactComponent as ICTimeoutDash } from '@IconsV2/ic-timeout-dash.svg'
@@ -164,6 +169,7 @@ export const iconMap = {
     'ic-amazon-eks': ICAmazonEks,
     'ic-apica': ICApica,
     'ic-app-group': ICAppGroup,
+    'ic-app-template': ICAppTemplate,
     'ic-arrow-clockwise': ICArrowClockwise,
     'ic-arrow-right': ICArrowRight,
     'ic-arrow-square-out': ICArrowSquareOut,
@@ -207,7 +213,9 @@ export const iconMap = {
     'ic-delete-lightning': ICDeleteLightning,
     'ic-delete': ICDelete,
     'ic-delhivery': ICDelhivery,
+    'ic-devtron-app': ICDevtronApp,
     'ic-devtron-header-logo': ICDevtronHeaderLogo,
+    'ic-devtron-job': ICDevtronJob,
     'ic-devtron': ICDevtron,
     'ic-disconnect': ICDisconnect,
     'ic-discord-fill': ICDiscordFill,
@@ -298,6 +306,8 @@ export const iconMap = {
     'ic-suspended': ICSuspended,
     'ic-tata1mg': ICTata1mg,
     'ic-terminal-fill': ICTerminalFill,
+    'ic-terminal': ICTerminal,
+    'ic-thermometer': ICThermometer,
     'ic-thumb-down': ICThumbDown,
     'ic-thumb-up': ICThumbUp,
     'ic-timeout-dash': ICTimeoutDash,

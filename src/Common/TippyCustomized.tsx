@@ -19,15 +19,15 @@ import Tippy from '@tippyjs/react'
 import { ReactComponent as CloseIcon } from '../Assets/Icon/ic-cross.svg'
 import { ReactComponent as Help } from '../Assets/Icon/ic-help.svg'
 import { ReactComponent as ICHelpOutline } from '../Assets/Icon/ic-help-outline.svg'
-import { ReactComponent as ICOpenInNew } from '../Assets/Icon/ic-open-in-new.svg'
 import 'tippy.js/animations/shift-toward-subtle.css'
 import 'tippy.js/animations/shift-toward.css'
 import { TippyCustomizedProps, TippyTheme } from './Types'
 import { not, stopPropagation } from './Helper'
+import { DocLink } from '../Shared/DocLink'
 
 // This component will handle some of the new tippy designs and interactions
 // So this can be updated to support further for new features or interactions
-export const TippyCustomized = (props: TippyCustomizedProps) => {
+export const TippyCustomized = <T extends boolean = false>(props: TippyCustomizedProps<T>) => {
     const tippyRef = useRef(null)
     const [showHeadingInfo, setShowHeadingInfo] = useState(false)
     const isWhiteTheme = props.theme === TippyTheme.white
@@ -79,6 +79,8 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
             additionalContent,
             documentationLink,
             documentationLinkText,
+            isEnterprise,
+            isExternalLink,
         } = props
         return (
             <>
@@ -156,17 +158,16 @@ export const TippyCustomized = (props: TippyCustomizedProps) => {
                 )}
                 {additionalContent}
                 {documentationLink && (
-                    <div className="pl-12 pb-12">
-                        <a
-                            href={documentationLink}
-                            target="_blank"
-                            rel="noreferrer noopener"
-                            className="fs-13 cb-5 flex left"
+                    <div className="px-12 pb-12 flexbox">
+                        <DocLink
+                            text={documentationLinkText}
+                            dataTestId="learn-more-about-tippy-link"
+                            showExternalIcon
                             onClick={closeTippy}
-                        >
-                            {documentationLinkText || 'Learn more'}
-                            <ICOpenInNew className="icon-dim-14 ml-4 scb-5" />
-                        </a>
+                            isEnterprise={isEnterprise}
+                            isExternalLink={isExternalLink}
+                            docLinkKey={documentationLink}
+                        />
                     </div>
                 )}
             </>
