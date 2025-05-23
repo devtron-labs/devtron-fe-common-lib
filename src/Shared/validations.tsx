@@ -497,3 +497,28 @@ export const validateYAML = (yamlString: string, isRequired?: boolean): Validati
         }
     }
 }
+
+export const validateEmail = (email: string): ValidationResponseType => {
+    if (!email) {
+        return {
+            isValid: false,
+            message: 'Email is required',
+        }
+    }
+
+    const re =
+        // eslint-disable-next-line no-useless-escape
+        /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/
+    const result = re.test(String(email).toLowerCase())
+
+    if (result) {
+        return {
+            isValid: true,
+        }
+    }
+
+    return {
+        isValid: false,
+        message: 'Please provide a valid email address',
+    }
+}
