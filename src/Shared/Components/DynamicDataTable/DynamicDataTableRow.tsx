@@ -124,14 +124,12 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     useEffect(() => {
         if (isAddRowButtonClicked && isRowAdded) {
             // Using the below logic to ensure the cell is focused after row addition.
-            const cell = cellRef.current[rowIds[0]][focusableFieldKey || headers[0].key].current
+            const cell = cellRef.current[rows[0].id][focusableFieldKey || headers[0].key].current
             if (cell) {
                 cell.focus()
                 setIsRowAdded(false)
                 setIsAddRowButtonClicked(false)
             }
-        } else if (!isAddRowButtonClicked && isRowAdded) {
-            setIsRowAdded(false)
         }
     }, [isRowAdded, isAddRowButtonClicked])
 
