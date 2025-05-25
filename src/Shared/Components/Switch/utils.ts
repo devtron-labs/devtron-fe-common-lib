@@ -4,8 +4,10 @@ import {
     ROUNDED_SWITCH_SIZE_MAP,
     ROUNDED_SWITCH_THUMB_SIZE_MAP,
     ROUNDED_SWITCH_TRACK_COLOR_MAP,
+    ROUNDED_SWITCH_TRACK_HOVER_COLOR_MAP,
     SQUARE_SWITCH_SIZE_MAP,
     SQUARE_SWITCH_TRACK_COLOR_MAP,
+    SQUARE_SWITCH_TRACK_HOVER_COLOR_MAP,
     SWITCH_HEIGHT_MAP,
     SWITCH_THUMB_PADDING_MAP,
     THUMB_OUTER_PADDING_MAP,
@@ -30,6 +32,22 @@ export const getSwitchTrackColor = ({
     }
 
     return shape === 'rounded' ? ROUNDED_SWITCH_TRACK_COLOR_MAP[variant] : SQUARE_SWITCH_TRACK_COLOR_MAP[variant]
+}
+
+export const getSwitchTrackHoverColor = ({
+    shape,
+    variant,
+    isChecked,
+}: Required<
+    Pick<DTSwitchProps, 'shape' | 'variant' | 'isChecked'>
+>): (typeof ROUNDED_SWITCH_TRACK_HOVER_COLOR_MAP)[DTSwitchProps['variant']] => {
+    if (!isChecked) {
+        return 'var(--N300)'
+    }
+
+    return shape === 'rounded'
+        ? ROUNDED_SWITCH_TRACK_HOVER_COLOR_MAP[variant]
+        : SQUARE_SWITCH_TRACK_HOVER_COLOR_MAP[variant]
 }
 
 export const getSwitchThumbClass = ({

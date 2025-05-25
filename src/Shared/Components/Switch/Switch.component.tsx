@@ -13,9 +13,12 @@ import {
     getSwitchIconColor,
     getSwitchThumbClass,
     getSwitchTrackColor,
+    getSwitchTrackHoverColor,
     getThumbPadding,
     getThumbPosition,
 } from './utils'
+
+import './switch.scss'
 
 const Switch = ({
     ariaLabel,
@@ -56,14 +59,14 @@ const Switch = ({
             {isLoading ? (
                 <motion.span
                     transition={{ ease: 'easeInOut', duration: 0.2 }}
-                    layoutId="loader"
+                    layoutId={`${name}-loader`}
                     className="flex-grow-1 h-100 dc__fill-available-space dc__no-shrink"
                 >
                     <Icon key="progressing" name="ic-circle-loader" color={LOADING_COLOR_MAP[variant]} size={null} />
                 </motion.span>
             ) : (
                 <motion.span
-                    layoutId="thumb"
+                    layoutId={`${name}-thumb`}
                     className={getSwitchThumbClass({ shape, size, showIndeterminateIcon })}
                     layout
                     transition={{ ease: 'easeInOut', duration: 0.2 }}
@@ -129,8 +132,16 @@ const Switch = ({
                     data-testid={dataTestId}
                     disabled={isDisabled || isLoading}
                     aria-disabled={isDisabled}
-                    className={`p-0-imp h-100 flex flex-grow-1 dc__no-border ${shape === 'rounded' ? 'br-12' : 'br-4'} ${getSwitchTrackColor({ shape, variant, isChecked, isLoading })} ${isDisabled ? 'dc__disabled' : ''} dc__fill-available-space`}
+                    className={`p-0-imp h-100 flex flex-grow-1 dc__no-border dt-switch__track ${shape === 'rounded' ? 'br-12' : 'br-4'} ${getSwitchTrackColor({ shape, variant, isChecked, isLoading })} ${isDisabled ? 'dc__disabled' : ''} dc__fill-available-space`}
                     onClick={onChange}
+                    style={{
+                        // Adding hover styles directly to the button
+                        ['--switch-track-hover-color' as string]: getSwitchTrackHoverColor({
+                            shape,
+                            variant,
+                            isChecked,
+                        }),
+                    }}
                 >
                     {renderContent()}
                 </button>

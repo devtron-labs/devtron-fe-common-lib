@@ -38,9 +38,19 @@ export const ROUNDED_SWITCH_TRACK_COLOR_MAP: Record<DTSwitchProps['variant'], st
     positive: 'bcg-5',
 }
 
+export const ROUNDED_SWITCH_TRACK_HOVER_COLOR_MAP: Record<DTSwitchProps['variant'], `var(--${IconBaseColorType})`> = {
+    theme: 'var(--B600)',
+    positive: 'var(--G600)',
+}
+
 export const SQUARE_SWITCH_TRACK_COLOR_MAP: typeof ROUNDED_SWITCH_TRACK_COLOR_MAP = {
     theme: 'bcb-3',
     positive: 'bcg-3',
+}
+
+export const SQUARE_SWITCH_TRACK_HOVER_COLOR_MAP: typeof ROUNDED_SWITCH_TRACK_HOVER_COLOR_MAP = {
+    theme: 'var(--B400)',
+    positive: 'var(--G400)',
 }
 
 export const ROUNDED_SWITCH_THUMB_SIZE_MAP: Record<DTSwitchProps['size'], string> = {
