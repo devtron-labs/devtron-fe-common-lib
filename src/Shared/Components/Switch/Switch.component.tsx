@@ -62,7 +62,7 @@ const Switch = ({
                     layoutId={`${name}-loader`}
                     className="flex-grow-1 h-100 dc__fill-available-space dc__no-shrink"
                 >
-                    <Icon key="progressing" name="ic-circle-loader" color={LOADING_COLOR_MAP[variant]} size={null} />
+                    <Icon name="ic-circle-loader" color={LOADING_COLOR_MAP[variant]} size={null} />
                 </motion.span>
             ) : (
                 <motion.span
@@ -74,7 +74,6 @@ const Switch = ({
                     <AnimatePresence>
                         {showIndeterminateIcon ? (
                             <motion.span
-                                key="dash"
                                 className={`${INDETERMINATE_ICON_WIDTH_MAP[size]} h-2 br-4 dc__no-shrink bg__white`}
                                 initial={{ scale: 0, opacity: 0 }}
                                 animate={{ scale: 1, opacity: 1 }}
@@ -83,7 +82,6 @@ const Switch = ({
                         ) : (
                             iconName && (
                                 <motion.span
-                                    key="icon"
                                     className="icon-dim-12 flex dc__fill-available-space dc__no-shrink"
                                     initial={{ scale: 0.8, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
