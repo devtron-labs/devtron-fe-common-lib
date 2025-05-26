@@ -1131,3 +1131,12 @@ export interface EnvAppsMetaDTO {
     appCount: number
     apps: AppMeta[]
 }
+
+
+export interface ClusterEnvironmentCategoryDTO {
+    id: number
+    name: string
+    description?: string
+}
+
+export interface ClusterEnvironmentCategoryType extends ClusterEnvironmentCategoryDTO {}
