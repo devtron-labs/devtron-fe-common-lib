@@ -51,6 +51,8 @@ export const PATTERNS = {
     CONFIG_MAP_AND_SECRET_KEY: /^[-._a-zA-Z0-9]+$/,
     CONFIGMAP_AND_SECRET_NAME: /^[a-z0-9][a-z0-9-.]*[a-z0-9]$/,
     ALPHANUMERIC_WITH_SPECIAL_CHAR_AND_SLASH: /^[A-Za-z0-9._/-]+$/, // allow alphanumeric,(.) ,(-),(_),(/)
+    // eslint-disable-next-line no-useless-escape
+    EMAIL: /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 }
 
 const GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP = '/global-config/templates/devtron-apps'
