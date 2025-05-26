@@ -1,5 +1,6 @@
 import { MouseEvent } from 'react'
 
+import { DOCUMENTATION_HOME_PAGE } from '@Common/Constants'
 import { Button, ButtonComponentType, ButtonVariantType, Icon } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
 import { useMainContext } from '@Shared/Providers'
@@ -17,7 +18,8 @@ export const DocLink = <T extends boolean = false>({
     variant = ButtonVariantType.text,
     isEnterprise = false,
     isExternalLink,
-    disableSidePanelOpen = false,
+    openInNewTab = false,
+    fullWidth = true,
 }: DocLinkProps<T>) => {
     // HOOKS
     const { setSidePanelConfig } = useMainContext()
@@ -30,31 +32,27 @@ export const DocLink = <T extends boolean = false>({
     })
 
     // HANDLERS
-    const handleClick = (e: MouseEvent<HTMLButtonElement>) => {
-        setSidePanelConfig((prev) => ({ ...prev, open: true, docLink: documentationLink }))
+    const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
+        if (!isExternalLink && !openInNewTab && !e.metaKey && documentationLink.startsWith(DOCUMENTATION_HOME_PAGE)) {
+            e.preventDefault()
+            setSidePanelConfig((prev) => ({ ...prev, open: true, docLink: documentationLink }))
+        }
         onClick?.(e)
     }
 
     return (
         <Button
-            {...(isExternalLink || disableSidePanelOpen
-                ? {
-                      component: ButtonComponentType.anchor,
-                      anchorProps: {
-                          href: documentationLink,
-                      },
-                      onClick,
-                  }
-                : {
-                      component: ButtonComponentType.button,
-                      onClick: handleClick,
-                  })}
+            component={ButtonComponentType.anchor}
+            anchorProps={{
+                href: documentationLink,
+            }}
+            onClick={handleClick}
             dataTestId={dataTestId}
             text={text}
             variant={variant}
             size={size}
             endIcon={showExternalIcon && <Icon name="ic-open-in-new" color={null} />}
-            fullWidth
+            fullWidth={fullWidth}
         />
     )
 }

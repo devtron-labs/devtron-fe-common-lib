@@ -1,3 +1,5 @@
+import { DOCUMENTATION_HOME_PAGE } from '@Common/Constants'
+
 export const DOCUMENTATION = {
     ADMIN_PASSWORD: 'install/install-devtron#devtron-admin-credentials',
     APP_CI_CONFIG_BUILD_WITHOUT_DOCKER:
@@ -32,7 +34,9 @@ export const DOCUMENTATION = {
     EXTERNAL_LINKS: 'getting-started/global-configurations/external-links',
     EXTERNAL_SECRET: 'usage/applications/creating-application/secrets#external-secrets',
     HOME_PAGE: 'https://devtron.ai',
+    DOC_HOME_PAGE: DOCUMENTATION_HOME_PAGE,
     KUBE_CONFIG: 'usage/resource-browser#running-kubectl-commands-locally',
+    JOBS: 'usage/jobs',
 
     // Global Configurations
     GLOBAL_CONFIG_API_TOKEN: 'getting-started/global-configurations/authorization/api-tokens',

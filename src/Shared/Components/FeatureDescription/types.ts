@@ -16,14 +16,14 @@
 
 import React, { ReactNode } from 'react'
 
-import { DocLinkProps } from '@Shared/DocLink/types'
+import { DocLinkProps } from '@Shared/DocLink'
 
 import { ImageType } from '../../../Common'
 import { Breadcrumb } from '../../../Common/BreadCrumb/Types'
 
-interface BaseFeatureDescriptionModalProps<T extends boolean = false> {
+interface BaseFeatureDescriptionModalProps {
     renderDescriptionContent?: () => ReactNode
-    docLink?: DocLinkProps<T>['docLinkKey']
+    docLink?: DocLinkProps<false>['docLinkKey']
     imageVariant?: ImageType
     SVGImage?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
     imageStyles?: React.CSSProperties

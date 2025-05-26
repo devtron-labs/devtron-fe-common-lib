@@ -33,7 +33,7 @@ import {
     ACTION_STATE,
     DEPLOYMENT_WINDOW_TYPE,
     DockerConfigOverrideType,
-    DOCUMENTATION,
+    DocLinkProps,
     RefVariableType,
     SortingOrder,
     TaskErrorObj,
@@ -120,10 +120,9 @@ export interface CheckboxProps {
     children?: ReactNode
 }
 
-export type TippyWithBaseDocLinkTypes<T extends boolean> = {
-    isExternalLink?: T
-    isEnterprise?: boolean
-    documentationLink?: T extends true ? string : keyof typeof DOCUMENTATION
+export interface TippyWithBaseDocLinkTypes<T extends boolean>
+    extends Pick<DocLinkProps<T>, 'isEnterprise' | 'isExternalLink' | 'openInNewTab'> {
+    documentationLink?: DocLinkProps<T>['docLinkKey']
 }
 
 export type TippyCustomizedProps<T extends boolean> = Pick<TippyProps, 'appendTo'> &
@@ -171,6 +170,7 @@ export interface InfoIconTippyProps<T extends boolean = false>
         | 'documentationLink'
         | 'isEnterprise'
         | 'isExternalLink'
+        | 'openInNewTab'
     > {
     dataTestid?: string
     children?: TippyCustomizedProps<T>['children']

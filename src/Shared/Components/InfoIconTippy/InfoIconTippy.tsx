@@ -34,6 +34,7 @@ const InfoIconTippy = <T extends boolean = false>({
     buttonPadding = 'p-0',
     isEnterprise = false,
     isExternalLink,
+    openInNewTab,
 }: InfoIconTippyProps<T>) => (
     <TippyCustomized
         theme={TippyTheme.white}
@@ -54,6 +55,7 @@ const InfoIconTippy = <T extends boolean = false>({
         duration={400}
         isEnterprise={isEnterprise}
         isExternalLink={isExternalLink}
+        openInNewTab={openInNewTab}
     >
         {children || (
             <button

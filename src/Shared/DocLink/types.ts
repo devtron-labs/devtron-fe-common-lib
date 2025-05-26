@@ -12,15 +12,15 @@ export type BaseDocLink<T extends boolean> = {
 
 export type DocLinkProps<T extends boolean> = Pick<
     ButtonProps<ButtonComponentType.anchor>,
-    'dataTestId' | 'size' | 'variant'
+    'dataTestId' | 'size' | 'variant' | 'fullWidth'
 > &
     BaseDocLink<T> & {
         text?: string
         showExternalIcon?: boolean
-        onClick?: (e: MouseEvent<HTMLButtonElement> | MouseEvent<HTMLAnchorElement>) => void
+        onClick?: (e: MouseEvent<HTMLAnchorElement>) => void
         /**
-         * If `true`, disables opening the documentation link in side panel.
+         * If `true`, the documentation will open in a new browser tab instead of the side panel.
          * @default false
          */
-        disableSidePanelOpen?: boolean
+        openInNewTab?: boolean
     }

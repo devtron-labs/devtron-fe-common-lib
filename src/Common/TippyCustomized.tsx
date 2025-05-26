@@ -81,6 +81,7 @@ export const TippyCustomized = <T extends boolean = false>(props: TippyCustomize
             documentationLinkText,
             isEnterprise,
             isExternalLink,
+            openInNewTab,
         } = props
         return (
             <>
@@ -167,6 +168,7 @@ export const TippyCustomized = <T extends boolean = false>(props: TippyCustomize
                             isEnterprise={isEnterprise}
                             isExternalLink={isExternalLink}
                             docLinkKey={documentationLink}
+                            openInNewTab={openInNewTab}
                         />
                     </div>
                 )}

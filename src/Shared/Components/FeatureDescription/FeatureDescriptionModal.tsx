@@ -71,6 +71,7 @@ const FeatureDescriptionModalContent = ({
                     showExternalIcon
                     variant={ButtonVariantType.secondary}
                     isEnterprise={isEnterprise}
+                    onClick={closeModal}
                 />
             )}
             <Button

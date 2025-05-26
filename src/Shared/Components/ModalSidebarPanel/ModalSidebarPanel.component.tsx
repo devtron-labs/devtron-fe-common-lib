@@ -44,6 +44,7 @@ const ModalSidebarPanel = ({
                 dataTestId="learn-more-about-modal-sidebar-panel-link"
                 showExternalIcon
                 isEnterprise={isEnterprise}
+                openInNewTab
             />
         </div>
     </div>
