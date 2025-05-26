@@ -1160,7 +1160,7 @@ export interface IntelligenceConfig {
     analyticsCategory: string
 }
 
-export type DeploymentStrategyType = 'CANARY' | 'ROLLING' | 'RECREATE' | 'BLUE-GREEN'
+export type DeploymentStrategyType = 'CANARY' | 'ROLLING' | 'RECREATE' | 'BLUE-GREEN' | 'ROLLINGUPDATE' | 'ONDELETE'
 
 export type DeploymentStrategyTypeWithDefault = DeploymentStrategyType | 'DEFAULT'
 
