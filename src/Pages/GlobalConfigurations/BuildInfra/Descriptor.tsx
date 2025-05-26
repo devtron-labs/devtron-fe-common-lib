@@ -16,7 +16,7 @@
 
 import { InfoIconTippy } from '@Shared/Components/InfoIconTippy'
 
-import { BreadCrumb, DOCUMENTATION } from '../../../Common'
+import { BreadCrumb } from '../../../Common'
 import { BUILD_INFRA_TEXT } from './constants'
 import { BuildInfraDescriptorProps } from './types'
 
@@ -38,7 +38,7 @@ const Descriptor = ({
                         infoText={tippyInfoText ?? BUILD_INFRA_TEXT.EDIT_DEFAULT_TOOLTIP}
                         additionalContent={tippyAdditionalContent}
                         heading={tooltipHeading || BUILD_INFRA_TEXT.HEADING}
-                        documentationLink={DOCUMENTATION.GLOBAL_CONFIG_BUILD_INFRA}
+                        documentationLink="GLOBAL_CONFIG_BUILD_INFRA"
                         documentationLinkText="View Documentation"
                         iconClassName="icon-dim-20 fcn-6"
                     />
