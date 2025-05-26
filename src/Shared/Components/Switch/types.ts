@@ -92,6 +92,10 @@ export type DTSwitchProps = {
      */
     size?: Extract<ComponentSizeType, ComponentSizeType.medium | ComponentSizeType.small>
 
+    /**
+     * Callback function that is called when the switch state changes.
+     * This function should handle the logic for toggling the switch.
+     */
     onChange: () => void
 
     /**

@@ -3,16 +3,6 @@ import { IconBaseColorType } from '@Shared/types'
 
 import { DTSwitchProps } from './types'
 
-export const SWITCH_VARIANTS: Readonly<Record<DTSwitchProps['variant'], null>> = {
-    theme: null,
-    positive: null,
-}
-
-export const SWITCH_SHAPES: Readonly<Record<DTSwitchProps['shape'], null>> = {
-    rounded: null,
-    square: null,
-}
-
 export const ROUNDED_SWITCH_SIZE_MAP: Readonly<Record<DTSwitchProps['size'], string>> = {
     [ComponentSizeType.medium]: 'w-32',
     [ComponentSizeType.small]: 'w-24',
