@@ -18,7 +18,7 @@ export const DOCUMENTATION = {
     APP_ROLLOUT_DEPLOYMENT_TEMPLATE: 'usage/applications/creating-application/deployment-template/rollout-deployment',
     BUILD_STAGE: 'usage/applications/creating-application/ci-pipeline#build-stage',
     APP_TAGS: 'usage/applications/create-application#tags',
-    BLOB_STORAGE: 'getting-started/install/installation-configuration#configuration-of-blob-storage',
+    BLOB_STORAGE: 'configurations-overview/installation-configuration#configuration-of-blob-storage',
     BULK_UPDATE: 'usage/bulk-update',
     CHART_GROUP: 'usage/deploy-chart/chart-group',
     CHART_LIST: 'usage/deploy-chart/overview-of-charts',
