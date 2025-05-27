@@ -19,6 +19,7 @@ import { ReactElement, useEffect, useRef, useState } from 'react'
 import { PromptProps } from 'react-router-dom'
 import { StrictRJSFSchema } from '@rjsf/utils'
 import Tippy from '@tippyjs/react'
+import { animate } from 'framer-motion'
 import moment from 'moment'
 import { nanoid } from 'nanoid'
 import { Pair } from 'yaml'
@@ -699,4 +700,17 @@ export const getAppDetailsURL = (appId: number | string, envId?: number | string
         return `${baseURL}/${envId}`
     }
     return baseURL
+}
+
+export const smoothScrollToTop = (scrollContainer: HTMLElement, targetPosition: number) => {
+    const start = scrollContainer.scrollTop
+
+    const controls = animate(start, targetPosition, {
+        ease: [0.33, 1, 0.68, 1],
+        onUpdate: (value) => {
+            scrollContainer.scrollTop = value
+        },
+    })
+
+    return controls
 }
