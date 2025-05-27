@@ -79,6 +79,7 @@ export type CodeEditorProps<DiffView extends boolean = false> = {
     diffView?: DiffView
     theme?: AppThemeType
     onOpenSearchPanel?: () => void
+    onSearchBarAction?: () => void
 } & CodeEditorPropsBasedOnDiffView<DiffView>
 
 export interface GetCodeEditorHeightReturnType {
@@ -97,7 +98,7 @@ export type FindReplaceQuery = Partial<
     Pick<SearchQuery, 'search' | 'wholeWord' | 'regexp' | 'replace' | 'caseSensitive'>
 >
 
-export interface FindReplaceProps {
+export interface FindReplaceProps extends Pick<CodeEditorProps, 'onSearchBarAction'> {
     view: EditorView
     /** Default value for Search Query state. */
     defaultQuery: SearchQuery

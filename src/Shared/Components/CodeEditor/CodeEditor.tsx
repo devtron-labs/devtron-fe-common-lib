@@ -48,7 +48,7 @@ import {
     replaceAll,
     showReplaceFieldState,
 } from './Commands'
-import { codeEditorFindReplace, readOnlyTooltip, yamlHighlight } from './Extensions'
+import { getCodeEditorFindReplace, readOnlyTooltip, yamlHighlight } from './Extensions'
 import { CodeEditorContextProps, CodeEditorProps } from './types'
 import { getFoldGutterElement, getLanguageExtension, getValidationSchema, parseValueToCode } from './utils'
 
@@ -90,6 +90,7 @@ const CodeEditor = <DiffView extends boolean = false>({
     autoFocus,
     disableSearch = false,
     onOpenSearchPanel = noop,
+    onSearchBarAction = noop,
 }: CodeEditorProps<DiffView>) => {
     // HOOKS
     const { appTheme } = useTheme()
@@ -216,7 +217,7 @@ const CodeEditor = <DiffView extends boolean = false>({
         foldingCompartment.of(foldConfig),
         lintGutter(),
         search({
-            createPanel: codeEditorFindReplace,
+            createPanel: getCodeEditorFindReplace(onSearchBarAction),
         }),
         showReplaceFieldState,
         ...(mode === MODES.YAML ? [yamlHighlight] : []),

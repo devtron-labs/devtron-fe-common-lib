@@ -50,7 +50,7 @@ import {
     REPLACE_SHORTCUT_KEYS,
 } from '../CodeEditor.constants'
 import { getShowReplaceField, setShowReplaceField } from '../Commands'
-import { FindReplaceProps, FindReplaceQuery, FindReplaceToggleButtonProps } from '../types'
+import { CodeEditorProps, FindReplaceProps, FindReplaceQuery, FindReplaceToggleButtonProps } from '../types'
 import { getFindReplaceToggleButtonIconClass, getUpdatedSearchMatchesCount } from '../utils'
 
 const FindReplaceToggleButton = ({
@@ -85,7 +85,7 @@ const FindReplaceToggleButton = ({
     )
 }
 
-const FindReplace = ({ view, defaultQuery, defaultShowReplace }: FindReplaceProps) => {
+const FindReplace = ({ view, defaultQuery, defaultShowReplace, onSearchBarAction }: FindReplaceProps) => {
     // STATES
     const [query, setQuery] = useState<SearchQuery>(new SearchQuery({ search: '' }))
     const [matchesCount, setMatchesCount] = useState({ count: 0, current: 1 })
@@ -111,6 +111,7 @@ const FindReplace = ({ view, defaultQuery, defaultShowReplace }: FindReplaceProp
             wholeWord,
         })
 
+        onSearchBarAction?.()
         if (!newQuery.eq(query)) {
             setQuery(newQuery)
             view.dispatch({ effects: setSearchQuery.of(newQuery) })
@@ -121,6 +122,7 @@ const FindReplace = ({ view, defaultQuery, defaultShowReplace }: FindReplaceProp
     useEffect(() => {
         if (!defaultQuery.eq(query)) {
             setMatchesCount(getUpdatedSearchMatchesCount(defaultQuery, view))
+            onSearchBarAction?.()
             setQuery(defaultQuery)
         }
     }, [defaultQuery])
@@ -162,6 +164,7 @@ const FindReplace = ({ view, defaultQuery, defaultShowReplace }: FindReplaceProp
     const onFindKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
         e.stopPropagation()
         if (e.key === 'Enter') {
+            onSearchBarAction?.()
             e.preventDefault()
             if (e.shiftKey) {
                 onPrevious()
@@ -431,62 +434,65 @@ const FindReplace = ({ view, defaultQuery, defaultShowReplace }: FindReplaceProp
     )
 }
 
-export const codeEditorFindReplace = (view: EditorView): Panel => {
-    const dom = document.createElement('div')
+export const getCodeEditorFindReplace =
+    (onSearchBarAction: CodeEditorProps['onSearchBarAction']) =>
+    (view: EditorView): Panel => {
+        const dom = document.createElement('div')
 
-    const keydown = (e: KeyboardEvent) => {
-        if (runScopeHandlers(view, e, 'search-panel')) {
-            e.preventDefault()
-            e.stopPropagation()
+        const keydown = (e: KeyboardEvent) => {
+            if (runScopeHandlers(view, e, 'search-panel')) {
+                e.preventDefault()
+                e.stopPropagation()
+            }
         }
-    }
 
-    dom.className =
-        'code-editor__search mt-8 mb-4 mr-8 ml-auto p-5 bg__secondary dc__border br-4 dc__w-fit-content fs-14'
-    dom.onkeydown = keydown
+        dom.className =
+            'code-editor__search mt-8 mb-4 mr-8 ml-auto p-5 bg__secondary dc__border br-4 dc__w-fit-content fs-14'
+        dom.onkeydown = keydown
 
-    const renderFindReplace = () => {
-        render(
-            <FindReplace
-                view={view}
-                defaultQuery={getSearchQuery(view.state)}
-                defaultShowReplace={getShowReplaceField(view.state)}
-            />,
-            dom,
-        )
-    }
+        const renderFindReplace = () => {
+            render(
+                <FindReplace
+                    view={view}
+                    defaultQuery={getSearchQuery(view.state)}
+                    defaultShowReplace={getShowReplaceField(view.state)}
+                    onSearchBarAction={onSearchBarAction}
+                />,
+                dom,
+            )
+        }
 
-    const mount = () => {
-        requestAnimationFrame(() => {
-            const findField = document.querySelector('[data-code-editor-find]') as HTMLInputElement
-            findField?.focus()
-            findField?.select()
-        })
-    }
-
-    const update = ({ transactions, docChanged, state, startState }: ViewUpdate) => {
-        transactions.forEach((tr) => {
-            tr.effects.forEach((effect) => {
-                if (effect.is(setSearchQuery)) {
-                    renderFindReplace()
-                }
-                if (effect.is(setShowReplaceField)) {
-                    renderFindReplace()
-                }
+        const mount = () => {
+            requestAnimationFrame(() => {
+                const findField = document.querySelector('[data-code-editor-find]') as HTMLInputElement
+                findField?.focus()
+                findField?.select()
             })
-        })
+        }
 
-        if (docChanged || state.readOnly !== startState.readOnly) {
-            renderFindReplace()
+        const update = ({ transactions, docChanged, state, startState }: ViewUpdate) => {
+            transactions.forEach((tr) => {
+                tr.effects.forEach((effect) => {
+                    if (effect.is(setSearchQuery)) {
+                        renderFindReplace()
+                    }
+                    if (effect.is(setShowReplaceField)) {
+                        renderFindReplace()
+                    }
+                })
+            })
+
+            if (docChanged || state.readOnly !== startState.readOnly) {
+                renderFindReplace()
+            }
+        }
+
+        renderFindReplace()
+
+        return {
+            top: true,
+            dom,
+            mount,
+            update,
         }
     }
-
-    renderFindReplace()
-
-    return {
-        top: true,
-        dom,
-        mount,
-        update,
-    }
-}
