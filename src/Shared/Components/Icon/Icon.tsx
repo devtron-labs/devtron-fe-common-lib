@@ -39,6 +39,7 @@ import { ReactComponent as ICCloseLarge } from '@IconsV2/ic-close-large.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
 import { ReactComponent as ICCloudVms } from '@IconsV2/ic-cloud-vms.svg'
 import { ReactComponent as ICCluster } from '@IconsV2/ic-cluster.svg'
+import { ReactComponent as ICClusterIsolated } from '@IconsV2/ic-cluster-isolated.svg'
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICCookr } from '@IconsV2/ic-cookr.svg'
@@ -158,7 +159,6 @@ import { ReactComponent as ICUnknown } from '@IconsV2/ic-unknown.svg'
 import { ReactComponent as ICUserCircle } from '@IconsV2/ic-user-circle.svg'
 import { ReactComponent as ICUserKey } from '@IconsV2/ic-user-key.svg'
 import { ReactComponent as ICUsers } from '@IconsV2/ic-users.svg'
-import { ReactComponent as ICVirtualCluster } from '@IconsV2/ic-virtual-cluster.svg'
 import { ReactComponent as ICWarning } from '@IconsV2/ic-warning.svg'
 import { ReactComponent as ICWifiSlash } from '@IconsV2/ic-wifi-slash.svg'
 
@@ -205,6 +205,7 @@ export const iconMap = {
     'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
     'ic-cloud-vms': ICCloudVms,
+    'ic-cluster-isolated': ICClusterIsolated,
     'ic-cluster': ICCluster,
     'ic-code': ICCode,
     'ic-container': ICContainer,
@@ -325,7 +326,6 @@ export const iconMap = {
     'ic-user-circle': ICUserCircle,
     'ic-user-key': ICUserKey,
     'ic-users': ICUsers,
-    'ic-virtual-cluster': ICVirtualCluster,
     'ic-warning': ICWarning,
     'ic-wifi-slash': ICWifiSlash,
 }

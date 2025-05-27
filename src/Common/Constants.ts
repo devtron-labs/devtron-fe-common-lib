@@ -88,7 +88,6 @@ export const ROUTES = {
     APP: 'app',
     APP_ARTIFACT_PROMOTE_MATERIAL: 'app/artifact/promotion-request/material',
     APP_TEMPLATE_DATA: 'app/template/data',
-    CLUSTER_CATEGORIES: 'cluster/categories',
     ENVIRONMENT_CATEGORIES: 'env/categories',
     PROJECT_LIST_MIN: 'team/autocomplete',
     USER_CHECK_ROLE: 'user/check/roles',
