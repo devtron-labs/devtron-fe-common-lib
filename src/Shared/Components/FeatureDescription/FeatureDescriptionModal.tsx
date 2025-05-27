@@ -18,8 +18,9 @@ import { ChangeEvent, useState } from 'react'
 
 import { ComponentSizeType } from '@Shared/constants'
 
-import { DocLink, stopPropagation, StyledRadioGroup, VisibleModal } from '../../../Common'
+import { stopPropagation, StyledRadioGroup, VisibleModal } from '../../../Common'
 import { Button, ButtonVariantType } from '../Button'
+import { DocLink } from '../DocLink'
 import { BUTTON_TEXT } from './constant'
 import { FeatureDescriptionModalProps } from './types'
 import { getImageSize } from './utils'

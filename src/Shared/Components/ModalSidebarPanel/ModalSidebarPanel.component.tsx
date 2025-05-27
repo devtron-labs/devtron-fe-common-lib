@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { DocLink } from '@Shared/DocLink'
-
+import { DocLink } from '../DocLink'
 import { ModalSidebarPanelProps } from './types'
 
 const ModalSidebarPanel = ({

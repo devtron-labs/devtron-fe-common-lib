@@ -28,12 +28,12 @@ import {
     ButtonProps,
     ComponentLayoutType,
     StatusType,
+    DocLinkProps,
 } from '../Shared'
 import {
     ACTION_STATE,
     DEPLOYMENT_WINDOW_TYPE,
     DockerConfigOverrideType,
-    DocLinkProps,
     RefVariableType,
     SortingOrder,
     TaskErrorObj,

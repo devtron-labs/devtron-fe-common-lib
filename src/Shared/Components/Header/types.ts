@@ -16,8 +16,9 @@
 
 import { InstallationType, ModuleStatus } from '@Shared/types'
 
-import { DOCUMENTATION, ResponseType, TippyCustomizedProps } from '../../../Common'
+import { ResponseType, TippyCustomizedProps } from '../../../Common'
 import { ActionMenuProps } from '../ActionMenu'
+import { DOCUMENTATION } from '../DocLink'
 
 export interface PageHeaderType {
     headerName?: string

@@ -23,7 +23,7 @@ import 'tippy.js/animations/shift-toward-subtle.css'
 import 'tippy.js/animations/shift-toward.css'
 import { TippyCustomizedProps, TippyTheme } from './Types'
 import { not, stopPropagation } from './Helper'
-import { DocLink } from '../Shared/DocLink'
+import { DocLink } from '@Shared/Components'
 
 // This component will handle some of the new tippy designs and interactions
 // So this can be updated to support further for new features or interactions

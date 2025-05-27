@@ -16,10 +16,9 @@
 
 import React, { ReactNode } from 'react'
 
-import { DocLinkProps } from '@Shared/DocLink'
-
 import { ImageType } from '../../../Common'
 import { Breadcrumb } from '../../../Common/BreadCrumb/Types'
+import { DocLinkProps } from '../DocLink'
 
 interface BaseFeatureDescriptionModalProps {
     renderDescriptionContent?: () => ReactNode

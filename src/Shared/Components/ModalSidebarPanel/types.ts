@@ -16,7 +16,7 @@
 
 import { ReactNode } from 'react'
 
-import { DocLinkProps } from '@Shared/DocLink'
+import { DocLinkProps } from '../DocLink'
 
 export interface ModalSidebarPanelProps {
     rootClassName?: string
