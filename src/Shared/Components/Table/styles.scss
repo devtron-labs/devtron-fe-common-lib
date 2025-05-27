@@ -1,4 +1,9 @@
 .generic-table {
+    &__cell > * {
+        height: 100%;
+        width: 100%;
+    }
+
     &__cell--sticky {
         background-color: var(--bg-primary);
 

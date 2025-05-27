@@ -120,7 +120,7 @@ export const getFilteringPromise = ({ searchSortTimeoutRef, callback }: GetFilte
     })
 
 export const getStickyColumnConfig = (gridTemplateColumns: string, columnIndex: number) => ({
-    className: 'dc__position-sticky dc__zi-1 generic-table__cell--sticky',
+    className: `dc__position-sticky dc__zi-1 generic-table__cell--sticky`,
     // NOTE: container has a padding left of 20px and the gap between columns is 16px
     // so we want each sticky column to stick to the left of the previous column
     left: `${

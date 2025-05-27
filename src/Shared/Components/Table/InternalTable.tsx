@@ -277,7 +277,11 @@ const InternalTable = ({
                         }
 
                         return (
-                            <div className={`${stickyClassName} flexbox`} style={{ left: stickyLeftValue }} key={field}>
+                            <div
+                                className={`${stickyClassName} generic-table__cell`}
+                                style={{ left: stickyLeftValue }}
+                                key={field}
+                            >
                                 {CellComponent ? (
                                     <CellComponent
                                         field={field}
@@ -298,7 +302,7 @@ const InternalTable = ({
                     })}
 
                     {RowActionsOnHoverComponent && (
-                        <div className="dc__position-fixed dc__left-0 dc__zi-1 dc__opacity-hover--child">
+                        <div className="dc__position-fixed dc__right-0 dc__zi-1 dc__opacity-hover--child">
                             <RowActionsOnHoverComponent row={row} />
                         </div>
                     )}

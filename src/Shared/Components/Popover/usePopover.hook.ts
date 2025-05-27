@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { MouseEvent, useLayoutEffect, useRef, useState } from 'react'
 
 import { UsePopoverProps, UsePopoverReturnType } from './types'
 import {
@@ -36,9 +36,17 @@ export const usePopover = ({
         onOpen?.(openState)
     }
 
-    const togglePopover = () => updateOpenState(!open)
+    const togglePopover = (e: MouseEvent<HTMLDivElement>) => {
+        e.stopPropagation()
+        updateOpenState(!open)
+    }
 
-    const closePopover = () => updateOpenState(false)
+    const closePopover = () => {
+        updateOpenState(false)
+        const triggerButton = triggerRef.current?.querySelector('button')
+        triggerButton?.blur()
+        triggerRef.current?.blur()
+    }
 
     const handleTriggerKeyDown = (e: React.KeyboardEvent) => {
         if (!open && (e.key === 'Enter' || e.key === ' ')) {

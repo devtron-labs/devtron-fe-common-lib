@@ -18,6 +18,7 @@ import { ReactComponent as ICBharatpe } from '@IconsV2/ic-bharatpe.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBookOpen } from '@IconsV2/ic-book-open.svg'
 import { ReactComponent as ICBrowser } from '@IconsV2/ic-browser.svg'
+import { ReactComponent as ICBug } from '@IconsV2/ic-bug.svg'
 import { ReactComponent as ICBuildColor } from '@IconsV2/ic-build-color.svg'
 import { ReactComponent as ICCalendar } from '@IconsV2/ic-calendar.svg'
 import { ReactComponent as ICCancelled } from '@IconsV2/ic-cancelled.svg'
@@ -33,6 +34,7 @@ import { ReactComponent as ICChecks } from '@IconsV2/ic-checks.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
 import { ReactComponent as ICCiWebhook } from '@IconsV2/ic-ci-webhook.svg'
 import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
+import { ReactComponent as ICCleanBrush } from '@IconsV2/ic-clean-brush.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
 import { ReactComponent as ICCloseLarge } from '@IconsV2/ic-close-large.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
@@ -64,6 +66,7 @@ import { ReactComponent as ICExpandRightSm } from '@IconsV2/ic-expand-right-sm.s
 import { ReactComponent as ICExpandSm } from '@IconsV2/ic-expand-sm.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
 import { ReactComponent as ICFile } from '@IconsV2/ic-file.svg'
+import { ReactComponent as ICFileCode } from '@IconsV2/ic-file-code.svg'
 import { ReactComponent as ICFileEdit } from '@IconsV2/ic-file-edit.svg'
 import { ReactComponent as ICFileKey } from '@IconsV2/ic-file-key.svg'
 import { ReactComponent as ICFiles } from '@IconsV2/ic-files.svg'
@@ -103,6 +106,7 @@ import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
 import { ReactComponent as ICLightningFill } from '@IconsV2/ic-lightning-fill.svg'
 import { ReactComponent as ICLivspace } from '@IconsV2/ic-livspace.svg'
 import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
+import { ReactComponent as ICLogs } from '@IconsV2/ic-logs.svg'
 import { ReactComponent as ICMediumDelete } from '@IconsV2/ic-medium-delete.svg'
 import { ReactComponent as ICMediumPaintbucket } from '@IconsV2/ic-medium-paintbucket.svg'
 import { ReactComponent as ICMegaphoneLeft } from '@IconsV2/ic-megaphone-left.svg'
@@ -122,7 +126,9 @@ import { ReactComponent as ICOpenshift } from '@IconsV2/ic-openshift.svg'
 import { ReactComponent as ICOutOfSync } from '@IconsV2/ic-out-of-sync.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
 import { ReactComponent as ICPath } from '@IconsV2/ic-path.svg'
+import { ReactComponent as ICPauseCircle } from '@IconsV2/ic-pause-circle.svg'
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
+import { ReactComponent as ICPlayOutline } from '@IconsV2/ic-play-outline.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
 import { ReactComponent as ICRocketLaunch } from '@IconsV2/ic-rocket-launch.svg'
@@ -134,6 +140,7 @@ import { ReactComponent as ICSortDescending } from '@IconsV2/ic-sort-descending.
 import { ReactComponent as ICSortable } from '@IconsV2/ic-sortable.svg'
 import { ReactComponent as ICSparkleColor } from '@IconsV2/ic-sparkle-color.svg'
 import { ReactComponent as ICSpinny } from '@IconsV2/ic-spinny.svg'
+import { ReactComponent as ICSprayCan } from '@IconsV2/ic-spray-can.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
 import { ReactComponent as ICStamp } from '@IconsV2/ic-stamp.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
@@ -176,6 +183,7 @@ export const iconMap = {
     'ic-bitbucket': ICBitbucket,
     'ic-book-open': ICBookOpen,
     'ic-browser': ICBrowser,
+    'ic-bug': ICBug,
     'ic-build-color': ICBuildColor,
     'ic-calendar': ICCalendar,
     'ic-cancelled': ICCancelled,
@@ -191,6 +199,7 @@ export const iconMap = {
     'ic-ci-linked': ICCiLinked,
     'ic-ci-webhook': ICCiWebhook,
     'ic-circle-loader': ICCircleLoader,
+    'ic-clean-brush': ICCleanBrush,
     'ic-clock': ICClock,
     'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
@@ -221,6 +230,7 @@ export const iconMap = {
     'ic-expand-right-sm': ICExpandRightSm,
     'ic-expand-sm': ICExpandSm,
     'ic-failure': ICFailure,
+    'ic-file-code': ICFileCode,
     'ic-file-edit': ICFileEdit,
     'ic-file-key': ICFileKey,
     'ic-file': ICFile,
@@ -261,6 +271,7 @@ export const iconMap = {
     'ic-lightning': ICLightning,
     'ic-livspace': ICLivspace,
     'ic-logout': ICLogout,
+    'ic-logs': ICLogs,
     'ic-medium-delete': ICMediumDelete,
     'ic-medium-paintbucket': ICMediumPaintbucket,
     'ic-megaphone-left': ICMegaphoneLeft,
@@ -280,7 +291,9 @@ export const iconMap = {
     'ic-out-of-sync': ICOutOfSync,
     'ic-paper-plane-color': ICPaperPlaneColor,
     'ic-path': ICPath,
+    'ic-pause-circle': ICPauseCircle,
     'ic-pencil': ICPencil,
+    'ic-play-outline': ICPlayOutline,
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
     'ic-rocket-launch': ICRocketLaunch,
@@ -292,6 +305,7 @@ export const iconMap = {
     'ic-sortable': ICSortable,
     'ic-sparkle-color': ICSparkleColor,
     'ic-spinny': ICSpinny,
+    'ic-spray-can': ICSprayCan,
     'ic-stack': ICStack,
     'ic-stamp': ICStamp,
     'ic-success': ICSuccess,
