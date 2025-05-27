@@ -14,7 +14,7 @@ export type DocLinkProps<T extends boolean> = Pick<
     ButtonProps<ButtonComponentType.anchor>,
     'dataTestId' | 'size' | 'variant' | 'fullWidth'
 > &
-    BaseDocLink<T> & {
+    Omit<BaseDocLink<T>, 'isEnterprise'> & {
         text?: string
         showExternalIcon?: boolean
         onClick?: (e: MouseEvent<HTMLAnchorElement>) => void

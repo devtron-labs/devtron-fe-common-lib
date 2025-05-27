@@ -16,13 +16,12 @@ export const DocLink = <T extends boolean = false>({
     onClick,
     size = ComponentSizeType.medium,
     variant = ButtonVariantType.text,
-    isEnterprise = false,
     isExternalLink,
     openInNewTab = false,
     fullWidth = true,
 }: DocLinkProps<T>) => {
     // HOOKS
-    const { setSidePanelConfig } = useMainContext()
+    const { isEnterprise, setSidePanelConfig } = useMainContext()
 
     // CONSTANTS
     const documentationLink = getDocumentationUrl({

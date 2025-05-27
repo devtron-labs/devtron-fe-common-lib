@@ -32,7 +32,6 @@ const InfoIconTippy = <T extends boolean = false>({
     children,
     headingInfo,
     buttonPadding = 'p-0',
-    isEnterprise = false,
     isExternalLink,
     openInNewTab,
 }: InfoIconTippyProps<T>) => (
@@ -53,7 +52,6 @@ const InfoIconTippy = <T extends boolean = false>({
         additionalContent={additionalContent}
         animation="shift-toward"
         duration={400}
-        isEnterprise={isEnterprise}
         isExternalLink={isExternalLink}
         openInNewTab={openInNewTab}
     >

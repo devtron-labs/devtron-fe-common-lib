@@ -87,6 +87,8 @@ export interface MainContext {
 
     sidePanelConfig: SidePanelConfig
     setSidePanelConfig: Dispatch<SetStateAction<SidePanelConfig>>
+
+    isEnterprise: boolean
 }
 
 export interface MainContextProviderProps {

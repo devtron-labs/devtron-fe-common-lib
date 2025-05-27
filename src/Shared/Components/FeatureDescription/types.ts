@@ -55,7 +55,6 @@ export type FeatureDescriptionModalProps = {
     title: string
     closeModalText?: string
     closeModal?: () => void
-    isEnterprise?: boolean
 } & (
     | (BaseFeatureDescriptionModalProps & {
           tabsConfig?: never
@@ -84,5 +83,4 @@ export type DescriptorProps = (
      * @default false
      */
     showInfoIcon?: boolean
-    isEnterprise?: boolean
 }

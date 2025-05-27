@@ -121,7 +121,7 @@ export interface CheckboxProps {
 }
 
 export interface TippyWithBaseDocLinkTypes<T extends boolean>
-    extends Pick<DocLinkProps<T>, 'isEnterprise' | 'isExternalLink' | 'openInNewTab'> {
+    extends Pick<DocLinkProps<T>, 'isExternalLink' | 'openInNewTab'> {
     documentationLink?: DocLinkProps<T>['docLinkKey']
 }
 
@@ -168,7 +168,6 @@ export interface InfoIconTippyProps<T extends boolean = false>
         | 'Icon'
         | 'headingInfo'
         | 'documentationLink'
-        | 'isEnterprise'
         | 'isExternalLink'
         | 'openInNewTab'
     > {
