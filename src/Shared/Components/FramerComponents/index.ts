@@ -1,4 +1,3 @@
-import { AnimatePresence, motion } from 'framer-motion'
+import { AnimatePresence, motion, useMotionValue } from 'framer-motion'
 
-export * from './MotionDiv'
-export { AnimatePresence, motion }
+export { AnimatePresence, motion, useMotionValue }
