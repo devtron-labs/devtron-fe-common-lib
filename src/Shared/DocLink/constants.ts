@@ -37,6 +37,7 @@ export const DOCUMENTATION = {
     DOC_HOME_PAGE: DOCUMENTATION_HOME_PAGE,
     KUBE_CONFIG: 'usage/resource-browser#running-kubectl-commands-locally',
     JOBS: 'usage/jobs',
+    TAINT: 'usage/resource-browser#taint-a-node',
 
     // Global Configurations
     GLOBAL_CONFIG_API_TOKEN: 'getting-started/global-configurations/authorization/api-tokens',
