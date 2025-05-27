@@ -14,16 +14,10 @@
  * limitations under the License.
  */
 
-import { ModuleStatus } from '@Shared/types'
+import { InstallationType, ModuleStatus } from '@Shared/types'
 
 import { DOCUMENTATION, ResponseType, TippyCustomizedProps } from '../../../Common'
 import { ActionMenuProps } from '../ActionMenu'
-
-export enum InstallationType {
-    OSS_KUBECTL = 'oss_kubectl',
-    OSS_HELM = 'oss_helm',
-    ENTERPRISE = 'enterprise',
-}
 
 export interface PageHeaderType {
     headerName?: string
@@ -43,7 +37,6 @@ export interface PageHeaderType {
         tippyMessage?: string
         onClickTippyButton?: () => void
     }
-    isEnterprise?: boolean
 }
 
 export interface ServerInfo {

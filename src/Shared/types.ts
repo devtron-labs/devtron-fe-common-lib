@@ -38,6 +38,12 @@ import {
 import { SelectPickerOptionType, WorkflowRunnerStatusDTO } from './Components'
 import { BASE_CONFIGURATION_ENV_ID, DEPLOYMENT_STATUS, EnvironmentTypeEnum, PatchOperationType } from './constants'
 
+export enum InstallationType {
+    OSS_KUBECTL = 'oss_kubectl',
+    OSS_HELM = 'oss_helm',
+    ENTERPRISE = 'enterprise',
+}
+
 export enum EnvType {
     CHART = 'helm_charts',
     APPLICATION = 'apps',
