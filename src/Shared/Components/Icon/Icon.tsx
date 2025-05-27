@@ -139,6 +139,7 @@ import { ReactComponent as ICSortDescending } from '@IconsV2/ic-sort-descending.
 import { ReactComponent as ICSortable } from '@IconsV2/ic-sortable.svg'
 import { ReactComponent as ICSparkleColor } from '@IconsV2/ic-sparkle-color.svg'
 import { ReactComponent as ICSpinny } from '@IconsV2/ic-spinny.svg'
+import { ReactComponent as ICSprayCan } from '@IconsV2/ic-spray-can.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
 import { ReactComponent as ICStamp } from '@IconsV2/ic-stamp.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
@@ -305,6 +306,7 @@ export const iconMap = {
     'ic-sortable': ICSortable,
     'ic-sparkle-color': ICSparkleColor,
     'ic-spinny': ICSpinny,
+    'ic-spray-can': ICSprayCan,
     'ic-stack': ICStack,
     'ic-stamp': ICStamp,
     'ic-success': ICSuccess,

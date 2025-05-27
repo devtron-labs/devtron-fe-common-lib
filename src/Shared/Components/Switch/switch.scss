@@ -1,0 +1,9 @@
+.dt-switch {
+    &__track {
+        --switch-track-hover-color: 'transparent';
+        
+        &:hover {
+            background-color: var(--switch-track-hover-color);
+        }
+    }
+}

@@ -41,6 +41,7 @@ export const KeyValueTable = ({
     headerComponent,
     onChange,
     isAdditionNotAllowed,
+    shouldAutoFocusOnMount,
     readOnly,
     showError,
     validationSchema: parentValidationSchema,
@@ -180,6 +181,7 @@ export const KeyValueTable = ({
             headerComponent={headerComponent}
             readOnly={readOnly}
             isAdditionNotAllowed={isAdditionNotAllowed}
+            shouldAutoFocusOnMount={shouldAutoFocusOnMount}
             sortingConfig={{
                 sortBy,
                 sortOrder,
