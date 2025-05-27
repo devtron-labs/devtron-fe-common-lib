@@ -32,7 +32,7 @@ const ThemeSwitcher = ({ onChange }: ThemeSwitcherProps) => {
         <button
             type="button"
             data-testid="open-theme-switcher-dialog"
-            className={`${LOGOUT_CARD_BASE_BUTTON_CLASS} dc__hover-n50`}
+            className={`${LOGOUT_CARD_BASE_BUTTON_CLASS} dc__tab-focus dc__hover-n50`}
             onClick={handleShowThemeSwitcherDialog}
         >
             Theme
