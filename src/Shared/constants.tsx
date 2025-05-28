@@ -580,3 +580,4 @@ export const DEPLOYMENT_STAGE_TO_NODE_MAP: Readonly<Record<DeploymentStageType, 
 
 export const APP_DETAILS_FALLBACK_POLLING_INTERVAL = 30000
 export const PROGRESSING_DEPLOYMENT_STATUS_POLLING_INTERVAL = 10000
+export const CUBIC_BEZIER_CURVE: [number, number, number, number] = [0.33, 1, 0.68, 1]

@@ -53,7 +53,7 @@ import {
 } from '../Common'
 import { getAggregator } from '../Pages'
 import { AggregatedNodes, PodMetadatum } from './Components'
-import { UNSAVED_CHANGES_PROMPT_MESSAGE } from './constants'
+import { CUBIC_BEZIER_CURVE, UNSAVED_CHANGES_PROMPT_MESSAGE } from './constants'
 import {
     AggregationKeys,
     BorderConfigType,
@@ -706,7 +706,7 @@ export const smoothScrollToTop = (scrollContainer: HTMLElement, targetPosition: 
     const start = scrollContainer.scrollTop
 
     const controls = animate(start, targetPosition, {
-        ease: [0.33, 1, 0.68, 1],
+        ease: CUBIC_BEZIER_CURVE,
         onUpdate: (value) => {
             scrollContainer.scrollTop = value
         },

@@ -79,6 +79,9 @@ export type CodeEditorProps<DiffView extends boolean = false> = {
     diffView?: DiffView
     theme?: AppThemeType
     onOpenSearchPanel?: () => void
+    /**
+     * This method is triggered when user types something in the search/replace bar or applies a search or replace action.
+     */
     onSearchBarAction?: () => void
 } & CodeEditorPropsBasedOnDiffView<DiffView>
 
