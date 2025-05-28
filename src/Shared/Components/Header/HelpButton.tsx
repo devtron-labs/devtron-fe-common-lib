@@ -5,11 +5,12 @@ import { SliderButton } from '@typeform/embed-react'
 import { URLS } from '@Common/Constants'
 import { ComponentSizeType } from '@Shared/constants'
 import { useMainContext } from '@Shared/Providers'
+import { InstallationType } from '@Shared/types'
 
 import { ActionMenu, ActionMenuItemType } from '../ActionMenu'
 import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
-import { HelpButtonActionMenuProps, HelpButtonProps, HelpMenuItems, InstallationType } from './types'
+import { HelpButtonActionMenuProps, HelpButtonProps, HelpMenuItems } from './types'
 import { getHelpActionMenuOptions } from './utils'
 
 const CheckForUpdates = ({
@@ -40,14 +41,13 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick }: HelpButt
     const [isActionMenuOpen, setIsActionMenuOpen] = useState(false)
 
     // HOOKS
-    const { currentServerInfo, handleOpenLicenseInfoDialog, licenseData, setGettingStartedClicked } = useMainContext()
+    const { handleOpenLicenseInfoDialog, licenseData, setGettingStartedClicked, isEnterprise } = useMainContext()
 
     // REFS
     const typeFormSliderButtonRef = useRef(null)
 
     // CONSTANTS
     const FEEDBACK_FORM_ID = `UheGN3KJ#source=${window.location.hostname}`
-    const isEnterprise = currentServerInfo?.serverInfo?.installationType === InstallationType.ENTERPRISE
 
     // HANDLERS
     const handleAnalytics = (option: ActionMenuItemType) => {

@@ -23,7 +23,6 @@ import { ReactComponent as ICArrow } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICCollapseAll } from '@Icons/ic-collapse-all.svg'
 import { ReactComponent as ICExpandAll } from '@Icons/ic-expand-all.svg'
 import { ANSI_UP_REGEX, ComponentSizeType } from '@Shared/constants'
-import { DocLink } from '@Shared/DocLink'
 import { escapeRegExp, sanitizeTargetPlatforms } from '@Shared/Helpers'
 import { AppThemeType, getComponentSpecificThemeClass } from '@Shared/Providers'
 
@@ -40,6 +39,7 @@ import {
     useRegisterShortcut,
     useUrlFilters,
 } from '../../../Common'
+import { DocLink } from '../DocLink'
 import {
     EVENT_STREAM_EVENTS_MAP,
     LOGS_RETRY_COUNT,
