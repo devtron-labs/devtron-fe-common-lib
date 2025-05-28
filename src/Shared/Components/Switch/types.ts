@@ -1,3 +1,5 @@
+import { ButtonHTMLAttributes } from 'react'
+
 import { ComponentSizeType } from '@Shared/constants'
 import { IconBaseColorType } from '@Shared/types'
 
@@ -96,7 +98,7 @@ export type DTSwitchProps = {
      * Callback function that is called when the switch state changes.
      * This function should handle the logic for toggling the switch.
      */
-    onChange: () => void
+    onChange: ButtonHTMLAttributes<HTMLButtonElement>['onClick']
 
     /**
      * Indicates whether the switch is disabled.

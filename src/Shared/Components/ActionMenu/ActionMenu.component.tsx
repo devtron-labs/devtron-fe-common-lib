@@ -4,7 +4,7 @@ import { CustomInput } from '../CustomInput'
 import { Popover } from '../Popover'
 import { SelectPickerMenuListFooter } from '../SelectPicker/common'
 import { ActionMenuItem } from './ActionMenuItem'
-import { ActionMenuItemType, ActionMenuProps } from './types'
+import { ActionMenuItemProps, ActionMenuProps } from './types'
 import { useActionMenu } from './useActionMenu.hook'
 
 import './actionMenu.scss'
@@ -51,8 +51,8 @@ export const ActionMenu = <T extends string | number = string | number>({
     // HANDLERS
     const handleOptionMouseEnter = (index: number) => () => setFocusedIndex(index)
 
-    const handleOptionOnClick = (item: ActionMenuItemType<T>) => () => {
-        onClick(item)
+    const handleOptionOnClick: ActionMenuItemProps<T>['onClick'] = (item, e) => {
+        onClick(item, e)
         closePopover()
     }
 
@@ -114,7 +114,7 @@ export const ActionMenu = <T extends string | number = string | number>({
                                                     itemRef={itemsRef.current[index]}
                                                     isFocused={index === focusedIndex}
                                                     onMouseEnter={handleOptionMouseEnter(index)}
-                                                    onClick={handleOptionOnClick(item)}
+                                                    onClick={handleOptionOnClick}
                                                     disableDescriptionEllipsis={disableDescriptionEllipsis}
                                                 />
                                             )
