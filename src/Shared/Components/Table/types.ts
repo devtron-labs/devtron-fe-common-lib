@@ -8,6 +8,7 @@ import {
     UseUrlFiltersReturnType,
 } from '@Common/Hooks'
 import { GenericEmptyStateType } from '@Common/index'
+import { PageSizeOption } from '@Common/Pagination/types'
 import { SortableTableHeaderCellProps, useResizableTableConfig } from '@Common/SortableTableHeaderCell'
 
 import { useBulkSelection, UseBulkSelectionProps } from '../BulkSelection'
@@ -159,9 +160,9 @@ interface GetRowsProps
 type AdditionalFilterPropsType<T extends Exclude<FiltersTypeEnum, FiltersTypeEnum.NONE>> = T extends FiltersTypeEnum.URL
     ? Pick<
           UseUrlFiltersProps<string, unknown>,
-          'parseSearchParams' | 'localStorageKey' | 'redirectionMethod' | 'initialSortKey'
+          'parseSearchParams' | 'localStorageKey' | 'redirectionMethod' | 'initialSortKey' | 'defaultPageSize'
       >
-    : Pick<UseStateFiltersProps<string>, 'initialSortKey'>
+    : Pick<UseStateFiltersProps<string>, 'initialSortKey' | 'defaultPageSize'>
 
 export type ViewWrapperProps<T = FiltersTypeEnum.STATE> = PropsWithChildren<
     (T extends FiltersTypeEnum.NONE
@@ -180,8 +181,6 @@ export type InternalTableProps = Required<Pick<ConfigurableColumnsType, 'visible
     id: `table__${string}`
 
     loading?: boolean
-
-    paginationVariant: PaginationEnum
 
     /**
      * Memoize columns before passing as props.
@@ -276,6 +275,16 @@ export type InternalTableProps = Required<Pick<ConfigurableColumnsType, 'visible
               additionalFilterProps?: never
               filter?: never
           }
+    ) &
+    (
+        | {
+              paginationVariant: PaginationEnum.PAGINATED
+              pageSizeOptions?: PageSizeOption[]
+          }
+        | {
+              paginationVariant: Omit<PaginationEnum, 'PAGINATED'>
+              pageSizeOptions?: never
+          }
     )
 
 export type UseResizableTableConfigWrapperProps = Omit<InternalTableProps, 'resizableConfig'>
@@ -307,6 +316,7 @@ export type TableProps = Pick<
     | 'RowActionsOnHoverComponent'
     | 'loading'
     | 'ViewWrapper'
+    | 'pageSizeOptions'
 >
 
 export type BulkActionStateType = string | null

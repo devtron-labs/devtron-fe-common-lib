@@ -6,6 +6,7 @@
 
     &__cell--sticky {
         background-color: var(--bg-primary);
+        transition: box-shadow 0.1s ease-in-out;
 
         &::before {
             position: absolute;
@@ -14,12 +15,21 @@
             width: 16px;
             height: 100%;
             background-color: inherit;
+            z-index: -1;
         }
 
         &:first-of-type::before {
             left: -20px;
             width: 20px;
         }
+    }
+
+    &--scrolled .generic-table__row > .generic-table__cell--sticky:not(:has(+ .generic-table__cell--sticky)) {
+        // Show a right border on the last sticky cell when the table is scrolled
+        // Using box-shadow to avoid layout issues with borders, since borders can affect the width of the cell
+        box-shadow:
+            0px 0px 0px 0px transparent,
+            1px 0px 0px 0px var(--border-primary);
     }
 
     &__row {

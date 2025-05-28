@@ -61,7 +61,7 @@ const TableWithResizableConfigWrapper = (tableProps: UseResizableTableConfigWrap
     const visibleColumns = useMemo(
         () =>
             bulkActionsConfig
-                ? [{ size: { fixed: 40 }, field: BULK_ACTION_GUTTER_LABEL }, ...columnsWithoutBulkActionGutter]
+                ? [{ size: { fixed: 20 }, field: BULK_ACTION_GUTTER_LABEL }, ...columnsWithoutBulkActionGutter]
                 : columnsWithoutBulkActionGutter,
         [!!bulkActionsConfig, columnsWithoutBulkActionGutter],
     )

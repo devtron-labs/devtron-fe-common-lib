@@ -18,7 +18,12 @@ import BulkSelectionActionWidget from './BulkSelectionActionWidget'
 import { BULK_ACTION_GUTTER_LABEL, EVENT_TARGET, NO_ROWS_OR_GET_ROWS_ERROR, SHIMMER_DUMMY_ARRAY } from './constants'
 import { BulkActionStateType, FiltersTypeEnum, InternalTableProps, PaginationEnum, SignalsType } from './types'
 import useTableWithKeyboardShortcuts from './useTableWithKeyboardShortcuts'
-import { getFilteringPromise, getStickyColumnConfig, searchAndSortRows } from './utils'
+import {
+    getFilteringPromise,
+    getStickyColumnConfig,
+    scrollToShowActiveElementIfNeeded,
+    searchAndSortRows,
+} from './utils'
 
 const InternalTable = ({
     filtersVariant,
@@ -42,13 +47,16 @@ const InternalTable = ({
     handleToggleBulkSelectionOnRow,
     paginationVariant,
     RowActionsOnHoverComponent,
+    pageSizeOptions,
 }: InternalTableProps) => {
     const rowsContainerRef = useRef<HTMLDivElement>(null)
     const parentRef = useRef<HTMLDivElement>(null)
     const activeRowRef = useRef<HTMLDivElement>(null)
     const bulkSelectionButtonRef = useRef<HTMLButtonElement>(null)
+    const headerRef = useRef<HTMLDivElement>(null)
 
     const [bulkActionState, setBulkActionState] = useState<BulkActionStateType>(null)
+    const [showBorderRightOnStickyElements, setShowBorderRightOnStickyElements] = useState(false)
 
     const {
         BulkActionsComponent,
@@ -69,7 +77,7 @@ const InternalTable = ({
         changePage,
         changePageSize,
         clearFilters,
-        isFilterApplied,
+        areFiltersApplied,
         // Destructuring specific filters, grouping the rest with the rest operator
         // eslint-disable-next-line @typescript-eslint/no-unused-vars
         handleSearch,
@@ -94,12 +102,24 @@ const InternalTable = ({
 
     const searchSortTimeoutRef = useRef<number>(-1)
 
-    useEffect(
-        () => () => {
+    useEffect(() => {
+        const scrollEventHandler = () => {
+            setShowBorderRightOnStickyElements(rowsContainerRef.current?.scrollLeft > 0)
+        }
+
+        const preventScrollByKeyboard = (event: KeyboardEvent) => {
+            if (['ArrowUp', 'ArrowDown'].includes(event.key)) {
+                event.preventDefault()
+            }
+        }
+
+        rowsContainerRef.current.addEventListener('scroll', scrollEventHandler)
+        rowsContainerRef.current.addEventListener('keydown', preventScrollByKeyboard)
+
+        return () => {
             clearTimeout(searchSortTimeoutRef.current)
-        },
-        [],
-    )
+        }
+    }, [])
 
     const [_areFilteredRowsLoading, filteredRows, filteredRowsError, reloadFilteredRows] = useAsync(async () => {
         if (!rows && !getRows) {
@@ -148,6 +168,12 @@ const InternalTable = ({
 
     useEffectAfterMount(() => {
         setActiveRowIndex(0)
+        activeRowRef.current?.focus({ preventScroll: true })
+        scrollToShowActiveElementIfNeeded(
+            activeRowRef.current,
+            rowsContainerRef.current,
+            headerRef.current.offsetHeight,
+        )
     }, [offset, visibleRows])
 
     useEffect(() => {
@@ -171,7 +197,12 @@ const InternalTable = ({
         // with loading shimmers, causing activeRowRef to be null. During this time, activeRowIndex might reset to 0, but focus
         // will not shift. However, when navigating with arrow keys, activeRowIndex changes, and activeRowRef will point to the
         // correct row once it is mounted, allowing focus to update appropriately.
-        activeRowRef.current?.focus()
+        activeRowRef.current?.focus({ preventScroll: true })
+        scrollToShowActiveElementIfNeeded(
+            activeRowRef.current,
+            rowsContainerRef.current,
+            headerRef.current.offsetHeight,
+        )
     }, [activeRowIndex])
 
     const onBulkOperationModalClose = () => {
@@ -193,7 +224,7 @@ const InternalTable = ({
                     key={shimmerRowLabel}
                     className={`px-20 flexbox py-12 dc__gap-16 ${showSeparatorBetweenRows ? 'border__secondary--bottom' : ''}`}
                 >
-                    {isBulkSelectionConfigured ? <div className="shimmer w-20 mr-20" /> : null}
+                    {isBulkSelectionConfigured ? <div className="shimmer w-20" /> : null}
                     {SHIMMER_DUMMY_ARRAY.map((shimmerCellLabel) => (
                         <div key={shimmerCellLabel} className="shimmer w-200" />
                     ))}
@@ -210,11 +241,9 @@ const InternalTable = ({
                         gridTemplateColumns,
                     }}
                 >
-                    {visibleColumns.map(({ label, field }) => (
-                        <div key={label} className="pr-6 py-12 flex" aria-label="Loading...">
-                            <div
-                                className={`shimmer h-16 ${field === BULK_ACTION_GUTTER_LABEL ? 'w-20 mr-6' : 'w-100'}`}
-                            />
+                    {visibleColumns.map(({ label }) => (
+                        <div key={label} className="py-12 flex" aria-label="Loading...">
+                            <div className="shimmer h-16 w-100" />
                         </div>
                     ))}
                 </div>
@@ -317,7 +346,7 @@ const InternalTable = ({
         }
 
         if (!areFilteredRowsLoading && !filteredRows?.length && !loading) {
-            return filtersVariant !== FiltersTypeEnum.NONE && isFilterApplied ? (
+            return filtersVariant !== FiltersTypeEnum.NONE && areFiltersApplied ? (
                 <GenericFilterEmptyState handleClearFilters={clearFilters} />
             ) : (
                 <GenericEmptyState {...emptyStateConfig.noRowsConfig} />
@@ -329,12 +358,15 @@ const InternalTable = ({
                 <div className="flexbox-col flex-grow-1 w-100 dc__overflow-hidden" ref={parentRef}>
                     <div
                         ref={rowsContainerRef}
-                        className={`flex-grow-1 flexbox-col dc__overflow-auto ${rowsContainerRef.current?.scrollLeft > 0}`}
+                        className={`flex-grow-1 flexbox-col dc__overflow-auto ${showBorderRightOnStickyElements ? 'generic-table--scrolled' : ''}`}
                     >
-                        <div className="bg__primary dc__min-width-fit-content px-20 border__secondary--bottom dc__position-sticky dc__zi-2 dc__top-0">
+                        <div
+                            ref={headerRef}
+                            className="bg__primary dc__min-width-fit-content px-20 border__secondary--bottom dc__position-sticky dc__zi-2 dc__top-0"
+                        >
                             {loading ? (
                                 <div className="flexbox py-12 dc__gap-16">
-                                    {isBulkSelectionConfigured ? <div className="shimmer w-20 mr-20" /> : null}
+                                    {isBulkSelectionConfigured ? <div className="shimmer w-20" /> : null}
                                     {SHIMMER_DUMMY_ARRAY.map((label) => (
                                         <div key={label} className="shimmer w-200" />
                                     ))}
@@ -377,6 +409,7 @@ const InternalTable = ({
                                                             ref={bulkSelectionButtonRef}
                                                             key={field}
                                                             showPagination={showPagination}
+                                                            showChevronDownIcon={false}
                                                         />
                                                     </div>
                                                 )
@@ -431,6 +464,7 @@ const InternalTable = ({
                         offset={offset}
                         rootClassName="border__secondary--top flex dc__content-space px-20"
                         size={filteredRows.length}
+                        pageSizeOptions={pageSizeOptions}
                     />
                 )}
 

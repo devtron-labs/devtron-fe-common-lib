@@ -23,9 +23,9 @@ export const searchAndSortRows = (
     filterData: UseFiltersReturnType,
     comparator?: Column['comparator'],
 ) => {
-    const { sortBy, sortOrder, isFilterApplied } = filterData ?? {}
+    const { sortBy, sortOrder, areFiltersApplied } = filterData ?? {}
 
-    const filteredRows = isFilterApplied ? rows.filter((row) => filter(row, filterData)) : rows
+    const filteredRows = areFiltersApplied ? rows.filter((row) => filter(row, filterData)) : rows
 
     return comparator && sortBy
         ? filteredRows.sort(
@@ -134,3 +134,30 @@ export const getStickyColumnConfig = (gridTemplateColumns: string, columnIndex: 
         16 * columnIndex
     }px`,
 })
+
+export const scrollToShowActiveElementIfNeeded = (
+    activeElement: HTMLDivElement,
+    parent: HTMLDivElement,
+    topMargin: number,
+) => {
+    if (!activeElement || !parent) {
+        return
+    }
+
+    // NOTE: we can't use scrollIntoView since that will also scroll it vertically
+    // therefore we need to conditionally scroll and that too in the horizontal direction only
+    const { bottom, top } = activeElement.getBoundingClientRect()
+    const { bottom: parentBottom, top: parentTop } = parent.getBoundingClientRect()
+
+    // NOTE: please look into https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
+    // for more information what left and right pertain to
+    if (top < parentTop) {
+        // eslint-disable-next-line no-param-reassign
+        parent.scrollTop += top - parentTop - topMargin
+    }
+
+    if (bottom > parentBottom) {
+        // eslint-disable-next-line no-param-reassign
+        parent.scrollTop += bottom - parentBottom
+    }
+}
