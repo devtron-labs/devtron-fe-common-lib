@@ -77,7 +77,6 @@ const CodeEditor = <DiffView extends boolean = false>({
     onChange,
     onOriginalValueChange,
     onModifiedValueChange,
-    readOnly,
     placeholder,
     diffView,
     loading,
@@ -88,8 +87,13 @@ const CodeEditor = <DiffView extends boolean = false>({
     onBlur,
     onFocus,
     autoFocus,
-    disableSearch = false,
+    collapseUnchangedDiffView = false,
+    ...resProps
 }: CodeEditorProps<DiffView>) => {
+    // DERIVED PROPS
+    const disableSearch = (collapseUnchangedDiffView || resProps.disableSearch) ?? false
+    const readOnly = (collapseUnchangedDiffView || resProps.readOnly) ?? false
+
     // HOOKS
     const { appTheme } = useTheme()
 
@@ -209,7 +213,7 @@ const CodeEditor = <DiffView extends boolean = false>({
             { key: 'Escape', run: blurOnEscape, stopPropagation: true },
         ]),
         indentationMarkers(),
-        getLanguageExtension(mode),
+        getLanguageExtension(mode, collapseUnchangedDiffView),
         foldingCompartment.of(foldConfig),
         lintGutter(),
         search({
@@ -277,6 +281,8 @@ const CodeEditor = <DiffView extends boolean = false>({
                 modifiedViewExtensions={modifiedViewExtensions}
                 extensions={extensions}
                 diffMinimapExtensions={diffMinimapExtensions}
+                collapseUnchanged={collapseUnchangedDiffView}
+                disableMinimap={collapseUnchangedDiffView}
             />
         </CodeEditorContext.Provider>
     )

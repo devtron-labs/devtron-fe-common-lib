@@ -51,6 +51,12 @@ type CodeEditorDiffBaseProps = {
     originalValue?: ReactCodeMirrorProps['value']
     modifiedValue?: ReactCodeMirrorProps['value']
     isOriginalModifiable?: boolean
+    /**
+     * When true, renders a diff view in readOnly mode with collapsed unchanged diffs.
+     * This disables the minimap, code-editor search functionality, and language linting.
+     * @default false
+     */
+    collapseUnchangedDiffView?: boolean
 }
 
 type CodeEditorPropsBasedOnDiffView<DiffView extends boolean> = DiffView extends true
@@ -146,6 +152,8 @@ export type CodeEditorRendererProps = Required<
     modifiedViewExtensions: ReactCodeMirrorProps['extensions']
     extensions: ReactCodeMirrorProps['extensions']
     diffMinimapExtensions: ReactCodeMirrorProps['extensions']
+    collapseUnchanged?: boolean
+    disableMinimap?: boolean
 }
 
 export interface DiffMinimapProps extends Pick<CodeEditorRendererProps, 'theme'> {
