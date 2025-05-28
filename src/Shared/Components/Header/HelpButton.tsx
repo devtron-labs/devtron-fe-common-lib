@@ -17,7 +17,7 @@ const CheckForUpdates = ({
     serverInfo,
     fetchingServerInfo,
 }: Pick<HelpButtonProps, 'serverInfo' | 'fetchingServerInfo'>) => (
-    <div className="flex column left px-10 py-6">
+    <div className="bg__menu--secondary flex column left px-10 py-6">
         {fetchingServerInfo ? (
             <p className="m-0 dc__loading-dots fs-13 fw-4 cn-7">Checking version</p>
         ) : (
@@ -110,7 +110,7 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick }: HelpButt
                 onOpen={setIsActionMenuOpen}
                 {...(serverInfo?.installationType === InstallationType.OSS_HELM
                     ? {
-                          menuListFooterConfig: {
+                          footerConfig: {
                               type: 'customNode',
                               value: (
                                   <CheckForUpdates serverInfo={serverInfo} fetchingServerInfo={fetchingServerInfo} />

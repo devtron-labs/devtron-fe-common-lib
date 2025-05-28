@@ -132,7 +132,7 @@ export const ActionMenu = <T extends string | number = string | number>({
                     )}
                 </ul>
                 {footerConfig && (
-                    <div className="bg__menu--secondary border__secondary-translucent--top">
+                    <div className="border__secondary-translucent--top">
                         <SelectPickerMenuListFooter menuListFooterConfig={footerConfig} />
                     </div>
                 )}
