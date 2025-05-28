@@ -1,3 +1,5 @@
+import { DOCUMENTATION_HOME_PAGE } from '@Common/Constants'
+
 export const DOCUMENTATION = {
     ADMIN_PASSWORD: 'install/install-devtron#devtron-admin-credentials',
     APP_CI_CONFIG_BUILD_WITHOUT_DOCKER:
@@ -16,7 +18,7 @@ export const DOCUMENTATION = {
     APP_ROLLOUT_DEPLOYMENT_TEMPLATE: 'usage/applications/creating-application/deployment-template/rollout-deployment',
     BUILD_STAGE: 'usage/applications/creating-application/ci-pipeline#build-stage',
     APP_TAGS: 'usage/applications/create-application#tags',
-    BLOB_STORAGE: 'getting-started/install/installation-configuration#configuration-of-blob-storage',
+    BLOB_STORAGE: 'configurations-overview/installation-configuration#configuration-of-blob-storage',
     BULK_UPDATE: 'usage/bulk-update',
     CHART_GROUP: 'usage/deploy-chart/chart-group',
     CHART_LIST: 'usage/deploy-chart/overview-of-charts',
@@ -32,7 +34,9 @@ export const DOCUMENTATION = {
     EXTERNAL_LINKS: 'getting-started/global-configurations/external-links',
     EXTERNAL_SECRET: 'usage/applications/creating-application/secrets#external-secrets',
     HOME_PAGE: 'https://devtron.ai',
+    DOC_HOME_PAGE: DOCUMENTATION_HOME_PAGE,
     KUBE_CONFIG: 'usage/resource-browser#running-kubectl-commands-locally',
+    JOBS: 'usage/jobs',
     TAINT: 'usage/resource-browser#taint-a-node',
 
     // Global Configurations
@@ -44,16 +48,16 @@ export const DOCUMENTATION = {
     GLOBAL_CONFIG_CUSTOM_CHART_PRE_REQUISITES: 'getting-started/global-configurations/custom-charts#prerequisites',
     GLOBAL_CONFIG_DOCKER: 'getting-started/global-configurations/container-registries',
     GLOBAL_CONFIG_GIT: 'getting-started/global-configurations/git-accounts',
-    GLOBAL_CONFIG_GITOPS: 'getting-started/global-configurations/gitops',
+    GLOBAL_CONFIG_GITOPS: 'global-configurations/gitops',
     GLOBAL_CONFIG_GITOPS_GITHUB: 'global-configurations/gitops#github',
     GLOBAL_CONFIG_GITOPS_GITLAB: 'global-configurations/gitops#gitlab',
     GLOBAL_CONFIG_GITOPS_AZURE: 'global-configurations/gitops#azure',
     GLOBAL_CONFIG_GITOPS_BITBUCKET: 'global-configurations/gitops#bitbucket',
     GLOBAL_CONFIG_GROUPS: 'getting-started/global-configurations/authorization/permission-groups',
-    GLOBAL_CONFIG_HOST_URL: 'getting-started/global-configurations/host-url',
+    GLOBAL_CONFIG_HOST_URL: 'global-configurations/host-url',
     GLOBAL_CONFIG_NOTIFICATION: 'getting-started/global-configurations/manage-notification',
     GLOBAL_CONFIG_PERMISSION: 'global-configurations/authorization/user-access#devtron-apps-permissions',
-    GLOBAL_CONFIG_PROJECT: 'getting-started/global-configurations/projects',
+    GLOBAL_CONFIG_PROJECT: 'global-configurations/projects',
     GLOBAL_CONFIG_SSO: 'getting-started/global-configurations/sso-login',
     GLOBAL_CONFIG_SCOPED_VARIABLES: 'getting-started/global-configurations/scoped-variables',
     GLOBAL_CONFIG_USER: 'getting-started/global-configurations/authorization/user-access',

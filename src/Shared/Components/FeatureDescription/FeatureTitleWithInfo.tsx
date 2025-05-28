@@ -38,7 +38,6 @@ const FeatureTitleWithInfo = ({
     additionalContent,
     showInfoIcon = false,
     tabsConfig,
-    isEnterprise,
 }: DescriptorProps) => {
     const [showFeatureDescriptionModal, setShowFeatureDescriptionModal] = useState(false)
     const onClickInfoIcon = () => {
@@ -64,7 +63,6 @@ const FeatureTitleWithInfo = ({
                         documentationLink={docLink}
                         documentationLinkText={docLinkText}
                         dataTestid="info-tippy-button"
-                        isEnterprise={isEnterprise}
                     />
                 </div>
             )
@@ -97,7 +95,6 @@ const FeatureTitleWithInfo = ({
                 <FeatureDescriptionModal
                     title={title}
                     closeModal={closeModal}
-                    isEnterprise={isEnterprise}
                     closeModalText={closeModalText}
                     {...(Array.isArray(tabsConfig)
                         ? {

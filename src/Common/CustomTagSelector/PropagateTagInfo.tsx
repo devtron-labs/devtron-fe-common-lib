@@ -47,6 +47,7 @@ export default function PropagateTagInfo({ isCreateApp }: { isCreateApp: boolean
             interactive
             documentationLink={isCreateApp ? "APP_TAGS" : "APP_OVERVIEW_TAGS"}
             documentationLinkText="View Documentation"
+            openInNewTab
         >
             <div className="flexbox cursor">
                 <InjectTag className="icon-dim-16 mt-2 mr-4" />
