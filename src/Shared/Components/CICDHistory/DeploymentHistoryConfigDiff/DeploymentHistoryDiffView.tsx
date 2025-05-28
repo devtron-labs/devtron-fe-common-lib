@@ -19,8 +19,6 @@ import { useParams } from 'react-router-dom'
 import Tippy from '@tippyjs/react'
 
 import { CodeEditor } from '@Shared/Components/CodeEditor'
-import { renderDiffViewNoDifferenceState } from '@Shared/Components/DeploymentConfigDiff'
-import { DiffViewer } from '@Shared/Components/DiffViewer'
 
 import { ReactComponent as Info } from '../../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ViewVariablesIcon } from '../../../../Assets/Icon/ic-view-variable-toggle.svg'
@@ -71,10 +69,14 @@ const DeploymentHistoryDiffView = ({
 
     const renderDeploymentDiffViaCodeEditor = () =>
         previousConfigAvailable ? (
-            <DiffViewer
-                oldValue={editorValuesLHS}
-                newValue={editorValuesRHS}
-                codeFoldMessageRenderer={renderDiffViewNoDifferenceState(editorValuesLHS, editorValuesRHS)}
+            <CodeEditor
+                height="100%"
+                originalValue={editorValuesLHS}
+                modifiedValue={editorValuesRHS}
+                mode={MODES.YAML}
+                noParsing
+                diffView
+                collapseUnchangedDiffView
             />
         ) : (
             <CodeEditor

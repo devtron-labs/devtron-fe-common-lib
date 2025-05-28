@@ -20,7 +20,7 @@ import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
 import { ReactComponent as ICCheckCircleDots } from '@Icons/ic-check-circle-dots.svg'
 import { ReactComponent as ICEditFile } from '@Icons/ic-edit-file.svg'
 import { ReactComponent as ICFileCode } from '@Icons/ic-file-code.svg'
-import { deepEqual, noop, YAMLStringify } from '@Common/Helper'
+import { deepEqual, YAMLStringify } from '@Common/Helper'
 import {
     AppEnvDeploymentConfigListParams,
     DeploymentConfigDiffProps,
@@ -28,7 +28,6 @@ import {
     DeploymentHistoryDetail,
     DeploymentHistorySingleValue,
     DiffHeadingDataType,
-    GenericSectionErrorState,
     prepareHistoryData,
 } from '@Shared/Components'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '@Shared/constants'
@@ -47,7 +46,6 @@ import {
     TemplateListDTO,
     TemplateListType,
 } from '../../Services/app.types'
-import { DiffViewerProps } from '../DiffViewer/types'
 
 export const getDeploymentTemplateData = (data: DeploymentTemplateDTO) => {
     const parsedDraftData = JSON.parse(data?.deploymentDraftData?.configData[0].draftMetadata.data || null)
@@ -911,21 +909,3 @@ export const getDefaultVersionAndPreviousDeploymentOptions = (data: TemplateList
             previousDeployments: [],
         },
     )
-
-export const renderDiffViewNoDifferenceState = (
-    lhsValue: string,
-    rhsValue: string,
-): DiffViewerProps['codeFoldMessageRenderer'] =>
-    lhsValue === rhsValue
-        ? () => (
-              <GenericSectionErrorState
-                  useInfoIcon
-                  title="No diff in configurations"
-                  subTitle=""
-                  description=""
-                  buttonText="View values"
-                  // Click event is handled at the parent level
-                  reload={noop}
-              />
-          )
-        : null
