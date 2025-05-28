@@ -121,8 +121,8 @@ const FindReplace = ({ view, defaultQuery, defaultShowReplace, onSearchBarAction
 
     useEffect(() => {
         if (!defaultQuery.eq(query)) {
-            setMatchesCount(getUpdatedSearchMatchesCount(defaultQuery, view))
             onSearchBarAction?.()
+            setMatchesCount(getUpdatedSearchMatchesCount(defaultQuery, view))
             setQuery(defaultQuery)
         }
     }, [defaultQuery])
@@ -146,6 +146,7 @@ const FindReplace = ({ view, defaultQuery, defaultShowReplace, onSearchBarAction
     const onNext = (e?: MouseEvent<HTMLButtonElement>) => {
         e?.preventDefault()
         e?.stopPropagation()
+        onSearchBarAction?.()
         findNext(view)
         setMatchesCount(getUpdatedSearchMatchesCount(query, view))
     }
@@ -153,6 +154,7 @@ const FindReplace = ({ view, defaultQuery, defaultShowReplace, onSearchBarAction
     const onPrevious = (e?: MouseEvent<HTMLButtonElement>) => {
         e?.preventDefault()
         e?.stopPropagation()
+        onSearchBarAction?.()
         findPrevious(view)
         setMatchesCount(getUpdatedSearchMatchesCount(query, view))
     }
@@ -164,7 +166,6 @@ const FindReplace = ({ view, defaultQuery, defaultShowReplace, onSearchBarAction
     const onFindKeyDown = (e: ReactKeyboardEvent<HTMLInputElement>) => {
         e.stopPropagation()
         if (e.key === 'Enter') {
-            onSearchBarAction?.()
             e.preventDefault()
             if (e.shiftKey) {
                 onPrevious()
@@ -182,6 +183,7 @@ const FindReplace = ({ view, defaultQuery, defaultShowReplace, onSearchBarAction
         e.stopPropagation()
         if (e.key === 'Enter') {
             e.preventDefault()
+            onSearchBarAction?.()
             replaceNext(view)
         }
     }
@@ -191,10 +193,12 @@ const FindReplace = ({ view, defaultQuery, defaultShowReplace, onSearchBarAction
     }
 
     const onReplaceTextClick = () => {
+        onSearchBarAction?.()
         replaceNext(view)
     }
 
     const onReplaceTextAllClick = () => {
+        onSearchBarAction?.()
         replaceAll(view)
     }
 

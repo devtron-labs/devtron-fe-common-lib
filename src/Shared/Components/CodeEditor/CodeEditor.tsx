@@ -87,7 +87,7 @@ const CodeEditor = <DiffView extends boolean = false>({
     onBlur,
     onFocus,
     autoFocus,
-    onOpenSearchPanel = noop,
+    onSearchPanelOpen = noop,
     onSearchBarAction = noop,
     collapseUnchangedDiffView = false,
     ...resProps
@@ -210,10 +210,10 @@ const CodeEditor = <DiffView extends boolean = false>({
         keymap.of([
             ...vscodeKeymap.filter(({ key }) => key !== 'Mod-Alt-Enter' && key !== 'Mod-Enter' && key !== 'Mod-f'),
             ...(!disableSearch
-                ? [{ key: 'Mod-f', run: getOpenSearchPanel(onOpenSearchPanel), scope: 'editor search-panel' }]
+                ? [{ key: 'Mod-f', run: getOpenSearchPanel(onSearchPanelOpen), scope: 'editor search-panel' }]
                 : []),
             { key: 'Mod-Enter', run: replaceAll, scope: 'editor search-panel' },
-            { key: 'Mod-Alt-f', run: getOpenSearchPanelWithReplace(onOpenSearchPanel), scope: 'editor search-panel' },
+            { key: 'Mod-Alt-f', run: getOpenSearchPanelWithReplace(onSearchPanelOpen), scope: 'editor search-panel' },
             { key: 'Escape', run: blurOnEscape, stopPropagation: true },
         ]),
         indentationMarkers(),
