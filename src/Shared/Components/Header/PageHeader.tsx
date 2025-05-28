@@ -232,7 +232,7 @@ const PageHeader = ({
                     {markAsBeta && renderBetaTag()}
                 </div>
                 {showTabs && (
-                    <div className="flex left dc__gap-12">
+                    <div className="flex left dc__gap-8">
                         {renderIframeButton()}
                         {typeof renderActionButtons === 'function' && renderActionButtons()}
                         {renderLogoutHelpSection()}
@@ -253,7 +253,7 @@ const PageHeader = ({
                     />
                 )}
             {!showTabs && (
-                <div className="flex left dc__gap-12">
+                <div className="flex left dc__gap-8">
                     {typeof renderActionButtons === 'function' && renderActionButtons()}
                     {renderIframeButton()}
                     {renderLogoutHelpSection()}
