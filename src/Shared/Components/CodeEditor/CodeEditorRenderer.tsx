@@ -46,6 +46,8 @@ export const CodeEditorRenderer = ({
     extensions,
     autoFocus,
     diffMinimapExtensions,
+    collapseUnchanged = false,
+    disableMinimap = false,
 }: CodeEditorRendererProps) => {
     // CONTEXTS
     const { value, lhsValue, diffMode } = useCodeEditorContext()
@@ -160,9 +162,11 @@ export const CodeEditorRenderer = ({
             handleLhsOnChange(val, vu)
         }
 
-        // Using `diffMinimapRef` instead of `diffMinimapInstance` since this extension captures the initial reference in a closure.
-        // Changes to `diffMinimapInstance` won't be reflected after initialization, so we rely on `diffMinimapRef.current` for updates.
-        updateDiffMinimapValues(diffMinimapRef.current, vu.transactions, 'a')
+        if (!disableMinimap) {
+            // Using `diffMinimapRef` instead of `diffMinimapInstance` since this extension captures the initial reference in a closure.
+            // Changes to `diffMinimapInstance` won't be reflected after initialization, so we rely on `diffMinimapRef.current` for updates.
+            updateDiffMinimapValues(diffMinimapRef.current, vu.transactions, 'a')
+        }
     })
 
     const modifiedUpdateListener = EditorView.updateListener.of((vu: ViewUpdate) => {
@@ -172,9 +176,11 @@ export const CodeEditorRenderer = ({
             handleOnChange(val, vu)
         }
 
-        // Using `diffMinimapRef` instead of `diffMinimapInstance` since this extension captures the initial reference in a closure.
-        // Changes to `diffMinimapInstance` won't be reflected after initialization, so we rely on `diffMinimapRef.current` for updates.
-        updateDiffMinimapValues(diffMinimapRef.current, vu.transactions, 'b')
+        if (!disableMinimap) {
+            // Using `diffMinimapRef` instead of `diffMinimapInstance` since this extension captures the initial reference in a closure.
+            // Changes to `diffMinimapInstance` won't be reflected after initialization, so we rely on `diffMinimapRef.current` for updates.
+            updateDiffMinimapValues(diffMinimapRef.current, vu.transactions, 'b')
+        }
     })
 
     useEffect(() => {
@@ -196,11 +202,12 @@ export const CodeEditorRenderer = ({
                 ...(!readOnly ? { revertControls: 'a-to-b', renderRevertControl: getRevertControlButton } : {}),
                 diffConfig: { scanLimit, timeout: 5000 },
                 parent: codeMirrorMergeParentRef.current,
+                collapseUnchanged: collapseUnchanged ? {} : undefined,
             })
             setCodeMirrorMergeInstance(codeMirrorMergeView)
 
             // MINIMAP INITIALIZATION
-            if (codeMirrorMergeView && diffMinimapParentRef.current) {
+            if (!disableMinimap && codeMirrorMergeView && diffMinimapParentRef.current) {
                 diffMinimapInstance?.destroy()
                 diffMinimapRef.current?.destroy()
 
@@ -228,7 +235,7 @@ export const CodeEditorRenderer = ({
             setDiffMinimapInstance(null)
             diffMinimapRef.current = null
         }
-    }, [loading, codemirrorMergeKey, diffMode])
+    }, [loading, codemirrorMergeKey, diffMode, collapseUnchanged, disableMinimap])
 
     // Sync external changes of `lhsValue` and `value` state to the diff-editor state.
     useEffect(() => {
@@ -251,14 +258,19 @@ export const CodeEditorRenderer = ({
 
     // SCALING FACTOR UPDATER
     useEffect(() => {
-        setTimeout(() => {
-            setScalingFactor(
-                codeMirrorMergeInstance
-                    ? Math.min(codeMirrorMergeInstance.dom.clientHeight / codeMirrorMergeInstance.dom.scrollHeight, 1)
-                    : 1,
-            )
-        }, 100)
-    }, [lhsValue, value, codeMirrorMergeInstance])
+        if (!disableMinimap) {
+            setTimeout(() => {
+                setScalingFactor(
+                    codeMirrorMergeInstance
+                        ? Math.min(
+                              codeMirrorMergeInstance.dom.clientHeight / codeMirrorMergeInstance.dom.scrollHeight,
+                              1,
+                          )
+                        : 1,
+                )
+            }, 100)
+        }
+    }, [lhsValue, value, codeMirrorMergeInstance, disableMinimap])
 
     const { codeEditorClassName, codeEditorHeight, codeEditorParentClassName } = getCodeEditorHeight(height)
 
@@ -286,12 +298,14 @@ export const CodeEditorRenderer = ({
                 ref={codeMirrorMergeParentRef}
                 className={`cm-merge-theme flex-grow-1 h-100 dc__overflow-hidden ${readOnly ? 'code-editor__read-only' : ''}`}
             />
-            <DiffMinimap
-                theme={theme}
-                view={codeMirrorMergeInstance}
-                diffMinimapParentRef={diffMinimapParentRef}
-                scalingFactor={scalingFactor}
-            />
+            {!disableMinimap && (
+                <DiffMinimap
+                    theme={theme}
+                    view={codeMirrorMergeInstance}
+                    diffMinimapParentRef={diffMinimapParentRef}
+                    scalingFactor={scalingFactor}
+                />
+            )}
         </div>
     ) : (
         <div

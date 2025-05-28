@@ -88,7 +88,16 @@ export interface MainContext {
     sidePanelConfig: SidePanelConfig
     setSidePanelConfig: Dispatch<SetStateAction<SidePanelConfig>>
 
+    /**
+     * Indicates whether the current Devtron instance is running as an Enterprise edition. \
+     * This flag is determined based on server-side configuration.
+     */
     isEnterprise: boolean
+    /**
+     * Indicates whether the fe-lib modules are available in the current instance. \
+     * Used to conditionally render or enable features that depend on fe-lib
+     */
+    isFELibAvailable: boolean
 }
 
 export interface MainContextProviderProps {
