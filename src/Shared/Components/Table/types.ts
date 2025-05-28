@@ -336,3 +336,25 @@ export interface GetFilteringPromiseProps {
     searchSortTimeoutRef: React.MutableRefObject<number>
     callback: () => Promise<RowsType> | RowsType
 }
+
+export interface TableContentProps
+    extends Pick<
+        InternalTableProps,
+        | 'filterData'
+        | 'rows'
+        | 'resizableConfig'
+        | 'additionalProps'
+        | 'visibleColumns'
+        | 'stylesConfig'
+        | 'loading'
+        | 'bulkSelectionConfig'
+        | 'bulkSelectionReturnValue'
+        | 'handleClearBulkSelection'
+        | 'handleToggleBulkSelectionOnRow'
+        | 'paginationVariant'
+        | 'RowActionsOnHoverComponent'
+        | 'pageSizeOptions'
+    > {
+    filteredRows: RowsType
+    areFilteredRowsLoading: boolean
+}
