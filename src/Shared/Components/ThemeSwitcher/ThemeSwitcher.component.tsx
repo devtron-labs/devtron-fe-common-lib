@@ -14,32 +14,29 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICCaretLeftSmall } from '@Icons/ic-caret-left-small.svg'
 import { getThemePreferenceText, useTheme } from '@Shared/Providers'
 
-import { LOGOUT_CARD_BASE_BUTTON_CLASS } from '../LogoutCard'
-import { ThemeSwitcherProps } from './types'
+import { Icon } from '../Icon'
 
-const ThemeSwitcher = ({ onChange }: ThemeSwitcherProps) => {
+const ThemeSwitcher = () => {
     const { handleThemeSwitcherDialogVisibilityChange, themePreference } = useTheme()
 
     const handleShowThemeSwitcherDialog = () => {
         handleThemeSwitcherDialogVisibilityChange(true)
-        onChange()
     }
 
     return (
         <button
             type="button"
             data-testid="open-theme-switcher-dialog"
-            className={`${LOGOUT_CARD_BASE_BUTTON_CLASS} dc__tab-focus dc__hover-n50`}
+            className="dc__transparent w-100 flex dc__content-space dc__gap-8 px-8 py-6 br-4 dc__tab-focus dc__hover-n50"
             onClick={handleShowThemeSwitcherDialog}
         >
-            Theme
-            <div className="flexbox dc__gap-4 dc__align-items-center">
-                <span className="cn-7 fs-13 fw-4 lh-20">{getThemePreferenceText(themePreference)}</span>
-                <ICCaretLeftSmall className="dc__flip-180 icon-16 dc__no-shrink scn-7" />
-            </div>
+            <span className="flex-grow-1 fs-13 lh-1-5 fw-4 cn-9 dc__text-justify">Theme</span>
+            <span className="flex dc__gap-2">
+                <span className="fs-12 lh-1-5 fw-4 cn-7">{getThemePreferenceText(themePreference)}</span>
+                <Icon name="ic-caret-right" color="N700" />
+            </span>
         </button>
     )
 }
