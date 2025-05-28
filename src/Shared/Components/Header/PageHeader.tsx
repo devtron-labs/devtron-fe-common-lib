@@ -21,6 +21,7 @@ import Tippy from '@tippyjs/react'
 import { ReactComponent as ICCaretDownSmall } from '@Icons/ic-caret-down-small.svg'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
 import { ReactComponent as ICMediumPaintBucket } from '@IconsV2/ic-medium-paintbucket.svg'
+import { InstallationType } from '@Shared/types'
 
 import { getAlphabetIcon, TippyCustomized, TippyTheme } from '../../../Common'
 import { MAX_LOGIN_COUNT, POSTHOG_EVENT_ONBOARDING } from '../../../Common/Constants'
@@ -31,7 +32,7 @@ import LogoutCard from '../LogoutCard'
 import { HelpButton } from './HelpButton'
 import { IframePromoButton } from './IframePromoButton'
 import { getServerInfo } from './service'
-import { InstallationType, PageHeaderType, ServerInfo } from './types'
+import { PageHeaderType, ServerInfo } from './types'
 import { getIsShowingLicenseData, handlePostHogEventUpdate, setActionWithExpiry } from './utils'
 
 import './pageHeader.scss'
@@ -48,7 +49,6 @@ const PageHeader = ({
     onClose,
     markAsBeta,
     tippyProps,
-    isEnterprise,
 }: PageHeaderType) => {
     const { loginCount, setLoginCount, showGettingStartedCard, setShowGettingStartedCard, licenseData } =
         useMainContext()
@@ -155,7 +155,6 @@ const PageHeader = ({
                     interactive
                     arrow
                     onClose={handleCloseSwitchThemeLocationTippyChange}
-                    isEnterprise={isEnterprise}
                     documentationLink={tippyRedirectLink}
                 >
                     <button
