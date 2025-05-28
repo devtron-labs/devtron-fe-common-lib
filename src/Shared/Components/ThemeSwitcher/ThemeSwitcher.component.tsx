@@ -17,12 +17,14 @@
 import { getThemePreferenceText, useTheme } from '@Shared/Providers'
 
 import { Icon } from '../Icon'
+import { ThemeSwitcherProps } from './types'
 
-const ThemeSwitcher = () => {
+const ThemeSwitcher = ({ onClick }: ThemeSwitcherProps) => {
     const { handleThemeSwitcherDialogVisibilityChange, themePreference } = useTheme()
 
     const handleShowThemeSwitcherDialog = () => {
         handleThemeSwitcherDialogVisibilityChange(true)
+        onClick?.()
     }
 
     return (

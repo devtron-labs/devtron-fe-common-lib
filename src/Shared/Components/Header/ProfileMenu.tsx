@@ -14,7 +14,7 @@ export const ProfileMenu = ({ user, onClick }: ProfileMenuProps) => {
     // HOOKS
     const { viewIsPipelineRBACConfiguredNode } = useMainContext()
 
-    const { open, overlayProps, popoverProps, triggerProps } = usePopover({
+    const { open, overlayProps, popoverProps, triggerProps, closePopover } = usePopover({
         id: 'profile-menu',
         alignment: 'end',
         width: 250,
@@ -38,6 +38,7 @@ export const ProfileMenu = ({ user, onClick }: ProfileMenuProps) => {
 
     // HANDLERS
     const onLogout = () => {
+        closePopover()
         clearCookieOnLogout()
     }
 
@@ -61,7 +62,7 @@ export const ProfileMenu = ({ user, onClick }: ProfileMenuProps) => {
                     </div>
                 </div>
                 <div className="px-4 py-2 border__secondary-translucent--top border__secondary-translucent--bottom">
-                    <ThemeSwitcher />
+                    <ThemeSwitcher onClick={closePopover} />
                     {viewIsPipelineRBACConfiguredNode}
                 </div>
                 <div className="p-4">
