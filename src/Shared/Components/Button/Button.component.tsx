@@ -243,7 +243,7 @@ const Button = <ComponentType extends ButtonComponentType>({
 
     return (
         <Tooltip {...getTooltipProps()}>
-            <div>
+            <div className="dc__inline-block">
                 <ButtonElement
                     {...props}
                     disabled={isDisabled}
