@@ -22,6 +22,7 @@ export const DEVTRON_HOME_PAGE = 'https://devtron.ai/'
 export const DOCUMENTATION_VERSION = '/devtron/v0.7'
 export const DISCORD_LINK = 'https://discord.devtron.ai/'
 export const DEFAULT_JSON_SCHEMA_URI = 'https://json-schema.org/draft/2020-12/schema'
+export const LICENSE_DASHBOARD_HOME_PAGE = 'https://license.devtron.ai/dashboard'
 
 export const PATTERNS = {
     STRING: /^[a-zA-Z0-9_]+$/,
