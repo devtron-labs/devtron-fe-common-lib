@@ -90,6 +90,7 @@ const InstallationFingerprintInfo = ({ fingerprint, showHelpTooltip = false }: I
                     iconClassName="icon-dim-20 fcn-6"
                     placement="right"
                     documentationLink="ENTERPRISE_LICENSE"
+                    openInNewTab
                 />
             )}
         </div>

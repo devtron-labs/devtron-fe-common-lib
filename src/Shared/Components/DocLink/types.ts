@@ -1,3 +1,5 @@
+import { MouseEvent } from 'react'
+
 import { ButtonComponentType, ButtonProps } from '@Shared/Components'
 
 import { DOCUMENTATION } from './constants'
@@ -10,9 +12,15 @@ export type BaseDocLink<T extends boolean> = {
 
 export type DocLinkProps<T extends boolean> = Pick<
     ButtonProps<ButtonComponentType.anchor>,
-    'onClick' | 'dataTestId' | 'size' | 'variant'
+    'dataTestId' | 'size' | 'variant' | 'fullWidth'
 > &
-    BaseDocLink<T> & {
+    Omit<BaseDocLink<T>, 'isEnterprise'> & {
         text?: string
         showExternalIcon?: boolean
+        onClick?: (e: MouseEvent<HTMLAnchorElement>) => void
+        /**
+         * If `true`, the documentation will open in a new browser tab instead of the side panel.
+         * @default false
+         */
+        openInNewTab?: boolean
     }

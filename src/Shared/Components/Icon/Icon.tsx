@@ -98,6 +98,7 @@ import { ReactComponent as ICJobColor } from '@IconsV2/ic-job-color.svg'
 import { ReactComponent as ICK3s } from '@IconsV2/ic-k3s.svg'
 import { ReactComponent as ICK8sJob } from '@IconsV2/ic-k8s-job.svg'
 import { ReactComponent as ICKey } from '@IconsV2/ic-key.svg'
+import { ReactComponent as ICKeyEnter } from '@IconsV2/ic-key-enter.svg'
 import { ReactComponent as ICKind } from '@IconsV2/ic-kind.svg'
 import { ReactComponent as ICLaptop } from '@IconsV2/ic-laptop.svg'
 import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
@@ -137,6 +138,7 @@ import { ReactComponent as ICSortDescending } from '@IconsV2/ic-sort-descending.
 import { ReactComponent as ICSortable } from '@IconsV2/ic-sortable.svg'
 import { ReactComponent as ICSparkleColor } from '@IconsV2/ic-sparkle-color.svg'
 import { ReactComponent as ICSpinny } from '@IconsV2/ic-spinny.svg'
+import { ReactComponent as ICSprayCan } from '@IconsV2/ic-spray-can.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
 import { ReactComponent as ICStamp } from '@IconsV2/ic-stamp.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
@@ -260,6 +262,7 @@ export const iconMap = {
     'ic-job-color': ICJobColor,
     'ic-k3s': ICK3s,
     'ic-k8s-job': ICK8sJob,
+    'ic-key-enter': ICKeyEnter,
     'ic-key': ICKey,
     'ic-kind': ICKind,
     'ic-laptop': ICLaptop,
@@ -300,6 +303,7 @@ export const iconMap = {
     'ic-sortable': ICSortable,
     'ic-sparkle-color': ICSparkleColor,
     'ic-spinny': ICSpinny,
+    'ic-spray-can': ICSprayCan,
     'ic-stack': ICStack,
     'ic-stamp': ICStamp,
     'ic-success': ICSuccess,

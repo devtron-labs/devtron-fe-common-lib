@@ -1,5 +1,3 @@
-import { RefObject } from 'react'
-
 import { TooltipProps } from '@Common/Tooltip'
 import { IconsProps, SelectPickerOptionType } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
@@ -56,6 +54,9 @@ export type SegmentedControlProps = {
      * List of segments to be displayed
      */
     segments: SegmentType[]
+    /**
+     * Please make sure this is unique
+     */
     name: string
     size?: Extract<ComponentSizeType, ComponentSizeType.xs | ComponentSizeType.small | ComponentSizeType.medium>
     fullWidth?: boolean
@@ -81,5 +82,4 @@ export interface SegmentProps
     extends Required<Pick<SegmentedControlProps, 'name' | 'onChange' | 'fullWidth' | 'size' | 'disabled'>> {
     isSelected: boolean
     segment: SegmentType
-    selectedSegmentRef: RefObject<HTMLDivElement> | undefined
 }

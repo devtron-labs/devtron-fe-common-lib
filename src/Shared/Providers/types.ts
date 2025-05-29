@@ -29,6 +29,12 @@ export interface ReloadVersionConfigTypes {
     updateToastRef: MutableRefObject<ReturnType<typeof ToastManager.showToast>> | null
     isRefreshing: boolean
 }
+
+export interface SidePanelConfig {
+    open: boolean
+    docLink?: string | null
+}
+
 export interface MainContext {
     serverMode: SERVER_MODE
     setServerMode: (serverMode: SERVER_MODE) => void
@@ -83,6 +89,20 @@ export interface MainContext {
         context: Record<string, string>
     }
     setAIAgentContext: (aiAgentContext: MainContext['aiAgentContext']) => void
+
+    sidePanelConfig: SidePanelConfig
+    setSidePanelConfig: Dispatch<SetStateAction<SidePanelConfig>>
+
+    /**
+     * Indicates whether the current Devtron instance is running as an Enterprise edition. \
+     * This flag is determined based on server-side configuration.
+     */
+    isEnterprise: boolean
+    /**
+     * Indicates whether the fe-lib modules are available in the current instance. \
+     * Used to conditionally render or enable features that depend on fe-lib
+     */
+    isFELibAvailable: boolean
 }
 
 export interface MainContextProviderProps {
