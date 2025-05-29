@@ -57,6 +57,9 @@ export interface customEnv {
     ENABLE_SCOPED_VARIABLES?: boolean
     DEFAULT_CI_TRIGGER_TYPE_MANUAL: boolean
     ANNOUNCEMENT_BANNER_MSG?: string
+    ANNOUNCEMENT_BANNER_TYPE?: string
+    ANNOUNCEMENT_BANNER_BUTTON_TEXT?: string
+    ANNOUNCEMENT_BANNER_BUTTON_LINK?: string
     HIDE_DEFAULT_CLUSTER?: boolean
     GLOBAL_API_TIMEOUT?: number
     TRIGGER_API_TIMEOUT?: number
@@ -149,6 +152,10 @@ export interface customEnv {
      * @default false
      */
     FEATURE_APPLICATION_TEMPLATES_ENABLE?: boolean
+    /**
+     * @default false
+     */
+    FEATURE_REDFISH_NODE_ENABLE?: boolean
     GATEKEEPER_URL?: string
     FEATURE_AI_INTEGRATION_ENABLE?: boolean
     LOGIN_PAGE_IMAGE?: string

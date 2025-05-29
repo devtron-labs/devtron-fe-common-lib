@@ -13,25 +13,21 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ReactElement } from 'react'
+import { ComponentProps, ReactElement } from 'react'
 import moment from 'moment'
 
 import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
-import { ReactComponent as Check } from '@Icons/ic-check-grey.svg'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
-import { ReactComponent as Disconnect } from '@Icons/ic-disconnected.svg'
-import { ReactComponent as Error } from '@Icons/ic-error-exclamation.svg'
-import { ReactComponent as ICHelpOutline } from '@Icons/ic-help-outline.svg'
 import { ReactComponent as ICInProgress } from '@Icons/ic-in-progress.svg'
-import { ReactComponent as TimeOut } from '@Icons/ic-timeout-red.svg'
-import { ReactComponent as Timer } from '@Icons/ic-timer.svg'
 import { DATE_TIME_FORMATS } from '@Common/Constants'
+import { DeploymentAppTypes } from '@Common/Types'
 import { ALL_RESOURCE_KIND_FILTER } from '@Shared/constants'
 import { isTimeStringAvailable } from '@Shared/Helpers'
 
-import { Node, ResourceKindType, WorkflowStatusEnum } from '../../types'
+import { DeploymentStatusBreakdownItemType, Node, ResourceKindType, WorkflowStatusEnum } from '../../types'
 import { Icon } from '../Icon'
 import { AppStatus, DeploymentStatus, StatusType } from '../StatusComponent'
+import { TabGroupProps } from '../TabGroup'
 import {
     DEFAULT_CLUSTER_ID,
     DEFAULT_NAMESPACE,
@@ -42,6 +38,7 @@ import {
     DeploymentHistory,
     DeploymentHistoryResultObject,
     ExecutionInfoType,
+    History,
     NodeFilters,
     NodeStatus,
     PodExecutionStageDTO,
@@ -120,33 +117,6 @@ export const buildHoverHtmlForWebhook = (eventName, condition, selectors) => {
             </ul>
         </>
     )
-}
-
-export const renderIcon = (iconState: string): JSX.Element => {
-    switch (iconState) {
-        case 'success':
-            return <Check className="icon-dim-20 green-tick" data-testid="success-green-tick" />
-        case 'failed':
-            return <Error className="icon-dim-20" />
-        case 'unknown':
-            return <ICHelpOutline className="icon-dim-20" />
-        case 'inprogress':
-            return (
-                <div className="icon-dim-20">
-                    <div className="pulse-highlight" />
-                </div>
-            )
-        case 'unreachable':
-            return <Close className="icon-dim-20" />
-        case 'loading':
-            return <Icon name="ic-circle-loader" color="O500" size={20} />
-        case 'disconnect':
-            return <Disconnect className="icon-dim-20" />
-        case 'time_out':
-            return <TimeOut className="icon-dim-20" />
-        default:
-            return <Timer className="icon-dim-20 timer-icon" />
-    }
 }
 
 export const getStageStatusIcon = (status: StageStatusType): JSX.Element => {
@@ -375,3 +345,117 @@ export const getTriggerStatusIcon = (status: string) => {
             return status
     }
 }
+
+export const renderDeploymentTimelineIcon = (iconState: DeploymentStatusBreakdownItemType['icon']): JSX.Element => {
+    const iconBaseProps: Pick<ComponentProps<typeof Icon>, 'size' | 'color'> = {
+        color: null,
+        size: 20,
+    }
+
+    switch (iconState) {
+        case 'success':
+            return <Icon {...iconBaseProps} name="ic-check" color="G500" dataTestId="success-green-tick" />
+        case 'failed':
+            return <Icon {...iconBaseProps} name="ic-error" />
+        case 'unknown':
+            return <Icon {...iconBaseProps} name="ic-help-outline" />
+        case 'inprogress':
+            return (
+                <div className="icon-dim-20 dc__no-shrink">
+                    <div className="pulse-highlight" />
+                </div>
+            )
+        case 'unreachable':
+            return <Icon {...iconBaseProps} name="ic-close-small" />
+        case 'loading':
+            return <Icon {...iconBaseProps} name="ic-circle-loader" color="O500" />
+        case 'disconnect':
+            return <Icon {...iconBaseProps} name="ic-disconnect" color="R500" />
+        case 'timed_out':
+            return <Icon {...iconBaseProps} name="ic-timeout-dash" color="R500" />
+        default:
+            return <Icon {...iconBaseProps} name="ic-timer" color="N600" />
+    }
+}
+
+export const getDeploymentTimelineBGColorFromIcon = (icon: DeploymentStatusBreakdownItemType['icon']): string => {
+    switch (icon) {
+        case 'success':
+            return 'bcg-1 cg-7'
+        case 'failed':
+        case 'disconnect':
+        case 'timed_out':
+            return 'bcr-1 cr-5'
+        case 'inprogress':
+        case 'loading':
+            return 'bcy-1 cy-5'
+        default:
+            return 'bcn-1 cn-9'
+    }
+}
+export const getTriggerOutputTabs = (
+    triggerDetails: History,
+    deploymentAppType: DeploymentAppTypes,
+): TabGroupProps['tabs'] => [
+    ...(triggerDetails.stage === 'DEPLOY' && deploymentAppType !== DeploymentAppTypes.HELM
+        ? [
+              {
+                  id: 'deployment-history-steps-link',
+                  label: 'Steps',
+                  tabType: 'navLink' as const,
+                  props: {
+                      to: 'deployment-steps',
+                      'data-testid': 'deployment-history-steps-link',
+                  },
+              },
+          ]
+        : []),
+    ...(!(triggerDetails.stage === 'DEPLOY' || triggerDetails.IsVirtualEnvironment)
+        ? [
+              {
+                  id: 'deployment-history-logs-link',
+                  label: 'Logs',
+                  tabType: 'navLink' as const,
+                  props: {
+                      to: 'logs',
+                      'data-testid': 'deployment-history-logs-link',
+                  },
+              },
+          ]
+        : []),
+    {
+        id: 'deployment-history-source-code-link',
+        label: 'Source',
+        tabType: 'navLink',
+        props: {
+            to: 'source-code',
+            'data-testid': 'deployment-history-source-code-link',
+        },
+    },
+    ...(triggerDetails.stage === 'DEPLOY'
+        ? [
+              {
+                  id: 'deployment-history-configuration-link',
+                  label: 'Configuration',
+                  tabType: 'navLink' as const,
+                  props: {
+                      to: 'configuration',
+                      'data-testid': 'deployment-history-configuration-link',
+                  },
+              },
+          ]
+        : []),
+    ...(triggerDetails.stage !== 'DEPLOY' || triggerDetails.IsVirtualEnvironment
+        ? [
+              {
+                  id: 'deployment-history-artifacts-link',
+                  label: 'Artifacts',
+                  tabType: 'navLink' as const,
+                  props: {
+                      to: 'artifacts',
+                      'data-testid': 'deployment-history-artifacts-link',
+                  },
+              },
+          ]
+        : []),
+]

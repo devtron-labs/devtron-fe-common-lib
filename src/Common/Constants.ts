@@ -30,6 +30,7 @@ export const DOCUMENTATION = {
     GLOBAL_CONFIG_BUILD_INFRA: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/global-configurations/build-infra`,
     ENTERPRISE_LICENSE: `${DOCUMENTATION_HOME_PAGE}/enterprise-license`,
     KUBE_CONFIG: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/resource-browser#running-kubectl-commands-locally`,
+    TENANT_INSTALLATION: `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/usage/software-distribution-hub/tenants`,
 }
 
 export const PATTERNS = {
@@ -64,7 +65,6 @@ export const URLS = {
     CREATE_JOB: 'create-job',
     GETTING_STARTED: 'getting-started',
     STACK_MANAGER_ABOUT: '/stack-manager/about',
-    APP_LIST_HELM: 'h',
     APP_CI_DETAILS: 'ci-details',
     LOGS: 'Logs',
     CREATE: '/create',
@@ -86,7 +86,6 @@ export const URLS = {
     COMPARE_CLUSTERS: '/compare-clusters',
     APP_CONFIG: 'edit',
     GLOBAL_CONFIG: '/global-config',
-    CONFIG_DRIFT: 'config-drift',
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP,
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_CREATE: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/create`,
     // NOTE: using appId since we are re-using AppConfig component
@@ -135,6 +134,7 @@ export const ROUTES = {
     ATTRIBUTES_CREATE: 'attributes/create',
     ATTRIBUTES_UPDATE: 'attributes/update',
     APP_LIST_MIN: 'app/min',
+    APP_DETAIL: 'app/detail',
     CLUSTER_LIST_MIN: 'cluster/autocomplete',
     CLUSTER_LIST_RAW: 'k8s/capacity/cluster/list/raw',
     PLUGIN_GLOBAL_LIST_DETAIL_V2: 'plugin/global/list/detail/v2',
