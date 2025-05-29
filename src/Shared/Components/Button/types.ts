@@ -150,11 +150,10 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
                   /**
                    * Props for tooltip
                    */
-                  // TODO: using some typing somersaults here, clean it up later
                   tooltipProps:
-                      | Omit<TooltipProps, 'alwaysShowTippyOnHover' | 'showOnTruncate' | 'shortcutKeyCombo'>
-                      | (Omit<TooltipProps, 'alwaysShowTippyOnHover' | 'showOnTruncate' | 'content'> &
-                            Required<Pick<TooltipProps, 'shortcutKeyCombo'>>)
+                      | Omit<Extract<TooltipProps, { alwaysShowTippyOnHover: boolean }>, 'alwaysShowTippyOnHover'>
+                      | Omit<Extract<TooltipProps, { alwaysShowTippyOnHover?: boolean }>, 'alwaysShowTippyOnHover'>
+                      | Omit<Extract<TooltipProps, { alwaysShowTippyOnHover?: never }>, 'alwaysShowTippyOnHover'>
               }
             | {
                   showTooltip?: never

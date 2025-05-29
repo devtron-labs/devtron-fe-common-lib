@@ -18,8 +18,7 @@ import { MutableRefObject, PropsWithChildren, useEffect, useRef, useState } from
 import { Link } from 'react-router-dom'
 
 import { Progressing } from '@Common/Progressing'
-import { Tooltip } from '@Common/Tooltip'
-import { TooltipProps } from '@Common/Tooltip/types'
+import { Tooltip, TooltipProps } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { ButtonComponentType, ButtonProps, ButtonStyleType, ButtonVariantType } from './types'
@@ -232,14 +231,13 @@ const Button = <ComponentType extends ButtonComponentType>({
         }
 
         if (Object.hasOwn(tooltipProps, 'shortcutKeyCombo') && 'shortcutKeyCombo' in tooltipProps) {
-            return tooltipProps
+            return tooltipProps as TooltipProps
         }
 
         return {
-            // TODO: using some typing somersaults here, clean it up later
-            alwaysShowTippyOnHover: showTooltip && !!(tooltipProps as Required<Pick<TooltipProps, 'content'>>)?.content,
-            ...(tooltipProps as Required<Pick<TooltipProps, 'content'>>),
-        }
+            alwaysShowTippyOnHover: showTooltip && !!tooltipProps?.content,
+            ...tooltipProps,
+        } as TooltipProps
     }
 
     return (
