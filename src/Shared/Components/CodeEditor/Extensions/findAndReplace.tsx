@@ -103,6 +103,9 @@ const FindReplace = ({ view, defaultQuery, defaultShowReplace, onSearchBarAction
         search = query.search,
         wholeWord = query.wholeWord,
     }: FindReplaceQuery) => {
+        // Calling this irrespective of whether the query has changed or not
+        onSearchBarAction()
+
         const newQuery = new SearchQuery({
             caseSensitive,
             regexp,
@@ -111,7 +114,6 @@ const FindReplace = ({ view, defaultQuery, defaultShowReplace, onSearchBarAction
             wholeWord,
         })
 
-        onSearchBarAction()
         if (!newQuery.eq(query)) {
             setQuery(newQuery)
             view.dispatch({ effects: setSearchQuery.of(newQuery) })

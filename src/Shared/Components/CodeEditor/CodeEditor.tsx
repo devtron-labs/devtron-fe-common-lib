@@ -43,8 +43,8 @@ import { getCodeEditorTheme } from './CodeEditor.theme'
 import { CodeEditorRenderer } from './CodeEditorRenderer'
 import {
     blurOnEscape,
-    getOpenSearchPanel,
-    getOpenSearchPanelWithReplace,
+    openSearchPanel,
+    openSearchPanelWithReplace,
     replaceAll,
     showReplaceFieldState,
 } from './Commands'
@@ -203,17 +203,25 @@ const CodeEditor = <DiffView extends boolean = false>({
         setLhsCode(newLhsValue)
     }
 
+    const openSearchPanelWrapper: typeof openSearchPanel = (view) => {
+        onSearchPanelOpen()
+        return openSearchPanel(view)
+    }
+
+    const openSearchPanelWithReplaceWrapper: typeof openSearchPanelWithReplace = (view) => {
+        onSearchPanelOpen()
+        return openSearchPanelWithReplace(view)
+    }
+
     // EXTENSIONS
     const getBaseExtensions = (): Extension[] => [
         basicSetup(basicSetupOptions),
         themeExtension,
         keymap.of([
             ...vscodeKeymap.filter(({ key }) => key !== 'Mod-Alt-Enter' && key !== 'Mod-Enter' && key !== 'Mod-f'),
-            ...(!disableSearch
-                ? [{ key: 'Mod-f', run: getOpenSearchPanel(onSearchPanelOpen), scope: 'editor search-panel' }]
-                : []),
+            ...(!disableSearch ? [{ key: 'Mod-f', run: openSearchPanelWrapper, scope: 'editor search-panel' }] : []),
             { key: 'Mod-Enter', run: replaceAll, scope: 'editor search-panel' },
-            { key: 'Mod-Alt-f', run: getOpenSearchPanelWithReplace(onSearchPanelOpen), scope: 'editor search-panel' },
+            { key: 'Mod-Alt-f', run: openSearchPanelWithReplaceWrapper, scope: 'editor search-panel' },
             { key: 'Escape', run: blurOnEscape, stopPropagation: true },
         ]),
         indentationMarkers(),
