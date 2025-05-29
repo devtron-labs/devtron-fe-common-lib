@@ -178,6 +178,12 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
                    * If provided, icon to be displayed at the end of the button
                    */
                   endIcon?: ReactElement
+                  /**
+                   * Controls the font weight of the button text
+                   *
+                   * @default 'bold'
+                   */
+                  fontWeight?: 'bold' | 'normal'
               }
             | {
                   /**
@@ -198,5 +204,6 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
                   text?: never
                   startIcon?: never
                   endIcon?: never
+                  fontWeight?: never
               }
         )

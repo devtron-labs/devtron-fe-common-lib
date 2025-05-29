@@ -170,6 +170,7 @@ const Button = <ComponentType extends ButtonComponentType>({
     variant = ButtonVariantType.primary,
     size = ComponentSizeType.large,
     style = ButtonStyleType.default,
+    fontWeight = 'bold',
     startIcon = null,
     endIcon = null,
     disabled = false,
@@ -243,11 +244,11 @@ const Button = <ComponentType extends ButtonComponentType>({
 
     return (
         <Tooltip {...getTooltipProps()}>
-            <div className="dc__inline-block">
+            <div className={`dc__inline-block ${fullWidth ? 'w-100' : ''}`}>
                 <ButtonElement
                     {...props}
                     disabled={isDisabled}
-                    className={`br-4 flex cursor dc__tab-focus dc__position-rel dc__capitalize ${isOpacityHoverChild ? 'dc__opacity-hover--child' : ''} ${getButtonDerivedClass({ size, variant, style, isLoading, icon, isAutoTriggerActive: isAutoClickActive })} ${isDisabled ? 'dc__disabled' : ''} ${fullWidth ? 'w-100' : ''}`}
+                    className={`br-4 flex cursor dc__tab-focus dc__position-rel dc__capitalize ${isOpacityHoverChild ? 'dc__opacity-hover--child' : ''} ${getButtonDerivedClass({ size, variant, style, isLoading, icon, isAutoTriggerActive: isAutoClickActive, fontWeight })} ${isDisabled ? 'dc__disabled' : ''} ${fullWidth ? 'w-100' : ''}`}
                     data-testid={dataTestId}
                     aria-label={ariaLabel || (isLoading ? text : undefined)}
                     elementRef={elementRef}

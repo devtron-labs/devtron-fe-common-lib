@@ -14,6 +14,7 @@ export const DocLink = <T extends boolean = false>({
     dataTestId,
     showExternalIcon,
     onClick,
+    fontWeight,
     size = ComponentSizeType.medium,
     variant = ButtonVariantType.text,
     isExternalLink,
@@ -52,6 +53,7 @@ export const DocLink = <T extends boolean = false>({
             size={size}
             endIcon={showExternalIcon && <Icon name="ic-open-in-new" color={null} />}
             fullWidth={fullWidth}
+            fontWeight={fontWeight}
         />
     )
 }
