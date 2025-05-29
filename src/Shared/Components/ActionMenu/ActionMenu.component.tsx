@@ -1,5 +1,3 @@
-import { MutableRefObject } from 'react'
-
 import { CustomInput } from '../CustomInput'
 import { Popover } from '../Popover'
 import { SelectPickerMenuListFooter } from '../SelectPicker/common'
@@ -82,7 +80,7 @@ export const ActionMenu = <T extends string | number = string | number>({
                     </div>
                 )}
                 <ul
-                    ref={scrollableRef as MutableRefObject<HTMLUListElement>}
+                    ref={scrollableRef}
                     role="menu"
                     className="action-menu m-0 p-0 flex-grow-1 dc__overflow-auto dc__overscroll-none"
                 >

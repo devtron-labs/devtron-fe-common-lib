@@ -14,7 +14,7 @@ export const ProfileMenu = ({ user, onClick }: ProfileMenuProps) => {
     // HOOKS
     const { viewIsPipelineRBACConfiguredNode } = useMainContext()
 
-    const { open, overlayProps, popoverProps, triggerProps, closePopover } = usePopover({
+    const { open, overlayProps, popoverProps, triggerProps, scrollableRef, closePopover } = usePopover({
         id: 'profile-menu',
         alignment: 'end',
         width: 250,
@@ -51,7 +51,7 @@ export const ProfileMenu = ({ user, onClick }: ProfileMenuProps) => {
             triggerElement={triggerElement}
             buttonProps={null}
         >
-            <>
+            <div ref={scrollableRef} className="dc__overflow-auto">
                 <div className="p-4">
                     <div className="flex dc__content-space dc__gap-8 px-8 py-6">
                         <div>
@@ -71,7 +71,7 @@ export const ProfileMenu = ({ user, onClick }: ProfileMenuProps) => {
                         <Icon name="ic-logout" color="R500" />
                     </Link>
                 </div>
-            </>
+            </div>
         </Popover>
     )
 }
