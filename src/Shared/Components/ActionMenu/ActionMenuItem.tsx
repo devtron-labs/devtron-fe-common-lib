@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 
+import { Button, ButtonProps, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import { getTooltipProps } from '../SelectPicker/common'
 import { DTSwitch, DTSwitchProps } from '../Switch'
@@ -46,12 +47,21 @@ export const ActionMenuItem = <T extends string | number>({
         onClick(item, e)
     }
 
-    const handleSwitchChange =
+    const handleTrailingSwitchChange =
         ({ type: trailingItemType, config }: ActionMenuItemType<T>['trailingItem']): DTSwitchProps['onChange'] =>
         (e) => {
             if (trailingItemType === 'switch') {
                 e.stopPropagation()
                 config.onChange(e)
+            }
+        }
+
+    const handleTrailingButtonClick =
+        ({ type: trailingItemType, config }: ActionMenuItemType<T>['trailingItem']): ButtonProps['onClick'] =>
+        (e) => {
+            e.stopPropagation()
+            if (trailingItemType === 'button' && config.onClick) {
+                config.onClick(e)
             }
         }
 
@@ -86,7 +96,20 @@ export const ActionMenuItem = <T extends string | number>({
                 return <span className="icon-dim-20 flex px-6 bcn-1 cn-7 br-12 fs-13 lh-20 fw-6">{config.value}</span>
             case 'switch':
                 return (
-                    <DTSwitch {...config} onChange={handleSwitchChange(trailingItem)} size={ComponentSizeType.small} />
+                    <DTSwitch
+                        {...config}
+                        onChange={handleTrailingSwitchChange(trailingItem)}
+                        size={ComponentSizeType.small}
+                    />
+                )
+            case 'button':
+                return (
+                    <Button
+                        {...(config as ButtonProps)}
+                        onClick={handleTrailingButtonClick(trailingItem)}
+                        variant={ButtonVariantType.borderLess}
+                        size={ComponentSizeType.xxs}
+                    />
                 )
             default:
                 return null

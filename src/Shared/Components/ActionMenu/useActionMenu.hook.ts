@@ -20,7 +20,7 @@ export const useActionMenu = <T extends string | number>({
     // MEMOIZED CONSTANTS
     const filteredOptions = useMemo(
         () => (isSearchable ? filterActionMenuOptions(options, searchTerm) : options),
-        [isSearchable, JSON.stringify(options), searchTerm],
+        [isSearchable, options, searchTerm],
     )
 
     const flatOptions = useMemo(() => getActionMenuFlatOptions(filteredOptions), [filteredOptions])

@@ -1,6 +1,9 @@
-import { LegacyRef, MouseEvent, Ref } from 'react'
+import { LegacyRef, MouseEvent, ReactElement, Ref } from 'react'
 import { LinkProps } from 'react-router-dom'
 
+import { OmitNever } from '@Shared/types'
+
+import { ButtonProps } from '../Button'
 import { IconsProps } from '../Icon'
 import { PopoverProps, UsePopoverProps } from '../Popover'
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
@@ -65,6 +68,10 @@ type TrailingItemType =
               | 'onChange'
               | 'tooltipContent'
           >
+      }
+    | {
+          type: 'button'
+          config: OmitNever<Omit<Extract<ButtonProps, { icon: ReactElement }>, 'size' | 'variant'>>
       }
 
 export type ActionMenuItemType<T extends string | number = string | number> = Omit<
