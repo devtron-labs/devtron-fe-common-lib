@@ -17,5 +17,5 @@
 export * from './ImageSelectionUtility'
 export * from './MainContextProvider'
 export * from './ThemeProvider'
-export type { MainContext, ReloadVersionConfigTypes } from './types'
+export type { MainContext, ReloadVersionConfigTypes, SidePanelConfig } from './types'
 export * from './UserEmailProvider'

@@ -14,16 +14,11 @@
  * limitations under the License.
  */
 
-import { ModuleStatus } from '@Shared/types'
+import { InstallationType, ModuleStatus } from '@Shared/types'
 
 import { ResponseType, TippyCustomizedProps } from '../../../Common'
 import { ActionMenuProps } from '../ActionMenu'
-
-export enum InstallationType {
-    OSS_KUBECTL = 'oss_kubectl',
-    OSS_HELM = 'oss_helm',
-    ENTERPRISE = 'enterprise',
-}
+import { DOCUMENTATION } from '../DocLink'
 
 export interface PageHeaderType {
     headerName?: string
@@ -36,9 +31,9 @@ export interface PageHeaderType {
     showCloseButton?: boolean
     onClose?: () => void
     markAsBeta?: boolean
-    tippyProps?: Pick<TippyCustomizedProps, 'additionalContent'> & {
+    tippyProps?: Pick<TippyCustomizedProps<false>, 'additionalContent'> & {
         isTippyCustomized?: boolean
-        tippyRedirectLink?: string
+        tippyRedirectLink?: keyof typeof DOCUMENTATION
         TippyIcon?: React.FunctionComponent<any>
         tippyMessage?: string
         onClickTippyButton?: () => void
