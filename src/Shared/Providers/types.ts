@@ -84,6 +84,11 @@ export interface MainContext {
     reloadVersionConfig: ReloadVersionConfigTypes
     intelligenceConfig: IntelligenceConfig
     setIntelligenceConfig: Dispatch<SetStateAction<IntelligenceConfig>>
+    aiAgentContext: {
+        path: string
+        context: Record<string, string>
+    }
+    setAIAgentContext: (aiAgentContext: MainContext['aiAgentContext']) => void
 
     sidePanelConfig: SidePanelConfig
     setSidePanelConfig: Dispatch<SetStateAction<SidePanelConfig>>
