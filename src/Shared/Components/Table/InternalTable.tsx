@@ -1,4 +1,4 @@
-import { Fragment, useEffect, useMemo, useRef } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 
 import { Checkbox } from '@Common/Checkbox'
 import { DEFAULT_BASE_PAGE_SIZE } from '@Common/Constants'
@@ -15,10 +15,10 @@ import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
 
 import { BulkSelection } from '../BulkSelection'
 import BulkSelectionActionWidget from './BulkSelectionActionWidget'
-import { BULK_ACTION_GUTTER_LABEL, EVENT_TARGET, SHIMMER_DUMMY_ARRAY } from './constants'
-import { FiltersTypeEnum, InternalTableProps, PaginationEnum, SignalsType } from './types'
+import { BULK_ACTION_GUTTER_LABEL, EVENT_TARGET, NO_ROWS_OR_GET_ROWS_ERROR, SHIMMER_DUMMY_ARRAY } from './constants'
+import { BulkActionStateType, FiltersTypeEnum, InternalTableProps, PaginationEnum, SignalsType } from './types'
 import useTableWithKeyboardShortcuts from './useTableWithKeyboardShortcuts'
-import { getFilteringPromise, searchAndSortRows } from './utils'
+import { getFilteringPromise, getStickyColumnConfig, searchAndSortRows } from './utils'
 
 const InternalTable = ({
     filtersVariant,
@@ -46,8 +46,16 @@ const InternalTable = ({
     const rowsContainerRef = useRef<HTMLDivElement>(null)
     const parentRef = useRef<HTMLDivElement>(null)
     const activeRowRef = useRef<HTMLDivElement>(null)
+    const bulkSelectionButtonRef = useRef<HTMLButtonElement>(null)
 
-    const { BulkActionsComponent } = bulkSelectionConfig ?? {}
+    const [bulkActionState, setBulkActionState] = useState<BulkActionStateType>(null)
+
+    const {
+        BulkActionsComponent,
+        bulkActionsData = null,
+        BulkOperationModal,
+        bulkOperationModalData = null,
+    } = bulkSelectionConfig ?? {}
 
     const { showSeparatorBetweenRows = true } = stylesConfig ?? {}
 
@@ -93,34 +101,29 @@ const InternalTable = ({
         [],
     )
 
-    const sortByToColumnIndexMap: Record<string, number> = useMemo(
-        () =>
-            visibleColumns.reduce((acc, column, index) => {
-                acc[column.field] = index
-
-                return acc
-            }, {}),
-        [visibleColumns],
-    )
-
-    const [areFilteredRowsLoading, filteredRows, filteredRowsError, reloadFilteredRows] = useAsync(async () => {
+    const [_areFilteredRowsLoading, filteredRows, filteredRowsError, reloadFilteredRows] = useAsync(async () => {
         if (!rows && !getRows) {
-            throw new Error('Neither rows nor getRows function provided')
+            throw NO_ROWS_OR_GET_ROWS_ERROR
         }
 
         return getFilteringPromise({
             searchSortTimeoutRef,
             callback: rows
-                ? () => {
-                      const sortByColumnIndex = sortByToColumnIndexMap[sortBy]
-
-                      return searchAndSortRows(rows, filter, filterData, visibleColumns[sortByColumnIndex]?.comparator)
-                  }
+                ? () =>
+                      searchAndSortRows(
+                          rows,
+                          filter,
+                          filterData,
+                          visibleColumns.find(({ field }) => field === sortBy)?.comparator,
+                      )
                 : () => getRows(filterData),
         })
-    }, [searchKey, sortBy, sortOrder, rows, sortByToColumnIndexMap, JSON.stringify(otherFilters)])
+    }, [searchKey, sortBy, sortOrder, rows, JSON.stringify(otherFilters)])
 
-    const bulkSelectionCount = getSelectedIdentifiersCount?.() ?? 0
+    const areFilteredRowsLoading = _areFilteredRowsLoading || filteredRowsError === NO_ROWS_OR_GET_ROWS_ERROR
+
+    const bulkSelectionCount =
+        isBulkSelectionApplied && rows ? filteredRows.length : (getSelectedIdentifiersCount?.() ?? 0)
 
     const visibleRows = useMemo(() => {
         const normalizedFilteredRows = filteredRows ?? []
@@ -133,9 +136,14 @@ const InternalTable = ({
         return paginatedRows
     }, [paginationVariant, offset, pageSize, filteredRows])
 
+    const showPagination =
+        paginationVariant === PaginationEnum.PAGINATED && filteredRows?.length > DEFAULT_BASE_PAGE_SIZE
+
     const { activeRowIndex, setActiveRowIndex } = useTableWithKeyboardShortcuts(
         { bulkSelectionConfig, bulkSelectionReturnValue, handleToggleBulkSelectionOnRow },
         visibleRows,
+        showPagination,
+        bulkSelectionButtonRef,
     )
 
     useEffectAfterMount(() => {
@@ -166,11 +174,20 @@ const InternalTable = ({
         activeRowRef.current?.focus()
     }, [activeRowIndex])
 
-    const showPagination =
-        paginationVariant === PaginationEnum.PAGINATED && filteredRows?.length > DEFAULT_BASE_PAGE_SIZE
+    const onBulkOperationModalClose = () => {
+        setBulkActionState(null)
+    }
+
+    const getBulkSelections = () => {
+        if (isBulkSelectionApplied && rows) {
+            return filteredRows
+        }
+
+        return Object.values(bulkSelectionState)
+    }
 
     const renderRows = () => {
-        if (loading && !visibleColumns.length) {
+        if (loading) {
             return SHIMMER_DUMMY_ARRAY.map((shimmerRowLabel) => (
                 <div
                     key={shimmerRowLabel}
@@ -193,13 +210,11 @@ const InternalTable = ({
                         gridTemplateColumns,
                     }}
                 >
-                    {visibleColumns.map(({ horizontallySticky, label }) => (
-                        <div
-                            key={label}
-                            className={`${horizontallySticky ? 'dc__position-sticky dc__left-0 dc__zi-1' : ''} pr-12 py-12 flex`}
-                            aria-label="Loading..."
-                        >
-                            <div className="shimmer h-16 w-100" />
+                    {visibleColumns.map(({ label, field }) => (
+                        <div key={label} className="pr-6 py-12 flex" aria-label="Loading...">
+                            <div
+                                className={`shimmer h-16 ${field === BULK_ACTION_GUTTER_LABEL ? 'w-20 mr-6' : 'w-100'}`}
+                            />
                         </div>
                     ))}
                 </div>
@@ -223,7 +238,7 @@ const InternalTable = ({
                     key={row.id}
                     ref={isRowActive ? activeRowRef : null}
                     onClick={handleChangeActiveRowIndex}
-                    className={`dc__grid px-20 checkbox__parent-container ${
+                    className={`dc__grid px-20 dc__min-width-fit-content checkbox__parent-container ${
                         showSeparatorBetweenRows ? 'border__secondary--bottom' : ''
                     } fs-13 fw-4 lh-20 cn-9 generic-table__row dc__gap-16 ${
                         isRowActive ? 'generic-table__row--active checkbox__parent-container--active' : ''
@@ -237,37 +252,48 @@ const InternalTable = ({
                     // NOTE: by giving it a negative tabIndex we can programmatically focus it through .focus()
                     tabIndex={-1}
                 >
-                    {visibleColumns.map(({ field, CellComponent }) => {
-                        if (field === BULK_ACTION_GUTTER_LABEL) {
-                            return (
-                                <Checkbox
-                                    key={field}
-                                    isChecked={isRowBulkSelected}
-                                    onChange={handleToggleBulkSelectionForRow}
-                                    rootClassName="mb-0"
-                                    value={CHECKBOX_VALUE.CHECKED}
-                                />
-                            )
-                        }
+                    {visibleColumns.map(({ field, horizontallySticky: isStickyColumn, CellComponent }, index) => {
+                        const isBulkActionGutter = field === BULK_ACTION_GUTTER_LABEL
+                        const horizontallySticky = isStickyColumn || isBulkActionGutter
+                        const { className: stickyClassName = '', left: stickyLeftValue = '' } = horizontallySticky
+                            ? getStickyColumnConfig(gridTemplateColumns, index)
+                            : {}
 
-                        if (CellComponent) {
+                        if (isBulkActionGutter) {
                             return (
-                                <CellComponent
-                                    field={field}
-                                    value={row.data[field]}
-                                    signals={EVENT_TARGET as SignalsType}
-                                    row={row}
-                                    filterData={filterData}
-                                    isRowActive={isRowActive}
-                                    {...additionalProps}
-                                />
+                                <div
+                                    className={`flexbox dc__align-items-center ${stickyClassName}`}
+                                    style={{ left: stickyLeftValue }}
+                                    key={field}
+                                >
+                                    <Checkbox
+                                        isChecked={isRowBulkSelected}
+                                        onChange={handleToggleBulkSelectionForRow}
+                                        rootClassName="mb-0"
+                                        value={CHECKBOX_VALUE.CHECKED}
+                                    />
+                                </div>
                             )
                         }
 
                         return (
-                            <span key={field} className="py-12">
-                                {row.data[field]}
-                            </span>
+                            <div className={`${stickyClassName} flexbox`} style={{ left: stickyLeftValue }} key={field}>
+                                {CellComponent ? (
+                                    <CellComponent
+                                        field={field}
+                                        value={row.data[field]}
+                                        signals={EVENT_TARGET as SignalsType}
+                                        row={row}
+                                        filterData={filterData as any}
+                                        isRowActive={isRowActive}
+                                        {...additionalProps}
+                                    />
+                                ) : (
+                                    <span key={field} className="py-12">
+                                        {row.data[field]}
+                                    </span>
+                                )}
+                            </div>
                         )
                     })}
 
@@ -282,7 +308,11 @@ const InternalTable = ({
     }
 
     const renderContent = () => {
-        if (!areFilteredRowsLoading && !filteredRows?.length) {
+        if (filteredRowsError && !areFilteredRowsLoading && !loading) {
+            return <ErrorScreenManager code={filteredRowsError.code} reload={reloadFilteredRows} />
+        }
+
+        if (!areFilteredRowsLoading && !filteredRows?.length && !loading) {
             return filtersVariant !== FiltersTypeEnum.NONE && isFilterApplied ? (
                 <GenericFilterEmptyState handleClearFilters={clearFilters} />
             ) : (
@@ -290,58 +320,90 @@ const InternalTable = ({
             )
         }
 
-        if (filteredRowsError && !areFilteredRowsLoading) {
-            return <ErrorScreenManager code={filteredRowsError.code} reload={reloadFilteredRows} />
-        }
-
         return (
             <div tabIndex={0} role="grid" className="generic-table flexbox-col dc__overflow-hidden flex-grow-1">
-                <div className="flexbox-col flex-grow-1 w-100 dc__overflow-auto" ref={parentRef}>
-                    <div className="bg__primary dc__min-width-fit-content px-20 border__secondary--bottom">
-                        {loading && !visibleColumns.length ? (
-                            <div className="flexbox py-12 dc__gap-16">
-                                {SHIMMER_DUMMY_ARRAY.map((label) => (
-                                    <div key={label} className="shimmer w-180" />
-                                ))}
-                            </div>
-                        ) : (
-                            <div
-                                className="dc__grid fw-6 cn-7 fs-12 lh-20 py-8 dc__gap-16"
-                                style={{
-                                    gridTemplateColumns,
-                                }}
-                            >
-                                {visibleColumns.map(({ label, field, isSortable, size, showTippyOnTruncate }) => {
-                                    const isResizable = !!size.range
-
-                                    if (field === BULK_ACTION_GUTTER_LABEL) {
-                                        return <BulkSelection key={field} showPagination={showPagination} />
-                                    }
-
-                                    return (
-                                        <SortableTableHeaderCell
-                                            key={field}
-                                            title={label}
-                                            isSortable={!!isSortable}
-                                            sortOrder={sortOrder}
-                                            isSorted={sortBy === field}
-                                            triggerSorting={getTriggerSortingHandler(field)}
-                                            showTippyOnTruncate={showTippyOnTruncate}
-                                            disabled={areFilteredRowsLoading}
-                                            {...(isResizable
-                                                ? { isResizable, handleResize, id: label }
-                                                : { isResizable: false })}
-                                        />
-                                    )
-                                })}
-                            </div>
-                        )}
-                    </div>
-
+                <div className="flexbox-col flex-grow-1 w-100 dc__overflow-hidden" ref={parentRef}>
                     <div
                         ref={rowsContainerRef}
-                        className="flex-grow-1 flexbox-col dc__min-width-fit-content dc__overflow-auto"
+                        className={`flex-grow-1 flexbox-col dc__overflow-auto ${rowsContainerRef.current?.scrollLeft > 0}`}
                     >
+                        <div className="bg__primary dc__min-width-fit-content px-20 border__secondary--bottom dc__position-sticky dc__zi-2 dc__top-0">
+                            {loading ? (
+                                <div className="flexbox py-12 dc__gap-16">
+                                    {isBulkSelectionConfigured ? <div className="shimmer w-20 mr-20" /> : null}
+                                    {SHIMMER_DUMMY_ARRAY.map((label) => (
+                                        <div key={label} className="shimmer w-200" />
+                                    ))}
+                                </div>
+                            ) : (
+                                <div
+                                    className="dc__grid fw-6 cn-7 fs-12 lh-20 py-8 dc__gap-16"
+                                    style={{
+                                        gridTemplateColumns,
+                                    }}
+                                >
+                                    {visibleColumns.map(
+                                        (
+                                            {
+                                                label,
+                                                field,
+                                                isSortable,
+                                                size,
+                                                showTippyOnTruncate,
+                                                horizontallySticky: isStickyColumn,
+                                            },
+                                            index,
+                                        ) => {
+                                            const isResizable = !!size?.range
+                                            const isBulkActionGutter = field === BULK_ACTION_GUTTER_LABEL
+                                            const horizontallySticky = isStickyColumn || isBulkActionGutter
+                                            const { className: stickyClassName = '', left: stickyLeftValue = '' } =
+                                                horizontallySticky
+                                                    ? getStickyColumnConfig(gridTemplateColumns, index)
+                                                    : {}
+
+                                            if (field === BULK_ACTION_GUTTER_LABEL) {
+                                                return (
+                                                    <div
+                                                        className={`flex ${stickyClassName}`}
+                                                        style={{ left: stickyLeftValue }}
+                                                        key={field}
+                                                    >
+                                                        <BulkSelection
+                                                            ref={bulkSelectionButtonRef}
+                                                            key={field}
+                                                            showPagination={showPagination}
+                                                        />
+                                                    </div>
+                                                )
+                                            }
+
+                                            return (
+                                                <div
+                                                    className={`${stickyClassName}`}
+                                                    style={{ left: stickyLeftValue }}
+                                                    key={field}
+                                                >
+                                                    <SortableTableHeaderCell
+                                                        key={field}
+                                                        title={label}
+                                                        isSortable={!!isSortable}
+                                                        sortOrder={sortOrder}
+                                                        isSorted={sortBy === field}
+                                                        triggerSorting={getTriggerSortingHandler(field)}
+                                                        showTippyOnTruncate={showTippyOnTruncate}
+                                                        disabled={areFilteredRowsLoading}
+                                                        {...(isResizable
+                                                            ? { isResizable, handleResize, id: label }
+                                                            : { isResizable: false })}
+                                                    />
+                                                </div>
+                                            )
+                                        },
+                                    )}
+                                </div>
+                            )}
+                        </div>
                         {renderRows()}
                     </div>
 
@@ -351,6 +413,8 @@ const InternalTable = ({
                             handleClearBulkSelection={handleClearBulkSelection}
                             parentRef={parentRef}
                             BulkActionsComponent={BulkActionsComponent}
+                            setBulkActionState={setBulkActionState}
+                            bulkActionsData={bulkActionsData}
                         />
                     )}
                 </div>
@@ -361,8 +425,18 @@ const InternalTable = ({
                         changePage={changePage}
                         changePageSize={changePageSize}
                         offset={offset}
-                        rootClassName="border__primary--top flex dc__content-space px-20"
+                        rootClassName="border__secondary--top flex dc__content-space px-20"
                         size={filteredRows.length}
+                    />
+                )}
+
+                {bulkActionState && (
+                    <BulkOperationModal
+                        action={bulkActionState}
+                        onClose={onBulkOperationModalClose}
+                        bulkOperationModalData={bulkOperationModalData}
+                        isBulkSelectionApplied={isBulkSelectionApplied}
+                        selections={getBulkSelections()}
                     />
                 )}
             </div>
