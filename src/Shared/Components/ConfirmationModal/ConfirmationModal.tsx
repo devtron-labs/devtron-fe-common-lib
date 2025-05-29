@@ -25,6 +25,7 @@ import { Backdrop } from '../Backdrop'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Confetti } from '../Confetti'
 import { CustomInput } from '../CustomInput'
+import { Icon } from '../Icon'
 import { useConfirmationModalContext } from './ConfirmationModalContext'
 import { ConfirmationModalBodyProps, ConfirmationModalProps, ConfirmationModalVariantType } from './types'
 import { getConfirmationLabel, getIconFromVariant, getPrimaryButtonStyleFromVariant } from './utils'
@@ -34,7 +35,7 @@ import './confirmationModal.scss'
 const ConfirmationModalBody = ({
     title,
     subtitle,
-    Icon,
+    Icon: ButtonIcon,
     variant,
     buttonConfig,
     confirmationConfig,
@@ -53,8 +54,8 @@ const ConfirmationModalBody = ({
 
     const { primaryButtonConfig, secondaryButtonConfig } = buttonConfig
 
-    const RenderIcon = Icon ?? getIconFromVariant(variant)
-    const hideIcon = variant === ConfirmationModalVariantType.custom && !Icon
+    const RenderIcon = ButtonIcon ?? getIconFromVariant(variant)
+    const hideIcon = variant === ConfirmationModalVariantType.custom && !ButtonIcon
 
     const disablePrimaryButton: boolean =
         ('disabled' in primaryButtonConfig && primaryButtonConfig.disabled) ||
@@ -159,7 +160,7 @@ const ConfirmationModalBody = ({
                             text={primaryButtonConfig.text}
                             onClick={primaryButtonConfig.onClick as ButtonHTMLAttributes<HTMLButtonElement>['onClick']}
                             startIcon={primaryButtonConfig.startIcon}
-                            endIcon={primaryButtonConfig.endIcon}
+                            endIcon={primaryButtonConfig.endIcon || <Icon name="ic-key-enter" color={null} />}
                         />
                     )}
                 </div>
