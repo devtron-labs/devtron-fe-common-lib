@@ -75,11 +75,6 @@ export type DTSwitchProps = {
     name: string
 
     /**
-     * A unique identifier for testing purposes.
-     */
-    dataTestId: string
-
-    /**
      * The visual variant of the switch.
      *
      * @default `positive`
