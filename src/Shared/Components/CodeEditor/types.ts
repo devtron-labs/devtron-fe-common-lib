@@ -84,6 +84,11 @@ export type CodeEditorProps<DiffView extends boolean = false> = {
     disableSearch?: boolean
     diffView?: DiffView
     theme?: AppThemeType
+    onSearchPanelOpen?: () => void
+    /**
+     * This method is triggered when user types something in the search/replace bar or applies a search or replace action.
+     */
+    onSearchBarAction?: () => void
 } & CodeEditorPropsBasedOnDiffView<DiffView>
 
 export interface GetCodeEditorHeightReturnType {
@@ -102,7 +107,7 @@ export type FindReplaceQuery = Partial<
     Pick<SearchQuery, 'search' | 'wholeWord' | 'regexp' | 'replace' | 'caseSensitive'>
 >
 
-export interface FindReplaceProps {
+export interface FindReplaceProps extends Pick<CodeEditorProps, 'onSearchBarAction'> {
     view: EditorView
     /** Default value for Search Query state. */
     defaultQuery: SearchQuery

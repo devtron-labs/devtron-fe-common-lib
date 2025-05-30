@@ -497,3 +497,25 @@ export const validateYAML = (yamlString: string, isRequired?: boolean): Validati
         }
     }
 }
+
+export const validateEmail = (email: string): ValidationResponseType => {
+    if (!email) {
+        return {
+            isValid: false,
+            message: 'Email is required',
+        }
+    }
+
+    const result = PATTERNS.EMAIL.test(String(email).toLowerCase())
+
+    if (result) {
+        return {
+            isValid: true,
+        }
+    }
+
+    return {
+        isValid: false,
+        message: 'Please provide a valid email address',
+    }
+}

@@ -60,6 +60,7 @@ import { ReactComponent as ICDiscordFill } from '@IconsV2/ic-discord-fill.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEdit } from '@IconsV2/ic-edit.svg'
+import { ReactComponent as ICEmail } from '@IconsV2/ic-email.svg'
 import { ReactComponent as ICEnterpriseFeat } from '@IconsV2/ic-enterprise-feat.svg'
 import { ReactComponent as ICEnterpriseTag } from '@IconsV2/ic-enterprise-tag.svg'
 import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
@@ -101,6 +102,7 @@ import { ReactComponent as ICJobColor } from '@IconsV2/ic-job-color.svg'
 import { ReactComponent as ICK3s } from '@IconsV2/ic-k3s.svg'
 import { ReactComponent as ICK8sJob } from '@IconsV2/ic-k8s-job.svg'
 import { ReactComponent as ICKey } from '@IconsV2/ic-key.svg'
+import { ReactComponent as ICKeyEnter } from '@IconsV2/ic-key-enter.svg'
 import { ReactComponent as ICKind } from '@IconsV2/ic-kind.svg'
 import { ReactComponent as ICLaptop } from '@IconsV2/ic-laptop.svg'
 import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
@@ -227,6 +229,7 @@ export const iconMap = {
     'ic-dockerhub': ICDockerhub,
     'ic-ecr': ICEcr,
     'ic-edit': ICEdit,
+    'ic-email': ICEmail,
     'ic-enterprise-feat': ICEnterpriseFeat,
     'ic-enterprise-tag': ICEnterpriseTag,
     'ic-env': ICEnv,
@@ -267,6 +270,7 @@ export const iconMap = {
     'ic-job-color': ICJobColor,
     'ic-k3s': ICK3s,
     'ic-k8s-job': ICK8sJob,
+    'ic-key-enter': ICKeyEnter,
     'ic-key': ICKey,
     'ic-kind': ICKind,
     'ic-laptop': ICLaptop,
