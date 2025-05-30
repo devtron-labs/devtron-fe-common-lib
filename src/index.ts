@@ -159,6 +159,12 @@ export interface customEnv {
     GATEKEEPER_URL?: string
     FEATURE_AI_INTEGRATION_ENABLE?: boolean
     LOGIN_PAGE_IMAGE?: string
+    /**
+     * If true, the manage traffic feature is enabled in apps & app groups.
+     *
+     * @default false
+     */
+    FEATURE_MANAGE_TRAFFIC_ENABLE?: boolean
 }
 declare global {
     interface Window {

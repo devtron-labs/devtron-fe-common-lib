@@ -66,7 +66,7 @@ export const getIconName = (status: string, showAnimatedIcon: boolean): IconName
             return 'ic-in-progress'
         case 'hibernating':
         case 'hibernated':
-            return 'ic-hibernate'
+            return 'ic-hibernate-circle'
         case 'timedout':
         case 'timed_out':
             return 'ic-timeout-dash'
