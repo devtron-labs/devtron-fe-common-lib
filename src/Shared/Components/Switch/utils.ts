@@ -68,7 +68,7 @@ export const getSwitchIconColor = ({
     variant,
 }: Pick<DTSwitchProps, 'iconColor' | 'isChecked' | 'variant'>): IconBaseColorType => {
     if (!isChecked) {
-        return 'N200'
+        return 'N500'
     }
 
     return iconColor || (variant === 'theme' ? 'B500' : 'G500')
