@@ -50,7 +50,7 @@ export const usePopover = ({
         onTriggerKeyDown?.(e, open, closePopover)
     }
 
-    const handlePopoverKeyDown = (e: React.KeyboardEvent) => onPopoverKeyDown(e, open, closePopover)
+    const handlePopoverKeyDown = (e: React.KeyboardEvent) => onPopoverKeyDown?.(e, open, closePopover)
 
     const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
         if (!popover.current?.contains(e.target as Node)) {

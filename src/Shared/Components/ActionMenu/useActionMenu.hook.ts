@@ -1,4 +1,4 @@
-import { ChangeEvent, createRef, RefObject, useEffect, useMemo, useRef, useState } from 'react'
+import { ChangeEvent, createRef, RefObject, useEffect, useRef, useState } from 'react'
 
 import { usePopover, UsePopoverProps } from '../Popover'
 import { UseActionMenuProps } from './types'
@@ -17,13 +17,9 @@ export const useActionMenu = <T extends string | number>({
     const [focusedIndex, setFocusedIndex] = useState(-1)
     const [searchTerm, setSearchTerm] = useState('')
 
-    // MEMOIZED CONSTANTS
-    const filteredOptions = useMemo(
-        () => (isSearchable ? filterActionMenuOptions(options, searchTerm) : options),
-        [isSearchable, options, searchTerm],
-    )
-
-    const flatOptions = useMemo(() => getActionMenuFlatOptions(filteredOptions), [filteredOptions])
+    // CONSTANTS
+    const filteredOptions = isSearchable ? filterActionMenuOptions(options, searchTerm) : options
+    const flatOptions = getActionMenuFlatOptions(filteredOptions)
 
     // REFS
     const itemsRef = useRef<RefObject<HTMLAnchorElement | HTMLButtonElement>[]>(

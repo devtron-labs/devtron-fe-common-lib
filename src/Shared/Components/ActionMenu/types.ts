@@ -5,6 +5,7 @@ import { OmitNever } from '@Shared/types'
 
 import { ButtonProps } from '../Button'
 import { IconsProps } from '../Icon'
+import { NumbersCountProps } from '../NumbersCount'
 import { PopoverProps, UsePopoverProps } from '../Popover'
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
 import { DTSwitchProps } from '../Switch'
@@ -51,7 +52,7 @@ type TrailingItemType =
     | {
           type: 'counter'
           config: {
-              value: string | number
+              value: NumbersCountProps['count']
           }
       }
     | {

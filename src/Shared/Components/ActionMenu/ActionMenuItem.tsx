@@ -6,6 +6,7 @@ import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonProps, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
+import { NumbersCount } from '../NumbersCount'
 import { getTooltipProps } from '../SelectPicker/common'
 import { DTSwitch, DTSwitchProps } from '../Switch'
 import { ActionMenuItemProps, ActionMenuItemType } from './types'
@@ -93,7 +94,7 @@ export const ActionMenuItem = <T extends string | number>({
                 )
             }
             case 'counter':
-                return <span className="icon-dim-20 flex px-6 bcn-1 cn-7 br-12 fs-13 lh-20 fw-6">{config.value}</span>
+                return <NumbersCount count={config.value} />
             case 'switch':
                 return (
                     <DTSwitch

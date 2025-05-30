@@ -47,6 +47,7 @@ export const PATTERNS = {
 const GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP = '/global-config/templates/devtron-apps'
 
 export const URLS = {
+    LOGIN: '/login',
     LOGIN_SSO: '/login/sso',
     PERMISSION_GROUPS: '/global-config/auth/groups',
     APP: '/app',
