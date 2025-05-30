@@ -75,11 +75,6 @@ export type DTSwitchProps = {
     name: string
 
     /**
-     * A unique identifier for testing purposes.
-     */
-    dataTestId: string
-
-    /**
      * The visual variant of the switch.
      *
      * @default `positive`
@@ -119,4 +114,9 @@ export type DTSwitchProps = {
      * @default undefined
      */
     tooltipContent?: string
+    /**
+     * Indicates whether the switch should be focused automatically when rendered.
+     * @default false
+     */
+    autoFocus?: boolean
 } & SwitchShapeProps

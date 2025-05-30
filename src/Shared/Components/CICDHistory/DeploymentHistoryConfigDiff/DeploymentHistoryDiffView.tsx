@@ -16,13 +16,12 @@
 
 import { useMemo, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import Tippy from '@tippyjs/react'
 
 import { CodeEditor } from '@Shared/Components/CodeEditor'
+import { ToggleResolveScopedVariables } from '@Shared/Components/ToggleResolveScopedVariables'
 
 import { ReactComponent as Info } from '../../../../Assets/Icon/ic-info-filled.svg'
-import { ReactComponent as ViewVariablesIcon } from '../../../../Assets/Icon/ic-view-variable-toggle.svg'
-import { MODES, Toggle, YAMLStringify } from '../../../../Common'
+import { MODES, YAMLStringify } from '../../../../Common'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '../../../constants'
 import { DeploymentHistorySingleValue, DeploymentTemplateHistoryType } from '../types'
 import { DeploymentHistoryParamsType } from './types'
@@ -93,8 +92,6 @@ const DeploymentHistoryDiffView = ({
     const handleShowVariablesClick = () => {
         setConvertVariables(!convertVariables)
     }
-
-    const tippyMsg = convertVariables ? 'Hide variables values' : 'Show variables values'
 
     const renderDetailedValue = (
         parentClassName: string,
@@ -173,18 +170,11 @@ const DeploymentHistoryDiffView = ({
                     >
                         <span>{baseTemplateConfiguration?.codeEditorValue?.displayName}</span>
                         {isVariablesAvailable && (
-                            <Tippy content={tippyMsg} placement="bottom-start" animation="shift-away" arrow={false}>
-                                <li className="flex left dc_width-max-content cursor">
-                                    <div className="w-40 h-20">
-                                        <Toggle
-                                            selected={convertVariables}
-                                            color="var(--B500)"
-                                            onSelect={handleShowVariablesClick}
-                                            Icon={ViewVariablesIcon}
-                                        />
-                                    </div>
-                                </li>
-                            </Tippy>
+                            <ToggleResolveScopedVariables
+                                name="resolve-scoped-variables"
+                                resolveScopedVariables={convertVariables}
+                                handleToggleScopedVariablesView={handleShowVariablesClick}
+                            />
                         )}
                     </div>
 

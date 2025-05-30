@@ -22,7 +22,6 @@ import './switch.scss'
 
 const Switch = ({
     ariaLabel,
-    dataTestId,
     isDisabled,
     isLoading,
     isChecked,
@@ -35,6 +34,7 @@ const Switch = ({
     size = ComponentSizeType.medium,
     name,
     onChange,
+    autoFocus = false,
 }: DTSwitchProps) => {
     const inputId = useRef(getUniqueId())
 
@@ -124,10 +124,12 @@ const Switch = ({
                 <button
                     type="button"
                     role="checkbox"
+                    // eslint-disable-next-line jsx-a11y/no-autofocus
+                    autoFocus={autoFocus}
                     aria-checked={ariaCheckedValue}
                     aria-labelledby={inputId.current}
                     aria-label={isLoading ? 'Loading...' : ariaLabel}
-                    data-testid={dataTestId}
+                    data-testid={name}
                     disabled={isDisabled || isLoading}
                     aria-disabled={isDisabled}
                     className={`p-0-imp h-100 flex flex-grow-1 dc__no-border dt-switch__track ${shape === 'rounded' ? 'br-12' : 'br-4'} ${getSwitchTrackColor({ shape, variant, isChecked, isLoading })} ${isDisabled ? 'dc__disabled' : ''} dc__fill-available-space`}
