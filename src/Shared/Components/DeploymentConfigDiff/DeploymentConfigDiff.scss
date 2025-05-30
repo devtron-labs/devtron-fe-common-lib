@@ -51,3 +51,26 @@
     }
   }
 }
+
+.config-strategy-radio {
+    .form__radio-item {
+      border: none !important;
+    }
+
+    .form__radio-item-content {
+      padding-block: 6px;
+      padding-inline: 0px;
+
+      .radio__button {
+        margin-right: 8px;
+        margin-top: 2px;
+      }
+
+      .radio__title {
+        font-size: 13px;
+        line-height: 20px;
+        font-weight: 400;
+        color: var(--N900) !important;
+      }
+    }
+}

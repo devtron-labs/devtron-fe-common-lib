@@ -68,7 +68,7 @@ const Vulnerabilities = ({
         )
     }
 
-    if (!isScanEnabled || !scanResultResponse.result?.isImageScanEnabled) {
+    if (!isScanEnabled || !scanResultResponse?.result?.isImageScanEnabled) {
         return (
             <div className="security-tab-empty">
                 <p className="security-tab-empty__title">Scan is Disabled</p>

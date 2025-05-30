@@ -15,7 +15,7 @@
  */
 
 import { KeyValueTableData } from '@Shared/Components'
-import { TargetPlatformsDTO } from '@Shared/types'
+import { DeploymentStrategyType, TargetPlatformsDTO } from '@Shared/types'
 import { OverrideMergeStrategyType } from '@Pages/Applications'
 
 import { ReleaseTag, ResponseType, UserApprovalMetadataType } from '../../Common'
@@ -308,10 +308,12 @@ export interface AppEnvDeploymentConfigDTO {
     isAppAdmin: boolean
 }
 
-export type AppEnvDeploymentConfigPayloadType =
+export type AppEnvDeploymentConfigPayloadType = {
+    appName: string
+    envName: string
+    strategy?: DeploymentStrategyType
+} & (
     | {
-          appName: string
-          envName: string
           configType: AppEnvDeploymentConfigType
           wfrId?: number
           pipelineId?: number
@@ -327,6 +329,7 @@ export type AppEnvDeploymentConfigPayloadType =
           configArea: 'CdRollback' | 'DeploymentHistory'
           wfrId: number
       }
+)
 
 export enum TemplateListType {
     DefaultVersions = 1,

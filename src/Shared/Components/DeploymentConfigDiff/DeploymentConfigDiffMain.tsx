@@ -36,6 +36,7 @@ import {
 } from './DeploymentConfigDiff.types'
 import { renderDiffViewNoDifferenceState } from './DeploymentConfigDiff.utils'
 import { DeploymentConfigDiffAccordion } from './DeploymentConfigDiffAccordion'
+import DeploymentConfigDiffRadioSelect from './DeploymentConfigDiffRadioSelect'
 
 export const DeploymentConfigDiffMain = ({
     isLoading,
@@ -104,6 +105,14 @@ export const DeploymentConfigDiffMain = ({
                         {!selectorsConfig?.hideDivider && index !== list.length - 1 && (
                             <span className="cn-9 fs-13 lh-20">/</span>
                         )}
+                    </Fragment>
+                )
+            }
+
+            if (configItem.type === 'radio-group') {
+                return (
+                    <Fragment key={configItem.id}>
+                        <DeploymentConfigDiffRadioSelect radioSelectConfig={configItem.radioSelectConfig} />
                     </Fragment>
                 )
             }

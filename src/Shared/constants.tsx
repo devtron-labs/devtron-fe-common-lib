@@ -17,7 +17,13 @@
 import { DeploymentNodeType, OptionType } from '@Common/Types'
 
 import { InfoBlockProps } from './Components'
-import { CDMaterialSidebarType, ConfigKeysWithLockType, ConfigurationType, IconBaseColorType } from './types'
+import {
+    CDMaterialSidebarType,
+    ConfigKeysWithLockType,
+    ConfigurationType,
+    DeploymentStrategyTypeWithDefault,
+    IconBaseColorType,
+} from './types'
 
 export const ARTIFACT_STATUS = {
     PROGRESSING: 'Progressing',
@@ -580,3 +586,13 @@ export const DEPLOYMENT_STAGE_TO_NODE_MAP: Readonly<Record<DeploymentStageType, 
 
 export const APP_DETAILS_FALLBACK_POLLING_INTERVAL = 30000
 export const PROGRESSING_DEPLOYMENT_STATUS_POLLING_INTERVAL = 10000
+
+export const STRATEGY_TYPE_TO_TITLE_MAP: Record<DeploymentStrategyTypeWithDefault, string> = {
+    DEFAULT: 'Default Strategy',
+    'BLUE-GREEN': 'Blue Green',
+    CANARY: 'Canary',
+    RECREATE: 'Recreate',
+    ROLLING: 'Rolling',
+    ROLLINGUPDATE: 'Rolling Update',
+    ONDELETE: 'On Delete',
+}
