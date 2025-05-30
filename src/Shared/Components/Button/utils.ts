@@ -17,6 +17,7 @@
 import { COMPONENT_SIZE_TYPE_TO_ICON_SIZE_MAP } from '@Shared/constants'
 
 import {
+    BUTTON_FONT_WEIGHT_TO_CLASS_NAME_MAP,
     BUTTON_SIZE_TO_CLASS_NAME_MAP,
     ICON_BUTTON_SIZE_TO_CLASS_NAME_MAP,
     ICON_BUTTON_SIZE_TO_ICON_SIZE_MAP,
@@ -44,9 +45,10 @@ export const getButtonDerivedClass = ({
     isLoading,
     icon,
     isAutoTriggerActive,
+    fontWeight,
 }: Required<
-    Pick<ButtonProps, 'variant' | 'size' | 'style' | 'isLoading' | 'icon'> & {
+    Pick<ButtonProps, 'variant' | 'size' | 'style' | 'isLoading' | 'icon' | 'fontWeight'> & {
         isAutoTriggerActive: boolean
     }
 >) =>
-    `button button__${variant}--${style} ${icon ? ICON_BUTTON_SIZE_TO_CLASS_NAME_MAP[size] : BUTTON_SIZE_TO_CLASS_NAME_MAP[size]} ${isAutoTriggerActive ? 'button--auto-click' : ''} ${isLoading ? 'button--loading' : ''}`
+    `button button__${variant}--${style} ${icon ? ICON_BUTTON_SIZE_TO_CLASS_NAME_MAP[size] : BUTTON_SIZE_TO_CLASS_NAME_MAP[size]} ${BUTTON_FONT_WEIGHT_TO_CLASS_NAME_MAP[fontWeight]} ${isAutoTriggerActive ? 'button--auto-click' : ''} ${isLoading ? 'button--loading' : ''}`

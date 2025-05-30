@@ -15,5 +15,5 @@
  */
 
 export interface ThemeSwitcherProps {
-    onChange: () => void
+    onClick?: () => void
 }
