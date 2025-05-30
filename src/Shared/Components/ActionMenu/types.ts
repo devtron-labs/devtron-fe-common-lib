@@ -60,7 +60,6 @@ type TrailingItemType =
           config: Pick<
               DTSwitchProps,
               | 'ariaLabel'
-              | 'dataTestId'
               | 'isChecked'
               | 'indeterminate'
               | 'isDisabled'
