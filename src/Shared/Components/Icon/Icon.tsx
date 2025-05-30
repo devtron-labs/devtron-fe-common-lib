@@ -68,10 +68,14 @@ import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICExpandRightSm } from '@IconsV2/ic-expand-right-sm.svg'
 import { ReactComponent as ICExpandSm } from '@IconsV2/ic-expand-sm.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
+import { ReactComponent as ICFastForward } from '@IconsV2/ic-fast-forward.svg'
 import { ReactComponent as ICFile } from '@IconsV2/ic-file.svg'
 import { ReactComponent as ICFileEdit } from '@IconsV2/ic-file-edit.svg'
 import { ReactComponent as ICFileKey } from '@IconsV2/ic-file-key.svg'
 import { ReactComponent as ICFiles } from '@IconsV2/ic-files.svg'
+import { ReactComponent as ICFilter } from '@IconsV2/ic-filter.svg'
+import { ReactComponent as ICFilterApplied } from '@IconsV2/ic-filter-applied.svg'
+import { ReactComponent as ICFlask } from '@IconsV2/ic-flask.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
 import { ReactComponent as ICGear } from '@IconsV2/ic-gear.svg'
 import { ReactComponent as ICGift } from '@IconsV2/ic-gift.svg'
@@ -92,6 +96,7 @@ import { ReactComponent as ICHelm } from '@IconsV2/ic-helm.svg'
 import { ReactComponent as ICHelpFilled } from '@IconsV2/ic-help-filled.svg'
 import { ReactComponent as ICHelpOutline } from '@IconsV2/ic-help-outline.svg'
 import { ReactComponent as ICHibernate } from '@IconsV2/ic-hibernate.svg'
+import { ReactComponent as ICHibernateCircle } from '@IconsV2/ic-hibernate-circle.svg'
 import { ReactComponent as ICInProgress } from '@IconsV2/ic-in-progress.svg'
 import { ReactComponent as ICInfoFilled } from '@IconsV2/ic-info-filled.svg'
 import { ReactComponent as ICInfoOutline } from '@IconsV2/ic-info-outline.svg'
@@ -104,10 +109,12 @@ import { ReactComponent as ICKeyEnter } from '@IconsV2/ic-key-enter.svg'
 import { ReactComponent as ICKind } from '@IconsV2/ic-kind.svg'
 import { ReactComponent as ICLaptop } from '@IconsV2/ic-laptop.svg'
 import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
+import { ReactComponent as ICLego } from '@IconsV2/ic-lego.svg'
 import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
 import { ReactComponent as ICLightningFill } from '@IconsV2/ic-lightning-fill.svg'
 import { ReactComponent as ICLivspace } from '@IconsV2/ic-livspace.svg'
 import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
+import { ReactComponent as ICMagnifyingGlass } from '@IconsV2/ic-magnifying-glass.svg'
 import { ReactComponent as ICMediumDelete } from '@IconsV2/ic-medium-delete.svg'
 import { ReactComponent as ICMediumPaintbucket } from '@IconsV2/ic-medium-paintbucket.svg'
 import { ReactComponent as ICMegaphoneLeft } from '@IconsV2/ic-megaphone-left.svg'
@@ -118,6 +125,7 @@ import { ReactComponent as ICMinikube } from '@IconsV2/ic-minikube.svg'
 import { ReactComponent as ICMissing } from '@IconsV2/ic-missing.svg'
 import { ReactComponent as ICMobile } from '@IconsV2/ic-mobile.svg'
 import { ReactComponent as ICMonitoring } from '@IconsV2/ic-monitoring.svg'
+import { ReactComponent as ICMoreVertical } from '@IconsV2/ic-more-vertical.svg'
 import { ReactComponent as ICNew } from '@IconsV2/ic-new.svg'
 import { ReactComponent as ICNodeScript } from '@IconsV2/ic-node-script.svg'
 import { ReactComponent as ICOidc } from '@IconsV2/ic-oidc.svg'
@@ -128,8 +136,10 @@ import { ReactComponent as ICOutOfSync } from '@IconsV2/ic-out-of-sync.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
 import { ReactComponent as ICPath } from '@IconsV2/ic-path.svg'
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
+import { ReactComponent as ICPlayOutline } from '@IconsV2/ic-play-outline.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
+import { ReactComponent as ICRocketGear } from '@IconsV2/ic-rocket-gear.svg'
 import { ReactComponent as ICRocketLaunch } from '@IconsV2/ic-rocket-launch.svg'
 import { ReactComponent as ICSelected } from '@IconsV2/ic-selected.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
@@ -142,7 +152,16 @@ import { ReactComponent as ICSpinny } from '@IconsV2/ic-spinny.svg'
 import { ReactComponent as ICSprayCan } from '@IconsV2/ic-spray-can.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
 import { ReactComponent as ICStamp } from '@IconsV2/ic-stamp.svg'
+import { ReactComponent as ICStrategyBlueGreen } from '@IconsV2/ic-strategy-blue-green.svg'
+import { ReactComponent as ICStrategyBlueGreenColor } from '@IconsV2/ic-strategy-blue-green-color.svg'
+import { ReactComponent as ICStrategyCanary } from '@IconsV2/ic-strategy-canary.svg'
+import { ReactComponent as ICStrategyCanaryColor } from '@IconsV2/ic-strategy-canary-color.svg'
+import { ReactComponent as ICStrategyRecreate } from '@IconsV2/ic-strategy-recreate.svg'
+import { ReactComponent as ICStrategyRecreateColor } from '@IconsV2/ic-strategy-recreate-color.svg'
+import { ReactComponent as ICStrategyRolling } from '@IconsV2/ic-strategy-rolling.svg'
+import { ReactComponent as ICStrategyRollingColor } from '@IconsV2/ic-strategy-rolling-color.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
+import { ReactComponent as ICSun } from '@IconsV2/ic-sun.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICTata1mg } from '@IconsV2/ic-tata1mg.svg'
 import { ReactComponent as ICTerminal } from '@IconsV2/ic-terminal.svg'
@@ -152,6 +171,7 @@ import { ReactComponent as ICThumbDown } from '@IconsV2/ic-thumb-down.svg'
 import { ReactComponent as ICThumbUp } from '@IconsV2/ic-thumb-up.svg'
 import { ReactComponent as ICTimeoutDash } from '@IconsV2/ic-timeout-dash.svg'
 import { ReactComponent as ICTimer } from '@IconsV2/ic-timer.svg'
+import { ReactComponent as ICTrafficSignal } from '@IconsV2/ic-traffic-signal.svg'
 import { ReactComponent as ICTravclan } from '@IconsV2/ic-travclan.svg'
 import { ReactComponent as ICUbuntu } from '@IconsV2/ic-ubuntu.svg'
 import { ReactComponent as ICUnknown } from '@IconsV2/ic-unknown.svg'
@@ -234,10 +254,14 @@ export const iconMap = {
     'ic-expand-right-sm': ICExpandRightSm,
     'ic-expand-sm': ICExpandSm,
     'ic-failure': ICFailure,
+    'ic-fast-forward': ICFastForward,
     'ic-file-edit': ICFileEdit,
     'ic-file-key': ICFileKey,
     'ic-file': ICFile,
     'ic-files': ICFiles,
+    'ic-filter-applied': ICFilterApplied,
+    'ic-filter': ICFilter,
+    'ic-flask': ICFlask,
     'ic-folder-user': ICFolderUser,
     'ic-gear': ICGear,
     'ic-gift-gradient': ICGiftGradient,
@@ -257,6 +281,7 @@ export const iconMap = {
     'ic-helm': ICHelm,
     'ic-help-filled': ICHelpFilled,
     'ic-help-outline': ICHelpOutline,
+    'ic-hibernate-circle': ICHibernateCircle,
     'ic-hibernate': ICHibernate,
     'ic-in-progress': ICInProgress,
     'ic-info-filled': ICInfoFilled,
@@ -270,10 +295,12 @@ export const iconMap = {
     'ic-kind': ICKind,
     'ic-laptop': ICLaptop,
     'ic-ldap': ICLdap,
+    'ic-lego': ICLego,
     'ic-lightning-fill': ICLightningFill,
     'ic-lightning': ICLightning,
     'ic-livspace': ICLivspace,
     'ic-logout': ICLogout,
+    'ic-magnifying-glass': ICMagnifyingGlass,
     'ic-medium-delete': ICMediumDelete,
     'ic-medium-paintbucket': ICMediumPaintbucket,
     'ic-megaphone-left': ICMegaphoneLeft,
@@ -284,6 +311,7 @@ export const iconMap = {
     'ic-missing': ICMissing,
     'ic-mobile': ICMobile,
     'ic-monitoring': ICMonitoring,
+    'ic-more-vertical': ICMoreVertical,
     'ic-new': ICNew,
     'ic-node-script': ICNodeScript,
     'ic-oidc': ICOidc,
@@ -294,8 +322,10 @@ export const iconMap = {
     'ic-paper-plane-color': ICPaperPlaneColor,
     'ic-path': ICPath,
     'ic-pencil': ICPencil,
+    'ic-play-outline': ICPlayOutline,
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
+    'ic-rocket-gear': ICRocketGear,
     'ic-rocket-launch': ICRocketLaunch,
     'ic-selected': ICSelected,
     'ic-shield-check': ICShieldCheck,
@@ -308,7 +338,16 @@ export const iconMap = {
     'ic-spray-can': ICSprayCan,
     'ic-stack': ICStack,
     'ic-stamp': ICStamp,
+    'ic-strategy-blue-green-color': ICStrategyBlueGreenColor,
+    'ic-strategy-blue-green': ICStrategyBlueGreen,
+    'ic-strategy-canary-color': ICStrategyCanaryColor,
+    'ic-strategy-canary': ICStrategyCanary,
+    'ic-strategy-recreate-color': ICStrategyRecreateColor,
+    'ic-strategy-recreate': ICStrategyRecreate,
+    'ic-strategy-rolling-color': ICStrategyRollingColor,
+    'ic-strategy-rolling': ICStrategyRolling,
     'ic-success': ICSuccess,
+    'ic-sun': ICSun,
     'ic-suspended': ICSuspended,
     'ic-tata1mg': ICTata1mg,
     'ic-terminal-fill': ICTerminalFill,
@@ -318,6 +357,7 @@ export const iconMap = {
     'ic-thumb-up': ICThumbUp,
     'ic-timeout-dash': ICTimeoutDash,
     'ic-timer': ICTimer,
+    'ic-traffic-signal': ICTrafficSignal,
     'ic-travclan': ICTravclan,
     'ic-ubuntu': ICUbuntu,
     'ic-unknown': ICUnknown,

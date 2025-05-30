@@ -73,6 +73,7 @@ export const triggerCDNode = ({
     abortControllerRef,
     skipIfHibernated,
     isRollbackTrigger = false,
+    strategy,
 }: TriggerCDNodeServiceProps) => {
     const areRuntimeParamsConfigured =
         runtimeParamsPayload && (stageType === DeploymentNodeType.POSTCD || stageType === DeploymentNodeType.PRECD)
@@ -85,6 +86,7 @@ export const triggerCDNode = ({
         isRollbackDeployment: isRollbackTrigger,
         ...(areRuntimeParamsConfigured && runtimeParamsPayload),
         ...(skipIfHibernated ? { skipIfHibernated: true } : {}),
+        ...(strategy ? { strategy } : {}),
     }
 
     if (deploymentWithConfig) {
