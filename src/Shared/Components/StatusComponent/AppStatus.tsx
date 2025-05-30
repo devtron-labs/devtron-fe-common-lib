@@ -20,7 +20,13 @@ import { StatusComponent } from './StatusComponent'
 import { AppStatusProps } from './types'
 import { getJobStatusFromStatus } from './utils'
 
-export const AppStatus = ({ status, isJobView = false, isVirtualEnv = false, ...restProps }: AppStatusProps) => {
+export const AppStatus = ({
+    status,
+    isJobView = false,
+    isVirtualEnv = false,
+    hideMessage,
+    ...restProps
+}: AppStatusProps) => {
     const _status = isJobView ? getJobStatusFromStatus(status) : status
     const appStatus = isVirtualEnv ? APP_STATUS.NOT_AVAILABLE : (_status ?? '')
     const isNotDeployed =
@@ -30,7 +36,7 @@ export const AppStatus = ({ status, isJobView = false, isVirtualEnv = false, ...
     const textContent = isNotDeployed ? notDeployedMessage : appStatus
 
     return appStatus ? (
-        <StatusComponent status={appStatus} message={textContent} {...restProps} />
+        <StatusComponent status={appStatus} message={textContent} hideMessage={hideMessage} {...restProps} />
     ) : (
         <div className="flexbox dc__align-items-center dc__gap-6">
             <Icon
@@ -43,7 +49,7 @@ export const AppStatus = ({ status, isJobView = false, isVirtualEnv = false, ...
                 }}
                 color="N600"
             />
-            <span className="fs-13 lh-20 cn-6">-</span>
+            {!hideMessage && <span className="fs-13 lh-20 cn-6">-</span>}
         </div>
     )
 }

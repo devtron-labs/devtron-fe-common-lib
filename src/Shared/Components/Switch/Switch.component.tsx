@@ -22,7 +22,6 @@ import './switch.scss'
 
 const Switch = ({
     ariaLabel,
-    dataTestId,
     isDisabled,
     isLoading,
     isChecked,
@@ -127,7 +126,7 @@ const Switch = ({
                     aria-checked={ariaCheckedValue}
                     aria-labelledby={inputId.current}
                     aria-label={isLoading ? 'Loading...' : ariaLabel}
-                    data-testid={dataTestId}
+                    data-testid={name}
                     disabled={isDisabled || isLoading}
                     aria-disabled={isDisabled}
                     className={`p-0-imp h-100 flex flex-grow-1 dc__no-border dt-switch__track ${shape === 'rounded' ? 'br-12' : 'br-4'} ${getSwitchTrackColor({ shape, variant, isChecked, isLoading })} ${isDisabled ? 'dc__disabled' : ''} dc__fill-available-space`}

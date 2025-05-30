@@ -29,6 +29,7 @@ import {
     ComponentLayoutType,
     StatusType,
     DocLinkProps,
+    DeploymentStrategyType,
 } from '../Shared'
 import {
     ACTION_STATE,
@@ -117,6 +118,7 @@ export interface CheckboxProps {
     onClick?: (event) => void
     id?: string
     dataTestId?: string
+    error?: boolean
     children?: ReactNode
 }
 
@@ -855,7 +857,7 @@ export interface AppEnvironment {
 }
 
 export interface Strategy {
-    deploymentTemplate: string
+    deploymentTemplate: DeploymentStrategyType
     config: any
     default?: boolean
 }
