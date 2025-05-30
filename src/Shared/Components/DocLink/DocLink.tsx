@@ -36,7 +36,7 @@ export const DocLink = <T extends boolean = false>({
     const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
         if (!isExternalLink && !openInNewTab && !e.metaKey && documentationLink.startsWith(DOCUMENTATION_HOME_PAGE)) {
             e.preventDefault()
-            setSidePanelConfig((prev) => ({ ...prev, open: true, docLink: documentationLink }))
+            setSidePanelConfig((prev) => ({ ...prev, open: true, docLink: documentationLink, reinitialize: true }))
         }
         onClick?.(e)
     }

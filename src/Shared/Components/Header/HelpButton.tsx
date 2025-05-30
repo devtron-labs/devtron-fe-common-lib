@@ -79,7 +79,12 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick }: HelpButt
         // Opens documentation in side panel when clicked normally, or in a new tab when clicked with the meta/command key
         if (!e.metaKey) {
             e.preventDefault()
-            setSidePanelConfig((prev) => ({ ...prev, open: true, docLink: DOCUMENTATION_HOME_PAGE }))
+            setSidePanelConfig((prev) => ({
+                ...prev,
+                open: true,
+                docLink: DOCUMENTATION_HOME_PAGE,
+                reinitialize: true,
+            }))
         }
     }
 
