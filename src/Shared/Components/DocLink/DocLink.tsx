@@ -12,6 +12,7 @@ export const DocLink = <T extends boolean = false>({
     docLinkKey,
     text = 'Learn more',
     dataTestId,
+    startIcon,
     showExternalIcon,
     onClick,
     fontWeight,
@@ -19,7 +20,7 @@ export const DocLink = <T extends boolean = false>({
     variant = ButtonVariantType.text,
     isExternalLink,
     openInNewTab = false,
-    fullWidth = true,
+    fullWidth = false,
 }: DocLinkProps<T>) => {
     // HOOKS
     const { isEnterprise, setSidePanelConfig } = useMainContext()
@@ -51,6 +52,7 @@ export const DocLink = <T extends boolean = false>({
             text={text}
             variant={variant}
             size={size}
+            startIcon={startIcon}
             endIcon={showExternalIcon && <Icon name="ic-open-in-new" color={null} />}
             fullWidth={fullWidth}
             fontWeight={fontWeight}

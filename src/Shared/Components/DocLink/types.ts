@@ -10,9 +10,9 @@ export type BaseDocLink<T extends boolean> = {
     docLinkKey: T extends true ? string : keyof typeof DOCUMENTATION
 }
 
-export type DocLinkProps<T extends boolean> = Pick<
+export type DocLinkProps<T extends boolean = false> = Pick<
     ButtonProps<ButtonComponentType.anchor>,
-    'dataTestId' | 'size' | 'variant' | 'fullWidth' | 'fontWeight'
+    'dataTestId' | 'size' | 'variant' | 'fullWidth' | 'fontWeight' | 'startIcon'
 > &
     Omit<BaseDocLink<T>, 'isEnterprise'> & {
         text?: string

@@ -22,7 +22,7 @@ import { DocLinkProps } from '../DocLink'
 
 interface BaseFeatureDescriptionModalProps {
     renderDescriptionContent?: () => ReactNode
-    docLink?: DocLinkProps<false>['docLinkKey']
+    docLink?: DocLinkProps['docLinkKey']
     imageVariant?: ImageType
     SVGImage?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
     imageStyles?: React.CSSProperties
