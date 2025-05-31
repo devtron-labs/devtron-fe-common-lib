@@ -1,4 +1,4 @@
-import { useLayoutEffect, useRef, useState } from 'react'
+import { MouseEvent, useLayoutEffect, useRef, useState } from 'react'
 
 import { UsePopoverProps, UsePopoverReturnType } from './types'
 import {
@@ -21,6 +21,7 @@ export const usePopover = ({
     const [open, setOpen] = useState(false)
     const [actualPosition, setActualPosition] = useState<UsePopoverProps['position']>(position)
     const [actualAlignment, setActualAlignment] = useState<UsePopoverProps['alignment']>(alignment)
+    const [triggerBounds, setTriggerBounds] = useState<UsePopoverReturnType['triggerProps']['bounds'] | null>(null)
 
     // CONSTANTS
     const isAutoWidth = width === 'auto'
@@ -49,25 +50,42 @@ export const usePopover = ({
         onTriggerKeyDown?.(e, open, closePopover)
     }
 
-    const handlePopoverKeyDown = (e: React.KeyboardEvent) => onPopoverKeyDown(e, open, closePopover)
+    const handlePopoverKeyDown = (e: React.KeyboardEvent) => onPopoverKeyDown?.(e, open, closePopover)
+
+    const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
+        if (!popover.current?.contains(e.target as Node)) {
+            closePopover()
+        }
+    }
 
     useLayoutEffect(() => {
         if (!open || !triggerRef.current || !popover.current || !scrollableRef.current) {
             return
         }
 
-        const triggerRect = triggerRef.current.getBoundingClientRect()
-        const popoverRect = popover.current.getBoundingClientRect()
+        const updatePopoverPosition = () => {
+            const triggerRect = triggerRef.current.getBoundingClientRect()
+            const popoverRect = popover.current.getBoundingClientRect()
 
-        const { fallbackPosition, fallbackAlignment } = getPopoverActualPositionAlignment({
-            position,
-            alignment,
-            triggerRect,
-            popoverRect,
-        })
+            const { fallbackPosition, fallbackAlignment } = getPopoverActualPositionAlignment({
+                position,
+                alignment,
+                triggerRect,
+                popoverRect,
+            })
 
-        setActualPosition(fallbackPosition)
-        setActualAlignment(fallbackAlignment)
+            setActualPosition(fallbackPosition)
+            setActualAlignment(fallbackAlignment)
+            setTriggerBounds({
+                left: triggerRect.left,
+                top: triggerRect.top,
+                height: triggerRect.height,
+                width: triggerRect.width,
+            })
+        }
+
+        // update position on open
+        updatePopoverPosition()
 
         // prevent scroll propagation unless scrollable
         const handleWheel = (e: WheelEvent) => {
@@ -84,9 +102,12 @@ export const usePopover = ({
         }
 
         scrollableRef.current.addEventListener('wheel', handleWheel, { passive: false })
+        window.addEventListener('resize', updatePopoverPosition)
+
         // eslint-disable-next-line consistent-return
         return () => {
             scrollableRef.current.removeEventListener('wheel', handleWheel)
+            window.removeEventListener('resize', updatePopoverPosition)
         }
     }, [open, position, alignment])
 
@@ -100,17 +121,18 @@ export const usePopover = ({
             'aria-haspopup': 'listbox',
             'aria-expanded': open,
             tabIndex: 0,
+            bounds: triggerBounds ?? { left: 0, top: 0, height: 0, width: 0 },
         },
         overlayProps: {
             role: 'dialog',
-            onClick: closePopover,
+            onClick: handleOverlayClick,
             className: 'popover-overlay',
         },
         popoverProps: {
             id,
             ref: popover,
             role: 'listbox',
-            className: `popover-content dc__position-abs bg__menu--primary shadow__menu border__primary br-6 dc__overflow-hidden ${isAutoWidth ? 'dc_width-max-content dc__mxw-250' : ''}`,
+            className: `dc__position-abs bg__menu--primary shadow__menu border__primary br-6 dc__overflow-hidden ${isAutoWidth ? 'dc_width-max-content dc__mxw-250' : ''}`,
             onKeyDown: handlePopoverKeyDown,
             style: {
                 width: !isAutoWidth ? `${width}px` : undefined,
