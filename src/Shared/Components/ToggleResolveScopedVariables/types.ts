@@ -15,6 +15,7 @@
  */
 
 export interface ToggleResolveScopedVariablesProps {
+    name: string
     resolveScopedVariables: boolean
     handleToggleScopedVariablesView: () => void
     isDisabled?: boolean
@@ -22,5 +23,4 @@ export interface ToggleResolveScopedVariablesProps {
      * @default true
      */
     showTooltip?: boolean
-    throttleOnChange?: boolean
 }

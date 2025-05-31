@@ -34,6 +34,7 @@ const Switch = ({
     size = ComponentSizeType.medium,
     name,
     onChange,
+    autoFocus = false,
 }: DTSwitchProps) => {
     const inputId = useRef(getUniqueId())
 
@@ -123,6 +124,8 @@ const Switch = ({
                 <button
                     type="button"
                     role="checkbox"
+                    // eslint-disable-next-line jsx-a11y/no-autofocus
+                    autoFocus={autoFocus}
                     aria-checked={ariaCheckedValue}
                     aria-labelledby={inputId.current}
                     aria-label={isLoading ? 'Loading...' : ariaLabel}

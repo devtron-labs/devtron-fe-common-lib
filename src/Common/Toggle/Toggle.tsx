@@ -20,6 +20,9 @@ import { throttle, useEffectAfterMount } from '../Helper'
 import { CHECKBOX_VALUE } from '@Common/Types'
 import './Toggle.scss'
 
+/**
+ * @deprecated
+ */
 const Toggle = ({
     selected = false,
     onSelect = null,

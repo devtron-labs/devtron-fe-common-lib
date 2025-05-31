@@ -116,4 +116,9 @@ export type DTSwitchProps = {
      * @default undefined
      */
     tooltipContent?: string
+    /**
+     * Indicates whether the switch should be focused automatically when rendered.
+     * @default false
+     */
+    autoFocus?: boolean
 } & SwitchShapeProps
