@@ -12,6 +12,7 @@ import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICArrowSquareOut } from '@IconsV2/ic-arrow-square-out.svg'
 import { ReactComponent as ICArrowsClockwise } from '@IconsV2/ic-arrows-clockwise.svg'
 import { ReactComponent as ICArrowsLeftRight } from '@IconsV2/ic-arrows-left-right.svg'
+import { ReactComponent as ICAsterisk } from '@IconsV2/ic-asterisk.svg'
 import { ReactComponent as ICAther } from '@IconsV2/ic-ather.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICAzureAks } from '@IconsV2/ic-azure-aks.svg'
@@ -181,6 +182,7 @@ import { ReactComponent as ICUsers } from '@IconsV2/ic-users.svg'
 import { ReactComponent as ICViewVariableToggle } from '@IconsV2/ic-view-variable-toggle.svg'
 import { ReactComponent as ICWarning } from '@IconsV2/ic-warning.svg'
 import { ReactComponent as ICWifiSlash } from '@IconsV2/ic-wifi-slash.svg'
+import { ReactComponent as ICWorldGlobe } from '@IconsV2/ic-world-globe.svg'
 
 // eslint-disable-next-line no-restricted-imports
 import { IconBase } from './IconBase'
@@ -199,6 +201,7 @@ export const iconMap = {
     'ic-arrow-square-out': ICArrowSquareOut,
     'ic-arrows-clockwise': ICArrowsClockwise,
     'ic-arrows-left-right': ICArrowsLeftRight,
+    'ic-asterisk': ICAsterisk,
     'ic-ather': ICAther,
     'ic-azure-aks': ICAzureAks,
     'ic-azure': ICAzure,
@@ -368,6 +371,7 @@ export const iconMap = {
     'ic-view-variable-toggle': ICViewVariableToggle,
     'ic-warning': ICWarning,
     'ic-wifi-slash': ICWifiSlash,
+    'ic-world-globe': ICWorldGlobe,
 }
 
 export type IconName = keyof typeof iconMap

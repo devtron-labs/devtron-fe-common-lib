@@ -33,6 +33,7 @@ const Switch = ({
     indeterminate = false,
     size = ComponentSizeType.medium,
     name,
+    dataTestId = name,
     onChange,
     autoFocus = false,
 }: DTSwitchProps) => {
@@ -129,7 +130,7 @@ const Switch = ({
                     aria-checked={ariaCheckedValue}
                     aria-labelledby={inputId.current}
                     aria-label={isLoading ? 'Loading...' : ariaLabel}
-                    data-testid={name}
+                    data-testid={dataTestId}
                     disabled={isDisabled || isLoading}
                     aria-disabled={isDisabled}
                     className={`p-0-imp h-100 flex flex-grow-1 dc__no-border dt-switch__track ${shape === 'rounded' ? 'br-12' : 'br-4'} ${getSwitchTrackColor({ shape, variant, isChecked, isLoading })} ${isDisabled ? 'dc__disabled' : ''} dc__fill-available-space`}
@@ -140,6 +141,7 @@ const Switch = ({
                             shape,
                             variant,
                             isChecked,
+                            isLoading,
                         }),
                     }}
                 >

@@ -38,9 +38,14 @@ export const getSwitchTrackHoverColor = ({
     shape,
     variant,
     isChecked,
-}: Required<
-    Pick<DTSwitchProps, 'shape' | 'variant' | 'isChecked'>
->): (typeof ROUNDED_SWITCH_TRACK_HOVER_COLOR_MAP)[DTSwitchProps['variant']] => {
+    isLoading,
+}: Required<Pick<DTSwitchProps, 'shape' | 'variant' | 'isChecked' | 'isLoading'>>):
+    | (typeof ROUNDED_SWITCH_TRACK_HOVER_COLOR_MAP)[DTSwitchProps['variant']]
+    | 'transparent' => {
+    if (isLoading) {
+        return 'transparent'
+    }
+
     if (!isChecked) {
         return 'var(--N300)'
     }
