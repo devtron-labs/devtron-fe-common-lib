@@ -18,8 +18,9 @@ import { ChangeEvent, useState } from 'react'
 
 import { ComponentSizeType } from '@Shared/constants'
 
-import { DocLink, stopPropagation, StyledRadioGroup, VisibleModal } from '../../../Common'
+import { stopPropagation, StyledRadioGroup, VisibleModal } from '../../../Common'
 import { Button, ButtonVariantType } from '../Button'
+import { DocLink } from '../DocLink'
 import { BUTTON_TEXT } from './constant'
 import { FeatureDescriptionModalProps } from './types'
 import { getImageSize } from './utils'
@@ -34,7 +35,6 @@ const FeatureDescriptionModalContent = ({
     imageVariant,
     SVGImage,
     imageStyles = {},
-    isEnterprise,
 }: Required<Omit<FeatureDescriptionModalProps, 'tabsConfig' | 'title'>>) => {
     const renderImage = () => {
         if (!SVGImage) {
@@ -70,7 +70,7 @@ const FeatureDescriptionModalContent = ({
                     dataTestId="feature-desc__view-doc"
                     showExternalIcon
                     variant={ButtonVariantType.secondary}
-                    isEnterprise={isEnterprise}
+                    onClick={closeModal}
                 />
             )}
             <Button
@@ -100,7 +100,6 @@ export const FeatureDescriptionModal = ({
     SVGImage,
     imageStyles = {},
     tabsConfig,
-    isEnterprise,
 }: FeatureDescriptionModalProps) => {
     const [selectedTabId, setSelectedTabId] = useState(tabsConfig?.[0]?.id ?? null)
     const selectedTab = tabsConfig?.find((tab) => tab.id === selectedTabId) ?? null
@@ -143,7 +142,6 @@ export const FeatureDescriptionModal = ({
                                 renderDescriptionContent={selectedTab.renderDescriptionContent}
                                 closeModal={closeModal}
                                 closeModalText={closeModalText}
-                                isEnterprise={isEnterprise}
                             />
                         </>
                     )
@@ -156,7 +154,6 @@ export const FeatureDescriptionModal = ({
                         imageStyles={imageStyles}
                         imageVariant={imageVariant}
                         renderDescriptionContent={renderDescriptionContent}
-                        isEnterprise={isEnterprise}
                     />
                 )}
             </div>

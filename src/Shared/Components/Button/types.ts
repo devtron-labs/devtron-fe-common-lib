@@ -150,11 +150,10 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
                   /**
                    * Props for tooltip
                    */
-                  // TODO: using some typing somersaults here, clean it up later
                   tooltipProps:
-                      | Omit<TooltipProps, 'alwaysShowTippyOnHover' | 'showOnTruncate' | 'shortcutKeyCombo'>
-                      | (Omit<TooltipProps, 'alwaysShowTippyOnHover' | 'showOnTruncate' | 'content'> &
-                            Required<Pick<TooltipProps, 'shortcutKeyCombo'>>)
+                      | Omit<Extract<TooltipProps, { alwaysShowTippyOnHover: boolean }>, 'alwaysShowTippyOnHover'>
+                      | Omit<Extract<TooltipProps, { alwaysShowTippyOnHover?: boolean }>, 'alwaysShowTippyOnHover'>
+                      | Omit<Extract<TooltipProps, { alwaysShowTippyOnHover?: never }>, 'alwaysShowTippyOnHover'>
               }
             | {
                   showTooltip?: never
@@ -178,6 +177,12 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
                    * If provided, icon to be displayed at the end of the button
                    */
                   endIcon?: ReactElement
+                  /**
+                   * Controls the font weight of the button text
+                   *
+                   * @default 'bold'
+                   */
+                  fontWeight?: 'bold' | 'normal'
               }
             | {
                   /**
@@ -198,5 +203,6 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
                   text?: never
                   startIcon?: never
                   endIcon?: never
+                  fontWeight?: never
               }
         )

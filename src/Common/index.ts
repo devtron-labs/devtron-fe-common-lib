@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-export * from '../Shared/DocLink'
 export * from './AddCDButton'
 export * from './API'
 export { BreadCrumb, useBreadcrumb } from './BreadCrumb/BreadCrumb'

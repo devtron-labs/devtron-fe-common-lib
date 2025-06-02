@@ -18,5 +18,5 @@ export const getDocumentationUrl = <T extends boolean = false>({
         return docPath
     }
 
-    return `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/${docPath || ''}?client=product_${isEnterprise ? 'ent' : 'oss'}`
+    return `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/${docPath || ''}?utm-source=product_${isEnterprise ? 'ent' : 'oss'}`
 }

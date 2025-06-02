@@ -19,7 +19,7 @@ import { getAppStatusMessageFromAppDetails } from './utils'
 
 const InfoCardItem = ({ heading, value, isLast = false, alignCenter = false }: InfoCardItemProps) => (
     <div
-        className={`py-12 px-16 dc__grid dc__column-gap-16 info-card-item ${alignCenter ? 'dc__align-items-center' : ''} ${!isLast ? 'border__secondary--bottom' : ''} ${alignCenter ? 'dc__align-center' : ''}`}
+        className={`py-12 px-16 dc__grid dc__column-gap-16 info-card-item ${alignCenter ? 'dc__align-items-center' : ''} ${!isLast ? 'border__secondary--bottom' : ''}`}
     >
         <Tooltip content={heading}>
             <h3 className="cn-9 fs-13 fw-4 lh-1-5 dc__truncate m-0 dc__no-shrink">{heading}</h3>

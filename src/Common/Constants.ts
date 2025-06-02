@@ -19,9 +19,10 @@ export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
 
 export const DOCUMENTATION_HOME_PAGE = 'https://docs.devtron.ai'
 export const DEVTRON_HOME_PAGE = 'https://devtron.ai/'
-export const DOCUMENTATION_VERSION = '/v/v0.7'
+export const DOCUMENTATION_VERSION = '/devtron/v0.7'
 export const DISCORD_LINK = 'https://discord.devtron.ai/'
 export const DEFAULT_JSON_SCHEMA_URI = 'https://json-schema.org/draft/2020-12/schema'
+export const LICENSE_DASHBOARD_HOME_PAGE = 'https://license.devtron.ai/dashboard'
 
 export const PATTERNS = {
     STRING: /^[a-zA-Z0-9_]+$/,
@@ -41,11 +42,13 @@ export const PATTERNS = {
     CONFIG_MAP_AND_SECRET_KEY: /^[-._a-zA-Z0-9]+$/,
     CONFIGMAP_AND_SECRET_NAME: /^[a-z0-9][a-z0-9-.]*[a-z0-9]$/,
     ALPHANUMERIC_WITH_SPECIAL_CHAR_AND_SLASH: /^[A-Za-z0-9._/-]+$/, // allow alphanumeric,(.) ,(-),(_),(/)
+    EMAIL: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 }
 
 const GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP = '/global-config/templates/devtron-apps'
 
 export const URLS = {
+    LOGIN: '/login',
     LOGIN_SSO: '/login/sso',
     PERMISSION_GROUPS: '/global-config/auth/groups',
     APP: '/app',
@@ -378,6 +381,7 @@ export const API_STATUS_CODES = {
     EXPECTATION_FAILED: 417,
     UNPROCESSABLE_ENTITY: 422,
     LOCKED: 423,
+    FAILED_DEPENDENCY: 424,
 }
 
 export enum SERVER_MODE {

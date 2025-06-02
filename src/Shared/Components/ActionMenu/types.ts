@@ -1,9 +1,14 @@
-import { LegacyRef, Ref } from 'react'
+import { LegacyRef, MouseEvent, ReactElement, Ref } from 'react'
 import { LinkProps } from 'react-router-dom'
 
+import { OmitNever } from '@Shared/types'
+
+import { ButtonProps } from '../Button'
 import { IconsProps } from '../Icon'
+import { NumbersCountProps } from '../NumbersCount'
 import { PopoverProps, UsePopoverProps } from '../Popover'
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
+import { DTSwitchProps } from '../Switch'
 
 type ConditionalActionMenuComponentType =
     | {
@@ -32,6 +37,43 @@ type ActionMenuItemIconType = Pick<IconsProps, 'name'> & {
     color?: IconsProps['color']
 }
 
+type TrailingItemType =
+    | {
+          type: 'icon'
+          config: ActionMenuItemIconType
+      }
+    | {
+          type: 'text'
+          config: {
+              value: string
+              icon?: ActionMenuItemIconType
+          }
+      }
+    | {
+          type: 'counter'
+          config: {
+              value: NumbersCountProps['count']
+          }
+      }
+    | {
+          type: 'switch'
+          config: Pick<
+              DTSwitchProps,
+              | 'ariaLabel'
+              | 'isChecked'
+              | 'indeterminate'
+              | 'isDisabled'
+              | 'isLoading'
+              | 'name'
+              | 'onChange'
+              | 'tooltipContent'
+          >
+      }
+    | {
+          type: 'button'
+          config: OmitNever<Omit<Extract<ButtonProps, { icon: ReactElement }>, 'size' | 'variant'>>
+      }
+
 export type ActionMenuItemType<T extends string | number = string | number> = Omit<
     SelectPickerOptionType,
     'label' | 'value' | 'endIcon' | 'startIcon'
@@ -49,8 +91,8 @@ export type ActionMenuItemType<T extends string | number = string | number> = Om
     type?: 'neutral' | 'negative'
     /** Defines the icon to be displayed at the start of the menu item. */
     startIcon?: ActionMenuItemIconType
-    /** Defines the icon to be displayed at the end of the menu item. */
-    endIcon?: ActionMenuItemIconType
+    /** Defines the item to be displayed at the end of the menu item. */
+    trailingItem?: TrailingItemType
 } & ConditionalActionMenuComponentType
 
 export type ActionMenuOptionType<T extends string | number> = {
@@ -85,7 +127,7 @@ export type ActionMenuProps<T extends string | number = string | number> = UseAc
          * Callback function triggered when an item is clicked.
          * @param item - The selected item.
          */
-        onClick: (item: ActionMenuItemType<T>) => void
+        onClick: (item: ActionMenuItemType<T>, e: MouseEvent<HTMLAnchorElement> | MouseEvent<HTMLButtonElement>) => void
         /**
          * Config for the footer at the bottom of action menu list. It is sticky by default
          */

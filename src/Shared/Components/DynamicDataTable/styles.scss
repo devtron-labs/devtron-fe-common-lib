@@ -69,21 +69,21 @@
         height: 36px;
         width: 100%;
         background: inherit;
-
-        &--add {
-            resize: none;
-            border-radius: 4px;
-            outline: none;
-        }
     }
 
     &__cell {
         min-width: 0;
 
-        &__select-picker__control {
-            gap: 6px !important;
-            padding: 8px !important;
-            max-height: 160px !important;
+        &__select-picker {
+            &__control {
+                gap: 6px !important;
+                padding: 8px !important;
+                max-height: 160px !important;
+            }
+
+            &__single-value {
+                font-weight: 400 !important;
+            }
         }
 
         &__select-picker-text-area {

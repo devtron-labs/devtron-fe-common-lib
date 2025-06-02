@@ -16,14 +16,12 @@
 
 import { ReactNode } from 'react'
 
-import { DocLinkProps } from '@Shared/DocLink/types'
+import { DocLinkProps } from '../DocLink'
 
-import { PageHeaderType } from '../Header/types'
-
-export interface ModalSidebarPanelProps<T extends boolean = false> extends Pick<PageHeaderType, 'isEnterprise'> {
+export interface ModalSidebarPanelProps {
     rootClassName?: string
     heading: string | null
     icon?: JSX.Element
     children?: ReactNode
-    documentationLink: DocLinkProps<T>['docLinkKey']
+    documentationLink: DocLinkProps['docLinkKey']
 }

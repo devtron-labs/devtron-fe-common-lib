@@ -18,21 +18,21 @@ import { useEffect, useState } from 'react'
 import ReactGA from 'react-ga4'
 import Tippy from '@tippyjs/react'
 
-import { ReactComponent as ICCaretDownSmall } from '@Icons/ic-caret-down-small.svg'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
 import { ReactComponent as ICMediumPaintBucket } from '@IconsV2/ic-medium-paintbucket.svg'
+import { InstallationType } from '@Shared/types'
 
-import { getAlphabetIcon, TippyCustomized, TippyTheme } from '../../../Common'
+import { TippyCustomized, TippyTheme } from '../../../Common'
 import { MAX_LOGIN_COUNT, POSTHOG_EVENT_ONBOARDING } from '../../../Common/Constants'
 import { useMainContext, useTheme, useUserEmail } from '../../Providers'
 import GettingStartedCard from '../GettingStartedCard/GettingStarted'
 import { InfoIconTippy } from '../InfoIconTippy'
-import LogoutCard from '../LogoutCard'
 import { HelpButton } from './HelpButton'
 import { IframePromoButton } from './IframePromoButton'
+import { ProfileMenu } from './ProfileMenu'
 import { getServerInfo } from './service'
-import { InstallationType, PageHeaderType, ServerInfo } from './types'
-import { getIsShowingLicenseData, handlePostHogEventUpdate, setActionWithExpiry } from './utils'
+import { PageHeaderType, ServerInfo } from './types'
+import { handlePostHogEventUpdate, setActionWithExpiry } from './utils'
 
 import './pageHeader.scss'
 
@@ -48,15 +48,12 @@ const PageHeader = ({
     onClose,
     markAsBeta,
     tippyProps,
-    isEnterprise,
 }: PageHeaderType) => {
-    const { loginCount, setLoginCount, showGettingStartedCard, setShowGettingStartedCard, licenseData } =
-        useMainContext()
+    const { loginCount, setLoginCount, showGettingStartedCard, setShowGettingStartedCard } = useMainContext()
     const { showSwitchThemeLocationTippy, handleShowSwitchThemeLocationTippyChange } = useTheme()
 
     const { isTippyCustomized, tippyRedirectLink, TippyIcon, tippyMessage, onClickTippyButton, additionalContent } =
         tippyProps || {}
-    const [showLogOutCard, setShowLogOutCard] = useState(false)
     const { email } = useUserEmail()
     const [currentServerInfo, setCurrentServerInfo] = useState<{ serverInfo: ServerInfo; fetchingServerInfo: boolean }>(
         {
@@ -98,25 +95,19 @@ const PageHeader = ({
         handleShowSwitchThemeLocationTippyChange(false)
     }
 
-    const onClickLogoutButton = () => {
+    const handleProfileMenuButtonClick = () => {
         handleCloseSwitchThemeLocationTippyChange()
-        setShowLogOutCard(!showLogOutCard)
         setActionWithExpiry('clickedOkay', 1)
         hideGettingStartedCard()
     }
 
-    const onHelpButtonClick = async () => {
+    const handleHelpButtonClick = async () => {
         if (
             !window._env_.K8S_CLIENT &&
             currentServerInfo.serverInfo?.installationType !== InstallationType.ENTERPRISE
         ) {
             await getCurrentServerInfo()
         }
-
-        if (showLogOutCard) {
-            setShowLogOutCard(false)
-        }
-
         setActionWithExpiry('clickedOkay', 1)
         hideGettingStartedCard()
         await handlePostHogEventUpdate(POSTHOG_EVENT_ONBOARDING.HELP)
@@ -138,7 +129,7 @@ const PageHeader = ({
             <HelpButton
                 serverInfo={currentServerInfo.serverInfo}
                 fetchingServerInfo={currentServerInfo.fetchingServerInfo}
-                onClick={onHelpButtonClick}
+                onClick={handleHelpButtonClick}
             />
             {!window._env_.K8S_CLIENT && (
                 <TippyCustomized
@@ -155,20 +146,11 @@ const PageHeader = ({
                     interactive
                     arrow
                     onClose={handleCloseSwitchThemeLocationTippyChange}
-                    isEnterprise={isEnterprise}
                     documentationLink={tippyRedirectLink}
                 >
-                    <button
-                        type="button"
-                        data-testid="profile-button"
-                        onClick={onClickLogoutButton}
-                        className="dc__transparent flex p-4 dc__gap-4 br-18 bg__secondary border__secondary"
-                    >
-                        {getAlphabetIcon(email, 'm-0-imp h-24 w-24-imp')}
-                        <ICCaretDownSmall
-                            className={`scn-7 icon-dim-16 ${showLogOutCard ? 'dc__flip-180' : ''} dc__transition--transform`}
-                        />
-                    </button>
+                    <div>
+                        <ProfileMenu user={email} onClick={handleProfileMenuButtonClick} />
+                    </div>
                 </TippyCustomized>
             )}
         </>
@@ -183,8 +165,6 @@ const PageHeader = ({
     const renderBetaTag = (): JSX.Element => (
         <span className="fs-12 fw-4 lh-18 pt-1 pb-1 pl-6 pr-6 ml-8 cn-9 bcy-5 br-4">Beta</span>
     )
-
-    const showingLicenseBar = getIsShowingLicenseData(licenseData)
 
     const renderIframeButton = () => <IframePromoButton />
 
@@ -252,7 +232,7 @@ const PageHeader = ({
                     {markAsBeta && renderBetaTag()}
                 </div>
                 {showTabs && (
-                    <div className="flex left dc__gap-12">
+                    <div className="flex left dc__gap-8">
                         {renderIframeButton()}
                         {typeof renderActionButtons === 'function' && renderActionButtons()}
                         {renderLogoutHelpSection()}
@@ -272,16 +252,8 @@ const PageHeader = ({
                         loginCount={loginCount}
                     />
                 )}
-            {showLogOutCard && (
-                <LogoutCard
-                    className={`logout-card__more-option ${showingLicenseBar ? 'with-bar' : ''} mt-8`}
-                    userFirstLetter={email}
-                    setShowLogOutCard={setShowLogOutCard}
-                    showLogOutCard={showLogOutCard}
-                />
-            )}
             {!showTabs && (
-                <div className="flex left dc__gap-12">
+                <div className="flex left dc__gap-8">
                     {typeof renderActionButtons === 'function' && renderActionButtons()}
                     {renderIframeButton()}
                     {renderLogoutHelpSection()}

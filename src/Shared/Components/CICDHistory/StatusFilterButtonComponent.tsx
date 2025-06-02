@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
 
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { SegmentType } from '@Common/SegmentedControl/types'
 import { ComponentSizeType } from '@Shared/constants'
+import { getUniqueId } from '@Shared/Helpers'
 
 import { PopupMenu, SegmentedControl } from '../../../Common'
 import { StatusFilterButtonType } from './types'
@@ -32,6 +33,8 @@ export const StatusFilterButtonComponent = ({
     handleFilterClick,
     maxInlineFiltersCount = 0,
 }: StatusFilterButtonType) => {
+    const segmentControlName = useRef(getUniqueId())
+
     // STATES
     const [overflowFilterIndex, setOverflowFilterIndex] = useState(0)
 
@@ -104,19 +107,13 @@ export const StatusFilterButtonComponent = ({
 
     const segmentValue = segments.find(({ value }) => value === selectedTab)?.value || null
 
-    const segmentControlKey = inlineFilters.reduce<string>(
-        (acc, inlineFilter) => `${acc}-${inlineFilter.status}`,
-        `${allResourceKindFilter.status}`,
-    )
-
     return (
         <div className="flexbox status-filter__container">
             <SegmentedControl
-                key={segmentControlKey}
                 segments={segments}
                 value={segmentValue}
                 onChange={handleInlineFilterClick}
-                name="status-filter-button"
+                name={segmentControlName.current}
                 size={ComponentSizeType.small}
             />
 

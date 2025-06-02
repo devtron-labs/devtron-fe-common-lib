@@ -85,7 +85,7 @@ export interface KeyValueTableData extends Pick<KeyValueTableRowType, 'id'> {
  */
 export type KeyValueTableProps = Pick<
     DynamicDataTableProps<KeyValueTableDataType>,
-    'isAdditionNotAllowed' | 'readOnly' | 'headerComponent'
+    'isAdditionNotAllowed' | 'readOnly' | 'headerComponent' | 'shouldAutoFocusOnMount'
 > & {
     /**
      * The label for the table header.

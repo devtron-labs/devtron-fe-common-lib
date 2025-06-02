@@ -2,21 +2,22 @@ import { useRef, useState } from 'react'
 import ReactGA from 'react-ga4'
 import { SliderButton } from '@typeform/embed-react'
 
-import { URLS } from '@Common/Constants'
+import { DOCUMENTATION_HOME_PAGE, URLS } from '@Common/Constants'
 import { ComponentSizeType } from '@Shared/constants'
 import { useMainContext } from '@Shared/Providers'
+import { InstallationType } from '@Shared/types'
 
-import { ActionMenu, ActionMenuItemType } from '../ActionMenu'
+import { ActionMenu } from '../ActionMenu'
 import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
-import { HelpButtonActionMenuProps, HelpButtonProps, HelpMenuItems, InstallationType } from './types'
+import { HelpButtonActionMenuProps, HelpButtonProps, HelpMenuItems } from './types'
 import { getHelpActionMenuOptions } from './utils'
 
 const CheckForUpdates = ({
     serverInfo,
     fetchingServerInfo,
 }: Pick<HelpButtonProps, 'serverInfo' | 'fetchingServerInfo'>) => (
-    <div className="flex column left px-10 py-6">
+    <div className="bg__menu--secondary flex column left px-10 py-6">
         {fetchingServerInfo ? (
             <p className="m-0 dc__loading-dots fs-13 fw-4 cn-7">Checking version</p>
         ) : (
@@ -40,20 +41,20 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick }: HelpButt
     const [isActionMenuOpen, setIsActionMenuOpen] = useState(false)
 
     // HOOKS
-    const { currentServerInfo, handleOpenLicenseInfoDialog, licenseData, setGettingStartedClicked } = useMainContext()
+    const { handleOpenLicenseInfoDialog, licenseData, setGettingStartedClicked, isEnterprise, setSidePanelConfig } =
+        useMainContext()
 
     // REFS
     const typeFormSliderButtonRef = useRef(null)
 
     // CONSTANTS
     const FEEDBACK_FORM_ID = `UheGN3KJ#source=${window.location.hostname}`
-    const isEnterprise = currentServerInfo?.serverInfo?.installationType === InstallationType.ENTERPRISE
 
     // HANDLERS
-    const handleAnalytics = (option: ActionMenuItemType) => {
+    const handleAnalytics: HelpButtonActionMenuProps['onClick'] = (item) => {
         ReactGA.event({
             category: 'Help Nav',
-            action: `${option.label} Clicked`,
+            action: `${item.label} Clicked`,
         })
     }
 
@@ -73,7 +74,21 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick }: HelpButt
         setGettingStartedClicked(true)
     }
 
-    const handleActionMenuClick: HelpButtonActionMenuProps['onClick'] = (item) => {
+    const handleViewDocumentationClick: HelpButtonActionMenuProps['onClick'] = (item, e) => {
+        handleAnalytics(item, e)
+        // Opens documentation in side panel when clicked normally, or in a new tab when clicked with the meta/command key
+        if (!e.metaKey) {
+            e.preventDefault()
+            setSidePanelConfig((prev) => ({
+                ...prev,
+                open: true,
+                docLink: DOCUMENTATION_HOME_PAGE,
+                reinitialize: true,
+            }))
+        }
+    }
+
+    const handleActionMenuClick: HelpButtonActionMenuProps['onClick'] = (item, e) => {
         switch (item.id) {
             case HelpMenuItems.GETTING_STARTED:
                 handleGettingStartedClick()
@@ -85,12 +100,14 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick }: HelpButt
                 handleFeedbackClick()
                 break
             case HelpMenuItems.JOIN_DISCORD_COMMUNITY:
-            case HelpMenuItems.VIEW_DOCUMENTATION:
             case HelpMenuItems.OPEN_NEW_TICKET:
             case HelpMenuItems.VIEW_ALL_TICKETS:
             case HelpMenuItems.CHAT_WITH_SUPPORT:
             case HelpMenuItems.RAISE_ISSUE_REQUEST:
-                handleAnalytics(item)
+                handleAnalytics(item, e)
+                break
+            case HelpMenuItems.VIEW_DOCUMENTATION:
+                handleViewDocumentationClick(item, e)
                 break
             default:
         }
@@ -110,7 +127,7 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick }: HelpButt
                 onOpen={setIsActionMenuOpen}
                 {...(serverInfo?.installationType === InstallationType.OSS_HELM
                     ? {
-                          menuListFooterConfig: {
+                          footerConfig: {
                               type: 'customNode',
                               value: (
                                   <CheckForUpdates serverInfo={serverInfo} fetchingServerInfo={fetchingServerInfo} />
