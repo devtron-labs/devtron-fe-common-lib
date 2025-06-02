@@ -1,4 +1,4 @@
-import { DetailedHTMLProps, KeyboardEvent, MutableRefObject, ReactElement } from 'react'
+import { DetailedHTMLProps, KeyboardEvent, LegacyRef, MutableRefObject, ReactElement } from 'react'
 import { HTMLMotionProps } from 'framer-motion'
 
 import { ButtonProps } from '../Button'
@@ -67,7 +67,9 @@ export interface UsePopoverReturnType {
      * Props to be spread onto the trigger element that opens the popover.
      * These props include standard HTML attributes for a `div` element.
      */
-    triggerProps: DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+    triggerProps: DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement> & {
+        bounds: Pick<DOMRect, 'left' | 'top' | 'height' | 'width'>
+    }
     /**
      * Props to be spread onto the overlay element of the popover.
      * These props include standard HTML attributes for a `div` element.
@@ -82,7 +84,7 @@ export interface UsePopoverReturnType {
      * A mutable reference to the scrollable element inside the popover. \
      * This reference should be assigned to the element that is scrollable.
      */
-    scrollableRef: MutableRefObject<HTMLElement>
+    scrollableRef: MutableRefObject<any> | LegacyRef<any>
     /**
      * A function to close the popover.
      */

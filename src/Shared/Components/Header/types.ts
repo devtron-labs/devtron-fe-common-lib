@@ -71,3 +71,8 @@ export enum HelpMenuItems {
 }
 
 export type HelpButtonActionMenuProps = ActionMenuProps<HelpMenuItems>
+
+export interface ProfileMenuProps {
+    user: string
+    onClick?: () => void
+}

@@ -31,8 +31,12 @@ export interface ReloadVersionConfigTypes {
 }
 
 export interface SidePanelConfig {
+    /** Determines whether the side panel is visible */
     open: boolean
-    docLink?: string | null
+    /** Optional flag to reset/reinitialize the side panel state */
+    reinitialize?: boolean
+    /** URL to documentation that should be displayed in the panel */
+    docLink: string | null
 }
 
 export interface MainContext {
