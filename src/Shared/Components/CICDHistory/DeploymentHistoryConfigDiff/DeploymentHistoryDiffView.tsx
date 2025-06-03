@@ -26,8 +26,9 @@ import { ReactComponent as Info } from '../../../../Assets/Icon/ic-info-filled.s
 import { ReactComponent as ViewVariablesIcon } from '../../../../Assets/Icon/ic-view-variable-toggle.svg'
 import { MODES, Toggle, YAMLStringify } from '../../../../Common'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '../../../constants'
-import { DeploymentHistorySingleValue, DeploymentTemplateHistoryType } from '../types'
+import { DeploymentTemplateHistoryType } from '../types'
 import { DeploymentHistoryParamsType } from './types'
+import { renderDetailedValue } from './utils'
 
 const DeploymentHistoryDiffView = ({
     currentConfiguration,
@@ -93,19 +94,6 @@ const DeploymentHistoryDiffView = ({
     }
 
     const tippyMsg = convertVariables ? 'Hide variables values' : 'Show variables values'
-
-    const renderDetailedValue = (
-        parentClassName: string,
-        singleValue: DeploymentHistorySingleValue,
-        dataTestId: string,
-    ) => (
-        <div className={`${parentClassName} px-16 py-8`}>
-            <div className="cn-6 lh-16" data-testid={dataTestId}>
-                {singleValue.displayName}
-            </div>
-            <div className="cn-9 fs-13 lh-20 dc__word-break">{singleValue.value}</div>
-        </div>
-    )
 
     return (
         <div className="deployment-history-diff-view">

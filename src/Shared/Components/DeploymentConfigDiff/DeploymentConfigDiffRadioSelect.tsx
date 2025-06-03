@@ -20,6 +20,7 @@ const DeploymentConfigDiffRadioSelect = ({
         id: 'deployment-config',
         width: 300,
         position,
+        variant: 'overlay',
     })
 
     const { triggerElementTitle, radioGroupConfig } = radioSelectConfig
@@ -40,7 +41,7 @@ const DeploymentConfigDiffRadioSelect = ({
             overlayProps={overlayProps}
             triggerProps={triggerProps}
         >
-            <div className="flexbox-col bg__primary border__primary br-6 shadow__overlay">
+            <div className="flexbox-col">
                 <div className="p-12 flexbox dc__content-space border__primary--bottom">
                     <span className="fs-13 fw-6 lh-20 cn-9">Deployment with Configuration</span>
                     <Button
@@ -50,7 +51,7 @@ const DeploymentConfigDiffRadioSelect = ({
                         ariaLabel="close button"
                         style={ButtonStyleType.negativeGrey}
                         variant={ButtonVariantType.borderLess}
-                        size={ComponentSizeType.xs}
+                        size={ComponentSizeType.xxs}
                         onClick={closePopover}
                     />
                 </div>
@@ -68,7 +69,7 @@ const DeploymentConfigDiffRadioSelect = ({
                                     <RadioGroupItem value={value}>
                                         <div className="flexbox-col">
                                             <span>{label}</span>
-                                            <span>{description}</span>
+                                            <span className="fs-12 fw-4 lh-18 cn-7">{description}</span>
                                         </div>
                                     </RadioGroupItem>
                                 ))}

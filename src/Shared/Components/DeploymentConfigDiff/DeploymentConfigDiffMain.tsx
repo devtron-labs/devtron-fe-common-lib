@@ -265,7 +265,7 @@ export const DeploymentConfigDiffMain = ({
                         {renderHeaderSelectors(selectorsConfig.secondaryConfig)}
                     </div>
                     {(sortingConfig || scopeVariablesConfig) && (
-                        <div className="dc__border-left flex dc__gap-8 pr-12 pl-8 py-8">
+                        <div className="dc__border-left flex dc__gap-8 pr-12 pl-8 py-8 dc__no-shrink">
                             {renderSortButton()}
                             {renderScopeVariablesButton()}
                         </div>

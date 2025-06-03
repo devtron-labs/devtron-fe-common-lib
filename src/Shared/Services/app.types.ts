@@ -298,6 +298,9 @@ export interface PipelineConfigDataDTO {
     data: Record<string, any>
     pipelineTriggerType: string
     Strategy: string
+    updatedBy: string
+    updatedOn: string
+    selectedAtRuntime: boolean
 }
 
 export interface AppEnvDeploymentConfigDTO {
