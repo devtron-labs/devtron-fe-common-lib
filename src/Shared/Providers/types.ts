@@ -30,10 +30,20 @@ export interface ReloadVersionConfigTypes {
     isRefreshing: boolean
 }
 
-export interface SidePanelConfig {
-    open: boolean
-    docLink?: string | null
+export enum SidePanelTab {
+    DOCUMENTATION = 'documentation',
+    ASK_DEVTRON = 'ask-devtron',
 }
+
+export type SidePanelConfig =
+    | {
+          state: SidePanelTab.DOCUMENTATION
+          docLink?: string | null
+      }
+    | {
+          state: SidePanelTab.ASK_DEVTRON | 'closed'
+          docLink?: never
+      }
 
 export interface MainContext {
     serverMode: SERVER_MODE

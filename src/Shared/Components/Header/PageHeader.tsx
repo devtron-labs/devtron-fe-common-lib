@@ -21,12 +21,15 @@ import Tippy from '@tippyjs/react'
 import { ReactComponent as ICCaretDownSmall } from '@Icons/ic-caret-down-small.svg'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
 import { ReactComponent as ICMediumPaintBucket } from '@IconsV2/ic-medium-paintbucket.svg'
+import { ComponentSizeType } from '@Shared/constants'
 import { InstallationType } from '@Shared/types'
 
 import { getAlphabetIcon, TippyCustomized, TippyTheme } from '../../../Common'
 import { MAX_LOGIN_COUNT, POSTHOG_EVENT_ONBOARDING } from '../../../Common/Constants'
-import { useMainContext, useTheme, useUserEmail } from '../../Providers'
+import { SidePanelTab, useMainContext, useTheme, useUserEmail } from '../../Providers'
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import GettingStartedCard from '../GettingStartedCard/GettingStarted'
+import { Icon } from '../Icon'
 import { InfoIconTippy } from '../InfoIconTippy'
 import LogoutCard from '../LogoutCard'
 import { HelpButton } from './HelpButton'
@@ -50,8 +53,14 @@ const PageHeader = ({
     markAsBeta,
     tippyProps,
 }: PageHeaderType) => {
-    const { loginCount, setLoginCount, showGettingStartedCard, setShowGettingStartedCard, licenseData } =
-        useMainContext()
+    const {
+        loginCount,
+        setLoginCount,
+        showGettingStartedCard,
+        setShowGettingStartedCard,
+        licenseData,
+        setSidePanelConfig,
+    } = useMainContext()
     const { showSwitchThemeLocationTippy, handleShowSwitchThemeLocationTippyChange } = useTheme()
 
     const { isTippyCustomized, tippyRedirectLink, TippyIcon, tippyMessage, onClickTippyButton, additionalContent } =
@@ -133,8 +142,21 @@ const PageHeader = ({
         </div>
     )
 
+    const onAskButtonClick = () => {
+        setSidePanelConfig(() => ({ state: SidePanelTab.ASK_DEVTRON }))
+    }
+
     const renderLogoutHelpSection = () => (
         <>
+            <Button
+                dataTestId="ask-devtron-button"
+                variant={ButtonVariantType.secondary}
+                style={ButtonStyleType.neutral}
+                onClick={onAskButtonClick}
+                text="Ask AI"
+                startIcon={<Icon name="ic-sparkle-color" color={null} />}
+                size={ComponentSizeType.small}
+            />
             <HelpButton
                 serverInfo={currentServerInfo.serverInfo}
                 fetchingServerInfo={currentServerInfo.fetchingServerInfo}
