@@ -16,7 +16,7 @@ const DeploymentConfigDiffRadioSelect = ({
     radioSelectConfig: DeploymentConfigDiffRadioSelectConfig
     position?: UsePopoverProps['position']
 }) => {
-    const { open, closePopover, overlayProps, popoverProps, triggerProps } = usePopover({
+    const { open, closePopover, overlayProps, popoverProps, triggerProps, scrollableRef } = usePopover({
         id: 'deployment-config',
         width: 300,
         position,
@@ -41,7 +41,8 @@ const DeploymentConfigDiffRadioSelect = ({
             overlayProps={overlayProps}
             triggerProps={triggerProps}
         >
-            <div className="flexbox-col">
+            {/* TODO: Remove any after syncing with develop */}
+            <div className="flexbox-col dc__overflow-auto" ref={scrollableRef as any}>
                 <div className="p-12 flexbox dc__content-space border__primary--bottom">
                     <span className="fs-13 fw-6 lh-20 cn-9">Deployment with Configuration</span>
                     <Button

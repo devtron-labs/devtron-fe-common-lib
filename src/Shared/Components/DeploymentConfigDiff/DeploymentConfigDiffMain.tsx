@@ -111,9 +111,10 @@ export const DeploymentConfigDiffMain = ({
 
             if (configItem.type === 'radio-group') {
                 return (
-                    <Fragment key={configItem.id}>
-                        <DeploymentConfigDiffRadioSelect radioSelectConfig={configItem.radioSelectConfig} />
-                    </Fragment>
+                    <DeploymentConfigDiffRadioSelect
+                        key={configItem.id}
+                        radioSelectConfig={configItem.radioSelectConfig}
+                    />
                 )
             }
 

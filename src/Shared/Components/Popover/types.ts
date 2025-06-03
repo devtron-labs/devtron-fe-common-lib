@@ -54,6 +54,7 @@ export interface UsePopoverProps {
     onPopoverKeyDown?: (e: KeyboardEvent, openState: boolean, closePopover: () => void) => void
     /**
      * Variant of the popover (bg, shadow and styles changes based on variant)
+     * @default 'menu'
      */
     variant?: 'menu' | 'overlay'
 }
