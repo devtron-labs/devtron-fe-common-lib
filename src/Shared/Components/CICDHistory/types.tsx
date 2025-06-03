@@ -37,6 +37,7 @@ import {
     DeploymentStatusDetailsBreakdownDataType,
     DeploymentStatusDetailsType,
     DeploymentStatusTimelineType,
+    DeploymentStrategyType,
     GitTriggers,
     Node,
     NodeType,
@@ -549,8 +550,8 @@ export interface DeploymentTemplateHistoryType {
     baseTemplateConfiguration: DeploymentHistoryDetail
     previousConfigAvailable: boolean
     rootClassName?: string
-    codeEditorKey?: string
 }
+
 export interface DeploymentHistoryDetailRes extends ResponseType {
     result?: DeploymentHistoryDetail
 }
@@ -735,8 +736,6 @@ export interface DeploymentHistory {
     ci_artifact_id?: number
     runSource?: RunSourceType
 }
-
-type DeploymentStrategyType = 'CANARY' | 'ROLLING' | 'RECREATE' | 'BLUE_GREEN'
 
 export interface DeploymentStrategy {
     deploymentTemplate: DeploymentStrategyType

@@ -986,6 +986,27 @@ export type Never<T> = {
     [K in keyof T]?: never
 }
 
+/**
+ * A utility type that filters out properties from type `T` that are of type `never`. \
+ * This is useful when you want to remove properties that have been marked as `never` from a type,
+ * effectively creating a new type without those properties.
+ *
+ * @template T - The input type from which to filter out `never` properties.
+ * @example
+ * ```typescript
+ * type User = {
+ *   id: number;
+ *   name: string;
+ *   deleted: never;
+ * }
+ *
+ * type ActiveUser = OmitNever<User>; // { id: number; name: string; }
+ * ```
+ */
+export type OmitNever<T> = {
+    [K in keyof T as T[K] extends never ? never : K]: T[K]
+}
+
 export interface TargetPlatformItemDTO {
     name: string
 }
@@ -1298,3 +1319,9 @@ export interface IntelligenceConfig {
     prompt: string
     analyticsCategory: string
 }
+
+export type DeploymentStrategyType = 'CANARY' | 'ROLLING' | 'RECREATE' | 'BLUE-GREEN' | 'ROLLINGUPDATE' | 'ONDELETE'
+
+export type DeploymentStrategyTypeWithDefault = DeploymentStrategyType | 'DEFAULT'
+
+export type PipelineIdsVsDeploymentStrategyMap = Record<number, DeploymentStrategyTypeWithDefault>

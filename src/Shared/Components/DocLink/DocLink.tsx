@@ -12,13 +12,15 @@ export const DocLink = <T extends boolean = false>({
     docLinkKey,
     text = 'Learn more',
     dataTestId,
+    startIcon,
     showExternalIcon,
     onClick,
+    fontWeight,
     size = ComponentSizeType.medium,
     variant = ButtonVariantType.text,
     isExternalLink,
     openInNewTab = false,
-    fullWidth = true,
+    fullWidth = false,
 }: DocLinkProps<T>) => {
     // HOOKS
     const { isEnterprise, setSidePanelConfig } = useMainContext()
@@ -34,7 +36,7 @@ export const DocLink = <T extends boolean = false>({
     const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
         if (!isExternalLink && !openInNewTab && !e.metaKey && documentationLink.startsWith(DOCUMENTATION_HOME_PAGE)) {
             e.preventDefault()
-            setSidePanelConfig((prev) => ({ ...prev, open: true, docLink: documentationLink }))
+            setSidePanelConfig((prev) => ({ ...prev, open: true, docLink: documentationLink, reinitialize: true }))
         }
         onClick?.(e)
     }
@@ -50,8 +52,10 @@ export const DocLink = <T extends boolean = false>({
             text={text}
             variant={variant}
             size={size}
+            startIcon={startIcon}
             endIcon={showExternalIcon && <Icon name="ic-open-in-new" color={null} />}
             fullWidth={fullWidth}
+            fontWeight={fontWeight}
         />
     )
 }

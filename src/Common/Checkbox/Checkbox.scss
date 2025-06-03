@@ -51,6 +51,10 @@ $checkbox-hover-bg-image: url('./assets/ic-checkbox-hover.svg');
     background-image: url('./assets/ic-checkbox-selected.svg');
 }
 
+.form__checkbox.error:checked[value='CHECKED'] ~ .form__checkbox-container {
+    background-image: url('./assets/ic-checkbox-selected-error.svg');
+}
+
 .form__checkbox:checked[value='BULK_CHECKED'] ~ .form__checkbox-container {
     background-image: url('./assets/ic-bulk-check.svg');
 }
@@ -84,15 +88,19 @@ $checkbox-hover-bg-image: url('./assets/ic-checkbox-hover.svg');
             }
         }
 
-        .form__checkbox:checked[value='INTERMEDIATE']~.form__checkbox-container {
+        .form__checkbox:checked[value='INTERMEDIATE'] ~ .form__checkbox-container {
             background-image: url('./assets/dark/ic-checkbox-intermediate.svg');
         }
 
-        .form__checkbox:checked[value='CHECKED']~.form__checkbox-container {
+        .form__checkbox:checked[value='CHECKED'] ~ .form__checkbox-container {
             background-image: url('./assets/dark/ic-checkbox-selected.svg');
         }
 
-        .form__checkbox:checked[value='BULK_CHECKED']~.form__checkbox-container {
+        .form__checkbox.error:checked[value='CHECKED'] ~ .form__checkbox-container {
+            background-image: url('./assets/dark/ic-checkbox-selected-error.svg');
+        }
+
+        .form__checkbox:checked[value='BULK_CHECKED'] ~ .form__checkbox-container {
             background-image: url('./assets/dark/ic-bulk-check.svg');
         }
     }

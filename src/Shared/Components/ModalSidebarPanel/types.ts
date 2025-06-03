@@ -23,5 +23,5 @@ export interface ModalSidebarPanelProps {
     heading: string | null
     icon?: JSX.Element
     children?: ReactNode
-    documentationLink: DocLinkProps<false>['docLinkKey']
+    documentationLink: DocLinkProps['docLinkKey']
 }

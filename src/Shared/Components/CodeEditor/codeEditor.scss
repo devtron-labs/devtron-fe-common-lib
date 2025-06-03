@@ -133,7 +133,8 @@
         border-bottom: none;
 
         &:has(.code-editor__search) {
-            z-index: 0;
+            width: fit-content;
+            margin-left: auto;
         }
     }
 
