@@ -116,7 +116,7 @@ const Textarea = ({
     const handleKeyDown: TextareaHTMLAttributes<HTMLTextAreaElement>['onKeyDown'] = (
         event: React.KeyboardEvent<HTMLTextAreaElement>,
     ) => {
-        if (event.key === 'Enter' || event.key === 'Escape') {
+        if ((event.key === 'Enter' && !event.metaKey && !event.ctrlKey) || event.key === 'Escape') {
             event.stopPropagation()
 
             if (event.key === 'Escape') {

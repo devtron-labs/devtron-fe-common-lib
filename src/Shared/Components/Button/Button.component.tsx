@@ -34,6 +34,7 @@ const ButtonElement = ({
     buttonProps,
     onClick,
     elementRef,
+    buttonRef,
     ...props
 }: PropsWithChildren<
     Omit<
@@ -60,6 +61,20 @@ const ButtonElement = ({
     // Added the specific class to ensure that the link override is applied
     const linkOrAnchorClassName = `${props.className} button__link ${props.disabled ? 'dc__disable-click' : ''}`
 
+    const refCallback = (el: HTMLButtonElement | HTMLAnchorElement) => {
+        if (!el) {
+            return
+        }
+
+        // eslint-disable-next-line no-param-reassign
+        elementRef.current = el
+
+        if (buttonRef && typeof buttonRef === 'object' && Object.hasOwn(buttonRef, 'current')) {
+            // eslint-disable-next-line no-param-reassign
+            buttonRef.current = el
+        }
+    }
+
     if (component === ButtonComponentType.link) {
         return (
             <Link
@@ -67,7 +82,7 @@ const ButtonElement = ({
                 {...props}
                 className={linkOrAnchorClassName}
                 onClick={onClick as ButtonProps<typeof component>['onClick']}
-                ref={elementRef as MutableRefObject<HTMLAnchorElement>}
+                ref={refCallback}
             />
         )
     }
@@ -81,7 +96,7 @@ const ButtonElement = ({
                 {...props}
                 className={linkOrAnchorClassName}
                 onClick={onClick as ButtonProps<typeof component>['onClick']}
-                ref={elementRef as MutableRefObject<HTMLAnchorElement>}
+                ref={refCallback}
             >
                 {props.children}
             </a>
@@ -95,7 +110,7 @@ const ButtonElement = ({
             // eslint-disable-next-line react/button-has-type
             type={buttonProps?.type || 'button'}
             onClick={onClick as ButtonProps<typeof component>['onClick']}
-            ref={elementRef as MutableRefObject<HTMLButtonElement>}
+            ref={refCallback}
         />
     )
 }
