@@ -17,7 +17,7 @@
 import { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactElement } from 'react'
 import { LinkProps } from 'react-router-dom'
 
-import { TooltipProps } from '@Common/Tooltip/types'
+import { TooltipProps } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 
 // Using the same for BEM class elements

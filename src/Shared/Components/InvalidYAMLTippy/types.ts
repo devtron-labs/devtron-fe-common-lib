@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { TooltipProps } from '@Common/Tooltip/types'
+import { TooltipProps } from '@Common/Tooltip'
 
 export interface InvalidYAMLTippyWrapperProps {
     parsingError: string
