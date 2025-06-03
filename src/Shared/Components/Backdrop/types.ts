@@ -17,9 +17,17 @@
 import { ReactNode } from 'react'
 
 export interface BackdropProps {
+    /**
+     * The content to be rendered within the backdrop component.
+     */
     children: ReactNode
     /**
-     * @param onEscape: please wrap in a useCallback, with respective dependencies or []
+     * Callback function that gets triggered when the Escape key is pressed. \
+     * Should be wrapped in useCallback to prevent unnecessary re-renders.
+     * @example
+     * const handleEscape = useCallback(() => {
+     *   // Handle escape key press
+     * }, []);
      */
     onEscape: () => void
 }
