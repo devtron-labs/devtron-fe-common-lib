@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { MutableRefObject, PropsWithChildren, useEffect, useRef, useState } from 'react'
+import { MutableRefObject, PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 import { Progressing } from '@Common/Progressing'
@@ -61,7 +61,9 @@ const ButtonElement = ({
     // Added the specific class to ensure that the link override is applied
     const linkOrAnchorClassName = `${props.className} button__link ${props.disabled ? 'dc__disable-click' : ''}`
 
-    const refCallback = (el: HTMLButtonElement | HTMLAnchorElement) => {
+    // NOTE: If the ref callback is re-created every render (i.e., not wrapped in useCallback),
+    // it will be invoked on every render: first with null, then with the new node.
+    const refCallback = useCallback((el: HTMLButtonElement | HTMLAnchorElement) => {
         if (!el) {
             return
         }
@@ -73,7 +75,7 @@ const ButtonElement = ({
             // eslint-disable-next-line no-param-reassign
             buttonRef.current = el
         }
-    }
+    }, [])
 
     if (component === ButtonComponentType.link) {
         return (

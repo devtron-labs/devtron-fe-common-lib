@@ -142,6 +142,7 @@ import { ReactComponent as ICSpinny } from '@IconsV2/ic-spinny.svg'
 import { ReactComponent as ICSprayCan } from '@IconsV2/ic-spray-can.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
 import { ReactComponent as ICStamp } from '@IconsV2/ic-stamp.svg'
+import { ReactComponent as ICStopCircle } from '@IconsV2/ic-stop-circle.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICTata1mg } from '@IconsV2/ic-tata1mg.svg'
@@ -308,6 +309,7 @@ export const iconMap = {
     'ic-spray-can': ICSprayCan,
     'ic-stack': ICStack,
     'ic-stamp': ICStamp,
+    'ic-stop-circle': ICStopCircle,
     'ic-success': ICSuccess,
     'ic-suspended': ICSuspended,
     'ic-tata1mg': ICTata1mg,

@@ -143,7 +143,7 @@ const PageHeader = ({
     )
 
     const onAskButtonClick = () => {
-        setSidePanelConfig(() => ({ state: SidePanelTab.ASK_DEVTRON }))
+        setSidePanelConfig((prev) => ({ ...prev, state: SidePanelTab.ASK_DEVTRON }))
     }
 
     const renderLogoutHelpSection = () => (

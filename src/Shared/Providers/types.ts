@@ -35,15 +35,10 @@ export enum SidePanelTab {
     ASK_DEVTRON = 'ask-devtron',
 }
 
-export type SidePanelConfig =
-    | {
-          state: SidePanelTab.DOCUMENTATION
-          docLink?: string | null
-      }
-    | {
-          state: SidePanelTab.ASK_DEVTRON | 'closed'
-          docLink?: never
-      }
+export interface SidePanelConfig {
+    state: SidePanelTab | 'closed'
+    docLink?: string | null
+}
 
 export interface MainContext {
     serverMode: SERVER_MODE
