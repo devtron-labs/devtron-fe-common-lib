@@ -31,7 +31,6 @@ const DeploymentHistoryDiffView = ({
     baseTemplateConfiguration,
     previousConfigAvailable,
     rootClassName,
-    codeEditorKey,
 }: DeploymentTemplateHistoryType) => {
     const { historyComponent, historyComponentName } = useParams<DeploymentHistoryParamsType>()
 
@@ -78,15 +77,7 @@ const DeploymentHistoryDiffView = ({
                 collapseUnchangedDiffView
             />
         ) : (
-            <CodeEditor
-                key={codeEditorKey}
-                value={editorValuesRHS}
-                height="auto"
-                disableSearch
-                readOnly
-                noParsing
-                mode={MODES.YAML}
-            />
+            <CodeEditor value={editorValuesRHS} height="auto" disableSearch readOnly noParsing mode={MODES.YAML} />
         )
 
     const handleShowVariablesClick = () => {

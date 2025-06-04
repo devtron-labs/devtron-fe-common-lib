@@ -190,7 +190,7 @@ const CodeEditor = <DiffView extends boolean = false>({
         defaultKeymap: false,
         searchKeymap: false,
         foldGutter: false,
-        drawSelection: false,
+        drawSelection: true,
         highlightActiveLineGutter: true,
         tabSize,
     }
@@ -260,6 +260,7 @@ const CodeEditor = <DiffView extends boolean = false>({
         codeEditorTheme,
         basicSetup({
             ...basicSetupOptions,
+            drawSelection: false,
             lineNumbers: false,
             highlightActiveLine: false,
             highlightActiveLineGutter: false,
