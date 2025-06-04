@@ -87,13 +87,7 @@ export const getThumbPosition = ({
     shape,
     indeterminate,
     isLoading,
-}: Required<Pick<DTSwitchProps, 'isChecked' | 'size' | 'shape' | 'indeterminate' | 'isLoading'>>):
-    | 0
-    | 12
-    | 8
-    | 5
-    | 6
-    | 4 => {
+}: Required<Pick<DTSwitchProps, 'isChecked' | 'size' | 'shape' | 'indeterminate' | 'isLoading'>>): number => {
     if (isLoading) {
         return size === ComponentSizeType.medium && shape === 'rounded' ? 6 : 4
     }
