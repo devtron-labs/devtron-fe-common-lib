@@ -14,13 +14,11 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
-import { InfoColourBar } from '@Common/index'
+import { InfoBlock } from '../InfoBlock'
 
 export const renderHashiOrAwsDeprecatedInfo = () => (
-    <InfoColourBar
-        classname="warn"
-        message={
+    <InfoBlock
+        description={
             <p className="m-0 cn-9 fs-13 lh-20">
                 <span>
                     Kubernetes External Secret (KES) has been deprecated and will be removed in the next Devtron
@@ -37,7 +35,6 @@ export const renderHashiOrAwsDeprecatedInfo = () => (
                 </a>
             </p>
         }
-        Icon={ICWarningY5}
-        iconSize={20}
+        variant="warning"
     />
 )
