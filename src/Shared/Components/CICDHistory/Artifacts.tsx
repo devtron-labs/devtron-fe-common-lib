@@ -27,15 +27,9 @@ import noartifact from '@Images/no-artifact.webp'
 import { getIsApprovalPolicyConfigured } from '@Shared/Helpers'
 import { useDownload } from '@Shared/Hooks'
 
-import {
-    ClipboardButton,
-    DOCUMENTATION,
-    extractImage,
-    GenericEmptyState,
-    ImageTagsContainer,
-    useGetUserRoles,
-} from '../../../Common'
+import { ClipboardButton, extractImage, GenericEmptyState, ImageTagsContainer, useGetUserRoles } from '../../../Common'
 import { EMPTY_STATE_STATUS } from '../../constants'
+import { DocLink } from '../DocLink'
 import { TargetPlatformBadgeList } from '../TargetPlatforms'
 import { TERMINAL_STATUS_MAP } from './constants'
 import { ArtifactType, CIListItemType } from './types'
@@ -274,14 +268,11 @@ const Artifacts = ({
                         <span className="fs-13 fw-4 mr-8 ml-8">
                             {EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.StoreFiles}
                         </span>
-                        <a
-                            className="fs-13 fw-6 cb-5 dc__no-decor"
-                            href={DOCUMENTATION.BLOB_STORAGE}
-                            target="_blank"
-                            rel="noreferrer"
-                        >
-                            {EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.ConfigureBlobStorage}
-                        </a>
+                        <DocLink
+                            docLinkKey="BLOB_STORAGE"
+                            text={EMPTY_STATE_STATUS.ARTIFACTS_EMPTY_STATE_TEXTS.ConfigureBlobStorage}
+                            dataTestId="configure-blob-storage"
+                        />
                         <OpenInNew className="icon-dim-20 ml-8" />
                     </div>
                 </div>

@@ -19,8 +19,6 @@ import { useParams } from 'react-router-dom'
 import Tippy from '@tippyjs/react'
 
 import { CodeEditor } from '@Shared/Components/CodeEditor'
-import { renderDiffViewNoDifferenceState } from '@Shared/Components/DeploymentConfigDiff'
-import { DiffViewer } from '@Shared/Components/DiffViewer'
 
 import { ReactComponent as Info } from '../../../../Assets/Icon/ic-info-filled.svg'
 import { ReactComponent as ViewVariablesIcon } from '../../../../Assets/Icon/ic-view-variable-toggle.svg'
@@ -34,7 +32,6 @@ const DeploymentHistoryDiffView = ({
     baseTemplateConfiguration,
     previousConfigAvailable,
     rootClassName,
-    codeEditorKey,
 }: DeploymentTemplateHistoryType) => {
     const { historyComponent, historyComponentName } = useParams<DeploymentHistoryParamsType>()
 
@@ -71,21 +68,17 @@ const DeploymentHistoryDiffView = ({
 
     const renderDeploymentDiffViaCodeEditor = () =>
         previousConfigAvailable ? (
-            <DiffViewer
-                oldValue={editorValuesLHS}
-                newValue={editorValuesRHS}
-                codeFoldMessageRenderer={renderDiffViewNoDifferenceState(editorValuesLHS, editorValuesRHS)}
+            <CodeEditor
+                height="100%"
+                originalValue={editorValuesLHS}
+                modifiedValue={editorValuesRHS}
+                mode={MODES.YAML}
+                noParsing
+                diffView
+                collapseUnchangedDiffView
             />
         ) : (
-            <CodeEditor
-                key={codeEditorKey}
-                value={editorValuesRHS}
-                height="auto"
-                disableSearch
-                readOnly
-                noParsing
-                mode={MODES.YAML}
-            />
+            <CodeEditor value={editorValuesRHS} height="auto" disableSearch readOnly noParsing mode={MODES.YAML} />
         )
 
     const handleShowVariablesClick = () => {

@@ -33,7 +33,7 @@ import {
 } from '@uiw/react-codemirror'
 
 import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
-import { cleanKubeManifest } from '@Common/Helper'
+import { cleanKubeManifest, noop } from '@Common/Helper'
 import { getUniqueId } from '@Shared/Helpers'
 import { AppThemeType, useTheme } from '@Shared/Providers'
 
@@ -48,7 +48,7 @@ import {
     replaceAll,
     showReplaceFieldState,
 } from './Commands'
-import { codeEditorFindReplace, readOnlyTooltip, yamlHighlight } from './Extensions'
+import { getCodeEditorFindReplace, readOnlyTooltip, yamlHighlight } from './Extensions'
 import { CodeEditorContextProps, CodeEditorProps } from './types'
 import { getFoldGutterElement, getLanguageExtension, getValidationSchema, parseValueToCode } from './utils'
 
@@ -77,7 +77,6 @@ const CodeEditor = <DiffView extends boolean = false>({
     onChange,
     onOriginalValueChange,
     onModifiedValueChange,
-    readOnly,
     placeholder,
     diffView,
     loading,
@@ -88,8 +87,15 @@ const CodeEditor = <DiffView extends boolean = false>({
     onBlur,
     onFocus,
     autoFocus,
-    disableSearch = false,
+    onSearchPanelOpen = noop,
+    onSearchBarAction = noop,
+    collapseUnchangedDiffView = false,
+    ...resProps
 }: CodeEditorProps<DiffView>) => {
+    // DERIVED PROPS
+    const disableSearch = (collapseUnchangedDiffView || resProps.disableSearch) ?? false
+    const readOnly = (collapseUnchangedDiffView || resProps.readOnly) ?? false
+
     // HOOKS
     const { appTheme } = useTheme()
 
@@ -184,7 +190,7 @@ const CodeEditor = <DiffView extends boolean = false>({
         defaultKeymap: false,
         searchKeymap: false,
         foldGutter: false,
-        drawSelection: false,
+        drawSelection: true,
         highlightActiveLineGutter: true,
         tabSize,
     }
@@ -197,23 +203,33 @@ const CodeEditor = <DiffView extends boolean = false>({
         setLhsCode(newLhsValue)
     }
 
+    const openSearchPanelWrapper: typeof openSearchPanel = (view) => {
+        onSearchPanelOpen()
+        return openSearchPanel(view)
+    }
+
+    const openSearchPanelWithReplaceWrapper: typeof openSearchPanelWithReplace = (view) => {
+        onSearchPanelOpen()
+        return openSearchPanelWithReplace(view)
+    }
+
     // EXTENSIONS
     const getBaseExtensions = (): Extension[] => [
         basicSetup(basicSetupOptions),
         themeExtension,
         keymap.of([
             ...vscodeKeymap.filter(({ key }) => key !== 'Mod-Alt-Enter' && key !== 'Mod-Enter' && key !== 'Mod-f'),
-            ...(!disableSearch ? [{ key: 'Mod-f', run: openSearchPanel, scope: 'editor search-panel' }] : []),
+            ...(!disableSearch ? [{ key: 'Mod-f', run: openSearchPanelWrapper, scope: 'editor search-panel' }] : []),
             { key: 'Mod-Enter', run: replaceAll, scope: 'editor search-panel' },
-            { key: 'Mod-Alt-f', run: openSearchPanelWithReplace, scope: 'editor search-panel' },
+            { key: 'Mod-Alt-f', run: openSearchPanelWithReplaceWrapper, scope: 'editor search-panel' },
             { key: 'Escape', run: blurOnEscape, stopPropagation: true },
         ]),
         indentationMarkers(),
-        getLanguageExtension(mode),
+        getLanguageExtension(mode, collapseUnchangedDiffView),
         foldingCompartment.of(foldConfig),
         lintGutter(),
         search({
-            createPanel: codeEditorFindReplace,
+            createPanel: getCodeEditorFindReplace(onSearchBarAction),
         }),
         showReplaceFieldState,
         ...(mode === MODES.YAML ? [yamlHighlight] : []),
@@ -244,6 +260,7 @@ const CodeEditor = <DiffView extends boolean = false>({
         codeEditorTheme,
         basicSetup({
             ...basicSetupOptions,
+            drawSelection: false,
             lineNumbers: false,
             highlightActiveLine: false,
             highlightActiveLineGutter: false,
@@ -277,6 +294,8 @@ const CodeEditor = <DiffView extends boolean = false>({
                 modifiedViewExtensions={modifiedViewExtensions}
                 extensions={extensions}
                 diffMinimapExtensions={diffMinimapExtensions}
+                collapseUnchanged={collapseUnchangedDiffView}
+                disableMinimap={collapseUnchangedDiffView}
             />
         </CodeEditorContext.Provider>
     )

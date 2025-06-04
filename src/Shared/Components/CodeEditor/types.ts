@@ -51,6 +51,12 @@ type CodeEditorDiffBaseProps = {
     originalValue?: ReactCodeMirrorProps['value']
     modifiedValue?: ReactCodeMirrorProps['value']
     isOriginalModifiable?: boolean
+    /**
+     * When true, renders a diff view in readOnly mode with collapsed unchanged diffs.
+     * This disables the minimap, code-editor search functionality, and language linting.
+     * @default false
+     */
+    collapseUnchangedDiffView?: boolean
 }
 
 type CodeEditorPropsBasedOnDiffView<DiffView extends boolean> = DiffView extends true
@@ -78,6 +84,11 @@ export type CodeEditorProps<DiffView extends boolean = false> = {
     disableSearch?: boolean
     diffView?: DiffView
     theme?: AppThemeType
+    onSearchPanelOpen?: () => void
+    /**
+     * This method is triggered when user types something in the search/replace bar or applies a search or replace action.
+     */
+    onSearchBarAction?: () => void
 } & CodeEditorPropsBasedOnDiffView<DiffView>
 
 export interface GetCodeEditorHeightReturnType {
@@ -96,7 +107,7 @@ export type FindReplaceQuery = Partial<
     Pick<SearchQuery, 'search' | 'wholeWord' | 'regexp' | 'replace' | 'caseSensitive'>
 >
 
-export interface FindReplaceProps {
+export interface FindReplaceProps extends Pick<CodeEditorProps, 'onSearchBarAction'> {
     view: EditorView
     /** Default value for Search Query state. */
     defaultQuery: SearchQuery
@@ -146,6 +157,8 @@ export type CodeEditorRendererProps = Required<
     modifiedViewExtensions: ReactCodeMirrorProps['extensions']
     extensions: ReactCodeMirrorProps['extensions']
     diffMinimapExtensions: ReactCodeMirrorProps['extensions']
+    collapseUnchanged?: boolean
+    disableMinimap?: boolean
 }
 
 export interface DiffMinimapProps extends Pick<CodeEditorRendererProps, 'theme'> {

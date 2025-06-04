@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { DetailedHTMLProps, Dispatch, ReactElement, ReactNode, SetStateAction } from 'react'
+import { DetailedHTMLProps, ReactElement, ReactNode } from 'react'
 
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 import { UseStateFiltersReturnType } from '@Common/Hooks'
@@ -228,6 +228,12 @@ export type DynamicDataTableProps<K extends string, CustomStateType = Record<str
      * @default 'first column key'
      */
     focusableFieldKey?: K
+    /**
+     * When true, the table will automatically focus the first focusable cell
+     * or cell key denoted by `focusableFieldKey` when the component mounts.
+     * @default false
+     */
+    shouldAutoFocusOnMount?: boolean
 }
 
 export interface DynamicDataTableHeaderProps<K extends string, CustomStateType = Record<string, unknown>>
@@ -261,7 +267,5 @@ export interface DynamicDataTableRowProps<K extends string, CustomStateType = Re
         | 'trailingCellIcon'
         | 'buttonCellWrapComponent'
         | 'focusableFieldKey'
-    > {
-    isAddRowButtonClicked: boolean
-    setIsAddRowButtonClicked: Dispatch<SetStateAction<boolean>>
-}
+        | 'shouldAutoFocusOnMount'
+    > {}

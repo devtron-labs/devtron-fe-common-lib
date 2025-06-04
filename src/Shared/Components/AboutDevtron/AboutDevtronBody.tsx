@@ -5,14 +5,12 @@ import { EULA_LINK, PRIVACY_POLICY_LINK, TERMS_OF_USE_LINK } from '@Shared/const
 import { useMainContext } from '@Shared/Providers'
 
 import { Button, ButtonComponentType, ButtonStyleType, ButtonVariantType } from '../Button'
-import { InstallationType } from '../Header/types'
 import { Icon } from '../Icon'
 
 const AboutDevtronBody = ({ isFELibAvailable }: { isFELibAvailable: boolean }) => {
-    const { currentServerInfo } = useMainContext()
+    const { currentServerInfo, isEnterprise } = useMainContext()
 
     const currentVersion = currentServerInfo?.serverInfo?.currentVersion
-    const isEnterprise = currentServerInfo?.serverInfo?.installationType === InstallationType.ENTERPRISE
 
     const isVersionCompatible = isFELibAvailable === isEnterprise
 
