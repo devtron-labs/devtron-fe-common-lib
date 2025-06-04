@@ -19,10 +19,10 @@ import Draggable from 'react-draggable'
 import Tippy from '@tippyjs/react'
 
 import { ReactComponent as ICDrag } from '@Icons/ic-drag.svg'
-import { ReactComponent as ICViewVariable } from '@Icons/ic-view-variable-toggle.svg'
 import { useAsync } from '@Common/Helper'
 import { useWindowSize } from '@Common/Hooks'
 
+import { Icon } from '../Icon'
 import { SUGGESTIONS_SIZE } from './constants'
 import { getScopedVariables } from './service'
 import Suggestions from './Suggestions'
@@ -196,8 +196,9 @@ const FloatingVariablesSuggestions = ({
                             type="button"
                             onClick={handleActivation}
                             data-testid="activate-suggestions"
+                            aria-label="Activate suggestions"
                         >
-                            <ICViewVariable className="scn-0 icon-dim-20" />
+                            <Icon name="ic-view-variable-toggle" color="N0" size={20} />
                         </button>
                     </Tippy>
                 </div>

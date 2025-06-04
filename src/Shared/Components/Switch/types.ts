@@ -1,4 +1,4 @@
-import { ButtonHTMLAttributes } from 'react'
+import { ButtonHTMLAttributes, ReactNode } from 'react'
 
 import { ComponentSizeType } from '@Shared/constants'
 import { IconBaseColorType } from '@Shared/types'
@@ -77,6 +77,11 @@ export type DTSwitchProps = {
     name: string
 
     /**
+     * Provide if name generated through `getUniqueId`.
+     */
+    dataTestId?: string
+
+    /**
      * The visual variant of the switch.
      *
      * @default `positive`
@@ -115,5 +120,10 @@ export type DTSwitchProps = {
      *
      * @default undefined
      */
-    tooltipContent?: string
+    tooltipContent?: ReactNode
+    /**
+     * Indicates whether the switch should be focused automatically when rendered.
+     * @default false
+     */
+    autoFocus?: boolean
 } & SwitchShapeProps

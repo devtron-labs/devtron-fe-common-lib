@@ -162,9 +162,9 @@ export const DeploymentConfigDiffMain = ({
 
             return (
                 <ToggleResolveScopedVariables
+                    name="resolve-scoped-variables"
                     resolveScopedVariables={convertVariables}
                     handleToggleScopedVariablesView={onConvertVariablesClick}
-                    throttleOnChange
                 />
             )
         }
