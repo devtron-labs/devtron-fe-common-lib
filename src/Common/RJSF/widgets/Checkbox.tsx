@@ -14,48 +14,35 @@
  * limitations under the License.
  */
 
-import { ChangeEvent } from 'react'
 import { WidgetProps } from '@rjsf/utils'
 import { isNullOrUndefined } from '@Shared/Helpers'
-import Toggle from '../../Toggle/Toggle'
+import { DTSwitch } from '@Shared/Components'
 
 export const Checkbox = ({
     id,
     onChange,
     value,
-    required,
     disabled,
     readonly,
     autofocus,
-    onBlur,
-    onFocus,
 }: WidgetProps) => {
-    const handleEvent = (e: ChangeEvent<HTMLInputElement>, type: 'blur' | 'focus') => {
-        const { id, checked } = e.target
-        if (type === 'blur') {
-            onBlur(id, checked)
-        } else if (type === 'focus') {
-            onFocus(id, checked)
-        }
-    }
-
     const isSelected: boolean = isNullOrUndefined(value) ? false : value
 
+    const handleChange = () => {
+        onChange(!isSelected)
+    }
+
     return (
-        <div>
-            <Toggle
-                selected={isSelected}
-                onSelect={onChange}
-                id={id}
+        <div className="flexbox dc__align-items-center dc__gap-8">
+            <DTSwitch
                 name={id}
-                required={required}
-                disabled={disabled || readonly}
+                ariaLabel={id}
+                onChange={handleChange}
+                isChecked={isSelected}
                 autoFocus={autofocus}
-                rootClassName="w-32 mb-0 dc__height-inherit"
-                onBlur={(e) => handleEvent(e, 'blur')}
-                onFocus={(e) => handleEvent(e, 'focus')}
+                isDisabled={disabled || readonly}
             />
-            <span className="dc__capitalize ml-8">{isSelected.toString()}</span>
+            <span className="dc__capitalize">{isSelected.toString()}</span>
         </div>
     )
 }

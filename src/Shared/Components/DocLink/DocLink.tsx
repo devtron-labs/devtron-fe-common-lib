@@ -23,18 +23,25 @@ export const DocLink = <T extends boolean = false>({
     fullWidth = false,
 }: DocLinkProps<T>) => {
     // HOOKS
-    const { isEnterprise, setSidePanelConfig } = useMainContext()
+    const { isEnterprise, setSidePanelConfig, isLicenseDashboard } = useMainContext()
 
     // CONSTANTS
     const documentationLink = getDocumentationUrl({
         docLinkKey,
         isEnterprise,
         isExternalLink,
+        isLicenseDashboard,
     })
 
     // HANDLERS
     const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
-        if (!isExternalLink && !openInNewTab && !e.metaKey && documentationLink.startsWith(DOCUMENTATION_HOME_PAGE)) {
+        if (
+            !isExternalLink &&
+            !openInNewTab &&
+            !e.metaKey &&
+            !isLicenseDashboard &&
+            documentationLink.startsWith(DOCUMENTATION_HOME_PAGE)
+        ) {
             e.preventDefault()
             setSidePanelConfig((prev) => ({ ...prev, open: true, docLink: documentationLink, reinitialize: true }))
         }
