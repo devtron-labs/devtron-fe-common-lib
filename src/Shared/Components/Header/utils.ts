@@ -16,7 +16,6 @@
 
 import { LOGIN_COUNT } from '@Common/Constants'
 
-import { DevtronLicenseInfo, LicenseStatus } from '../License'
 import {
     COMMON_HELP_ACTION_MENU_ITEMS,
     ENTERPRISE_HELP_ACTION_MENU_ITEMS,
@@ -42,9 +41,6 @@ export const handlePostHogEventUpdate = async (eventName: string): Promise<void>
 export const setActionWithExpiry = (key: string, days: number): void => {
     localStorage.setItem(key, `${getDateInMilliseconds(days)}`)
 }
-
-export const getIsShowingLicenseData = (licenseData: DevtronLicenseInfo) =>
-    licenseData && (licenseData.licenseStatus !== LicenseStatus.ACTIVE || licenseData.isTrial)
 
 export const getHelpActionMenuOptions = ({
     isEnterprise,

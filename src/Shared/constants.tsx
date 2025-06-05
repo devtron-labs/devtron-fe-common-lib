@@ -596,3 +596,5 @@ export const STRATEGY_TYPE_TO_TITLE_MAP: Record<DeploymentStrategyTypeWithDefaul
     ROLLINGUPDATE: 'Rolling Update',
     ONDELETE: 'On Delete',
 }
+
+export const CUBIC_BEZIER_CURVE: [number, number, number, number] = [0.33, 1, 0.68, 1]

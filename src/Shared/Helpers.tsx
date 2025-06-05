@@ -19,6 +19,7 @@ import { ReactElement, useEffect, useRef, useState } from 'react'
 import { PromptProps } from 'react-router-dom'
 import { StrictRJSFSchema } from '@rjsf/utils'
 import Tippy from '@tippyjs/react'
+import { animate } from 'framer-motion'
 import moment from 'moment'
 import { nanoid } from 'nanoid'
 import { Pair } from 'yaml'
@@ -52,7 +53,7 @@ import {
 } from '../Common'
 import { getAggregator } from '../Pages'
 import { AggregatedNodes, PodMetadatum } from './Components'
-import { UNSAVED_CHANGES_PROMPT_MESSAGE } from './constants'
+import { CUBIC_BEZIER_CURVE, UNSAVED_CHANGES_PROMPT_MESSAGE } from './constants'
 import {
     AggregationKeys,
     BorderConfigType,
@@ -699,4 +700,17 @@ export const getAppDetailsURL = (appId: number | string, envId?: number | string
         return `${baseURL}/${envId}`
     }
     return baseURL
+}
+
+export const smoothScrollToTop = (scrollContainer: HTMLElement, targetPosition: number) => {
+    const start = scrollContainer.scrollTop
+
+    const controls = animate(start, targetPosition, {
+        ease: CUBIC_BEZIER_CURVE,
+        onUpdate: (value) => {
+            scrollContainer.scrollTop = value
+        },
+    })
+
+    return controls
 }

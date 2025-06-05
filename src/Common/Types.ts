@@ -25,9 +25,9 @@ import {
     Severity,
     PolicyBlockInfo,
     TargetPlatformItemDTO,
-    ButtonProps,
     ComponentLayoutType,
     StatusType,
+    DocLinkProps,
     DeploymentStrategyType,
 } from '../Shared'
 import {
@@ -121,52 +121,59 @@ export interface CheckboxProps {
     children?: ReactNode
 }
 
-export interface TippyCustomizedProps extends Pick<TippyProps, 'appendTo'> {
-    theme: TippyTheme
-    visible?: boolean
-    heading?: ReactNode | string
-    headingInfo?: ReactNode | string
-    noHeadingBorder?: boolean
-    infoTextHeading?: string
-    hideHeading?: boolean
-    placement?: TippyProps['placement']
-    className?: string
-    Icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
-    iconPath?: string
-    iconClass?: string
-    iconSize?: number // E.g. 16, 20, etc.. Currently, there are around 12 sizes supported. Check `icons.css` or `base.scss` for supported sizes or add new size (class names starts with `icon-dim-`).
-    onImageLoadError?: (e) => void
-    onClose?: () => void
-    infoText?: React.ReactNode
-    showCloseButton?: boolean
-    arrow?: boolean
-    interactive?: boolean
-    showOnCreate?: boolean
-    trigger?: string
-    animation?: string
-    duration?: number
-    additionalContent?: ReactNode
-    documentationLink?: string
-    documentationLinkText?: string
-    children: React.ReactElement<any>
-    disableClose?: boolean
+export interface TippyWithBaseDocLinkTypes<T extends boolean>
+    extends Pick<DocLinkProps<T>, 'isExternalLink' | 'openInNewTab'> {
+    documentationLink?: DocLinkProps<T>['docLinkKey']
 }
 
-export interface InfoIconTippyProps
+export type TippyCustomizedProps<T extends boolean> = Pick<TippyProps, 'appendTo'> &
+    TippyWithBaseDocLinkTypes<T> & {
+        theme: TippyTheme
+        visible?: boolean
+        heading?: ReactNode | string
+        headingInfo?: ReactNode | string
+        noHeadingBorder?: boolean
+        infoTextHeading?: string
+        hideHeading?: boolean
+        placement?: TippyProps['placement']
+        className?: string
+        Icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
+        iconPath?: string
+        iconClass?: string
+        iconSize?: number // E.g. 16, 20, etc.. Currently, there are around 12 sizes supported. Check `icons.css` or `base.scss` for supported sizes or add new size (class names starts with `icon-dim-`).
+        onImageLoadError?: (e) => void
+        onClose?: () => void
+        infoText?: React.ReactNode
+        showCloseButton?: boolean
+        arrow?: boolean
+        interactive?: boolean
+        showOnCreate?: boolean
+        trigger?: string
+        animation?: string
+        duration?: number
+        additionalContent?: ReactNode
+        documentationLinkText?: string
+        children: React.ReactElement<any>
+        disableClose?: boolean
+    }
+
+export interface InfoIconTippyProps<T extends boolean = false>
     extends Pick<
-        TippyCustomizedProps,
+        TippyCustomizedProps<T>,
         | 'heading'
         | 'infoText'
         | 'iconClass'
-        | 'documentationLink'
         | 'documentationLinkText'
         | 'additionalContent'
         | 'placement'
         | 'Icon'
         | 'headingInfo'
+        | 'documentationLink'
+        | 'isExternalLink'
+        | 'openInNewTab'
     > {
     dataTestid?: string
-    children?: TippyCustomizedProps['children']
+    children?: TippyCustomizedProps<T>['children']
     iconClassName?: string
     buttonPadding?: string
 }
@@ -222,56 +229,6 @@ export enum ImageType {
     Medium = 'medium',
     SMALL = 'small',
 }
-
-interface InfoColourBarTextConfigType {
-    /**
-     * If given would be shown above the description, in bold
-     */
-    heading?: string
-    /**
-     * If given would be shown below the heading (if given)
-     */
-    description: string
-    actionButtonConfig?: ButtonProps
-}
-
-type InfoColourBarMessageProp =
-    | {
-          message: ReactNode
-          linkText?: ReactNode
-          redirectLink?: string
-          linkOnClick?: () => void
-          linkClass?: string
-          internalLink?: boolean
-
-          textConfig?: never
-      }
-    | {
-          textConfig: InfoColourBarTextConfigType
-
-          message?: never
-          linkText?: never
-          redirectLink?: never
-          linkOnClick?: () => never
-          linkClass?: never
-          internalLink?: never
-      }
-
-export type InfoColourBarType = InfoColourBarMessageProp & {
-    classname: string
-    Icon
-    iconClass?: string
-    iconSize?: number // E.g. 16, 20, etc.. Currently, there are around 12 sizes supported. Check `icons.css` or `base.scss` for supported sizes or add new size (class names starts with `icon-dim-`).
-    renderActionButton?: () => JSX.Element
-    styles?: CSSProperties
-    /**
-     * If true, the icon is not shown
-     *
-     * @default false
-     */
-    hideIcon?: boolean
-}
-
 export interface ReloadType {
     reload?: (event?: any) => void
     className?: string

@@ -39,6 +39,12 @@ import {
 import { SelectPickerOptionType, WorkflowRunnerStatusDTO } from './Components'
 import { BASE_CONFIGURATION_ENV_ID, DEPLOYMENT_STATUS, EnvironmentTypeEnum, PatchOperationType } from './constants'
 
+export enum InstallationType {
+    OSS_KUBECTL = 'oss_kubectl',
+    OSS_HELM = 'oss_helm',
+    ENTERPRISE = 'enterprise',
+}
+
 export enum EnvType {
     CHART = 'helm_charts',
     APPLICATION = 'apps',
@@ -979,6 +985,27 @@ export interface UploadFileProps {
  */
 export type Never<T> = {
     [K in keyof T]?: never
+}
+
+/**
+ * A utility type that filters out properties from type `T` that are of type `never`. \
+ * This is useful when you want to remove properties that have been marked as `never` from a type,
+ * effectively creating a new type without those properties.
+ *
+ * @template T - The input type from which to filter out `never` properties.
+ * @example
+ * ```typescript
+ * type User = {
+ *   id: number;
+ *   name: string;
+ *   deleted: never;
+ * }
+ *
+ * type ActiveUser = OmitNever<User>; // { id: number; name: string; }
+ * ```
+ */
+export type OmitNever<T> = {
+    [K in keyof T as T[K] extends never ? never : K]: T[K]
 }
 
 export interface TargetPlatformItemDTO {

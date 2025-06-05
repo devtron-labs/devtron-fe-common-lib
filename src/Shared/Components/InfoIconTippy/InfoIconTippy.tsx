@@ -19,7 +19,7 @@ import { ReactComponent as ICHelpOutline } from '../../../Assets/Icon/ic-help-ou
 import { TippyCustomized } from '../../../Common/TippyCustomized'
 import { InfoIconTippyProps, TippyTheme } from '../../../Common/Types'
 
-const InfoIconTippy = ({
+const InfoIconTippy = <T extends boolean = false>({
     heading,
     infoText,
     iconClass = 'fcv-5',
@@ -32,7 +32,9 @@ const InfoIconTippy = ({
     children,
     headingInfo,
     buttonPadding = 'p-0',
-}: InfoIconTippyProps) => (
+    isExternalLink,
+    openInNewTab,
+}: InfoIconTippyProps<T>) => (
     <TippyCustomized
         theme={TippyTheme.white}
         headingInfo={headingInfo}
@@ -50,6 +52,8 @@ const InfoIconTippy = ({
         additionalContent={additionalContent}
         animation="shift-toward"
         duration={400}
+        isExternalLink={isExternalLink}
+        openInNewTab={openInNewTab}
     >
         {children || (
             <button

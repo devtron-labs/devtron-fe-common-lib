@@ -6,11 +6,13 @@ import { ReactComponent as ICAdd } from '@IconsV2/ic-add.svg'
 import { ReactComponent as ICAmazonEks } from '@IconsV2/ic-amazon-eks.svg'
 import { ReactComponent as ICApica } from '@IconsV2/ic-apica.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
+import { ReactComponent as ICAppTemplate } from '@IconsV2/ic-app-template.svg'
 import { ReactComponent as ICArrowClockwise } from '@IconsV2/ic-arrow-clockwise.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICArrowSquareOut } from '@IconsV2/ic-arrow-square-out.svg'
 import { ReactComponent as ICArrowsClockwise } from '@IconsV2/ic-arrows-clockwise.svg'
 import { ReactComponent as ICArrowsLeftRight } from '@IconsV2/ic-arrows-left-right.svg'
+import { ReactComponent as ICAsterisk } from '@IconsV2/ic-asterisk.svg'
 import { ReactComponent as ICAther } from '@IconsV2/ic-ather.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICAzureAks } from '@IconsV2/ic-azure-aks.svg'
@@ -51,12 +53,15 @@ import { ReactComponent as ICDeleteDots } from '@IconsV2/ic-delete-dots.svg'
 import { ReactComponent as ICDeleteLightning } from '@IconsV2/ic-delete-lightning.svg'
 import { ReactComponent as ICDelhivery } from '@IconsV2/ic-delhivery.svg'
 import { ReactComponent as ICDevtron } from '@IconsV2/ic-devtron.svg'
+import { ReactComponent as ICDevtronApp } from '@IconsV2/ic-devtron-app.svg'
 import { ReactComponent as ICDevtronHeaderLogo } from '@IconsV2/ic-devtron-header-logo.svg'
+import { ReactComponent as ICDevtronJob } from '@IconsV2/ic-devtron-job.svg'
 import { ReactComponent as ICDisconnect } from '@IconsV2/ic-disconnect.svg'
 import { ReactComponent as ICDiscordFill } from '@IconsV2/ic-discord-fill.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEdit } from '@IconsV2/ic-edit.svg'
+import { ReactComponent as ICEmail } from '@IconsV2/ic-email.svg'
 import { ReactComponent as ICEnterpriseFeat } from '@IconsV2/ic-enterprise-feat.svg'
 import { ReactComponent as ICEnterpriseTag } from '@IconsV2/ic-enterprise-tag.svg'
 import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
@@ -101,6 +106,7 @@ import { ReactComponent as ICJobColor } from '@IconsV2/ic-job-color.svg'
 import { ReactComponent as ICK3s } from '@IconsV2/ic-k3s.svg'
 import { ReactComponent as ICK8sJob } from '@IconsV2/ic-k8s-job.svg'
 import { ReactComponent as ICKey } from '@IconsV2/ic-key.svg'
+import { ReactComponent as ICKeyEnter } from '@IconsV2/ic-key-enter.svg'
 import { ReactComponent as ICKind } from '@IconsV2/ic-kind.svg'
 import { ReactComponent as ICLaptop } from '@IconsV2/ic-laptop.svg'
 import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
@@ -144,6 +150,7 @@ import { ReactComponent as ICSortDescending } from '@IconsV2/ic-sort-descending.
 import { ReactComponent as ICSortable } from '@IconsV2/ic-sortable.svg'
 import { ReactComponent as ICSparkleColor } from '@IconsV2/ic-sparkle-color.svg'
 import { ReactComponent as ICSpinny } from '@IconsV2/ic-spinny.svg'
+import { ReactComponent as ICSprayCan } from '@IconsV2/ic-spray-can.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
 import { ReactComponent as ICStamp } from '@IconsV2/ic-stamp.svg'
 import { ReactComponent as ICStrategyBlueGreen } from '@IconsV2/ic-strategy-blue-green.svg'
@@ -172,8 +179,10 @@ import { ReactComponent as ICUnknown } from '@IconsV2/ic-unknown.svg'
 import { ReactComponent as ICUserCircle } from '@IconsV2/ic-user-circle.svg'
 import { ReactComponent as ICUserKey } from '@IconsV2/ic-user-key.svg'
 import { ReactComponent as ICUsers } from '@IconsV2/ic-users.svg'
+import { ReactComponent as ICViewVariableToggle } from '@IconsV2/ic-view-variable-toggle.svg'
 import { ReactComponent as ICWarning } from '@IconsV2/ic-warning.svg'
 import { ReactComponent as ICWifiSlash } from '@IconsV2/ic-wifi-slash.svg'
+import { ReactComponent as ICWorldGlobe } from '@IconsV2/ic-world-globe.svg'
 
 // eslint-disable-next-line no-restricted-imports
 import { IconBase } from './IconBase'
@@ -186,11 +195,13 @@ export const iconMap = {
     'ic-amazon-eks': ICAmazonEks,
     'ic-apica': ICApica,
     'ic-app-group': ICAppGroup,
+    'ic-app-template': ICAppTemplate,
     'ic-arrow-clockwise': ICArrowClockwise,
     'ic-arrow-right': ICArrowRight,
     'ic-arrow-square-out': ICArrowSquareOut,
     'ic-arrows-clockwise': ICArrowsClockwise,
     'ic-arrows-left-right': ICArrowsLeftRight,
+    'ic-asterisk': ICAsterisk,
     'ic-ather': ICAther,
     'ic-azure-aks': ICAzureAks,
     'ic-azure': ICAzure,
@@ -230,13 +241,16 @@ export const iconMap = {
     'ic-delete-lightning': ICDeleteLightning,
     'ic-delete': ICDelete,
     'ic-delhivery': ICDelhivery,
+    'ic-devtron-app': ICDevtronApp,
     'ic-devtron-header-logo': ICDevtronHeaderLogo,
+    'ic-devtron-job': ICDevtronJob,
     'ic-devtron': ICDevtron,
     'ic-disconnect': ICDisconnect,
     'ic-discord-fill': ICDiscordFill,
     'ic-dockerhub': ICDockerhub,
     'ic-ecr': ICEcr,
     'ic-edit': ICEdit,
+    'ic-email': ICEmail,
     'ic-enterprise-feat': ICEnterpriseFeat,
     'ic-enterprise-tag': ICEnterpriseTag,
     'ic-env': ICEnv,
@@ -280,6 +294,7 @@ export const iconMap = {
     'ic-job-color': ICJobColor,
     'ic-k3s': ICK3s,
     'ic-k8s-job': ICK8sJob,
+    'ic-key-enter': ICKeyEnter,
     'ic-key': ICKey,
     'ic-kind': ICKind,
     'ic-laptop': ICLaptop,
@@ -324,6 +339,7 @@ export const iconMap = {
     'ic-sortable': ICSortable,
     'ic-sparkle-color': ICSparkleColor,
     'ic-spinny': ICSpinny,
+    'ic-spray-can': ICSprayCan,
     'ic-stack': ICStack,
     'ic-stamp': ICStamp,
     'ic-strategy-blue-green-color': ICStrategyBlueGreenColor,
@@ -352,8 +368,10 @@ export const iconMap = {
     'ic-user-circle': ICUserCircle,
     'ic-user-key': ICUserKey,
     'ic-users': ICUsers,
+    'ic-view-variable-toggle': ICViewVariableToggle,
     'ic-warning': ICWarning,
     'ic-wifi-slash': ICWifiSlash,
+    'ic-world-globe': ICWorldGlobe,
 }
 
 export type IconName = keyof typeof iconMap

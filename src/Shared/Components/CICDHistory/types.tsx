@@ -548,7 +548,6 @@ export interface DeploymentTemplateHistoryType {
     baseTemplateConfiguration: DeploymentHistoryDetail
     previousConfigAvailable: boolean
     rootClassName?: string
-    codeEditorKey?: string
 }
 
 export interface DeploymentHistorySidebarType {
