@@ -36,11 +36,11 @@ export const WORKFLOW_OPTIONS_MODAL_TYPES = {
 
 export const SOURCE_TYPE_CARD_VARIANTS = {
     SOURCE_CODE: {
-        title: 'Build and Deploy from Source Code',
-        subtitle: 'Build container image from a Git repo and deploy to an environment.',
+        title: 'Build from Source Code',
+        subtitle: 'Build container image from a Git repo',
         image: ci,
         alt: 'CI',
-        dataTestId: 'build-deploy-from-source-code-button',
+        dataTestId: 'build-from-source-code-button',
         type: CIPipelineNodeType.CI,
     },
     LINKED_PIPELINE: {
@@ -66,6 +66,14 @@ export const SOURCE_TYPE_CARD_VARIANTS = {
         alt: 'Job-CI',
         dataTestId: 'job-ci-pipeline-button',
         type: CIPipelineNodeType.JOB_CI,
+    },
+    BUILD_AND_DEPLOY: {
+        title: 'Build and Deploy from Source Code',
+        subtitle: 'Build container image from a Git repo and deploy to an environment.',
+        image: ci,
+        alt: 'CI_CD',
+        dataTestId: 'build-and-deploy-from-source-code-button',
+        type: CIPipelineNodeType.CI_CD,
     },
 }
 

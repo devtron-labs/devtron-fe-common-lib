@@ -225,6 +225,23 @@ const WorkflowOptionsModal = ({
                         </h3>
 
                         <SourceTypeCard
+                            title={SOURCE_TYPE_CARD_VARIANTS.BUILD_AND_DEPLOY.title}
+                            subtitle={SOURCE_TYPE_CARD_VARIANTS.BUILD_AND_DEPLOY.subtitle}
+                            image={SOURCE_TYPE_CARD_VARIANTS.BUILD_AND_DEPLOY.image}
+                            alt={SOURCE_TYPE_CARD_VARIANTS.BUILD_AND_DEPLOY.alt}
+                            dataTestId={SOURCE_TYPE_CARD_VARIANTS.BUILD_AND_DEPLOY.dataTestId}
+                            type={SOURCE_TYPE_CARD_VARIANTS.BUILD_AND_DEPLOY.type}
+                            handleCardAction={handleCardAction}
+                            disableInfo={getDisabledInfo(CIPipelineNodeType.CI)}
+                        />
+                    </section>
+
+                    <section className="flexbox-col dc__gap-8 dc__align-self-stretch">
+                        <h3 className="m-0 cn-7 fs-11 fw-6 lh-16 dc__uppercase">
+                            {WORKFLOW_OPTIONS_MODAL_TYPES.DEFAULT}
+                        </h3>
+
+                        <SourceTypeCard
                             title={SOURCE_TYPE_CARD_VARIANTS.SOURCE_CODE.title}
                             subtitle={SOURCE_TYPE_CARD_VARIANTS.SOURCE_CODE.subtitle}
                             image={SOURCE_TYPE_CARD_VARIANTS.SOURCE_CODE.image}

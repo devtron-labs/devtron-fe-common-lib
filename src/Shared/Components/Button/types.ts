@@ -146,7 +146,7 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
                   /**
                    * If true, the tooltip is shown for the button
                    */
-                  showTooltip: boolean
+                  showTooltip?: boolean
                   /**
                    * Props for tooltip
                    */

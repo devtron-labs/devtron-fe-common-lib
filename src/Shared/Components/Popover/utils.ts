@@ -47,7 +47,7 @@ const getPopoverAnimationProps = (axisKey: 'x' | 'y', axisInitialValue: number, 
         exit: { opacity: 0, [axisKey]: axisInitialValue },
         transformTemplate: (isMiddleAlignment
             ? (params) =>
-                  axisKey === 'y' ? `translate(-50%, ${params[axisKey]})` : `translate(${params[axisKey]}, -50%,)`
+                  axisKey === 'y' ? `translate(-50%, ${params[axisKey]})` : `translate(${params[axisKey]}, -50%)`
             : undefined) as HTMLMotionProps<'div'>['transformTemplate'],
     }) satisfies HTMLMotionProps<'div'>
 
