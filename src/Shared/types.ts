@@ -137,6 +137,7 @@ export enum Nodes {
     Node = 'Node',
     Overview = 'Overview',
     MonitoringDashboard = 'MonitoringDashboard',
+    EmbeddedSloop = 'EmbeddedSloop',
     UpgradeCluster = 'UpgradeCluster',
 }
 
