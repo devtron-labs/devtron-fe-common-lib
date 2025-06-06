@@ -90,22 +90,25 @@ export type ResourceRecommenderHeaderWithRecommendation = Extract<
 
 export type K8sResourceDetailDataType = {
     [key: string]: string | number | object | boolean
-    additionalMetadata?: {
-        [key in ResourceRecommenderHeaderWithRecommendation]?: {
-            // In case there is not limit or request set, it will be null
-            current: {
-                value: string
-                unit: string
-            } | null
-            // In case cron is yet to run
-            recommended: {
-                value: string
-                unit: string
-            } | null
-            // In case any of current or recommended is null, delta will be null
-            delta: number | null
-        }
-    }
+    additionalMetadata?: Partial<
+        Record<
+            ResourceRecommenderHeaderWithRecommendation,
+            {
+                // In case there is not limit or request set, it will be null
+                current: {
+                    value: number
+                    unit: string
+                } | null
+                // In case cron is yet to run
+                recommended: {
+                    value: number
+                    unit: string
+                } | null
+                // In case any of current or recommended is null, delta will be null
+                delta: number | null
+            }
+        >
+    >
 }
 
 export interface K8sResourceDetailType {

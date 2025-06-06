@@ -19,6 +19,7 @@ import { ReactComponent as ICMediumPause } from '@Icons/ic-medium-pause.svg'
 import { ReactComponent as ICMediumPlay } from '@Icons/ic-medium-play.svg'
 import { SelectPickerOptionType } from '@Shared/Components'
 
+import { ResourceRecommenderHeaderType } from './ResourceBrowser.Types'
 import { NodeDrainRequest } from './types'
 
 export const ALL_NAMESPACE_OPTION: Readonly<Pick<SelectPickerOptionType<string>, 'value' | 'label'>> = {
@@ -111,3 +112,15 @@ export const NODE_DRAIN_OPTIONS_CHECKBOX_CONFIG: {
         label: DRAIN_NODE_MODAL_MESSAGING.IgnoreDaemonSets.heading,
     },
 ] as const
+
+export const RESOURCE_RECOMMENDER_HEADER_TO_TITLE_MAP: Record<ResourceRecommenderHeaderType, string> = {
+    [ResourceRecommenderHeaderType.API_VERSION]: 'API Version',
+    [ResourceRecommenderHeaderType.CONTAINER_NAME]: 'Container Name',
+    [ResourceRecommenderHeaderType.CPU_LIMIT]: 'CPU Limits',
+    [ResourceRecommenderHeaderType.CPU_REQUEST]: 'CPU Requests',
+    [ResourceRecommenderHeaderType.KIND]: 'Kind',
+    [ResourceRecommenderHeaderType.MEMORY_LIMIT]: 'Mem Limits',
+    [ResourceRecommenderHeaderType.MEMORY_REQUEST]: 'Mem Requests',
+    [ResourceRecommenderHeaderType.NAME]: 'Workload',
+    [ResourceRecommenderHeaderType.NAMESPACE]: 'Namespace',
+}
