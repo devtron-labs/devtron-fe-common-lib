@@ -59,8 +59,50 @@ export interface K8sResourceListPayloadType {
     k8sRequest: ResourceListPayloadK8sRequestType
 }
 
+export enum ResourceRecommenderHeaderType {
+    NAME = 'name',
+    NAMESPACE = 'namespace',
+    KIND = 'kind',
+    API_VERSION = 'apiVersion',
+    CONTAINER_NAME = 'containerName',
+    CPU_REQUEST = 'cpuRequest',
+    CPU_LIMIT = 'cpuLimit',
+    MEMORY_REQUEST = 'memoryRequest',
+    MEMORY_LIMIT = 'memoryLimit',
+}
+
+export type ResourceRecommenderHeaderWithStringValue = Extract<
+    ResourceRecommenderHeaderType,
+    | ResourceRecommenderHeaderType.NAME
+    | ResourceRecommenderHeaderType.NAMESPACE
+    | ResourceRecommenderHeaderType.KIND
+    | ResourceRecommenderHeaderType.API_VERSION
+    | ResourceRecommenderHeaderType.CONTAINER_NAME
+>
+
+export type ResourceRecommenderHeaderWithRecommendation = Extract<
+    ResourceRecommenderHeaderType,
+    | ResourceRecommenderHeaderType.CPU_REQUEST
+    | ResourceRecommenderHeaderType.CPU_LIMIT
+    | ResourceRecommenderHeaderType.MEMORY_REQUEST
+    | ResourceRecommenderHeaderType.MEMORY_LIMIT
+>
+
 export type K8sResourceDetailDataType = {
     [key: string]: string | number | object | boolean
+    additionalMetadata?: {
+        [key in ResourceRecommenderHeaderWithRecommendation]?: {
+            current: {
+                value: string
+                unit: string
+            }
+            recommended: {
+                value: string
+                unit: string
+            }
+            delta: number
+        }
+    }
 }
 
 export interface K8sResourceDetailType {
