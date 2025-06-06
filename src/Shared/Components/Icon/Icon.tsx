@@ -77,6 +77,7 @@ import { ReactComponent as ICFiles } from '@IconsV2/ic-files.svg'
 import { ReactComponent as ICFilter } from '@IconsV2/ic-filter.svg'
 import { ReactComponent as ICFilterApplied } from '@IconsV2/ic-filter-applied.svg'
 import { ReactComponent as ICFlask } from '@IconsV2/ic-flask.svg'
+import { ReactComponent as ICFolderColor } from '@IconsV2/ic-folder-color.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
 import { ReactComponent as ICGear } from '@IconsV2/ic-gear.svg'
 import { ReactComponent as ICGift } from '@IconsV2/ic-gift.svg'
@@ -123,6 +124,7 @@ import { ReactComponent as ICMegaphoneRight } from '@IconsV2/ic-megaphone-right.
 import { ReactComponent as ICMemory } from '@IconsV2/ic-memory.svg'
 import { ReactComponent as ICMicrosoft } from '@IconsV2/ic-microsoft.svg'
 import { ReactComponent as ICMinikube } from '@IconsV2/ic-minikube.svg'
+import { ReactComponent as ICMinus } from '@IconsV2/ic-minus.svg'
 import { ReactComponent as ICMissing } from '@IconsV2/ic-missing.svg'
 import { ReactComponent as ICMobile } from '@IconsV2/ic-mobile.svg'
 import { ReactComponent as ICMonitoring } from '@IconsV2/ic-monitoring.svg'
@@ -266,6 +268,7 @@ export const iconMap = {
     'ic-filter-applied': ICFilterApplied,
     'ic-filter': ICFilter,
     'ic-flask': ICFlask,
+    'ic-folder-color': ICFolderColor,
     'ic-folder-user': ICFolderUser,
     'ic-gear': ICGear,
     'ic-gift-gradient': ICGiftGradient,
@@ -312,6 +315,7 @@ export const iconMap = {
     'ic-memory': ICMemory,
     'ic-microsoft': ICMicrosoft,
     'ic-minikube': ICMinikube,
+    'ic-minus': ICMinus,
     'ic-missing': ICMissing,
     'ic-mobile': ICMobile,
     'ic-monitoring': ICMonitoring,
