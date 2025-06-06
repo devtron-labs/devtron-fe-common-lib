@@ -92,15 +92,18 @@ export type K8sResourceDetailDataType = {
     [key: string]: string | number | object | boolean
     additionalMetadata?: {
         [key in ResourceRecommenderHeaderWithRecommendation]?: {
+            // In case there is not limit or request set, it will be null
             current: {
                 value: string
                 unit: string
-            }
+            } | null
+            // In case cron is yet to run
             recommended: {
                 value: string
                 unit: string
-            }
-            delta: number
+            } | null
+            // In case any of current or recommended is null, delta will be null
+            delta: number | null
         }
     }
 }
