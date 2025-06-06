@@ -159,7 +159,7 @@ export interface customEnv {
     GATEKEEPER_URL?: string
     FEATURE_AI_INTEGRATION_ENABLE?: boolean
     LOGIN_PAGE_IMAGE?: string
-    FEATURE_AI_APP_DETAILS_ENABLE?: boolean
+    FEATURE_ASK_DEVTRON_EXPERT?: boolean
 }
 declare global {
     interface Window {

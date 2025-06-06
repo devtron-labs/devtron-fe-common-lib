@@ -148,15 +148,17 @@ const PageHeader = ({
 
     const renderLogoutHelpSection = () => (
         <>
-            <Button
-                dataTestId="ask-devtron-button"
-                variant={ButtonVariantType.secondary}
-                style={ButtonStyleType.neutral}
-                onClick={onAskButtonClick}
-                text="Ask AI"
-                startIcon={<Icon name="ic-sparkle-color" color={null} />}
-                size={ComponentSizeType.small}
-            />
+            {window._env_?.FEATURE_ASK_DEVTRON_EXPERT && (
+                <Button
+                    dataTestId="ask-devtron-button"
+                    variant={ButtonVariantType.secondary}
+                    style={ButtonStyleType.neutral}
+                    onClick={onAskButtonClick}
+                    text="Ask AI"
+                    startIcon={<Icon name="ic-sparkle-color" color={null} />}
+                    size={ComponentSizeType.small}
+                />
+            )}
             <HelpButton
                 serverInfo={currentServerInfo.serverInfo}
                 fetchingServerInfo={currentServerInfo.fetchingServerInfo}
