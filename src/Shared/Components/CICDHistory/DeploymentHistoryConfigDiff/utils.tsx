@@ -17,11 +17,12 @@
 import moment from 'moment'
 
 import { DATE_TIME_FORMATS, ERROR_STATUS_CODE } from '@Common/Constants'
+import { Icon } from '@Shared/Components/Icon'
 import { SelectPickerOptionType } from '@Shared/Components/SelectPicker'
 import { DeploymentStatus } from '@Shared/Components/StatusComponent'
 import { DeploymentStageType } from '@Shared/constants'
 
-import { History } from '../types'
+import { DeploymentHistorySingleValue, History } from '../types'
 import { renderPipelineDeploymentOptionDescription } from './helpers'
 import { DeploymentHistoryConfigDiffProps } from './types'
 
@@ -88,3 +89,28 @@ export const isDeploymentHistoryConfigDiffNotFoundError = <T extends unknown>(re
 
 export const getDeploymentHistoryConfigDiffError = <T extends unknown>(res: PromiseSettledResult<T>) =>
     res.status === 'rejected' && res.reason?.code !== ERROR_STATUS_CODE.NOT_FOUND ? res.reason : null
+
+export const renderDetailedValue = (
+    parentClassName: string,
+    singleValue: DeploymentHistorySingleValue,
+    dataTestId: string,
+) => (
+    <div className={`${parentClassName} px-16 py-8 flexbox dc__content-space dc__gap-12`}>
+        <div>
+            <div className="cn-6 lh-16" data-testid={dataTestId}>
+                {singleValue.displayName}
+            </div>
+            <div className="cn-9 fs-13 lh-20 dc__word-break">{singleValue.value}</div>
+        </div>
+        {singleValue.tooltipContent && (
+            <Icon
+                name="ic-info-outline"
+                tooltipProps={{
+                    alwaysShowTippyOnHover: true,
+                    content: singleValue.tooltipContent,
+                }}
+                color={null}
+            />
+        )}
+    </div>
+)

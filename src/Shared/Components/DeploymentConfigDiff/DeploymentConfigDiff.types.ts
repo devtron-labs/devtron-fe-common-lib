@@ -15,6 +15,7 @@
  */
 
 import { SortingOrder } from '@Common/Constants'
+import { RadioGroupItemProps, RadioGroupProps } from '@Common/Types'
 import {
     AppEnvDeploymentConfigDTO,
     ConfigMapSecretDataConfigDatumDTO,
@@ -27,7 +28,7 @@ import { ManifestTemplateDTO } from '@Pages/Applications'
 import { DeploymentHistoryDetail } from '../CICDHistory'
 import { CollapseProps } from '../Collapse'
 import { CollapsibleListConfig, CollapsibleListItem } from '../CollapsibleList'
-import { SelectPickerProps } from '../SelectPicker'
+import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
 
 export enum DeploymentConfigDiffState {
     NO_DIFF = 'noDiff',
@@ -53,6 +54,18 @@ export interface DeploymentConfigListItem {
     groupHeader?: string
 }
 
+interface DeploymentConfigDiffRadioConfig extends Pick<RadioGroupProps, 'name' | 'onChange'> {
+    title: string
+    options: (Pick<RadioGroupItemProps, 'disabled'> &
+        Pick<SelectPickerOptionType<string>, 'label' | 'value' | 'description' | 'tooltipProps'>)[]
+    groupValue: string
+}
+
+export interface DeploymentConfigDiffRadioSelectConfig {
+    triggerElementTitle: string
+    radioGroupConfig: DeploymentConfigDiffRadioConfig[]
+}
+
 export type DeploymentConfigDiffSelectPickerProps =
     | {
           type: 'string'
@@ -65,6 +78,13 @@ export type DeploymentConfigDiffSelectPickerProps =
           id: string
           text?: never
           selectPickerProps: SelectPickerProps
+      }
+    | {
+          type: 'radio-group'
+          id: string
+          text?: never
+          radioSelectConfig: DeploymentConfigDiffRadioSelectConfig
+          selectPickerProps?: never
       }
 
 export interface DeploymentConfigDiffNavigationItem

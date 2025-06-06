@@ -15,19 +15,18 @@
  */
 
 /* eslint-disable dot-notation */
+import moment from 'moment'
+
 import { get, getUrlWithSearchParams, ResponseType, ROUTES, sanitizeUserApprovalMetadata, trash } from '../../../Common'
-import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP, EXTERNAL_TYPES } from '../../constants'
-import { decode } from '../../Helpers'
+import { DATE_TIME_FORMAT_STRING, DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP, EXTERNAL_TYPES } from '../../constants'
+import { decode, isNullOrUndefined } from '../../Helpers'
 import { ResourceKindType, ResourceVersionType } from '../../types'
 import {
-    DeploymentConfigurationsRes,
     DeploymentHistoryDetail,
-    DeploymentHistoryDetailRes,
     DeploymentHistoryResult,
     DeploymentHistorySingleValue,
     DeploymentStatusDetailsResponse,
     FetchIdDataStatus,
-    HistoryDiffSelectorRes,
     ModuleConfigResponse,
     TriggerDetailsResponseType,
     TriggerHistoryParamsType,
@@ -107,26 +106,7 @@ export function getManualSync(params: { appId: string; envId: string }): Promise
     return get(`${ROUTES.MANUAL_SYNC}/${params.appId}/${params.envId}`)
 }
 
-export const getDeploymentHistoryList = (
-    appId: string,
-    pipelineId: string,
-    triggerId: string,
-): Promise<DeploymentConfigurationsRes> => get(`app/history/deployed-configuration/${appId}/${pipelineId}/${triggerId}`)
-
-export const getDeploymentHistoryDetail = (
-    appId: string,
-    pipelineId: string,
-    id: string,
-    historyComponent: string,
-    historyComponentName: string,
-): Promise<DeploymentHistoryDetailRes> =>
-    get(
-        `app/history/deployed-component/detail/${appId}/${pipelineId}/${id}?historyComponent=${historyComponent
-            .replace('-', '_')
-            .toUpperCase()}${historyComponentName ? `&historyComponentName=${historyComponentName}` : ''}`,
-    )
-
-export const prepareDeploymentTemplateData = (rawData): Record<string, DeploymentHistorySingleValue> => {
+const prepareDeploymentTemplateData = (rawData): Record<string, DeploymentHistorySingleValue> => {
     const deploymentTemplateData = {}
     if (rawData.templateVersion) {
         deploymentTemplateData['templateVersion'] = { displayName: 'Chart Version', value: rawData.templateVersion }
@@ -140,7 +120,7 @@ export const prepareDeploymentTemplateData = (rawData): Record<string, Deploymen
     return deploymentTemplateData
 }
 
-export const preparePipelineConfigData = (rawData): Record<string, DeploymentHistorySingleValue> => {
+const preparePipelineConfigData = (rawData): Record<string, DeploymentHistorySingleValue> => {
     const pipelineConfigData = {}
     if (rawData.pipelineTriggerType) {
         pipelineConfigData['pipelineTriggerType'] = {
@@ -149,15 +129,28 @@ export const preparePipelineConfigData = (rawData): Record<string, DeploymentHis
         }
     }
     if (rawData.strategy) {
+        const { updatedBy, updatedOn, selectedAtRuntime } = rawData
         pipelineConfigData['strategy'] = {
             displayName: 'Deployment strategy',
             value: rawData.strategy,
+            ...(updatedBy && updatedOn && !isNullOrUndefined(selectedAtRuntime)
+                ? {
+                      tooltipContent: (
+                          <div className="flexbox-col br-4 w-200">
+                              <span className="fw-6">
+                                  {selectedAtRuntime ? 'Selected at runtime' : 'Default Strategy'}
+                              </span>
+                              <span className="fw-4">{`${selectedAtRuntime ? '' : 'Last updated '}by ${updatedBy} at ${moment(updatedOn).format(DATE_TIME_FORMAT_STRING)}`}</span>
+                          </div>
+                      ),
+                  }
+                : {}),
         }
     }
     return pipelineConfigData
 }
 
-export const prepareConfigMapAndSecretData = (
+const prepareConfigMapAndSecretData = (
     rawData,
     type: string,
     historyData: DeploymentHistoryDetail,
@@ -275,24 +268,6 @@ export const prepareHistoryData = (
     }
     historyData.values = values
     return historyData
-}
-
-export const getDeploymentDiffSelector = (
-    pipelineId: string,
-    historyComponent,
-    baseConfigurationId,
-    historyComponentName,
-): Promise<HistoryDiffSelectorRes> => {
-    const url = getUrlWithSearchParams(
-        `${ROUTES.RESOURCE_HISTORY_DEPLOYMENT}/${ROUTES.CONFIG_CD_PIPELINE}/${ResourceVersionType.v1}`,
-        {
-            baseConfigurationId,
-            historyComponent: historyComponent.replace('-', '_').toUpperCase(),
-            filterCriteria: `cd-pipeline|id|${pipelineId}`,
-            historyComponentName,
-        },
-    )
-    return get(url)
 }
 
 export const getTriggerHistory = async ({

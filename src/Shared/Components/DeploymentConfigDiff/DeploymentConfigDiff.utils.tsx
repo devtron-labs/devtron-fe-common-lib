@@ -667,6 +667,23 @@ const getConfigDataWithResolvedDeploymentTemplate = (
     }
 }
 
+const removeTooltipContent = (
+    valuesObj: Record<string, DeploymentHistorySingleValue>,
+): Record<string, DeploymentHistorySingleValue> => {
+    if (!valuesObj) return valuesObj
+    return Object.fromEntries(
+        Object.entries(valuesObj).map(([key, val]) => {
+            if (val && typeof val === 'object' && 'tooltipContent' in val) {
+                // Remove tooltipContent so that diff is not checked in this property
+                // eslint-disable-next-line @typescript-eslint/no-unused-vars
+                const { tooltipContent, ...rest } = val
+                return [key, rest]
+            }
+            return [key, val]
+        }),
+    )
+}
+
 /**
  * Generates a list of deployment configurations for application environments and identifies changes between the current and compare lists.
  *
@@ -738,6 +755,17 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
                 compareWithObject.pipelineConfigData,
                 sortingConfig,
             )
+
+            const currentPipelineConfigDataForDiff = {
+                ...currentPipelineConfigData,
+                values: removeTooltipContent(currentPipelineConfigData.values),
+            }
+
+            const comparePipelineConfigDataForDiff = {
+                ...comparePipelineConfigData,
+                values: removeTooltipContent(comparePipelineConfigData.values),
+            }
+
             pipelineConfigData = {
                 id: EnvResourceType.PipelineStrategy,
                 pathType: EnvResourceType.PipelineStrategy,
@@ -750,7 +778,7 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
                     heading: null,
                     list: currentPipelineConfigData,
                 },
-                diffState: getDiffState(currentPipelineConfigData, comparePipelineConfigData),
+                diffState: getDiffState(currentPipelineConfigDataForDiff, comparePipelineConfigDataForDiff),
             }
         }
 
