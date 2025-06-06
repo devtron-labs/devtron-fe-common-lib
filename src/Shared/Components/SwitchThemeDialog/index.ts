@@ -14,4 +14,5 @@
  * limitations under the License.
  */
 
-export * from './DialogForm'
+export { default as SwitchThemeDialog } from './SwitchThemeDialog.component'
+export * from './types'
