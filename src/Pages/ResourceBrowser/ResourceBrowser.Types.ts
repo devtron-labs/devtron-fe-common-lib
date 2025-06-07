@@ -120,6 +120,7 @@ export interface K8sResourceDetailType {
 }
 
 export interface BulkSelectionActionWidgetProps {
+    isResourceRecommendationView: boolean
     count: number
     handleOpenBulkDeleteModal: () => void
     handleClearBulkSelection: () => void
@@ -127,12 +128,13 @@ export interface BulkSelectionActionWidgetProps {
     handleOpenUncordonNodeModal: () => void
     handleOpenDrainNodeModal: () => void
     handleOpenRestartWorkloadModal: () => void
+    handleOpenApplyResourceRecommendationModal: () => void
     parentRef: RefObject<HTMLDivElement>
     showBulkRestartOption: boolean
     showNodeListingOptions: boolean
 }
 
-export type RBBulkOperationType = 'restart' | 'delete' | 'cordon' | 'uncordon' | 'drain'
+export type RBBulkOperationType = 'restart' | 'delete' | 'cordon' | 'uncordon' | 'drain' | 'applyResourceRecommendation'
 
 export interface CreateResourceRequestBodyType {
     appId: string
