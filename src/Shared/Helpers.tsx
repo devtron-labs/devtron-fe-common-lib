@@ -61,6 +61,7 @@ import {
     GitTriggers,
     IntersectionChangeHandler,
     IntersectionOptions,
+    Node,
     Nodes,
     PreventOutsideFocusProps,
     TargetPlatformItemDTO,
@@ -713,4 +714,23 @@ export const smoothScrollToTop = (scrollContainer: HTMLElement, targetPosition: 
     })
 
     return controls
+}
+
+export const getGroupVersionFromApiVersion = (apiVersion: string): Pick<Node, 'group' | 'version'> => {
+    if (!apiVersion || apiVersion === '/') {
+        return { group: '', version: '' }
+    }
+
+    const parts = apiVersion.split('/')
+
+    if (parts.length === 1) {
+        return { group: '', version: parts[0] }
+    }
+
+    if (parts.length === 2) {
+        return { group: parts[0], version: parts[1] }
+    }
+
+    // If the apiVersion has more than two parts, we consider the first part as group and the rest as version
+    return { group: parts[0], version: parts.slice(1).join('/') }
 }

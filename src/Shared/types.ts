@@ -138,6 +138,7 @@ export enum Nodes {
     Overview = 'Overview',
     MonitoringDashboard = 'MonitoringDashboard',
     UpgradeCluster = 'UpgradeCluster',
+    ResourceRecommender = 'ResourceRecommender',
 }
 
 // FIXME: This should be `typeof Nodes[keyof typeof Nodes]` instead since the key and values are not the same. Same to be removed from duplications in dashboard
