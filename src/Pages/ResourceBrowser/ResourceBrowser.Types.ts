@@ -194,3 +194,8 @@ export interface NodeActionRequest {
     version: string
     kind: string
 }
+
+export interface GVKOptionValueType {
+    kind: string
+    apiVersion: string
+}

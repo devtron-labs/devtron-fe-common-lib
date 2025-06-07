@@ -124,3 +124,6 @@ export const RESOURCE_RECOMMENDER_HEADER_TO_TITLE_MAP: Record<ResourceRecommende
     [ResourceRecommenderHeaderType.NAME]: 'Workload',
     [ResourceRecommenderHeaderType.NAMESPACE]: 'Namespace',
 }
+
+export const GVK_FILTER_KIND_QUERY_PARAM_KEY = 'gvkFilterKind'
+export const GVK_FILTER_API_VERSION_QUERY_PARAM_KEY = 'gvkFilterApiVersion'
