@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-import { RefObject } from 'react'
+import { Dispatch, RefObject, SetStateAction } from 'react'
+import { GroupBase } from 'react-select'
 
+import { ServerErrors } from '@Common/ServerError'
+import { SelectPickerOptionType } from '@Shared/Components'
 import { Nodes, NodeType } from '@Shared/types'
 
 export interface GVKType {
@@ -198,4 +201,14 @@ export interface NodeActionRequest {
 export interface GVKOptionValueType {
     kind: string
     apiVersion: string
+}
+
+export interface GetResourceRecommenderResourceListPropsType {
+    resourceList: K8sResourceDetailType
+    reloadResourceListData: () => void
+    setShowAbsoluteValuesInResourceRecommender: Dispatch<SetStateAction<boolean>>
+    showAbsoluteValuesInResourceRecommender: boolean
+    gvkOptions: GroupBase<SelectPickerOptionType<GVKOptionValueType>>[]
+    isLoading: boolean
+    resourceListError: ServerErrors
 }
