@@ -91,7 +91,7 @@ export const ResizableTagTextArea = ({
     useEffect(() => {
         setTimeout(() => {
             reInitHeight()
-        }, 100)
+        }, 300)
     }, [])
 
     useThrottledEffect(reInitHeight, 500, [value])

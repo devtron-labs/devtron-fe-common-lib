@@ -38,6 +38,7 @@ import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
 import { ReactComponent as ICCloseLarge } from '@IconsV2/ic-close-large.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
+import { ReactComponent as ICCloudUpload } from '@IconsV2/ic-cloud-upload.svg'
 import { ReactComponent as ICCloudVms } from '@IconsV2/ic-cloud-vms.svg'
 import { ReactComponent as ICCluster } from '@IconsV2/ic-cluster.svg'
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
@@ -122,6 +123,7 @@ import { ReactComponent as ICMegaphoneRight } from '@IconsV2/ic-megaphone-right.
 import { ReactComponent as ICMemory } from '@IconsV2/ic-memory.svg'
 import { ReactComponent as ICMicrosoft } from '@IconsV2/ic-microsoft.svg'
 import { ReactComponent as ICMinikube } from '@IconsV2/ic-minikube.svg'
+import { ReactComponent as ICMinus } from '@IconsV2/ic-minus.svg'
 import { ReactComponent as ICMissing } from '@IconsV2/ic-missing.svg'
 import { ReactComponent as ICMobile } from '@IconsV2/ic-mobile.svg'
 import { ReactComponent as ICMonitoring } from '@IconsV2/ic-monitoring.svg'
@@ -163,6 +165,7 @@ import { ReactComponent as ICStrategyRollingColor } from '@IconsV2/ic-strategy-r
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
 import { ReactComponent as ICSun } from '@IconsV2/ic-sun.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
+import { ReactComponent as ICSwap } from '@IconsV2/ic-swap.svg'
 import { ReactComponent as ICTata1mg } from '@IconsV2/ic-tata1mg.svg'
 import { ReactComponent as ICTerminal } from '@IconsV2/ic-terminal.svg'
 import { ReactComponent as ICTerminalFill } from '@IconsV2/ic-terminal-fill.svg'
@@ -224,6 +227,7 @@ export const iconMap = {
     'ic-clock': ICClock,
     'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
+    'ic-cloud-upload': ICCloudUpload,
     'ic-cloud-vms': ICCloudVms,
     'ic-cluster': ICCluster,
     'ic-code': ICCode,
@@ -308,6 +312,7 @@ export const iconMap = {
     'ic-memory': ICMemory,
     'ic-microsoft': ICMicrosoft,
     'ic-minikube': ICMinikube,
+    'ic-minus': ICMinus,
     'ic-missing': ICMissing,
     'ic-mobile': ICMobile,
     'ic-monitoring': ICMonitoring,
@@ -349,6 +354,7 @@ export const iconMap = {
     'ic-success': ICSuccess,
     'ic-sun': ICSun,
     'ic-suspended': ICSuspended,
+    'ic-swap': ICSwap,
     'ic-tata1mg': ICTata1mg,
     'ic-terminal-fill': ICTerminalFill,
     'ic-terminal': ICTerminal,

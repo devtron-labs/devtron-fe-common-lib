@@ -330,7 +330,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
             const { renderer, position = 'start' } = actionButtonConfig
             const actionButtonNode = (
                 <div
-                    className={`dc__overflow-hidden flex top bg__primary ${(position === 'start' && key === headers[0].key) || (isDeletionNotAllowed && position === 'end' && key === headers[headers.length - 1].key) ? 'dynamic-data-table__cell' : ''}`}
+                    className={`dc__overflow-hidden flex top bg__primary no-focus ${(position === 'start' && key === headers[0].key) || (isDeletionNotAllowed && position === 'end' && key === headers[headers.length - 1].key) ? 'dynamic-data-table__cell' : ''}`}
                 >
                     {renderer(row)}
                 </div>

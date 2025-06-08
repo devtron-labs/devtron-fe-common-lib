@@ -53,6 +53,11 @@ export interface ResourceDetail {
     usagePercentage: string
     requestPercentage: string
     limitPercentage: string
+    prevUsagePercentage?: string | null
+    threshold?: {
+        operator: 'greaterThan' | 'lessThan' | 'equalTo'
+        value: number
+    } | null
 }
 
 export interface NodeTaintType {
