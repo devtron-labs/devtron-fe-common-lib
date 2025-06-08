@@ -148,6 +148,7 @@ export interface CreateResourceRequestBodyType {
 export interface ResourceManifestDTO {
     manifestResponse: {
         manifest: Record<string, unknown>
+        recommendedManifest?: Record<string, unknown>
     }
     secretViewAccess: boolean
 }

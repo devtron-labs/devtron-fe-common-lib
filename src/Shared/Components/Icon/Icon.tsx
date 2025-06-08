@@ -42,6 +42,7 @@ import { ReactComponent as ICCloudVms } from '@IconsV2/ic-cloud-vms.svg'
 import { ReactComponent as ICCluster } from '@IconsV2/ic-cluster.svg'
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
+import { ReactComponent as ICContainerRegistry } from '@IconsV2/ic-container-registry.svg'
 import { ReactComponent as ICCookr } from '@IconsV2/ic-cookr.svg'
 import { ReactComponent as ICCopy } from '@IconsV2/ic-copy.svg'
 import { ReactComponent as ICCpu } from '@IconsV2/ic-cpu.svg'
@@ -229,6 +230,7 @@ export const iconMap = {
     'ic-cloud-vms': ICCloudVms,
     'ic-cluster': ICCluster,
     'ic-code': ICCode,
+    'ic-container-registry': ICContainerRegistry,
     'ic-container': ICContainer,
     'ic-cookr': ICCookr,
     'ic-copy': ICCopy,
