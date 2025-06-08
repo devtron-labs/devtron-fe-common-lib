@@ -99,13 +99,11 @@ export type K8sResourceDetailDataType = {
             {
                 // In case there is not limit or request set, it will be null
                 current: {
-                    value: number
-                    unit: string
+                    value: string
                 } | null
                 // In case cron is yet to run
                 recommended: {
-                    value: number
-                    unit: string
+                    value: string
                 } | null
                 // In case any of current or recommended is null, delta will be null
                 delta: number | null
