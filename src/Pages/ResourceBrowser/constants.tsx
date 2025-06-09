@@ -125,5 +125,17 @@ export const RESOURCE_RECOMMENDER_HEADER_TO_TITLE_MAP: Record<ResourceRecommende
     [ResourceRecommenderHeaderType.NAMESPACE]: 'Namespace',
 }
 
+export const RESOURCE_RECOMMENDER_HEADER_TO_WIDTH_MAP: Record<ResourceRecommenderHeaderType, number> = {
+    [ResourceRecommenderHeaderType.API_VERSION]: 180,
+    [ResourceRecommenderHeaderType.CONTAINER_NAME]: 150,
+    [ResourceRecommenderHeaderType.CPU_LIMIT]: 150,
+    [ResourceRecommenderHeaderType.CPU_REQUEST]: 150,
+    [ResourceRecommenderHeaderType.KIND]: 150,
+    [ResourceRecommenderHeaderType.MEMORY_LIMIT]: 150,
+    [ResourceRecommenderHeaderType.MEMORY_REQUEST]: 150,
+    [ResourceRecommenderHeaderType.NAME]: 350,
+    [ResourceRecommenderHeaderType.NAMESPACE]: 150,
+}
+
 export const GVK_FILTER_KIND_QUERY_PARAM_KEY = 'gvkFilterKind'
 export const GVK_FILTER_API_VERSION_QUERY_PARAM_KEY = 'gvkFilterApiVersion'
