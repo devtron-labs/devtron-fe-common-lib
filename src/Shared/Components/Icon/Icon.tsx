@@ -113,6 +113,8 @@ import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
 import { ReactComponent as ICLego } from '@IconsV2/ic-lego.svg'
 import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
 import { ReactComponent as ICLightningFill } from '@IconsV2/ic-lightning-fill.svg'
+import { ReactComponent as ICLink } from '@IconsV2/ic-link.svg'
+import { ReactComponent as ICLinkBroken } from '@IconsV2/ic-link-broken.svg'
 import { ReactComponent as ICLivspace } from '@IconsV2/ic-livspace.svg'
 import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
 import { ReactComponent as ICMagnifyingGlass } from '@IconsV2/ic-magnifying-glass.svg'
@@ -302,6 +304,8 @@ export const iconMap = {
     'ic-lego': ICLego,
     'ic-lightning-fill': ICLightningFill,
     'ic-lightning': ICLightning,
+    'ic-link-broken': ICLinkBroken,
+    'ic-link': ICLink,
     'ic-livspace': ICLivspace,
     'ic-logout': ICLogout,
     'ic-magnifying-glass': ICMagnifyingGlass,
