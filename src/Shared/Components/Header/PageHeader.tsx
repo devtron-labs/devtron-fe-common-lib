@@ -21,13 +21,11 @@ import Tippy from '@tippyjs/react'
 import { ReactComponent as ICCaretDownSmall } from '@Icons/ic-caret-down-small.svg'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
 import { ReactComponent as ICMediumPaintBucket } from '@IconsV2/ic-medium-paintbucket.svg'
-import { ComponentSizeType } from '@Shared/constants'
 import { InstallationType } from '@Shared/types'
 
 import { getAlphabetIcon, TippyCustomized, TippyTheme } from '../../../Common'
 import { MAX_LOGIN_COUNT, POSTHOG_EVENT_ONBOARDING } from '../../../Common/Constants'
 import { SidePanelTab, useMainContext, useTheme, useUserEmail } from '../../Providers'
-import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import GettingStartedCard from '../GettingStartedCard/GettingStarted'
 import { Icon } from '../Icon'
 import { InfoIconTippy } from '../InfoIconTippy'
@@ -60,6 +58,7 @@ const PageHeader = ({
         setShowGettingStartedCard,
         licenseData,
         setSidePanelConfig,
+        sidePanelConfig,
     } = useMainContext()
     const { showSwitchThemeLocationTippy, handleShowSwitchThemeLocationTippyChange } = useTheme()
 
@@ -148,16 +147,15 @@ const PageHeader = ({
 
     const renderLogoutHelpSection = () => (
         <>
-            {window._env_?.FEATURE_ASK_DEVTRON_EXPERT && (
-                <Button
-                    dataTestId="ask-devtron-button"
-                    variant={ButtonVariantType.secondary}
-                    style={ButtonStyleType.neutral}
+            {window._env_?.FEATURE_ASK_DEVTRON_EXPERT && sidePanelConfig.state === 'closed' && (
+                <button
+                    className="enable-svg-animation--hover flex dc__no-background p-2 dc__outline-none-imp dc__no-border"
                     onClick={onAskButtonClick}
-                    text="Ask AI"
-                    startIcon={<Icon name="ic-sparkle-color" color={null} />}
-                    size={ComponentSizeType.small}
-                />
+                    type="button"
+                    aria-label="Ask Devtron Expert"
+                >
+                    <Icon name="ic-devtron-ai" color={null} size={28} />
+                </button>
             )}
             <HelpButton
                 serverInfo={currentServerInfo.serverInfo}
