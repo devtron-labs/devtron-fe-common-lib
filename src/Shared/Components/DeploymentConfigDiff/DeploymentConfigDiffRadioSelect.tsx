@@ -27,7 +27,7 @@ const DeploymentConfigDiffRadioSelect = ({
 
     const renderTriggerElement = () => (
         <div className="flex dc__content-space dc__gap-8">
-            <span className="fs-13 cn-9 fw-6 lh-20 dc__truncate">{triggerElementTitle}</span>
+            <span className="fs-13 cn-9 fw-6 lh-20 dc__mxw-250 dc__truncate">{triggerElementTitle}</span>
             <Icon name="ic-caret-left" color={null} size={20} rotateBy={open ? 90 : -90} />
         </div>
     )
