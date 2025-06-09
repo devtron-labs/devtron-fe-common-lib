@@ -162,7 +162,7 @@ export const CiPipelineSourceConfig = ({
                                 {!baseText && (
                                     <>
                                         <div
-                                            className={`dc__ellipsis-right ${
+                                            className={`dc__truncate ${
                                                 sourceValue === GIT_BRANCH_NOT_CONFIGURED ? 'cr-5' : ''
                                             }`}
                                         >
@@ -181,7 +181,7 @@ export const CiPipelineSourceConfig = ({
                             </div>
                         </Tooltip>
                     ) : (
-                        <span className="dc__ellipsis-right">{sourceValueAdv}</span>
+                        <span className="dc__truncate">{sourceValueAdv}</span>
                     )}
                 </div>
             )}

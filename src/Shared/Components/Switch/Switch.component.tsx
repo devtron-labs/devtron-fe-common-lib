@@ -1,12 +1,12 @@
 import { AriaAttributes, useRef } from 'react'
-import { AnimatePresence, motion } from 'framer-motion'
+import { motion } from 'framer-motion'
 
 import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 import { getUniqueId } from '@Shared/Helpers'
 
 import { Icon } from '../Icon'
-import { INDETERMINATE_ICON_WIDTH_MAP, LOADING_COLOR_MAP } from './constants'
+import { LOADING_COLOR_MAP } from './constants'
 import { DTSwitchProps } from './types'
 import {
     getSwitchContainerClass,
@@ -22,7 +22,6 @@ import './switch.scss'
 
 const Switch = ({
     ariaLabel,
-    dataTestId,
     isDisabled,
     isLoading,
     isChecked,
@@ -34,7 +33,9 @@ const Switch = ({
     indeterminate = false,
     size = ComponentSizeType.medium,
     name,
+    dataTestId = name,
     onChange,
+    autoFocus = false,
 }: DTSwitchProps) => {
     const inputId = useRef(getUniqueId())
 
@@ -50,59 +51,46 @@ const Switch = ({
 
     const showIndeterminateIcon = ariaCheckedValue === 'mixed'
 
+    const thumbPosition = getThumbPosition({ isChecked, shape, size, indeterminate, isLoading })
+
     const renderContent = () => (
-        <motion.span
-            className={`flex flex-grow-1 ${getThumbPadding({ shape, isLoading })} ${getThumbPosition({ isChecked, isLoading })}`}
-            layout
-            transition={{ ease: 'easeInOut', duration: 0.2 }}
+        <span
+            className={`flexbox flex-grow-1 ${!isLoading && showIndeterminateIcon ? 'dc__align-items-center' : ''} ${getThumbPadding({ shape, isLoading })}`}
         >
             {isLoading ? (
                 <motion.span
                     transition={{ ease: 'easeInOut', duration: 0.2 }}
-                    layoutId={`${name}-loader`}
-                    className="flex-grow-1 h-100 dc__fill-available-space dc__no-shrink"
+                    animate={{
+                        x: thumbPosition,
+                    }}
+                    className="flexbox dc__fill-available-space"
                 >
                     <Icon name="ic-circle-loader" color={LOADING_COLOR_MAP[variant]} size={null} />
                 </motion.span>
             ) : (
                 <motion.span
-                    layoutId={`${name}-thumb`}
-                    className={getSwitchThumbClass({ shape, size, showIndeterminateIcon })}
-                    layout
                     transition={{ ease: 'easeInOut', duration: 0.2 }}
+                    animate={{
+                        x: thumbPosition,
+                    }}
+                    className={getSwitchThumbClass({ shape, size, showIndeterminateIcon })}
                 >
-                    <AnimatePresence>
-                        {showIndeterminateIcon ? (
-                            <motion.span
-                                className={`${INDETERMINATE_ICON_WIDTH_MAP[size]} h-2 br-4 dc__no-shrink bg__white`}
-                                initial={{ scale: 0, opacity: 0 }}
-                                animate={{ scale: 1, opacity: 1 }}
-                                exit={{ scale: 0, opacity: 0 }}
+                    {iconName && !showIndeterminateIcon && (
+                        <span className="icon-dim-12 flex dc__fill-available-space dc__no-shrink">
+                            <Icon
+                                name={iconName}
+                                color={getSwitchIconColor({
+                                    isChecked,
+                                    iconColor,
+                                    variant,
+                                })}
+                                size={null}
                             />
-                        ) : (
-                            iconName && (
-                                <motion.span
-                                    className="icon-dim-12 flex dc__fill-available-space dc__no-shrink"
-                                    initial={{ scale: 0.8, opacity: 0 }}
-                                    animate={{ scale: 1, opacity: 1 }}
-                                    exit={{ scale: 0.8, opacity: 0 }}
-                                >
-                                    <Icon
-                                        name={iconName}
-                                        color={getSwitchIconColor({
-                                            isChecked,
-                                            iconColor,
-                                            variant,
-                                        })}
-                                        size={null}
-                                    />
-                                </motion.span>
-                            )
-                        )}
-                    </AnimatePresence>
+                        </span>
+                    )}
                 </motion.span>
             )}
-        </motion.span>
+        </span>
     )
 
     return (
@@ -124,6 +112,8 @@ const Switch = ({
                 <button
                     type="button"
                     role="checkbox"
+                    // eslint-disable-next-line jsx-a11y/no-autofocus
+                    autoFocus={autoFocus}
                     aria-checked={ariaCheckedValue}
                     aria-labelledby={inputId.current}
                     aria-label={isLoading ? 'Loading...' : ariaLabel}
@@ -138,6 +128,7 @@ const Switch = ({
                             shape,
                             variant,
                             isChecked,
+                            isLoading,
                         }),
                     }}
                 >

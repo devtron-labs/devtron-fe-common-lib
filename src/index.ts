@@ -160,6 +160,12 @@ export interface customEnv {
     FEATURE_AI_INTEGRATION_ENABLE?: boolean
     LOGIN_PAGE_IMAGE?: string
     FEATURE_ASK_DEVTRON_EXPERT?: boolean
+    /**
+     * If true, the manage traffic feature is enabled in apps & app groups.
+     *
+     * @default false
+     */
+    FEATURE_MANAGE_TRAFFIC_ENABLE?: boolean
 }
 declare global {
     interface Window {

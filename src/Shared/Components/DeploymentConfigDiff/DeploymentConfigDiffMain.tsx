@@ -162,9 +162,9 @@ export const DeploymentConfigDiffMain = ({
 
             return (
                 <ToggleResolveScopedVariables
+                    name="resolve-scoped-variables"
                     resolveScopedVariables={convertVariables}
                     handleToggleScopedVariablesView={onConvertVariablesClick}
-                    throttleOnChange
                 />
             )
         }
@@ -218,7 +218,6 @@ export const DeploymentConfigDiffMain = ({
                                 </div>
                             )}
                             <DeploymentHistoryDiffView
-                                codeEditorKey={`${sortingConfig?.sortBy}-${sortingConfig?.sortOrder}-${scopeVariablesConfig?.convertVariables}`}
                                 baseTemplateConfiguration={secondaryList}
                                 currentConfiguration={primaryList}
                                 previousConfigAvailable

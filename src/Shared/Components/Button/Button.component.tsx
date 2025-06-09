@@ -18,8 +18,7 @@ import { MutableRefObject, PropsWithChildren, useCallback, useEffect, useRef, us
 import { Link } from 'react-router-dom'
 
 import { Progressing } from '@Common/Progressing'
-import { Tooltip } from '@Common/Tooltip'
-import { TooltipProps } from '@Common/Tooltip/types'
+import { Tooltip, TooltipProps } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { ButtonComponentType, ButtonProps, ButtonStyleType, ButtonVariantType } from './types'
@@ -187,6 +186,7 @@ const Button = <ComponentType extends ButtonComponentType>({
     variant = ButtonVariantType.primary,
     size = ComponentSizeType.large,
     style = ButtonStyleType.default,
+    fontWeight = 'bold',
     startIcon = null,
     endIcon = null,
     disabled = false,
@@ -248,23 +248,22 @@ const Button = <ComponentType extends ButtonComponentType>({
         }
 
         if (Object.hasOwn(tooltipProps, 'shortcutKeyCombo') && 'shortcutKeyCombo' in tooltipProps) {
-            return tooltipProps
+            return tooltipProps as TooltipProps
         }
 
         return {
-            // TODO: using some typing somersaults here, clean it up later
-            alwaysShowTippyOnHover: showTooltip && !!(tooltipProps as Required<Pick<TooltipProps, 'content'>>)?.content,
-            ...(tooltipProps as Required<Pick<TooltipProps, 'content'>>),
-        }
+            alwaysShowTippyOnHover: showTooltip && !!tooltipProps?.content,
+            ...tooltipProps,
+        } as TooltipProps
     }
 
     return (
         <Tooltip {...getTooltipProps()}>
-            <div>
+            <div className={`dc__inline-block ${fullWidth ? 'w-100' : ''}`}>
                 <ButtonElement
                     {...props}
                     disabled={isDisabled}
-                    className={`br-4 flex cursor dc__tab-focus dc__position-rel dc__capitalize ${isOpacityHoverChild ? 'dc__opacity-hover--child' : ''} ${getButtonDerivedClass({ size, variant, style, isLoading, icon, isAutoTriggerActive: isAutoClickActive })} ${isDisabled ? 'dc__disabled' : ''} ${fullWidth ? 'w-100' : ''}`}
+                    className={`br-4 flex cursor dc__tab-focus dc__position-rel dc__capitalize ${isOpacityHoverChild ? 'dc__opacity-hover--child' : ''} ${getButtonDerivedClass({ size, variant, style, isLoading, icon, isAutoTriggerActive: isAutoClickActive, fontWeight })} ${isDisabled ? 'dc__disabled' : ''} ${fullWidth ? 'w-100' : ''}`}
                     data-testid={dataTestId}
                     aria-label={ariaLabel || (isLoading ? text : undefined)}
                     elementRef={elementRef}

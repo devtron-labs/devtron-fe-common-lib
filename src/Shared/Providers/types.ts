@@ -37,15 +37,16 @@ export enum SidePanelTab {
 
 export interface SidePanelConfig {
     state: SidePanelTab | 'closed'
-    docLink?: string | null
+    /** Optional flag to reset/reinitialize the side panel state */
+    reinitialize?: boolean
+    /** URL to documentation that should be displayed in the panel */
+    docLink: string | null
 }
 
-export interface MainContext {
-    serverMode: SERVER_MODE
+type CommonMainContextProps = {
     setServerMode: (serverMode: SERVER_MODE) => void
     isHelpGettingStartedClicked: boolean
     showCloseButtonAfterGettingStartedClicked: () => void
-    loginCount: number
     setLoginCount: (loginCount: number) => void
     showGettingStartedCard: boolean
     setShowGettingStartedCard: (showGettingStartedCard: boolean) => void
@@ -53,9 +54,8 @@ export interface MainContext {
     setGettingStartedClicked: (isGettingStartedClicked: boolean) => void
     moduleInInstallingState: string
     setModuleInInstallingState: (moduleInInstallingState: string) => void
-    installedModuleMap: MutableRefObject<Record<string, boolean>>
     currentServerInfo: {
-        serverInfo: ServerInfo
+        serverInfo: ServerInfo | null
         fetchingServerInfo: boolean
     }
     isAirgapped: boolean
@@ -80,35 +80,66 @@ export interface MainContext {
     handleOpenLicenseInfoDialog: (
         initialDialogType?: LicenseInfoDialogType.ABOUT | LicenseInfoDialogType.LICENSE,
     ) => void
-    /**
-     * Data is set only if showLicenseData is received as true
-     */
-    licenseData: DevtronLicenseInfo
     setLicenseData: Dispatch<SetStateAction<DevtronLicenseInfo>>
     canFetchHelmAppStatus: boolean
-    reloadVersionConfig: ReloadVersionConfigTypes
-    intelligenceConfig: IntelligenceConfig
     setIntelligenceConfig: Dispatch<SetStateAction<IntelligenceConfig>>
     aiAgentContext: {
         path: string
         context: Record<string, string>
     }
-    setAIAgentContext: (aiAgentContext: MainContext['aiAgentContext']) => void
+    setAIAgentContext: (aiAgentContext: CommonMainContextProps['aiAgentContext']) => void
 
     sidePanelConfig: SidePanelConfig
     setSidePanelConfig: Dispatch<SetStateAction<SidePanelConfig>>
-
-    /**
-     * Indicates whether the current Devtron instance is running as an Enterprise edition. \
-     * This flag is determined based on server-side configuration.
-     */
-    isEnterprise: boolean
-    /**
-     * Indicates whether the fe-lib modules are available in the current instance. \
-     * Used to conditionally render or enable features that depend on fe-lib
-     */
-    isFELibAvailable: boolean
 }
+
+export type MainContext = CommonMainContextProps &
+    (
+        | {
+              isLicenseDashboard?: never
+              serverMode: SERVER_MODE
+              loginCount: number | null
+              installedModuleMap: MutableRefObject<Record<string, boolean>>
+              /**
+               * Data is set only if showLicenseData is received as true
+               */
+              licenseData: DevtronLicenseInfo
+
+              reloadVersionConfig: ReloadVersionConfigTypes
+              intelligenceConfig: IntelligenceConfig
+
+              sidePanelConfig: SidePanelConfig
+
+              /**
+               * Indicates whether the current Devtron instance is running as an Enterprise edition. \
+               * This flag is determined based on server-side configuration.
+               */
+              isEnterprise: boolean
+              /**
+               * Indicates whether the fe-lib modules are available in the current instance. \
+               * Used to conditionally render or enable features that depend on fe-lib
+               */
+              isFELibAvailable: boolean
+          }
+        | {
+              isLicenseDashboard: true
+              serverMode: null
+              loginCount: null
+              installedModuleMap: null
+              /**
+               * Data is set only if showLicenseData is received as true
+               */
+              licenseData: null
+
+              reloadVersionConfig: null
+              intelligenceConfig: null
+
+              sidePanelConfig: null
+
+              isEnterprise: false
+              isFELibAvailable: false
+          }
+    )
 
 export interface MainContextProviderProps {
     children: ReactNode

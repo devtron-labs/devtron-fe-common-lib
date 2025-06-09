@@ -25,10 +25,10 @@ import {
     Severity,
     PolicyBlockInfo,
     TargetPlatformItemDTO,
-    ButtonProps,
     ComponentLayoutType,
     StatusType,
     DocLinkProps,
+    DeploymentStrategyType,
 } from '../Shared'
 import {
     ACTION_STATE,
@@ -117,6 +117,7 @@ export interface CheckboxProps {
     onClick?: (event) => void
     id?: string
     dataTestId?: string
+    error?: boolean
     children?: ReactNode
 }
 
@@ -228,56 +229,6 @@ export enum ImageType {
     Medium = 'medium',
     SMALL = 'small',
 }
-
-interface InfoColourBarTextConfigType {
-    /**
-     * If given would be shown above the description, in bold
-     */
-    heading?: string
-    /**
-     * If given would be shown below the heading (if given)
-     */
-    description: string
-    actionButtonConfig?: ButtonProps
-}
-
-type InfoColourBarMessageProp =
-    | {
-          message: ReactNode
-          linkText?: ReactNode
-          redirectLink?: string
-          linkOnClick?: () => void
-          linkClass?: string
-          internalLink?: boolean
-
-          textConfig?: never
-      }
-    | {
-          textConfig: InfoColourBarTextConfigType
-
-          message?: never
-          linkText?: never
-          redirectLink?: never
-          linkOnClick?: () => never
-          linkClass?: never
-          internalLink?: never
-      }
-
-export type InfoColourBarType = InfoColourBarMessageProp & {
-    classname: string
-    Icon
-    iconClass?: string
-    iconSize?: number // E.g. 16, 20, etc.. Currently, there are around 12 sizes supported. Check `icons.css` or `base.scss` for supported sizes or add new size (class names starts with `icon-dim-`).
-    renderActionButton?: () => JSX.Element
-    styles?: CSSProperties
-    /**
-     * If true, the icon is not shown
-     *
-     * @default false
-     */
-    hideIcon?: boolean
-}
-
 export interface ReloadType {
     reload?: (event?: any) => void
     className?: string
@@ -855,7 +806,7 @@ export interface AppEnvironment {
 }
 
 export interface Strategy {
-    deploymentTemplate: string
+    deploymentTemplate: DeploymentStrategyType
     config: any
     default?: boolean
 }
