@@ -210,6 +210,9 @@ export interface GetResourceRecommenderResourceListPropsType {
     setShowAbsoluteValuesInResourceRecommender: Dispatch<SetStateAction<boolean>>
     showAbsoluteValuesInResourceRecommender: boolean
     gvkOptions: GroupBase<SelectPickerOptionType<GVKOptionValueType>>[]
-    isLoading: boolean
+    areGVKOptionsLoading: boolean
+    reloadGVKOptions: () => void
+    gvkOptionsError: ServerErrors
+    isResourceListLoading: boolean
     resourceListError: ServerErrors
 }
