@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AnchorHTMLAttributes, ButtonHTMLAttributes, MutableRefObject, ReactElement } from 'react'
+import { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactElement } from 'react'
 import { LinkProps } from 'react-router-dom'
 
 import { TooltipProps } from '@Common/Tooltip/types'
@@ -141,7 +141,6 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
          * Use from useTriggerAutoClickTimestamp hook
          */
         triggerAutoClickTimestamp?: number | null
-        buttonRef?: MutableRefObject<HTMLButtonElement | HTMLAnchorElement>
     } & (
             | {
                   /**
