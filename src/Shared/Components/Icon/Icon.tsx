@@ -52,6 +52,7 @@ import { ReactComponent as ICDelete } from '@IconsV2/ic-delete.svg'
 import { ReactComponent as ICDeleteDots } from '@IconsV2/ic-delete-dots.svg'
 import { ReactComponent as ICDeleteLightning } from '@IconsV2/ic-delete-lightning.svg'
 import { ReactComponent as ICDelhivery } from '@IconsV2/ic-delhivery.svg'
+import { ReactComponent as ICDeployColor } from '@IconsV2/ic-deploy-color.svg'
 import { ReactComponent as ICDevtron } from '@IconsV2/ic-devtron.svg'
 import { ReactComponent as ICDevtronApp } from '@IconsV2/ic-devtron-app.svg'
 import { ReactComponent as ICDevtronHeaderLogo } from '@IconsV2/ic-devtron-header-logo.svg'
@@ -241,6 +242,7 @@ export const iconMap = {
     'ic-delete-lightning': ICDeleteLightning,
     'ic-delete': ICDelete,
     'ic-delhivery': ICDelhivery,
+    'ic-deploy-color': ICDeployColor,
     'ic-devtron-app': ICDevtronApp,
     'ic-devtron-header-logo': ICDevtronHeaderLogo,
     'ic-devtron-job': ICDevtronJob,
