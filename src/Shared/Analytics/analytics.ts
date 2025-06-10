@@ -18,8 +18,9 @@ export const handleSendAnalyticsEventToServer = async (
 }
 
 export const handleAnalyticsEvent = ({ category, action }: Pick<UaEventOptions, 'category' | 'action'>) => {
-    ReactGA.event({
-        category,
-        action,
-    })
+    if (window._env_.GA_ENABLED && ReactGA?.event)
+        ReactGA.event({
+            category,
+            action,
+        })
 }
