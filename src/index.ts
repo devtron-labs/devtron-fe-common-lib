@@ -165,6 +165,7 @@ export interface customEnv {
      * @default false
      */
     FEATURE_MANAGE_TRAFFIC_ENABLE?: boolean
+    FEATURE_INFRA_PROVISION_INFO_BLOCK_HIDE?: boolean
 }
 declare global {
     interface Window {
