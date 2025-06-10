@@ -14,31 +14,31 @@
  * limitations under the License.
  */
 
-.info-bar-container {
-    .info_text .success {
-        background-color: var(--G100);
+.theme-preference-option {
+    &__label-container {
+        transition: padding 0.2s;
     }
-    .warn {
-        background: var(--Y100);
-        border: solid var(--Y200);
 
-        .warning-icon path:nth-child(2) {
-            fill: var(--Y700);
+    &__label-container--hover:hover {
+        padding: 2px;
+    }
+
+    &__container {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    &__auto-figure {
+        grid-template-columns: repeat(12, 1fr);
+        grid-template-rows: 1fr;
+
+        &--light {
+            grid-column: 1 / -1;
+            grid-row: 1 / -1;
         }
-    }
 
-    .info_bar {
-        background-color: var(--B100);
-        border: 1px solid var(--B200);
-    }
-
-    .error_bar {
-        background-color: var(--R100);
-        border: 1px solid var(--R200);
-    }
-
-    .question-bar {
-        background-color: var(--V100);
-        border: 1px solid var(--V200);
+        &--dark {
+            grid-column: 7 / -1;
+            grid-row: 1 / -1;
+        }
     }
 }
