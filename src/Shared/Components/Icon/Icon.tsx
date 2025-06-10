@@ -78,6 +78,7 @@ import { ReactComponent as ICFilter } from '@IconsV2/ic-filter.svg'
 import { ReactComponent as ICFilterApplied } from '@IconsV2/ic-filter-applied.svg'
 import { ReactComponent as ICFlask } from '@IconsV2/ic-flask.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
+import { ReactComponent as ICGavel } from '@IconsV2/ic-gavel.svg'
 import { ReactComponent as ICGear } from '@IconsV2/ic-gear.svg'
 import { ReactComponent as ICGift } from '@IconsV2/ic-gift.svg'
 import { ReactComponent as ICGiftGradient } from '@IconsV2/ic-gift-gradient.svg'
@@ -267,6 +268,7 @@ export const iconMap = {
     'ic-filter': ICFilter,
     'ic-flask': ICFlask,
     'ic-folder-user': ICFolderUser,
+    'ic-gavel': ICGavel,
     'ic-gear': ICGear,
     'ic-gift-gradient': ICGiftGradient,
     'ic-gift': ICGift,
