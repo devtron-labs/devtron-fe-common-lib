@@ -114,7 +114,6 @@ export const usePopover = ({
     return {
         open,
         triggerProps: {
-            role: 'button',
             ref: triggerRef,
             onClick: togglePopover,
             onKeyDown: handleTriggerKeyDown,
