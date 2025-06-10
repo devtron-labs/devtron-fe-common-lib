@@ -49,5 +49,4 @@ export interface DraggableWrapperProps {
  */
 export interface DraggableButtonProps {
     dragClassName: string
-    svgClassName?: string
 }
