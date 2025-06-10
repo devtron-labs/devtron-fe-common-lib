@@ -1,0 +1,13 @@
+.workflow-options-modal {
+    &__header {
+        background: linear-gradient(269deg, var(--B100, #{var(--B100)}) 0%, var(--bg-primary, #{var(--white)}) 99.9%);
+    }
+
+    &__img {
+        top: 13px;
+    }
+
+    &__cards-container {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+}
