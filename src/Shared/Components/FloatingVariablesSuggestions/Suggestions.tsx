@@ -18,12 +18,12 @@ import { memo, useEffect, useState } from 'react'
 
 import { ReactComponent as ICClose } from '@Icons/ic-cross.svg'
 import { ReactComponent as ICSearch } from '@Icons/ic-search.svg'
-import { ReactComponent as ICVariable } from '@Icons/ic-view-variable-toggle.svg'
 import NoVariables from '@Images/no-artifact.webp'
 import { DebouncedSearch, GenericEmptyState, Progressing, Reload } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
+import { Icon } from '../Icon'
 import { NO_DEFINED_DESCRIPTION, NO_DEFINED_VALUE } from './constants'
 import SuggestionItem from './SuggestionItem'
 import SuggestionsInfo from './SuggestionsInfo'
@@ -79,7 +79,7 @@ const Suggestions = ({
                 <div className="flexbox-col dc__content-center dc__align-start flex-grow-1 dc__no-shrink">
                     <div className="flex center dc__gap-4">
                         <p className="m-0 cn-7 fs-13 fw-6 lh-20 dc__align-self-stretch">Scoped variables</p>
-                        <ICVariable className="icon-dim-16 scn-7" />
+                        <Icon name="ic-view-variable-toggle" color="N700" size={16} />
                     </div>
 
                     <p className="dc__align-self-stretch cn-7 fs-12 fw-1 lh-20">Use variable to set dynamic value</p>

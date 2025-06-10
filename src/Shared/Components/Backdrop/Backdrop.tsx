@@ -40,10 +40,14 @@ const Backdrop = ({ children, onEscape }: BackdropProps) => {
         preventBodyScroll(true)
         // Setting main as inert to that focus is trapped inside the new portal
         preventOutsideFocus({ identifier: DEVTRON_BASE_MAIN_ID, preventFocus: true })
+        preventOutsideFocus({ identifier: 'visible-modal', preventFocus: true })
+        preventOutsideFocus({ identifier: 'visible-modal-2', preventFocus: true })
 
         return () => {
             preventBodyScroll(false)
             preventOutsideFocus({ identifier: DEVTRON_BASE_MAIN_ID, preventFocus: false })
+            preventOutsideFocus({ identifier: 'visible-modal', preventFocus: false })
+            preventOutsideFocus({ identifier: 'visible-modal-2', preventFocus: false })
         }
     }, [])
 

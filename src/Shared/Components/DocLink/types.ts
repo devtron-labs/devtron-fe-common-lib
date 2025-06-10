@@ -7,6 +7,7 @@ import { DOCUMENTATION } from './constants'
 export type BaseDocLink<T extends boolean> = {
     isExternalLink?: T
     isEnterprise?: boolean
+    isLicenseDashboard?: boolean
     docLinkKey: T extends true ? string : keyof typeof DOCUMENTATION
 }
 
