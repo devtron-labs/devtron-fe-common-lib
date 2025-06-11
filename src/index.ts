@@ -172,6 +172,11 @@ export interface customEnv {
      *  @default true
      */
     FEATURE_INTERNET_CONNECTIVITY_ENABLE?: boolean
+    /**
+     * If true, will add flux option to deployment types in devtron apps and devtron charts
+     * @default false
+     */
+    FEATURE_FLUX_DEPLOYMENTS_ENABLE?: boolean
 }
 declare global {
     interface Window {
