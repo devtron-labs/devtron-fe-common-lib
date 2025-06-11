@@ -56,4 +56,10 @@
             background-color: var(--B100);
         }
     }
+
+    .sortable-table-header__resize-btn:hover {
+        > div {
+            transform: scaleY(1.8);
+        }
+    }
 }
