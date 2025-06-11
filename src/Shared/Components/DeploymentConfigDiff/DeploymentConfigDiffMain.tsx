@@ -35,6 +35,7 @@ import {
     DeploymentConfigDiffState,
 } from './DeploymentConfigDiff.types'
 import { DeploymentConfigDiffAccordion } from './DeploymentConfigDiffAccordion'
+import DeploymentConfigDiffRadioSelect from './DeploymentConfigDiffRadioSelect'
 
 export const DeploymentConfigDiffMain = ({
     isLoading,
@@ -104,6 +105,15 @@ export const DeploymentConfigDiffMain = ({
                             <span className="cn-9 fs-13 lh-20">/</span>
                         )}
                     </Fragment>
+                )
+            }
+
+            if (configItem.type === 'radio-group') {
+                return (
+                    <DeploymentConfigDiffRadioSelect
+                        key={configItem.id}
+                        radioSelectConfig={configItem.radioSelectConfig}
+                    />
                 )
             }
 
@@ -260,7 +270,7 @@ export const DeploymentConfigDiffMain = ({
                         {renderHeaderSelectors(selectorsConfig.secondaryConfig)}
                     </div>
                     {(sortingConfig || scopeVariablesConfig) && (
-                        <div className="dc__border-left flex dc__gap-8 pr-12 pl-8 py-8">
+                        <div className="dc__border-left flex dc__gap-8 pr-12 pl-8 py-8 dc__no-shrink">
                             {renderSortButton()}
                             {renderScopeVariablesButton()}
                         </div>
