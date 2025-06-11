@@ -30,7 +30,6 @@ import { ReactComponent as OpenInNew } from '../../../Assets/Icon/ic-arrow-out.s
 import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
 import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-filled.svg'
 import {
-    DOCUMENTATION,
     Host,
     Progressing,
     ROUTES,
@@ -40,6 +39,7 @@ import {
     useRegisterShortcut,
     useUrlFilters,
 } from '../../../Common'
+import { DocLink } from '../DocLink'
 import {
     EVENT_STREAM_EVENTS_MAP,
     LOGS_RETRY_COUNT,
@@ -82,14 +82,8 @@ const renderBlobNotConfigured = (): JSX.Element => (
         <div className="flexbox configure-blob-container pt-8 pr-12 pb-8 pl-12 bcv-1 br-4">
             <HelpIcon className="icon-dim-20 fcv-5" />
             <span className="fs-13 fw-4 mr-8 ml-8 text__white">Want to store logs to view later?</span>
-            <a
-                className="fs-13 fw-6 cb-5 dc__no-decor"
-                href={DOCUMENTATION.BLOB_STORAGE}
-                target="_blank"
-                rel="noreferrer"
-            >
-                Configure blob storage
-            </a>
+
+            <DocLink docLinkKey="BLOB_STORAGE" text="Configure blob storage" dataTestId="configure-blob-storage" />
             <OpenInNew className="icon-dim-20 ml-8" />
         </div>
     </>
@@ -179,6 +173,8 @@ const useCIEventSource = (url: string, maxLength?: number): [string[], EventSour
 
 const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, fullScreenView }: LogsRendererType) => {
     const { pipelineId, envId, appId } = useParams<DeploymentHistoryBaseParamsType>()
+    const logsRendererRef = useRef<HTMLDivElement>(null)
+
     const logsURL =
         parentType === HistoryComponentType.CI
             ? `${Host}/${ROUTES.CI_CONFIG_GET}/${pipelineId}/workflow/${triggerDetails.id}/logs`
@@ -579,6 +575,7 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
                                     isLoading={index === stageList.length - 1 && areEventsProgressing}
                                     fullScreenView={fullScreenView}
                                     searchIndex={searchResults[currentSearchIndex]}
+                                    logsRendererRef={logsRendererRef}
                                 />
                             ),
                         )}
@@ -615,7 +612,10 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
     }
 
     return (
-        <div className={`flexbox-col flex-grow-1 ${getComponentSpecificThemeClass(AppThemeType.dark)}`}>
+        <div
+            className={`flexbox-col flex-grow-1 ${getComponentSpecificThemeClass(AppThemeType.dark)}`}
+            ref={logsRendererRef}
+        >
             {triggerDetails.podStatus !== POD_STATUS.PENDING &&
             logsNotAvailable &&
             (!isBlobStorageConfigured || !triggerDetails.blobStorageEnabled)

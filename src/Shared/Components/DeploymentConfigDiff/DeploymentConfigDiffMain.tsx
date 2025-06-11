@@ -18,14 +18,14 @@ import { Fragment, useEffect, useState } from 'react'
 
 import { ReactComponent as ICSort } from '@Icons/ic-arrow-up-down.svg'
 import { ReactComponent as ICSortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
-import { SortingOrder } from '@Common/Constants'
+import { MODES, SortingOrder } from '@Common/Constants'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
 import { Progressing } from '@Common/Progressing'
-import { DiffViewer } from '@Shared/Components/DiffViewer'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { DeploymentHistoryDiffView } from '../CICDHistory'
+import { CodeEditor } from '../CodeEditor'
 import { SelectPicker } from '../SelectPicker'
 import { ToggleResolveScopedVariables } from '../ToggleResolveScopedVariables'
 import {
@@ -34,7 +34,6 @@ import {
     DeploymentConfigDiffSelectPickerProps,
     DeploymentConfigDiffState,
 } from './DeploymentConfigDiff.types'
-import { renderDiffViewNoDifferenceState } from './DeploymentConfigDiff.utils'
 import { DeploymentConfigDiffAccordion } from './DeploymentConfigDiffAccordion'
 
 export const DeploymentConfigDiffMain = ({
@@ -163,9 +162,9 @@ export const DeploymentConfigDiffMain = ({
 
             return (
                 <ToggleResolveScopedVariables
+                    name="resolve-scoped-variables"
                     resolveScopedVariables={convertVariables}
                     handleToggleScopedVariablesView={onConvertVariablesClick}
-                    throttleOnChange
                 />
             )
         }
@@ -191,19 +190,25 @@ export const DeploymentConfigDiffMain = ({
                     hideDiffState={hideDiffState}
                 >
                     {singleView ? (
-                        <DiffViewer
-                            oldValue={primaryList.codeEditorValue.value}
-                            newValue={secondaryList.codeEditorValue.value}
-                            // Need to hide the title since the null state is controlled explicitly
-                            {...(primaryList.codeEditorValue.value !== secondaryList.codeEditorValue.value && {
-                                leftTitle: primaryHeading,
-                                rightTitle: secondaryHeading,
-                            })}
-                            codeFoldMessageRenderer={renderDiffViewNoDifferenceState(
-                                primaryList.codeEditorValue.value,
-                                secondaryList.codeEditorValue.value,
-                            )}
-                        />
+                        <>
+                            <div className="dc__grid-half vertical-divider">
+                                <div className="bcn-1 py-8 px-12">
+                                    <p className="m-0 fs-12 lh-20 fw-6">{primaryHeading}</p>
+                                </div>
+                                <div className="bcn-1 py-8 px-12">
+                                    <p className="m-0 fs-12 lh-20 fw-6">{secondaryHeading}</p>
+                                </div>
+                            </div>
+                            <CodeEditor
+                                originalValue={primaryList.codeEditorValue.value}
+                                modifiedValue={secondaryList.codeEditorValue.value}
+                                height="100%"
+                                mode={MODES.YAML}
+                                noParsing
+                                diffView
+                                collapseUnchangedDiffView
+                            />
+                        </>
                     ) : (
                         <div className="p-16">
                             {primaryHeading && secondaryHeading && (
@@ -213,7 +218,6 @@ export const DeploymentConfigDiffMain = ({
                                 </div>
                             )}
                             <DeploymentHistoryDiffView
-                                codeEditorKey={`${sortingConfig?.sortBy}-${sortingConfig?.sortOrder}-${scopeVariablesConfig?.convertVariables}`}
                                 baseTemplateConfiguration={secondaryList}
                                 currentConfiguration={primaryList}
                                 previousConfigAvailable
@@ -245,7 +249,7 @@ export const DeploymentConfigDiffMain = ({
     }
 
     return (
-        <div className="bg__primary deployment-config-diff__main-top flexbox-col min-h-100">
+        <div className="bg__primary deployment-config-diff__main-top flexbox-col min-h-100 mw-none">
             <div className="dc__border-bottom-n1 flexbox dc__align-items-center dc__position-sticky dc__top-0 bg__primary w-100 dc__zi-11">
                 <div className="flexbox dc__align-items-center p-12 dc__gap-8 deployment-config-diff__main-top__header">
                     {!!headerText && <p className="m-0 cn-9 fs-13 lh-20">{headerText}</p>}

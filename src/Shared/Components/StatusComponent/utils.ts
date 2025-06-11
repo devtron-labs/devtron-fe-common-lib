@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { TIMELINE_STATUS } from '@Shared/constants'
-import { WorkflowStatusEnum } from '@Shared/types'
+import { TIMELINE_STATUS, WorkflowStatusEnum } from '@Shared/types'
 
 import { IconName, IconsProps } from '../Icon'
 import { StatusType } from './types'
@@ -67,10 +66,12 @@ export const getIconName = (status: string, showAnimatedIcon: boolean): IconName
             return 'ic-in-progress'
         case 'hibernating':
         case 'hibernated':
-            return 'ic-hibernate'
+            return 'ic-hibernate-circle'
         case 'timedout':
         case 'timed_out':
             return 'ic-timeout-dash'
+        case 'unable_to_fetch':
+            return 'ic-disconnect'
         case 'deleting':
             return 'ic-delete-dots'
         case 'deleted':
@@ -95,6 +96,7 @@ export const getIconColor = (status: string): IconsProps['color'] => {
         case 'request_accepted':
         case 'starting':
             return 'O500'
+        case 'unable_to_fetch':
         case 'timedout':
         case 'timed_out':
         case 'deleting':

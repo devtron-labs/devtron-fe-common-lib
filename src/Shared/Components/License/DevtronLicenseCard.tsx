@@ -5,11 +5,10 @@ import { ReactComponent as ICChatSupport } from '@IconsV2/ic-chat-circle-dots.sv
 import { ReactComponent as TexturedBG } from '@Images/licenseCardBG.svg'
 import { ClipboardButton, getTTLInHumanReadableFormat } from '@Common/index'
 import { CONTACT_SUPPORT_LINK, ENTERPRISE_SUPPORT_LINK } from '@Shared/constants'
-import { getHandleOpenURL } from '@Shared/Helpers'
 import { AppThemeType } from '@Shared/Providers'
 import { getThemeOppositeThemeClass } from '@Shared/Providers/ThemeProvider/utils'
 
-import { Button, ButtonVariantType } from '../Button'
+import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import { DevtronLicenseCardProps, LicenseStatus } from './types'
 import { getLicenseColorsAccordingToStatus } from './utils'
@@ -147,7 +146,8 @@ export const DevtronLicenseCard = ({
                         startIcon={<ICChatSupport />}
                         text="Contact support"
                         variant={ButtonVariantType.text}
-                        onClick={getHandleOpenURL(CONTACT_SUPPORT_LINK)}
+                        component={ButtonComponentType.anchor}
+                        anchorProps={{ href: CONTACT_SUPPORT_LINK }}
                     />
                 </div>
             )}

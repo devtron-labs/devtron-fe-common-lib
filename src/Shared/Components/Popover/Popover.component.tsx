@@ -15,24 +15,25 @@ export const Popover = ({
     open,
     popoverProps,
     overlayProps,
-    triggerProps,
+    triggerProps: { bounds, ...triggerProps },
     buttonProps,
     triggerElement,
     children,
 }: PopoverProps) => (
-    <div className="dc__position-rel dc__inline-block">
+    <>
         <div {...triggerProps}>{triggerElement || <Button {...buttonProps} />}</div>
 
         <AnimatePresence>
             {open && (
-                <>
-                    {/* Overlay to block interactions with the background */}
-                    <div {...overlayProps} />
-                    <motion.div {...popoverProps} data-testid={popoverProps.id}>
-                        {children}
-                    </motion.div>
-                </>
+                <div {...overlayProps}>
+                    <div className="dc__position-abs" style={{ left: bounds.left, top: bounds.top }}>
+                        <div className="dc__visibility-hidden" style={{ width: bounds.width, height: bounds.height }} />
+                        <motion.div {...popoverProps} data-testid={popoverProps.id}>
+                            {children}
+                        </motion.div>
+                    </div>
+                </div>
             )}
         </AnimatePresence>
-    </div>
+    </>
 )

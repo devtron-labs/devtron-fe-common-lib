@@ -16,7 +16,7 @@
 
 import React from 'react'
 
-import { SegmentedBarChartProps } from '@Common/SegmentedBarChart'
+import { Entity } from '@Common/SegmentedBarChart/types'
 import { ServerErrors } from '@Common/ServerError'
 import { GenericEmptyStateType } from '@Common/Types'
 import { LastExecutionResultType, Nodes, NodeType } from '@Shared/types'
@@ -103,7 +103,7 @@ export interface StatusType {
 }
 
 export interface InfoCardPropsType extends Pick<StatusType, 'scanToolName' | 'scanToolUrl'> {
-    entities: SegmentedBarChartProps['entities']
+    entities: NonNullable<Entity[]>
     lastScanTimeString?: string
 }
 
