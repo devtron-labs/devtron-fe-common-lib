@@ -31,7 +31,7 @@ import {
     useInterval,
 } from '../../../Common'
 import { DEPLOYMENT_STAGE_TO_NODE_MAP, EMPTY_STATE_STATUS } from '../../constants'
-import { TabGroup, TabGroupProps } from '../TabGroup'
+import { TabGroup } from '../TabGroup'
 import Artifacts from './Artifacts'
 import DeploymentDetailSteps from './DeploymentDetailSteps'
 import { DeploymentHistoryConfigDiff } from './DeploymentHistoryConfigDiff'
@@ -318,11 +318,6 @@ const TriggerOutput = ({
             (!!triggerDetailsResult?.result?.artifactId || !!triggerDetails?.artifactId),
     )
 
-    const tabs: TabGroupProps['tabs'] = useMemo(
-        () => getTriggerOutputTabs(triggerDetails, deploymentAppType),
-        [triggerDetails, deploymentAppType],
-    )
-
     useEffect(() => {
         if (triggerDetailsLoading) {
             return
@@ -417,7 +412,7 @@ const TriggerOutput = ({
                         namespace={triggerDetails.namespace}
                     />
                     <div className="pl-50 pr-20 pt-8 dc__border-bottom dc__position-sticky dc__top-0 bg__primary dc__zi-3">
-                        <TabGroup tabs={tabs} />
+                        <TabGroup tabs={getTriggerOutputTabs(triggerDetails, deploymentAppType)} />
                     </div>
                 </>
             )}
