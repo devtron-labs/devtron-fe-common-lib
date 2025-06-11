@@ -157,6 +157,7 @@ const useTableWithKeyboardShortcuts = (
             callback: () => {
                 if (showPagination) {
                     bulkSelectionButtonRef.current?.click()
+                    bulkSelectionButtonRef.current?.focus()
                     return
                 }
 
