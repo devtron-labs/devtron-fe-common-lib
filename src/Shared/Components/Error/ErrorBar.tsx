@@ -17,7 +17,7 @@
 import { NavLink } from 'react-router-dom'
 
 import { ReactComponent as ErrorInfo } from '../../../Assets/Icon/ic-errorInfo.svg'
-import { URLS } from '../../../Common'
+import { DISCORD_LINK, URLS } from '../../../Common'
 import { AppType } from '../../types'
 import { ErrorBarType } from './types'
 import { getIsImagePullBackOff, renderErrorHeaderMessage } from './utils'
@@ -90,7 +90,7 @@ const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
                             <div className="flex left">
                                 <span className="mr-8 fw-6">Facing issues?</span>
                                 <a
-                                    href="https://discord.devtron.ai/"
+                                    href={DISCORD_LINK}
                                     className="cb-5 fs-13 anchor w-auto dc__no-decor flex"
                                     target="_blank"
                                     rel="noreferrer"

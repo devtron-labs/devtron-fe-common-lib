@@ -93,6 +93,42 @@ type TabTooltipProps =
           tooltipProps?: never
       }
 
+/**
+ * Represents the properties for defining an icon in a tab group.
+ * This type allows for three configurations:
+ *
+ * 1. **Icon as a functional component or string**:
+ *    - Use the `icon` property to specify either a functional component that renders an SVG or a string representing the name of the icon.
+ *    - The `iconElement` property must not be provided in this case.
+ *
+ * 2. **Icon as a JSX element**:
+ *    - Use the `iconElement` property to specify a JSX element representing the icon.
+ *    - The `icon` property must not be provided in this case.
+ *
+ * 3. **No icon**:
+ *    - Neither `icon` nor `iconElement` is provided, resulting in no icon being displayed.
+ *
+ */
+type TabGroupIconProp =
+    | {
+          /**
+           * A functional component rendering an SVG or a string representing the icon name. Mutually exclusive with `iconElement`.
+           */
+          icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>> | IconName
+          iconElement?: never
+      }
+    | {
+          icon?: never
+          /**
+           * A JSX element representing the icon. Mutually exclusive with `icon`.
+           */
+          iconElement: JSX.Element
+      }
+    | {
+          icon?: never
+          iconElement?: never
+      }
+
 export type TabProps = {
     /**
      * Unique identifier for the tab.
@@ -107,12 +143,6 @@ export type TabProps = {
      * @note - If passed as a `string[]`, it will be rendered with a bullet in-between strings.
      */
     description?: string | string[]
-    /**
-     * Icon to be displayed in the tab.
-     * This can either be a functional component that renders a SVG
-     * or a string representing the name of the icon to be rendered by the Icon component.
-     */
-    icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>> | IconName
     /**
      * Badge number to be displayed on the tab, typically for notifications.
      */
@@ -136,7 +166,8 @@ export type TabProps = {
      */
     disabled?: boolean
 } & ConditionalTabType &
-    TabTooltipProps
+    TabTooltipProps &
+    TabGroupIconProp
 
 export interface TabGroupProps {
     /**

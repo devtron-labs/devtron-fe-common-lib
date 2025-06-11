@@ -148,7 +148,7 @@
             $active-bg-color: var(--B200);
 
             @include button-variant-styles($background, var(--B500), $border-color, $active-bg-color);
-            @include pseudo-states(var(--B100), $active-bg-color, var(--B300));
+            @include pseudo-states(var(--bg-hover), $active-bg-color, var(--B300));
         }
 
         &--negative {
@@ -183,7 +183,7 @@
             $active-bg-color: var(--N200);
 
             @include button-variant-styles($background, var(--N700), $border-color, $active-bg-color);
-            @include pseudo-states(var(--N100), $active-bg-color, var(--N300));
+            @include pseudo-states(var(--bg-hover), $active-bg-color, var(--N300));
         }
     }
 
@@ -229,7 +229,7 @@
     // Pseudo states for border-less button
     &__border-less {
         &--default {
-            @include pseudo-states(var(--B100), var(--B200));
+            @include pseudo-states(var(--bg-hover), var(--B200));
         }
 
         &--negative {
@@ -249,7 +249,7 @@
         }
 
         &--neutral {
-            @include pseudo-states(var(--N100), var(--N200));
+            @include pseudo-states(var(--bg-hover), var(--N200));
         }
 
         &--neutral-n0 {

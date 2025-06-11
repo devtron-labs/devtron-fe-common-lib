@@ -4,32 +4,12 @@
     background: var(--bg-segmented-control);
 
     &__container {
-        --segmented-control-highlight-width: auto;
-        --segmented-control-highlight-x-position: 0;
-
-        &::before {
-            content: '';
-            background: var(--bg-primary);
-            border-radius: 4px;
-            width: var(--segmented-control-highlight-width);
-            transform: translateX(var(--segmented-control-highlight-x-position));
-            position: absolute;
-            left: 0;
-            z-index: 0;
-            border: 0.5px solid var(--border-primary);
-            box-shadow: 0px 1px 2px 0px var(--black-20);
-            height: 100%;
-            transition: transform 0.3s ease, width 0.3s ease;
-
-            &:has(#{$segmented-control-selector}__segment--xs) {
-                top: 1px;
-                bottom: 1px;
-            }
-
-            &:has(#{$segmented-control-selector}__segment--small),
-            &:has(#{$segmented-control-selector}__segment--medium) {
-                top: 2px;
-                bottom: 2px;
+        &:has(input[type='radio']:checked:focus-visible) {
+            .segmented-control__segment--selected {
+                .active-mask {
+                    outline: 2px solid var(--B500) !important;
+                    outline-offset: 2px;
+                }
             }
         }
     }
@@ -37,10 +17,6 @@
     &__segment {
         $parent-selector: &;
         transition: color 0.3s ease;
-
-        &:hover:not(#{$parent-selector}--selected):not(.cursor-not-allowed) {
-            background-color: var(--bg-secondary);
-        }
 
         &--selected {
             &#{$parent-selector} {
@@ -56,6 +32,19 @@
                     padding-inline: 7.5px;
                 }
             }
+
+            .active-mask {
+                border: 0.5px solid var(--border-primary);
+                box-shadow: 0px 1px 2px 0px var(--black-20);
+            }
+
+            > *:not(.active-mask) {
+                z-index: 1;
+            }
+        }
+
+        &:hover:not(#{$parent-selector}--selected):not(.cursor-not-allowed) {
+            background-color: var(--bg-hover);
         }
     }
 }
