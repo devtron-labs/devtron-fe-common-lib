@@ -146,6 +146,7 @@ const LoginBanner = () => {
                     style={{
                         maxHeight: '90%',
                     }}
+                    loading="lazy"
                 />
             </div>
             <div className="p-40 dc__backdrop-filter bg__primary flex dc__gap-12 dc__zi-2">
