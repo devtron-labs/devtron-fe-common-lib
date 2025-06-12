@@ -16,6 +16,7 @@
 
 import { Fragment } from 'react'
 
+import { DeploymentAppTypes } from '@Common/Types'
 import { TIMELINE_STATUS } from '@Shared/types'
 
 import { InfoBlock } from '../InfoBlock'
@@ -58,8 +59,9 @@ const DeploymentStatusDetailBreakdown = ({
                     {(
                         [
                             TIMELINE_STATUS.GIT_COMMIT,
-                            TIMELINE_STATUS.ARGOCD_SYNC,
-                            TIMELINE_STATUS.KUBECTL_APPLY,
+                            ...(deploymentStatusDetailRowProps.appDetails.deploymentAppType === DeploymentAppTypes.FLUX
+                                ? []
+                                : [TIMELINE_STATUS.ARGOCD_SYNC, TIMELINE_STATUS.KUBECTL_APPLY]),
                         ] as DeploymentStatusDetailRowType['type'][]
                     ).map((timelineStatus) => (
                         <Fragment key={timelineStatus}>
