@@ -43,6 +43,11 @@ export interface SidePanelConfig {
     docLink: string | null
 }
 
+type AIAgentContextType = {
+    path: string
+    context: Record<string, string>
+}
+
 type CommonMainContextProps = {
     setServerMode: (serverMode: SERVER_MODE) => void
     isHelpGettingStartedClicked: boolean
@@ -83,13 +88,7 @@ type CommonMainContextProps = {
     setLicenseData: Dispatch<SetStateAction<DevtronLicenseInfo>>
     canFetchHelmAppStatus: boolean
     setIntelligenceConfig: Dispatch<SetStateAction<IntelligenceConfig>>
-    aiAgentContext: {
-        path: string
-        context: Record<string, string>
-    }
-    setAIAgentContext: (aiAgentContext: CommonMainContextProps['aiAgentContext']) => void
-
-    sidePanelConfig: SidePanelConfig
+    setAIAgentContext: (aiAgentContext: AIAgentContextType) => void
     setSidePanelConfig: Dispatch<SetStateAction<SidePanelConfig>>
 }
 
@@ -120,6 +119,7 @@ export type MainContext = CommonMainContextProps &
                * Used to conditionally render or enable features that depend on fe-lib
                */
               isFELibAvailable: boolean
+              aiAgentContext: AIAgentContextType
           }
         | {
               isLicenseDashboard: true
@@ -130,14 +130,12 @@ export type MainContext = CommonMainContextProps &
                * Data is set only if showLicenseData is received as true
                */
               licenseData: null
-
               reloadVersionConfig: null
               intelligenceConfig: null
-
               sidePanelConfig: null
-
               isEnterprise: false
               isFELibAvailable: false
+              aiAgentContext: null
           }
     )
 
