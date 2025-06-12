@@ -20,6 +20,7 @@ import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
 import { ReactComponent as ICBharatpe } from '@IconsV2/ic-bharatpe.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBookOpen } from '@IconsV2/ic-book-open.svg'
+import { ReactComponent as ICBrain } from '@IconsV2/ic-brain.svg'
 import { ReactComponent as ICBrowser } from '@IconsV2/ic-browser.svg'
 import { ReactComponent as ICBuildColor } from '@IconsV2/ic-build-color.svg'
 import { ReactComponent as ICCalendar } from '@IconsV2/ic-calendar.svg'
@@ -53,6 +54,7 @@ import { ReactComponent as ICDeleteDots } from '@IconsV2/ic-delete-dots.svg'
 import { ReactComponent as ICDeleteLightning } from '@IconsV2/ic-delete-lightning.svg'
 import { ReactComponent as ICDelhivery } from '@IconsV2/ic-delhivery.svg'
 import { ReactComponent as ICDevtron } from '@IconsV2/ic-devtron.svg'
+import { ReactComponent as ICDevtronAi } from '@IconsV2/ic-devtron-ai.svg'
 import { ReactComponent as ICDevtronApp } from '@IconsV2/ic-devtron-app.svg'
 import { ReactComponent as ICDevtronHeaderLogo } from '@IconsV2/ic-devtron-header-logo.svg'
 import { ReactComponent as ICDevtronJob } from '@IconsV2/ic-devtron-job.svg'
@@ -136,6 +138,7 @@ import { ReactComponent as ICOpenBox } from '@IconsV2/ic-open-box.svg'
 import { ReactComponent as ICOpenInNew } from '@IconsV2/ic-open-in-new.svg'
 import { ReactComponent as ICOpenshift } from '@IconsV2/ic-openshift.svg'
 import { ReactComponent as ICOutOfSync } from '@IconsV2/ic-out-of-sync.svg'
+import { ReactComponent as ICPaperPlane } from '@IconsV2/ic-paper-plane.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
 import { ReactComponent as ICPath } from '@IconsV2/ic-path.svg'
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
@@ -150,11 +153,13 @@ import { ReactComponent as ICSlidersVertical } from '@IconsV2/ic-sliders-vertica
 import { ReactComponent as ICSortAscending } from '@IconsV2/ic-sort-ascending.svg'
 import { ReactComponent as ICSortDescending } from '@IconsV2/ic-sort-descending.svg'
 import { ReactComponent as ICSortable } from '@IconsV2/ic-sortable.svg'
+import { ReactComponent as ICSparkleAiColor } from '@IconsV2/ic-sparkle-ai-color.svg'
 import { ReactComponent as ICSparkleColor } from '@IconsV2/ic-sparkle-color.svg'
 import { ReactComponent as ICSpinny } from '@IconsV2/ic-spinny.svg'
 import { ReactComponent as ICSprayCan } from '@IconsV2/ic-spray-can.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
 import { ReactComponent as ICStamp } from '@IconsV2/ic-stamp.svg'
+import { ReactComponent as ICStopFill } from '@IconsV2/ic-stop-fill.svg'
 import { ReactComponent as ICStrategyBlueGreen } from '@IconsV2/ic-strategy-blue-green.svg'
 import { ReactComponent as ICStrategyBlueGreenColor } from '@IconsV2/ic-strategy-blue-green-color.svg'
 import { ReactComponent as ICStrategyCanary } from '@IconsV2/ic-strategy-canary.svg'
@@ -211,6 +216,7 @@ export const iconMap = {
     'ic-bharatpe': ICBharatpe,
     'ic-bitbucket': ICBitbucket,
     'ic-book-open': ICBookOpen,
+    'ic-brain': ICBrain,
     'ic-browser': ICBrowser,
     'ic-build-color': ICBuildColor,
     'ic-calendar': ICCalendar,
@@ -243,6 +249,7 @@ export const iconMap = {
     'ic-delete-lightning': ICDeleteLightning,
     'ic-delete': ICDelete,
     'ic-delhivery': ICDelhivery,
+    'ic-devtron-ai': ICDevtronAi,
     'ic-devtron-app': ICDevtronApp,
     'ic-devtron-header-logo': ICDevtronHeaderLogo,
     'ic-devtron-job': ICDevtronJob,
@@ -328,6 +335,7 @@ export const iconMap = {
     'ic-openshift': ICOpenshift,
     'ic-out-of-sync': ICOutOfSync,
     'ic-paper-plane-color': ICPaperPlaneColor,
+    'ic-paper-plane': ICPaperPlane,
     'ic-path': ICPath,
     'ic-pencil': ICPencil,
     'ic-play-outline': ICPlayOutline,
@@ -341,11 +349,13 @@ export const iconMap = {
     'ic-sort-ascending': ICSortAscending,
     'ic-sort-descending': ICSortDescending,
     'ic-sortable': ICSortable,
+    'ic-sparkle-ai-color': ICSparkleAiColor,
     'ic-sparkle-color': ICSparkleColor,
     'ic-spinny': ICSpinny,
     'ic-spray-can': ICSprayCan,
     'ic-stack': ICStack,
     'ic-stamp': ICStamp,
+    'ic-stop-fill': ICStopFill,
     'ic-strategy-blue-green-color': ICStrategyBlueGreenColor,
     'ic-strategy-blue-green': ICStrategyBlueGreen,
     'ic-strategy-canary-color': ICStrategyCanaryColor,
