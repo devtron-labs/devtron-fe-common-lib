@@ -177,6 +177,7 @@ import { ReactComponent as ICTimeoutDash } from '@IconsV2/ic-timeout-dash.svg'
 import { ReactComponent as ICTimer } from '@IconsV2/ic-timer.svg'
 import { ReactComponent as ICTrafficSignal } from '@IconsV2/ic-traffic-signal.svg'
 import { ReactComponent as ICTravclan } from '@IconsV2/ic-travclan.svg'
+import { ReactComponent as ICTwoCubes } from '@IconsV2/ic-two-cubes.svg'
 import { ReactComponent as ICUbuntu } from '@IconsV2/ic-ubuntu.svg'
 import { ReactComponent as ICUnknown } from '@IconsV2/ic-unknown.svg'
 import { ReactComponent as ICUserCircle } from '@IconsV2/ic-user-circle.svg'
@@ -367,6 +368,7 @@ export const iconMap = {
     'ic-timer': ICTimer,
     'ic-traffic-signal': ICTrafficSignal,
     'ic-travclan': ICTravclan,
+    'ic-two-cubes': ICTwoCubes,
     'ic-ubuntu': ICUbuntu,
     'ic-unknown': ICUnknown,
     'ic-user-circle': ICUserCircle,
