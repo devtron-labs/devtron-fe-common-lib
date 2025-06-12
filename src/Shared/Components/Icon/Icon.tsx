@@ -28,7 +28,9 @@ import { ReactComponent as ICCancelled } from '@IconsV2/ic-cancelled.svg'
 import { ReactComponent as ICCardStack } from '@IconsV2/ic-card-stack.svg'
 import { ReactComponent as ICCaretDownSmall } from '@IconsV2/ic-caret-down-small.svg'
 import { ReactComponent as ICCaretLeft } from '@IconsV2/ic-caret-left.svg'
+import { ReactComponent as ICCaretLeftSmall } from '@IconsV2/ic-caret-left-small.svg'
 import { ReactComponent as ICCaretRight } from '@IconsV2/ic-caret-right.svg'
+import { ReactComponent as ICCaretRightSmall } from '@IconsV2/ic-caret-right-small.svg'
 import { ReactComponent as ICCd } from '@IconsV2/ic-cd.svg'
 import { ReactComponent as ICChatCircleDots } from '@IconsV2/ic-chat-circle-dots.svg'
 import { ReactComponent as ICChatCircleOnline } from '@IconsV2/ic-chat-circle-online.svg'
@@ -227,7 +229,9 @@ export const iconMap = {
     'ic-cancelled': ICCancelled,
     'ic-card-stack': ICCardStack,
     'ic-caret-down-small': ICCaretDownSmall,
+    'ic-caret-left-small': ICCaretLeftSmall,
     'ic-caret-left': ICCaretLeft,
+    'ic-caret-right-small': ICCaretRightSmall,
     'ic-caret-right': ICCaretRight,
     'ic-cd': ICCd,
     'ic-chat-circle-dots': ICChatCircleDots,
