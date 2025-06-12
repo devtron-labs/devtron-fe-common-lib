@@ -31,9 +31,9 @@ const registryIconMap: Record<RegistryType, IconName> = {
     [RegistryType.ECR]: 'ic-ecr',
     [RegistryType.ARTIFACT_REGISTRY]: 'ic-google-artifact-registry',
     [RegistryType.GCR]: 'ic-google-container-registry',
-    [RegistryType.OTHER]: 'ic-container',
+    [RegistryType.OTHER]: 'ic-container-registry',
 }
 
 export const RegistryIcon = ({ registryType, size = 20 }: RegistryIconProps) => (
-    <Icon name={registryIconMap[registryType] || 'ic-container'} size={size} color={null} />
+    <Icon name={registryIconMap[registryType] || 'ic-container-registry'} size={size} color={null} />
 )

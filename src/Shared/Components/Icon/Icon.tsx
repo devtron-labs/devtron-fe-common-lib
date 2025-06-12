@@ -42,6 +42,7 @@ import { ReactComponent as ICCloudVms } from '@IconsV2/ic-cloud-vms.svg'
 import { ReactComponent as ICCluster } from '@IconsV2/ic-cluster.svg'
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
+import { ReactComponent as ICContainerRegistry } from '@IconsV2/ic-container-registry.svg'
 import { ReactComponent as ICCookr } from '@IconsV2/ic-cookr.svg'
 import { ReactComponent as ICCopy } from '@IconsV2/ic-copy.svg'
 import { ReactComponent as ICCpu } from '@IconsV2/ic-cpu.svg'
@@ -77,6 +78,7 @@ import { ReactComponent as ICFilter } from '@IconsV2/ic-filter.svg'
 import { ReactComponent as ICFilterApplied } from '@IconsV2/ic-filter-applied.svg'
 import { ReactComponent as ICFlask } from '@IconsV2/ic-flask.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
+import { ReactComponent as ICGavel } from '@IconsV2/ic-gavel.svg'
 import { ReactComponent as ICGear } from '@IconsV2/ic-gear.svg'
 import { ReactComponent as ICGift } from '@IconsV2/ic-gift.svg'
 import { ReactComponent as ICGiftGradient } from '@IconsV2/ic-gift-gradient.svg'
@@ -122,6 +124,7 @@ import { ReactComponent as ICMegaphoneRight } from '@IconsV2/ic-megaphone-right.
 import { ReactComponent as ICMemory } from '@IconsV2/ic-memory.svg'
 import { ReactComponent as ICMicrosoft } from '@IconsV2/ic-microsoft.svg'
 import { ReactComponent as ICMinikube } from '@IconsV2/ic-minikube.svg'
+import { ReactComponent as ICMinus } from '@IconsV2/ic-minus.svg'
 import { ReactComponent as ICMissing } from '@IconsV2/ic-missing.svg'
 import { ReactComponent as ICMobile } from '@IconsV2/ic-mobile.svg'
 import { ReactComponent as ICMonitoring } from '@IconsV2/ic-monitoring.svg'
@@ -148,6 +151,7 @@ import { ReactComponent as ICSortAscending } from '@IconsV2/ic-sort-ascending.sv
 import { ReactComponent as ICSortDescending } from '@IconsV2/ic-sort-descending.svg'
 import { ReactComponent as ICSortable } from '@IconsV2/ic-sortable.svg'
 import { ReactComponent as ICSparkleColor } from '@IconsV2/ic-sparkle-color.svg'
+import { ReactComponent as ICSpeedometer } from '@IconsV2/ic-speedometer.svg'
 import { ReactComponent as ICSpinny } from '@IconsV2/ic-spinny.svg'
 import { ReactComponent as ICSprayCan } from '@IconsV2/ic-spray-can.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
@@ -173,6 +177,7 @@ import { ReactComponent as ICTimeoutDash } from '@IconsV2/ic-timeout-dash.svg'
 import { ReactComponent as ICTimer } from '@IconsV2/ic-timer.svg'
 import { ReactComponent as ICTrafficSignal } from '@IconsV2/ic-traffic-signal.svg'
 import { ReactComponent as ICTravclan } from '@IconsV2/ic-travclan.svg'
+import { ReactComponent as ICTwoCubes } from '@IconsV2/ic-two-cubes.svg'
 import { ReactComponent as ICUbuntu } from '@IconsV2/ic-ubuntu.svg'
 import { ReactComponent as ICUnknown } from '@IconsV2/ic-unknown.svg'
 import { ReactComponent as ICUserCircle } from '@IconsV2/ic-user-circle.svg'
@@ -227,6 +232,7 @@ export const iconMap = {
     'ic-cloud-vms': ICCloudVms,
     'ic-cluster': ICCluster,
     'ic-code': ICCode,
+    'ic-container-registry': ICContainerRegistry,
     'ic-container': ICContainer,
     'ic-cookr': ICCookr,
     'ic-copy': ICCopy,
@@ -263,6 +269,7 @@ export const iconMap = {
     'ic-filter': ICFilter,
     'ic-flask': ICFlask,
     'ic-folder-user': ICFolderUser,
+    'ic-gavel': ICGavel,
     'ic-gear': ICGear,
     'ic-gift-gradient': ICGiftGradient,
     'ic-gift': ICGift,
@@ -308,6 +315,7 @@ export const iconMap = {
     'ic-memory': ICMemory,
     'ic-microsoft': ICMicrosoft,
     'ic-minikube': ICMinikube,
+    'ic-minus': ICMinus,
     'ic-missing': ICMissing,
     'ic-mobile': ICMobile,
     'ic-monitoring': ICMonitoring,
@@ -334,6 +342,7 @@ export const iconMap = {
     'ic-sort-descending': ICSortDescending,
     'ic-sortable': ICSortable,
     'ic-sparkle-color': ICSparkleColor,
+    'ic-speedometer': ICSpeedometer,
     'ic-spinny': ICSpinny,
     'ic-spray-can': ICSprayCan,
     'ic-stack': ICStack,
@@ -359,6 +368,7 @@ export const iconMap = {
     'ic-timer': ICTimer,
     'ic-traffic-signal': ICTrafficSignal,
     'ic-travclan': ICTravclan,
+    'ic-two-cubes': ICTwoCubes,
     'ic-ubuntu': ICUbuntu,
     'ic-unknown': ICUnknown,
     'ic-user-circle': ICUserCircle,
