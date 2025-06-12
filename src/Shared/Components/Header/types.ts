@@ -68,6 +68,7 @@ export enum HelpMenuItems {
     GIVE_FEEDBACK = 'give-feedback',
     CHAT_WITH_SUPPORT = 'chat-with-support',
     RAISE_ISSUE_REQUEST = 'raise-issue-request',
+    DEVTRON_GPT = 'devtron-gpt',
 }
 
 export type HelpButtonActionMenuProps = ActionMenuProps<HelpMenuItems>

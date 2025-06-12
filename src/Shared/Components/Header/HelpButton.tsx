@@ -4,7 +4,7 @@ import { SliderButton } from '@typeform/embed-react'
 
 import { DOCUMENTATION_HOME_PAGE, URLS } from '@Common/Constants'
 import { ComponentSizeType } from '@Shared/constants'
-import { useMainContext } from '@Shared/Providers'
+import { SidePanelTab, useMainContext } from '@Shared/Providers'
 import { InstallationType } from '@Shared/types'
 
 import { ActionMenu } from '../ActionMenu'
@@ -81,7 +81,7 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick }: HelpButt
             e.preventDefault()
             setSidePanelConfig((prev) => ({
                 ...prev,
-                open: true,
+                state: SidePanelTab.DOCUMENTATION,
                 docLink: DOCUMENTATION_HOME_PAGE,
                 reinitialize: true,
             }))

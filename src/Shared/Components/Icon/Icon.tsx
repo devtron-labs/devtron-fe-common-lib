@@ -136,6 +136,7 @@ import { ReactComponent as ICNodeScript } from '@IconsV2/ic-node-script.svg'
 import { ReactComponent as ICOidc } from '@IconsV2/ic-oidc.svg'
 import { ReactComponent as ICOpenBox } from '@IconsV2/ic-open-box.svg'
 import { ReactComponent as ICOpenInNew } from '@IconsV2/ic-open-in-new.svg'
+import { ReactComponent as ICOpenai } from '@IconsV2/ic-openai.svg'
 import { ReactComponent as ICOpenshift } from '@IconsV2/ic-openshift.svg'
 import { ReactComponent as ICOutOfSync } from '@IconsV2/ic-out-of-sync.svg'
 import { ReactComponent as ICPaperPlane } from '@IconsV2/ic-paper-plane.svg'
@@ -332,6 +333,7 @@ export const iconMap = {
     'ic-oidc': ICOidc,
     'ic-open-box': ICOpenBox,
     'ic-open-in-new': ICOpenInNew,
+    'ic-openai': ICOpenai,
     'ic-openshift': ICOpenshift,
     'ic-out-of-sync': ICOutOfSync,
     'ic-paper-plane-color': ICPaperPlaneColor,
