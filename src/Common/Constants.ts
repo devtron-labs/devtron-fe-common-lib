@@ -79,6 +79,7 @@ export const URLS = {
     COMPARE_CLUSTERS: '/compare-clusters',
     APP_CONFIG: 'edit',
     GLOBAL_CONFIG: '/global-config',
+    GLOBAL_CONFIG_MANAGE_CATEGORIES: '/global-config/cluster-env/manage-categories',
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP,
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_CREATE: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/create`,
     // NOTE: using appId since we are re-using AppConfig component
@@ -90,6 +91,7 @@ export const ROUTES = {
     APP: 'app',
     APP_ARTIFACT_PROMOTE_MATERIAL: 'app/artifact/promotion-request/material',
     APP_TEMPLATE_DATA: 'app/template/data',
+    ENVIRONMENT_CATEGORIES: 'env/categories',
     PROJECT_LIST_MIN: 'team/autocomplete',
     USER_CHECK_ROLE: 'user/check/roles',
     IMAGE_TAGGING: 'app/image-tagging',

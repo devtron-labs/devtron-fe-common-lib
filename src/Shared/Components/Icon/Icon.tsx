@@ -42,6 +42,7 @@ import { ReactComponent as ICCloseLarge } from '@IconsV2/ic-close-large.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
 import { ReactComponent as ICCloudVms } from '@IconsV2/ic-cloud-vms.svg'
 import { ReactComponent as ICCluster } from '@IconsV2/ic-cluster.svg'
+import { ReactComponent as ICClusterIsolated } from '@IconsV2/ic-cluster-isolated.svg'
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICCookr } from '@IconsV2/ic-cookr.svg'
@@ -67,6 +68,8 @@ import { ReactComponent as ICEmail } from '@IconsV2/ic-email.svg'
 import { ReactComponent as ICEnterpriseFeat } from '@IconsV2/ic-enterprise-feat.svg'
 import { ReactComponent as ICEnterpriseTag } from '@IconsV2/ic-enterprise-tag.svg'
 import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
+import { ReactComponent as ICEnvironment } from '@IconsV2/ic-environment.svg'
+import { ReactComponent as ICEnvironmentIsolated } from '@IconsV2/ic-environment-isolated.svg'
 import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICExpandRightSm } from '@IconsV2/ic-expand-right-sm.svg'
 import { ReactComponent as ICExpandSm } from '@IconsV2/ic-expand-sm.svg'
@@ -148,6 +151,7 @@ import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
 import { ReactComponent as ICRocketGear } from '@IconsV2/ic-rocket-gear.svg'
 import { ReactComponent as ICRocketLaunch } from '@IconsV2/ic-rocket-launch.svg'
 import { ReactComponent as ICSelected } from '@IconsV2/ic-selected.svg'
+import { ReactComponent as ICShapes } from '@IconsV2/ic-shapes.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
 import { ReactComponent as ICSlidersVertical } from '@IconsV2/ic-sliders-vertical.svg'
 import { ReactComponent as ICSortAscending } from '@IconsV2/ic-sort-ascending.svg'
@@ -237,6 +241,7 @@ export const iconMap = {
     'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
     'ic-cloud-vms': ICCloudVms,
+    'ic-cluster-isolated': ICClusterIsolated,
     'ic-cluster': ICCluster,
     'ic-code': ICCode,
     'ic-container': ICContainer,
@@ -263,6 +268,8 @@ export const iconMap = {
     'ic-enterprise-feat': ICEnterpriseFeat,
     'ic-enterprise-tag': ICEnterpriseTag,
     'ic-env': ICEnv,
+    'ic-environment-isolated': ICEnvironmentIsolated,
+    'ic-environment': ICEnvironment,
     'ic-error': ICError,
     'ic-expand-right-sm': ICExpandRightSm,
     'ic-expand-sm': ICExpandSm,
@@ -344,6 +351,7 @@ export const iconMap = {
     'ic-rocket-gear': ICRocketGear,
     'ic-rocket-launch': ICRocketLaunch,
     'ic-selected': ICSelected,
+    'ic-shapes': ICShapes,
     'ic-shield-check': ICShieldCheck,
     'ic-sliders-vertical': ICSlidersVertical,
     'ic-sort-ascending': ICSortAscending,
