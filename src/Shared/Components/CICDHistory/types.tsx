@@ -27,6 +27,7 @@ import {
     PromotionApprovalMetadataType,
     ReleaseTag,
     ResponseType,
+    TooltipProps,
     UserApprovalMetadataType,
     useScrollable,
 } from '../../../Common'
@@ -529,15 +530,12 @@ export interface DeploymentStatusDetailRowType extends Pick<DeploymentStatusDeta
     deploymentDetailedData: DeploymentStatusDetailsBreakdownDataType
 }
 
-export interface DeploymentConfigurationsRes extends ResponseType {
-    result?: DeploymentTemplateList[]
-}
-
 export interface DeploymentHistorySingleValue {
     displayName: string
     value: string
     variableSnapshot?: object
     resolvedValue?: string
+    tooltipContent?: TooltipProps['content']
 }
 export interface DeploymentHistoryDetail {
     componentName?: string
@@ -550,23 +548,6 @@ export interface DeploymentTemplateHistoryType {
     baseTemplateConfiguration: DeploymentHistoryDetail
     previousConfigAvailable: boolean
     rootClassName?: string
-    codeEditorKey?: string
-}
-export interface DeploymentHistoryDetailRes extends ResponseType {
-    result?: DeploymentHistoryDetail
-}
-
-export interface HistoryDiffSelectorList {
-    id: number
-    deployedOn: string
-    deployedBy: string
-    deploymentStatus: string
-    wfrId?: number
-    runSource?: RunSourceType
-}
-
-export interface HistoryDiffSelectorRes {
-    result?: HistoryDiffSelectorList[]
 }
 
 export interface DeploymentHistorySidebarType {

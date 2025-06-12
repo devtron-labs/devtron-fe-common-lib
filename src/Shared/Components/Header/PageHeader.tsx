@@ -24,8 +24,9 @@ import { InstallationType } from '@Shared/types'
 
 import { TippyCustomized, TippyTheme } from '../../../Common'
 import { MAX_LOGIN_COUNT, POSTHOG_EVENT_ONBOARDING } from '../../../Common/Constants'
-import { useMainContext, useTheme, useUserEmail } from '../../Providers'
+import { SidePanelTab, useMainContext, useTheme, useUserEmail } from '../../Providers'
 import GettingStartedCard from '../GettingStartedCard/GettingStarted'
+import { Icon } from '../Icon'
 import { InfoIconTippy } from '../InfoIconTippy'
 import { HelpButton } from './HelpButton'
 import { IframePromoButton } from './IframePromoButton'
@@ -49,7 +50,14 @@ const PageHeader = ({
     markAsBeta,
     tippyProps,
 }: PageHeaderType) => {
-    const { loginCount, setLoginCount, showGettingStartedCard, setShowGettingStartedCard } = useMainContext()
+    const {
+        loginCount,
+        setLoginCount,
+        showGettingStartedCard,
+        setShowGettingStartedCard,
+        setSidePanelConfig,
+        sidePanelConfig,
+    } = useMainContext()
     const { showSwitchThemeLocationTippy, handleShowSwitchThemeLocationTippyChange } = useTheme()
 
     const { isTippyCustomized, tippyRedirectLink, TippyIcon, tippyMessage, onClickTippyButton, additionalContent } =
@@ -124,8 +132,22 @@ const PageHeader = ({
         </div>
     )
 
+    const onAskButtonClick = () => {
+        setSidePanelConfig((prev) => ({ ...prev, state: SidePanelTab.ASK_DEVTRON }))
+    }
+
     const renderLogoutHelpSection = () => (
         <>
+            {window._env_?.FEATURE_ASK_DEVTRON_EXPERT && sidePanelConfig.state === 'closed' && (
+                <button
+                    className="enable-svg-animation--hover flex dc__no-background p-2 dc__outline-none-imp dc__no-border"
+                    onClick={onAskButtonClick}
+                    type="button"
+                    aria-label="Ask Devtron Expert"
+                >
+                    <Icon name="ic-devtron-ai" color={null} size={28} />
+                </button>
+            )}
             <HelpButton
                 serverInfo={currentServerInfo.serverInfo}
                 fetchingServerInfo={currentServerInfo.fetchingServerInfo}
