@@ -30,9 +30,13 @@ export interface ReloadVersionConfigTypes {
     isRefreshing: boolean
 }
 
+export enum SidePanelTab {
+    DOCUMENTATION = 'documentation',
+    ASK_DEVTRON = 'ask-devtron',
+}
+
 export interface SidePanelConfig {
-    /** Determines whether the side panel is visible */
-    open: boolean
+    state: SidePanelTab | 'closed'
     /** Optional flag to reset/reinitialize the side panel state */
     reinitialize?: boolean
     /** URL to documentation that should be displayed in the panel */
@@ -79,6 +83,13 @@ type CommonMainContextProps = {
     setLicenseData: Dispatch<SetStateAction<DevtronLicenseInfo>>
     canFetchHelmAppStatus: boolean
     setIntelligenceConfig: Dispatch<SetStateAction<IntelligenceConfig>>
+    aiAgentContext: {
+        path: string
+        context: Record<string, string>
+    }
+    setAIAgentContext: (aiAgentContext: CommonMainContextProps['aiAgentContext']) => void
+
+    sidePanelConfig: SidePanelConfig
     setSidePanelConfig: Dispatch<SetStateAction<SidePanelConfig>>
 }
 

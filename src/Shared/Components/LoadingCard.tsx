@@ -5,7 +5,7 @@ interface LoadingCardType {
 const LoadingCard = ({ wider }: LoadingCardType) => (
     <div
         // TODO: Remove margin and use gap
-        className={`flexbox-col ${wider ? 'w-250' : 'w-200'} bg__primary border__secondary-translucent br-8 mr-16 shadow__card--10`}
+        className={`flexbox-col ${wider ? 'w-250' : 'w-200'} bg__primary border__secondary-translucent br-8 mr-12 shadow__card--10`}
     >
         <div className="flexbox-col dc__gap-8 px-12 pt-12 pb-8">
             <span className="w-60 h-14 shimmer" />
