@@ -35,9 +35,25 @@ export interface TextareaProps
      *
      * @default ComponentSizeType.large
      */
-    size?: Extract<ComponentSizeType, ComponentSizeType.medium | ComponentSizeType.large>
+    size?: Extract<ComponentSizeType, ComponentSizeType.small | ComponentSizeType.medium | ComponentSizeType.large>
     /**
      * Value of the textarea
      */
     value: string
+    /**
+     * If true, the textarea resize is disabled
+     *
+     * @default false
+     */
+    disableResize?: true
+    /**
+     * Allows inserting a newline with Shift + Enter instead of Enter alone.
+     *
+     * When enabled, pressing Enter submits the form, while Shift + Enter inserts a newline.
+     * Useful for forms where Enter should trigger submission, but multiline input is still needed.
+     *
+     * @default false
+     */
+    newlineOnShiftEnter?: boolean
+    textareaRef?: React.MutableRefObject<HTMLTextAreaElement> | React.RefCallback<HTMLTextAreaElement>
 }

@@ -30,13 +30,22 @@ export interface ReloadVersionConfigTypes {
     isRefreshing: boolean
 }
 
+export enum SidePanelTab {
+    DOCUMENTATION = 'documentation',
+    ASK_DEVTRON = 'ask-devtron',
+}
+
 export interface SidePanelConfig {
-    /** Determines whether the side panel is visible */
-    open: boolean
+    state: SidePanelTab | 'closed'
     /** Optional flag to reset/reinitialize the side panel state */
     reinitialize?: boolean
     /** URL to documentation that should be displayed in the panel */
     docLink: string | null
+}
+
+type AIAgentContextType = {
+    path: string
+    context: Record<string, string>
 }
 
 type CommonMainContextProps = {
@@ -79,6 +88,7 @@ type CommonMainContextProps = {
     setLicenseData: Dispatch<SetStateAction<DevtronLicenseInfo>>
     canFetchHelmAppStatus: boolean
     setIntelligenceConfig: Dispatch<SetStateAction<IntelligenceConfig>>
+    setAIAgentContext: (aiAgentContext: AIAgentContextType) => void
     setSidePanelConfig: Dispatch<SetStateAction<SidePanelConfig>>
 }
 
@@ -109,6 +119,7 @@ export type MainContext = CommonMainContextProps &
                * Used to conditionally render or enable features that depend on fe-lib
                */
               isFELibAvailable: boolean
+              aiAgentContext: AIAgentContextType
           }
         | {
               isLicenseDashboard: true
@@ -119,14 +130,12 @@ export type MainContext = CommonMainContextProps &
                * Data is set only if showLicenseData is received as true
                */
               licenseData: null
-
               reloadVersionConfig: null
               intelligenceConfig: null
-
               sidePanelConfig: null
-
               isEnterprise: false
               isFELibAvailable: false
+              aiAgentContext: null
           }
     )
 
