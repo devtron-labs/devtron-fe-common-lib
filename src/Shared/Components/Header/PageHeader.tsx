@@ -133,6 +133,10 @@ const PageHeader = ({
     )
 
     const onAskButtonClick = () => {
+        ReactGA.event({
+            category: 'AI',
+            action: `HELP_ASK_DEVTRON_AI`,
+        })
         setSidePanelConfig((prev) => ({ ...prev, state: SidePanelTab.ASK_DEVTRON }))
     }
 

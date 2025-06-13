@@ -104,6 +104,7 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick }: HelpButt
             case HelpMenuItems.VIEW_ALL_TICKETS:
             case HelpMenuItems.CHAT_WITH_SUPPORT:
             case HelpMenuItems.RAISE_ISSUE_REQUEST:
+            case HelpMenuItems.DEVTRON_GPT:
                 handleAnalytics(item, e)
                 break
             case HelpMenuItems.VIEW_DOCUMENTATION:
