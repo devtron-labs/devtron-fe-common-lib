@@ -17,6 +17,7 @@
 import { useEffect, useState } from 'react'
 
 import { Button, ButtonVariantType, Icon } from '@Shared/Components'
+import { ComponentSizeType } from '@Shared/constants'
 
 import PageSizeSelector from './PageSizeSelector'
 import { Page, PageValueItemProps, PaginationProps } from './types'
@@ -90,15 +91,16 @@ const Pagination = ({
                 {offset + 1} - {lastPageNo} of {size}
             </div>
 
-            <ul className="pagination">
+            <ul className="pagination flex">
                 <Button
                     disabled={!pageNoIndex}
                     onClick={selectPreviousPage}
                     ariaLabel="Previous page"
                     variant={ButtonVariantType.borderLess}
-                    icon={<Icon name="ic-caret-left-small" color="B500" />}
+                    icon={<Icon name="ic-caret-left-small" color={null} />}
                     dataTestId="pagination-prev-button-clicked"
                     showAriaLabelInTippy={false}
+                    size={ComponentSizeType.xs}
                 />
 
                 {visiblePages.map((page) => (
@@ -115,9 +117,10 @@ const Pagination = ({
                     onClick={selectNextPage}
                     ariaLabel="Next page"
                     variant={ButtonVariantType.borderLess}
-                    icon={<Icon name="ic-caret-right-small" color="B500" />}
+                    icon={<Icon name="ic-caret-right-small" color={null} />}
                     dataTestId="pagination-prev-button-clicked"
                     showAriaLabelInTippy={false}
+                    size={ComponentSizeType.xs}
                 />
             </ul>
 
