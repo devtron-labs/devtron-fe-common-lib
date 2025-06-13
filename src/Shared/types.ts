@@ -1249,6 +1249,7 @@ export interface DeploymentStatusDetailsType {
     timelines: DeploymentStatusDetailsTimelineType[]
     wfrStatus?: WorkflowRunnerStatusDTO
     isDeploymentWithoutApproval: boolean
+    deploymentAppType: DeploymentAppTypes
 }
 
 export type DeploymentStatusTimelineType =

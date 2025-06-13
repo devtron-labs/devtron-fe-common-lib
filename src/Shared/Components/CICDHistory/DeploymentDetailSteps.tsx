@@ -115,7 +115,10 @@ const DeploymentDetailSteps = ({
         const processedDeploymentStatusDetailsData =
             isVirtualEnv.current && processVirtualEnvironmentDeploymentData
                 ? processVirtualEnvironmentDeploymentData(deploymentStatusDetailRes)
-                : processDeploymentStatusDetailsData(appDetails?.deploymentAppType, deploymentStatusDetailRes)
+                : processDeploymentStatusDetailsData(
+                      deploymentStatusDetailRes.deploymentAppType,
+                      deploymentStatusDetailRes,
+                  )
         clearDeploymentStatusTimer()
         // If deployment status is in progress then fetch data in every 10 seconds
 
