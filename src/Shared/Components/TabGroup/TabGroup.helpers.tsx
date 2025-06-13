@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICErrorExclamation } from '@Icons/ic-error-exclamation.svg'
-import { ReactComponent as ICWarning } from '@Icons/ic-warning.svg'
-
 import { Icon } from '../Icon'
 import { TabGroupProps, TabProps } from './TabGroup.types'
 import { TAB_ICON_SIZE_MAP } from './TabGroup.utils'
@@ -32,10 +29,10 @@ export const getTabIcon = ({
 }: Pick<TabProps, 'showError' | 'showWarning' | 'icon' | 'active' | 'iconElement'> &
     Pick<TabGroupProps, 'size'> & { className: string }) => {
     if (showError) {
-        return <ICErrorExclamation className={className} />
+        return <Icon name="ic-error" color={null} size={TAB_ICON_SIZE_MAP[size]} />
     }
     if (showWarning) {
-        return <ICWarning className={`${className} warning-icon-y7`} />
+        return <Icon name="ic-warning" color={null} size={TAB_ICON_SIZE_MAP[size]} />
     }
     if (typeof icon === 'string') {
         return <Icon name={icon} color={active ? 'B500' : 'N700'} size={TAB_ICON_SIZE_MAP[size]} />

@@ -187,7 +187,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     error,
     icon,
     helperText,
-    placeholder = 'Select a option',
+    placeholder = 'Select an option',
     label,
     showSelectedOptionIcon = true,
     size = ComponentSizeType.medium,
