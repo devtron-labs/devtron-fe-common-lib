@@ -5,7 +5,7 @@ import { Icon, IconsProps } from '../Icon'
 
 type BadgeVariants = 'default' | 'negative' | 'negative-grey' | 'positive' | 'warning' | 'neutral' | 'custom'
 
-type BadgeProps = {
+export type BadgeProps = {
     size?: Extract<ComponentSizeType, ComponentSizeType.xs | ComponentSizeType.xxs | ComponentSizeType.xxxs>
     startIconProps?: Omit<IconsProps, 'color' | 'size'>
     endIconProps?: Omit<IconsProps, 'color' | 'size'>
