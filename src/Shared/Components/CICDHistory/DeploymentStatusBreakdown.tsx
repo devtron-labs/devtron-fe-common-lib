@@ -30,6 +30,7 @@ const DeploymentStatusDetailBreakdown = ({
     isVirtualEnvironment,
     appDetails,
     rootClassName = '',
+    deploymentAppType,
 }: DeploymentStatusDetailBreakdownType) => {
     const isHelmManifestPushed =
         deploymentStatusDetailsBreakdownData.deploymentStatusBreakdown[
@@ -59,7 +60,8 @@ const DeploymentStatusDetailBreakdown = ({
                     {(
                         [
                             TIMELINE_STATUS.GIT_COMMIT,
-                            ...(deploymentStatusDetailRowProps.appDetails.deploymentAppType === DeploymentAppTypes.FLUX
+                            ...(appDetails.deploymentAppType === DeploymentAppTypes.FLUX ||
+                            deploymentAppType === DeploymentAppTypes.FLUX
                                 ? []
                                 : [TIMELINE_STATUS.ARGOCD_SYNC, TIMELINE_STATUS.KUBECTL_APPLY]),
                         ] as DeploymentStatusDetailRowType['type'][]

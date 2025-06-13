@@ -48,6 +48,7 @@ const getDefaultDeploymentStatusTimeline = (
 
     return {
         deploymentStatus,
+        deploymentAppType,
         deploymentTriggerTime: data?.deploymentStartedOn || '',
         deploymentEndTime: data?.deploymentFinishedOn || '',
         triggeredBy: data?.triggeredBy || '',

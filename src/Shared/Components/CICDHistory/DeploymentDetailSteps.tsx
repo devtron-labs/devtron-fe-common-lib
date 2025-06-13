@@ -174,6 +174,7 @@ const DeploymentDetailSteps = ({
                     isVirtualEnvironment={isVirtualEnv.current}
                     appDetails={appDetails}
                     rootClassName="p-20"
+                    deploymentAppType={deploymentStatusDetailsBreakdownData.deploymentAppType}
                 />
             </div>
         )
