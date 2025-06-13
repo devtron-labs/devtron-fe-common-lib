@@ -23,9 +23,9 @@ export const searchAndSortRows = (
     filterData: UseFiltersReturnType,
     comparator?: Column['comparator'],
 ) => {
-    const { searchKey, sortBy, sortOrder } = filterData ?? {}
+    const { sortBy, sortOrder, isFilterApplied } = filterData ?? {}
 
-    const filteredRows = searchKey ? rows.filter((row) => filter(row, filterData)) : rows
+    const filteredRows = isFilterApplied ? rows.filter((row) => filter(row, filterData)) : rows
 
     return comparator && sortBy
         ? filteredRows.sort(
@@ -62,7 +62,9 @@ export const getVisibleColumnsFromLocalStorage = ({
             throw new Error()
         }
 
-        return visibleColumns
+        const visibleColumnsFieldSet = new Set(visibleColumns.map((column) => column.field))
+
+        return allColumns.filter((column) => visibleColumnsFieldSet.has(column.field))
     } catch {
         // NOTE: show all headers by default
         return allColumns
@@ -116,3 +118,19 @@ export const getFilteringPromise = ({ searchSortTimeoutRef, callback }: GetFilte
             searchSortTimeoutRef.current = -1
         }, SEARCH_SORT_CHANGE_DEBOUNCE_TIME)
     })
+
+export const getStickyColumnConfig = (gridTemplateColumns: string, columnIndex: number) => ({
+    className: 'dc__position-sticky dc__zi-1 generic-table__cell--sticky',
+    // NOTE: container has a padding left of 20px and the gap between columns is 16px
+    // so we want each sticky column to stick to the left of the previous column
+    left: `${
+        Number(
+            gridTemplateColumns
+                .split(' ')
+                .slice(0, columnIndex)
+                .reduce((acc, num) => acc + Number(num.split('px')[0]), 0) ?? 1,
+        ) +
+        20 +
+        16 * columnIndex
+    }px`,
+})

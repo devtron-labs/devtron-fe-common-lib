@@ -16,14 +16,14 @@
 
 import { BulkSelectionDropdownItemsProps } from './types'
 
-const BulkSelectionDropdownItems = <T,>({
+const BulkSelectionDropdownItems = ({
     locator,
     label,
     isSelected,
     handleBulkSelection,
     icon: Icon,
     iconClass,
-}: BulkSelectionDropdownItemsProps<T>) => {
+}: BulkSelectionDropdownItemsProps<unknown>) => {
     const handleSelect = () => {
         handleBulkSelection({
             action: locator,
