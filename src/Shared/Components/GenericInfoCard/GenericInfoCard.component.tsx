@@ -19,7 +19,7 @@ import { Link } from 'react-router-dom'
 
 import { Tooltip } from '@Common/Tooltip'
 
-import { Icon as InconComponent } from '../Icon'
+import { Icon as IconComponent } from '../Icon'
 import { GenericInfoCardProps } from './types'
 import { getClassNameForBorderVariant } from './utils'
 
@@ -76,7 +76,7 @@ const GenericInfoCard = ({
                                 </Tooltip>
 
                                 <div className="generic-info-card__arrow dc__no-shrink flex">
-                                    <InconComponent color="B500" name="ic-caret-right-small" />
+                                    <IconComponent color="B500" name="ic-caret-right-small" />
                                 </div>
                             </div>
 
