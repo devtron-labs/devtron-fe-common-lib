@@ -1,5 +1,6 @@
 /* eslint-disable no-param-reassign */
 import { findRight, handleUTCTime, logExceptionToSentry } from '@Common/Helper'
+import { DeploymentAppTypes } from '@Common/Types'
 import { DEPLOYMENT_STATUS } from '@Shared/constants'
 import {
     DeploymentPhaseType,
@@ -22,6 +23,7 @@ import {
 import { ProcessUnableToFetchOrTimedOutStatusType } from './types'
 
 const getDefaultDeploymentStatusTimeline = (
+    deploymentAppType: DeploymentAppTypes,
     data?: DeploymentStatusDetailsType,
 ): DeploymentStatusDetailsBreakdownDataType => {
     const commonProps: Pick<
@@ -58,19 +60,26 @@ const getDefaultDeploymentStatusTimeline = (
                 ...commonProps,
                 displayText: 'Push manifest to Git',
             },
-            [TIMELINE_STATUS.ARGOCD_SYNC]: {
-                ...commonProps,
-                displayText: 'Synced with Argo CD',
-            },
-            [TIMELINE_STATUS.KUBECTL_APPLY]: {
-                ...commonProps,
-                displayText: 'Apply manifest to Kubernetes',
-                resourceDetails: [],
-                subSteps: [],
-            },
+            ...(deploymentAppType === DeploymentAppTypes.GITOPS
+                ? {
+                      [TIMELINE_STATUS.ARGOCD_SYNC]: {
+                          ...commonProps,
+                          displayText: 'Synced with Argo CD',
+                      },
+                      [TIMELINE_STATUS.KUBECTL_APPLY]: {
+                          ...commonProps,
+                          displayText: 'Apply manifest to Kubernetes',
+                          resourceDetails: [],
+                          subSteps: [],
+                      },
+                  }
+                : {}),
             [TIMELINE_STATUS.APP_HEALTH]: {
                 ...commonProps,
-                displayText: 'Propagate manifest to Kubernetes resources',
+                displayText:
+                    deploymentAppType === DeploymentAppTypes.FLUX
+                        ? 'Synced with Flux CD'
+                        : 'Propagate manifest to Kubernetes resources',
             },
         },
         errorBarConfig: deploymentErrorMessage
@@ -233,12 +242,13 @@ const processKubeCTLApply = (
  *   - In similar fashion based on the deploymentStatus we will set the icon and display text for the timeline.
  */
 export const processDeploymentStatusDetailsData = (
+    deploymentAppType: DeploymentAppTypes,
     data?: DeploymentStatusDetailsType,
 ): DeploymentStatusDetailsBreakdownDataType => {
     if (data && !WFR_STATUS_DTO_TO_DEPLOYMENT_STATUS_MAP[data.wfrStatus]) {
         logExceptionToSentry(new Error(`New WFR status found: ${data?.wfrStatus}`))
     }
-    const deploymentData = getDefaultDeploymentStatusTimeline(data)
+    const deploymentData = getDefaultDeploymentStatusTimeline(deploymentAppType, data)
 
     const { deploymentStatus } = deploymentData
 
