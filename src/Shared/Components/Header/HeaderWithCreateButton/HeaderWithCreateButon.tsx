@@ -29,7 +29,7 @@ import PageHeader from '../PageHeader'
 import { HeaderWithCreateButtonProps } from './types'
 import { getCreateActionMenuOptions } from './utils'
 
-export const HeaderWithCreateButton = ({ headerName, renderAdditionalHeaderInfo }: HeaderWithCreateButtonProps) => {
+export const HeaderWithCreateButton = ({ headerName, additionalHeaderInfo }: HeaderWithCreateButtonProps) => {
     // HOOKS
     const { serverMode } = useMainContext()
     const params = useParams<{ appType: string }>()
@@ -67,7 +67,7 @@ export const HeaderWithCreateButton = ({ headerName, renderAdditionalHeaderInfo 
             <PageHeader
                 headerName={headerName}
                 renderActionButtons={renderActionButtons}
-                additionalHeaderInfo={renderAdditionalHeaderInfo}
+                additionalHeaderInfo={additionalHeaderInfo}
             />
         </div>
     )

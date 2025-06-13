@@ -4,7 +4,7 @@ import { PageHeaderType } from '../types'
 
 export interface HeaderWithCreateButtonProps {
     headerName: string
-    renderAdditionalHeaderInfo: PageHeaderType['additionalHeaderInfo']
+    additionalHeaderInfo: PageHeaderType['additionalHeaderInfo']
 }
 
 export enum CreateActionMenuItems {
