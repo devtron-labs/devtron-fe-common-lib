@@ -88,7 +88,7 @@ export const IframePromoButton = () => {
     )
 
     return (
-        <div>
+        <>
             {FEATURE_PROMO_EMBEDDED_BUTTON_TEXT && (
                 <Button
                     dataTestId="iframe-header-button"
@@ -99,6 +99,6 @@ export const IframePromoButton = () => {
                 />
             )}
             {showEmbeddedIframeModal && renderIframeDrawer()}
-        </div>
+        </>
     )
 }
