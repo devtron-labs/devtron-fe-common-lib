@@ -97,7 +97,7 @@ const Pagination = ({
                     onClick={selectPreviousPage}
                     ariaLabel="Previous page"
                     variant={ButtonVariantType.borderLess}
-                    icon={<Icon name="ic-caret-left-small" color={null} />}
+                    icon={<Icon name="ic-caret-right-small" color={null} rotateBy={90} />}
                     dataTestId="pagination-prev-button-clicked"
                     showAriaLabelInTippy={false}
                     size={ComponentSizeType.xs}
