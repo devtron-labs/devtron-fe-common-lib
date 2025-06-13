@@ -102,7 +102,7 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
          *
          * @default ComponentSizeType.large
          */
-        size?: ComponentSizeType
+        size?: Exclude<ComponentSizeType, 'xxxs'>
         /**
          * Style to be applied on the button
          *
