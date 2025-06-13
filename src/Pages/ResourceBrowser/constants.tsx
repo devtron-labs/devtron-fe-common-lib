@@ -19,7 +19,6 @@ import { ReactComponent as ICMediumPause } from '@Icons/ic-medium-pause.svg'
 import { ReactComponent as ICMediumPlay } from '@Icons/ic-medium-play.svg'
 import { SelectPickerOptionType } from '@Shared/Components'
 
-import { ResourceRecommenderHeaderType } from './ResourceBrowser.Types'
 import { NodeDrainRequest } from './types'
 
 export const ALL_NAMESPACE_OPTION: Readonly<Pick<SelectPickerOptionType<string>, 'value' | 'label'>> = {
@@ -112,30 +111,6 @@ export const NODE_DRAIN_OPTIONS_CHECKBOX_CONFIG: {
         label: DRAIN_NODE_MODAL_MESSAGING.IgnoreDaemonSets.heading,
     },
 ] as const
-
-export const RESOURCE_RECOMMENDER_HEADER_TO_TITLE_MAP: Record<ResourceRecommenderHeaderType, string> = {
-    [ResourceRecommenderHeaderType.API_VERSION]: 'API Version',
-    [ResourceRecommenderHeaderType.CONTAINER_NAME]: 'Container Name',
-    [ResourceRecommenderHeaderType.CPU_LIMIT]: 'CPU Limits',
-    [ResourceRecommenderHeaderType.CPU_REQUEST]: 'CPU Requests',
-    [ResourceRecommenderHeaderType.KIND]: 'Kind',
-    [ResourceRecommenderHeaderType.MEMORY_LIMIT]: 'Mem Limits',
-    [ResourceRecommenderHeaderType.MEMORY_REQUEST]: 'Mem Requests',
-    [ResourceRecommenderHeaderType.NAME]: 'Workload',
-    [ResourceRecommenderHeaderType.NAMESPACE]: 'Namespace',
-}
-
-export const RESOURCE_RECOMMENDER_HEADER_TO_WIDTH_MAP: Record<ResourceRecommenderHeaderType, number> = {
-    [ResourceRecommenderHeaderType.API_VERSION]: 180,
-    [ResourceRecommenderHeaderType.CONTAINER_NAME]: 150,
-    [ResourceRecommenderHeaderType.CPU_LIMIT]: 150,
-    [ResourceRecommenderHeaderType.CPU_REQUEST]: 150,
-    [ResourceRecommenderHeaderType.KIND]: 150,
-    [ResourceRecommenderHeaderType.MEMORY_LIMIT]: 150,
-    [ResourceRecommenderHeaderType.MEMORY_REQUEST]: 150,
-    [ResourceRecommenderHeaderType.NAME]: 350,
-    [ResourceRecommenderHeaderType.NAMESPACE]: 150,
-}
 
 export const GVK_FILTER_KIND_QUERY_PARAM_KEY = 'gvkFilterKind'
 export const GVK_FILTER_API_VERSION_QUERY_PARAM_KEY = 'gvkFilterApiVersion'
