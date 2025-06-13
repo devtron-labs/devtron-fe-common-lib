@@ -68,17 +68,17 @@ export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
         },
         startIcon: <RegistryIcon registryType={RegistryType.DOCKER_HUB} />,
     },
-     'gitlab': {
+    gitlab: {
         value: 'gitlab',
         label: 'GitLab',
         desiredFormat: '(desired format: username/repo-name)',
         placeholderText: 'Eg. username/repo_name',
         gettingStartedLink: 'https://docs.gitlab.com/ee/user/packages/container_registry/',
-        defaultRegistryURL: 'registry.gitlab.com',
+        defaultRegistryURL: '',
         registryURL: {
             label: 'Registry URL',
-            defaultValue: '',
-            placeholder: '',
+            defaultValue: 'registry.gitlab.com',
+            placeholder: 'Eg. registry.gitlab.com',
         },
         id: {
             label: 'Username',
