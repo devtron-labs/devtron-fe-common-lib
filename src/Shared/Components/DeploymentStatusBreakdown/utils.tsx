@@ -307,7 +307,11 @@ export const processDeploymentStatusDetailsData = (
             if (hasDeploymentFailed) {
                 const hasCurrentTimelineFailed =
                     timelineStatusType === TIMELINE_STATUS.APP_HEALTH &&
-                    deploymentData.deploymentStatusBreakdown.KUBECTL_APPLY.icon === 'success'
+                    deploymentData.deploymentStatusBreakdown[
+                        deploymentAppType === DeploymentAppTypes.FLUX
+                            ? TIMELINE_STATUS.GIT_COMMIT
+                            : TIMELINE_STATUS.KUBECTL_APPLY
+                    ].icon === 'success'
 
                 timelineData.displaySubText = hasCurrentTimelineFailed ? 'Failed' : ''
                 timelineData.icon = hasCurrentTimelineFailed ? 'failed' : 'unreachable'
