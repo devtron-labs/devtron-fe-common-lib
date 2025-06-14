@@ -15,7 +15,8 @@ import {
 import {
     DEPLOYMENT_PHASES,
     FAILED_DEPLOYMENT_STATUS,
-    PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER,
+    PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER_ARGO,
+    PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER_FLUX,
     PROGRESSING_DEPLOYMENT_STATUS,
     SUCCESSFUL_DEPLOYMENT_STATUS,
     WFR_STATUS_DTO_TO_DEPLOYMENT_STATUS_MAP,
@@ -47,6 +48,7 @@ const getDefaultDeploymentStatusTimeline = (
 
     return {
         deploymentStatus,
+        deploymentAppType,
         deploymentTriggerTime: data?.deploymentStartedOn || '',
         deploymentEndTime: data?.deploymentFinishedOn || '',
         triggeredBy: data?.triggeredBy || '',
@@ -276,7 +278,13 @@ export const processDeploymentStatusDetailsData = (
         timeline.status.includes(TIMELINE_STATUS.ARGOCD_SYNC),
     )
 
-    PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER.forEach((timelineStatusType, index) => {
+    // Only keep 3 steps in case of flux
+    const timelineOrder =
+        deploymentAppType === DeploymentAppTypes.FLUX
+            ? PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER_FLUX
+            : PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER_ARGO
+
+    timelineOrder.forEach((timelineStatusType, index) => {
         const element = findRight(data.timelines, getPredicate(timelineStatusType))
         const timelineData = deploymentData.deploymentStatusBreakdown[timelineStatusType]
 
@@ -363,8 +371,8 @@ export const processDeploymentStatusDetailsData = (
         }
 
         // Moving the next timeline to inprogress
-        if (timelineData.icon === 'success' && index !== PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER.length - 1) {
-            const nextTimelineStatus = PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER[index + 1]
+        if (timelineData.icon === 'success' && index !== timelineOrder.length - 1) {
+            const nextTimelineStatus = timelineOrder[index + 1]
             const nextTimeline = deploymentData.deploymentStatusBreakdown[nextTimelineStatus]
 
             if (deploymentData.errorBarConfig) {
@@ -377,13 +385,13 @@ export const processDeploymentStatusDetailsData = (
     })
 
     // Traversing the timeline in reverse order so that if any status is there which is inprogress or success then we will mark all the previous steps as success
-    for (let i = PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER.length - 1; i >= 0; i -= 1) {
-        const timelineStatusType = PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER[i]
+    for (let i = timelineOrder.length - 1; i >= 0; i -= 1) {
+        const timelineStatusType = timelineOrder[i]
         const timelineData = deploymentData.deploymentStatusBreakdown[timelineStatusType]
 
         if (timelineData.icon === 'inprogress' || timelineData.icon === 'success') {
             for (let j = i - 1; j >= 0; j -= 1) {
-                const prevTimelineStatusType = PHYSICAL_ENV_DEPLOYMENT_TIMELINE_ORDER[j]
+                const prevTimelineStatusType = timelineOrder[j]
                 const prevTimelineData = deploymentData.deploymentStatusBreakdown[prevTimelineStatusType]
                 prevTimelineData.icon = 'success'
                 prevTimelineData.displaySubText = ''

@@ -1249,6 +1249,7 @@ export interface DeploymentStatusDetailsType {
     timelines: DeploymentStatusDetailsTimelineType[]
     wfrStatus?: WorkflowRunnerStatusDTO
     isDeploymentWithoutApproval: boolean
+    deploymentAppType: DeploymentAppTypes
 }
 
 export type DeploymentStatusTimelineType =
@@ -1311,6 +1312,7 @@ export interface DeploymentStatusDetailsBreakdownDataType {
         deploymentErrorMessage: string
         nextTimelineToProcess: DeploymentStatusTimelineType
     } | null
+    deploymentAppType: DeploymentAppTypes
 }
 
 export interface IntelligenceConfig {

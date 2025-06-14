@@ -521,6 +521,7 @@ export interface DeploymentStatusDetailBreakdownType {
      */
     appDetails: AppDetails | null
     rootClassName?: string
+    deploymentAppType?: DeploymentAppTypes
 }
 
 export interface DeploymentStatusDetailRowType extends Pick<DeploymentStatusDetailBreakdownType, 'appDetails'> {
