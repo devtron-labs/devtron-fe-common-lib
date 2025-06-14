@@ -129,6 +129,7 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                                 userApprovalMetadata={userApprovalMetadata}
                                 isGitops={
                                     deploymentAppType === DeploymentAppTypes.GITOPS ||
+                                    deploymentAppType === DeploymentAppTypes.FLUX ||
                                     deploymentAppType === DeploymentAppTypes.MANIFEST_DOWNLOAD ||
                                     deploymentAppType === DeploymentAppTypes.MANIFEST_PUSH
                                 }

@@ -1,6 +1,6 @@
 import { FunctionComponent, PropsWithChildren, ReactNode } from 'react'
 
-import { APIOptions } from '@Common/Types'
+import { APIOptions, DeploymentAppTypes } from '@Common/Types'
 import {
     AppDetails,
     ConfigDriftModalProps,
@@ -85,6 +85,7 @@ export type GetDeploymentStatusWithTimelineParamsType = Pick<APIOptions, 'abortC
         wfrId: AppDetails['resourceTree']['wfrId']
     }
     isHelmApp?: boolean
+    deploymentAppType: DeploymentAppTypes
 }
 
 export interface AppStatusModalTabListProps extends Pick<AppStatusModalProps, 'appDetails' | 'type'> {
