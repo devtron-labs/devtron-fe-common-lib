@@ -60,10 +60,10 @@ const DeploymentStatusDetailBreakdown = ({
                     {(
                         [
                             TIMELINE_STATUS.GIT_COMMIT,
-                            ...(appDetails.deploymentAppType === DeploymentAppTypes.FLUX ||
-                            deploymentAppType === DeploymentAppTypes.FLUX
-                                ? []
-                                : [TIMELINE_STATUS.ARGOCD_SYNC, TIMELINE_STATUS.KUBECTL_APPLY]),
+                            ...(appDetails.deploymentAppType === DeploymentAppTypes.GITOPS ||
+                            deploymentAppType === DeploymentAppTypes.GITOPS
+                                ? [TIMELINE_STATUS.ARGOCD_SYNC, TIMELINE_STATUS.KUBECTL_APPLY]
+                                : []),
                         ] as DeploymentStatusDetailRowType['type'][]
                     ).map((timelineStatus) => (
                         <Fragment key={timelineStatus}>
