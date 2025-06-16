@@ -13,6 +13,7 @@ export const DOCUMENTATION = {
     APP_CREATE_WORKFLOW: 'usage/applications/creating-application/workflow',
     APP_DEPLOYMENT_TEMPLATE: 'usage/applications/creating-application/deployment-template',
     APP_EPHEMERAL_CONTAINER: 'usage/applications/app-details/ephemeral-containers',
+    APP_GROUP: 'usage/application-groups',
     APP_METRICS: 'usage/applications/app-details/app-metrics',
     APP_OVERVIEW_TAGS: 'usage/applications/overview#manage-tags',
     APP_ROLLOUT_DEPLOYMENT_TEMPLATE: 'usage/applications/creating-application/deployment-template/rollout-deployment',
@@ -22,6 +23,7 @@ export const DOCUMENTATION = {
     BULK_UPDATE: 'usage/bulk-update',
     CHART_GROUP: 'usage/deploy-chart/chart-group',
     CHART_LIST: 'usage/deploy-chart/overview-of-charts',
+    CHART_STORE: 'usage/deploy-chart',
     CHART_STORE_METRICS_SERVER: 'dashboard//chart-store/discover?appStoreName=metrics-server',
     CUSTOM_VALUES: 'usage/deploy-chart/overview-of-charts#custom-values',
     DEPLOYMENT: 'usage/applications/creating-application/deployment-template/deployment',
@@ -38,6 +40,7 @@ export const DOCUMENTATION = {
     KUBE_CONFIG: 'usage/resource-browser#running-kubectl-commands-locally',
     JOBS: 'usage/jobs',
     TAINT: 'usage/resource-browser#taint-a-node',
+    RESOURCE_BROWSER: 'usage/resource-browser',
 
     // Global Configurations
     GLOBAL_CONFIG_API_TOKEN: 'getting-started/global-configurations/authorization/api-tokens',
