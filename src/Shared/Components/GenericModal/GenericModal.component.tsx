@@ -13,7 +13,7 @@ const GenericModalHeader = ({ title }: GenericModalHeaderProps) => {
     const { name, onClose } = useGenericModalContext()
 
     return (
-        <div className="flex dc__content-space dc__gap-12 border__secondary--bottom px-20 pt-12 pb-11">
+        <div className="flex dc__content-space dc__gap-12 border__secondary-translucent--bottom px-20 pt-12 pb-11">
             <h2 data-testid={`${name}-heading`} className="m-0 fs-16 lh-24 fw-6 cn-9 dc__truncate">
                 {title}
             </h2>
@@ -37,7 +37,7 @@ const GenericModalFooter = ({
     children,
 }: PropsWithChildren<GenericModalFooterProps>) => (
     <div
-        className={`border__secondary--top px-20 pt-15 pb-16 ${!children ? `flex dc__gap-12 ${leftSideElement ? 'dc__content-space' : 'right'}` : ''}`}
+        className={`border__secondary-translucent--top px-20 pt-15 pb-16 ${!children ? `flex dc__gap-12 ${leftSideElement ? 'dc__content-space' : 'right'}` : ''}`}
     >
         {children || (
             <>
