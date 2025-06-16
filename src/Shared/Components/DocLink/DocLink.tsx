@@ -3,7 +3,7 @@ import { MouseEvent } from 'react'
 import { DOCUMENTATION_HOME_PAGE } from '@Common/Constants'
 import { Button, ButtonComponentType, ButtonVariantType, Icon } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
-import { useMainContext } from '@Shared/Providers'
+import { SidePanelTab, useMainContext } from '@Shared/Providers'
 
 import { DocLinkProps } from './types'
 import { getDocumentationUrl } from './utils'
@@ -43,7 +43,12 @@ export const DocLink = <T extends boolean = false>({
             documentationLink.startsWith(DOCUMENTATION_HOME_PAGE)
         ) {
             e.preventDefault()
-            setSidePanelConfig((prev) => ({ ...prev, open: true, docLink: documentationLink, reinitialize: true }))
+            setSidePanelConfig((prev) => ({
+                ...prev,
+                state: SidePanelTab.DOCUMENTATION,
+                docLink: documentationLink,
+                reinitialize: true,
+            }))
         }
         onClick?.(e)
     }

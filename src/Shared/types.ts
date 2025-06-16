@@ -18,7 +18,7 @@ import { ReactNode } from 'react'
 import { ParsedCountry } from 'react-international-phone'
 import { Dayjs } from 'dayjs'
 
-import { APIOptions, ApprovalConfigDataType } from '@Common/Types'
+import { APIOptions, ApprovalConfigDataType, Strategy } from '@Common/Types'
 import { ReleaseMode } from '@Pages/index'
 
 import {
@@ -28,6 +28,7 @@ import {
     PluginType,
     RefVariableType,
     SegmentedControlProps,
+    ServerError,
     ServerErrors,
     SortingParams,
     TriggerBlockType,
@@ -1326,3 +1327,9 @@ export type DeploymentStrategyType = 'CANARY' | 'ROLLING' | 'RECREATE' | 'BLUE-G
 export type DeploymentStrategyTypeWithDefault = DeploymentStrategyType | 'DEFAULT'
 
 export type PipelineIdsVsDeploymentStrategyMap = Record<number, DeploymentStrategyTypeWithDefault>
+
+export interface PipelineDeploymentStrategy {
+    pipelineId: number
+    strategies: Strategy[]
+    error: ServerError
+}

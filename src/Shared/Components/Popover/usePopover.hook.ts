@@ -13,6 +13,7 @@ export const usePopover = ({
     position = 'bottom',
     alignment = 'start',
     width = 'auto',
+    variant = 'menu',
     onOpen,
     onPopoverKeyDown,
     onTriggerKeyDown,
@@ -131,7 +132,7 @@ export const usePopover = ({
             id,
             ref: popover,
             role: 'listbox',
-            className: `dc__position-abs bg__menu--primary shadow__menu border__primary br-6 dc__overflow-hidden ${isAutoWidth ? 'dc_width-max-content dc__mxw-250' : ''}`,
+            className: `dc__position-abs ${variant === 'menu' ? 'bg__menu--primary shadow__menu' : 'bg__overlay--primary shadow__overlay'} border__primary br-6 dc__overflow-hidden ${isAutoWidth ? 'dc_width-max-content dc__mxw-250' : ''}`,
             onKeyDown: handlePopoverKeyDown,
             style: {
                 width: !isAutoWidth ? `${width}px` : undefined,
