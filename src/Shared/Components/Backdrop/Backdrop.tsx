@@ -25,7 +25,7 @@ import { getUniqueId, preventBodyScroll, preventOutsideFocus } from '@Shared/Hel
 import { BackdropProps } from './types'
 import { createPortalContainerAndAppendToDOM } from './utils'
 
-const Backdrop = ({ children, onEscape }: BackdropProps) => {
+const Backdrop = ({ children, onEscape, onClick }: BackdropProps) => {
     // STATES
     const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null)
 
@@ -107,6 +107,7 @@ const Backdrop = ({ children, onEscape }: BackdropProps) => {
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.35 } }}
             className="backdrop dc__position-fixed dc__top-0 dc__left-0 full-height-width flexbox dc__content-center dc__align-items-center dc__overflow-hidden"
+            onClick={onClick}
         >
             {children}
         </motion.div>,

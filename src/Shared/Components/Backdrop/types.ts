@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactNode } from 'react'
+import { MouseEvent, ReactNode } from 'react'
 
 export interface BackdropProps {
     /**
@@ -30,4 +30,10 @@ export interface BackdropProps {
      * }, []);
      */
     onEscape: () => void
+    /**
+     * Callback function that gets triggered when the backdrop is clicked.
+     * Useful for dismissing modals or other overlay content.
+     * @param e - The mouse event object from the click interaction
+     */
+    onClick?: (e: MouseEvent<HTMLDivElement>) => void
 }
