@@ -23,13 +23,18 @@ export interface GenericModalProps extends Partial<Pick<BackdropProps, 'onEscape
 export interface GenericModalContextType extends Pick<GenericModalProps, 'name' | 'onClose'> {}
 
 export interface GenericModalHeaderProps {
+    /** Title text displayed in the modal header */
     title: string
 }
 
 export interface GenericModalFooterProps {
+    /** Configuration for the buttons displayed in the modal footer */
     buttonConfig?: {
+        /** Properties for the primary action button */
         primaryButton?: ButtonProps
+        /** Properties for the secondary action button */
         secondaryButton?: ButtonProps
     }
+    /** Optional element to be displayed on the left side of the footer */
     leftSideElement?: React.ReactNode
 }
