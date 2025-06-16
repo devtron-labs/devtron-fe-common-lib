@@ -11,3 +11,20 @@
         grid-template-columns: 1fr 1fr 1fr;
     }
 }
+
+.source-type-card {
+    &__icons {
+        transition:
+            margin 0.2s,
+            padding 0.2s;
+    }
+
+    &:hover {
+        box-shadow: var(--shadow-10);
+
+        .source-type-card__icons {
+            margin: 0;
+            padding: 20px 16px;
+        }
+    }
+}

@@ -53,12 +53,12 @@ const SourceTypeCard = ({
                 data-pipeline-type={type}
                 tabIndex={isDisabled ? -1 : 0}
                 aria-disabled={isDisabled}
-                className={`flexbox-col bg__primary br-8 border__secondary-translucent ${isDisabled ? 'dc__disabled' : ''} `}
+                className={`source-type-card flexbox-col bg__primary br-8 border__secondary-translucent ${isDisabled ? 'dc__disabled' : ''} `}
                 onClick={onCardAction}
                 onKeyDown={onCardAction}
             >
                 {!!icons.length && (
-                    <div className="flex bg__tertiary br-6 px-12 py-16 m-4">
+                    <div className="source-type-card__icons flex bg__tertiary br-6 px-12 py-16 m-4">
                         {icons.map(({ name, color }, index) => (
                             <Fragment key={name}>
                                 <div className="flex p-8 br-8 bg__primary border__secondary-translucent">
