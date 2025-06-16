@@ -69,6 +69,15 @@ export const SOURCE_TYPE_CARD_VARIANTS = {
             icons: [{ name: 'ic-linked-build-color', color: null }],
         },
     },
+    JOB: {
+        JOB: {
+            title: 'Create a Job',
+            subtitle: 'Create and trigger a job. Such as trigger Jenkins build trigger',
+            dataTestId: 'job-ci-pipeline-button',
+            type: CIPipelineNodeType.JOB_CI,
+            icons: [{ name: 'ic-job-color', color: null }],
+        },
+    },
 } satisfies Record<
     string,
     Record<string, Pick<SourceTypeCardProps, 'title' | 'subtitle' | 'type' | 'icons' | 'dataTestId'>>

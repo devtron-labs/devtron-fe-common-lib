@@ -128,3 +128,26 @@ export const getReceiveWorkflowCardsConfig = ({
 
     return config
 }
+
+export const getJobWorkflowCardsConfig = ({
+    currentPipelineType,
+    isAppGroup,
+}: {
+    currentPipelineType: CIPipelineNodeType | WorkflowNodeType.WEBHOOK
+} & Required<Pick<WorkflowOptionsModalProps, 'isAppGroup'>>) =>
+    Object.values(SOURCE_TYPE_CARD_VARIANTS.JOB)
+        .map<Pick<SourceTypeCardProps, 'title' | 'subtitle' | 'type' | 'icons' | 'dataTestId' | 'disabled'>>(
+            ({ type, ...restKeys }) => {
+                const hideCard =
+                    currentPipelineType === type || (type === CIPipelineNodeType.JOB_CI && !window._env_.ENABLE_CI_JOB)
+
+                return !hideCard
+                    ? {
+                          ...restKeys,
+                          type,
+                          disabled: type === CIPipelineNodeType.JOB_CI && isAppGroup,
+                      }
+                    : null
+            },
+        )
+        .filter(Boolean)
