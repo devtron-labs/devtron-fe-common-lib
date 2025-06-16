@@ -13,6 +13,11 @@ export interface GenericModalProps extends Partial<Pick<BackdropProps, 'onEscape
      * @default 600
      */
     width?: 500 | 600 | 800
+    /**
+     * Determines if the modal should close when the user clicks outside of it (on the backdrop).
+     * @default false
+     */
+    closeOnBackdropClick?: boolean
 }
 
 export interface GenericModalContextType extends Pick<GenericModalProps, 'name' | 'onClose'> {}
