@@ -97,7 +97,7 @@ const Pagination = ({
                     onClick={selectPreviousPage}
                     ariaLabel="Previous page"
                     variant={ButtonVariantType.borderLess}
-                    icon={<Icon name="ic-caret-right-small" color={null} rotateBy={90} />}
+                    icon={<Icon name="ic-caret-down-small" color={null} rotateBy={90} />}
                     dataTestId="pagination-prev-button-clicked"
                     showAriaLabelInTippy={false}
                     size={ComponentSizeType.xs}
@@ -117,7 +117,7 @@ const Pagination = ({
                     onClick={selectNextPage}
                     ariaLabel="Next page"
                     variant={ButtonVariantType.borderLess}
-                    icon={<Icon name="ic-caret-right-small" color={null} />}
+                    icon={<Icon name="ic-caret-down-small" color={null} rotateBy={270} />}
                     dataTestId="pagination-prev-button-clicked"
                     showAriaLabelInTippy={false}
                     size={ComponentSizeType.xs}

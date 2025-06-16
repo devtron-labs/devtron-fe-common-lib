@@ -76,7 +76,7 @@ const GenericInfoCard = ({
                                 </Tooltip>
 
                                 <div className="generic-info-card__arrow dc__no-shrink flex">
-                                    <IconComponent color="B500" name="ic-caret-right-small" />
+                                    <IconComponent color="B500" name="ic-caret-down-small" rotateBy={270} />
                                 </div>
                             </div>
 
