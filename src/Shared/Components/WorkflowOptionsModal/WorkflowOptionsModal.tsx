@@ -60,7 +60,8 @@ const WorkflowOptionsModal = ({
     // CONSTANTS
     const currentPipelineType = useMemo(
         () => getCurrentPipelineType({ workflows, changeCIPayload }),
-        [workflows, changeCIPayload],
+        // Expecting modal to be closed in case of workflows or changeCIPayload change
+        [],
     )
 
     const buildWorkflowCards = useMemo(
