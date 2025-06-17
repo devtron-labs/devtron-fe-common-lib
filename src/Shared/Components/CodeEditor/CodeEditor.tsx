@@ -15,6 +15,7 @@
  */
 
 import { useEffect, useMemo, useRef, useState } from 'react'
+import { autocompletion } from '@codemirror/autocomplete'
 import { foldGutter } from '@codemirror/language'
 import { lintGutter } from '@codemirror/lint'
 import { search } from '@codemirror/search'
@@ -193,6 +194,7 @@ const CodeEditor = <DiffView extends boolean = false>({
         drawSelection: true,
         highlightActiveLineGutter: true,
         tabSize,
+        autocompletion: false,
     }
 
     const handleOnChange: ReactCodeMirrorProps['onChange'] = (newValue) => {
@@ -216,6 +218,7 @@ const CodeEditor = <DiffView extends boolean = false>({
     // EXTENSIONS
     const getBaseExtensions = (): Extension[] => [
         basicSetup(basicSetupOptions),
+        autocompletion({ closeOnBlur: false }),
         themeExtension,
         keymap.of([
             ...vscodeKeymap.filter(({ key }) => key !== 'Mod-Alt-Enter' && key !== 'Mod-Enter' && key !== 'Mod-f'),
