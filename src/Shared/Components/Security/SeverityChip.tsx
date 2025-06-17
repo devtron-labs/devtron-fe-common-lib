@@ -1,8 +1,7 @@
 import { capitalizeFirstLetter } from '@Common/Helper'
 import { ComponentSizeType } from '@Shared/constants'
 
-import { Badge } from '../Badge'
-import { BadgeProps } from '../Badge/Badge'
+import { Badge, BadgeProps } from '../Badge'
 import { SeveritiesDTO } from './SecurityModal'
 
 const SeverityChip = ({ severity, count }: { severity: SeveritiesDTO; count?: number }) => {

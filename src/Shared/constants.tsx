@@ -435,7 +435,8 @@ export enum ComponentSizeType {
     xl = 'xl',
 }
 
-export const COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP: Record<Exclude<ComponentSizeType, 'xxxs'>, string> = {
+export const COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP: Record<ComponentSizeType, string> = {
+    [ComponentSizeType.xxxs]: 'py-1 fs-12 lh-20',
     [ComponentSizeType.xxs_small_icon]: 'py-1 fs-12 lh-20',
     [ComponentSizeType.xxs]: 'py-1 fs-12 lh-20',
     [ComponentSizeType.xs]: 'py-1 fs-12 lh-20',
@@ -445,7 +446,8 @@ export const COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP: Record<Exclude<C
     [ComponentSizeType.xl]: 'py-9 fs-14 lh-20',
 } as const
 
-export const COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP: Record<Exclude<ComponentSizeType, 'xxxs'>, string> = {
+export const COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP: Record<ComponentSizeType, string> = {
+    [ComponentSizeType.xxxs]: 'px-5',
     [ComponentSizeType.xxs_small_icon]: 'px-4',
     [ComponentSizeType.xxs]: 'px-5',
     [ComponentSizeType.xs]: 'px-5',
@@ -455,7 +457,8 @@ export const COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP: Record<Exclude<Component
     [ComponentSizeType.xl]: 'px-9',
 } as const
 
-export const COMPONENT_SIZE_TYPE_TO_ICON_SIZE_MAP: Record<Exclude<ComponentSizeType, 'xxxs'>, number> = {
+export const COMPONENT_SIZE_TYPE_TO_ICON_SIZE_MAP: Record<ComponentSizeType, number> = {
+    [ComponentSizeType.xxxs]: 14,
     [ComponentSizeType.xxs_small_icon]: 12,
     [ComponentSizeType.xxs]: 14,
     [ComponentSizeType.xs]: 14,
