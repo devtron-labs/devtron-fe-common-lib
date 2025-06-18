@@ -16,6 +16,9 @@
 
 import { useEffect, useState } from 'react'
 
+import { Button, ButtonVariantType, Icon } from '@Shared/Components'
+import { ComponentSizeType } from '@Shared/constants'
+
 import PageSizeSelector from './PageSizeSelector'
 import { Page, PageValueItemProps, PaginationProps } from './types'
 import { createPageArr } from './utils'
@@ -88,20 +91,17 @@ const Pagination = ({
                 {offset + 1} - {lastPageNo} of {size}
             </div>
 
-            <ul className="pagination">
-                <li className="page">
-                    <button
-                        className="page__button page__button--icon"
-                        disabled={!pageNoIndex}
-                        onClick={selectPreviousPage}
-                        type="button"
-                        aria-label="Previous page"
-                    >
-                        <span className="left-icon">
-                            <i className="fa fa-chevron-left" />
-                        </span>
-                    </button>
-                </li>
+            <ul className="pagination flex">
+                <Button
+                    disabled={!pageNoIndex}
+                    onClick={selectPreviousPage}
+                    ariaLabel="Previous page"
+                    variant={ButtonVariantType.borderLess}
+                    icon={<Icon name="ic-caret-down-small" color={null} rotateBy={90} />}
+                    dataTestId="pagination-prev-button-clicked"
+                    showAriaLabelInTippy={false}
+                    size={ComponentSizeType.xs}
+                />
 
                 {visiblePages.map((page) => (
                     <PageValueItem
@@ -112,19 +112,16 @@ const Pagination = ({
                     />
                 ))}
 
-                <li className="page">
-                    <button
-                        className="page__button page__button--icon"
-                        disabled={pageNoIndex === pages.length - 1}
-                        onClick={selectNextPage}
-                        type="button"
-                        aria-label="Next page"
-                    >
-                        <span className="left-icon">
-                            <i className="fa fa-chevron-right" />
-                        </span>
-                    </button>
-                </li>
+                <Button
+                    disabled={pageNoIndex === pages.length - 1}
+                    onClick={selectNextPage}
+                    ariaLabel="Next page"
+                    variant={ButtonVariantType.borderLess}
+                    icon={<Icon name="ic-caret-down-small" color={null} rotateBy={270} />}
+                    dataTestId="pagination-prev-button-clicked"
+                    showAriaLabelInTippy={false}
+                    size={ComponentSizeType.xs}
+                />
             </ul>
 
             {!isPageSizeFix && (

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import SeverityChip from '../../SeverityChip'
 import { getCVEUrlFromCVEName } from '../../utils'
 import { OpenDetailViewButton } from '../components'
 import IndexedTextDisplay from '../components/IndexedTextDisplay'
@@ -29,6 +30,7 @@ import {
     OpenDetailViewButtonProps,
     ScanResultDTO,
     SecurityModalStateType,
+    SeveritiesDTO,
     StatusType,
     SUB_CATEGORIES,
     TablePropsType,
@@ -77,11 +79,7 @@ export const getCodeScanVulnerabilities = (data: CodeScan['vulnerability'], hide
                       cellContent: element.cveId,
                   },
                   {
-                      component: (
-                          <span className={`severity-chip severity-chip--${element.severity?.toLowerCase()}`}>
-                              {element.severity}
-                          </span>
-                      ),
+                      component: <SeverityChip severity={element.severity} />,
                       cellContent: element.severity,
                   },
                   {
@@ -137,11 +135,7 @@ export const getCodeScanLicense = (data: CodeScan['license']) => ({
                       cellContent: element.classification,
                   },
                   {
-                      component: (
-                          <span className={`severity-chip severity-chip--${element.severity?.toLowerCase()}`}>
-                              {element.severity}
-                          </span>
-                      ),
+                      component: <SeverityChip severity={element.severity as SeveritiesDTO} />,
                       cellContent: element.severity,
                   },
                   {
@@ -214,11 +208,7 @@ const getMisconfigurationsDetail = (
                       cellContent: '',
                   },
                   {
-                      component: (
-                          <span className={`severity-chip severity-chip--${child.severity?.toLowerCase()}`}>
-                              {child.severity}
-                          </span>
-                      ),
+                      component: <SeverityChip severity={child.severity as SeveritiesDTO} />,
                       cellContent: child.severity,
                   },
                   {
@@ -332,11 +322,7 @@ const getExposedSecretsDetail = (
                       cellContent: '',
                   },
                   {
-                      component: (
-                          <span className={`severity-chip severity-chip--${child.severity?.toLowerCase()}`}>
-                              {child.severity}
-                          </span>
-                      ),
+                      component: <SeverityChip severity={child.severity as SeveritiesDTO} />,
                       cellContent: child.severity,
                   },
                   {
