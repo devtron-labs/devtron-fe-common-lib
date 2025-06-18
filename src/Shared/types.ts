@@ -893,6 +893,11 @@ interface CommonTabArgsType {
      * @default false
      */
     shouldRemainMounted?: boolean
+    /**
+     * @default false
+     * If true, tab would contain alpha as badge next to the title
+     */
+    isAlpha?: boolean
 }
 
 export type InitTabType = Omit<CommonTabArgsType, 'type'> &
