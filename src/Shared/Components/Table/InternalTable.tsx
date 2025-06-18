@@ -80,7 +80,7 @@ const InternalTable = ({
                       )
                 : () => getRows(filterData),
         })
-    }, [searchKey, sortBy, sortOrder, rows, JSON.stringify(otherFilters)])
+    }, [searchKey, sortBy, sortOrder, rows, JSON.stringify(otherFilters), visibleColumns])
 
     const areFilteredRowsLoading = _areFilteredRowsLoading || filteredRowsError === NO_ROWS_OR_GET_ROWS_ERROR
 

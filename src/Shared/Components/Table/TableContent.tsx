@@ -288,7 +288,7 @@ const TableContent = ({
                 >
                     <div
                         ref={headerRef}
-                        className="bg__primary dc__min-width-fit-content px-20 border__secondary--bottom dc__position-sticky dc__zi-2 dc__top-0"
+                        className="bg__primary dc__min-width-fit-content px-20 border__secondary--bottom dc__position-sticky dc__zi-2 dc__top-0 generic-table__header"
                     >
                         {loading ? (
                             <div className="flexbox py-12 dc__gap-16">
