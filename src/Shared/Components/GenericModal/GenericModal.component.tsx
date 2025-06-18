@@ -42,16 +42,18 @@ const GenericModalFooter = ({
         {children || (
             <>
                 {leftSideElement}
-                <div className="flex dc__gap-12">
-                    {buttonConfig?.secondaryButton && (
-                        <Button
-                            variant={ButtonVariantType.secondary}
-                            style={ButtonStyleType.neutral}
-                            {...buttonConfig.secondaryButton}
-                        />
-                    )}
-                    {buttonConfig?.primaryButton && <Button {...buttonConfig.primaryButton} />}
-                </div>
+                {!!buttonConfig && (
+                    <div className="flex dc__gap-12">
+                        {buttonConfig?.secondaryButton && (
+                            <Button
+                                variant={ButtonVariantType.secondary}
+                                style={ButtonStyleType.neutral}
+                                {...buttonConfig.secondaryButton}
+                            />
+                        )}
+                        {buttonConfig?.primaryButton && <Button {...buttonConfig.primaryButton} />}
+                    </div>
+                )}
             </>
         )}
     </div>
