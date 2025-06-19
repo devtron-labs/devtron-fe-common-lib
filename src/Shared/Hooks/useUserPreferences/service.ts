@@ -128,12 +128,15 @@ const getUserPreferencePayload = async ({
 export const updateUserPreferences = async ({
     path,
     value,
+    resourceKind,
     shouldThrowError = false,
 }: UserPreferenceResourceProps): Promise<boolean> => {
     try {
         const payload: UpdateUserPreferencesPayloadType = {
             key: USER_PREFERENCES_ATTRIBUTE_KEY,
-            value: JSON.stringify(await getUserPreferencePayload({ path, value } as UserPathValueMapType)),
+            value: JSON.stringify(
+                await getUserPreferencePayload({ path, value, resourceKind } as UserPathValueMapType),
+            ),
         }
 
         await patch(`${ROUTES.ATTRIBUTES_USER}/${ROUTES.PATCH}`, payload)
