@@ -148,16 +148,19 @@ export const scrollToShowActiveElementIfNeeded = (
     // therefore we need to conditionally scroll and that too in the horizontal direction only
     const { bottom, top } = activeElement.getBoundingClientRect()
     const { bottom: parentBottom, top: parentTop } = parent.getBoundingClientRect()
+    let { scrollTop } = parent
 
     // NOTE: please look into https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
     // for more information what left and right pertain to
     if (top < parentTop) {
         // eslint-disable-next-line no-param-reassign
-        parent.scrollTop += top - parentTop - topMargin
+        scrollTop += top - parentTop - topMargin
     }
 
     if (bottom > parentBottom) {
         // eslint-disable-next-line no-param-reassign
-        parent.scrollTop += bottom - parentBottom
+        scrollTop += bottom - parentBottom
     }
+
+    parent.scrollTo({ top: scrollTop, behavior: 'smooth' })
 }
