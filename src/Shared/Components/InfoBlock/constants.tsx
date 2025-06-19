@@ -39,7 +39,12 @@ export const SIZE_TO_ICON_CLASS_MAP: Record<InfoBlockProps['size'], string> = {
     [ComponentSizeType.medium]: 'icon-dim-18',
 }
 
-export const CONTAINER_SIZE_TO_BUTTON_SIZE: Record<InfoBlockProps['size'], ButtonProps['size']> = {
+export const CONTAINER_SIZE_TO_TEXT_BUTTON_SIZE: Record<InfoBlockProps['size'], ButtonProps['size']> = {
     [ComponentSizeType.large]: ComponentSizeType.medium,
-    [ComponentSizeType.medium]: ComponentSizeType.small,
+    [ComponentSizeType.medium]: ComponentSizeType.xs,
+}
+
+export const CONTAINER_SIZE_TO_ICON_BUTTON_SIZE: Record<InfoBlockProps['size'], ButtonProps['size']> = {
+    [ComponentSizeType.large]: ComponentSizeType.xxs,
+    [ComponentSizeType.medium]: ComponentSizeType.xxs,
 }
