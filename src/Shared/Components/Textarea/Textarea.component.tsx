@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { TextareaHTMLAttributes, useEffect, useRef, useState } from 'react'
+import { TextareaHTMLAttributes, useCallback, useEffect, useRef, useState } from 'react'
 
 import { useThrottledEffect } from '@Common/Helper'
 import {
@@ -25,16 +25,15 @@ import {
 import { deriveBorderRadiusAndBorderClassFromConfig } from '@Shared/Helpers'
 
 import { FormFieldWrapper, getFormFieldAriaAttributes } from '../FormFieldWrapper'
-import { TEXTAREA_CONSTRAINTS } from './constants'
 import { TextareaProps } from './types'
+import { getTextAreaConstraintsForSize } from './utils'
 
 import './textarea.scss'
-
-const { MIN_HEIGHT, AUTO_EXPANSION_MAX_HEIGHT } = TEXTAREA_CONSTRAINTS
 
 const Textarea = ({
     name,
     label,
+    textareaRef: textareaRefProp,
     fullWidth,
     error,
     helperText,
@@ -51,6 +50,8 @@ const Textarea = ({
     hideFormFieldInfo,
     value,
     borderConfig,
+    disableResize,
+    newlineOnShiftEnter = false,
     ...props
 }: TextareaProps) => {
     const textareaRef = useRef<HTMLTextAreaElement>(null)
@@ -58,12 +59,27 @@ const Textarea = ({
     // else, it behaves as controlled
     const [text, setText] = useState('')
 
+    const { MIN_HEIGHT, AUTO_EXPANSION_MAX_HEIGHT } = getTextAreaConstraintsForSize(size)
+
     const updateRefsHeight = (height: number) => {
         const refElement = textareaRef.current
         if (refElement) {
             refElement.style.height = `${height}px`
         }
     }
+
+    const refCallback = useCallback((node: HTMLTextAreaElement) => {
+        if (textareaRefProp) {
+            if (typeof textareaRefProp === 'function') {
+                textareaRefProp(node)
+            } else {
+                // eslint-disable-next-line no-param-reassign
+                textareaRefProp.current = node
+            }
+        }
+
+        textareaRef.current = node
+    }, [])
 
     const reInitHeight = () => {
         const currentHeight = parseInt(textareaRef.current.style.height, 10)
@@ -119,6 +135,10 @@ const Textarea = ({
         if (event.key === 'Enter' || event.key === 'Escape') {
             event.stopPropagation()
 
+            if (newlineOnShiftEnter && event.key === 'Enter' && !event.shiftKey) {
+                event.preventDefault()
+            }
+
             if (event.key === 'Escape') {
                 textareaRef.current.blur()
             }
@@ -163,11 +183,12 @@ const Textarea = ({
                 onBlur={handleBlur}
                 onKeyDown={handleKeyDown}
                 className={`${COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP[size]} ${COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP[size]} ${deriveBorderRadiusAndBorderClassFromConfig({ borderConfig, borderRadiusConfig })} w-100 dc__overflow-auto textarea`}
-                ref={textareaRef}
+                ref={refCallback}
                 style={{
                     // No max height when user is expanding
                     maxHeight: 'none',
                     minHeight: MIN_HEIGHT,
+                    resize: disableResize ? 'none' : 'vertical',
                 }}
             />
         </FormFieldWrapper>

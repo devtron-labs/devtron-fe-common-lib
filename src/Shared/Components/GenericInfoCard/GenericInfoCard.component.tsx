@@ -17,9 +17,9 @@
 import { cloneElement } from 'react'
 import { Link } from 'react-router-dom'
 
-import { ReactComponent as ICCaretSmall } from '@Icons/ic-caret-left-small.svg'
 import { Tooltip } from '@Common/Tooltip'
 
+import { Icon as IconComponent } from '../Icon'
 import { GenericInfoCardProps } from './types'
 import { getClassNameForBorderVariant } from './utils'
 
@@ -76,7 +76,7 @@ const GenericInfoCard = ({
                                 </Tooltip>
 
                                 <div className="generic-info-card__arrow dc__no-shrink flex">
-                                    <ICCaretSmall className="icon-dim-16 dc__flip-180 scb-5" />
+                                    <IconComponent color="B500" name="ic-caret-down-small" rotateBy={270} />
                                 </div>
                             </div>
 

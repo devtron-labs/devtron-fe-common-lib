@@ -17,7 +17,13 @@
 import { DeploymentNodeType, OptionType } from '@Common/Types'
 
 import { InfoBlockProps } from './Components'
-import { CDMaterialSidebarType, ConfigKeysWithLockType, ConfigurationType, IconBaseColorType } from './types'
+import {
+    CDMaterialSidebarType,
+    ConfigKeysWithLockType,
+    ConfigurationType,
+    DeploymentStrategyTypeWithDefault,
+    IconBaseColorType,
+} from './types'
 
 export const ARTIFACT_STATUS = {
     PROGRESSING: 'Progressing',
@@ -420,6 +426,7 @@ export const ANSI_UP_REGEX = /\x1B\[.*?m/g
  */
 export enum ComponentSizeType {
     xxs_small_icon = 'xxs-small-icon',
+    xxxs = 'xxxs',
     xxs = 'xxs',
     xs = 'xs',
     small = 'small',
@@ -429,6 +436,7 @@ export enum ComponentSizeType {
 }
 
 export const COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP: Record<ComponentSizeType, string> = {
+    [ComponentSizeType.xxxs]: 'py-1 fs-12 lh-20',
     [ComponentSizeType.xxs_small_icon]: 'py-1 fs-12 lh-20',
     [ComponentSizeType.xxs]: 'py-1 fs-12 lh-20',
     [ComponentSizeType.xs]: 'py-1 fs-12 lh-20',
@@ -439,6 +447,7 @@ export const COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP: Record<Component
 } as const
 
 export const COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP: Record<ComponentSizeType, string> = {
+    [ComponentSizeType.xxxs]: 'px-5',
     [ComponentSizeType.xxs_small_icon]: 'px-4',
     [ComponentSizeType.xxs]: 'px-5',
     [ComponentSizeType.xs]: 'px-5',
@@ -449,6 +458,7 @@ export const COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP: Record<ComponentSizeType
 } as const
 
 export const COMPONENT_SIZE_TYPE_TO_ICON_SIZE_MAP: Record<ComponentSizeType, number> = {
+    [ComponentSizeType.xxxs]: 14,
     [ComponentSizeType.xxs_small_icon]: 12,
     [ComponentSizeType.xxs]: 14,
     [ComponentSizeType.xs]: 14,
@@ -580,4 +590,15 @@ export const DEPLOYMENT_STAGE_TO_NODE_MAP: Readonly<Record<DeploymentStageType, 
 
 export const APP_DETAILS_FALLBACK_POLLING_INTERVAL = 30000
 export const PROGRESSING_DEPLOYMENT_STATUS_POLLING_INTERVAL = 10000
+
+export const STRATEGY_TYPE_TO_TITLE_MAP: Record<DeploymentStrategyTypeWithDefault, string> = {
+    DEFAULT: 'Default Strategy',
+    'BLUE-GREEN': 'Blue Green',
+    CANARY: 'Canary',
+    RECREATE: 'Recreate',
+    ROLLING: 'Rolling',
+    ROLLINGUPDATE: 'Rolling Update',
+    ONDELETE: 'On Delete',
+}
+
 export const CUBIC_BEZIER_CURVE: [number, number, number, number] = [0.33, 1, 0.68, 1]

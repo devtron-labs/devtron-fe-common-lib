@@ -1,6 +1,8 @@
+import { ComponentSizeType } from '@Shared/constants'
 import { IconBaseColorType } from '@Shared/types'
 
 import {
+    INDETERMINATE_ICON_WIDTH_MAP,
     ROUNDED_SWITCH_SIZE_MAP,
     ROUNDED_SWITCH_THUMB_SIZE_MAP,
     ROUNDED_SWITCH_TRACK_COLOR_MAP,
@@ -38,9 +40,14 @@ export const getSwitchTrackHoverColor = ({
     shape,
     variant,
     isChecked,
-}: Required<
-    Pick<DTSwitchProps, 'shape' | 'variant' | 'isChecked'>
->): (typeof ROUNDED_SWITCH_TRACK_HOVER_COLOR_MAP)[DTSwitchProps['variant']] => {
+    isLoading,
+}: Required<Pick<DTSwitchProps, 'shape' | 'variant' | 'isChecked' | 'isLoading'>>):
+    | (typeof ROUNDED_SWITCH_TRACK_HOVER_COLOR_MAP)[DTSwitchProps['variant']]
+    | 'transparent' => {
+    if (isLoading) {
+        return 'transparent'
+    }
+
     if (!isChecked) {
         return 'var(--N300)'
     }
@@ -56,7 +63,7 @@ export const getSwitchThumbClass = ({
     showIndeterminateIcon,
 }: Pick<DTSwitchProps, 'shape' | 'size'> & { showIndeterminateIcon: boolean }) => {
     if (showIndeterminateIcon) {
-        return 'w-100 h-100 flex'
+        return `${INDETERMINATE_ICON_WIDTH_MAP[size]} h-2 br-4 dc__no-shrink bg__white`
     }
 
     return `flex ${SWITCH_THUMB_PADDING_MAP[size]} ${shape === 'rounded' ? `dc__border-radius-50-per ${ROUNDED_SWITCH_THUMB_SIZE_MAP[size]}` : 'br-3'} bg__white`
@@ -75,14 +82,26 @@ export const getSwitchIconColor = ({
 }
 
 export const getThumbPosition = ({
-    isLoading,
     isChecked,
-}: Pick<DTSwitchProps, 'isLoading' | 'isChecked'>): 'left' | 'right' | 'center' => {
+    size,
+    shape,
+    indeterminate,
+    isLoading,
+}: Required<Pick<DTSwitchProps, 'isChecked' | 'size' | 'shape' | 'indeterminate' | 'isLoading'>>): number => {
     if (isLoading) {
-        return 'center'
+        return size === ComponentSizeType.medium && shape === 'rounded' ? 6 : 4
     }
 
-    return isChecked ? 'right' : 'left'
+    if (!isChecked) {
+        return 0
+    }
+
+    if (indeterminate) {
+        // This only has rounded shape
+        return size === ComponentSizeType.medium ? 8 : 5
+    }
+
+    return size === ComponentSizeType.medium && shape === 'rounded' ? 12 : 8
 }
 
 export const getThumbPadding = ({ shape, isLoading }: Pick<DTSwitchProps, 'shape' | 'isLoading'>): string => {
