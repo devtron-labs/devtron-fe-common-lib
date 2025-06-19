@@ -898,6 +898,10 @@ interface CommonTabArgsType {
      * If true, tab would contain alpha as badge next to the title
      */
     isAlpha?: boolean
+    /**
+     * On tab stop, i.e by pressing cross icon on alive tab [fixed tab expanding on click of tab and remains expanded on other tab click], tab will reset the tab to this default URL if provided
+     */
+    defaultUrl?: string | null
 }
 
 export type InitTabType = Omit<CommonTabArgsType, 'type'> &
