@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { DISCORD_LINK, DOCUMENTATION_HOME_PAGE, URLS } from '@Common/Constants'
+import { DEVTRON_GPT_LINK, DISCORD_LINK, DOCUMENTATION_HOME_PAGE, URLS } from '@Common/Constants'
 import { CONTACT_SUPPORT_LINK, OPEN_NEW_TICKET, RAISE_ISSUE, VIEW_ALL_TICKETS } from '@Shared/constants'
 
 import { HelpButtonActionMenuProps, HelpMenuItems } from './types'
@@ -37,6 +37,14 @@ export const COMMON_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options']
         startIcon: { name: 'ic-book-open' },
         componentType: 'anchor',
         href: DOCUMENTATION_HOME_PAGE,
+    },
+    {
+        id: HelpMenuItems.DEVTRON_GPT,
+        label: 'Devtron GPT',
+        startIcon: { name: 'ic-openai' },
+        trailingItem: { type: 'icon', config: { name: 'ic-arrow-square-out' } },
+        componentType: 'anchor',
+        href: DEVTRON_GPT_LINK,
     },
     {
         id: HelpMenuItems.JOIN_DISCORD_COMMUNITY,
