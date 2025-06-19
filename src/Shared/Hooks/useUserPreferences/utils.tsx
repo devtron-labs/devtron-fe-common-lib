@@ -3,8 +3,11 @@ import { ResourceKindType } from '@Shared/types'
 
 import { UserPreferenceFilteredListTypes, UserPreferenceResourceActions, UserPreferenceResourceType } from './types'
 
-export const getUserPreferenceResourcesMetadata = (recentlyVisited: BaseAppMetaData[]): UserPreferenceResourceType => ({
-    [ResourceKindType.devtronApplication]: {
+export const getUserPreferenceResourcesMetadata = (
+    recentlyVisited: BaseAppMetaData[],
+    resourceKind: ResourceKindType,
+): UserPreferenceResourceType => ({
+    [resourceKind]: {
         [UserPreferenceResourceActions.RECENTLY_VISITED]: recentlyVisited.map(({ appId, appName }) => ({
             appId,
             appName,
@@ -16,11 +19,10 @@ export const getFilteredUniqueAppList = ({
     userPreferencesResponse,
     appId,
     appName,
+    resourceKind,
 }: UserPreferenceFilteredListTypes) => {
     const _recentApps =
-        userPreferencesResponse?.resources?.[ResourceKindType.devtronApplication]?.[
-            UserPreferenceResourceActions.RECENTLY_VISITED
-        ] || []
+        userPreferencesResponse?.resources?.[resourceKind]?.[UserPreferenceResourceActions.RECENTLY_VISITED] || []
 
     const isInvalidApp = appId && !appName
 

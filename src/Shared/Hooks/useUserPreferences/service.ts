@@ -39,7 +39,11 @@ import { getUserPreferenceResourcesMetadata } from './utils'
  * @description This function fetches the user preferences from the server. It uses the `get` method to make a request to the server and retrieves the user preferences based on the `USER_PREFERENCES_ATTRIBUTE_KEY`. The result is parsed and returned as a `UserPreferencesType` object.
  * @throws Will throw an error if the request fails or if the result is not in the expected format.
  */
-export const getUserPreferences = async (): Promise<UserPreferencesType> => {
+export const getUserPreferences = async ({
+    resourceKindType,
+}: {
+    resourceKindType: ResourceKindType
+}): Promise<UserPreferencesType> => {
     const queryParamsPayload: Pick<GetUserPreferencesQueryParamsType, 'key'> = {
         key: USER_PREFERENCES_ATTRIBUTE_KEY,
     }
@@ -58,6 +62,23 @@ export const getUserPreferences = async (): Promise<UserPreferencesType> => {
         ? ViewIsPipelineRBACConfiguredRadioTabs.ACCESS_ONLY
         : ViewIsPipelineRBACConfiguredRadioTabs.ALL_ENVIRONMENTS
 
+    const getPreferredResourcesData = () => {
+        let resources
+        switch (resourceKindType) {
+            case ResourceKindType.devtronApplication:
+                resources = {
+                    [UserPreferenceResourceActions.RECENTLY_VISITED]:
+                        parsedResult.resources?.[ResourceKindType.devtronApplication]?.[
+                            UserPreferenceResourceActions.RECENTLY_VISITED
+                        ] || ([] as BaseAppMetaData[]),
+                }
+                break
+            default:
+                resources = {}
+        }
+        return resources
+    }
+
     return {
         pipelineRBACViewSelectedTab,
         themePreference:
@@ -65,16 +86,10 @@ export const getUserPreferences = async (): Promise<UserPreferencesType> => {
                 ? THEME_PREFERENCE_MAP.auto
                 : parsedResult.computedAppTheme,
         resources: {
-            [ResourceKindType.devtronApplication]: {
-                [UserPreferenceResourceActions.RECENTLY_VISITED]:
-                    parsedResult.resources?.[ResourceKindType.devtronApplication]?.[
-                        UserPreferenceResourceActions.RECENTLY_VISITED
-                    ] || ([] as BaseAppMetaData[]),
-            },
+            [resourceKindType]: getPreferredResourcesData(),
         },
     }
 }
-
 /**
  * @description This function updates the user preferences in the server. It constructs a payload with the updated user preferences and sends a PATCH request to the server. If the request is successful, it returns true. If an error occurs, it shows an error message and returns false.
  * @param updatedUserPreferences - The updated user preferences to be sent to the server.
@@ -87,6 +102,7 @@ export const getUserPreferences = async (): Promise<UserPreferencesType> => {
 const getUserPreferencePayload = async ({
     path,
     value,
+    resourceKind,
 }: UserPathValueMapType): Promise<Partial<UserPreferencesPayloadValueType>> => {
     switch (path) {
         case 'themePreference':
@@ -102,7 +118,7 @@ const getUserPreferencePayload = async ({
 
         case 'resources':
             return {
-                resources: getUserPreferenceResourcesMetadata(value as BaseAppMetaData[]),
+                resources: getUserPreferenceResourcesMetadata(value as BaseAppMetaData[], resourceKind),
             }
         default:
             return {}

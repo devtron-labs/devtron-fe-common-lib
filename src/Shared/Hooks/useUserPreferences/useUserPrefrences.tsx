@@ -18,7 +18,6 @@ import { useState } from 'react'
 
 import { ServerErrors } from '@Common/ServerError'
 import { useTheme } from '@Shared/Providers'
-import { ResourceKindType } from '@Shared/types'
 
 import { getUserPreferences, updateUserPreferences } from './service'
 import {
@@ -36,26 +35,31 @@ export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreference
 
     const { handleThemeSwitcherDialogVisibilityChange, handleThemePreferenceChange } = useTheme()
 
-    const fetchRecentlyVisitedParsedApps = async ({ appId, appName }: UserPreferenceRecentlyVisitedAppsTypes) => {
-        const userPreferencesResponse = await getUserPreferences()
+    const fetchRecentlyVisitedParsedApps = async ({
+        appId,
+        appName,
+        resourceKind,
+    }: UserPreferenceRecentlyVisitedAppsTypes) => {
+        const userPreferencesResponse = await getUserPreferences({ resourceKindType: resourceKind })
 
         const uniqueFilteredApps = getFilteredUniqueAppList({
             userPreferencesResponse,
             appId,
             appName,
+            resourceKind,
         })
 
         setUserPreferences((prev) => ({
             ...prev,
             resources: {
                 ...prev?.resources,
-                [ResourceKindType.devtronApplication]: {
-                    ...prev?.resources?.[ResourceKindType.devtronApplication],
+                [resourceKind]: {
+                    ...prev?.resources?.[resourceKind],
                     [UserPreferenceResourceActions.RECENTLY_VISITED]: uniqueFilteredApps,
                 },
             },
         }))
-        await updateUserPreferences({ path: 'resources', value: uniqueFilteredApps })
+        await updateUserPreferences({ path: 'resources', value: uniqueFilteredApps, resourceKind })
     }
 
     const handleInitializeUserPreferencesFromResponse = (userPreferencesResponse: UserPreferencesType) => {
@@ -67,10 +71,10 @@ export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreference
         setUserPreferences(userPreferencesResponse)
     }
 
-    const handleFetchUserPreferences = async () => {
+    const handleFetchUserPreferences = async (resourceKind: UserPreferenceRecentlyVisitedAppsTypes['resourceKind']) => {
         try {
             setUserPreferencesError(null)
-            const userPreferencesResponse = await getUserPreferences()
+            const userPreferencesResponse = await getUserPreferences({ resourceKindType: resourceKind })
             if (migrateUserPreferences) {
                 const migratedUserPreferences = await migrateUserPreferences(userPreferencesResponse)
                 handleInitializeUserPreferencesFromResponse(migratedUserPreferences)
