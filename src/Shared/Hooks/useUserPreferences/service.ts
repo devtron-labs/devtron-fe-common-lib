@@ -42,7 +42,7 @@ import { getUserPreferenceResourcesMetadata } from './utils'
 export const getUserPreferences = async ({
     resourceKindType,
 }: {
-    resourceKindType: ResourceKindType
+    resourceKindType?: ResourceKindType
 }): Promise<UserPreferencesType> => {
     const queryParamsPayload: Pick<GetUserPreferencesQueryParamsType, 'key'> = {
         key: USER_PREFERENCES_ATTRIBUTE_KEY,
@@ -86,7 +86,7 @@ export const getUserPreferences = async ({
                 ? THEME_PREFERENCE_MAP.auto
                 : parsedResult.computedAppTheme,
         resources: {
-            [resourceKindType]: getPreferredResourcesData(),
+            [resourceKindType]: resourceKindType ? getPreferredResourcesData() : {},
         },
     }
 }

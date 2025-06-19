@@ -71,10 +71,10 @@ export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreference
         setUserPreferences(userPreferencesResponse)
     }
 
-    const handleFetchUserPreferences = async (resourceKind: UserPreferenceRecentlyVisitedAppsTypes['resourceKind']) => {
+    const handleFetchUserPreferences = async () => {
         try {
             setUserPreferencesError(null)
-            const userPreferencesResponse = await getUserPreferences({ resourceKindType: resourceKind })
+            const userPreferencesResponse = await getUserPreferences({})
             if (migrateUserPreferences) {
                 const migratedUserPreferences = await migrateUserPreferences(userPreferencesResponse)
                 handleInitializeUserPreferencesFromResponse(migratedUserPreferences)
