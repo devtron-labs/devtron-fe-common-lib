@@ -17,13 +17,13 @@
 import { useMemo, useState } from 'react'
 import { generatePath, Route, Switch, useLocation, useRouteMatch } from 'react-router-dom'
 
-import { ReactComponent as ICError } from '@Icons/ic-error.svg'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
 import { useAsync } from '@Common/Helper'
 import { useUrlFilters } from '@Common/Hooks'
-import { GenericEmptyState, InfoColourBar, SortingOrder } from '@Common/index'
+import { GenericEmptyState, SortingOrder } from '@Common/index'
 import { Progressing } from '@Common/Progressing'
 import { DEPLOYMENT_CONFIG_DIFF_SORT_KEY, getAppEnvDeploymentConfigList } from '@Shared/Components/DeploymentConfigDiff'
+import { InfoBlock } from '@Shared/Components/InfoBlock'
 import { groupArrayByObjectKey } from '@Shared/Helpers'
 import { useMainContext } from '@Shared/Providers'
 import { EnvResourceType, getAppEnvDeploymentConfig, getCompareSecretsData } from '@Shared/Services'
@@ -262,10 +262,9 @@ export const DeploymentHistoryConfigDiff = ({
                                         )}
                                     </div>
                                     {hasPreviousDeploymentConfigNotFoundError && (
-                                        <InfoColourBar
-                                            classname="error_bar cn-9 fs-13 lh-20"
-                                            Icon={ICError}
-                                            message="Diff unavailable: Configurations for previous deployment not found."
+                                        <InfoBlock
+                                            variant="error"
+                                            description="Diff unavailable: Configurations for previous deployment not found."
                                         />
                                     )}
                                 </div>
