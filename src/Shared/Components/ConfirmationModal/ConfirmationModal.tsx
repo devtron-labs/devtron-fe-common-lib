@@ -58,8 +58,7 @@ const ConfirmationModalBody = ({
     const hideIcon = variant === ConfirmationModalVariantType.custom && !ButtonIcon
 
     const disablePrimaryButton: boolean =
-        ('disabled' in primaryButtonConfig && primaryButtonConfig.disabled) ||
-        (confirmationKeyword && confirmationText.trim() !== confirmationKeyword)
+        !!primaryButtonConfig?.disabled || (confirmationKeyword && confirmationText.trim() !== confirmationKeyword)
 
     const handleTriggerPrimaryActionButton = () => {
         if (primaryButtonConfig && !disablePrimaryButton) {

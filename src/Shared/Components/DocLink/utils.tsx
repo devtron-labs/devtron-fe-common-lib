@@ -7,6 +7,7 @@ export const getDocumentationUrl = <T extends boolean = false>({
     docLinkKey,
     isEnterprise = false,
     isExternalLink,
+    isLicenseDashboard = false,
 }: BaseDocLink<T>) => {
     if (isExternalLink) {
         return docLinkKey
@@ -18,5 +19,7 @@ export const getDocumentationUrl = <T extends boolean = false>({
         return docPath
     }
 
-    return `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/${docPath || ''}?utm-source=product_${isEnterprise ? 'ent' : 'oss'}`
+    const utmPath = !isLicenseDashboard ? `?utm-source=product_${isEnterprise ? 'ent' : 'oss'}` : ''
+
+    return `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/${docPath || ''}${utmPath}`
 }
