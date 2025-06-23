@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { forwardRef } from 'react'
+import { forwardRef, MouseEvent } from 'react'
 
 import { ReactComponent as ICChevronDown } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { Checkbox, noop } from '../../../Common'
@@ -24,7 +24,10 @@ import { BULK_DROPDOWN_TEST_ID, BulkSelectionOptionsLabels } from './constants'
 import { BulkSelectionEvents, BulkSelectionProps } from './types'
 
 const BulkSelection = forwardRef<HTMLButtonElement, BulkSelectionProps>(
-    ({ showPagination, disabled = false, showChevronDownIcon = true }, forwardedRef) => {
+    (
+        { showPagination, disabled = false, showChevronDownIcon = true, selectAllIfNotPaginated = false },
+        forwardedRef,
+    ) => {
         const { handleBulkSelection, isChecked, checkboxValue, getSelectedIdentifiersCount } = useBulkSelection()
         const areOptionsSelected = getSelectedIdentifiersCount() > 0
         const BulkSelectionItems: ActionMenuItemType[] = [
@@ -60,6 +63,16 @@ const BulkSelection = forwardRef<HTMLButtonElement, BulkSelectionProps>(
             })
         }
 
+        const onSinglePageSelectAll = (e: MouseEvent<HTMLButtonElement>) => {
+            e.stopPropagation()
+
+            handleBulkSelection({
+                action: areOptionsSelected
+                    ? BulkSelectionEvents.CLEAR_ALL_SELECTIONS
+                    : BulkSelectionEvents.SELECT_ALL_ON_PAGE,
+            })
+        }
+
         return (
             <ActionMenu
                 id={BULK_DROPDOWN_TEST_ID}
@@ -90,6 +103,7 @@ const BulkSelection = forwardRef<HTMLButtonElement, BulkSelectionProps>(
                         type="button"
                         className="dc__position-abs dc__left-0 dc__top-0 h-100 w-100 dc__zi-1 p-0 dc__no-border dc__outline-none dc__transparent--unstyled"
                         aria-label="Bulk selection dropdown"
+                        onClick={selectAllIfNotPaginated && !showPagination ? onSinglePageSelectAll : noop}
                     />
                 </div>
             </ActionMenu>

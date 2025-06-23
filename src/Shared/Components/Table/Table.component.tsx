@@ -203,7 +203,11 @@ const TableWrapper = (tableProps: TableProps) => {
         return <VisibleColumnsWrapper {...{ ...tableProps, filterData: null }} />
     }
 
-    return <UseRegisterShortcutProvider shortcutTimeout={50}>{renderContent()}</UseRegisterShortcutProvider>
+    return (
+        <UseRegisterShortcutProvider shortcutTimeout={50} ignoreTags={['input', 'textarea', 'select', 'button']}>
+            {renderContent()}
+        </UseRegisterShortcutProvider>
+    )
 }
 
 export default TableWrapper

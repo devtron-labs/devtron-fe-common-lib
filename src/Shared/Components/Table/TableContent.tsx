@@ -334,6 +334,7 @@ const TableContent = ({
                                                         key={field}
                                                         showPagination={showPagination}
                                                         showChevronDownIcon={false}
+                                                        selectAllIfNotPaginated
                                                     />
                                                 </div>
                                             )

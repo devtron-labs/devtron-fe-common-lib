@@ -54,6 +54,7 @@ export interface BulkSelectionProps {
      */
     showChevronDownIcon?: boolean
     disabled?: boolean
+    selectAllIfNotPaginated?: boolean
 }
 
 export enum SelectAllDialogStatus {
