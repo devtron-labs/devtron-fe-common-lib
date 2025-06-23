@@ -60,13 +60,12 @@ const WorkflowOptionsModal = ({
     // CONSTANTS
     const currentPipelineType = useMemo(
         () => getCurrentPipelineType({ workflows, changeCIPayload }),
-        // Expecting modal to be closed in case of workflows or changeCIPayload change
-        [],
+        [workflows, changeCIPayload],
     )
 
     const buildWorkflowCards = useMemo(
         () => getBuildWorkflowCardsConfig({ currentPipelineType, changeCIPayload, isAppGroup }),
-        [currentPipelineType, isAppGroup],
+        [currentPipelineType, isAppGroup, changeCIPayload],
     )
 
     const receiveWorkflowCards = useMemo(
