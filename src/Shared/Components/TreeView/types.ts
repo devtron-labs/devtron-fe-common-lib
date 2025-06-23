@@ -1,0 +1,78 @@
+import { IconsProps } from '../Icon'
+import { TrailingItemProps } from '../TrailingItem'
+
+// eslint-disable-next-line no-use-before-define
+export type TreeNode = TreeHeading | TreeItem
+
+interface BaseNode {
+    id: string
+    /**
+     * The title of the list item.
+     */
+    title: string
+    /**
+     * The subtitle of the list item.
+     */
+    subtitle?: string
+    /**
+     * If true, the title will be rendered with line-through.
+     */
+    strikeThrough?: boolean
+    startIconConfig?: Pick<IconsProps, 'name' | 'color'> & {
+        tooltipContent?: string
+    }
+    trailingItem?: TrailingItemProps
+}
+
+export interface TreeHeading extends BaseNode {
+    type: 'heading'
+    items?: TreeNode[]
+    /**
+     * Text to display when there are no items in the list.
+     * @default 'No items found.'
+     */
+    noItemsText?: string
+}
+
+export type TreeItem = BaseNode & {
+    type: 'item'
+    /**
+     * @default false
+     */
+    isDisabled?: boolean
+} & (
+        | {
+              as?: 'button'
+              /**
+               * The callback function to handle click events on the button.
+               */
+              onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+              href?: never
+              clearQueryParamsOnNavigation?: never
+          }
+        | {
+              as: 'link'
+              href: string
+              /**
+               * The callback function to handle click events on the nav link.
+               */
+              onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void
+              /**
+               * If `true`, clears query parameters during navigation.
+               * @default false
+               */
+              clearQueryParamsOnNavigation?: boolean
+          }
+    )
+
+export interface TreeViewProps {
+    nodes: TreeNode[]
+    expandedMap: Record<string, boolean>
+    selectedId?: string
+    onToggle: (item: TreeHeading) => void
+    onSelect: (item: TreeItem) => void
+    /**
+     * WARNING: For internal use only.
+     */
+    depth?: number
+}
