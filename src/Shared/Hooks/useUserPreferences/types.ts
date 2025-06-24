@@ -16,7 +16,6 @@
 
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from '@Shared/Hooks/useUserPreferences/constants'
 import { AppThemeType, ThemeConfigType, ThemePreferenceType } from '@Shared/Providers/ThemeProvider/types'
-import { BaseAppMetaData } from '@Shared/Services'
 import { ResourceKindType } from '@Shared/types'
 
 export interface GetUserPreferencesQueryParamsType {
@@ -37,14 +36,16 @@ export type PreferredResourceKindType =
     | 'app-group'
     | ResourceKindType.cluster
 
-export interface UserPreferenceRecentlyVisitedAppsTypes {
-    appId: number
-    appName: string
+export interface BaseRecentlyVisitedEntitiesTypes {
+    id: number
+    name: string
+}
+export interface UserPreferenceRecentlyVisitedAppsTypes extends BaseRecentlyVisitedEntitiesTypes {
     resourceKind: PreferredResourceKindType
 }
 
 export interface UserResourceKindActionType {
-    [UserPreferenceResourceActions.RECENTLY_VISITED]: BaseAppMetaData[]
+    [UserPreferenceResourceActions.RECENTLY_VISITED]: BaseRecentlyVisitedEntitiesTypes[]
 }
 export type UserPreferenceResourceType = Partial<Record<PreferredResourceKindType, UserResourceKindActionType>>
 export interface GetUserPreferencesParsedDTO {
@@ -85,9 +86,14 @@ export interface UserPreferencesType {
 
 export interface UpdatedUserPreferencesType extends UserPreferencesType, Pick<ThemeConfigType, 'appTheme'> {}
 
+export interface RecentlyVisitedFetchConfigType extends UserPreferenceRecentlyVisitedAppsTypes {
+    isDataAvailable?: boolean
+}
+
 export interface UseUserPreferencesProps {
     userPreferenceResourceKind?: PreferredResourceKindType
     migrateUserPreferences?: (userPreferencesResponse: UserPreferencesType) => Promise<UserPreferencesType>
+    recentlyVisitedFetchConfig?: RecentlyVisitedFetchConfigType
 }
 
 export type UserPathValueMapType =
@@ -105,7 +111,7 @@ export type UserPathValueMapType =
       }
     | {
           path: 'resources'
-          value: Required<BaseAppMetaData[]>
+          value: Required<BaseRecentlyVisitedEntitiesTypes[]>
           resourceKind: PreferredResourceKindType
           userPreferencesResponse?: UserPreferencesType
       }

@@ -33,6 +33,17 @@ import {
 } from './types'
 import { getUserPreferenceResourcesMetadata } from './utils'
 
+export const getParsedResourcesMap = (resources: GetUserPreferencesParsedDTO['resources']) => {
+    const resourcesMap = resources || {}
+    const parsedResourcesMap: UserPreferencesType['resources'] = {}
+
+    Object.entries(resourcesMap).forEach(([resourceKind, resourceActions]) => {
+        parsedResourcesMap[resourceKind] = resourceActions
+    })
+
+    return parsedResourcesMap
+}
+
 /**
  * @returns UserPreferencesType
  * @description This function fetches the user preferences from the server. It uses the `get` method to make a request to the server and retrieves the user preferences based on the `USER_PREFERENCES_ATTRIBUTE_KEY`. The result is parsed and returned as a `UserPreferencesType` object.
@@ -63,7 +74,7 @@ export const getUserPreferences = async (): Promise<UserPreferencesType> => {
             parsedResult.computedAppTheme === 'system-dark' || parsedResult.computedAppTheme === 'system-light'
                 ? THEME_PREFERENCE_MAP.auto
                 : parsedResult.computedAppTheme,
-        resources: parsedResult.resources,
+        resources: getParsedResourcesMap(parsedResult.resources),
     }
 }
 /**
