@@ -22,7 +22,7 @@ import { CreatableProps } from 'react-select/creatable'
 
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 import { ServerErrors } from '@Common/ServerError'
-import { TooltipProps } from '@Common/Tooltip/types'
+import { TooltipProps } from '@Common/Tooltip'
 import { OptionType } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 
