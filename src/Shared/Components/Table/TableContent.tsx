@@ -83,8 +83,7 @@ const TableContent = ({
         rowsContainerRef.current.addEventListener('keydown', preventScrollByKeyboard)
     }, [])
 
-    const bulkSelectionCount =
-        isBulkSelectionApplied && rows ? filteredRows.length : (getSelectedIdentifiersCount?.() ?? 0)
+    const bulkSelectionCount = isBulkSelectionApplied && rows ? rows.length : (getSelectedIdentifiersCount?.() ?? 0)
 
     const visibleRows = useMemo(() => {
         const normalizedFilteredRows = filteredRows ?? []
