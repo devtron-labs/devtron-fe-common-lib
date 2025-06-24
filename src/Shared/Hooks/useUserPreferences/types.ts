@@ -31,7 +31,11 @@ export enum ViewIsPipelineRBACConfiguredRadioTabs {
 export enum UserPreferenceResourceActions {
     RECENTLY_VISITED = 'recently-visited',
 }
-export type PreferredResourceKindType = ResourceKindType.devtronApplication
+export type PreferredResourceKindType =
+    | ResourceKindType.devtronApplication
+    | ResourceKindType.job
+    | ResourceKindType.appGroup
+    | ResourceKindType.cluster
 
 export interface UserPreferenceRecentlyVisitedAppsTypes {
     appId: number
@@ -84,6 +88,7 @@ export interface UserPreferencesType {
 export interface UpdatedUserPreferencesType extends UserPreferencesType, Pick<ThemeConfigType, 'appTheme'> {}
 
 export interface UseUserPreferencesProps {
+    userPreferenceResourceKind?: ResourceKindType
     migrateUserPreferences?: (userPreferencesResponse: UserPreferencesType) => Promise<UserPreferencesType>
 }
 
@@ -92,20 +97,24 @@ export type UserPathValueMapType =
           path: 'themePreference'
           value: Required<Pick<UpdatedUserPreferencesType, 'themePreference' | 'appTheme'>>
           resourceKind?: never
+          userPreferencesResponse?: never
       }
     | {
           path: 'pipelineRBACViewSelectedTab'
           value: Required<Pick<UserPreferencesType, 'pipelineRBACViewSelectedTab'>>
           resourceKind?: never
+          userPreferencesResponse?: never
       }
     | {
           path: 'resources'
           value: Required<BaseAppMetaData[]>
           resourceKind: PreferredResourceKindType
+          userPreferencesResponse?
       }
 
 export type UserPreferenceResourceProps = UserPathValueMapType & {
     shouldThrowError?: boolean
+    userPreferencesResponse?
 }
 
 export interface UserPreferenceFilteredListTypes extends UserPreferenceRecentlyVisitedAppsTypes {

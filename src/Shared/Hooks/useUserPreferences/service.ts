@@ -18,7 +18,6 @@ import { ROUTES } from '@Common/Constants'
 import { get, getUrlWithSearchParams, patch, showError } from '@Common/index'
 import { THEME_PREFERENCE_MAP } from '@Shared/Providers/ThemeProvider/types'
 import { BaseAppMetaData } from '@Shared/Services'
-import { ResourceKindType } from '@Shared/types'
 
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
 import {
@@ -39,11 +38,7 @@ import { getUserPreferenceResourcesMetadata } from './utils'
  * @description This function fetches the user preferences from the server. It uses the `get` method to make a request to the server and retrieves the user preferences based on the `USER_PREFERENCES_ATTRIBUTE_KEY`. The result is parsed and returned as a `UserPreferencesType` object.
  * @throws Will throw an error if the request fails or if the result is not in the expected format.
  */
-export const getUserPreferences = async ({
-    resourceKindType,
-}: {
-    resourceKindType?: ResourceKindType
-}): Promise<UserPreferencesType> => {
+export const getUserPreferences = async (): Promise<UserPreferencesType> => {
     const queryParamsPayload: Pick<GetUserPreferencesQueryParamsType, 'key'> = {
         key: USER_PREFERENCES_ATTRIBUTE_KEY,
     }
@@ -62,32 +57,13 @@ export const getUserPreferences = async ({
         ? ViewIsPipelineRBACConfiguredRadioTabs.ACCESS_ONLY
         : ViewIsPipelineRBACConfiguredRadioTabs.ALL_ENVIRONMENTS
 
-    const getPreferredResourcesData = () => {
-        let resources
-        switch (resourceKindType) {
-            case ResourceKindType.devtronApplication:
-                resources = {
-                    [UserPreferenceResourceActions.RECENTLY_VISITED]:
-                        parsedResult.resources?.[ResourceKindType.devtronApplication]?.[
-                            UserPreferenceResourceActions.RECENTLY_VISITED
-                        ] || ([] as BaseAppMetaData[]),
-                }
-                break
-            default:
-                resources = {}
-        }
-        return resources
-    }
-
     return {
         pipelineRBACViewSelectedTab,
         themePreference:
             parsedResult.computedAppTheme === 'system-dark' || parsedResult.computedAppTheme === 'system-light'
                 ? THEME_PREFERENCE_MAP.auto
                 : parsedResult.computedAppTheme,
-        resources: {
-            [resourceKindType]: resourceKindType ? getPreferredResourcesData() : {},
-        },
+        resources: parsedResult.resources,
     }
 }
 /**
@@ -103,6 +79,7 @@ const getUserPreferencePayload = async ({
     path,
     value,
     resourceKind,
+    userPreferencesResponse,
 }: UserPathValueMapType): Promise<Partial<UserPreferencesPayloadValueType>> => {
     switch (path) {
         case 'themePreference':
@@ -116,10 +93,24 @@ const getUserPreferencePayload = async ({
                     value.pipelineRBACViewSelectedTab === ViewIsPipelineRBACConfiguredRadioTabs.ACCESS_ONLY,
             }
 
-        case 'resources':
-            return {
-                resources: getUserPreferenceResourcesMetadata(value as BaseAppMetaData[], resourceKind),
+        case 'resources': {
+            const existingResources = userPreferencesResponse?.resources || {}
+
+            const updatedResources = {
+                ...existingResources,
+                [resourceKind]: {
+                    ...existingResources[resourceKind],
+                    [UserPreferenceResourceActions.RECENTLY_VISITED]:
+                        getUserPreferenceResourcesMetadata(value as BaseAppMetaData[], resourceKind)[resourceKind]?.[
+                            UserPreferenceResourceActions.RECENTLY_VISITED
+                        ] || [],
+                },
             }
+
+            return {
+                resources: updatedResources,
+            }
+        }
         default:
             return {}
     }
@@ -130,12 +121,18 @@ export const updateUserPreferences = async ({
     value,
     resourceKind,
     shouldThrowError = false,
+    userPreferencesResponse,
 }: UserPreferenceResourceProps): Promise<boolean> => {
     try {
         const payload: UpdateUserPreferencesPayloadType = {
             key: USER_PREFERENCES_ATTRIBUTE_KEY,
             value: JSON.stringify(
-                await getUserPreferencePayload({ path, value, resourceKind } as UserPathValueMapType),
+                await getUserPreferencePayload({
+                    path,
+                    value,
+                    resourceKind,
+                    userPreferencesResponse,
+                } as UserPathValueMapType),
             ),
         }
 

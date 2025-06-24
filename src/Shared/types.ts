@@ -499,6 +499,7 @@ export enum ResourceKindType {
     cdPipeline = 'cd-pipeline',
     ciPipeline = 'ci-pipeline',
     project = 'project',
+    appGroup = 'app-group',
 }
 
 /**

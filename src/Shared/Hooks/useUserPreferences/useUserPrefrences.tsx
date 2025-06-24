@@ -40,7 +40,7 @@ export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreference
         appName,
         resourceKind,
     }: UserPreferenceRecentlyVisitedAppsTypes) => {
-        const userPreferencesResponse = await getUserPreferences({ resourceKindType: resourceKind })
+        const userPreferencesResponse = await getUserPreferences()
 
         const uniqueFilteredApps = getFilteredUniqueAppList({
             userPreferencesResponse,
@@ -59,7 +59,12 @@ export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreference
                 },
             },
         }))
-        await updateUserPreferences({ path: 'resources', value: uniqueFilteredApps, resourceKind })
+        await updateUserPreferences({
+            path: 'resources',
+            value: uniqueFilteredApps,
+            resourceKind,
+            userPreferencesResponse,
+        })
     }
 
     const handleInitializeUserPreferencesFromResponse = (userPreferencesResponse: UserPreferencesType) => {
@@ -74,7 +79,7 @@ export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreference
     const handleFetchUserPreferences = async () => {
         try {
             setUserPreferencesError(null)
-            const userPreferencesResponse = await getUserPreferences({})
+            const userPreferencesResponse = await getUserPreferences()
             if (migrateUserPreferences) {
                 const migratedUserPreferences = await migrateUserPreferences(userPreferencesResponse)
                 handleInitializeUserPreferencesFromResponse(migratedUserPreferences)
