@@ -1,11 +1,15 @@
 import { BaseAppMetaData } from '@Shared/Services'
-import { ResourceKindType } from '@Shared/types'
 
-import { UserPreferenceFilteredListTypes, UserPreferenceResourceActions, UserPreferenceResourceType } from './types'
+import {
+    PreferredResourceKindType,
+    UserPreferenceFilteredListTypes,
+    UserPreferenceResourceActions,
+    UserPreferenceResourceType,
+} from './types'
 
 export const getUserPreferenceResourcesMetadata = (
     recentlyVisited: BaseAppMetaData[],
-    resourceKind: ResourceKindType,
+    resourceKind: PreferredResourceKindType,
 ): UserPreferenceResourceType => ({
     [resourceKind]: {
         [UserPreferenceResourceActions.RECENTLY_VISITED]: recentlyVisited.map(({ appId, appName }) => ({

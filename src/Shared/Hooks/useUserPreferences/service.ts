@@ -17,10 +17,10 @@
 import { ROUTES } from '@Common/Constants'
 import { get, getUrlWithSearchParams, patch, showError } from '@Common/index'
 import { THEME_PREFERENCE_MAP } from '@Shared/Providers/ThemeProvider/types'
-import { BaseAppMetaData } from '@Shared/Services'
 
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
 import {
+    BaseRecentlyVisitedEntitiesTypes,
     GetUserPreferencesParsedDTO,
     GetUserPreferencesQueryParamsType,
     UpdateUserPreferencesPayloadType,
@@ -101,9 +101,9 @@ const getUserPreferencePayload = async ({
                 [resourceKind]: {
                     ...existingResources[resourceKind],
                     [UserPreferenceResourceActions.RECENTLY_VISITED]:
-                        getUserPreferenceResourcesMetadata(value as BaseAppMetaData[], resourceKind)[resourceKind]?.[
-                            UserPreferenceResourceActions.RECENTLY_VISITED
-                        ] || [],
+                        getUserPreferenceResourcesMetadata(value as BaseRecentlyVisitedEntitiesTypes[], resourceKind)[
+                            resourceKind
+                        ]?.[UserPreferenceResourceActions.RECENTLY_VISITED] || [],
                 },
             }
 

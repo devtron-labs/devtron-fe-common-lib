@@ -35,7 +35,7 @@ export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreference
 
     const { handleThemeSwitcherDialogVisibilityChange, handleThemePreferenceChange } = useTheme()
 
-    const fetchRecentlyVisitedParsedApps = async ({
+    const fetchRecentlyVisitedParsedEntities = async ({
         appId,
         appName,
         resourceKind,
@@ -112,6 +112,6 @@ export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreference
         handleFetchUserPreferences,
         handleUpdatePipelineRBACViewSelectedTab,
         handleUpdateUserThemePreference,
-        fetchRecentlyVisitedParsedApps,
+        fetchRecentlyVisitedParsedEntities,
     }
 }

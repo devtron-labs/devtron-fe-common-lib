@@ -34,7 +34,7 @@ export enum UserPreferenceResourceActions {
 export type PreferredResourceKindType =
     | ResourceKindType.devtronApplication
     | ResourceKindType.job
-    | ResourceKindType.appGroup
+    | 'app-group'
     | ResourceKindType.cluster
 
 export interface UserPreferenceRecentlyVisitedAppsTypes {
@@ -46,9 +46,7 @@ export interface UserPreferenceRecentlyVisitedAppsTypes {
 export interface UserResourceKindActionType {
     [UserPreferenceResourceActions.RECENTLY_VISITED]: BaseAppMetaData[]
 }
-export type UserPreferenceResourceType = {
-    [key in ResourceKindType]?: UserResourceKindActionType
-}
+export type UserPreferenceResourceType = Partial<Record<PreferredResourceKindType, UserResourceKindActionType>>
 export interface GetUserPreferencesParsedDTO {
     viewPermittedEnvOnly?: boolean
     /**
@@ -88,7 +86,7 @@ export interface UserPreferencesType {
 export interface UpdatedUserPreferencesType extends UserPreferencesType, Pick<ThemeConfigType, 'appTheme'> {}
 
 export interface UseUserPreferencesProps {
-    userPreferenceResourceKind?: ResourceKindType
+    userPreferenceResourceKind?: PreferredResourceKindType
     migrateUserPreferences?: (userPreferencesResponse: UserPreferencesType) => Promise<UserPreferencesType>
 }
 
@@ -109,12 +107,12 @@ export type UserPathValueMapType =
           path: 'resources'
           value: Required<BaseAppMetaData[]>
           resourceKind: PreferredResourceKindType
-          userPreferencesResponse?
+          userPreferencesResponse?: UserPreferencesType
       }
 
 export type UserPreferenceResourceProps = UserPathValueMapType & {
     shouldThrowError?: boolean
-    userPreferencesResponse?
+    userPreferencesResponse?: UserPreferencesType
 }
 
 export interface UserPreferenceFilteredListTypes extends UserPreferenceRecentlyVisitedAppsTypes {
