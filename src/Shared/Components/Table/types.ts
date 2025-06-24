@@ -174,6 +174,7 @@ export type ViewWrapperProps<T = FiltersTypeEnum.STATE> = PropsWithChildren<
         AdditionalProps &
         Partial<ConfigurableColumnsType> & {
             areRowsLoading: boolean
+            filteredRows: RowsType | null
         } & (T extends FiltersTypeEnum.URL ? Pick<UseUrlFiltersReturnType<string>, 'updateSearchParams'> : {})
 >
 

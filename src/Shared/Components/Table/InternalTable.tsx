@@ -147,6 +147,7 @@ const InternalTable = ({
                 ...filterData,
                 ...additionalProps,
                 areRowsLoading: areFilteredRowsLoading,
+                filteredRows,
                 ...(areColumnsConfigurable
                     ? {
                           allColumns: columns,

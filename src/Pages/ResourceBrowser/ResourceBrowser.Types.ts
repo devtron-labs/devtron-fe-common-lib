@@ -205,14 +205,10 @@ export interface GVKOptionValueType {
 }
 
 export interface GetResourceRecommenderResourceListPropsType {
-    resourceList: K8sResourceDetailType
-    reloadResourceListData: () => void
     setShowAbsoluteValuesInResourceRecommender: Dispatch<SetStateAction<boolean>>
     showAbsoluteValuesInResourceRecommender: boolean
     gvkOptions: GroupBase<SelectPickerOptionType<GVKOptionValueType>>[]
     areGVKOptionsLoading: boolean
     reloadGVKOptions: () => void
     gvkOptionsError: ServerErrors
-    isResourceListLoading: boolean
-    resourceListError: ServerErrors
 }
