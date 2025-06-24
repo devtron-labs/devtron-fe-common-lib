@@ -1,5 +1,5 @@
 import { ReactElement, useMemo } from 'react'
-import { motion } from 'framer-motion'
+import { AnimatePresence, motion } from 'framer-motion'
 
 import { Tooltip } from '@Common/Tooltip'
 import { Icon } from '@Shared/Components'
@@ -38,19 +38,21 @@ const Segment = ({ segment, isSelected, name, onChange, fullWidth, size, disable
                     disabled={disabled}
                 />
 
-                <motion.label
+                <label
                     htmlFor={inputId}
-                    layout
                     className={`pointer m-0 dc__position-rel flex ${!fullWidth ? 'left' : ''} dc__gap-4 br-4 segmented-control__segment segmented-control__segment--${size} ${isSelected ? 'fw-6 segmented-control__segment--selected' : 'fw-4'} ${segment.isError ? 'cr-5' : 'cn-9'} ${disabled ? 'cursor-not-allowed' : ''} ${COMPONENT_SIZE_TO_SEGMENT_CLASS_MAP[size]}`}
                     key={inputId}
                     aria-label={ariaLabel}
                 >
-                    {isSelected && (
-                        <motion.div
-                            layoutId={`active-segment-control-${name}`}
-                            className="dc__position-abs active-mask dc__top-0 dc__left-0 dc__right-0 dc__bottom-0 bg__primary br-4"
-                        />
-                    )}
+                    <AnimatePresence>
+                        {isSelected && (
+                            <motion.div
+                                layoutId={`active-segment-control-${name}`}
+                                className="dc__position-abs active-mask dc__top-0 dc__left-0 dc__right-0 dc__bottom-0 bg__primary br-4"
+                                transition={{ type: 'spring', stiffness: 500, damping: 30 }}
+                            />
+                        )}
+                    </AnimatePresence>
 
                     {(isError || icon) && (
                         <span className={`flex ${COMPONENT_SIZE_TO_ICON_CLASS_MAP[size]}`}>
@@ -69,7 +71,7 @@ const Segment = ({ segment, isSelected, name, onChange, fullWidth, size, disable
                         </span>
                     )}
                     {label && <span>{label}</span>}
-                </motion.label>
+                </label>
             </div>
         </ConditionalWrap>
     )
