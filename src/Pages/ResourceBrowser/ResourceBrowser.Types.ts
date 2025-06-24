@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Dispatch, RefObject, SetStateAction } from 'react'
+import { Dispatch, ReactNode, RefObject, SetStateAction } from 'react'
 import { GroupBase } from 'react-select'
 
 import { ServerErrors } from '@Common/ServerError'
@@ -211,4 +211,9 @@ export interface GetResourceRecommenderResourceListPropsType {
     areGVKOptionsLoading: boolean
     reloadGVKOptions: () => void
     gvkOptionsError: ServerErrors
+}
+
+export interface ResourceRecommenderActionMenuProps {
+    children: ReactNode
+    lastScannedOn: string
 }

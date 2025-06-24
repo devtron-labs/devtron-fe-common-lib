@@ -67,6 +67,7 @@ import { ReactComponent as ICDevtronJob } from '@IconsV2/ic-devtron-job.svg'
 import { ReactComponent as ICDisconnect } from '@IconsV2/ic-disconnect.svg'
 import { ReactComponent as ICDiscordFill } from '@IconsV2/ic-discord-fill.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
+import { ReactComponent as ICDownload } from '@IconsV2/ic-download.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEdit } from '@IconsV2/ic-edit.svg'
 import { ReactComponent as ICEmail } from '@IconsV2/ic-email.svg'
@@ -280,6 +281,7 @@ export const iconMap = {
     'ic-disconnect': ICDisconnect,
     'ic-discord-fill': ICDiscordFill,
     'ic-dockerhub': ICDockerhub,
+    'ic-download': ICDownload,
     'ic-ecr': ICEcr,
     'ic-edit': ICEdit,
     'ic-email': ICEmail,
