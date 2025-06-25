@@ -18,7 +18,7 @@ import { ROUTES } from '@Common/Constants'
 import { get, getUrlWithSearchParams, patch, showError } from '@Common/index'
 import { THEME_PREFERENCE_MAP } from '@Shared/Providers/ThemeProvider/types'
 
-import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
+import { PreferredResourceKinds, USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
 import {
     BaseRecentlyVisitedEntitiesTypes,
     GetUserPreferencesParsedDTO,
@@ -33,12 +33,13 @@ import {
 } from './types'
 import { getUserPreferenceResourcesMetadata } from './utils'
 
-export const getParsedResourcesMap = (resources: GetUserPreferencesParsedDTO['resources']) => {
-    const resourcesMap = resources || {}
+export const getParsedResourcesMap = (
+    resources: GetUserPreferencesParsedDTO['resources'],
+): UserPreferencesType['resources'] => {
     const parsedResourcesMap: UserPreferencesType['resources'] = {}
 
-    Object.entries(resourcesMap).forEach(([resourceKind, resourceActions]) => {
-        parsedResourcesMap[resourceKind] = resourceActions
+    PreferredResourceKinds.forEach((resourceKind) => {
+        parsedResourcesMap[resourceKind] = resources?.[resourceKind]
     })
 
     return parsedResourcesMap

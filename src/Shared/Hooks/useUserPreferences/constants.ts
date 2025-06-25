@@ -14,4 +14,15 @@
  * limitations under the License.
  */
 
+import { ResourceKindType } from '@Shared/types'
+
+import { PreferredResourceKindType } from './types'
+
 export const USER_PREFERENCES_ATTRIBUTE_KEY = 'userPreferences'
+
+export const PreferredResourceKinds: PreferredResourceKindType[] = [
+    ResourceKindType.devtronApplication,
+    ResourceKindType.job,
+    'app-group',
+    ResourceKindType.cluster,
+]
