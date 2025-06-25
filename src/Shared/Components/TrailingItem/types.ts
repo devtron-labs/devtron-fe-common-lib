@@ -53,5 +53,5 @@ export type TrailingItemProps = TrailingItemType & {
     /**
      * @default 'neutral'
      */
-    variant: 'neutral' | 'negative'
+    variant?: 'neutral' | 'negative'
 }
