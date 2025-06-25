@@ -1,72 +1,17 @@
 .tree-view {
     &__container {
-        &[aria-selected="true"] &--title {
-            color: var(--B500);
-            font-weight: 600;
-            background: var(--B100);
-        }
-    }
-
-    &__heading-group-wrapper {
-        position: relative;
-
-        &--expanded::before {
-            content: "";
-            position: absolute;
-            left: 17px;
-            top: 24px;
-            bottom: 0;
-            width: 1px;
-            background-color: var(--N200);
-            z-index: 0;
-        }
-    }
-
-    &__group {
-        margin-left: 24px;
-        border-left: 1px solid transparent;
-        padding-top: 8px;
-        padding-bottom: 8px;
-        position: relative;
-    }
-
-    &__item {
-        position: relative;
-        padding-left: 16px;
-        margin: 4px 0;
-
-        &::before {
-            content: "";
-            position: absolute;
-            left: -8px;
-            top: 0;
-            bottom: 0;
-            width: 1px;
-            background-color: var(--N200);
-            z-index: 1;
+        .icon-with-divider {
+            grid-template-rows: 24px auto;
         }
 
-        &::after {
-            content: "";
-            position: absolute;
-            left: -8px;
-            top: 0;
-            width: 1px;
-            height: 100%;
-            z-index: 2;
-            opacity: 0;
-            background-image: linear-gradient(to bottom,
-                    var(--bg-primary) 0px,
-                    var(--bg-primary) 4px,
-                    var(--B500) 4px,
-                    var(--B500) calc(100% - 4px),
-                    var(--bg-primary) calc(100% - 4px),
-                    var(--bg-primary) 100%);
-            transition: opacity 0.2s ease;
-        }
-
-        &:hover::after {
-            opacity: 1;
+        &--item {
+            &:hover {
+                .tree-view__divider {
+                    background-color: var(--B500);
+                    height: 16px;
+                    border-radius: 3px;
+                }
+            }
         }
     }
 }
