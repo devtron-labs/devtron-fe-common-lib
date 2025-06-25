@@ -15,11 +15,11 @@
  */
 
 import { useEffect, useState } from 'react'
-import ReactGA from 'react-ga4'
 import Tippy from '@tippyjs/react'
 
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
 import { ReactComponent as ICMediumPaintBucket } from '@IconsV2/ic-medium-paintbucket.svg'
+import { handleAnalyticsEvent } from '@Shared/Analytics'
 import { InstallationType } from '@Shared/types'
 
 import { TippyCustomized, TippyTheme, Tooltip } from '../../../Common'
@@ -119,7 +119,7 @@ const PageHeader = ({
         setActionWithExpiry('clickedOkay', 1)
         hideGettingStartedCard()
         await handlePostHogEventUpdate(POSTHOG_EVENT_ONBOARDING.HELP)
-        ReactGA.event({
+        handleAnalyticsEvent({
             category: 'Main Navigation',
             action: `Help Clicked`,
         })
@@ -133,7 +133,7 @@ const PageHeader = ({
     )
 
     const onAskButtonClick = () => {
-        ReactGA.event({
+        handleAnalyticsEvent({
             category: 'AI',
             action: `HELP_ASK_DEVTRON_AI`,
         })

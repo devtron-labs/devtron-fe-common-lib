@@ -1,8 +1,8 @@
 import { useRef, useState } from 'react'
-import ReactGA from 'react-ga4'
 import { SliderButton } from '@typeform/embed-react'
 
 import { DOCUMENTATION_HOME_PAGE, URLS } from '@Common/Constants'
+import { handleAnalyticsEvent } from '@Shared/Analytics'
 import { ComponentSizeType } from '@Shared/constants'
 import { SidePanelTab, useMainContext } from '@Shared/Providers'
 import { InstallationType } from '@Shared/types'
@@ -51,18 +51,7 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick }: HelpButt
     const FEEDBACK_FORM_ID = `UheGN3KJ#source=${window.location.hostname}`
 
     // HANDLERS
-    const handleAnalytics: HelpButtonActionMenuProps['onClick'] = (item) => {
-        ReactGA.event({
-            category: 'Help Nav',
-            action: `${item.label} Clicked`,
-        })
-    }
-
     const handleOpenAboutDevtron = () => {
-        ReactGA.event({
-            category: 'help-nav__about-devtron',
-            action: 'ABOUT_DEVTRON_CLICKED',
-        })
         handleOpenLicenseInfoDialog()
     }
 
@@ -74,8 +63,7 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick }: HelpButt
         setGettingStartedClicked(true)
     }
 
-    const handleViewDocumentationClick: HelpButtonActionMenuProps['onClick'] = (item, e) => {
-        handleAnalytics(item, e)
+    const handleViewDocumentationClick: HelpButtonActionMenuProps['onClick'] = (_, e) => {
         // Opens documentation in side panel when clicked normally, or in a new tab when clicked with the meta/command key
         if (!e.metaKey) {
             e.preventDefault()
@@ -89,6 +77,10 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick }: HelpButt
     }
 
     const handleActionMenuClick: HelpButtonActionMenuProps['onClick'] = (item, e) => {
+        handleAnalyticsEvent({
+            category: 'Help Nav',
+            action: `HELP_${item.id.toUpperCase().replace('-', '_')}`,
+        })
         switch (item.id) {
             case HelpMenuItems.GETTING_STARTED:
                 handleGettingStartedClick()
@@ -98,14 +90,6 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick }: HelpButt
                 break
             case HelpMenuItems.GIVE_FEEDBACK:
                 handleFeedbackClick()
-                break
-            case HelpMenuItems.JOIN_DISCORD_COMMUNITY:
-            case HelpMenuItems.OPEN_NEW_TICKET:
-            case HelpMenuItems.VIEW_ALL_TICKETS:
-            case HelpMenuItems.CHAT_WITH_SUPPORT:
-            case HelpMenuItems.RAISE_ISSUE_REQUEST:
-            case HelpMenuItems.DEVTRON_GPT:
-                handleAnalytics(item, e)
                 break
             case HelpMenuItems.VIEW_DOCUMENTATION:
                 handleViewDocumentationClick(item, e)
