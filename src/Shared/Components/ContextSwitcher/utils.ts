@@ -3,7 +3,7 @@ import { RecentlyVisitedGroupedOptionsType, RecentlyVisitedOptions } from './typ
 
 export const getDisabledOptions = (option: RecentlyVisitedOptions): SelectPickerProps['isDisabled'] => option.isDisabled
 
-export const customSelect: SelectPickerProps['filterOption'] = (option, searchText: string) => {
+export const customSelectFilterOption: SelectPickerProps['filterOption'] = (option, searchText: string) => {
     const label = option.data.label as string
     return option.data.value === 0 || label.toLowerCase().includes(searchText.toLowerCase())
 }

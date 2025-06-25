@@ -2,7 +2,7 @@ import { getNoMatchingResultText, SelectPicker, SelectPickerVariantType } from '
 import { ComponentSizeType } from '@Shared/constants'
 
 import { ContextSwitcherTypes } from './types'
-import { customSelect, getDisabledOptions } from './utils'
+import { customSelectFilterOption, getDisabledOptions } from './utils'
 
 export const ContextSwitcher = ({
     inputId,
@@ -17,6 +17,7 @@ export const ContextSwitcher = ({
     formatOptionLabel,
     optionListError,
     reloadOptionList,
+    classNamePrefix,
 }: ContextSwitcherTypes) => {
     const selectedOptions = options?.map((section) => ({
         ...section,
@@ -36,10 +37,11 @@ export const ContextSwitcher = ({
             placeholder={placeholder}
             isOptionDisabled={getDisabledOptions}
             size={ComponentSizeType.xl}
-            filterOption={filterOption || customSelect}
+            filterOption={filterOption || customSelectFilterOption}
             formatOptionLabel={formatOptionLabel}
             optionListError={optionListError}
             reloadOptionList={reloadOptionList}
+            classNamePrefix={classNamePrefix}
         />
     )
 }
