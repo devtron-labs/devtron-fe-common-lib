@@ -15,6 +15,8 @@ export const ContextSwitcher = ({
     placeholder,
     filterOption,
     formatOptionLabel,
+    optionListError,
+    reloadOptionList,
 }: ContextSwitcherTypes) => {
     const selectedOptions = options?.map((section) => ({
         ...section,
@@ -36,6 +38,8 @@ export const ContextSwitcher = ({
             size={ComponentSizeType.xl}
             filterOption={filterOption || customSelect}
             formatOptionLabel={formatOptionLabel}
+            optionListError={optionListError}
+            reloadOptionList={reloadOptionList}
         />
     )
 }

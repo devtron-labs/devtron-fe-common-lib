@@ -14,6 +14,8 @@ export interface ContextSwitcherTypes
         | 'inputId'
         | 'formatOptionLabel'
         | 'filterOption'
+        | 'optionListError'
+        | 'reloadOptionList'
     > {
     options: GroupBase<SelectPickerOptionType<string | number>>[]
     isAppDataAvailable?: boolean
