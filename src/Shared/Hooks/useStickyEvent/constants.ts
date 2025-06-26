@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
-export const FALLBACK_SENTINEL_HEIGHT = '2px'
+export const SENTINEL_HEIGHT_BUFFER = 2
+export const FALLBACK_SENTINEL_HEIGHT = `${SENTINEL_HEIGHT_BUFFER}px`
 export const OBSERVER_THRESHOLD = 1
 export const OBSERVER_ROOT_MARGIN = '1px'
