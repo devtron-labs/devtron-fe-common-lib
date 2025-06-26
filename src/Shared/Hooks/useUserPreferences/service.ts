@@ -25,7 +25,6 @@ import {
     GetUserPreferencesQueryParamsType,
     UpdateUserPreferencesPayloadType,
     UserPathValueMapType,
-    UserPreferenceResourceActions,
     UserPreferenceResourceProps,
     UserPreferencesPayloadValueType,
     UserPreferencesType,
@@ -42,7 +41,7 @@ export const getParsedResourcesMap = (
         parsedResourcesMap[resourceKind] = resources?.[resourceKind]
     })
 
-    return parsedResourcesMap
+    return parsedResourcesMap || {}
 }
 
 /**
@@ -91,7 +90,6 @@ const getUserPreferencePayload = async ({
     path,
     value,
     resourceKind,
-    userPreferencesResponse,
 }: UserPathValueMapType): Promise<Partial<UserPreferencesPayloadValueType>> => {
     switch (path) {
         case 'themePreference':
@@ -106,15 +104,11 @@ const getUserPreferencePayload = async ({
             }
 
         case 'resources': {
-            const existingResources = userPreferencesResponse?.resources || {}
-
             const updatedResources = {
                 [resourceKind]: {
-                    ...existingResources[resourceKind],
-                    [UserPreferenceResourceActions.RECENTLY_VISITED]:
-                        getUserPreferenceResourcesMetadata(value as BaseRecentlyVisitedEntitiesTypes[], resourceKind)[
-                            resourceKind
-                        ]?.[UserPreferenceResourceActions.RECENTLY_VISITED] || [],
+                    ...getUserPreferenceResourcesMetadata(value as BaseRecentlyVisitedEntitiesTypes[], resourceKind)[
+                        resourceKind
+                    ],
                 },
             }
 
