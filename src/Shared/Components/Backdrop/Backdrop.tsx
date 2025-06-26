@@ -25,7 +25,7 @@ import { getUniqueId, preventBodyScroll, preventOutsideFocus } from '@Shared/Hel
 import { BackdropProps } from './types'
 import { createPortalContainerAndAppendToDOM } from './utils'
 
-const Backdrop = ({ children, onEscape, onClick }: BackdropProps) => {
+const Backdrop = ({ children, onEscape, onClick, hasClearBackground = false, onBackdropMount }: BackdropProps) => {
     // STATES
     const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null)
 
@@ -58,6 +58,10 @@ const Backdrop = ({ children, onEscape, onClick }: BackdropProps) => {
             preventOutsideFocus({ identifier: 'visible-modal-2', preventFocus: false })
         }
     }, [])
+
+    useEffect(() => {
+        onBackdropMount?.(!!portalContainer)
+    }, [portalContainer])
 
     /**
      * Manages a dedicated DOM node for rendering a portal backdrop.
@@ -106,7 +110,7 @@ const Backdrop = ({ children, onEscape, onClick }: BackdropProps) => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             exit={{ opacity: 0, transition: { duration: 0.35 } }}
-            className="backdrop dc__position-fixed dc__top-0 dc__left-0 full-height-width flexbox dc__content-center dc__align-items-center dc__overflow-hidden"
+            className={`backdrop ${hasClearBackground ? 'backdrop--transparent' : ''} dc__position-fixed dc__top-0 dc__left-0 full-height-width flexbox dc__content-center dc__align-items-center dc__overflow-hidden`}
             onClick={onClick}
         >
             {children}
