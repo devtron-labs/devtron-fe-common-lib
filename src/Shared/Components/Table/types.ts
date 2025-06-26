@@ -265,16 +265,19 @@ export type InternalTableProps = Required<Pick<ConfigurableColumnsType, 'visible
                * If filter is only being used for sorting, then send `noop` in this prop
                */
               filter: (row: RowType, filterData: UseFiltersReturnType) => boolean
+              clearFilters?: () => void
           }
         | {
               filtersVariant: FiltersTypeEnum.STATE
               additionalFilterProps?: AdditionalFilterPropsType<FiltersTypeEnum.STATE>
               filter: (row: RowType, filterData: UseFiltersReturnType) => boolean
+              clearFilters?: never
           }
         | {
               filtersVariant: FiltersTypeEnum.NONE
               additionalFilterProps?: never
               filter?: never
+              clearFilters?: never
           }
     ) &
     (
@@ -318,6 +321,7 @@ export type TableProps = Pick<
     | 'loading'
     | 'ViewWrapper'
     | 'pageSizeOptions'
+    | 'clearFilters'
 >
 
 export type BulkActionStateType = string | null

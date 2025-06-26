@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { RefObject } from 'react'
+
 import { IS_PLATFORM_MAC_OS } from '@Common/Constants'
 
 // NOTE: check this link for more info on keyboard keys: https://w3c.github.io/uievents-key/
@@ -81,6 +83,7 @@ export interface UseRegisterShortcutContextType {
 }
 
 export interface UseRegisterShortcutProviderType {
+    containerRef?: RefObject<HTMLElement>
     children: React.ReactNode
     /**
      * Defines how long after holding the keys down do we trigger the callback in milliseconds

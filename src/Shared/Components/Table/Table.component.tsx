@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 
 import {
     noop,
@@ -190,6 +190,7 @@ const UseUrlFilterWrapper = (props: FilterWrapperProps) => {
 
 const TableWrapper = (tableProps: TableProps) => {
     const { filtersVariant } = tableProps
+    const tableContainerRef = useRef<HTMLDivElement>(null)
 
     const renderContent = () => {
         if (filtersVariant === FiltersTypeEnum.STATE) {
@@ -204,8 +205,14 @@ const TableWrapper = (tableProps: TableProps) => {
     }
 
     return (
-        <UseRegisterShortcutProvider shortcutTimeout={50} ignoreTags={['input', 'textarea', 'select', 'button']}>
-            {renderContent()}
+        <UseRegisterShortcutProvider
+            containerRef={tableContainerRef}
+            shortcutTimeout={50}
+            ignoreTags={['input', 'textarea', 'select', 'button']}
+        >
+            <div ref={tableContainerRef} className="flexbox-col dc__overflow-hidden flex-grow-1">
+                {renderContent()}
+            </div>
         </UseRegisterShortcutProvider>
     )
 }

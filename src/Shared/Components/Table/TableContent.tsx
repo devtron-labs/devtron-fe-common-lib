@@ -34,7 +34,6 @@ const TableContent = ({
 }: TableContentProps) => {
     const rowsContainerRef = useRef<HTMLDivElement>(null)
     const parentRef = useRef<HTMLDivElement>(null)
-    const activeRowRef = useRef<HTMLDivElement>(null)
     const bulkSelectionButtonRef = useRef<HTMLButtonElement>(null)
     const headerRef = useRef<HTMLDivElement>(null)
 
@@ -109,11 +108,6 @@ const TableContent = ({
 
     useEffectAfterMount(() => {
         setActiveRowIndex(0)
-        scrollToShowActiveElementIfNeeded(
-            activeRowRef.current,
-            rowsContainerRef.current,
-            headerRef.current?.offsetHeight,
-        )
     }, [offset, visibleRows])
 
     useEffect(() => {
@@ -129,19 +123,12 @@ const TableContent = ({
         handleSorting(newSortBy)
     }
 
-    useEffect(() => {
-        // Focus the active row only when activeRowIndex changes. This ensures that focus is not stolen from other elements,
-        // such as the search bar, when it is already focused. For example, when typing in the search bar, the rows may be replaced
-        // with loading shimmers, causing activeRowRef to be null. During this time, activeRowIndex might reset to 0, but focus
-        // will not shift. However, when navigating with arrow keys, activeRowIndex changes, and activeRowRef will point to the
-        // correct row once it is mounted, allowing focus to update appropriately.
-        activeRowRef.current?.focus({ preventScroll: true })
-        scrollToShowActiveElementIfNeeded(
-            activeRowRef.current,
-            rowsContainerRef.current,
-            headerRef.current?.offsetHeight,
-        )
-    }, [activeRowIndex])
+    const focusActiveRow = (node: HTMLDivElement) => {
+        if (node && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName.toUpperCase())) {
+            node.focus({ preventScroll: true })
+            scrollToShowActiveElementIfNeeded(node, rowsContainerRef.current, headerRef.current?.offsetHeight)
+        }
+    }
 
     const onBulkOperationModalClose = () => {
         setBulkActionState(null)
@@ -203,7 +190,7 @@ const TableContent = ({
             return (
                 <div
                     key={row.id}
-                    ref={isRowActive ? activeRowRef : null}
+                    ref={isRowActive ? focusActiveRow : null}
                     onClick={handleChangeActiveRowIndex}
                     className={`dc__grid px-20 dc__min-width-fit-content checkbox__parent-container ${
                         showSeparatorBetweenRows ? 'border__secondary--bottom' : ''

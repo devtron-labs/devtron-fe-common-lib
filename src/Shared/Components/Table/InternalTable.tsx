@@ -31,6 +31,7 @@ const InternalTable = ({
     paginationVariant,
     RowActionsOnHoverComponent,
     pageSizeOptions,
+    clearFilters: userGivenUrlClearFilters,
 }: InternalTableProps) => {
     const {
         sortBy,
@@ -113,7 +114,7 @@ const InternalTable = ({
 
         if (!areFilteredRowsLoading && !filteredRows?.length && !loading) {
             return filtersVariant !== FiltersTypeEnum.NONE && areFiltersApplied ? (
-                <GenericFilterEmptyState handleClearFilters={clearFilters} />
+                <GenericFilterEmptyState handleClearFilters={userGivenUrlClearFilters ?? clearFilters} />
             ) : (
                 <GenericEmptyState {...emptyStateConfig.noRowsConfig} />
             )
