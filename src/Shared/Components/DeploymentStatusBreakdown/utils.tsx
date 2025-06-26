@@ -62,7 +62,7 @@ const getDefaultDeploymentStatusTimeline = (
                 ...commonProps,
                 displayText: 'Push manifest to Git',
             },
-            ...(deploymentAppType === DeploymentAppTypes.GITOPS
+            ...(deploymentAppType === DeploymentAppTypes.ARGO
                 ? {
                       [TIMELINE_STATUS.ARGOCD_SYNC]: {
                           ...commonProps,

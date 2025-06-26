@@ -659,7 +659,7 @@ export interface CommonNodeAttr extends Pick<MandatoryPluginBaseStateType, 'isTr
 
 export enum DeploymentAppTypes {
     HELM = 'helm',
-    GITOPS = 'argo_cd',
+    ARGO = 'argo_cd',
     MANIFEST_DOWNLOAD = 'manifest_download',
     MANIFEST_PUSH = 'manifest_push',
     FLUX = 'flux_cd',

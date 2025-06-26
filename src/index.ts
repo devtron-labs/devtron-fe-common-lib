@@ -172,6 +172,7 @@ export interface customEnv {
      * @default false
      */
     FEATURE_FLUX_DEPLOYMENTS_ENABLE?: boolean
+    FEATURE_LINK_EXTERNAL_FLUX_ENABLE?: boolean
     /**
      * If true, online/offline connectivity banner is enabled
      *  @default true
