@@ -15,9 +15,11 @@ const Divider = () => (
 )
 
 // Only selected element should have tab-index 0 and for tab navigation use keyboard events
-const TreeView = ({ nodes, expandedMap, selectedId, onToggle, onSelect, depth = 0 }: TreeViewProps) => {
+const TreeView = ({ nodes, expandedMap, selectedId, onToggle, onSelect, depth = 0, mode }: TreeViewProps) => {
     const { pathname } = useLocation()
     const isFirstLevel = depth === 0
+
+    const fallbackTabIndex = mode === 'navigation' ? -1 : 0
 
     const getToggleNode = (node: TreeHeading) => () => {
         onToggle(node)
@@ -82,8 +84,9 @@ const TreeView = ({ nodes, expandedMap, selectedId, onToggle, onSelect, depth = 
                                     <div className="flexbox w-100 dc__align-start bg__hover--opaque br-4">
                                         <button
                                             type="button"
-                                            className="tree-view__container--item dc__transparent p-0-imp flexbox dc__align-start flex-grow-1"
+                                            className="tree-view__container--item dc__transparent p-0-imp flexbox dc__align-start flex-grow-1 dc__select-text"
                                             onClick={getToggleNode(node)}
+                                            tabIndex={fallbackTabIndex}
                                         >
                                             {depth > 0 && (
                                                 <span className="dc__grid dc__align-self-stretch dc__content-center pl-8 w-24 dc__no-shrink dc__align-items-center">
@@ -135,6 +138,7 @@ const TreeView = ({ nodes, expandedMap, selectedId, onToggle, onSelect, depth = 
                                                     onSelect={onSelect}
                                                     nodes={[nodeItem]}
                                                     depth={depth + 1}
+                                                    mode={mode}
                                                 />
                                             ))}
                                         </div>
@@ -147,7 +151,7 @@ const TreeView = ({ nodes, expandedMap, selectedId, onToggle, onSelect, depth = 
 
                 const isSelected = selectedId === node.id
                 const baseClass =
-                    'dc__transparent p-0-imp flexbox dc__align-start flex-grow-1 tree-view__container--item'
+                    'dc__transparent p-0-imp flexbox dc__align-start flex-grow-1 tree-view__container--item dc__select-text'
 
                 const itemDivider =
                     depth > 0 ? (
@@ -183,6 +187,7 @@ const TreeView = ({ nodes, expandedMap, selectedId, onToggle, onSelect, depth = 
                                         node.onClick?.(e)
                                         onSelect(node)
                                     }}
+                                    tabIndex={isSelected ? 0 : fallbackTabIndex}
                                 >
                                     {itemDivider}
                                     {content}
@@ -196,6 +201,7 @@ const TreeView = ({ nodes, expandedMap, selectedId, onToggle, onSelect, depth = 
                                         node.onClick?.(e)
                                         onSelect(node)
                                     }}
+                                    tabIndex={isSelected ? 0 : fallbackTabIndex}
                                 >
                                     {itemDivider}
                                     {content}

@@ -75,4 +75,10 @@ export interface TreeViewProps {
      * WARNING: For internal use only.
      */
     depth?: number
+    /**
+     * If navigation mode, the tree view will provide navigation through keyboard actions and make the only selected item focusable.
+     * If form mode, will leave the navigation to browser.
+     * @default 'navigation'
+     */
+    mode: 'navigation' | 'form'
 }
