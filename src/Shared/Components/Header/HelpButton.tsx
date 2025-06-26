@@ -1,14 +1,16 @@
-import { useRef, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import Tippy from '@tippyjs/react'
 import { SliderButton } from '@typeform/embed-react'
 
-import { DOCUMENTATION_HOME_PAGE, URLS } from '@Common/Constants'
+import { DOCUMENTATION_HOME_PAGE, MAX_LOGIN_COUNT, URLS } from '@Common/Constants'
 import { handleAnalyticsEvent } from '@Shared/Analytics'
 import { ComponentSizeType } from '@Shared/constants'
-import { SidePanelTab, useMainContext } from '@Shared/Providers'
+import { AppThemeType, SidePanelTab, useMainContext, useTheme } from '@Shared/Providers'
 import { InstallationType } from '@Shared/types'
 
 import { ActionMenu } from '../ActionMenu'
 import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
+import GettingStartedCard from '../GettingStartedCard/GettingStarted'
 import { Icon } from '../Icon'
 import { HelpButtonActionMenuProps, HelpButtonProps, HelpMenuItems } from './types'
 import { getHelpActionMenuOptions } from './utils'
@@ -36,19 +38,25 @@ const CheckForUpdates = ({
     </div>
 )
 
-export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick }: HelpButtonProps) => {
+export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick, hideGettingStartedCard }: HelpButtonProps) => {
     // STATES
     const [isActionMenuOpen, setIsActionMenuOpen] = useState(false)
+    const [expiryDate, setExpiryDate] = useState(0)
 
     // HOOKS
-    const { handleOpenLicenseInfoDialog, licenseData, setGettingStartedClicked, isEnterprise, setSidePanelConfig } =
-        useMainContext()
+    const {
+        handleOpenLicenseInfoDialog,
+        licenseData,
+        setGettingStartedClicked,
+        isEnterprise,
+        setSidePanelConfig,
+        loginCount,
+        showGettingStartedCard,
+    } = useMainContext()
+    const { appTheme } = useTheme()
 
     // REFS
     const typeFormSliderButtonRef = useRef(null)
-
-    // CONSTANTS
-    const FEEDBACK_FORM_ID = `UheGN3KJ#source=${window.location.hostname}`
 
     // HANDLERS
     const handleOpenAboutDevtron = () => {
@@ -98,6 +106,23 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick }: HelpButt
         }
     }
 
+    const getExpired = (): boolean => {
+        // Render Getting started tippy card if the time gets expired
+        const now = new Date().valueOf()
+        return now > expiryDate
+    }
+
+    // USE-EFFECT
+    useEffect(() => {
+        setExpiryDate(+localStorage.getItem('clickedOkay'))
+    }, [])
+
+    // CONSTANTS
+    const FEEDBACK_FORM_ID = `UheGN3KJ#source=${window.location.hostname}`
+
+    const isGettingStartedVisible =
+        showGettingStartedCard && loginCount >= 0 && loginCount < MAX_LOGIN_COUNT && getExpired()
+
     return (
         <>
             <ActionMenu<HelpMenuItems>
@@ -121,16 +146,28 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick }: HelpButt
                       }
                     : {})}
             >
-                <button
-                    type="button"
-                    data-testid="page-header-help-button"
-                    className="dc__transparent p-6 br-6 dc__hover-n50 flex dc__gap-4 fs-13 lh-20 fw-6 cn-9"
-                    onClick={onClick}
+                <Tippy
+                    placement="bottom"
+                    content={<GettingStartedCard hideGettingStartedCard={hideGettingStartedCard} />}
+                    visible={isGettingStartedVisible}
+                    className={`br-8 ${
+                        appTheme === AppThemeType.light
+                            ? 'tippy-white-container default-white'
+                            : 'tippy-black-container default-black'
+                    } no-content-padding tippy-shadow`}
+                    interactive
                 >
-                    <Icon name="ic-help-outline" color="N900" size={20} />
-                    <span>Help</span>
-                    <Icon name="ic-caret-down-small" color={null} rotateBy={isActionMenuOpen ? 180 : 0} />
-                </button>
+                    <button
+                        type="button"
+                        data-testid="page-header-help-button"
+                        className="dc__transparent p-6 br-6 dc__hover-n50 flex dc__gap-4 fs-13 lh-20 fw-6 cn-9"
+                        onClick={onClick}
+                    >
+                        <Icon name="ic-help-outline" color="N900" size={20} />
+                        <span>Help</span>
+                        <Icon name="ic-caret-down-small" color={null} rotateBy={isActionMenuOpen ? 180 : 0} />
+                    </button>
+                </Tippy>
             </ActionMenu>
             {isEnterprise && (
                 <SliderButton
