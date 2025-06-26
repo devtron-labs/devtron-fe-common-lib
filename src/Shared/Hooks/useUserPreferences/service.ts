@@ -109,7 +109,6 @@ const getUserPreferencePayload = async ({
             const existingResources = userPreferencesResponse?.resources || {}
 
             const updatedResources = {
-                ...existingResources,
                 [resourceKind]: {
                     ...existingResources[resourceKind],
                     [UserPreferenceResourceActions.RECENTLY_VISITED]:
