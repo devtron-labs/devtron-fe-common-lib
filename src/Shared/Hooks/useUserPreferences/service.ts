@@ -18,7 +18,7 @@ import { ROUTES } from '@Common/Constants'
 import { get, getUrlWithSearchParams, patch, showError } from '@Common/index'
 import { THEME_PREFERENCE_MAP } from '@Shared/Providers/ThemeProvider/types'
 
-import { PreferredResourceKinds, USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
+import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
 import {
     BaseRecentlyVisitedEntitiesTypes,
     GetUserPreferencesParsedDTO,
@@ -30,19 +30,7 @@ import {
     UserPreferencesType,
     ViewIsPipelineRBACConfiguredRadioTabs,
 } from './types'
-import { getUserPreferenceResourcesMetadata } from './utils'
-
-export const getParsedResourcesMap = (
-    resources: GetUserPreferencesParsedDTO['resources'],
-): UserPreferencesType['resources'] => {
-    const parsedResourcesMap: UserPreferencesType['resources'] = {}
-
-    PreferredResourceKinds.forEach((resourceKind) => {
-        parsedResourcesMap[resourceKind] = resources?.[resourceKind]
-    })
-
-    return parsedResourcesMap || {}
-}
+import { getParsedResourcesMap, getUserPreferenceResourcesMetadata } from './utils'
 
 /**
  * @returns UserPreferencesType

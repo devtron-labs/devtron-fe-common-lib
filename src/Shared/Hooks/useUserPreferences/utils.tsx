@@ -1,9 +1,12 @@
+import { DEFAULT_RESOURCES_MAP } from './constants'
 import {
     BaseRecentlyVisitedEntitiesTypes,
+    GetUserPreferencesParsedDTO,
     PreferredResourceKindType,
     UserPreferenceFilteredListTypes,
     UserPreferenceResourceActions,
     UserPreferenceResourceType,
+    UserPreferencesType,
 } from './types'
 
 export const getUserPreferenceResourcesMetadata = (
@@ -47,4 +50,16 @@ export const getFilteredUniqueAppList = ({
     ).slice(0, 6) // Limit to 6 items
 
     return uniqueApps
+}
+
+export const getParsedResourcesMap = (
+    resources: GetUserPreferencesParsedDTO['resources'],
+): UserPreferencesType['resources'] => {
+    const parsedResourcesMap: UserPreferencesType['resources'] = {}
+
+    Object.keys(DEFAULT_RESOURCES_MAP).forEach((resourceKind) => {
+        parsedResourcesMap[resourceKind] = resources?.[resourceKind]
+    })
+
+    return parsedResourcesMap || {}
 }

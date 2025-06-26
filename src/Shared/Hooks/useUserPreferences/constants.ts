@@ -20,9 +20,9 @@ import { PreferredResourceKindType } from './types'
 
 export const USER_PREFERENCES_ATTRIBUTE_KEY = 'userPreferences'
 
-export const PreferredResourceKinds: PreferredResourceKindType[] = [
-    ResourceKindType.devtronApplication,
-    ResourceKindType.job,
-    'app-group',
-    ResourceKindType.cluster,
-]
+export const DEFAULT_RESOURCES_MAP: Record<PreferredResourceKindType, null> = {
+    [ResourceKindType.devtronApplication]: null,
+    [ResourceKindType.job]: null,
+    'app-group': null,
+    [ResourceKindType.cluster]: null,
+}
