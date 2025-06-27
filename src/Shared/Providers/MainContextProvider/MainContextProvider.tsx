@@ -18,7 +18,6 @@ import { createContext, useContext } from 'react'
 
 import { MainContext, MainContextProviderProps } from './types'
 
-// TODO: (Arun) - Move to separate folder
 const mainContext = createContext<MainContext>(null)
 
 export const useMainContext = () => {

@@ -16,9 +16,9 @@
 
 import { Dispatch, MutableRefObject, ReactNode, SetStateAction } from 'react'
 
-import { SERVER_MODE } from '../../Common'
-import { ServerInfo } from '../Components/Header/types'
-import { DevtronLicenseInfo, IntelligenceConfig, LicenseInfoDialogType, ToastManager } from '..'
+import { SERVER_MODE } from '../../../Common'
+import { DevtronLicenseInfo, IntelligenceConfig, LicenseInfoDialogType, ToastManager } from '../..'
+import { ServerInfo } from '../../Components/Header/types'
 
 export interface ReloadVersionConfigTypes {
     bgUpdated: boolean
