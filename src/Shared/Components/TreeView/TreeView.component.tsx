@@ -15,7 +15,6 @@ const Divider = () => (
     </span>
 )
 
-// Only selected element should have tab-index 0 and for tab navigation use keyboard events
 const TreeView = ({
     nodes,
     expandedMap,
@@ -113,6 +112,7 @@ const TreeView = ({
             {...(isFirstLevel ? { role: 'tree', onKeyDown: handleKeyDown } : {})}
         >
             {nodes.map((node) => {
+                const isSelected = selectedId === node.id
                 const content = (
                     <span className="flexbox flex-grow-1 px-8 py-6 flexbox dc__gap-8 dc__align-start">
                         {node.startIconConfig && (
@@ -163,7 +163,9 @@ const TreeView = ({
                                 <div className="flexbox w-100 dc__align-start">
                                     {dividerPrefix}
 
-                                    <div className="flexbox w-100 dc__align-start bg__hover--opaque br-4">
+                                    <div
+                                        className={`flexbox w-100 dc__align-start br-4 ${isSelected ? 'bcb-1' : 'bg__hover--opaque'}`}
+                                    >
                                         <button
                                             type="button"
                                             className="tree-view__container--item dc__transparent p-0-imp flexbox dc__align-start flex-grow-1 dc__select-text"
@@ -241,7 +243,6 @@ const TreeView = ({
                     )
                 }
 
-                const isSelected = selectedId === node.id
                 const baseClass =
                     'dc__transparent p-0-imp flexbox dc__align-start flex-grow-1 tree-view__container--item dc__select-text'
 
@@ -262,7 +263,7 @@ const TreeView = ({
                     >
                         {dividerPrefix}
 
-                        <div className="flexbox flex-grow-1 w-100 bg__hover--opaque br-4">
+                        <div className={`flexbox flex-grow-1 w-100 br-4 ${isSelected ? 'bcb-1' : 'bg__hover--opaque'}`}>
                             {node.as === 'link' ? (
                                 <NavLink
                                     to={

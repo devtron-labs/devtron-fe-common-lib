@@ -4,13 +4,25 @@
             grid-template-rows: 24px auto;
         }
 
+        @mixin tree-view-divider {
+            .tree-view__divider {
+                background-color: var(--B500);
+                height: 16px;
+                border-radius: 3px;
+            }
+        }
+
         &--item {
             &:hover {
-                .tree-view__divider {
-                    background-color: var(--B500);
-                    height: 16px;
-                    border-radius: 3px;
-                }
+                @include tree-view-divider;
+            }
+        }
+
+        [aria-selected="true"] {
+            @include tree-view-divider;
+
+            .tree-view__container--title {
+                color: var(--B500);
             }
         }
     }
