@@ -32,11 +32,14 @@ const FilterSelectPicker = ({
     appliedFilterOptions,
     handleApplyFilter,
     options,
+    menuIsOpen = false,
+    onMenuClose,
+    focusOnMount = false,
     ...props
 }: FilterSelectPickerProps) => {
     const selectRef = useRef<SelectPickerProps<string | number, true>['selectRef']['current']>()
 
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [isMenuOpen, setIsMenuOpen] = useState(menuIsOpen)
     const { triggerAutoClickTimestamp, setTriggerAutoClickTimestampToNow, resetTriggerAutoClickTimestamp } =
         useTriggerAutoClickTimestamp()
 
@@ -88,6 +91,11 @@ const FilterSelectPicker = ({
         }
     }
 
+    const handleMenuClose = () => {
+        onMenuClose?.()
+        ;(handleApplyClick as () => void)()
+    }
+
     useEffect(() => {
         if (isMenuOpen) {
             registerShortcut({ keys: APPLY_FILTER_SHORTCUT_KEYS, callback: handleApplyClick as () => void })
@@ -97,6 +105,14 @@ const FilterSelectPicker = ({
             unregisterShortcut(APPLY_FILTER_SHORTCUT_KEYS)
         }
     }, [handleApplyClick, isMenuOpen])
+
+    useEffect(() => {
+        setTimeout(() => {
+            if (menuIsOpen && focusOnMount && selectRef.current) {
+                selectRef.current.focus()
+            }
+        }, 100)
+    }, [])
 
     return (
         <div className="dc__mxw-250">
@@ -108,7 +124,7 @@ const FilterSelectPicker = ({
                 isMulti
                 menuIsOpen={isMenuOpen}
                 onMenuOpen={openMenu}
-                onMenuClose={handleApplyClick as () => void}
+                onMenuClose={handleMenuClose}
                 onChange={handleSelectOnChange}
                 menuListFooterConfig={{
                     type: 'button',
