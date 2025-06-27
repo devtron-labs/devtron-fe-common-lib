@@ -16,15 +16,15 @@
 
 import { Dispatch, MutableRefObject, ReactNode, SetStateAction } from 'react'
 
-import { SERVER_MODE } from '../../Common'
-import { ServerInfo } from '../Components/Header/types'
+import { SERVER_MODE } from '../../../Common'
 import {
     DevtronLicenseInfo,
     EnvironmentDataValuesDTO,
     IntelligenceConfig,
     LicenseInfoDialogType,
     ToastManager,
-} from '..'
+} from '../..'
+import { ServerInfo } from '../../Components/Header/types'
 
 export interface ReloadVersionConfigTypes {
     bgUpdated: boolean

@@ -7,8 +7,8 @@ import { useMainContext } from '@Shared/Providers'
 import { Button, ButtonComponentType, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 
-const AboutDevtronBody = ({ isFELibAvailable }: { isFELibAvailable: boolean }) => {
-    const { currentServerInfo, isEnterprise } = useMainContext()
+const AboutDevtronBody = () => {
+    const { currentServerInfo, isEnterprise, isFELibAvailable } = useMainContext()
 
     const currentVersion = currentServerInfo?.serverInfo?.currentVersion
 

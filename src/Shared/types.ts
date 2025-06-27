@@ -1044,6 +1044,7 @@ export enum CIPipelineNodeType {
     LINKED_CI = 'LINKED-CI',
     JOB_CI = 'JOB-CI',
     LINKED_CD = 'LINKED_CD',
+    CI_CD = 'CI_CD',
 }
 
 export interface ChangeCIPayloadType {

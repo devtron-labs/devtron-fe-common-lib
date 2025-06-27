@@ -38,7 +38,6 @@ import { ReactComponent as ICCheckAll } from '@IconsV2/ic-check-all.svg'
 import { ReactComponent as ICCheckSquare } from '@IconsV2/ic-check-square.svg'
 import { ReactComponent as ICChecks } from '@IconsV2/ic-checks.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
-import { ReactComponent as ICCiWebhook } from '@IconsV2/ic-ci-webhook.svg'
 import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
 import { ReactComponent as ICCleanBrush } from '@IconsV2/ic-clean-brush.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
@@ -59,6 +58,8 @@ import { ReactComponent as ICDelete } from '@IconsV2/ic-delete.svg'
 import { ReactComponent as ICDeleteDots } from '@IconsV2/ic-delete-dots.svg'
 import { ReactComponent as ICDeleteLightning } from '@IconsV2/ic-delete-lightning.svg'
 import { ReactComponent as ICDelhivery } from '@IconsV2/ic-delhivery.svg'
+import { ReactComponent as ICDeployColor } from '@IconsV2/ic-deploy-color.svg'
+import { ReactComponent as ICDeploySync } from '@IconsV2/ic-deploy-sync.svg'
 import { ReactComponent as ICDevtron } from '@IconsV2/ic-devtron.svg'
 import { ReactComponent as ICDevtronAi } from '@IconsV2/ic-devtron-ai.svg'
 import { ReactComponent as ICDevtronApp } from '@IconsV2/ic-devtron-app.svg'
@@ -96,6 +97,7 @@ import { ReactComponent as ICGear } from '@IconsV2/ic-gear.svg'
 import { ReactComponent as ICGift } from '@IconsV2/ic-gift.svg'
 import { ReactComponent as ICGiftGradient } from '@IconsV2/ic-gift-gradient.svg'
 import { ReactComponent as ICGit } from '@IconsV2/ic-git.svg'
+import { ReactComponent as ICGitBranch } from '@IconsV2/ic-git-branch.svg'
 import { ReactComponent as ICGithub } from '@IconsV2/ic-github.svg'
 import { ReactComponent as ICGitlab } from '@IconsV2/ic-gitlab.svg'
 import { ReactComponent as ICGoogle } from '@IconsV2/ic-google.svg'
@@ -128,6 +130,7 @@ import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
 import { ReactComponent as ICLego } from '@IconsV2/ic-lego.svg'
 import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
 import { ReactComponent as ICLightningFill } from '@IconsV2/ic-lightning-fill.svg'
+import { ReactComponent as ICLinkedBuildColor } from '@IconsV2/ic-linked-build-color.svg'
 import { ReactComponent as ICLivspace } from '@IconsV2/ic-livspace.svg'
 import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
 import { ReactComponent as ICLogs } from '@IconsV2/ic-logs.svg'
@@ -206,6 +209,7 @@ import { ReactComponent as ICUserKey } from '@IconsV2/ic-user-key.svg'
 import { ReactComponent as ICUsers } from '@IconsV2/ic-users.svg'
 import { ReactComponent as ICViewVariableToggle } from '@IconsV2/ic-view-variable-toggle.svg'
 import { ReactComponent as ICWarning } from '@IconsV2/ic-warning.svg'
+import { ReactComponent as ICWebhook } from '@IconsV2/ic-webhook.svg'
 import { ReactComponent as ICWifiSlash } from '@IconsV2/ic-wifi-slash.svg'
 import { ReactComponent as ICWorldGlobe } from '@IconsV2/ic-world-globe.svg'
 
@@ -252,7 +256,6 @@ export const iconMap = {
     'ic-check': ICCheck,
     'ic-checks': ICChecks,
     'ic-ci-linked': ICCiLinked,
-    'ic-ci-webhook': ICCiWebhook,
     'ic-circle-loader': ICCircleLoader,
     'ic-clean-brush': ICCleanBrush,
     'ic-clock': ICClock,
@@ -273,6 +276,8 @@ export const iconMap = {
     'ic-delete-lightning': ICDeleteLightning,
     'ic-delete': ICDelete,
     'ic-delhivery': ICDelhivery,
+    'ic-deploy-color': ICDeployColor,
+    'ic-deploy-sync': ICDeploySync,
     'ic-devtron-ai': ICDevtronAi,
     'ic-devtron-app': ICDevtronApp,
     'ic-devtron-header-logo': ICDevtronHeaderLogo,
@@ -309,6 +314,7 @@ export const iconMap = {
     'ic-gear': ICGear,
     'ic-gift-gradient': ICGiftGradient,
     'ic-gift': ICGift,
+    'ic-git-branch': ICGitBranch,
     'ic-git': ICGit,
     'ic-github': ICGithub,
     'ic-gitlab': ICGitlab,
@@ -342,6 +348,7 @@ export const iconMap = {
     'ic-lego': ICLego,
     'ic-lightning-fill': ICLightningFill,
     'ic-lightning': ICLightning,
+    'ic-linked-build-color': ICLinkedBuildColor,
     'ic-livspace': ICLivspace,
     'ic-logout': ICLogout,
     'ic-logs': ICLogs,
@@ -420,6 +427,7 @@ export const iconMap = {
     'ic-users': ICUsers,
     'ic-view-variable-toggle': ICViewVariableToggle,
     'ic-warning': ICWarning,
+    'ic-webhook': ICWebhook,
     'ic-wifi-slash': ICWifiSlash,
     'ic-world-globe': ICWorldGlobe,
 }
