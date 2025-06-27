@@ -34,7 +34,6 @@ const FilterSelectPicker = ({
     options,
     menuIsOpen = false,
     onMenuClose,
-    focusOnMount = false,
     ...props
 }: FilterSelectPickerProps) => {
     const selectRef = useRef<SelectPickerProps<string | number, true>['selectRef']['current']>()
@@ -67,6 +66,7 @@ const FilterSelectPicker = ({
     const closeMenu = () => {
         resetTriggerAutoClickTimestamp()
         setIsMenuOpen(false)
+        onMenuClose?.()
     }
 
     const handleSelectOnChange: SelectPickerProps<number | string, true>['onChange'] = (selectedOptionsToUpdate) => {
@@ -105,14 +105,6 @@ const FilterSelectPicker = ({
             unregisterShortcut(APPLY_FILTER_SHORTCUT_KEYS)
         }
     }, [handleApplyClick, isMenuOpen])
-
-    useEffect(() => {
-        setTimeout(() => {
-            if (menuIsOpen && focusOnMount && selectRef.current) {
-                selectRef.current.focus()
-            }
-        }, 100)
-    }, [])
 
     return (
         <div className="dc__mxw-250">

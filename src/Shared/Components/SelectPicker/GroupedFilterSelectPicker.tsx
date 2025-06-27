@@ -62,13 +62,15 @@ export const GroupedFilterSelectPicker = <T extends string | number>({
     }
 
     return selectedActionMenuItem ? (
-        <FilterSelectPicker
-            {...filterSelectPickerPropsMap[selectedActionMenuItem]}
-            focusOnMount
-            menuIsOpen
-            onMenuClose={handleMenuClose}
-            onKeyDown={handleKeyDown}
-        />
+        <div className="w-200">
+            <FilterSelectPicker
+                {...filterSelectPickerPropsMap[selectedActionMenuItem]}
+                menuIsOpen
+                onMenuClose={handleMenuClose}
+                onKeyDown={handleKeyDown}
+                autoFocus
+            />
+        </div>
     ) : (
         <ActionMenu {...restProps} id={id} isSearchable onClick={handleMenuItemClick}>
             <button

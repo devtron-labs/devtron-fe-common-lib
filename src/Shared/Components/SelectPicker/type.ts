@@ -334,9 +334,10 @@ export interface FilterSelectPickerProps
             | 'reloadOptionList'
             | 'getOptionValue'
             | 'isOptionDisabled'
-        >,
-        Partial<Pick<SelectPickerProps<number | string, true>, 'onMenuClose' | 'menuIsOpen' | 'onKeyDown'>> {
-    focusOnMount?: boolean
+            | 'onMenuClose'
+            | 'menuIsOpen'
+            | 'onKeyDown'
+        > {
     appliedFilterOptions: SelectPickerOptionType[]
     handleApplyFilter: (filtersToApply: SelectPickerOptionType<number | string>[]) => void
 }
@@ -361,6 +362,6 @@ export interface GroupedFilterSelectPickerProps<T extends string | number = stri
     isFilterApplied?: boolean
     filterSelectPickerPropsMap: Record<
         T,
-        Omit<FilterSelectPickerProps, 'focusOnMount' | 'menuIsOpen' | 'onMenuClose' | 'onKeyDown'>
+        Omit<FilterSelectPickerProps, 'autoFocus' | 'menuIsOpen' | 'onMenuClose' | 'onKeyDown'>
     >
 }
