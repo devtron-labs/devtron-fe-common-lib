@@ -65,20 +65,39 @@ export type TreeItem = BaseNode & {
           }
     )
 
-export interface TreeViewProps {
+export type TreeViewProps = {
     nodes: TreeNode[]
     expandedMap: Record<string, boolean>
     selectedId?: string
     onToggle: (item: TreeHeading) => void
     onSelect: (item: TreeItem) => void
     /**
-     * WARNING: For internal use only.
-     */
-    depth?: number
-    /**
      * If navigation mode, the tree view will provide navigation through keyboard actions and make the only selected item focusable.
      * If form mode, will leave the navigation to browser.
      * @default 'navigation'
      */
     mode: 'navigation' | 'form'
-}
+} & (
+    | {
+          /**
+           * WARNING: For internal use only.
+           */
+          depth: number
+          /**
+           * WARNING: For internal use only.
+           * Would pass this to item button/ref and store it in out ref map through this function.
+           */
+          getUpdateItemsRefMap: (id: string) => (element: HTMLButtonElement | HTMLAnchorElement) => void
+
+          /**
+           * WARNING: For internal use only.
+           * List of all nodes visible in tree view for keyboard navigation.
+           */
+          flatNodeList: string[]
+      }
+    | {
+          depth?: never
+          getUpdateItemsRefMap?: never
+          flatNodeList?: never
+      }
+)

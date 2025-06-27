@@ -1,3 +1,4 @@
+import { useMemo, useRef } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 
 import { Tooltip } from '@Common/Tooltip'
@@ -15,8 +16,21 @@ const Divider = () => (
 )
 
 // Only selected element should have tab-index 0 and for tab navigation use keyboard events
-const TreeView = ({ nodes, expandedMap, selectedId, onToggle, onSelect, depth = 0, mode }: TreeViewProps) => {
+const TreeView = ({
+    nodes,
+    expandedMap,
+    selectedId,
+    onToggle,
+    onSelect,
+    depth = 0,
+    mode,
+    flatNodeList: flatNodeListProp,
+    getUpdateItemsRefMap: getUpdateItemsRefMapProp,
+}: TreeViewProps) => {
     const { pathname } = useLocation()
+    // Using this at root level
+    const rootItemRefs = useRef<Record<string, HTMLButtonElement | HTMLAnchorElement | null>>({})
+
     const isFirstLevel = depth === 0
 
     const fallbackTabIndex = mode === 'navigation' ? -1 : 0
@@ -25,10 +39,78 @@ const TreeView = ({ nodes, expandedMap, selectedId, onToggle, onSelect, depth = 
         onToggle(node)
     }
 
+    const getUpdateItemsRefMap = (id: string) => (el: HTMLButtonElement | HTMLAnchorElement) => {
+        if (!isFirstLevel) {
+            throw new Error('getUpdateItemsRefMap should only be used at the first level of the tree view.')
+        }
+        rootItemRefs.current[id] = el
+    }
+
+    // will traverse all the nodes that are expanded and visible in the tree view
+    // and return a flat list of node ids for keyboard navigation
+    const traverseNodes = (nodeList: typeof nodes): string[] =>
+        nodeList.reduce((acc: string[], node) => {
+            acc.push(node.id)
+            if (node.type === 'heading' && expandedMap[node.id] && node.items?.length) {
+                // If the node is a heading and expanded, traverse its items
+                acc.push(...traverseNodes(node.items))
+            }
+            return acc
+        }, [])
+
+    const flatNodeList = useMemo(() => {
+        if (flatNodeListProp) {
+            return flatNodeListProp
+        }
+
+        if (flatNodeListProp) {
+            // If flatNodeList is provided, return it directly
+            return flatNodeListProp
+        }
+
+        return traverseNodes(nodes)
+    }, [nodes, expandedMap])
+
+    const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
+        if (mode !== 'navigation' || !isFirstLevel) {
+            return
+        }
+
+        const { key } = e
+
+        if (!['ArrowUp', 'ArrowDown'].includes(key)) {
+            return
+        }
+
+        e.preventDefault()
+
+        const target = e.target as HTMLButtonElement | HTMLAnchorElement
+        const nodeId = target.getAttribute('data-node-id')
+        if (!nodeId) {
+            return
+        }
+
+        // Find the index of the current node in the flatNodeList
+        const currentIndex = flatNodeList.indexOf(nodeId)
+        if (currentIndex === -1) {
+            return
+        }
+
+        if (key === 'ArrowDown' && currentIndex < flatNodeList.length - 1) {
+            rootItemRefs.current[flatNodeList[currentIndex + 1]]?.focus()
+            return
+        }
+
+        if (key === 'ArrowUp' && currentIndex > 0) {
+            rootItemRefs.current[flatNodeList[currentIndex - 1]]?.focus()
+        }
+    }
+
     return (
         <div
             className={`tree-view__container bg__primary ${isFirstLevel ? 'dc__overflow-auto w-100 h-100 flex-grow-1' : ''}`}
-            {...(isFirstLevel ? { role: 'tree' } : {})}
+            // Setting key down event here instead of button and navlink to minimize the number of event listeners
+            {...(isFirstLevel ? { role: 'tree', onKeyDown: handleKeyDown } : {})}
         >
             {nodes.map((node) => {
                 const content = (
@@ -87,6 +169,12 @@ const TreeView = ({ nodes, expandedMap, selectedId, onToggle, onSelect, depth = 
                                             className="tree-view__container--item dc__transparent p-0-imp flexbox dc__align-start flex-grow-1 dc__select-text"
                                             onClick={getToggleNode(node)}
                                             tabIndex={fallbackTabIndex}
+                                            data-node-id={node.id}
+                                            ref={
+                                                getUpdateItemsRefMapProp
+                                                    ? getUpdateItemsRefMapProp(node.id)
+                                                    : getUpdateItemsRefMap(node.id)
+                                            }
                                         >
                                             {depth > 0 && (
                                                 <span className="dc__grid dc__align-self-stretch dc__content-center pl-8 w-24 dc__no-shrink dc__align-items-center">
@@ -139,6 +227,10 @@ const TreeView = ({ nodes, expandedMap, selectedId, onToggle, onSelect, depth = 
                                                     nodes={[nodeItem]}
                                                     depth={depth + 1}
                                                     mode={mode}
+                                                    getUpdateItemsRefMap={
+                                                        getUpdateItemsRefMapProp || getUpdateItemsRefMap
+                                                    }
+                                                    flatNodeList={flatNodeList}
                                                 />
                                             ))}
                                         </div>
@@ -188,6 +280,12 @@ const TreeView = ({ nodes, expandedMap, selectedId, onToggle, onSelect, depth = 
                                         onSelect(node)
                                     }}
                                     tabIndex={isSelected ? 0 : fallbackTabIndex}
+                                    data-node-id={node.id}
+                                    ref={
+                                        getUpdateItemsRefMapProp
+                                            ? getUpdateItemsRefMapProp(node.id)
+                                            : getUpdateItemsRefMap(node.id)
+                                    }
                                 >
                                     {itemDivider}
                                     {content}
@@ -202,6 +300,12 @@ const TreeView = ({ nodes, expandedMap, selectedId, onToggle, onSelect, depth = 
                                         onSelect(node)
                                     }}
                                     tabIndex={isSelected ? 0 : fallbackTabIndex}
+                                    data-node-id={node.id}
+                                    ref={
+                                        getUpdateItemsRefMapProp
+                                            ? getUpdateItemsRefMapProp(node.id)
+                                            : getUpdateItemsRefMap(node.id)
+                                    }
                                 >
                                     {itemDivider}
                                     {content}
