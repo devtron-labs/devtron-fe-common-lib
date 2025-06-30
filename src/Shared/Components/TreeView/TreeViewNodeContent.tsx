@@ -5,7 +5,7 @@ import { Icon } from '../Icon'
 import { TreeViewNodeContentProps } from './types'
 
 const wrapWithTooltip =
-    (customTooltipConfig: TooltipProps, isTextTruncated: boolean, title: string, subTitle: string) =>
+    (customTooltipConfig: TooltipProps, isTextTruncated: boolean, title: string, subtitle: string) =>
     (children: TooltipProps['children']) => {
         if (customTooltipConfig) {
             return <Tooltip {...customTooltipConfig}>{children}</Tooltip>
@@ -20,12 +20,12 @@ const wrapWithTooltip =
                     content={
                         <div className="flexbox-col dc__gap-2 dc__overflow-auto">
                             <h6
-                                className={`m-0 fs-12 ${subTitle ? 'fw-6' : 'fw-4'} lh-18 dc__word-break dc__align-left`}
+                                className={`m-0 fs-12 ${subtitle ? 'fw-6' : 'fw-4'} lh-18 dc__word-break dc__align-left`}
                             >
                                 {title}
                             </h6>
-                            {subTitle && (
-                                <p className="m-0 fs-12 fw-4 lh-18 dc__word-break dc__align-left">{subTitle}</p>
+                            {subtitle && (
+                                <p className="m-0 fs-12 fw-4 lh-18 dc__word-break dc__align-left">{subtitle}</p>
                             )}
                         </div>
                     }

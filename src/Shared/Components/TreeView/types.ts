@@ -36,7 +36,7 @@ export interface TreeHeading extends BaseNode {
     items?: TreeNode[]
     /**
      * Text to display when there are no items in the list.
-     * @default 'No items found.'
+     * @default DEFAULT_NO_ITEMS_TEXT
      */
     noItemsText?: string
 }

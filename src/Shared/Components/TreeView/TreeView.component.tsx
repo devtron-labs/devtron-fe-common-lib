@@ -1,9 +1,10 @@
-import { useMemo, useRef, useState } from 'react'
+import { useMemo, useRef } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { Icon } from '../Icon'
 import { TrailingItem } from '../TrailingItem'
+import { DEFAULT_NO_ITEMS_TEXT } from './constants'
 import TreeViewNodeContent from './TreeViewNodeContent'
 import { TreeHeading, TreeViewProps } from './types'
 
@@ -29,19 +30,13 @@ const TreeView = ({
     const { pathname } = useLocation()
     // Using this at root level
     const rootItemRefs = useRef<Record<string, HTMLButtonElement | HTMLAnchorElement | null>>({})
-    const [transitionNodeId, setTransitionNodeId] = useState<string | null>(null)
 
     const isFirstLevel = depth === 0
 
     const fallbackTabIndex = mode === 'navigation' ? -1 : 0
 
     const getToggleNode = (node: TreeHeading) => () => {
-        setTransitionNodeId(node.id)
         onToggle(node)
-    }
-
-    const onTransitionEnd = () => {
-        setTransitionNodeId(null)
     }
 
     const getUpdateItemsRefMap = (id: string) => (el: HTMLButtonElement | HTMLAnchorElement) => {
@@ -68,13 +63,8 @@ const TreeView = ({
             return flatNodeListProp
         }
 
-        if (flatNodeListProp) {
-            // If flatNodeList is provided, return it directly
-            return flatNodeListProp
-        }
-
         return traverseNodes(nodes)
-    }, [nodes, expandedMap])
+    }, [nodes, expandedMap, flatNodeListProp])
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {
         if (mode !== 'navigation' || !isFirstLevel) {
@@ -204,24 +194,23 @@ const TreeView = ({
                                 </div>
                             </div>
 
-                            <AnimatePresence>
+                            <AnimatePresence initial={false}>
                                 {isExpanded && (
                                     <motion.div
                                         role="group"
                                         className="flexbox"
                                         initial={{ height: 0, opacity: 0 }}
-                                        animate={node.id === transitionNodeId ? { height: 'auto', opacity: 1 } : false}
+                                        animate={{ height: 'auto', opacity: 1 }}
                                         exit={{ height: 0, opacity: 0 }}
                                         transition={{ duration: 0.2, easings: ['easeOut'] }}
                                         style={{ overflow: 'hidden' }}
-                                        onTransitionEnd={onTransitionEnd}
                                     >
                                         {!node.items?.length ? (
                                             <>
                                                 {dividerPrefix}
                                                 <Divider />
                                                 <span className="px-8 py-6">
-                                                    {node.noItemsText || 'No items found.'}
+                                                    {node.noItemsText || DEFAULT_NO_ITEMS_TEXT}
                                                 </span>
                                             </>
                                         ) : (
