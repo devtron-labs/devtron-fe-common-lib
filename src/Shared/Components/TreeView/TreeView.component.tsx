@@ -1,4 +1,4 @@
-import { useMemo, useRef } from 'react'
+import { MouseEvent, useMemo, useRef } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 
@@ -6,7 +6,7 @@ import { Icon } from '../Icon'
 import { TrailingItem } from '../TrailingItem'
 import { DEFAULT_NO_ITEMS_TEXT } from './constants'
 import TreeViewNodeContent from './TreeViewNodeContent'
-import { TreeHeading, TreeViewProps } from './types'
+import { TreeHeading, TreeItem, TreeViewProps } from './types'
 
 import './TreeView.scss'
 
@@ -99,6 +99,28 @@ const TreeView = ({
         if (key === 'ArrowUp' && currentIndex > 0) {
             rootItemRefs.current[flatNodeList[currentIndex - 1]]?.focus()
         }
+    }
+
+    const getNodeItemButtonClick = (node: TreeItem) => (e: MouseEvent<HTMLButtonElement>) => {
+        if (node.as !== 'button') {
+            return
+        }
+
+        node.onClick?.(e)
+        onSelect?.(node)
+    }
+
+    const getNodeItemNavLinkClick = (node: TreeItem) => (e: MouseEvent<HTMLAnchorElement>) => {
+        if (node.as !== 'link') {
+            return
+        }
+
+        // Prevent navigation to the same page
+        if (node.href === pathname) {
+            e.preventDefault()
+        }
+        node.onClick?.(e)
+        onSelect?.(node)
     }
 
     return (
@@ -269,14 +291,7 @@ const TreeView = ({
                                             : node.href
                                     }
                                     className={baseClass}
-                                    onClick={(e) => {
-                                        // Prevent navigation to the same page
-                                        if (node.href === pathname) {
-                                            e.preventDefault()
-                                        }
-                                        node.onClick?.(e)
-                                        onSelect?.(node)
-                                    }}
+                                    onClick={getNodeItemNavLinkClick(node)}
                                     tabIndex={isSelected ? 0 : fallbackTabIndex}
                                     data-node-id={node.id}
                                     ref={
@@ -293,10 +308,7 @@ const TreeView = ({
                                     type="button"
                                     disabled={node.isDisabled}
                                     className={baseClass}
-                                    onClick={(e) => {
-                                        node.onClick?.(e)
-                                        onSelect?.(node)
-                                    }}
+                                    onClick={getNodeItemButtonClick(node)}
                                     tabIndex={isSelected ? 0 : fallbackTabIndex}
                                     data-node-id={node.id}
                                     ref={
