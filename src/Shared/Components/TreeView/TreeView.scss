@@ -25,5 +25,16 @@
                 color: var(--B500);
             }
         }
+        
+        &--title-wrapper:hover {
+            .title-with-tooltip {
+                text-decoration-line: underline;
+                text-decoration-style: dotted;
+                text-decoration-color: var(--N300);
+                text-decoration-thickness: 12%;
+                text-underline-offset: 20%;
+                text-decoration-skip-ink: auto;
+            }
+        }
     }
 }

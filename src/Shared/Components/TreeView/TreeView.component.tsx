@@ -1,10 +1,9 @@
 import { useMemo, useRef } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 
-import { Tooltip } from '@Common/Tooltip'
-
 import { Icon } from '../Icon'
 import { TrailingItem } from '../TrailingItem'
+import TreeViewNodeContent from './TreeViewNodeContent'
 import { TreeHeading, TreeViewProps } from './types'
 
 import './TreeView.scss'
@@ -113,37 +112,22 @@ const TreeView = ({
         >
             {nodes.map((node) => {
                 const isSelected = selectedId === node.id
-                const content = (
-                    <span className="flexbox flex-grow-1 px-8 py-6 flexbox dc__gap-8 dc__align-start">
-                        {node.startIconConfig && (
-                            <Tooltip
-                                alwaysShowTippyOnHover={!!node.startIconConfig.tooltipContent}
-                                content={node.startIconConfig.tooltipContent}
-                            >
-                                <Icon name={node.startIconConfig.name} color={node.startIconConfig.color} size={16} />
-                            </Tooltip>
-                        )}
-
-                        {/* TODO: Tooltip */}
-                        <span className="flexbox-col">
-                            <span
-                                className={`tree-view__container--title dc__truncate dc__align-left cn-9 fs-13 fw-6 lh-1-5 ${node.strikeThrough ? 'dc__strike-through' : ''}`}
-                            >
-                                {node.title}
-                            </span>
-                            {node.subtitle && (
-                                <span className="dc__align-left dc__truncate cn-7 fs-12 fw-4 lh-1-5">
-                                    {node.subtitle}
-                                </span>
-                            )}
-                        </span>
-                    </span>
-                )
 
                 const dividerPrefix =
                     depth > 1 &&
                     // eslint-disable-next-line react/no-array-index-key
                     Array.from({ length: depth - 1 }).map((_, index) => <Divider key={`divider-${index}`} />)
+
+                const content = (
+                    <TreeViewNodeContent
+                        startIconConfig={node.startIconConfig}
+                        title={node.title}
+                        subtitle={node.subtitle}
+                        type={node.type}
+                        customTooltipConfig={node.customTooltipConfig}
+                        strikeThrough={node.strikeThrough}
+                    />
+                )
 
                 if (node.type === 'heading') {
                     const isExpanded = expandedMap[node.id] ?? false
@@ -204,7 +188,11 @@ const TreeView = ({
                                             {content}
                                         </button>
 
-                                        {node.trailingItem && <TrailingItem {...node.trailingItem} />}
+                                        {node.trailingItem && (
+                                            <div className="flex py-6 pr-8 dc__no-shrink">
+                                                <TrailingItem {...node.trailingItem} />
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
                             </div>
@@ -278,7 +266,7 @@ const TreeView = ({
                                             e.preventDefault()
                                         }
                                         node.onClick?.(e)
-                                        onSelect(node)
+                                        onSelect?.(node)
                                     }}
                                     tabIndex={isSelected ? 0 : fallbackTabIndex}
                                     data-node-id={node.id}
@@ -298,7 +286,7 @@ const TreeView = ({
                                     className={baseClass}
                                     onClick={(e) => {
                                         node.onClick?.(e)
-                                        onSelect(node)
+                                        onSelect?.(node)
                                     }}
                                     tabIndex={isSelected ? 0 : fallbackTabIndex}
                                     data-node-id={node.id}
@@ -313,7 +301,11 @@ const TreeView = ({
                                 </button>
                             )}
 
-                            {node.trailingItem && <TrailingItem {...node.trailingItem} />}
+                            {node.trailingItem && (
+                                <div className="flex py-6 pr-8 dc__no-shrink">
+                                    <TrailingItem {...node.trailingItem} />
+                                </div>
+                            )}
                         </div>
                     </div>
                 )

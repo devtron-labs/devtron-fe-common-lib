@@ -1,3 +1,6 @@
+import { TooltipProps } from '@Common/Tooltip'
+import { Never } from '@Shared/types'
+
 import { IconsProps } from '../Icon'
 import { TrailingItemProps } from '../TrailingItem'
 
@@ -14,13 +17,17 @@ interface BaseNode {
      * The subtitle of the list item.
      */
     subtitle?: string
+    customTooltipConfig?: TooltipProps
     /**
      * If true, the title will be rendered with line-through.
      */
     strikeThrough?: boolean
-    startIconConfig?: Pick<IconsProps, 'name' | 'color'> & {
+    startIconConfig?: {
         tooltipContent?: string
-    }
+    } & (
+        | (Pick<IconsProps, 'name' | 'color'> & { customIcon?: never })
+        | (Never<Pick<IconsProps, 'name' | 'color'>> & { customIcon?: JSX.Element })
+    )
     trailingItem?: TrailingItemProps
 }
 
@@ -68,9 +75,9 @@ export type TreeItem = BaseNode & {
 export type TreeViewProps = {
     nodes: TreeNode[]
     expandedMap: Record<string, boolean>
-    selectedId?: string
     onToggle: (item: TreeHeading) => void
-    onSelect: (item: TreeItem) => void
+    selectedId?: string
+    onSelect?: (item: TreeItem) => void
     /**
      * If navigation mode, the tree view will provide navigation through keyboard actions and make the only selected item focusable.
      * If form mode, will leave the navigation to browser.
@@ -101,3 +108,8 @@ export type TreeViewProps = {
           flatNodeList?: never
       }
 )
+
+export interface TreeViewNodeContentProps
+    extends Pick<BaseNode, 'startIconConfig' | 'title' | 'subtitle' | 'customTooltipConfig' | 'strikeThrough'> {
+    type: 'heading' | 'item'
+}
