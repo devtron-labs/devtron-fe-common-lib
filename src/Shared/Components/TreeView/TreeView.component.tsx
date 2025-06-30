@@ -1,5 +1,6 @@
-import { useMemo, useRef } from 'react'
+import { useMemo, useRef, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
+import { AnimatePresence, motion } from 'framer-motion'
 
 import { Icon } from '../Icon'
 import { TrailingItem } from '../TrailingItem'
@@ -28,13 +29,19 @@ const TreeView = ({
     const { pathname } = useLocation()
     // Using this at root level
     const rootItemRefs = useRef<Record<string, HTMLButtonElement | HTMLAnchorElement | null>>({})
+    const [transitionNodeId, setTransitionNodeId] = useState<string | null>(null)
 
     const isFirstLevel = depth === 0
 
     const fallbackTabIndex = mode === 'navigation' ? -1 : 0
 
     const getToggleNode = (node: TreeHeading) => () => {
+        setTransitionNodeId(node.id)
         onToggle(node)
+    }
+
+    const onTransitionEnd = () => {
+        setTransitionNodeId(null)
     }
 
     const getUpdateItemsRefMap = (id: string) => (el: HTMLButtonElement | HTMLAnchorElement) => {
@@ -197,36 +204,49 @@ const TreeView = ({
                                 </div>
                             </div>
 
-                            {isExpanded && (
-                                <div role="group" className="flexbox">
-                                    {!node.items?.length ? (
-                                        <>
-                                            {dividerPrefix}
-                                            <Divider />
-                                            <span className="px-8 py-6">{node.noItemsText || 'No items found.'}</span>
-                                        </>
-                                    ) : (
-                                        <div className="flexbox-col flex-grow-1">
-                                            {node.items.map((nodeItem) => (
-                                                <TreeView
-                                                    key={nodeItem.id}
-                                                    expandedMap={expandedMap}
-                                                    selectedId={selectedId}
-                                                    onToggle={onToggle}
-                                                    onSelect={onSelect}
-                                                    nodes={[nodeItem]}
-                                                    depth={depth + 1}
-                                                    mode={mode}
-                                                    getUpdateItemsRefMap={
-                                                        getUpdateItemsRefMapProp || getUpdateItemsRefMap
-                                                    }
-                                                    flatNodeList={flatNodeList}
-                                                />
-                                            ))}
-                                        </div>
-                                    )}
-                                </div>
-                            )}
+                            <AnimatePresence>
+                                {isExpanded && (
+                                    <motion.div
+                                        role="group"
+                                        className="flexbox"
+                                        initial={{ height: 0, opacity: 0 }}
+                                        animate={node.id === transitionNodeId ? { height: 'auto', opacity: 1 } : false}
+                                        exit={{ height: 0, opacity: 0 }}
+                                        transition={{ duration: 0.2, easings: ['easeOut'] }}
+                                        style={{ overflow: 'hidden' }}
+                                        onTransitionEnd={onTransitionEnd}
+                                    >
+                                        {!node.items?.length ? (
+                                            <>
+                                                {dividerPrefix}
+                                                <Divider />
+                                                <span className="px-8 py-6">
+                                                    {node.noItemsText || 'No items found.'}
+                                                </span>
+                                            </>
+                                        ) : (
+                                            <div className="flexbox-col flex-grow-1">
+                                                {node.items.map((nodeItem) => (
+                                                    <TreeView
+                                                        key={nodeItem.id}
+                                                        expandedMap={expandedMap}
+                                                        selectedId={selectedId}
+                                                        onToggle={onToggle}
+                                                        onSelect={onSelect}
+                                                        nodes={[nodeItem]}
+                                                        depth={depth + 1}
+                                                        mode={mode}
+                                                        getUpdateItemsRefMap={
+                                                            getUpdateItemsRefMapProp || getUpdateItemsRefMap
+                                                        }
+                                                        flatNodeList={flatNodeList}
+                                                    />
+                                                ))}
+                                            </div>
+                                        )}
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
                     )
                 }
