@@ -4,7 +4,6 @@ import { useRegisterShortcut } from '@Common/Hooks'
 
 import { ActionMenu, ActionMenuItemType, ActionMenuProps } from '../ActionMenu'
 import { Icon } from '../Icon'
-import { ShortcutKeyBadge } from '../Widgets'
 import FilterSelectPicker from './FilterSelectPicker'
 import { GroupedFilterSelectPickerProps } from './type'
 
@@ -81,7 +80,7 @@ export const GroupedFilterSelectPicker = <T extends string | number>({
             >
                 <Icon name={isFilterApplied ? 'ic-filter-applied' : 'ic-filter'} color="N700" />
                 <span className="fs-12 lh-20 fw-6 cn-9">Filter</span>
-                <ShortcutKeyBadge shortcutKey="F" />
+                <kbd className="icon-dim-20 flex bg__primary border__primary br-2 shadow__key fs-12 lh-20 cn-7">F</kbd>
             </button>
         </ActionMenu>
     )
