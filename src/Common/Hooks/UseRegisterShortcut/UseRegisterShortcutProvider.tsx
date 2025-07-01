@@ -182,7 +182,7 @@ const UseRegisterShortcutProvider = ({
                 clearTimeout(keyDownTimeoutRef.current)
             }
         }
-    }, [handleKeyupEvent, handleKeydownEvent, handleBlur])
+    }, [handleKeyupEvent, handleKeydownEvent, handleBlur, shouldHookOntoWindow])
 
     const providerValue: UseRegisterShortcutContextType = useMemo(
         () => ({
@@ -194,7 +194,16 @@ const UseRegisterShortcutProvider = ({
                 ? { targetProps: { onKeyDown: handleKeydownEvent, onKeyUp: handleKeyupEvent, onBlur: handleBlur } }
                 : {}),
         }),
-        [registerShortcut, unregisterShortcut, setDisableShortcuts, triggerShortcut],
+        [
+            registerShortcut,
+            unregisterShortcut,
+            setDisableShortcuts,
+            triggerShortcut,
+            shouldHookOntoWindow,
+            handleKeydownEvent,
+            handleKeyupEvent,
+            handleBlur,
+        ],
     )
 
     return <UseRegisterShortcutContext.Provider value={providerValue}>{children}</UseRegisterShortcutContext.Provider>
