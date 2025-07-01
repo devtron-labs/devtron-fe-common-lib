@@ -233,7 +233,7 @@ export const getHistoryItemStatusIconFromWorkflowStages = (
 }
 
 export const getWorkerPodBaseUrl = (clusterId: number = DEFAULT_CLUSTER_ID, podNamespace: string = DEFAULT_NAMESPACE) =>
-    `/resource-browser/${clusterId}/${podNamespace}/pod/k8sEmptyGroup`
+    `/resource-browser/${clusterId}/${podNamespace}/pod/k8sEmptyGroup/v1`
 
 export const getWorkflowNodeStatusTitle = (status: string) => {
     if (!status) {

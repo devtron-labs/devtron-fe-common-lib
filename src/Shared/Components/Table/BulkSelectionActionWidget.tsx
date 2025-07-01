@@ -2,11 +2,10 @@
  * Copyright (c) 2024. Devtron Inc.
  */
 
-import { MouseEvent, useEffect } from 'react'
+import { MouseEvent } from 'react'
 
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { DraggableButton, DraggablePositionVariant, DraggableWrapper } from '@Common/DraggableWrapper'
-import { useRegisterShortcut } from '@Common/Hooks'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonComponentType, ButtonStyleType, ButtonVariantType } from '../Button'
@@ -21,16 +20,6 @@ const BulkSelectionActionWidget = ({
     bulkActionsData,
     setBulkActionState,
 }: BulkSelectionActionWidgetProps) => {
-    const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
-
-    useEffect(() => {
-        registerShortcut({ keys: ['Escape'], callback: handleClearBulkSelection })
-
-        return () => {
-            unregisterShortcut(['Escape'])
-        }
-    }, [])
-
     const onActionClick = (event: MouseEvent<HTMLButtonElement>) => {
         const {
             dataset: { key },

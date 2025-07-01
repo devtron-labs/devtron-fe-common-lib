@@ -23,7 +23,7 @@ import { useBulkSelection } from './BulkSelectionProvider'
 import { BULK_DROPDOWN_TEST_ID, BulkSelectionOptionsLabels } from './constants'
 import { BulkSelectionEvents, BulkSelectionProps } from './types'
 
-const BulkSelection = forwardRef<HTMLButtonElement, BulkSelectionProps>(
+const BulkSelection = forwardRef<HTMLLabelElement, BulkSelectionProps>(
     (
         { showPagination, disabled = false, showChevronDownIcon = true, selectAllIfNotPaginated = false },
         forwardedRef,
@@ -84,27 +84,19 @@ const BulkSelection = forwardRef<HTMLButtonElement, BulkSelectionProps>(
                     },
                 ]}
             >
-                <div className="dc__position-rel flexbox">
-                    <div className="flexbox dc__gap-4 dc__align-items-center">
-                        <Checkbox
-                            isChecked={isChecked}
-                            onChange={noop}
-                            rootClassName="icon-dim-20 m-0"
-                            value={checkboxValue}
-                            disabled={disabled}
-                            // Ideally should be disabled but was giving issue with cursor
-                        />
-
-                        {showChevronDownIcon && <ICChevronDown className="icon-dim-20 fcn-6 dc__no-shrink" />}
-                    </div>
-
-                    <button
+                <div className="flexbox dc__gap-4 dc__align-items-center">
+                    <Checkbox
                         ref={forwardedRef}
-                        type="button"
-                        className="dc__position-abs dc__left-0 dc__top-0 h-100 w-100 dc__zi-1 p-0 dc__no-border dc__outline-none dc__transparent--unstyled"
-                        aria-label="Bulk selection dropdown"
-                        onClick={selectAllIfNotPaginated && !showPagination ? onSinglePageSelectAll : noop}
+                        isChecked={isChecked}
+                        onChange={noop}
+                        rootClassName="icon-dim-20 m-0"
+                        value={checkboxValue}
+                        disabled={disabled}
+                        onClick={selectAllIfNotPaginated && !showPagination ? onSinglePageSelectAll : null}
+                        // Ideally should be disabled but was giving issue with cursor
                     />
+
+                    {showChevronDownIcon && <ICChevronDown className="icon-dim-20 fcn-6 dc__no-shrink" />}
                 </div>
             </ActionMenu>
         )
