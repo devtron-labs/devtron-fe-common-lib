@@ -20,17 +20,17 @@ import { THEME_PREFERENCE_MAP } from '@Shared/Providers/ThemeProvider/types'
 
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
 import {
-    BaseRecentlyVisitedEntitiesTypes,
     GetUserPreferencesParsedDTO,
     GetUserPreferencesQueryParamsType,
     UpdateUserPreferencesPayloadType,
     UserPathValueMapType,
+    UserPreferenceResourceActions,
     UserPreferenceResourceProps,
     UserPreferencesPayloadValueType,
     UserPreferencesType,
     ViewIsPipelineRBACConfiguredRadioTabs,
 } from './types'
-import { getParsedResourcesMap, getUserPreferenceResourcesMetadata } from './utils'
+import { getParsedResourcesMap } from './utils'
 
 /**
  * @returns UserPreferencesType
@@ -78,6 +78,7 @@ const getUserPreferencePayload = async ({
     path,
     value,
     resourceKind,
+    userPreferencesResponse,
 }: UserPathValueMapType): Promise<Partial<UserPreferencesPayloadValueType>> => {
     switch (path) {
         case 'themePreference':
@@ -92,11 +93,15 @@ const getUserPreferencePayload = async ({
             }
 
         case 'resources': {
+            const existingResources = userPreferencesResponse?.resources || {}
             const updatedResources = {
+                ...existingResources,
                 [resourceKind]: {
-                    ...getUserPreferenceResourcesMetadata(value as BaseRecentlyVisitedEntitiesTypes[], resourceKind)[
-                        resourceKind
-                    ],
+                    ...existingResources[resourceKind],
+                    [UserPreferenceResourceActions.RECENTLY_VISITED]: value.map(({ id, name }) => ({
+                        id,
+                        name,
+                    })),
                 },
             }
 

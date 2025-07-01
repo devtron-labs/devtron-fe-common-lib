@@ -1,25 +1,10 @@
 import { DEFAULT_RESOURCES_MAP } from './constants'
 import {
-    BaseRecentlyVisitedEntitiesTypes,
     GetUserPreferencesParsedDTO,
-    PreferredResourceKindType,
     UserPreferenceFilteredListTypes,
     UserPreferenceResourceActions,
-    UserPreferenceResourceType,
     UserPreferencesType,
 } from './types'
-
-export const getUserPreferenceResourcesMetadata = (
-    recentlyVisited: BaseRecentlyVisitedEntitiesTypes[],
-    resourceKind: PreferredResourceKindType,
-): UserPreferenceResourceType => ({
-    [resourceKind]: {
-        [UserPreferenceResourceActions.RECENTLY_VISITED]: recentlyVisited.map(({ id, name }) => ({
-            id,
-            name,
-        })),
-    },
-})
 
 export const getFilteredUniqueAppList = ({
     userPreferencesResponse,

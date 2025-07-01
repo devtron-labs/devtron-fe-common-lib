@@ -39,7 +39,8 @@ export const useUserPreferences = ({ migrateUserPreferences, recentlyVisitedFetc
     const { handleThemeSwitcherDialogVisibilityChange, handleThemePreferenceChange } = useTheme()
 
     const fetchRecentlyVisitedParsedEntities = async (): Promise<UserPreferencesType> => {
-        const userPreferencesResponse = await getUserPreferences()
+        // Retrieve and parse the user's saved preferences from local storage
+        const userPreferencesResponse = JSON.parse(localStorage.getItem('userPreferences'))
 
         const uniqueFilteredApps = getFilteredUniqueAppList({
             userPreferencesResponse,
@@ -65,6 +66,8 @@ export const useUserPreferences = ({ migrateUserPreferences, recentlyVisitedFetc
                 },
             },
         }
+
+        localStorage.setItem('userPreferences', JSON.stringify(updatedUserPreferences))
 
         return updatedUserPreferences
     }
