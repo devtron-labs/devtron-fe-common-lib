@@ -42,18 +42,15 @@ export const useUserPreferences = ({ migrateUserPreferences, recentlyVisitedFetc
         // Retrieve and parse the user's saved preferences from local storage
         const userPreferencesResponse = JSON.parse(localStorage.getItem('userPreferences'))
 
+        if (!resourceKind) {
+            return userPreferencesResponse
+        }
+
         const uniqueFilteredApps = getFilteredUniqueAppList({
             userPreferencesResponse,
             id,
             name,
             resourceKind,
-        })
-
-        await updateUserPreferences({
-            path: 'resources',
-            value: uniqueFilteredApps,
-            resourceKind,
-            userPreferencesResponse,
         })
 
         const updatedUserPreferences = {
@@ -66,13 +63,33 @@ export const useUserPreferences = ({ migrateUserPreferences, recentlyVisitedFetc
                 },
             },
         }
-
         localStorage.setItem('userPreferences', JSON.stringify(updatedUserPreferences))
+
+        setUserPreferences((prev) => ({
+            ...prev,
+            resources: {
+                ...prev?.resources,
+                [resourceKind]: {
+                    ...prev?.resources?.[resourceKind],
+                    [UserPreferenceResourceActions.RECENTLY_VISITED]: uniqueFilteredApps,
+                },
+            },
+        }))
+        await updateUserPreferences({
+            path: 'resources',
+            value: uniqueFilteredApps,
+            resourceKind,
+            userPreferencesResponse,
+        })
 
         return updatedUserPreferences
     }
 
-    const [, recentResourcesResult] = useAsync(() => fetchRecentlyVisitedParsedEntities(), [id, name], isDataAvailable)
+    const [recentResourcesLoading, recentResourcesResult] = useAsync(
+        () => fetchRecentlyVisitedParsedEntities(),
+        [id, name],
+        isDataAvailable && !!resourceKind,
+    )
 
     const recentlyVisitedResources =
         recentResourcesResult?.resources?.[resourceKind]?.[UserPreferenceResourceActions.RECENTLY_VISITED] ||
@@ -125,5 +142,6 @@ export const useUserPreferences = ({ migrateUserPreferences, recentlyVisitedFetc
         handleUpdateUserThemePreference,
         fetchRecentlyVisitedParsedEntities,
         recentlyVisitedResources,
+        recentResourcesLoading,
     }
 }
