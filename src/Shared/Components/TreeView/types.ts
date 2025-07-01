@@ -76,8 +76,6 @@ export type TreeItem = BaseNode & {
 
 export type TreeViewProps = {
     nodes: TreeNode[]
-    expandedMap: Record<string, boolean>
-    onToggle: (item: TreeHeading) => void
     selectedId?: string
     onSelect?: (item: TreeItem) => void
     /**
@@ -88,28 +86,40 @@ export type TreeViewProps = {
     mode?: 'navigation' | 'form'
 } & (
     | {
-          /**
-           * WARNING: For internal use only.
-           */
-          depth: number
-          /**
-           * WARNING: For internal use only.
-           * Would pass this to item button/ref and store it in out ref map through this function.
-           */
-          getUpdateItemsRefMap: (id: string) => (element: HTMLButtonElement | HTMLAnchorElement) => void
-
-          /**
-           * WARNING: For internal use only.
-           * List of all nodes visible in tree view for keyboard navigation.
-           */
-          flatNodeList: string[]
+          isUncontrolled: true
+          expandedMap?: never
+          onToggle?: never
       }
     | {
-          depth?: never
-          getUpdateItemsRefMap?: never
-          flatNodeList?: never
+          isUncontrolled?: false
+          expandedMap: Record<string, boolean>
+          onToggle: (item: TreeHeading) => void
       }
-)
+) &
+    (
+        | {
+              /**
+               * WARNING: For internal use only.
+               */
+              depth: number
+              /**
+               * WARNING: For internal use only.
+               * Would pass this to item button/ref and store it in out ref map through this function.
+               */
+              getUpdateItemsRefMap: (id: string) => (element: HTMLButtonElement | HTMLAnchorElement) => void
+
+              /**
+               * WARNING: For internal use only.
+               * List of all nodes visible in tree view for keyboard navigation.
+               */
+              flatNodeList: string[]
+          }
+        | {
+              depth?: never
+              getUpdateItemsRefMap?: never
+              flatNodeList?: never
+          }
+    )
 
 export interface TreeViewNodeContentProps
     extends Pick<BaseNode, 'startIconConfig' | 'title' | 'subtitle' | 'customTooltipConfig' | 'strikeThrough'> {

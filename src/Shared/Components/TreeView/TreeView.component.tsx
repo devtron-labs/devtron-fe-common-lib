@@ -1,4 +1,4 @@
-import { SyntheticEvent, useMemo, useRef } from 'react'
+import { SyntheticEvent, useMemo, useRef, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 
@@ -18,7 +18,8 @@ const Divider = () => (
 
 const TreeView = ({
     nodes,
-    expandedMap,
+    isUncontrolled,
+    expandedMap: expandedMapProp,
     selectedId,
     onToggle,
     onSelect,
@@ -30,13 +31,24 @@ const TreeView = ({
     const { pathname } = useLocation()
     // Using this at root level
     const rootItemRefs = useRef<Record<string, HTMLButtonElement | HTMLAnchorElement | null>>({})
+    // This will in actuality be used in first level of tree view since we are sending isUncontrolled prop as false to all the nested tree views
+    const [currentLevelExpandedMap, setCurrentLevelExpandedMap] = useState<Record<string, boolean>>({})
+
+    const expandedMap = isUncontrolled ? currentLevelExpandedMap : expandedMapProp
 
     const isFirstLevel = depth === 0
 
     const fallbackTabIndex = mode === 'navigation' ? -1 : 0
 
     const getToggleNode = (node: TreeHeading) => () => {
-        onToggle(node)
+        if (isUncontrolled) {
+            setCurrentLevelExpandedMap((prev) => ({
+                ...prev,
+                [node.id]: !prev[node.id],
+            }))
+        } else {
+            onToggle(node)
+        }
     }
 
     const getUpdateItemsRefMap = (id: string) => (el: HTMLButtonElement | HTMLAnchorElement) => {
