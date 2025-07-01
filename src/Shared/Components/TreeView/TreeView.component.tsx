@@ -4,7 +4,7 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 import { Icon } from '../Icon'
 import { TrailingItem } from '../TrailingItem'
-import { DEFAULT_NO_ITEMS_TEXT } from './constants'
+import { DEFAULT_NO_ITEMS_TEXT, VARIANT_TO_BG_CLASS_MAP, VARIANT_TO_HOVER_CLASS_MAP } from './constants'
 import TreeViewNodeContent from './TreeViewNodeContent'
 import { TreeHeading, TreeItem, TreeViewProps } from './types'
 
@@ -27,6 +27,7 @@ const TreeView = ({
     mode = 'navigation',
     flatNodeList: flatNodeListProp,
     getUpdateItemsRefMap: getUpdateItemsRefMapProp,
+    variant = 'primary',
 }: TreeViewProps) => {
     const { pathname } = useLocation()
     // Using this at root level
@@ -132,7 +133,7 @@ const TreeView = ({
 
     return (
         <div
-            className={`tree-view__container bg__primary ${isFirstLevel ? 'dc__overflow-auto w-100 h-100 flex-grow-1' : ''}`}
+            className={`tree-view__container ${VARIANT_TO_BG_CLASS_MAP[variant]} ${isFirstLevel ? 'dc__overflow-auto w-100 h-100 flex-grow-1' : ''}`}
             // Setting key down event here instead of button and navlink to minimize the number of event listeners
             {...(isFirstLevel ? { role: 'tree', onKeyDown: handleKeyDown } : {})}
         >
@@ -169,13 +170,13 @@ const TreeView = ({
                             aria-level={depth + 1}
                         >
                             <div
-                                className={`flexbox w-100 dc__align-start ${isFirstLevel ? 'dc__position-sticky dc__top-0 dc__zi-1' : ''} bg__primary`}
+                                className={`flexbox w-100 dc__align-start ${VARIANT_TO_BG_CLASS_MAP[variant]} ${isFirstLevel ? 'dc__position-sticky dc__top-0 dc__zi-1' : ''}`}
                             >
                                 <div className="flexbox w-100 dc__align-start">
                                     {dividerPrefix}
 
                                     <div
-                                        className={`flexbox w-100 dc__align-start br-4 ${isSelected ? 'bcb-1' : 'bg__hover--opaque'}`}
+                                        className={`flexbox w-100 dc__align-start br-4 ${isSelected ? 'bcb-1' : VARIANT_TO_HOVER_CLASS_MAP[variant]}`}
                                     >
                                         <button
                                             type="button"
@@ -183,6 +184,7 @@ const TreeView = ({
                                             onClick={getToggleNode(node)}
                                             tabIndex={fallbackTabIndex}
                                             data-node-id={node.id}
+                                            data-testid={`tree-view-heading-${node.title}`}
                                             ref={
                                                 getUpdateItemsRefMapProp
                                                     ? getUpdateItemsRefMapProp(node.id)
@@ -259,6 +261,7 @@ const TreeView = ({
                                                             getUpdateItemsRefMapProp || getUpdateItemsRefMap
                                                         }
                                                         flatNodeList={flatNodeList}
+                                                        variant={variant}
                                                     />
                                                 ))}
                                             </div>
@@ -290,7 +293,9 @@ const TreeView = ({
                     >
                         {dividerPrefix}
 
-                        <div className={`flexbox flex-grow-1 w-100 br-4 ${isSelected ? 'bcb-1' : 'bg__hover--opaque'}`}>
+                        <div
+                            className={`flexbox flex-grow-1 w-100 br-4 ${isSelected ? 'bcb-1' : VARIANT_TO_HOVER_CLASS_MAP[variant]}`}
+                        >
                             {node.as === 'link' ? (
                                 <NavLink
                                     to={
@@ -302,6 +307,7 @@ const TreeView = ({
                                     onClick={getNodeItemNavLinkClick(node)}
                                     tabIndex={isSelected ? 0 : fallbackTabIndex}
                                     data-node-id={node.id}
+                                    data-testid={`tree-view-item-${node.title}`}
                                     ref={
                                         getUpdateItemsRefMapProp
                                             ? getUpdateItemsRefMapProp(node.id)
@@ -324,6 +330,7 @@ const TreeView = ({
                                             ? getUpdateItemsRefMapProp(node.id)
                                             : getUpdateItemsRefMap(node.id)
                                     }
+                                    data-testid={`tree-view-item-${node.title}`}
                                 >
                                     {itemDivider}
                                     {content}

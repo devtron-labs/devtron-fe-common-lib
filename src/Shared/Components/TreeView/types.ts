@@ -84,6 +84,11 @@ export type TreeViewProps = {
      * @default 'navigation'
      */
     mode?: 'navigation' | 'form'
+    /**
+     * If primary the background color will be bg__primary and bg__hover--opaque, if secondary the background color will be bg__secondary bg__hover-secondary--opaque.
+     * @default 'primary'
+     */
+    variant?: 'primary' | 'secondary'
 } & (
     | {
           isUncontrolled: true
