@@ -1,4 +1,4 @@
-import { MouseEvent, useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 
 import { UsePopoverProps, UsePopoverReturnType } from './types'
 import {
@@ -23,6 +23,7 @@ export const usePopover = ({
     const [actualPosition, setActualPosition] = useState<UsePopoverProps['position']>(position)
     const [actualAlignment, setActualAlignment] = useState<UsePopoverProps['alignment']>(alignment)
     const [triggerBounds, setTriggerBounds] = useState<UsePopoverReturnType['triggerProps']['bounds'] | null>(null)
+    const [isBackdropMounted, setIsBackdropMounted] = useState(false)
 
     // CONSTANTS
     const isAutoWidth = width === 'auto'
@@ -53,14 +54,12 @@ export const usePopover = ({
 
     const handlePopoverKeyDown = (e: React.KeyboardEvent) => onPopoverKeyDown?.(e, open, closePopover)
 
-    const handleOverlayClick = (e: MouseEvent<HTMLDivElement>) => {
-        if (!popover.current?.contains(e.target as Node)) {
-            closePopover()
-        }
+    const handleOverlayClick = () => {
+        closePopover()
     }
 
     useLayoutEffect(() => {
-        if (!open || !triggerRef.current || !popover.current || !scrollableRef.current) {
+        if (!open || !isBackdropMounted || !triggerRef.current || !popover.current || !scrollableRef.current) {
             return
         }
 
@@ -88,6 +87,9 @@ export const usePopover = ({
         // update position on open
         updatePopoverPosition()
 
+        // focus on popover when it is opened, so that keyboard navigation works as expected
+        popover.current.focus()
+
         // prevent scroll propagation unless scrollable
         const handleWheel = (e: WheelEvent) => {
             e.stopPropagation()
@@ -110,12 +112,11 @@ export const usePopover = ({
             scrollableRef.current.removeEventListener('wheel', handleWheel)
             window.removeEventListener('resize', updatePopoverPosition)
         }
-    }, [open, position, alignment])
+    }, [open, position, alignment, isBackdropMounted])
 
     return {
         open,
         triggerProps: {
-            role: 'button',
             ref: triggerRef,
             onClick: togglePopover,
             onKeyDown: handleTriggerKeyDown,
@@ -125,15 +126,17 @@ export const usePopover = ({
             bounds: triggerBounds ?? { left: 0, top: 0, height: 0, width: 0 },
         },
         overlayProps: {
-            role: 'dialog',
+            hasClearBackground: true,
             onClick: handleOverlayClick,
-            className: 'popover-overlay',
+            onEscape: closePopover,
+            onBackdropMount: setIsBackdropMounted,
         },
         popoverProps: {
             id,
             ref: popover,
             role: 'listbox',
-            className: `dc__position-abs ${variant === 'menu' ? 'bg__menu--primary shadow__menu' : 'bg__overlay--primary shadow__overlay'} border__primary br-6 dc__overflow-hidden ${isAutoWidth ? 'dc_width-max-content dc__mxw-250' : ''}`,
+            tabIndex: 0,
+            className: `dc__position-abs dc__outline-none-imp ${variant === 'menu' ? 'bg__menu--primary shadow__menu' : 'bg__overlay--primary shadow__overlay'} border__primary br-6 dc__overflow-hidden ${isAutoWidth ? 'dc_width-max-content dc__mxw-250' : ''}`,
             onKeyDown: handlePopoverKeyDown,
             style: {
                 width: !isAutoWidth ? `${width}px` : undefined,

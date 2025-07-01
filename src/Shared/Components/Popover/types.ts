@@ -1,6 +1,7 @@
 import { DetailedHTMLProps, KeyboardEvent, LegacyRef, MutableRefObject, ReactElement } from 'react'
 import { HTMLMotionProps } from 'framer-motion'
 
+import { BackdropProps } from '../Backdrop'
 import { ButtonProps } from '../Button'
 
 export interface UsePopoverProps {
@@ -77,9 +78,9 @@ export interface UsePopoverReturnType {
     }
     /**
      * Props to be spread onto the overlay element of the popover.
-     * These props include standard HTML attributes for a `div` element.
+     * These props include backdrop properties.
      */
-    overlayProps: DetailedHTMLProps<React.HTMLAttributes<HTMLDivElement>, HTMLDivElement>
+    overlayProps: Omit<BackdropProps, 'children'>
     /**
      * Props to be spread onto the popover element itself.
      * Includes motion-related props for animations and a `ref` to the popover's `div` element.
