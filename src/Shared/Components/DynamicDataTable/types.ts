@@ -18,7 +18,7 @@ import { DetailedHTMLProps, ReactElement, ReactNode } from 'react'
 
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 import { UseStateFiltersReturnType } from '@Common/Hooks'
-import { TooltipProps } from '@Common/Tooltip/types'
+import { TooltipProps } from '@Common/Tooltip'
 
 import { FileUploadProps } from '../FileUpload'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerTextAreaProps } from '../SelectPicker'

@@ -28,7 +28,7 @@ export const ProgressBar = ({ isLoading, intervalTime = 50 }: ProgressBarProps) 
                 <motion.div
                     initial={{ opacity: 1 }}
                     exit={{ opacity: 0 }}
-                    transition={{ duration: 1, ease: 'easeOut' }}
+                    transition={{ duration: 0.3, ease: 'easeOut' }}
                     className="dc__position-abs dc__top-0 dc__left-0 dc__zi-10 h-2 w-100 bcn-2"
                 >
                     <motion.div
