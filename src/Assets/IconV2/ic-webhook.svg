@@ -1,0 +1,21 @@
+<!--
+  - Copyright (c) 2024. Devtron Inc.
+  -
+  - Licensed under the Apache License, Version 2.0 (the "License");
+  - you may not use this file except in compliance with the License.
+  - You may obtain a copy of the License at
+  -
+  -     http://www.apache.org/licenses/LICENSE-2.0
+  -
+  - Unless required by applicable law or agreed to in writing, software
+  - distributed under the License is distributed on an "AS IS" BASIS,
+  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  - See the License for the specific language governing permissions and
+  - limitations under the License.
+  -->
+
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+  <path fill="var(--N700)" fill-rule="evenodd" d="M12 5.728a1.818 1.818 0 0 1 1.589 2.702l2.35 3.921.06-.021a4.53 4.53 0 0 1 1.206-.232l.25-.007a4.545 4.545 0 1 1-3.091 7.879.91.91 0 0 1 1.236-1.333 2.727 2.727 0 1 0 .449-4.338.91.91 0 0 1-1.189-.224l-.06-.088-2.77-4.624H12a1.818 1.818 0 0 1-1.813-1.682l-.005-.135c0-1.004.814-1.818 1.818-1.818Z" clip-rule="evenodd"/>
+  <path fill="#EB456D" d="M12 3a4.545 4.545 0 0 1 4.546 4.545.91.91 0 0 1-1.813.106l-.006-.106a2.727 2.727 0 1 0-3.982 2.423c.476.247.636.85.345 1.3l-2.926 4.538a1.818 1.818 0 1 1-1.53-.986l2.446-3.792-.033-.026A4.541 4.541 0 0 1 7.46 7.759l-.005-.214A4.545 4.545 0 0 1 12 3Z"/>
+  <path fill="var(--N700)" fill-rule="evenodd" d="M6.162 12.906a.909.909 0 0 1-.545 1.165 2.729 2.729 0 1 0 3.651 2.725l.005-.16c0-.466.35-.85.803-.903l.106-.006h5.698a1.817 1.817 0 1 1 0 1.818h-4.882l-.01.054a4.548 4.548 0 0 1-4.245 3.578l-.198.005a4.545 4.545 0 0 1-1.547-8.82.91.91 0 0 1 1.164.544Z" clip-rule="evenodd"/>
+</svg>

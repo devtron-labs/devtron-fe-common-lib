@@ -54,19 +54,8 @@ export interface BulkSelectionProps {
      */
     showChevronDownIcon?: boolean
     disabled?: boolean
+    selectAllIfNotPaginated?: boolean
 }
-
-export interface BulkSelectionDropdownItemsType {
-    locator: BulkSelectionEvents
-    label: string
-    isSelected: boolean
-    icon: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
-    iconClass?: string
-}
-
-export interface BulkSelectionDropdownItemsProps<T>
-    extends BulkSelectionDropdownItemsType,
-        Pick<UseBulkSelectionReturnType<T>, 'handleBulkSelection'> {}
 
 export enum SelectAllDialogStatus {
     OPEN = 'OPEN',

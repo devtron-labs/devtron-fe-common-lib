@@ -14,18 +14,16 @@
  * limitations under the License.
  */
 
-import { useEffect, useState } from 'react'
-import ReactGA from 'react-ga4'
+import { useState } from 'react'
 import Tippy from '@tippyjs/react'
 
-import { ReactComponent as Close } from '@Icons/ic-close.svg'
 import { ReactComponent as ICMediumPaintBucket } from '@IconsV2/ic-medium-paintbucket.svg'
+import { handleAnalyticsEvent } from '@Shared/Analytics'
 import { InstallationType } from '@Shared/types'
 
 import { TippyCustomized, TippyTheme, Tooltip } from '../../../Common'
-import { MAX_LOGIN_COUNT, POSTHOG_EVENT_ONBOARDING } from '../../../Common/Constants'
+import { POSTHOG_EVENT_ONBOARDING } from '../../../Common/Constants'
 import { SidePanelTab, useMainContext, useTheme, useUserEmail } from '../../Providers'
-import GettingStartedCard from '../GettingStartedCard/GettingStarted'
 import { Icon } from '../Icon'
 import { InfoIconTippy } from '../InfoIconTippy'
 import { HelpButton } from './HelpButton'
@@ -45,19 +43,9 @@ const PageHeader = ({
     isBreadcrumbs = false,
     breadCrumbs,
     renderActionButtons,
-    showCloseButton = false,
-    onClose,
-    markAsBeta,
     tippyProps,
 }: PageHeaderType) => {
-    const {
-        loginCount,
-        setLoginCount,
-        showGettingStartedCard,
-        setShowGettingStartedCard,
-        setSidePanelConfig,
-        sidePanelConfig,
-    } = useMainContext()
+    const { setLoginCount, setShowGettingStartedCard, setSidePanelConfig, sidePanelConfig } = useMainContext()
     const { showSwitchThemeLocationTippy, handleShowSwitchThemeLocationTippyChange } = useTheme()
 
     const { isTippyCustomized, tippyRedirectLink, TippyIcon, tippyMessage, onClickTippyButton, additionalContent } =
@@ -69,7 +57,6 @@ const PageHeader = ({
             fetchingServerInfo: false,
         },
     )
-    const [expiryDate, setExpiryDate] = useState(0)
 
     const getCurrentServerInfo = async () => {
         try {
@@ -87,10 +74,6 @@ const PageHeader = ({
             console.error('Error in fetching server info')
         }
     }
-
-    useEffect(() => {
-        setExpiryDate(+localStorage.getItem('clickedOkay'))
-    }, [])
 
     const hideGettingStartedCard = (count?: string) => {
         setShowGettingStartedCard(false)
@@ -119,7 +102,7 @@ const PageHeader = ({
         setActionWithExpiry('clickedOkay', 1)
         hideGettingStartedCard()
         await handlePostHogEventUpdate(POSTHOG_EVENT_ONBOARDING.HELP)
-        ReactGA.event({
+        handleAnalyticsEvent({
             category: 'Main Navigation',
             action: `Help Clicked`,
         })
@@ -133,7 +116,7 @@ const PageHeader = ({
     )
 
     const onAskButtonClick = () => {
-        ReactGA.event({
+        handleAnalyticsEvent({
             category: 'AI',
             action: `HELP_ASK_DEVTRON_AI`,
         })
@@ -158,6 +141,7 @@ const PageHeader = ({
                 serverInfo={currentServerInfo.serverInfo}
                 fetchingServerInfo={currentServerInfo.fetchingServerInfo}
                 onClick={handleHelpButtonClick}
+                hideGettingStartedCard={hideGettingStartedCard}
             />
             {!window._env_.K8S_CLIENT && (
                 <TippyCustomized
@@ -184,16 +168,6 @@ const PageHeader = ({
         </>
     )
 
-    const getExpired = (): boolean => {
-        // Render Getting started tippy card if the time gets expired
-        const now = new Date().valueOf()
-        return now > expiryDate
-    }
-
-    const renderBetaTag = (): JSX.Element => (
-        <span className="fs-12 fw-4 lh-18 pt-1 pb-1 pl-6 pr-6 ml-8 cn-9 bcy-5 br-4">Beta</span>
-    )
-
     const renderIframeButton = () => <IframePromoButton />
 
     return (
@@ -204,16 +178,6 @@ const PageHeader = ({
         >
             <h1 className="dc__page-header__title dc__content-space  flex fs-16 fw-6 lh-20 h-48">
                 <div className="flex left">
-                    {showCloseButton && (
-                        <button
-                            className="dc__transparent flex mr-8"
-                            type="button"
-                            aria-label="close-button"
-                            onClick={onClose}
-                        >
-                            <Close className="dc__page-header__close-icon icon-dim-24 cursor" />
-                        </button>
-                    )}
                     <span className="fw-6" data-testid="main-header">
                         {headerName}
                     </span>
@@ -257,7 +221,6 @@ const PageHeader = ({
                                 </Tippy>
                             </a>
                         ))}
-                    {markAsBeta && renderBetaTag()}
                 </div>
                 {showTabs && (
                     <div className="flex left dc__gap-8">
@@ -268,18 +231,6 @@ const PageHeader = ({
                 )}
             </h1>
             {showTabs && renderHeaderTabs()}
-            {!window._env_.K8S_CLIENT &&
-                showGettingStartedCard &&
-                loginCount >= 0 &&
-                loginCount < MAX_LOGIN_COUNT &&
-                getExpired() && (
-                    <GettingStartedCard
-                        className="w-300"
-                        showHelpCard={false}
-                        hideGettingStartedCard={hideGettingStartedCard}
-                        loginCount={loginCount}
-                    />
-                )}
             {!showTabs && (
                 <div className="flex left dc__gap-8">
                     {typeof renderActionButtons === 'function' && renderActionButtons()}

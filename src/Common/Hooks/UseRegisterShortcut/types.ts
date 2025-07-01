@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { FocusEvent, KeyboardEvent } from 'react'
+
 import { IS_PLATFORM_MAC_OS } from '@Common/Constants'
 
 // NOTE: check this link for more info on keyboard keys: https://w3c.github.io/uievents-key/
@@ -28,6 +30,7 @@ export const KEYBOARD_KEYS_MAP = {
     K: 'K',
     X: 'X',
     A: 'A',
+    N: 'N',
     Escape: 'Esc',
     Enter: '↩',
     ArrowLeft: '←',
@@ -77,9 +80,26 @@ export interface UseRegisterShortcutContextType {
      * Programmatically trigger a shortcut if already registered
      */
     triggerShortcut: (keys: ShortcutType['keys']) => void
+    /**
+     * If shouldHookOntoWindow is false, these props need to be hooked onto
+     * the component that needs to listen to the shortcuts
+     */
+    targetProps?: {
+        onKeyDown: (event: KeyboardEvent<HTMLElement>) => void
+        onKeyUp: (event: KeyboardEvent<HTMLElement>) => void
+        onBlur: (event: FocusEvent<HTMLElement>) => void
+    }
 }
 
 export interface UseRegisterShortcutProviderType {
+    /**
+     * If false, the shortcuts will not be registered to the window object
+     * instead onKeyDown, onKeyUp and onBlur will be exposed as context methods
+     * which need to be hooked onto the component that needs to listen to the shortcuts
+     *
+     * defaults to true
+     */
+    shouldHookOntoWindow?: boolean
     children: React.ReactNode
     /**
      * Defines how long after holding the keys down do we trigger the callback in milliseconds

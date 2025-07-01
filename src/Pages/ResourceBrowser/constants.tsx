@@ -111,3 +111,6 @@ export const NODE_DRAIN_OPTIONS_CHECKBOX_CONFIG: {
         label: DRAIN_NODE_MODAL_MESSAGING.IgnoreDaemonSets.heading,
     },
 ] as const
+
+export const GVK_FILTER_KIND_QUERY_PARAM_KEY = 'gvkFilterKind'
+export const GVK_FILTER_API_VERSION_QUERY_PARAM_KEY = 'gvkFilterApiVersion'

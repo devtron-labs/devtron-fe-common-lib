@@ -16,7 +16,7 @@
 
 import { LinkProps, NavLinkProps } from 'react-router-dom'
 
-import { TooltipProps } from '@Common/Tooltip/types'
+import { TooltipProps } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 import { DataAttributes } from '@Shared/types'
 

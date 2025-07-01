@@ -1,5 +1,7 @@
 export { default as Table } from './Table.component'
 export type {
+    BulkActionsComponentProps as TableBulkActionsComponentProps,
+    BulkOperationModalProps as TableBulkOperationModalProps,
     CellComponentProps as TableCellComponentProps,
     Column as TableColumnType,
     TableProps,

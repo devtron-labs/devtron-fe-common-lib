@@ -14,26 +14,27 @@
  * limitations under the License.
  */
 
+import { WorkflowNodeType } from '@Common/Types'
 import { ChangeCIPayloadType, CIPipelineNodeType, WorkflowType } from '@Shared/types'
 import { AppConfigProps } from '@Pages/index'
 
-interface LinkedCDSourceVariant {
+import { GenericModalProps } from '../GenericModal'
+import { IconsProps } from '../Icon'
+
+export interface SourceTypeCardProps {
     title: string
     subtitle: string
-    image: string
-    alt: string
     dataTestId: string
-    type: string
-}
-
-export interface SourceTypeCardProps extends LinkedCDSourceVariant {
-    handleCardAction: (e: React.MouseEvent | React.KeyboardEvent) => void
+    type: CIPipelineNodeType | WorkflowNodeType.WEBHOOK
+    disabled?: boolean
     disableInfo: string
-    isDisabled?: boolean
+    icons: Pick<IconsProps, 'name' | 'color'>[]
+    onCardAction: (e: React.MouseEvent | React.KeyboardEvent) => void
 }
 
-export interface WorkflowOptionsModalProps extends Required<Pick<AppConfigProps, 'isTemplateView'>> {
-    handleCloseWorkflowOptionsModal: () => void
+export interface WorkflowOptionsModalProps
+    extends Required<Pick<AppConfigProps, 'isTemplateView'>>,
+        Pick<GenericModalProps, 'open' | 'onClose'> {
     addCIPipeline: (type: CIPipelineNodeType, workflowId?: number | string) => void
     addWebhookCD: (workflowId?: number | string) => void
     addLinkedCD: (changeCIPayload?: ChangeCIPayloadType) => void
@@ -43,6 +44,6 @@ export interface WorkflowOptionsModalProps extends Required<Pick<AppConfigProps,
     changeCIPayload?: ChangeCIPayloadType
     workflows?: WorkflowType[]
     getWorkflows?: () => void
-    linkedCDSourceVariant?: LinkedCDSourceVariant
+    linkedCDSourceVariant?: Pick<SourceTypeCardProps, 'title' | 'subtitle' | 'type' | 'icons' | 'dataTestId'>
     isAppGroup?: boolean
 }
