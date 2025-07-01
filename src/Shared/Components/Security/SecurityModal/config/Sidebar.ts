@@ -14,103 +14,171 @@
  * limitations under the License.
  */
 
-import { ScanCategoriesWithLicense } from '../../types'
+import { TreeItem, TreeViewProps } from '@Shared/Components/TreeView'
+
+import { GetSidebarDataParamsType } from '../../types'
 import { CATEGORY_LABELS, SUB_CATEGORY_LABELS } from '../constants'
-import { CATEGORIES, SidebarDataType, SUB_CATEGORIES } from '../types'
+import { CATEGORIES, SeveritiesDTO, SidebarDataChildType, SUB_CATEGORIES } from '../types'
 
-export const getSidebarData = (categoriesConfig: Record<ScanCategoriesWithLicense, boolean>): SidebarDataType[] => {
-    const { imageScan, codeScan, kubernetesManifest, imageScanLicenseRisks } = categoriesConfig
+export const getSecurityModalSidebarId = ({ category, subCategory }: SidebarDataChildType['value']): string =>
+    JSON.stringify({ category, subCategory })
 
-    return [
+export const getSecurityModalSidebarChildFromId = (id: string): SidebarDataChildType['value'] => {
+    const parsedId = JSON.parse(id)
+    return {
+        category: parsedId.category,
+        subCategory: parsedId.subCategory,
+    }
+}
+
+export const getSidebarData = ({
+    imageScan,
+    codeScan,
+    kubernetesManifest,
+    imageScanLicenseRisks,
+    selectedId,
+    scanResult,
+}: GetSidebarDataParamsType): TreeViewProps['nodes'] => {
+    const nodes: TreeViewProps['nodes'] = [
         ...(imageScan
-            ? [
+            ? ([
                   {
-                      label: CATEGORY_LABELS.IMAGE_SCAN,
-                      isExpanded: true,
-                      children: [
+                      type: 'heading',
+                      title: CATEGORY_LABELS.IMAGE_SCAN,
+                      id: CATEGORY_LABELS.IMAGE_SCAN,
+                      items: [
                           {
-                              label: SUB_CATEGORY_LABELS.VULNERABILITIES,
-                              value: {
+                              type: 'item',
+                              title: SUB_CATEGORY_LABELS.VULNERABILITIES,
+                              id: getSecurityModalSidebarId({
                                   category: CATEGORIES.IMAGE_SCAN,
                                   subCategory: SUB_CATEGORIES.VULNERABILITIES,
-                              },
+                              }),
                           },
                           ...(imageScanLicenseRisks
-                              ? [
+                              ? ([
                                     {
-                                        label: SUB_CATEGORY_LABELS.LICENSE,
-                                        value: {
+                                        type: 'item',
+                                        title: SUB_CATEGORY_LABELS.LICENSE,
+                                        id: getSecurityModalSidebarId({
                                             category: CATEGORIES.IMAGE_SCAN,
                                             subCategory: SUB_CATEGORIES.LICENSE,
-                                        },
+                                        }),
                                     },
-                                ]
+                                ] satisfies TreeItem[])
                               : []),
                       ],
                   },
-              ]
+              ] satisfies TreeViewProps['nodes'])
             : []),
         ...(codeScan
-            ? [
+            ? ([
                   {
-                      label: CATEGORY_LABELS.CODE_SCAN,
-                      isExpanded: true,
-                      children: [
+                      type: 'heading',
+                      title: CATEGORY_LABELS.CODE_SCAN,
+                      id: CATEGORY_LABELS.CODE_SCAN,
+                      items: [
                           {
-                              label: SUB_CATEGORY_LABELS.VULNERABILITIES,
-                              value: {
+                              type: 'item',
+                              title: SUB_CATEGORY_LABELS.VULNERABILITIES,
+                              id: getSecurityModalSidebarId({
                                   category: CATEGORIES.CODE_SCAN,
                                   subCategory: SUB_CATEGORIES.VULNERABILITIES,
-                              },
+                              }),
                           },
                           {
-                              label: SUB_CATEGORY_LABELS.LICENSE,
-                              value: {
+                              type: 'item',
+                              title: SUB_CATEGORY_LABELS.LICENSE,
+                              id: getSecurityModalSidebarId({
                                   category: CATEGORIES.CODE_SCAN,
                                   subCategory: SUB_CATEGORIES.LICENSE,
-                              },
+                              }),
                           },
                           {
-                              label: SUB_CATEGORY_LABELS.MISCONFIGURATIONS,
-                              value: {
+                              type: 'item',
+                              title: SUB_CATEGORY_LABELS.MISCONFIGURATIONS,
+                              id: getSecurityModalSidebarId({
                                   category: CATEGORIES.CODE_SCAN,
                                   subCategory: SUB_CATEGORIES.MISCONFIGURATIONS,
-                              },
+                              }),
                           },
                           {
-                              label: SUB_CATEGORY_LABELS.EXPOSED_SECRETS,
-                              value: {
+                              type: 'item',
+                              title: SUB_CATEGORY_LABELS.EXPOSED_SECRETS,
+                              id: getSecurityModalSidebarId({
                                   category: CATEGORIES.CODE_SCAN,
                                   subCategory: SUB_CATEGORIES.EXPOSED_SECRETS,
-                              },
+                              }),
                           },
                       ],
                   },
-              ]
+              ] satisfies TreeViewProps['nodes'])
             : []),
         ...(kubernetesManifest
-            ? [
+            ? ([
                   {
-                      label: CATEGORY_LABELS.KUBERNETES_MANIFEST,
-                      isExpanded: true,
-                      children: [
+                      type: 'heading',
+                      title: CATEGORY_LABELS.KUBERNETES_MANIFEST,
+                      id: CATEGORY_LABELS.KUBERNETES_MANIFEST,
+                      items: [
                           {
-                              label: SUB_CATEGORY_LABELS.MISCONFIGURATIONS,
-                              value: {
+                              type: 'item',
+                              title: SUB_CATEGORY_LABELS.MISCONFIGURATIONS,
+                              id: getSecurityModalSidebarId({
                                   category: CATEGORIES.KUBERNETES_MANIFEST,
                                   subCategory: SUB_CATEGORIES.MISCONFIGURATIONS,
-                              },
+                              }),
                           },
                           {
-                              label: SUB_CATEGORY_LABELS.EXPOSED_SECRETS,
-                              value: {
+                              type: 'item',
+                              title: SUB_CATEGORY_LABELS.EXPOSED_SECRETS,
+                              id: getSecurityModalSidebarId({
                                   category: CATEGORIES.KUBERNETES_MANIFEST,
                                   subCategory: SUB_CATEGORIES.EXPOSED_SECRETS,
-                              },
+                              }),
                           },
                       ],
                   },
-              ]
+              ] satisfies TreeViewProps['nodes'])
             : []),
-    ]
+    ] satisfies TreeViewProps['nodes']
+
+    // Not implementing complete dfs since its not nested, traversing
+    nodes.forEach((node) => {
+        if (node.type === 'heading') {
+            node.items.forEach((item) => {
+                if (item.type === 'heading') {
+                    throw new Error(
+                        'Broken assumption: Heading should not have nested headings in security sidebar, Please implement dfs based handling for nested headings in security sidebar',
+                    )
+                }
+
+                const { category, subCategory } = getSecurityModalSidebarChildFromId(item.id)
+                const subCategoryResult = scanResult[category]?.[subCategory]
+
+                const severities: Partial<Record<SeveritiesDTO, number>> =
+                    subCategoryResult?.summary?.severities || subCategoryResult?.misConfSummary?.status
+
+                const threatCount: number = Object.keys(severities || {}).reduce((acc, key) => {
+                    if (key === SeveritiesDTO.SUCCESSES) {
+                        return acc
+                    }
+                    return acc + severities[key]
+                }, 0)
+
+                // eslint-disable-next-line no-param-reassign
+                item.trailingItem = threatCount
+                    ? {
+                          type: 'counter',
+                          config: {
+                              value: threatCount,
+                              isSelected: selectedId === item.id,
+                          },
+                      }
+                    : null
+            })
+        }
+    })
+
+    return nodes
 }
