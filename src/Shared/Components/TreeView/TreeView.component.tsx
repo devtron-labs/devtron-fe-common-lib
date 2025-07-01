@@ -1,4 +1,4 @@
-import { MouseEvent, useMemo, useRef } from 'react'
+import { SyntheticEvent, useMemo, useRef } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 
@@ -23,7 +23,7 @@ const TreeView = ({
     onToggle,
     onSelect,
     depth = 0,
-    mode,
+    mode = 'navigation',
     flatNodeList: flatNodeListProp,
     getUpdateItemsRefMap: getUpdateItemsRefMapProp,
 }: TreeViewProps) => {
@@ -101,26 +101,21 @@ const TreeView = ({
         }
     }
 
-    const getNodeItemButtonClick = (node: TreeItem) => (e: MouseEvent<HTMLButtonElement>) => {
-        if (node.as !== 'button') {
-            return
-        }
-
+    const commonClickHandler = (e: SyntheticEvent, node: TreeItem) => {
         node.onClick?.(e)
         onSelect?.(node)
     }
 
-    const getNodeItemNavLinkClick = (node: TreeItem) => (e: MouseEvent<HTMLAnchorElement>) => {
-        if (node.as !== 'link') {
-            return
-        }
+    const getNodeItemButtonClick = (node: TreeItem) => (e: SyntheticEvent) => {
+        commonClickHandler(e, node)
+    }
 
+    const getNodeItemNavLinkClick = (node: TreeItem) => (e: SyntheticEvent) => {
         // Prevent navigation to the same page
         if (node.href === pathname) {
             e.preventDefault()
         }
-        node.onClick?.(e)
-        onSelect?.(node)
+        commonClickHandler(e, node)
     }
 
     return (
@@ -145,6 +140,7 @@ const TreeView = ({
                         type={node.type}
                         customTooltipConfig={node.customTooltipConfig}
                         strikeThrough={node.strikeThrough}
+                        isSelected={isSelected}
                     />
                 )
 

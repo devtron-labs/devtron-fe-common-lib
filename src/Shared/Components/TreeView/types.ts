@@ -1,3 +1,5 @@
+import { SyntheticEvent } from 'react'
+
 import { TooltipProps } from '@Common/Tooltip'
 import { Never } from '@Shared/types'
 
@@ -47,13 +49,13 @@ export type TreeItem = BaseNode & {
      * @default false
      */
     isDisabled?: boolean
-} & (
+} & ( // Should we add as `div` as well?
         | {
               as?: 'button'
               /**
                * The callback function to handle click events on the button.
                */
-              onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void
+              onClick?: (e: SyntheticEvent) => void
               href?: never
               clearQueryParamsOnNavigation?: never
           }
@@ -63,7 +65,7 @@ export type TreeItem = BaseNode & {
               /**
                * The callback function to handle click events on the nav link.
                */
-              onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void
+              onClick?: (e: SyntheticEvent) => void
               /**
                * If `true`, clears query parameters during navigation.
                * @default false
@@ -83,7 +85,7 @@ export type TreeViewProps = {
      * If form mode, will leave the navigation to browser.
      * @default 'navigation'
      */
-    mode: 'navigation' | 'form'
+    mode?: 'navigation' | 'form'
 } & (
     | {
           /**
@@ -112,4 +114,5 @@ export type TreeViewProps = {
 export interface TreeViewNodeContentProps
     extends Pick<BaseNode, 'startIconConfig' | 'title' | 'subtitle' | 'customTooltipConfig' | 'strikeThrough'> {
     type: 'heading' | 'item'
+    isSelected: boolean
 }

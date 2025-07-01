@@ -41,7 +41,7 @@ const TrailingItem = ({ type, config, variant = 'neutral' }: TrailingItemProps) 
             )
         }
         case 'counter':
-            return <NumbersCount count={config.value} />
+            return <NumbersCount count={config.value} isSelected={config.isSelected} />
         case 'switch':
             return <DTSwitch {...config} onChange={handleTrailingSwitchChange} size={ComponentSizeType.small} />
         case 'button':

@@ -46,6 +46,7 @@ const TreeViewNodeContent = ({
     type,
     customTooltipConfig,
     strikeThrough,
+    isSelected,
 }: TreeViewNodeContentProps) => {
     const { isTextTruncated: isTitleTruncate, handleMouseEnterEvent: handleTitleMouseEnter } = useIsTextTruncated()
     const { isTextTruncated: isSubtitleTruncate, handleMouseEnterEvent: handleSubtitleMouseEnter } =
@@ -72,7 +73,7 @@ const TreeViewNodeContent = ({
             >
                 <span className="flexbox-col tree-view__container--title-wrapper">
                     <span
-                        className={`tree-view__container--title dc__truncate dc__align-left cn-9 fs-13 lh-1-5 ${type === 'heading' ? 'fw-6' : 'fw-4'} ${customTooltipConfig && type === 'item' ? 'title-with-tooltip' : ''} ${strikeThrough ? 'dc__strike-through' : ''}`}
+                        className={`tree-view__container--title dc__truncate dc__align-left cn-9 fs-13 lh-1-5 ${type === 'heading' || isSelected ? 'fw-6' : 'fw-4'} ${customTooltipConfig && type === 'item' ? 'title-with-tooltip' : ''} ${strikeThrough ? 'dc__strike-through' : ''}`}
                         onMouseEnter={handleTitleMouseEnter}
                     >
                         {title}

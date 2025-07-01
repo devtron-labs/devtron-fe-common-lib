@@ -28,7 +28,7 @@ export type TrailingItemType =
           type: 'counter'
           config: {
               value: NumbersCountProps['count']
-          }
+          } & Pick<NumbersCountProps, 'isSelected'>
       }
     | {
           type: 'switch'
