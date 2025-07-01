@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { forwardRef, useEffect } from 'react'
+import React, { useEffect } from 'react'
 import { Modal } from './Modals/Modal'
 import { PopupMenuBodyType, PopupMenuButtonType, PopupMenuType } from './Types'
 
@@ -155,7 +155,7 @@ const PopupMenu = ({
     )
 }
 
-const Button = forwardRef(({
+const Button = ({
     children = null,
     disabled = false,
     rootClassName = '',
@@ -163,25 +163,11 @@ const Button = forwardRef(({
     onHover = false,
     isKebab = false,
     dataTestId = '',
-}: PopupMenuButtonType, forwardedRef) => {
+}: PopupMenuButtonType) => {
     const { handleOpen, popupPosition, buttonRef, initialiseButtonWidth } = usePopupContext()
-
-    const refCallback = (node) => {
-        buttonRef.current = node
-
-        if (typeof forwardedRef === 'function') {
-            forwardedRef(node)
-            return
-        }
-
-        if (forwardedRef && typeof forwardedRef === 'object') {
-            forwardedRef.current = node
-        }
-    }
-
     return (
         <button
-            ref={refCallback}
+            ref={initialiseButtonWidth}
             type="button"
             tabIndex={tabIndex}
             disabled={disabled}
@@ -195,7 +181,7 @@ const Button = forwardRef(({
             {children}
         </button>
     )
-})
+}
 
 const Body = ({
     children = null,

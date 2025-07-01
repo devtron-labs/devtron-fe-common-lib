@@ -54,6 +54,9 @@ export interface BulkSelectionProps {
      */
     showChevronDownIcon?: boolean
     disabled?: boolean
+    /**
+     * If true, pressing the checkbox will select all items on page if list is not paginated
+     */
     selectAllIfNotPaginated?: boolean
 }
 

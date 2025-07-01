@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactElement } from 'react'
+import { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactElement, Ref } from 'react'
 import { LinkProps } from 'react-router-dom'
 
 import { TooltipProps } from '@Common/Tooltip'
@@ -48,6 +48,7 @@ export enum ButtonComponentType {
 export type ButtonProps<ComponentType extends ButtonComponentType = ButtonComponentType.button> =
     (ComponentType extends ButtonComponentType.link
         ? {
+              ref?: Ref<HTMLAnchorElement>
               component: ButtonComponentType.link
               /**
                * Props for the link component
@@ -59,6 +60,7 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
           }
         : ComponentType extends ButtonComponentType.anchor
           ? {
+                ref?: Ref<HTMLAnchorElement>
                 component: ButtonComponentType.anchor
                 linkProps?: never
                 buttonProps?: never
@@ -74,6 +76,7 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
                 onClick?: AnchorHTMLAttributes<HTMLAnchorElement>['onClick']
             }
           : {
+                ref?: Ref<HTMLButtonElement>
                 /**
                  * Component to be rendered from the available options
                  *
