@@ -17,15 +17,13 @@
 import { ComponentSizeType } from '@Shared/constants'
 
 import GettingToast from '../../../Assets/Img/lifebuoy.png'
-import { LOGIN_COUNT, MAX_LOGIN_COUNT, POSTHOG_EVENT_ONBOARDING } from '../../../Common'
+import { LOGIN_COUNT, MAX_LOGIN_COUNT, POSTHOG_EVENT_ONBOARDING, stopPropagation } from '../../../Common'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { handlePostHogEventUpdate, setActionWithExpiry } from '../Header/utils'
 import updateLoginCount from './service'
 import { GettingStartedType } from './types'
 
-import './gettingStarted.scss'
-
-const GettingStartedCard = ({ className, hideGettingStartedCard }: GettingStartedType) => {
+const GettingStartedCard = ({ hideGettingStartedCard }: GettingStartedType) => {
     const onClickedOkay = async () => {
         setActionWithExpiry('clickedOkay', 1)
         hideGettingStartedCard()
@@ -43,28 +41,25 @@ const GettingStartedCard = ({ className, hideGettingStartedCard }: GettingStarte
     }
 
     return (
-        <div className="getting_tippy__position">
-            <div className="arrow-up" />
-            <div className={`getting-started-card cn-0 p-20 br-8 fs-13 bg__overlay--primary dc__border ${className}`}>
-                <img className="mb-12 icon-dim-32" src={GettingToast} alt="getting started icon" />
-                <div className="flex column left fw-6 cn-7">Getting started</div>
-                <div className="cn-7">You can always access the Getting Started guide from here.</div>
-                <div className="mt-12 lh-18 flex left dc__gap-12">
-                    <Button
-                        text="Okay"
-                        size={ComponentSizeType.xs}
-                        dataTestId="getting-started-okay"
-                        onClick={onClickedOkay}
-                    />
-                    <Button
-                        text="Don't show again"
-                        size={ComponentSizeType.xs}
-                        dataTestId="getting-started-don't-show-again"
-                        onClick={onClickedDontShowAgain}
-                        style={ButtonStyleType.neutral}
-                        variant={ButtonVariantType.secondary}
-                    />
-                </div>
+        <div className="cn-0 p-20 br-8 fs-13 bg__overlay--primary dc__border w-300" onClick={stopPropagation}>
+            <img className="mb-12 icon-dim-32" src={GettingToast} alt="getting started icon" />
+            <div className="flex column left fw-6 cn-7">Getting started</div>
+            <div className="cn-7">You can always access the Getting Started guide from here.</div>
+            <div className="mt-12 lh-18 flex left dc__gap-12">
+                <Button
+                    text="Okay"
+                    size={ComponentSizeType.xs}
+                    dataTestId="getting-started-okay"
+                    onClick={onClickedOkay}
+                />
+                <Button
+                    text="Don't show again"
+                    size={ComponentSizeType.xs}
+                    dataTestId="getting-started-don't-show-again"
+                    onClick={onClickedDontShowAgain}
+                    style={ButtonStyleType.neutral}
+                    variant={ButtonVariantType.secondary}
+                />
             </div>
         </div>
     )

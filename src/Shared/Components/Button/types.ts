@@ -17,7 +17,7 @@
 import { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactElement } from 'react'
 import { LinkProps } from 'react-router-dom'
 
-import { TooltipProps } from '@Common/Tooltip/types'
+import { TooltipProps } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 
 // Using the same for BEM class elements
@@ -146,7 +146,7 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
                   /**
                    * If true, the tooltip is shown for the button
                    */
-                  showTooltip: boolean
+                  showTooltip?: boolean
                   /**
                    * Props for tooltip
                    */

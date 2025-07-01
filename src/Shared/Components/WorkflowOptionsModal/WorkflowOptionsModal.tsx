@@ -14,31 +14,33 @@
  * limitations under the License.
  */
 
-import React, { useEffect, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 
-import changeCI from '@Images/change-source.png'
-import selectWorkflowSource from '@Images/select-image-source.png'
-import { showError, stopPropagation } from '@Common/Helper'
-import { VisibleModal } from '@Common/index'
+import { ReactComponent as ImgWorkflowOptionsModalHeader } from '@Images/workflow-options-modal-header.svg'
+import { noop, showError } from '@Common/Helper'
 import { PipelineType, WorkflowNodeType } from '@Common/Types'
+import { ComponentSizeType } from '@Shared/constants'
 import { saveCDPipeline, ToastManager, ToastVariantType } from '@Shared/Services'
 import { CIPipelineNodeType } from '@Shared/types'
 
-import {
-    CHANGE_SAME_CI,
-    NO_ENV_FOUND,
-    REQUEST_IN_PROGRESS,
-    SOURCE_TYPE_CARD_VARIANTS,
-    TOAST_MESSAGES,
-    WORKFLOW_OPTIONS_MODAL,
-    WORKFLOW_OPTIONS_MODAL_TYPES,
-} from './constants'
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
+import { GenericModal } from '../GenericModal'
+import { Icon } from '../Icon'
+import { NO_ENV_FOUND, REQUEST_IN_PROGRESS, TOAST_MESSAGES } from './constants'
 import SourceTypeCard from './SourceTypeCard'
-import { WorkflowOptionsModalProps } from './types'
-import { getSwitchToWebhookPayload } from './utils'
+import { SourceTypeCardProps, WorkflowOptionsModalProps } from './types'
+import {
+    getBuildWorkflowCardsConfig,
+    getCurrentPipelineType,
+    getJobWorkflowCardsConfig,
+    getReceiveWorkflowCardsConfig,
+    getSwitchToWebhookPayload,
+} from './utils'
+
+import './styles.scss'
 
 const WorkflowOptionsModal = ({
-    handleCloseWorkflowOptionsModal,
+    open,
     addCIPipeline,
     addWebhookCD,
     addLinkedCD,
@@ -50,63 +52,41 @@ const WorkflowOptionsModal = ({
     linkedCDSourceVariant,
     isAppGroup = false,
     isTemplateView,
+    onClose,
 }: Readonly<WorkflowOptionsModalProps>) => {
-    const [currentCIPipelineType, setCurrentCIPipelineType] = useState<CIPipelineNodeType | WorkflowNodeType.WEBHOOK>(
-        null,
-    )
+    // STATES
     const [loadingWebhook, setLoadingWebhook] = useState<boolean>(false)
 
+    // CONSTANTS
+    const currentPipelineType = useMemo(
+        () => getCurrentPipelineType({ workflows, changeCIPayload }),
+        [workflows, changeCIPayload],
+    )
+
+    const buildWorkflowCards = useMemo(
+        () => getBuildWorkflowCardsConfig({ currentPipelineType, changeCIPayload, isAppGroup }),
+        [currentPipelineType, isAppGroup, changeCIPayload],
+    )
+
+    const receiveWorkflowCards = useMemo(
+        () => getReceiveWorkflowCardsConfig({ currentPipelineType, linkedCDSourceVariant, isAppGroup }),
+        [currentPipelineType, linkedCDSourceVariant, isAppGroup],
+    )
+
+    const jobWorkflowCards = useMemo(
+        () => getJobWorkflowCardsConfig({ currentPipelineType, isAppGroup }),
+        [currentPipelineType, isAppGroup],
+    )
+
+    // HANDLERS
     /**
      * Would be called in case user flow is completed like closing modal, changing CI to webhook with some cd pipelines
      * In other cases this would be done via closePipeline method in workflowEditor
      */
     const handleFlowCompletion = () => {
-        handleCloseWorkflowOptionsModal()
+        onClose()
         resetChangeCIPayload()
     }
-
-    useEffect(() => {
-        if (changeCIPayload && workflows) {
-            const currentWorkflow = workflows.find((workflow) => +workflow.id === changeCIPayload?.appWorkflowId)
-            if (!currentWorkflow) {
-                handleFlowCompletion()
-                ToastManager.showToast({
-                    variant: ToastVariantType.error,
-                    description: TOAST_MESSAGES.WORKFLOW_NOT_AVAILABLE,
-                })
-                return
-            }
-
-            const currentCIPipeline = currentWorkflow.nodes.find((node) => node.type === WorkflowNodeType.CI)
-            const isWebhook = currentWorkflow.nodes.some((node) => node.type === WorkflowNodeType.WEBHOOK)
-
-            if (isWebhook) {
-                setCurrentCIPipelineType(WorkflowNodeType.WEBHOOK)
-                return
-            }
-
-            if (currentCIPipeline?.isJobCI) {
-                setCurrentCIPipelineType(CIPipelineNodeType.JOB_CI)
-                return
-            }
-
-            if (currentCIPipeline?.isLinkedCI) {
-                setCurrentCIPipelineType(CIPipelineNodeType.LINKED_CI)
-                return
-            }
-
-            if (currentCIPipeline?.isExternalCI) {
-                setCurrentCIPipelineType(CIPipelineNodeType.EXTERNAL_CI)
-                return
-            }
-
-            if (currentCIPipeline?.isLinkedCD) {
-                setCurrentCIPipelineType(CIPipelineNodeType.LINKED_CD)
-                return
-            }
-            setCurrentCIPipelineType(CIPipelineNodeType.CI)
-        }
-    }, [workflows, changeCIPayload])
 
     const handleChangeToWebhook = () => {
         if (changeCIPayload) {
@@ -137,10 +117,10 @@ const WorkflowOptionsModal = ({
             }
         }
         addWebhookCD(changeCIPayload?.appWorkflowId || 0)
-        handleCloseWorkflowOptionsModal()
+        onClose()
     }
 
-    const handleCardAction = (e: React.MouseEvent | React.KeyboardEvent) => {
+    const handleCardAction: SourceTypeCardProps['onCardAction'] = (e) => {
         if (!(e.currentTarget instanceof HTMLDivElement)) {
             return
         }
@@ -159,21 +139,17 @@ const WorkflowOptionsModal = ({
 
         if (linkedCDSourceVariant && pipelineType === linkedCDSourceVariant.type) {
             addLinkedCD(changeCIPayload)
-            handleCloseWorkflowOptionsModal()
+            onClose()
             return
         }
 
         addCIPipeline(pipelineType as CIPipelineNodeType, changeCIPayload?.appWorkflowId ?? 0)
-        handleCloseWorkflowOptionsModal()
+        onClose()
     }
 
-    const getDisabledInfo = (requiredCIPipelineType: typeof currentCIPipelineType) => {
+    const getDisabledInfo = (requiredCIPipelineType: typeof currentPipelineType) => {
         if (!showLinkedCDSource && requiredCIPipelineType === CIPipelineNodeType.LINKED_CD) {
             return NO_ENV_FOUND
-        }
-
-        if (currentCIPipelineType === requiredCIPipelineType) {
-            return CHANGE_SAME_CI
         }
 
         if (loadingWebhook) {
@@ -183,124 +159,92 @@ const WorkflowOptionsModal = ({
         return null
     }
 
-    return (
-        <VisibleModal
-            onEscape={loadingWebhook ? null : handleFlowCompletion}
-            close={loadingWebhook ? null : handleFlowCompletion}
-        >
-            <div
-                className="mt-40 dc__m-auto w-650 shadow__modal bg__menu--primary br-8 flexbox h-500 dc__overflow-auto"
-                onClick={stopPropagation}
-            >
-                {/* Sidebar */}
-                <div className="flexbox-col w-250 pt-32 bg__tertiary dc__content-space">
-                    {/* Info */}
-                    <div className="flexbox-col dc__gap-6 dc__align-self-stretch pt-0 pb-0 pl-24 pr-24">
-                        <h2 className="m-0 cn-9 fs-16 fw-6 lh-24">
-                            {changeCIPayload
-                                ? WORKFLOW_OPTIONS_MODAL.CHANGE_CI_TEXT
-                                : WORKFLOW_OPTIONS_MODAL.ACTION_TEXT}
-                        </h2>
+    // USE-EFFECTS
+    useEffect(() => {
+        if (changeCIPayload && workflows) {
+            const currentWorkflow = workflows.find((workflow) => +workflow.id === changeCIPayload.appWorkflowId)
+            if (!currentWorkflow) {
+                handleFlowCompletion()
+                ToastManager.showToast({
+                    variant: ToastVariantType.error,
+                    description: TOAST_MESSAGES.WORKFLOW_NOT_AVAILABLE,
+                })
+            }
+        }
+    }, [workflows, changeCIPayload])
 
-                        <p className="m-0 cn-7 fs-13 fw-4 lh-20">
-                            {changeCIPayload
-                                ? WORKFLOW_OPTIONS_MODAL.CHANGE_CI_NOTE
-                                : WORKFLOW_OPTIONS_MODAL.ACTION_NOTE}
-                        </p>
-                    </div>
+    const resetStateToDefault = () => {
+        setLoadingWebhook(false)
+    }
 
-                    <img
-                        src={changeCIPayload ? changeCI : selectWorkflowSource}
-                        alt="workflow-action"
-                        width={250}
-                        height={350}
-                    />
-                </div>
+    useEffect(() => {
+        if (!open) {
+            resetStateToDefault()
+        }
+    }, [open])
 
-                {/* Content */}
-                <div className="flexbox-col p-20 dc__gap-12 dc__overflow-auto">
-                    <section className="flexbox-col dc__gap-8 dc__align-self-stretch">
-                        <h3 className="m-0 cn-7 fs-11 fw-6 lh-16 dc__uppercase">
-                            {WORKFLOW_OPTIONS_MODAL_TYPES.DEFAULT}
-                        </h3>
-
+    // RENDERERS
+    const renderSourceTypeCards = (title: string, cardsConfig: typeof buildWorkflowCards) =>
+        !!cardsConfig.length && (
+            <div className="flexbox-col dc__gap-8">
+                <h4 className="m-0 fs-13 lh-16 fw-6 cn-7">{title}</h4>
+                <div className="workflow-options-modal__cards-container dc__grid dc__gap-12">
+                    {cardsConfig.map((props) => (
                         <SourceTypeCard
-                            title={SOURCE_TYPE_CARD_VARIANTS.SOURCE_CODE.title}
-                            subtitle={SOURCE_TYPE_CARD_VARIANTS.SOURCE_CODE.subtitle}
-                            image={SOURCE_TYPE_CARD_VARIANTS.SOURCE_CODE.image}
-                            alt={SOURCE_TYPE_CARD_VARIANTS.SOURCE_CODE.alt}
-                            dataTestId={SOURCE_TYPE_CARD_VARIANTS.SOURCE_CODE.dataTestId}
-                            type={SOURCE_TYPE_CARD_VARIANTS.SOURCE_CODE.type}
-                            handleCardAction={handleCardAction}
-                            disableInfo={getDisabledInfo(CIPipelineNodeType.CI)}
+                            {...props}
+                            onCardAction={handleCardAction}
+                            disableInfo={getDisabledInfo(props.type)}
                         />
-
-                        <SourceTypeCard
-                            title={SOURCE_TYPE_CARD_VARIANTS.LINKED_PIPELINE.title}
-                            subtitle={SOURCE_TYPE_CARD_VARIANTS.LINKED_PIPELINE.subtitle}
-                            image={SOURCE_TYPE_CARD_VARIANTS.LINKED_PIPELINE.image}
-                            alt={SOURCE_TYPE_CARD_VARIANTS.LINKED_PIPELINE.alt}
-                            dataTestId={SOURCE_TYPE_CARD_VARIANTS.LINKED_PIPELINE.dataTestId}
-                            type={SOURCE_TYPE_CARD_VARIANTS.LINKED_PIPELINE.type}
-                            handleCardAction={handleCardAction}
-                            disableInfo={getDisabledInfo(CIPipelineNodeType.LINKED_CI)}
-                            isDisabled={isAppGroup}
-                        />
-                    </section>
-
-                    <section className="flexbox-col dc__gap-8 dc__align-self-stretch">
-                        <h3 className="m-0 cn-7 fs-11 fw-6 lh-16 dc__uppercase">
-                            {WORKFLOW_OPTIONS_MODAL_TYPES.RECIEVE}
-                        </h3>
-
-                        <SourceTypeCard
-                            title={SOURCE_TYPE_CARD_VARIANTS.EXTERNAL_SERVICE.title}
-                            subtitle={SOURCE_TYPE_CARD_VARIANTS.EXTERNAL_SERVICE.subtitle}
-                            image={SOURCE_TYPE_CARD_VARIANTS.EXTERNAL_SERVICE.image}
-                            alt={SOURCE_TYPE_CARD_VARIANTS.EXTERNAL_SERVICE.alt}
-                            dataTestId={SOURCE_TYPE_CARD_VARIANTS.EXTERNAL_SERVICE.dataTestId}
-                            type={SOURCE_TYPE_CARD_VARIANTS.EXTERNAL_SERVICE.type}
-                            handleCardAction={handleCardAction}
-                            disableInfo={getDisabledInfo(WorkflowNodeType.WEBHOOK)}
-                            isDisabled={isAppGroup}
-                        />
-
-                        {!!linkedCDSourceVariant && (
-                            <SourceTypeCard
-                                title={linkedCDSourceVariant.title}
-                                subtitle={linkedCDSourceVariant.subtitle}
-                                image={linkedCDSourceVariant.image}
-                                alt={linkedCDSourceVariant.alt}
-                                dataTestId={linkedCDSourceVariant.dataTestId}
-                                type={linkedCDSourceVariant.type}
-                                handleCardAction={handleCardAction}
-                                disableInfo={getDisabledInfo(CIPipelineNodeType.LINKED_CD)}
-                            />
-                        )}
-                    </section>
-
-                    {window._env_.ENABLE_CI_JOB && (
-                        <section className="flexbox-col dc__gap-8 dc__align-self-stretch">
-                            <h3 className="m-0 cn-7 fs-11 fw-6 lh-16 dc__uppercase">
-                                {WORKFLOW_OPTIONS_MODAL_TYPES.JOB}
-                            </h3>
-
-                            <SourceTypeCard
-                                title={SOURCE_TYPE_CARD_VARIANTS.JOB.title}
-                                subtitle={SOURCE_TYPE_CARD_VARIANTS.JOB.subtitle}
-                                image={SOURCE_TYPE_CARD_VARIANTS.JOB.image}
-                                alt={SOURCE_TYPE_CARD_VARIANTS.JOB.alt}
-                                dataTestId={SOURCE_TYPE_CARD_VARIANTS.JOB.dataTestId}
-                                type={SOURCE_TYPE_CARD_VARIANTS.JOB.type}
-                                handleCardAction={handleCardAction}
-                                disableInfo={getDisabledInfo(CIPipelineNodeType.JOB_CI)}
-                                isDisabled={isAppGroup}
-                            />
-                        </section>
-                    )}
+                    ))}
                 </div>
             </div>
-        </VisibleModal>
+        )
+
+    return (
+        <GenericModal
+            name="workflow-options-modal"
+            open={open}
+            onClose={loadingWebhook ? noop : handleFlowCompletion}
+            onEscape={loadingWebhook ? noop : handleFlowCompletion}
+            width={800}
+            closeOnBackdropClick
+        >
+            <GenericModal.Body>
+                <div className="flexbox-col h-500">
+                    {/* HEADER */}
+                    <div className="workflow-options-modal__header flex top dc__content-space dc__no-shrink p-24 dc__position-rel dc__overflow-hidden">
+                        <ImgWorkflowOptionsModalHeader className="workflow-options-modal__img dc__position-abs dc__right-0" />
+                        <div>
+                            <h2 className="m-0 fs-20 lh-1-5 fw-6 cn-9">
+                                {changeCIPayload ? 'Change image source' : 'Workflow templates'}
+                            </h2>
+                            <h3 className="m-0 fs-14 lh-1-5 fw-4 cn-7">
+                                {changeCIPayload
+                                    ? 'Deploy to environments in the workflow from another image source'
+                                    : 'Select a template to create a workflow'}
+                            </h3>
+                        </div>
+                        <Button
+                            dataTestId="workflow-options-modal-close-button"
+                            ariaLabel="workflow-options-modal-close-button"
+                            icon={<Icon name="ic-close-large" color={null} />}
+                            variant={ButtonVariantType.secondary}
+                            style={ButtonStyleType.negativeGrey}
+                            size={ComponentSizeType.medium}
+                            onClick={onClose}
+                            showAriaLabelInTippy={false}
+                        />
+                    </div>
+
+                    {/* BODY */}
+                    <div className="flex-grow-1 flexbox-col dc__gap-24 px-20 py-16 dc__overflow-auto">
+                        {renderSourceTypeCards('Build Container Image', buildWorkflowCards)}
+                        {renderSourceTypeCards('Receive Container Image', receiveWorkflowCards)}
+                        {renderSourceTypeCards('Create Job', jobWorkflowCards)}
+                    </div>
+                </div>
+            </GenericModal.Body>
+        </GenericModal>
     )
 }
 
