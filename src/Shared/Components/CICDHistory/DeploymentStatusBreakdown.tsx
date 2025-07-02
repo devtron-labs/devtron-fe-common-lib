@@ -60,8 +60,7 @@ const DeploymentStatusDetailBreakdown = ({
                     {(
                         [
                             TIMELINE_STATUS.GIT_COMMIT,
-                            ...(appDetails.deploymentAppType === DeploymentAppTypes.ARGO ||
-                            deploymentAppType === DeploymentAppTypes.ARGO
+                            ...(deploymentAppType === DeploymentAppTypes.ARGO
                                 ? [TIMELINE_STATUS.ARGOCD_SYNC, TIMELINE_STATUS.KUBECTL_APPLY]
                                 : []),
                         ] as DeploymentStatusDetailRowType['type'][]
