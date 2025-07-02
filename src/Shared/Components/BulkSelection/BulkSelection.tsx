@@ -17,7 +17,7 @@
 import { forwardRef, MouseEvent } from 'react'
 
 import { ReactComponent as ICChevronDown } from '../../../Assets/Icon/ic-chevron-down.svg'
-import { Checkbox, noop } from '../../../Common'
+import { Checkbox, ConditionalWrap, noop } from '../../../Common'
 import { ActionMenu, ActionMenuItemType, ActionMenuProps } from '../ActionMenu'
 import { useBulkSelection } from './BulkSelectionProvider'
 import { BULK_DROPDOWN_TEST_ID, BulkSelectionOptionsLabels } from './constants'
@@ -73,7 +73,9 @@ const BulkSelection = forwardRef<HTMLLabelElement, BulkSelectionProps>(
             })
         }
 
-        return (
+        const shouldWrapActionMenu = !selectAllIfNotPaginated || showPagination
+
+        const wrapWithActionMenu = (children: React.ReactElement) => (
             <ActionMenu
                 id={BULK_DROPDOWN_TEST_ID}
                 onClick={onActionMenuClick}
@@ -84,6 +86,12 @@ const BulkSelection = forwardRef<HTMLLabelElement, BulkSelectionProps>(
                     },
                 ]}
             >
+                {children}
+            </ActionMenu>
+        )
+
+        return (
+            <ConditionalWrap wrap={wrapWithActionMenu} condition={shouldWrapActionMenu}>
                 <div className="flexbox dc__gap-4 dc__align-items-center">
                     <Checkbox
                         ref={forwardedRef}
@@ -92,13 +100,13 @@ const BulkSelection = forwardRef<HTMLLabelElement, BulkSelectionProps>(
                         rootClassName="icon-dim-20 m-0"
                         value={checkboxValue}
                         disabled={disabled}
-                        onClick={selectAllIfNotPaginated && !showPagination ? onSinglePageSelectAll : null}
+                        onClick={!shouldWrapActionMenu ? onSinglePageSelectAll : null}
                         // Ideally should be disabled but was giving issue with cursor
                     />
 
                     {showChevronDownIcon && <ICChevronDown className="icon-dim-20 fcn-6 dc__no-shrink" />}
                 </div>
-            </ActionMenu>
+            </ConditionalWrap>
         )
     },
 )
