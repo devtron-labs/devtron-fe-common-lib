@@ -89,6 +89,12 @@ export type TreeViewProps = {
      * @default 'primary'
      */
     variant?: 'primary' | 'secondary'
+    /**
+     * If true, means on change of selectedId, the tree view will scroll to the selected item.
+     * Assumption: parents of the selected item are expanded.
+     * @default true
+     */
+    shouldScrollOnChange?: boolean
 } & (
     | {
           isUncontrolled: true

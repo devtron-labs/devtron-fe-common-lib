@@ -2,11 +2,13 @@ import { SyntheticEvent, useMemo, useRef, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 
+import { useEffectAfterMount } from '@Common/Helper'
+
 import { Icon } from '../Icon'
 import { TrailingItem } from '../TrailingItem'
 import { DEFAULT_NO_ITEMS_TEXT, VARIANT_TO_BG_CLASS_MAP, VARIANT_TO_HOVER_CLASS_MAP } from './constants'
 import TreeViewNodeContent from './TreeViewNodeContent'
-import { TreeHeading, TreeItem, TreeViewProps } from './types'
+import { TreeHeading, TreeItem, TreeNode, TreeViewProps } from './types'
 
 import './TreeView.scss'
 
@@ -28,10 +30,11 @@ const TreeView = ({
     flatNodeList: flatNodeListProp,
     getUpdateItemsRefMap: getUpdateItemsRefMapProp,
     variant = 'primary',
+    shouldScrollOnChange = true,
 }: TreeViewProps) => {
     const { pathname } = useLocation()
     // Using this at root level
-    const rootItemRefs = useRef<Record<string, HTMLButtonElement | HTMLAnchorElement | null>>({})
+    const itemsRef = useRef<Record<string, HTMLButtonElement | HTMLAnchorElement | null>>({})
     // This will in actuality be used in first level of tree view since we are sending isUncontrolled prop as false to all the nested tree views
     const [currentLevelExpandedMap, setCurrentLevelExpandedMap] = useState<Record<string, boolean>>({})
 
@@ -40,6 +43,54 @@ const TreeView = ({
     const isFirstLevel = depth === 0
 
     const fallbackTabIndex = mode === 'navigation' ? -1 : 0
+
+    const findSelectedIdParentNodes = (node: TreeNode, onFindParentNode: (id: string) => void): boolean => {
+        if (node.id === selectedId) {
+            return true
+        }
+
+        if (node.type === 'heading' && node.items?.length) {
+            let found = false
+            node.items.forEach((childNode) => {
+                if (findSelectedIdParentNodes(childNode, onFindParentNode)) {
+                    found = true
+                    onFindParentNode(node.id)
+                }
+            })
+            return found
+        }
+
+        return false
+    }
+
+    const getSelectedIdParentNodes = (): string[] => {
+        const selectedIdParentNodes: string[] = []
+
+        nodes.forEach((node) => {
+            findSelectedIdParentNodes(node, (id: string) => {
+                selectedIdParentNodes.push(id)
+            })
+        })
+        return selectedIdParentNodes
+    }
+
+    useEffectAfterMount(() => {
+        // To use this functionality one must make sure the expandedMap is set correctly
+        if (isFirstLevel && itemsRef.current && itemsRef.current[selectedId]) {
+            // In case of uncontrolled tree view, we will expand all the parent nodes of the selected item
+            if (isUncontrolled) {
+                const selectedIdParentNodes = getSelectedIdParentNodes()
+                setCurrentLevelExpandedMap((prev) => {
+                    const newExpandedMap = { ...prev }
+                    selectedIdParentNodes.forEach((id) => {
+                        newExpandedMap[id] = true
+                    })
+                    return newExpandedMap
+                })
+            }
+            itemsRef.current[selectedId].scrollIntoView()
+        }
+    }, [shouldScrollOnChange, selectedId])
 
     const getToggleNode = (node: TreeHeading) => () => {
         if (isUncontrolled) {
@@ -56,7 +107,7 @@ const TreeView = ({
         if (!isFirstLevel) {
             throw new Error('getUpdateItemsRefMap should only be used at the first level of the tree view.')
         }
-        rootItemRefs.current[id] = el
+        itemsRef.current[id] = el
     }
 
     // will traverse all the nodes that are expanded and visible in the tree view
@@ -105,12 +156,12 @@ const TreeView = ({
         }
 
         if (key === 'ArrowDown' && currentIndex < flatNodeList.length - 1) {
-            rootItemRefs.current[flatNodeList[currentIndex + 1]]?.focus()
+            itemsRef.current[flatNodeList[currentIndex + 1]]?.focus()
             return
         }
 
         if (key === 'ArrowUp' && currentIndex > 0) {
-            rootItemRefs.current[flatNodeList[currentIndex - 1]]?.focus()
+            itemsRef.current[flatNodeList[currentIndex - 1]]?.focus()
         }
     }
 
