@@ -62,7 +62,7 @@ const getDefaultDeploymentStatusTimeline = (
                 ...commonProps,
                 displayText: 'Push manifest to Git',
             },
-            ...(deploymentAppType === DeploymentAppTypes.GITOPS
+            ...(deploymentAppType === DeploymentAppTypes.ARGO
                 ? {
                       [TIMELINE_STATUS.ARGOCD_SYNC]: {
                           ...commonProps,
@@ -230,12 +230,16 @@ const processKubeCTLApply = (
  * This function processes the deployment status details data and returns a breakdown of the deployment status.
  * Cases it handles:
  * 1. If timelines are not present, say the case of helm deployment, we will parse the wfrStatus and put the status and basic deployment info [triggeredBy, deploymentStartedOn, deploymentFinishedOn] into the breakdown data and return it.
- * 2. In case of gitops:
+ * 2. In case of argo_cd:
  *  - There are five timelines in chronological order:
  *    - Deployment Initiated
  *    - Git commit
  *    - ArgoCD Sync
  *    - Kubectl Apply
+ *    - App Health
+ *    In case of flux_cd
+ *    - Deployment Initiated
+ *    - Git commit
  *    - App Health
  *  - Basic flow is we traverse the timelines in order, if find the last status for that specific timeline from response by traversing the timelines in reverse order.
  *  - If element is found, we will parse the status and set the icon, display text, time, etc. for that timeline and set the next timeline to inprogress.

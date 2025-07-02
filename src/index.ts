@@ -159,6 +159,7 @@ export interface customEnv {
     GATEKEEPER_URL?: string
     FEATURE_AI_INTEGRATION_ENABLE?: boolean
     LOGIN_PAGE_IMAGE?: string
+    FEATURE_ASK_DEVTRON_EXPERT?: boolean
     /**
      * If true, the manage traffic feature is enabled in apps & app groups.
      *
@@ -171,6 +172,12 @@ export interface customEnv {
      * @default false
      */
     FEATURE_FLUX_DEPLOYMENTS_ENABLE?: boolean
+    FEATURE_LINK_EXTERNAL_FLUX_ENABLE?: boolean
+    /**
+     * If true, online/offline connectivity banner is enabled
+     *  @default true
+     */
+    FEATURE_INTERNET_CONNECTIVITY_ENABLE?: boolean
 }
 declare global {
     interface Window {

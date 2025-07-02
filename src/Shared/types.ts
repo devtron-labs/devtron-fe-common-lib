@@ -18,7 +18,7 @@ import { ReactNode } from 'react'
 import { ParsedCountry } from 'react-international-phone'
 import { Dayjs } from 'dayjs'
 
-import { APIOptions, ApprovalConfigDataType } from '@Common/Types'
+import { APIOptions, ApprovalConfigDataType, Strategy } from '@Common/Types'
 import { ReleaseMode } from '@Pages/index'
 
 import {
@@ -28,6 +28,7 @@ import {
     PluginType,
     RefVariableType,
     SegmentedControlProps,
+    ServerError,
     ServerErrors,
     SortingParams,
     TriggerBlockType,
@@ -1033,6 +1034,7 @@ export enum CIPipelineNodeType {
     LINKED_CI = 'LINKED-CI',
     JOB_CI = 'JOB-CI',
     LINKED_CD = 'LINKED_CD',
+    CI_CD = 'CI_CD',
 }
 
 export interface ChangeCIPayloadType {
@@ -1327,3 +1329,9 @@ export type DeploymentStrategyType = 'CANARY' | 'ROLLING' | 'RECREATE' | 'BLUE-G
 export type DeploymentStrategyTypeWithDefault = DeploymentStrategyType | 'DEFAULT'
 
 export type PipelineIdsVsDeploymentStrategyMap = Record<number, DeploymentStrategyTypeWithDefault>
+
+export interface PipelineDeploymentStrategy {
+    pipelineId: number
+    strategies: Strategy[]
+    error: ServerError
+}

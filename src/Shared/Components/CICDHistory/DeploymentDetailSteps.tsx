@@ -61,7 +61,7 @@ const DeploymentDetailSteps = ({
     const processedData =
         isVirtualEnv.current && processVirtualEnvironmentDeploymentData
             ? processVirtualEnvironmentDeploymentData()
-            : processDeploymentStatusDetailsData(appDetails?.deploymentAppType)
+            : processDeploymentStatusDetailsData(deploymentAppType ?? appDetails?.deploymentAppType)
     const [deploymentStatusDetailsBreakdownData, setDeploymentStatusDetailsBreakdownData] =
         useState<DeploymentStatusDetailsBreakdownDataType>(processedData)
 
