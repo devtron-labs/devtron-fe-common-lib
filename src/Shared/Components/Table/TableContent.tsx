@@ -124,9 +124,15 @@ const TableContent = ({
     }
 
     const focusActiveRow = (node: HTMLDivElement) => {
-        if (node && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName.toUpperCase())) {
+        if (
+            node &&
+            !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName.toUpperCase()) &&
+            node.dataset.active === 'true'
+        ) {
             node.focus({ preventScroll: true })
             scrollToShowActiveElementIfNeeded(node, rowsContainerRef.current, headerRef.current?.offsetHeight)
+            // eslint-disable-next-line no-param-reassign
+            node.dataset.active = 'false'
         }
     }
 

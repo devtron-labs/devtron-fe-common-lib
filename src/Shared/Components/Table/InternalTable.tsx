@@ -60,7 +60,7 @@ const InternalTable = ({
     const searchSortTimeoutRef = useRef<number>(-1)
 
     useEffect(() => {
-        wrapperDivRef.current?.addEventListener('focusout', (e: FocusEvent) => {
+        const handleFocusOutEvent = (e: FocusEvent) => {
             const container = e.currentTarget as HTMLElement
             const related = e.relatedTarget as HTMLElement | null
 
@@ -68,10 +68,13 @@ const InternalTable = ({
                 const tableElement = wrapperDivRef.current.getElementsByClassName('generic-table')[0] as HTMLDivElement
                 tableElement?.focus()
             }
-        })
+        }
+
+        wrapperDivRef.current?.addEventListener('focusout', handleFocusOutEvent)
 
         return () => {
             clearTimeout(searchSortTimeoutRef.current)
+            wrapperDivRef.current?.removeEventListener('focusout', handleFocusOutEvent)
         }
     }, [])
 
