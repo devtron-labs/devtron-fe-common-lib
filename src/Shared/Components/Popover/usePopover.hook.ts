@@ -39,9 +39,16 @@ export const usePopover = ({
         onOpen?.(openState)
     }
 
-    const togglePopover = () => updateOpenState(!open)
+    const togglePopover = () => {
+        updateOpenState(!open)
+    }
 
-    const closePopover = () => updateOpenState(false)
+    const closePopover = () => {
+        updateOpenState(false)
+        const triggerButton = triggerRef.current?.querySelector('button')
+        triggerButton?.blur()
+        triggerRef.current?.blur()
+    }
 
     const handleTriggerKeyDown = (e: React.KeyboardEvent) => {
         if (!open && (e.key === 'Enter' || e.key === ' ')) {
@@ -122,6 +129,7 @@ export const usePopover = ({
             onKeyDown: handleTriggerKeyDown,
             'aria-haspopup': 'listbox',
             'aria-expanded': open,
+            className: 'flex',
             tabIndex: 0,
             bounds: triggerBounds ?? { left: 0, top: 0, height: 0, width: 0 },
         },

@@ -14,12 +14,14 @@ const useTableWithKeyboardShortcuts = (
         bulkSelectionReturnValue,
     }: Pick<InternalTableProps, 'bulkSelectionConfig' | 'bulkSelectionReturnValue' | 'handleToggleBulkSelectionOnRow'>,
     visibleRows: RowsType,
+    showPagination: boolean,
+    bulkSelectionButtonRef: React.RefObject<HTMLLabelElement>,
 ) => {
     const isBulkSelectionConfigured = !!bulkSelectionConfig
 
-    const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
+    const { registerShortcut, unregisterShortcut, targetProps } = useRegisterShortcut()
 
-    const { handleBulkSelection } = bulkSelectionReturnValue
+    const { handleBulkSelection } = bulkSelectionReturnValue ?? {}
 
     const [activeRowIndex, setActiveRowIndex] = useState<number>(0)
 
@@ -126,6 +128,13 @@ const useTableWithKeyboardShortcuts = (
         }
 
         registerShortcut({
+            keys: ['Escape'],
+            callback: () => {
+                handleBulkSelection({ action: BulkSelectionEvents.CLEAR_ALL_SELECTIONS })
+            },
+        })
+
+        registerShortcut({
             keys: ['Shift', 'ArrowDown'],
             callback: () => {
                 const { consecutiveSequencesForBulkSelection, activeRowIndex: newActiveRowIndex } =
@@ -146,6 +155,21 @@ const useTableWithKeyboardShortcuts = (
                             [newActiveRow.id]: newActiveRow,
                         },
                     },
+                })
+            },
+        })
+
+        registerShortcut({
+            keys: ['Control', 'A'],
+            callback: () => {
+                if (showPagination) {
+                    bulkSelectionButtonRef.current?.click()
+                    bulkSelectionButtonRef.current?.focus()
+                    return
+                }
+
+                handleBulkSelection({
+                    action: BulkSelectionEvents.SELECT_ALL_ON_PAGE,
                 })
             },
         })
@@ -186,6 +210,8 @@ const useTableWithKeyboardShortcuts = (
             unregisterShortcut(['Shift', 'ArrowUp'])
             unregisterShortcut(['Shift', 'ArrowDown'])
             unregisterShortcut(['X'])
+            unregisterShortcut(['Control', 'A'])
+            unregisterShortcut(['Escape'])
         }
     }, [
         getMoveFocusToNextRowHandler,
@@ -193,11 +219,14 @@ const useTableWithKeyboardShortcuts = (
         activeRowIndex,
         visibleRows,
         handleToggleBulkSelectionOnRow,
+        handleBulkSelection,
+        showPagination,
     ])
 
     return {
         activeRowIndex,
         setActiveRowIndex,
+        shortcutContainerProps: targetProps,
     }
 }
 

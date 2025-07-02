@@ -49,6 +49,7 @@ const useUrlFilters = <T = string, K = {}>({
     parseSearchParams,
     localStorageKey,
     redirectionMethod = 'replace',
+    defaultPageSize = DEFAULT_BASE_PAGE_SIZE,
 }: UseUrlFiltersProps<T, K> = {}): UseUrlFiltersReturnType<T, K> => {
     const location = useLocation()
     const history = useHistory()
@@ -108,7 +109,7 @@ const useUrlFilters = <T = string, K = {}>({
         const _parsedParams = getParsedSearchParams(searchParams)
 
         return {
-            pageSize: Number(_pageSize) || DEFAULT_BASE_PAGE_SIZE,
+            pageSize: Number(_pageSize) || defaultPageSize,
             pageNumber: Number(_pageNumber) || DEFAULT_PAGE_NUMBER,
             searchKey: _searchKey || '',
             sortBy: sortByKey,
@@ -223,7 +224,7 @@ const useUrlFilters = <T = string, K = {}>({
         clearFilters,
         ...parsedParams,
         updateSearchParams,
-        isFilterApplied: !!searchKey || areAnyAdditionalFiltersApplied(parsedParams),
+        areFiltersApplied: !!searchKey || areAnyAdditionalFiltersApplied(parsedParams),
     }
 }
 

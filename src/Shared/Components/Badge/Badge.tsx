@@ -29,7 +29,7 @@ const Badge = ({
                 : {})}
         >
             {startIconProps && <Icon {...startIconProps} size={iconSize} color={fontColor || iconColor} />}
-            <span className="dc__truncate">{label}</span>
+            {label && <span className="dc__truncate">{label}</span>}
             {endIconProps && <Icon {...endIconProps} size={iconSize} color={fontColor || iconColor} />}
         </div>
     )
