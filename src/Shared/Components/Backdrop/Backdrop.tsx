@@ -45,6 +45,8 @@ const Backdrop = ({ children, onEscape, onClick, hasClearBackground = false, onB
     }, [onEscape])
 
     useEffect(() => {
+        const previousActiveElement = document.activeElement as HTMLElement
+
         preventBodyScroll(true)
         // Setting main as inert to that focus is trapped inside the new portal
         preventOutsideFocus({ identifier: DEVTRON_BASE_MAIN_ID, preventFocus: true })
@@ -56,6 +58,8 @@ const Backdrop = ({ children, onEscape, onClick, hasClearBackground = false, onB
             preventOutsideFocus({ identifier: DEVTRON_BASE_MAIN_ID, preventFocus: false })
             preventOutsideFocus({ identifier: 'visible-modal', preventFocus: false })
             preventOutsideFocus({ identifier: 'visible-modal-2', preventFocus: false })
+
+            previousActiveElement?.focus({ preventScroll: true })
         }
     }, [])
 

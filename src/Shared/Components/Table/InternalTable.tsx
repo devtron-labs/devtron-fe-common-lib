@@ -1,7 +1,7 @@
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 
 import ErrorScreenManager from '@Common/ErrorScreenManager'
-import { GenericEmptyState, GenericFilterEmptyState, useAsync } from '@Common/index'
+import { GenericEmptyState, GenericFilterEmptyState, useAsync, UseRegisterShortcutProvider } from '@Common/index'
 
 import { NO_ROWS_OR_GET_ROWS_ERROR } from './constants'
 import TableContent from './TableContent'
@@ -53,16 +53,34 @@ const InternalTable = ({
         ...otherFilters
     } = filterData ?? {}
 
+    const wrapperDivRef = useRef<HTMLDivElement>(null)
+
     const { setIdentifiers } = bulkSelectionReturnValue ?? {}
 
     const searchSortTimeoutRef = useRef<number>(-1)
 
-    useEffect(
-        () => () => {
+    useEffect(() => {
+        const handleFocusOutEvent = (e: FocusEvent) => {
+            const container = e.currentTarget as HTMLElement
+            const related = e.relatedTarget as HTMLElement | null
+
+            if (container && (!related || related.tagName === 'BODY')) {
+                const tableElement = wrapperDivRef.current.getElementsByClassName('generic-table')[0] as HTMLDivElement
+                tableElement?.focus()
+            }
+        }
+
+        wrapperDivRef.current?.addEventListener('focusout', handleFocusOutEvent)
+
+        return () => {
             clearTimeout(searchSortTimeoutRef.current)
-        },
-        [],
-    )
+            wrapperDivRef.current?.removeEventListener('focusout', handleFocusOutEvent)
+        }
+    }, [])
+
+    useEffect(() => {
+        handleClearBulkSelection()
+    }, [rows])
 
     const [_areFilteredRowsLoading, filteredRows, filteredRowsError, reloadFilteredRows] = useAsync(async () => {
         if (!rows && !getRows) {
@@ -121,45 +139,49 @@ const InternalTable = ({
         }
 
         return (
-            <TableContent
-                filteredRows={filteredRows}
-                areFilteredRowsLoading={areFilteredRowsLoading}
-                visibleColumns={visibleColumns}
-                bulkSelectionReturnValue={bulkSelectionReturnValue}
-                paginationVariant={paginationVariant}
-                resizableConfig={resizableConfig}
-                filterData={filterData}
-                handleClearBulkSelection={handleClearBulkSelection}
-                handleToggleBulkSelectionOnRow={handleToggleBulkSelectionOnRow}
-                RowActionsOnHoverComponent={RowActionsOnHoverComponent}
-                additionalProps={additionalProps}
-                bulkSelectionConfig={bulkSelectionConfig}
-                loading={loading}
-                pageSizeOptions={pageSizeOptions}
-                rows={rows}
-                stylesConfig={stylesConfig}
-            />
+            <UseRegisterShortcutProvider shouldHookOntoWindow={false} shortcutTimeout={50}>
+                <TableContent
+                    filteredRows={filteredRows}
+                    areFilteredRowsLoading={areFilteredRowsLoading}
+                    visibleColumns={visibleColumns}
+                    bulkSelectionReturnValue={bulkSelectionReturnValue}
+                    paginationVariant={paginationVariant}
+                    resizableConfig={resizableConfig}
+                    filterData={filterData}
+                    handleClearBulkSelection={handleClearBulkSelection}
+                    handleToggleBulkSelectionOnRow={handleToggleBulkSelectionOnRow}
+                    RowActionsOnHoverComponent={RowActionsOnHoverComponent}
+                    additionalProps={additionalProps}
+                    bulkSelectionConfig={bulkSelectionConfig}
+                    loading={loading}
+                    pageSizeOptions={pageSizeOptions}
+                    rows={rows}
+                    stylesConfig={stylesConfig}
+                />
+            </UseRegisterShortcutProvider>
         )
     }
 
     return (
-        <Wrapper
-            {...{
-                ...filterData,
-                ...additionalProps,
-                areRowsLoading: areFilteredRowsLoading,
-                filteredRows,
-                ...(areColumnsConfigurable
-                    ? {
-                          allColumns: columns,
-                          setVisibleColumns,
-                          visibleColumns,
-                      }
-                    : {}),
-            }}
-        >
-            {renderContent()}
-        </Wrapper>
+        <div ref={wrapperDivRef} className="flexbox-col flex-grow-1 dc__overflow-hidden">
+            <Wrapper
+                {...{
+                    ...filterData,
+                    ...additionalProps,
+                    areRowsLoading: areFilteredRowsLoading,
+                    filteredRows,
+                    ...(areColumnsConfigurable
+                        ? {
+                              allColumns: columns,
+                              setVisibleColumns,
+                              visibleColumns,
+                          }
+                        : {}),
+                }}
+            >
+                {renderContent()}
+            </Wrapper>
+        </div>
     )
 }
 

@@ -1,4 +1,4 @@
-import { MouseEvent, useLayoutEffect, useRef, useState } from 'react'
+import { useLayoutEffect, useRef, useState } from 'react'
 
 import { UsePopoverProps, UsePopoverReturnType } from './types'
 import {
@@ -39,8 +39,7 @@ export const usePopover = ({
         onOpen?.(openState)
     }
 
-    const togglePopover = (e: MouseEvent<HTMLDivElement>) => {
-        e.stopPropagation()
+    const togglePopover = () => {
         updateOpenState(!open)
     }
 

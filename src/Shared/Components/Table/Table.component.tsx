@@ -1,12 +1,6 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import {
-    noop,
-    UseRegisterShortcutProvider,
-    useResizableTableConfig,
-    useStateFilters,
-    useUrlFilters,
-} from '@Common/index'
+import { noop, useResizableTableConfig, useStateFilters, useUrlFilters } from '@Common/index'
 
 import { BulkSelectionEvents, BulkSelectionProvider, useBulkSelection } from '../BulkSelection'
 import { BULK_ACTION_GUTTER_LABEL } from './constants'
@@ -92,7 +86,7 @@ const TableWithUseBulkSelectionReturnValue = (tableProps: TableWithBulkSelection
         (row: RowType) => {
             const isRowSelected = selectedIdentifiers[row.id]
 
-            if (!isRowSelected) {
+            if (!isRowSelected && !isBulkSelectionApplied) {
                 /**
                  * !FIXME: handleBulkSelection does not handle multiple updates in a single call
                  * can be done by using callbacks when setting setIdentifiers in BulkSelectionProvider
@@ -190,31 +184,16 @@ const UseUrlFilterWrapper = (props: FilterWrapperProps) => {
 
 const TableWrapper = (tableProps: TableProps) => {
     const { filtersVariant } = tableProps
-    const tableContainerRef = useRef<HTMLDivElement>(null)
 
-    const renderContent = () => {
-        if (filtersVariant === FiltersTypeEnum.STATE) {
-            return <UseStateFilterWrapper {...tableProps} />
-        }
-
-        if (filtersVariant === FiltersTypeEnum.URL) {
-            return <UseUrlFilterWrapper {...tableProps} />
-        }
-
-        return <VisibleColumnsWrapper {...{ ...tableProps, filterData: null }} />
+    if (filtersVariant === FiltersTypeEnum.STATE) {
+        return <UseStateFilterWrapper {...tableProps} />
     }
 
-    return (
-        <UseRegisterShortcutProvider
-            containerRef={tableContainerRef}
-            shortcutTimeout={50}
-            ignoreTags={['input', 'textarea', 'select', 'button']}
-        >
-            <div ref={tableContainerRef} className="flexbox-col dc__overflow-hidden flex-grow-1">
-                {renderContent()}
-            </div>
-        </UseRegisterShortcutProvider>
-    )
+    if (filtersVariant === FiltersTypeEnum.URL) {
+        return <UseUrlFilterWrapper {...tableProps} />
+    }
+
+    return <VisibleColumnsWrapper {...{ ...tableProps, filterData: null }} />
 }
 
 export default TableWrapper

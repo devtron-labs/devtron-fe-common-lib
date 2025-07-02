@@ -34,7 +34,7 @@ const TableContent = ({
 }: TableContentProps) => {
     const rowsContainerRef = useRef<HTMLDivElement>(null)
     const parentRef = useRef<HTMLDivElement>(null)
-    const bulkSelectionButtonRef = useRef<HTMLButtonElement>(null)
+    const bulkSelectionButtonRef = useRef<HTMLLabelElement>(null)
     const headerRef = useRef<HTMLDivElement>(null)
 
     const [bulkActionState, setBulkActionState] = useState<BulkActionStateType>(null)
@@ -99,7 +99,7 @@ const TableContent = ({
         paginationVariant === PaginationEnum.PAGINATED &&
         filteredRows?.length > (pageSizeOptions?.[0]?.value ?? DEFAULT_BASE_PAGE_SIZE)
 
-    const { activeRowIndex, setActiveRowIndex } = useTableWithKeyboardShortcuts(
+    const { activeRowIndex, setActiveRowIndex, shortcutContainerProps } = useTableWithKeyboardShortcuts(
         { bulkSelectionConfig, bulkSelectionReturnValue, handleToggleBulkSelectionOnRow },
         visibleRows,
         showPagination,
@@ -124,9 +124,15 @@ const TableContent = ({
     }
 
     const focusActiveRow = (node: HTMLDivElement) => {
-        if (node && !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName.toUpperCase())) {
+        if (
+            node &&
+            !['INPUT', 'TEXTAREA'].includes(document.activeElement.tagName.toUpperCase()) &&
+            node.dataset.active === 'true'
+        ) {
             node.focus({ preventScroll: true })
             scrollToShowActiveElementIfNeeded(node, rowsContainerRef.current, headerRef.current?.offsetHeight)
+            // eslint-disable-next-line no-param-reassign
+            node.dataset.active = 'false'
         }
     }
 
@@ -266,7 +272,12 @@ const TableContent = ({
     }
 
     return (
-        <div tabIndex={0} role="grid" className="generic-table flexbox-col dc__overflow-hidden flex-grow-1">
+        <div
+            {...shortcutContainerProps}
+            tabIndex={-1}
+            role="grid"
+            className="generic-table flexbox-col dc__overflow-hidden flex-grow-1 dc__outline-none-imp"
+        >
             <div className="flexbox-col flex-grow-1 w-100 dc__overflow-hidden" ref={parentRef}>
                 <div
                     ref={rowsContainerRef}

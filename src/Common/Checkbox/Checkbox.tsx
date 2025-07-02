@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+import { forwardRef } from 'react'
+
+import { stopPropagation } from '@Common/Helper'
+
 import { CheckboxProps } from '../Types'
 
 import './Checkbox.scss'
@@ -28,38 +32,32 @@ Valid States of Checkbox:
 6. disabled: false, checked: true,  value: CHECKED
 */
 // TODO: Associate label with input element
-export const Checkbox = ({
-    rootClassName,
-    onClick,
-    name,
-    disabled,
-    value,
-    onChange,
-    tabIndex,
-    isChecked,
-    id,
-    dataTestId,
-    children,
-}: CheckboxProps) => {
-    const rootClass = `${rootClassName || ''}`
+export const Checkbox = forwardRef<HTMLLabelElement, CheckboxProps>(
+    (
+        { rootClassName, onClick, name, disabled, value, onChange, tabIndex, isChecked, id, dataTestId, children },
+        forwardedRef,
+    ) => {
+        const rootClass = `${rootClassName || ''}`
 
-    return (
-        // eslint-disable-next-line jsx-a11y/label-has-associated-control
-        <label className={`dc__position-rel flex left cursor ${rootClass}`} onClick={onClick}>
-            <input
-                {...(name ? { name } : {})}
-                type="checkbox"
-                className="form__checkbox"
-                disabled={disabled}
-                value={value}
-                onChange={onChange}
-                tabIndex={tabIndex}
-                checked={isChecked}
-                id={id}
-                data-testid={dataTestId}
-            />
-            <span className="form__checkbox-container" data-testid={`${dataTestId}-chk-span`} />
-            <span className="form__checkbox-label">{children}</span>
-        </label>
-    )
-}
+        return (
+            // eslint-disable-next-line jsx-a11y/label-has-associated-control
+            <label ref={forwardedRef} className={`dc__position-rel flex left cursor ${rootClass}`} onClick={onClick}>
+                <input
+                    {...(name ? { name } : {})}
+                    type="checkbox"
+                    className="form__checkbox"
+                    disabled={disabled}
+                    value={value}
+                    onChange={onChange}
+                    tabIndex={tabIndex}
+                    checked={isChecked}
+                    id={id}
+                    data-testid={dataTestId}
+                    onClick={stopPropagation}
+                />
+                <span className="form__checkbox-container" data-testid={`${dataTestId}-chk-span`} />
+                <span className="form__checkbox-label">{children}</span>
+            </label>
+        )
+    },
+)
