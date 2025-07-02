@@ -1,7 +1,7 @@
 import { SyntheticEvent } from 'react'
 
 import { TooltipProps } from '@Common/Tooltip'
-import { Never } from '@Shared/types'
+import { DataAttributes, Never } from '@Shared/types'
 
 import { IconsProps } from '../Icon'
 import { TrailingItemProps } from '../TrailingItem'
@@ -31,6 +31,7 @@ interface BaseNode {
         | (Never<Pick<IconsProps, 'name' | 'color'>> & { customIcon?: JSX.Element })
     )
     trailingItem?: TrailingItemProps
+    dataAttributes?: Exclude<DataAttributes, 'data-testid' | 'data-node-id'>
 }
 
 export interface TreeHeading extends BaseNode {
@@ -98,6 +99,10 @@ export type TreeViewProps = {
 } & (
     | {
           isUncontrolled: true
+          /**
+           * @default {}
+           */
+          defaultExpandedMap?: Record<string, boolean>
           expandedMap?: never
           onToggle?: never
       }
@@ -105,6 +110,7 @@ export type TreeViewProps = {
           isUncontrolled?: false
           expandedMap: Record<string, boolean>
           onToggle: (item: TreeHeading) => void
+          defaultExpandedMap?: never
       }
 ) &
     (

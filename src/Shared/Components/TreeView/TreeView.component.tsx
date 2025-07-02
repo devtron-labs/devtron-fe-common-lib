@@ -31,12 +31,13 @@ const TreeView = ({
     getUpdateItemsRefMap: getUpdateItemsRefMapProp,
     variant = 'primary',
     shouldScrollOnChange = true,
+    defaultExpandedMap = {},
 }: TreeViewProps) => {
     const { pathname } = useLocation()
     // Using this at root level
     const itemsRef = useRef<Record<string, HTMLButtonElement | HTMLAnchorElement | null>>({})
     // This will in actuality be used in first level of tree view since we are sending isUncontrolled prop as false to all the nested tree views
-    const [currentLevelExpandedMap, setCurrentLevelExpandedMap] = useState<Record<string, boolean>>({})
+    const [currentLevelExpandedMap, setCurrentLevelExpandedMap] = useState<Record<string, boolean>>(defaultExpandedMap)
 
     const expandedMap = isUncontrolled ? currentLevelExpandedMap : expandedMapProp
 
@@ -241,6 +242,7 @@ const TreeView = ({
                                                     ? getUpdateItemsRefMapProp(node.id)
                                                     : getUpdateItemsRefMap(node.id)
                                             }
+                                            {...node.dataAttributes}
                                         >
                                             {depth > 0 && (
                                                 <span className="dc__grid dc__align-self-stretch dc__content-center pl-8 w-24 dc__no-shrink dc__align-items-center">
@@ -364,6 +366,7 @@ const TreeView = ({
                                             ? getUpdateItemsRefMapProp(node.id)
                                             : getUpdateItemsRefMap(node.id)
                                     }
+                                    {...node.dataAttributes}
                                 >
                                     {itemDivider}
                                     {content}
@@ -382,6 +385,7 @@ const TreeView = ({
                                             : getUpdateItemsRefMap(node.id)
                                     }
                                     data-testid={`tree-view-item-${node.title}`}
+                                    {...node.dataAttributes}
                                 >
                                     {itemDivider}
                                     {content}
