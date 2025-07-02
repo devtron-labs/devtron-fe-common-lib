@@ -17,7 +17,13 @@
 import { Dispatch, MutableRefObject, ReactNode, SetStateAction } from 'react'
 
 import { SERVER_MODE } from '../../../Common'
-import { DevtronLicenseInfo, IntelligenceConfig, LicenseInfoDialogType, ToastManager } from '../..'
+import {
+    DevtronLicenseInfo,
+    EnvironmentDataValuesDTO,
+    IntelligenceConfig,
+    LicenseInfoDialogType,
+    ToastManager,
+} from '../..'
 import { ServerInfo } from '../../Components/Header/types'
 
 export interface ReloadVersionConfigTypes {
@@ -48,6 +54,7 @@ type AIAgentContextType = {
     context: Record<string, string>
 }
 
+// Please make sure to make it optional if not required in gatekeeper
 type CommonMainContextProps = {
     setServerMode: (serverMode: SERVER_MODE) => void
     isHelpGettingStartedClicked: boolean
@@ -90,7 +97,7 @@ type CommonMainContextProps = {
     setIntelligenceConfig: Dispatch<SetStateAction<IntelligenceConfig>>
     setAIAgentContext: (aiAgentContext: AIAgentContextType) => void
     setSidePanelConfig: Dispatch<SetStateAction<SidePanelConfig>>
-}
+} & Pick<EnvironmentDataValuesDTO, 'isResourceRecommendationEnabled'>
 
 export type MainContext = CommonMainContextProps &
     (

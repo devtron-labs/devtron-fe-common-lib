@@ -26,6 +26,10 @@
 
         input.form__input {
             padding: 6px 8px;
+
+            &[readonly] {
+                opacity: 0.5;
+            }
         }
     }
 

@@ -21,6 +21,7 @@ import { stopPropagation } from '../Helper'
 
 export class VisibleModal2 extends React.Component<{ className?: string; close?: (e) => void }> {
     modalRef = document.getElementById('visible-modal-2')
+    previousActiveElement: HTMLElement | null = null
 
     constructor(props) {
         super(props)
@@ -38,12 +39,14 @@ export class VisibleModal2 extends React.Component<{ className?: string; close?:
         document.addEventListener('keydown', this.escFunction)
         this.modalRef.classList.add('show-with-bg')
         preventBodyScroll(true)
+        this.previousActiveElement = document.activeElement as HTMLElement
     }
 
     componentWillUnmount() {
         document.removeEventListener('keydown', this.escFunction)
         this.modalRef.classList.remove('show-with-bg')
         preventBodyScroll(false)
+        this.previousActiveElement?.focus({ preventScroll: true })
     }
 
     handleBodyClick = (e: SyntheticEvent) => {

@@ -79,12 +79,10 @@ export const useActionMenu = <T extends string | number>({
         }
     }
 
-    const handleTriggerKeyDown: UsePopoverProps['onTriggerKeyDown'] = (e, openState, closePopover) => {
+    const handleTriggerKeyDown: UsePopoverProps['onTriggerKeyDown'] = (e, openState) => {
         if (!openState && (e.key === 'Enter' || e.key === ' ')) {
             setFocusedIndex(0)
         }
-
-        handlePopoverKeyDown(e, openState, closePopover)
     }
 
     // POPOVER HOOK
