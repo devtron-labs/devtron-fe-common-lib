@@ -144,9 +144,9 @@ export const getSidebarData = ({
     ] satisfies TreeViewProps['nodes']
 
     // Not implementing complete dfs since its not nested, traversing
-    nodes.forEach((node) => {
+    const parsedNodes = nodes.map<(typeof nodes)[number]>((node) => {
         if (node.type === 'heading') {
-            node.items.forEach((item) => {
+            const items = node.items.map<(typeof node.items)[number]>((item) => {
                 if (item.type === 'heading') {
                     throw new Error(
                         'Broken assumption: Heading should not have nested headings in security sidebar, Please implement dfs based handling for nested headings in security sidebar',
@@ -166,19 +166,28 @@ export const getSidebarData = ({
                     return acc + severities[key]
                 }, 0)
 
-                // eslint-disable-next-line no-param-reassign
-                item.trailingItem = threatCount
-                    ? {
-                          type: 'counter',
-                          config: {
-                              value: threatCount,
-                              isSelected: selectedId === item.id,
-                          },
-                      }
-                    : null
+                return {
+                    ...item,
+                    trailingItem: threatCount
+                        ? {
+                              type: 'counter',
+                              config: {
+                                  value: threatCount,
+                                  isSelected: selectedId === item.id,
+                              },
+                          }
+                        : null,
+                }
             })
+
+            return {
+                ...node,
+                items,
+            }
         }
+
+        return node
     })
 
-    return nodes
+    return parsedNodes
 }

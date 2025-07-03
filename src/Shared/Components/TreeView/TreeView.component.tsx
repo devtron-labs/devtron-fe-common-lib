@@ -402,7 +402,7 @@ const TreeView = <DataAttributeType = null,>({
                                             ? getUpdateItemsRefMapProp(node.id)
                                             : getUpdateItemsRefMap(node.id)
                                     }
-                                    {...node.dataAttributes}
+                                    {...(node.dataAttributes ? node.dataAttributes : {})}
                                 >
                                     {itemDivider}
                                     {content}
@@ -421,7 +421,7 @@ const TreeView = <DataAttributeType = null,>({
                                             : getUpdateItemsRefMap(node.id)
                                     }
                                     data-testid={`tree-view-item-${node.title}`}
-                                    {...node.dataAttributes}
+                                    {...(node.dataAttributes ? node.dataAttributes : {})}
                                 >
                                     {itemDivider}
                                     {content}
