@@ -4,6 +4,7 @@
         "paths": {
             "@Icons/*": ["./src/Assets/Icon/*"],
             "@IconsV2/*": ["./src/Assets/IconV2/*"],
+            "@Illustrations/*": ["./src/Assets/Illustration/*"],
             "@Sounds/*": ["./src/Assets/Sounds/*"],
             "@Images/*": ["./src/Assets/Img/*"],
             "@Common/*": ["./src/Common/*"],
