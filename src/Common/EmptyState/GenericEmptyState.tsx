@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { Illustration } from '@Shared/Components'
+
 import AppNotDeployed from '../../Assets/Img/app-not-deployed.svg'
 import { GenericEmptyStateType, ImageType } from '../Types'
 
@@ -35,6 +37,7 @@ const GenericEmptyState = ({
     layout = 'column',
     contentClassName = '',
     imageStyles = {},
+    illustrationName,
 }: GenericEmptyStateType): JSX.Element => {
     const isRowLayout = layout === 'row'
 
@@ -54,7 +57,20 @@ const GenericEmptyState = ({
             data-testid="generic-empty-state"
         >
             {!SvgImage ? (
-                !noImage && (
+                !noImage &&
+                (illustrationName ? (
+                    <Illustration
+                        name={illustrationName}
+                        imageProps={{
+                            alt: 'empty-state',
+                            style: {
+                                width: `${getImageSize().width}`,
+                                height: `${getImageSize().height}`,
+                                ...imageStyles,
+                            },
+                        }}
+                    />
+                ) : (
                     <img
                         className={imageClassName || ''}
                         src={image || AppNotDeployed}
@@ -65,7 +81,7 @@ const GenericEmptyState = ({
                         }}
                         alt="empty-state"
                     />
-                )
+                ))
             ) : (
                 <SvgImage
                     style={{
