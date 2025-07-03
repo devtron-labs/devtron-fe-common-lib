@@ -1,17 +1,17 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-illustration` to update.
 
-import IllustrationCode from '@Illustrations/illustration-code.webp'
-import IllustrationManOnRocket from '@Illustrations/illustration-man-on-rocket.webp'
-import IllustrationNoResult from '@Illustrations/illustration-no-result.webp'
+import ImgCode from '@Illustrations/img-code.webp'
+import ImgManOnRocket from '@Illustrations/img-man-on-rocket.webp'
+import ImgNoResult from '@Illustrations/img-no-result.webp'
 
 // eslint-disable-next-line no-restricted-imports
 import { IllustrationBase } from './IllustrationBase'
 import { IllustrationBaseProps } from './types'
 
 export const illustrationMap = {
-    'illustration-code': IllustrationCode,
-    'illustration-man-on-rocket': IllustrationManOnRocket,
-    'illustration-no-result': IllustrationNoResult,
+    'img-code': ImgCode,
+    'img-man-on-rocket': ImgManOnRocket,
+    'img-no-result': ImgNoResult,
 }
 
 export type IllustrationName = keyof typeof illustrationMap
