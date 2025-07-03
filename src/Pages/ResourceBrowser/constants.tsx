@@ -121,7 +121,7 @@ export const RESOURCE_BROWSER_ROUTES = {
     MONITORING_DASHBOARD: `${URLS.RESOURCE_BROWSER}/:clusterId/monitoring-dashboard`,
     TERMINAL: `${URLS.RESOURCE_BROWSER}/:clusterId/terminal`,
     CLUSTER_UPGRADE: `${URLS.RESOURCE_BROWSER}/:clusterId/cluster-upgrade`,
-    NODE_DETAIL: `${URLS.RESOURCE_BROWSER}/:clusterId/node/:name`,
+    NODE_DETAIL: `${URLS.RESOURCE_BROWSER}/:clusterId/node/detail/:name`,
     K8S_RESOURCE_DETAIL: `${URLS.RESOURCE_BROWSER}/:clusterId/:namespace/:kind/:group/:name`,
     K8S_RESOURCE_LIST: `${URLS.RESOURCE_BROWSER}/:clusterId/:kind/:group`,
     RESOURCE_RECOMMENDER: `${URLS.RESOURCE_BROWSER}/:clusterId/resource-recommender`,
