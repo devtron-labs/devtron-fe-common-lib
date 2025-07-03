@@ -18,7 +18,7 @@ const Divider = () => (
     </span>
 )
 
-const TreeView = ({
+const TreeView = <DataAttributeType = null,>({
     nodes,
     isUncontrolled,
     expandedMap: expandedMapProp,
@@ -32,7 +32,7 @@ const TreeView = ({
     variant = 'primary',
     shouldScrollOnChange = true,
     defaultExpandedMap = {},
-}: TreeViewProps) => {
+}: TreeViewProps<DataAttributeType>) => {
     const { pathname } = useLocation()
     // Using this at root level
     const itemsRef = useRef<Record<string, HTMLButtonElement | HTMLAnchorElement | null>>({})
@@ -45,7 +45,10 @@ const TreeView = ({
 
     const fallbackTabIndex = mode === 'navigation' ? -1 : 0
 
-    const findSelectedIdParentNodes = (node: TreeNode, onFindParentNode: (id: string) => void): boolean => {
+    const findSelectedIdParentNodes = (
+        node: TreeNode<DataAttributeType>,
+        onFindParentNode: (id: string) => void,
+    ): boolean => {
         if (node.id === selectedId) {
             return true
         }
@@ -93,7 +96,7 @@ const TreeView = ({
         }
     }, [shouldScrollOnChange, selectedId])
 
-    const getToggleNode = (node: TreeHeading) => () => {
+    const getToggleNode = (node: TreeHeading<DataAttributeType>) => () => {
         if (isUncontrolled) {
             setCurrentLevelExpandedMap((prev) => ({
                 ...prev,
@@ -166,16 +169,16 @@ const TreeView = ({
         }
     }
 
-    const commonClickHandler = (e: SyntheticEvent, node: TreeItem) => {
+    const commonClickHandler = (e: SyntheticEvent, node: TreeItem<DataAttributeType>) => {
         node.onClick?.(e)
         onSelect?.(node)
     }
 
-    const getNodeItemButtonClick = (node: TreeItem) => (e: SyntheticEvent) => {
+    const getNodeItemButtonClick = (node: TreeItem<DataAttributeType>) => (e: SyntheticEvent) => {
         commonClickHandler(e, node)
     }
 
-    const getNodeItemNavLinkClick = (node: TreeItem) => (e: SyntheticEvent) => {
+    const getNodeItemNavLinkClick = (node: TreeItem<DataAttributeType>) => (e: SyntheticEvent) => {
         // Prevent navigation to the same page
         if (node.href === pathname) {
             e.preventDefault()
@@ -242,7 +245,7 @@ const TreeView = ({
                                                     ? getUpdateItemsRefMapProp(node.id)
                                                     : getUpdateItemsRefMap(node.id)
                                             }
-                                            {...node.dataAttributes}
+                                            {...(node.dataAttributes ? node.dataAttributes : {})}
                                         >
                                             {depth > 0 && (
                                                 <span className="dc__grid dc__align-self-stretch dc__content-center pl-8 w-24 dc__no-shrink dc__align-items-center">

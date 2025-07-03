@@ -7,9 +7,9 @@ import { IconsProps } from '../Icon'
 import { TrailingItemProps } from '../TrailingItem'
 
 // eslint-disable-next-line no-use-before-define
-export type TreeNode = TreeHeading | TreeItem
+export type TreeNode<DataAttributeType = null> = TreeHeading<DataAttributeType> | TreeItem<DataAttributeType>
 
-interface BaseNode {
+type BaseNode<DataAttributeType = null> = {
     id: string
     /**
      * The title of the list item.
@@ -31,12 +31,17 @@ interface BaseNode {
         | (Never<Pick<IconsProps, 'name' | 'color'>> & { customIcon?: JSX.Element })
     )
     trailingItem?: TrailingItemProps
-    dataAttributes?: Exclude<DataAttributes, 'data-testid' | 'data-node-id'>
-}
+} & (DataAttributeType extends DataAttributes
+    ? {
+          dataAttributes?: DataAttributeType
+      }
+    : {
+          dataAttributes?: never
+      })
 
-export interface TreeHeading extends BaseNode {
+export type TreeHeading<DataAttributeType = null> = BaseNode<DataAttributeType> & {
     type: 'heading'
-    items?: TreeNode[]
+    items?: TreeNode<DataAttributeType>[]
     /**
      * Text to display when there are no items in the list.
      * @default DEFAULT_NO_ITEMS_TEXT
@@ -44,7 +49,7 @@ export interface TreeHeading extends BaseNode {
     noItemsText?: string
 }
 
-export type TreeItem = BaseNode & {
+export type TreeItem<DataAttributeType = null> = BaseNode<DataAttributeType> & {
     type: 'item'
     /**
      * @default false
@@ -75,10 +80,10 @@ export type TreeItem = BaseNode & {
           }
     )
 
-export type TreeViewProps = {
-    nodes: TreeNode[]
+export type TreeViewProps<DataAttributeType = null> = {
+    nodes: TreeNode<DataAttributeType>[]
     selectedId?: string
-    onSelect?: (item: TreeItem) => void
+    onSelect?: (item: TreeItem<DataAttributeType>) => void
     /**
      * If navigation mode, the tree view will provide navigation through keyboard actions and make the only selected item focusable.
      * If form mode, will leave the navigation to browser.
@@ -109,7 +114,7 @@ export type TreeViewProps = {
     | {
           isUncontrolled?: false
           expandedMap: Record<string, boolean>
-          onToggle: (item: TreeHeading) => void
+          onToggle: (item: TreeHeading<DataAttributeType>) => void
           defaultExpandedMap?: never
       }
 ) &
