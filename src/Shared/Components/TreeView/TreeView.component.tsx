@@ -1,8 +1,6 @@
-import { SyntheticEvent, useMemo, useRef, useState } from 'react'
+import { SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
-
-import { useEffectAfterMount } from '@Common/Helper'
 
 import { Icon } from '../Icon'
 import { TrailingItem } from '../TrailingItem'
@@ -20,30 +18,20 @@ const Divider = () => (
 
 const TreeView = <DataAttributeType = null,>({
     nodes,
-    isUncontrolled,
-    expandedMap: expandedMapProp,
+    isControlled = false,
+    expandedMap: expandedMapProp = {},
     selectedId,
-    onToggle,
+    onToggle: onToggleProp,
     onSelect,
     depth = 0,
     mode = 'navigation',
     flatNodeList: flatNodeListProp,
     getUpdateItemsRefMap: getUpdateItemsRefMapProp,
     variant = 'primary',
-    shouldScrollOnChange = true,
     defaultExpandedMap = {},
 }: TreeViewProps<DataAttributeType>) => {
     const { pathname } = useLocation()
-    // Using this at root level
-    const itemsRef = useRef<Record<string, HTMLButtonElement | HTMLAnchorElement | null>>({})
-    // This will in actuality be used in first level of tree view since we are sending isUncontrolled prop as false to all the nested tree views
-    const [currentLevelExpandedMap, setCurrentLevelExpandedMap] = useState<Record<string, boolean>>(defaultExpandedMap)
-
-    const expandedMap = isUncontrolled ? currentLevelExpandedMap : expandedMapProp
-
     const isFirstLevel = depth === 0
-
-    const fallbackTabIndex = mode === 'navigation' ? -1 : 0
 
     const findSelectedIdParentNodes = (
         node: TreeNode<DataAttributeType>,
@@ -70,6 +58,10 @@ const TreeView = <DataAttributeType = null,>({
     const getSelectedIdParentNodes = (): string[] => {
         const selectedIdParentNodes: string[] = []
 
+        if (!selectedId) {
+            return selectedIdParentNodes
+        }
+
         nodes.forEach((node) => {
             findSelectedIdParentNodes(node, (id: string) => {
                 selectedIdParentNodes.push(id)
@@ -78,38 +70,78 @@ const TreeView = <DataAttributeType = null,>({
         return selectedIdParentNodes
     }
 
-    useEffectAfterMount(() => {
-        // To use this functionality one must make sure the expandedMap is set correctly
-        if (isFirstLevel && itemsRef.current && itemsRef.current[selectedId]) {
-            // In case of uncontrolled tree view, we will expand all the parent nodes of the selected item
-            if (isUncontrolled) {
-                const selectedIdParentNodes = getSelectedIdParentNodes()
-                setCurrentLevelExpandedMap((prev) => {
-                    const newExpandedMap = { ...prev }
-                    selectedIdParentNodes.forEach((id) => {
-                        newExpandedMap[id] = true
-                    })
-                    return newExpandedMap
-                })
-            }
-            itemsRef.current[selectedId].scrollIntoView()
+    const getDefaultExpandedMap = (): Record<string, boolean> => {
+        const defaultMap: Record<string, boolean> = defaultExpandedMap
+        if (!selectedId) {
+            return defaultMap
         }
-    }, [shouldScrollOnChange, selectedId])
+
+        const selectedIdParentNodes = getSelectedIdParentNodes()
+        selectedIdParentNodes.forEach((id) => {
+            defaultMap[id] = true
+        })
+        return defaultMap
+    }
+
+    const [itemIdToScroll, setItemIdToScroll] = useState<string | null>(null)
+
+    // Using this at root level
+    const itemsRef = useRef<Record<string, HTMLButtonElement | HTMLAnchorElement | null>>({})
+    // This will in actuality be used in first level of tree view since we are sending isControlled prop as true to all the nested tree views
+    const [currentLevelExpandedMap, setCurrentLevelExpandedMap] =
+        useState<Record<string, boolean>>(getDefaultExpandedMap)
+
+    const expandedMap = isControlled ? expandedMapProp : currentLevelExpandedMap
+
+    const fallbackTabIndex = mode === 'navigation' ? -1 : 0
+
+    useEffect(() => {
+        // isControlled is false for first level of the tree view so should set the expanded map only from first level
+        if (isFirstLevel && itemsRef.current && itemsRef.current[selectedId]) {
+            const selectedIdParentNodes = getSelectedIdParentNodes()
+            setCurrentLevelExpandedMap((prev) => {
+                const newExpandedMap = { ...prev }
+                selectedIdParentNodes.forEach((id) => {
+                    newExpandedMap[id] = true
+                })
+                return newExpandedMap
+            })
+
+            setItemIdToScroll(selectedId)
+        }
+    }, [selectedId])
 
     const getToggleNode = (node: TreeHeading<DataAttributeType>) => () => {
-        if (isUncontrolled) {
+        if (isControlled) {
+            onToggleProp(node)
+        } else {
             setCurrentLevelExpandedMap((prev) => ({
                 ...prev,
                 [node.id]: !prev[node.id],
             }))
+        }
+    }
+
+    const childItemsOnToggle = (node: TreeHeading<DataAttributeType>) => {
+        if (isControlled) {
+            onToggleProp(node)
         } else {
-            onToggle(node)
+            getToggleNode(node)()
         }
     }
 
     const getUpdateItemsRefMap = (id: string) => (el: HTMLButtonElement | HTMLAnchorElement) => {
         if (!isFirstLevel) {
             throw new Error('getUpdateItemsRefMap should only be used at the first level of the tree view.')
+        }
+
+        if (id === itemIdToScroll) {
+            el?.scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+                inline: 'center',
+            })
+            setItemIdToScroll(null)
         }
         itemsRef.current[id] = el
     }
@@ -308,7 +340,8 @@ const TreeView = <DataAttributeType = null,>({
                                                         key={nodeItem.id}
                                                         expandedMap={expandedMap}
                                                         selectedId={selectedId}
-                                                        onToggle={onToggle}
+                                                        isControlled
+                                                        onToggle={childItemsOnToggle}
                                                         onSelect={onSelect}
                                                         nodes={[nodeItem]}
                                                         depth={depth + 1}

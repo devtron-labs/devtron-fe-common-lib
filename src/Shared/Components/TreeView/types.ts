@@ -96,52 +96,45 @@ export type TreeViewProps<DataAttributeType = null> = {
      */
     variant?: 'primary' | 'secondary'
     /**
-     * If true, means on change of selectedId, the tree view will scroll to the selected item.
-     * Assumption: parents of the selected item are expanded.
-     * @default true
+     * @default {}
      */
-    shouldScrollOnChange?: boolean
-} & (
+    defaultExpandedMap?: Record<string, boolean>
+} /**
+ * WARNING: For internal use only.
+ */ & (
     | {
-          isUncontrolled: true
+          depth: number
           /**
-           * @default {}
+           * WARNING: For internal use only.
+           * Would pass this to item button/ref and store it in out ref map through this function.
            */
-          defaultExpandedMap?: Record<string, boolean>
-          expandedMap?: never
-          onToggle?: never
+          getUpdateItemsRefMap: (id: string) => (element: HTMLButtonElement | HTMLAnchorElement) => void
+
+          /**
+           * WARNING: For internal use only.
+           * List of all nodes visible in tree view for keyboard navigation.
+           */
+          flatNodeList: string[]
+
+          /**
+           * Would be called when the user toggles a heading.
+           */
+          onToggle: (item: TreeHeading<DataAttributeType>) => void
+          /**
+           * Map of id to whether the item is expanded or not.
+           */
+          expandedMap: Record<string, boolean>
+          isControlled: true
       }
     | {
-          isUncontrolled?: false
-          expandedMap: Record<string, boolean>
-          onToggle: (item: TreeHeading<DataAttributeType>) => void
-          defaultExpandedMap?: never
+          depth?: never
+          getUpdateItemsRefMap?: never
+          flatNodeList?: never
+          onToggle?: never
+          expandedMap?: never
+          isControlled?: false
       }
-) &
-    (
-        | {
-              /**
-               * WARNING: For internal use only.
-               */
-              depth: number
-              /**
-               * WARNING: For internal use only.
-               * Would pass this to item button/ref and store it in out ref map through this function.
-               */
-              getUpdateItemsRefMap: (id: string) => (element: HTMLButtonElement | HTMLAnchorElement) => void
-
-              /**
-               * WARNING: For internal use only.
-               * List of all nodes visible in tree view for keyboard navigation.
-               */
-              flatNodeList: string[]
-          }
-        | {
-              depth?: never
-              getUpdateItemsRefMap?: never
-              flatNodeList?: never
-          }
-    )
+)
 
 export interface TreeViewNodeContentProps
     extends Pick<BaseNode, 'startIconConfig' | 'title' | 'subtitle' | 'customTooltipConfig' | 'strikeThrough'> {
