@@ -97,7 +97,7 @@ const TreeView = <DataAttributeType = null,>({
 
     useEffect(() => {
         // isControlled is false for first level of the tree view so should set the expanded map only from first level
-        if (isFirstLevel && itemsRef.current && itemsRef.current[selectedId]) {
+        if (isFirstLevel) {
             const selectedIdParentNodes = getSelectedIdParentNodes()
             setCurrentLevelExpandedMap((prev) => {
                 const newExpandedMap = { ...prev }
