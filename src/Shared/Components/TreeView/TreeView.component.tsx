@@ -6,7 +6,7 @@ import { Icon } from '../Icon'
 import { TrailingItem } from '../TrailingItem'
 import { DEFAULT_NO_ITEMS_TEXT, VARIANT_TO_BG_CLASS_MAP, VARIANT_TO_HOVER_CLASS_MAP } from './constants'
 import TreeViewNodeContent from './TreeViewNodeContent'
-import { TreeHeading, TreeItem, TreeNode, TreeViewProps } from './types'
+import { NodeElementType, TreeHeading, TreeItem, TreeNode, TreeViewProps } from './types'
 
 import './TreeView.scss'
 
@@ -86,7 +86,7 @@ const TreeView = <DataAttributeType = null,>({
     const [itemIdToScroll, setItemIdToScroll] = useState<string | null>(null)
 
     // Using this at root level
-    const itemsRef = useRef<Record<string, HTMLButtonElement | HTMLAnchorElement | null>>({})
+    const itemsRef = useRef<Record<string, NodeElementType | null>>({})
     // This will in actuality be used in first level of tree view since we are sending isControlled prop as true to all the nested tree views
     const [currentLevelExpandedMap, setCurrentLevelExpandedMap] =
         useState<Record<string, boolean>>(getDefaultExpandedMap)
@@ -130,7 +130,7 @@ const TreeView = <DataAttributeType = null,>({
         }
     }
 
-    const getUpdateItemsRefMap = (id: string) => (el: HTMLButtonElement | HTMLAnchorElement) => {
+    const getUpdateItemsRefMap = (id: string) => (el: NodeElementType) => {
         if (!isFirstLevel) {
             throw new Error('getUpdateItemsRefMap should only be used at the first level of the tree view.')
         }
@@ -216,6 +216,66 @@ const TreeView = <DataAttributeType = null,>({
             e.preventDefault()
         }
         commonClickHandler(e, node)
+    }
+
+    const renderNodeItemAction = (
+        node: TreeItem<DataAttributeType>,
+        itemDivider: JSX.Element,
+        content: JSX.Element,
+    ) => {
+        const isSelected = selectedId === node.id
+        const baseClass =
+            'dc__transparent p-0-imp flexbox dc__align-start flex-grow-1 tree-view__container--item dc__select-text'
+
+        if (node.as === 'div') {
+            return (
+                <div
+                    className={baseClass}
+                    data-node-id={node.id}
+                    data-testid={`tree-view-item-${node.title}`}
+                    ref={getUpdateItemsRefMapProp ? getUpdateItemsRefMapProp(node.id) : getUpdateItemsRefMap(node.id)}
+                    {...(node.dataAttributes ? node.dataAttributes : {})}
+                >
+                    {itemDivider}
+                    {content}
+                </div>
+            )
+        }
+
+        if (node.as === 'link') {
+            return (
+                <NavLink
+                    to={node.clearQueryParamsOnNavigation ? { pathname: node.href, search: '' } : node.href}
+                    className={baseClass}
+                    onClick={getNodeItemNavLinkClick(node)}
+                    tabIndex={isSelected ? 0 : fallbackTabIndex}
+                    data-node-id={node.id}
+                    data-testid={`tree-view-item-${node.title}`}
+                    ref={getUpdateItemsRefMapProp ? getUpdateItemsRefMapProp(node.id) : getUpdateItemsRefMap(node.id)}
+                    {...(node.dataAttributes ? node.dataAttributes : {})}
+                >
+                    {itemDivider}
+                    {content}
+                </NavLink>
+            )
+        }
+
+        return (
+            <button
+                type="button"
+                disabled={node.isDisabled}
+                className={baseClass}
+                onClick={getNodeItemButtonClick(node)}
+                tabIndex={isSelected ? 0 : fallbackTabIndex}
+                data-node-id={node.id}
+                ref={getUpdateItemsRefMapProp ? getUpdateItemsRefMapProp(node.id) : getUpdateItemsRefMap(node.id)}
+                data-testid={`tree-view-item-${node.title}`}
+                {...(node.dataAttributes ? node.dataAttributes : {})}
+            >
+                {itemDivider}
+                {content}
+            </button>
+        )
     }
 
     return (
@@ -362,9 +422,6 @@ const TreeView = <DataAttributeType = null,>({
                     )
                 }
 
-                const baseClass =
-                    'dc__transparent p-0-imp flexbox dc__align-start flex-grow-1 tree-view__container--item dc__select-text'
-
                 const itemDivider =
                     depth > 0 ? (
                         <span className="dc__grid dc__align-self-stretch dc__content-center pl-8 w-24 dc__no-shrink dc__align-items-center">
@@ -385,48 +442,7 @@ const TreeView = <DataAttributeType = null,>({
                         <div
                             className={`flexbox flex-grow-1 w-100 br-4 ${isSelected ? 'bcb-1' : VARIANT_TO_HOVER_CLASS_MAP[variant]}`}
                         >
-                            {node.as === 'link' ? (
-                                <NavLink
-                                    to={
-                                        node.clearQueryParamsOnNavigation
-                                            ? { pathname: node.href, search: '' }
-                                            : node.href
-                                    }
-                                    className={baseClass}
-                                    onClick={getNodeItemNavLinkClick(node)}
-                                    tabIndex={isSelected ? 0 : fallbackTabIndex}
-                                    data-node-id={node.id}
-                                    data-testid={`tree-view-item-${node.title}`}
-                                    ref={
-                                        getUpdateItemsRefMapProp
-                                            ? getUpdateItemsRefMapProp(node.id)
-                                            : getUpdateItemsRefMap(node.id)
-                                    }
-                                    {...(node.dataAttributes ? node.dataAttributes : {})}
-                                >
-                                    {itemDivider}
-                                    {content}
-                                </NavLink>
-                            ) : (
-                                <button
-                                    type="button"
-                                    disabled={node.isDisabled}
-                                    className={baseClass}
-                                    onClick={getNodeItemButtonClick(node)}
-                                    tabIndex={isSelected ? 0 : fallbackTabIndex}
-                                    data-node-id={node.id}
-                                    ref={
-                                        getUpdateItemsRefMapProp
-                                            ? getUpdateItemsRefMapProp(node.id)
-                                            : getUpdateItemsRefMap(node.id)
-                                    }
-                                    data-testid={`tree-view-item-${node.title}`}
-                                    {...(node.dataAttributes ? node.dataAttributes : {})}
-                                >
-                                    {itemDivider}
-                                    {content}
-                                </button>
-                            )}
+                            {renderNodeItemAction(node, itemDivider, content)}
 
                             {node.trailingItem && (
                                 <div className="flex py-6 pr-8 dc__no-shrink">
