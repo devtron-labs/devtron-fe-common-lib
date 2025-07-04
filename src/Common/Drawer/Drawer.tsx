@@ -16,8 +16,9 @@
 
 import { useRef, useEffect } from 'react'
 import { preventBodyScroll } from '../../Shared'
-import { VisibleModal } from '../Modals/VisibleModal'
+import { VisibleModalWithoutDelay } from '../Modals/VisibleModal'
 import './Drawer.scss'
+import DelayComponentRender from '@Common/DelayComponentRender'
 
 export interface DrawerProps {
     position: 'left' | 'right' | 'bottom' | 'top'
@@ -33,7 +34,7 @@ export interface DrawerProps {
     disableTransition?: boolean
 }
 
-export const Drawer = ({
+const DrawerWithoutDelay = ({
     children,
     position,
     height,
@@ -64,10 +65,18 @@ export const Drawer = ({
         style['--height'] = height
     }
     return (
-        <VisibleModal className="drawer--container" parentClassName={parentClassName || ''} onEscape={onEscape} close={onClose}>
+        <VisibleModalWithoutDelay className="drawer--container" parentClassName={parentClassName || ''} onEscape={onEscape} close={onClose}>
             <aside style={style} ref={drawerRef} className={`drawer ${disableTransition ? 'disable-transition' : ''} ${position}`}>
                 {children}
             </aside>
-        </VisibleModal>
+        </VisibleModalWithoutDelay>
+    )
+}
+
+export const Drawer = (props: DrawerProps) => {
+    return (
+        <DelayComponentRender>
+            <DrawerWithoutDelay {...props} />
+        </DelayComponentRender>
     )
 }

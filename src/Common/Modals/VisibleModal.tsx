@@ -14,18 +14,21 @@
  * limitations under the License.
  */
 
-import React, { SyntheticEvent } from 'react'
+import React, { PropsWithChildren, SyntheticEvent } from 'react'
 import ReactDOM from 'react-dom'
 import { POP_UP_MENU_MODAL_ID, preventBodyScroll } from '../../Shared'
 import { stopPropagation } from '../Helper'
+import DelayComponentRender from '@Common/DelayComponentRender'
 
-export class VisibleModal extends React.Component<{
+interface VisibleModalProps  {
     className?: string
     parentClassName?: string
     noBackground?: boolean
     close?: (e) => void
     onEscape?: (e) => void
-}> {
+}
+
+export class VisibleModalWithoutDelay extends React.Component<VisibleModalProps> {
     modalRef = document.getElementById('visible-modal')
     previousActiveElement: HTMLElement | null = null
 
@@ -94,3 +97,9 @@ export class VisibleModal extends React.Component<{
         )
     }
 }
+
+export const VisibleModal = (props: PropsWithChildren<VisibleModalProps>) => (
+    <DelayComponentRender>
+        <VisibleModalWithoutDelay {...props} />
+    </DelayComponentRender>
+)

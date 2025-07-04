@@ -263,7 +263,7 @@ const TableContent = ({
 
                     {RowActionsOnHoverComponent && (
                         <div className="dc__position-fixed dc__right-0 dc__zi-1 dc__opacity-hover--child">
-                            <RowActionsOnHoverComponent row={row} />
+                            <RowActionsOnHoverComponent row={row} {...additionalProps} />
                         </div>
                     )}
                 </div>

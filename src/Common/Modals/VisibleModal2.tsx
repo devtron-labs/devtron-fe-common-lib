@@ -14,12 +14,18 @@
  * limitations under the License.
  */
 
-import React, { SyntheticEvent } from 'react'
+import React, { PropsWithChildren, SyntheticEvent } from 'react'
 import ReactDOM from 'react-dom'
 import { preventBodyScroll } from '../../Shared'
 import { stopPropagation } from '../Helper'
+import DelayComponentRender from '../DelayComponentRender';
 
-export class VisibleModal2 extends React.Component<{ className?: string; close?: (e) => void }> {
+interface VisibleModal2Props {
+    className?: string;
+    close?: (e) => void
+}
+
+export class VisibleModal2WithoutDelay extends React.Component<VisibleModal2Props> {
     modalRef = document.getElementById('visible-modal-2')
     previousActiveElement: HTMLElement | null = null
 
@@ -67,4 +73,13 @@ export class VisibleModal2 extends React.Component<{ className?: string; close?:
             document.getElementById('visible-modal-2'),
         )
     }
+}
+
+
+export const VisibleModal2 = (props: PropsWithChildren<VisibleModal2Props>) => {
+    return (
+        <DelayComponentRender>
+            <VisibleModal2 {...props} />
+        </DelayComponentRender>
+    )
 }
