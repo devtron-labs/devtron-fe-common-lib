@@ -35,7 +35,6 @@ export interface UseUrlFiltersProps<T, K extends {}> {
      * @default 'replace'
      */
     redirectionMethod?: 'replace' | 'push'
-    defaultPageSize?: number
 }
 
 export type UpdateSearchParamsOptionsType<T, K = {}> = Partial<Pick<UseUrlFiltersProps<T, K>, 'redirectionMethod'>>
@@ -87,5 +86,5 @@ export type UseUrlFiltersReturnType<T, K = {}> = K & {
      * Update the search params with the passed object
      */
     updateSearchParams: (paramsToSerialize: Partial<K>, options?: UpdateSearchParamsOptionsType<T, K>) => void
-    areFiltersApplied: boolean
+    isFilterApplied: boolean
 }

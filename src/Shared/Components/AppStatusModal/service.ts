@@ -51,7 +51,6 @@ export const getDeploymentStatusWithTimeline = async ({
     showTimeline,
     virtualEnvironmentConfig,
     isHelmApp,
-    deploymentAppType,
 }: GetDeploymentStatusWithTimelineParamsType): Promise<DeploymentStatusDetailsBreakdownDataType> => {
     const baseURL = isHelmApp ? ROUTES.HELM_DEPLOYMENT_STATUS_TIMELINE_INSTALLED_APP : ROUTES.DEPLOYMENT_STATUS
 
@@ -69,8 +68,5 @@ export const getDeploymentStatusWithTimeline = async ({
 
     return virtualEnvironmentConfig
         ? virtualEnvironmentConfig.processVirtualEnvironmentDeploymentData(deploymentStatusDetailsResponse.result)
-        : processDeploymentStatusDetailsData(
-              deploymentStatusDetailsResponse.result.deploymentAppType ?? deploymentAppType,
-              deploymentStatusDetailsResponse.result,
-          )
+        : processDeploymentStatusDetailsData(deploymentStatusDetailsResponse.result)
 }

@@ -16,25 +16,32 @@
 
 import { useEffect, useRef, useState } from 'react'
 import ReactMde from 'react-mde'
+import Tippy from '@tippyjs/react'
 
-import { ReactComponent as Edit } from '@Icons/ic-pencil.svg'
-import { ReactComponent as UnorderedListIcon } from '@Icons/ic-unordered-list.svg'
-
+import { ReactComponent as BoldIcon } from '../../Assets/Icon/ic-bold.svg'
+import { ReactComponent as CheckedListIcon } from '../../Assets/Icon/ic-checked-list.svg'
+import { ReactComponent as CodeIcon } from '../../Assets/Icon/ic-code.svg'
+import { ReactComponent as HeaderIcon } from '../../Assets/Icon/ic-header.svg'
+import { ReactComponent as ImageIcon } from '../../Assets/Icon/ic-image.svg'
+import { ReactComponent as ItalicIcon } from '../../Assets/Icon/ic-italic.svg'
+import { ReactComponent as LinkIcon } from '../../Assets/Icon/ic-link.svg'
+import { ReactComponent as OrderedListIcon } from '../../Assets/Icon/ic-ordered-list.svg'
+import { ReactComponent as Edit } from '../../Assets/Icon/ic-pencil.svg'
+import { ReactComponent as QuoteIcon } from '../../Assets/Icon/ic-quote.svg'
+import { ReactComponent as StrikethroughIcon } from '../../Assets/Icon/ic-strikethrough.svg'
+import { ReactComponent as UnorderedListIcon } from '../../Assets/Icon/ic-unordered-list.svg'
+import { ButtonWithLoader, ToastManager, ToastVariantType } from '../../Shared'
 import {
-    Button,
-    ButtonStyleType,
-    ButtonVariantType,
-    ComponentSizeType,
-    Icon,
-    ToastManager,
-    ToastVariantType,
-} from '../../Shared'
-import { DEFAULT_MARKDOWN_EDITOR_PREVIEW_MESSAGE, MARKDOWN_EDITOR_COMMANDS } from '../Markdown/constant'
+    DEFAULT_MARKDOWN_EDITOR_PREVIEW_MESSAGE,
+    MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT,
+    MARKDOWN_EDITOR_COMMAND_TITLE,
+    MARKDOWN_EDITOR_COMMANDS,
+} from '../Markdown/constant'
 import Markdown from '../Markdown/MarkDown'
 import { deepEqual, showError } from '..'
 import { DESCRIPTION_EMPTY_ERROR_MSG, DESCRIPTION_UNSAVED_CHANGES_MSG } from './constant'
 import { GenericDescriptionProps, MDEditorSelectedTabType } from './types'
-import { getEditorCustomIcon, getParsedUpdatedOnDate } from './utils'
+import { getParsedUpdatedOnDate } from './utils'
 
 import 'react-mde/lib/styles/css/react-mde-all.css'
 import './genericDescription.scss'
@@ -43,17 +50,16 @@ const GenericDescription = ({
     text,
     updatedBy,
     updatedOn,
+    isDescriptionPreview,
     tabIndex,
     updateDescription,
     title,
     minEditorHeight = 300,
-    emptyStateConfig,
 }: GenericDescriptionProps) => {
     const [isLoading, setIsLoading] = useState(false)
-    const [editorView, setEditorView] = useState<
-        MDEditorSelectedTabType.PREVIEW | MDEditorSelectedTabType.WRITE | 'previewSaved' | 'empty'
-    >(text ? 'previewSaved' : 'empty')
+    const [isEditDescriptionView, setIsEditDescriptionView] = useState<boolean>(isDescriptionPreview)
     const [modifiedDescriptionText, setModifiedDescriptionText] = useState<string>(text)
+    const [selectedTab, setSelectedTab] = useState<'write' | 'preview'>(MDEditorSelectedTabType.WRITE)
     const isDescriptionModified = !deepEqual(text, modifiedDescriptionText)
     const mdeRef = useRef(null)
 
@@ -64,25 +70,27 @@ const GenericDescription = ({
     const _date = getParsedUpdatedOnDate(updatedOn)
 
     const validateDescriptionText = (description: string): boolean => {
-        const descriptionLength = description.length
-        if (!descriptionLength) {
+        let isValid = true
+        if (description.length === 0) {
             ToastManager.showToast({
                 variant: ToastVariantType.error,
                 description: DESCRIPTION_EMPTY_ERROR_MSG,
             })
+            isValid = false
         }
-        return !!descriptionLength
+        return isValid
     }
 
-    const handleCancel = () => {
+    const toggleDescriptionView = () => {
         let isConfirmed: boolean = true
-        if (isDescriptionModified) {
+        if (isDescriptionModified && !isEditDescriptionView) {
             // eslint-disable-next-line no-alert
             isConfirmed = window.confirm(DESCRIPTION_UNSAVED_CHANGES_MSG)
         }
         if (isConfirmed) {
             setModifiedDescriptionText(text)
-            setEditorView(text ? 'previewSaved' : 'empty')
+            setIsEditDescriptionView(!isEditDescriptionView)
+            setSelectedTab(MDEditorSelectedTabType.WRITE)
         }
     }
 
@@ -95,53 +103,171 @@ const GenericDescription = ({
         try {
             setIsLoading(true)
             await updateDescription(trimmedDescription)
+            setIsEditDescriptionView(true)
             // Explicitly updating the state, since the modified state gets corrupted
             setModifiedDescriptionText(trimmedDescription)
-            setEditorView('previewSaved')
         } catch (error) {
             showError(error)
-            setEditorView(MDEditorSelectedTabType.WRITE)
-            setModifiedDescriptionText(text)
         } finally {
             setIsLoading(false)
         }
     }
 
-    const handleWriteDescription = () => {
-        setEditorView(MDEditorSelectedTabType.WRITE)
-    }
-
-    const handleTabChange = (tab: MDEditorSelectedTabType) => {
-        setEditorView(tab)
-    }
-
-    if (editorView === 'empty') {
-        const { img, subtitle } = emptyStateConfig || {}
-        return (
-            <div className="flexbox w-100 bg__primary br-8 dc__border-dashed--n3">
-                <div className="flexbox-col p-24 dc__gap-12">
-                    <div className="flexbox-col dc__gap-6">
-                        <span className="fs-18 fw-6 cn-9">{title}</span>
-                        {subtitle && <div className="fs-13 fw-4 lh-20 cn-8">{subtitle}</div>}
-                    </div>
-                    <Button
-                        dataTestId="edit-description"
-                        startIcon={<Icon name="ic-pencil" color={null} />}
-                        onClick={handleWriteDescription}
-                        text="Write"
-                        variant={ButtonVariantType.secondary}
-                        size={ComponentSizeType.medium}
-                    />
-                </div>
-                {img && <img src={img} width="585px" height="243px" alt="release-note" className="br-8 bg__primary" />}
-            </div>
-        )
+    // TODO: add commandName
+    // eslint-disable-next-line consistent-return
+    const editorCustomIcon = (commandName: string): JSX.Element => {
+        // eslint-disable-next-line default-case
+        switch (commandName) {
+            case MARKDOWN_EDITOR_COMMAND_TITLE.HEADER:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <HeaderIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.BOLD:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <BoldIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.ITALIC:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <ItalicIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.STRIKETHROUGH:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <StrikethroughIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.LINK:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <LinkIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.QUOTE:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <QuoteIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.CODE:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <CodeIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.IMAGE:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <ImageIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.UNORDERED_LIST:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <UnorderedListIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.ORDERED_LIST:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <OrderedListIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+            case MARKDOWN_EDITOR_COMMAND_TITLE.CHECKED_LIST:
+                return (
+                    <Tippy
+                        className="default-tt"
+                        arrow={false}
+                        placement="bottom"
+                        content={MARKDOWN_EDITOR_COMMAND_ICON_TIPPY_CONTENT[commandName]}
+                    >
+                        <div className="flex">
+                            <CheckedListIcon className="icon-dim-16 flex" />
+                        </div>
+                    </Tippy>
+                )
+        }
     }
 
     return (
         <div className="cluster__body-details">
             <div data-testid="generic-description-wrapper" className="dc__overflow-hidden">
-                {editorView === 'previewSaved' ? (
+                {isEditDescriptionView ? (
                     <div className="min-w-500 bg__primary br-4 dc__border-top dc__border-left dc__border-right w-100 dc__border-bottom">
                         <div className="pt-8 pb-8 pl-16 pr-16 dc__top-radius-4 flex bg__secondary dc__border-bottom h-36">
                             <div className="flexbox dc__gap-6 dc__align-items-center">
@@ -157,7 +283,7 @@ const GenericDescription = ({
                             <div
                                 data-testid="description-edit-button"
                                 className="dc__align-right pencil-icon cursor flex fw-6 cn-7"
-                                onClick={handleWriteDescription}
+                                onClick={toggleDescriptionView}
                             >
                                 <Edit className="icon-dim-16 mr-4 scn-7" /> Edit
                             </div>
@@ -183,19 +309,24 @@ const GenericDescription = ({
                         <ReactMde
                             ref={mdeRef}
                             classes={{
-                                reactMde: 'mark-down-editor-container dc__word-break',
+                                reactMde: `mark-down-editor-container dc__word-break ${
+                                    // TODO (Eshank): The checks are broken here & the height as well
+                                    isDescriptionPreview ? '' : 'create-app-description'
+                                }`,
                                 toolbar: 'mark-down-editor-toolbar tab-description',
                                 preview: 'mark-down-editor-preview pt-8',
-                                textArea: 'mark-down-editor-textarea-wrapper',
+                                textArea: `mark-down-editor-textarea-wrapper ${
+                                    isDescriptionPreview ? '' : 'h-200-imp'
+                                }`,
                             }}
-                            getIcon={(commandName: string) => getEditorCustomIcon(commandName)}
+                            getIcon={(commandName: string) => editorCustomIcon(commandName)}
                             toolbarCommands={MARKDOWN_EDITOR_COMMANDS}
                             value={modifiedDescriptionText}
                             onChange={setModifiedDescriptionText}
                             minEditorHeight={minEditorHeight}
                             minPreviewHeight={150}
-                            selectedTab={editorView}
-                            onTabChange={handleTabChange}
+                            selectedTab={selectedTab}
+                            onTabChange={setSelectedTab}
                             generateMarkdownPreview={(markdown: string) =>
                                 Promise.resolve(
                                     <Markdown markdown={markdown || DEFAULT_MARKDOWN_EDITOR_PREVIEW_MESSAGE} breaks />,
@@ -204,12 +335,12 @@ const GenericDescription = ({
                             childProps={{
                                 writeButton: {
                                     className: `tab-list__tab pointer fs-13 ${
-                                        editorView === MDEditorSelectedTabType.WRITE && 'cb-5 fw-6 active active-tab'
+                                        selectedTab === MDEditorSelectedTabType.WRITE && 'cb-5 fw-6 active active-tab'
                                     }`,
                                 },
                                 previewButton: {
                                     className: `tab-list__tab pointer fs-13 ${
-                                        editorView === MDEditorSelectedTabType.PREVIEW && 'cb-5 fw-6 active active-tab'
+                                        selectedTab === MDEditorSelectedTabType.PREVIEW && 'cb-5 fw-6 active active-tab'
                                     }`,
                                 },
                                 textArea: {
@@ -217,26 +348,28 @@ const GenericDescription = ({
                                 },
                             }}
                         />
-                        {editorView === MDEditorSelectedTabType.WRITE && (
+                        {selectedTab === MDEditorSelectedTabType.WRITE && (
                             <div className="form cluster__description-footer pt-12 pb-12">
-                                <div className="form__buttons dc__gap-16 px-16">
-                                    <Button
-                                        dataTestId="description-edit-cancel-button"
-                                        text="Cancel"
+                                <div className="form__buttons pl-16 pr-16">
+                                    <button
+                                        data-testid="description-edit-cancel-button"
+                                        className="cta cancel flex h-36 mr-12"
+                                        type="button"
+                                        onClick={toggleDescriptionView}
                                         disabled={isLoading}
-                                        onClick={handleCancel}
-                                        variant={ButtonVariantType.secondary}
-                                        style={ButtonStyleType.neutral}
-                                    />
-                                    <Button
-                                        dataTestId="description-edit-save-button"
-                                        text="Save"
+                                    >
+                                        Cancel
+                                    </button>
+                                    <ButtonWithLoader
                                         isLoading={isLoading}
+                                        disabled={isLoading}
+                                        data-testid="description-edit-save-button"
+                                        rootClassName="cta flex h-36"
+                                        type="submit"
                                         onClick={handleSave}
-                                        buttonProps={{
-                                            type: 'submit',
-                                        }}
-                                    />
+                                    >
+                                        Save
+                                    </ButtonWithLoader>
                                 </div>
                             </div>
                         )}

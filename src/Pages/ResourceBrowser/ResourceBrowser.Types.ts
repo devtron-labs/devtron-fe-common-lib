@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactNode, RefObject } from 'react'
+import { RefObject } from 'react'
 
 import { Nodes, NodeType } from '@Shared/types'
 
@@ -59,54 +59,8 @@ export interface K8sResourceListPayloadType {
     k8sRequest: ResourceListPayloadK8sRequestType
 }
 
-export enum ResourceRecommenderHeaderType {
-    NAME = 'name',
-    NAMESPACE = 'namespace',
-    KIND = 'kind',
-    API_VERSION = 'apiVersion',
-    CONTAINER_NAME = 'containerName',
-    CPU_REQUEST = 'cpuRequest',
-    CPU_LIMIT = 'cpuLimit',
-    MEMORY_REQUEST = 'memoryRequest',
-    MEMORY_LIMIT = 'memoryLimit',
-}
-
-export type ResourceRecommenderHeaderWithStringValue = Extract<
-    ResourceRecommenderHeaderType,
-    | ResourceRecommenderHeaderType.NAME
-    | ResourceRecommenderHeaderType.NAMESPACE
-    | ResourceRecommenderHeaderType.KIND
-    | ResourceRecommenderHeaderType.API_VERSION
-    | ResourceRecommenderHeaderType.CONTAINER_NAME
->
-
-export type ResourceRecommenderHeaderWithRecommendation = Extract<
-    ResourceRecommenderHeaderType,
-    | ResourceRecommenderHeaderType.CPU_REQUEST
-    | ResourceRecommenderHeaderType.CPU_LIMIT
-    | ResourceRecommenderHeaderType.MEMORY_REQUEST
-    | ResourceRecommenderHeaderType.MEMORY_LIMIT
->
-
 export type K8sResourceDetailDataType = {
     [key: string]: string | number | object | boolean
-    additionalMetadata?: Partial<
-        Record<
-            ResourceRecommenderHeaderWithRecommendation,
-            {
-                // In case there is not limit or request set, it will be null
-                current: {
-                    value: string | 'none'
-                } | null
-                // In case cron is yet to run
-                recommended: {
-                    value: string | 'none'
-                } | null
-                // In case any of current or recommended is null, delta will be null
-                delta: number | null
-            }
-        >
-    >
 }
 
 export interface K8sResourceDetailType {
@@ -115,7 +69,6 @@ export interface K8sResourceDetailType {
 }
 
 export interface BulkSelectionActionWidgetProps {
-    isResourceRecommendationView: boolean
     count: number
     handleOpenBulkDeleteModal: () => void
     handleClearBulkSelection: () => void
@@ -123,13 +76,12 @@ export interface BulkSelectionActionWidgetProps {
     handleOpenUncordonNodeModal: () => void
     handleOpenDrainNodeModal: () => void
     handleOpenRestartWorkloadModal: () => void
-    handleOpenApplyResourceRecommendationModal: () => void
     parentRef: RefObject<HTMLDivElement>
     showBulkRestartOption: boolean
     showNodeListingOptions: boolean
 }
 
-export type RBBulkOperationType = 'restart' | 'delete' | 'cordon' | 'uncordon' | 'drain' | 'applyResourceRecommendation'
+export type RBBulkOperationType = 'restart' | 'delete' | 'cordon' | 'uncordon' | 'drain'
 
 export interface CreateResourceRequestBodyType {
     appId: string
@@ -143,7 +95,6 @@ export interface CreateResourceRequestBodyType {
 export interface ResourceManifestDTO {
     manifestResponse: {
         manifest: Record<string, unknown>
-        recommendedManifest?: Record<string, unknown>
     }
     secretViewAccess: boolean
 }
@@ -194,14 +145,4 @@ export interface NodeActionRequest {
     name: string
     version: string
     kind: string
-}
-
-export interface GVKOptionValueType {
-    kind: string
-    apiVersion: string
-}
-
-export interface ResourceRecommenderActionMenuProps {
-    children: ReactNode
-    lastScannedOn: string
 }

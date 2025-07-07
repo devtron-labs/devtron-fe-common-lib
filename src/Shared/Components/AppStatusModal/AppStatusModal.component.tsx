@@ -99,7 +99,6 @@ const AppStatusModal = ({
                           }
                         : null,
                     isHelmApp: appDetails.appType === AppType.DEVTRON_HELM_CHART,
-                    deploymentAppType: appDetails.deploymentAppType,
                 }),
             deploymentStatusAbortControllerRef,
         )

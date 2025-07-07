@@ -22,7 +22,7 @@ import { CreatableProps } from 'react-select/creatable'
 
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 import { ServerErrors } from '@Common/ServerError'
-import { TooltipProps } from '@Common/Tooltip'
+import { TooltipProps } from '@Common/Tooltip/types'
 import { OptionType } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 
@@ -169,7 +169,6 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     | 'inputValue'
     | 'filterOption'
     | 'noOptionsMessage'
-    | 'defaultMenuIsOpen'
 > &
     Partial<
         Pick<

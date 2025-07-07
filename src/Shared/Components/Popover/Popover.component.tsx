@@ -1,8 +1,9 @@
 import { AnimatePresence, motion } from 'framer-motion'
 
-import { Backdrop } from '../Backdrop'
 import { Button } from '../Button'
 import { PopoverProps } from './types'
+
+import './popover.scss'
 
 /**
  * Popover Component \
@@ -24,14 +25,14 @@ export const Popover = ({
 
         <AnimatePresence>
             {open && (
-                <Backdrop {...overlayProps}>
+                <div {...overlayProps}>
                     <div className="dc__position-abs" style={{ left: bounds.left, top: bounds.top }}>
                         <div className="dc__visibility-hidden" style={{ width: bounds.width, height: bounds.height }} />
                         <motion.div {...popoverProps} data-testid={popoverProps.id}>
                             {children}
                         </motion.div>
                     </div>
-                </Backdrop>
+                </div>
             )}
         </AnimatePresence>
     </>

@@ -86,7 +86,6 @@ export const URLS = {
     // NOTE: using appId since we are re-using AppConfig component
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_DETAIL: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/detail/:appId`,
     LICENSE_AUTH: '/license-auth',
-    GLOBAL_CONFIG_EDIT_CLUSTER: '/global-config/cluster-env/edit/:clusterId',
 } as const
 
 export const ROUTES = {
@@ -382,7 +381,6 @@ export const API_STATUS_CODES = {
     NOT_FOUND: 404,
     REQUEST_TIMEOUT: 408,
     CONFLICT: 409,
-    PRE_CONDITION_FAILED: 412,
     EXPECTATION_FAILED: 417,
     UNPROCESSABLE_ENTITY: 422,
     LOCKED: 423,

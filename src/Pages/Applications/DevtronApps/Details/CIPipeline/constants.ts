@@ -63,12 +63,3 @@ export const IO_VARIABLES_VALUE_COLUMN_DATE_OPTIONS: SelectPickerOptionType<stri
         description: 'ISO8601 with nanoseconds',
     },
 ]
-
-export const VALUE_COLUMN_DROPDOWN_LABEL = {
-    CHOICES: 'Choices',
-    SUPPORTED_DATE_FORMATS: 'Supported date formats',
-    SYSTEM_VARIABLES: 'System variables',
-    PRE_BUILD_STAGE: 'From Pre-build Stage',
-    POST_BUILD_STAGE: 'From Post-build Stage',
-    PREVIOUS_STEPS: 'From Previous Steps',
-} as const

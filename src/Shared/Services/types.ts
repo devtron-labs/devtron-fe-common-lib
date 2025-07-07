@@ -60,5 +60,4 @@ export interface EnvironmentDataValuesDTO extends Pick<MainContext, 'featureGitO
     isManifestScanningEnabled: boolean
     canOnlyViewPermittedEnvOrgLevel: boolean
     devtronManagedLicensingEnabled: boolean
-    isResourceRecommendationEnabled?: boolean
 }

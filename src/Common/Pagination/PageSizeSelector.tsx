@@ -82,7 +82,7 @@ const PageSizeSelector = ({ pageSizeOptions, pageSize, changePageSize }: PageSiz
                 </div>
             )}
 
-            <button type="button" className="select__button flexbox" onClick={handleDropdownToggle}>
+            <button type="button" className="select__button" onClick={handleDropdownToggle}>
                 <span>{selectedOption ? selectedOption.value : ''}</span>
                 <span className="select__icon">
                     <i className={font} />

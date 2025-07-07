@@ -14,11 +14,13 @@
  * limitations under the License.
  */
 
-import { ButtonProps } from '../Button'
-
-export interface AnimatedDeployButtonProps
-    extends Pick<ButtonProps, 'dataTestId' | 'text' | 'disabled' | 'isLoading' | 'startIcon' | 'endIcon' | 'style'> {
-    onButtonClick: (e?) => void
-    tooltipContent?: string
-    animateStartIcon?: boolean
+export interface AnimatedDeployButtonProps {
+    isLoading?: boolean
+    isVirtualEnvironment: boolean
+    onButtonClick: (e, disableDeployButton: boolean) => void
+    exceptionUserConfig?: {
+        canDeploy: boolean
+        isImageApprover: boolean
+    }
+    isBulkCDTrigger?: boolean
 }

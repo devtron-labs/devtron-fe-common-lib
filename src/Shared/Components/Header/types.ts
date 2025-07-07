@@ -28,6 +28,9 @@ export interface PageHeaderType {
     isBreadcrumbs?: boolean
     breadCrumbs?: () => JSX.Element
     renderActionButtons?: () => JSX.Element
+    showCloseButton?: boolean
+    onClose?: () => void
+    markAsBeta?: boolean
     tippyProps?: Pick<TippyCustomizedProps<false>, 'additionalContent'> & {
         isTippyCustomized?: boolean
         tippyRedirectLink?: keyof typeof DOCUMENTATION
@@ -52,7 +55,6 @@ export interface HelpButtonProps {
     serverInfo: ServerInfo
     fetchingServerInfo: boolean
     onClick: () => void
-    hideGettingStartedCard: () => void
 }
 
 export enum HelpMenuItems {

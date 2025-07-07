@@ -16,8 +16,7 @@
 
 import { UseUrlFiltersProps, UseUrlFiltersReturnType } from '../useUrlFilters'
 
-export interface UseStateFiltersProps<T>
-    extends Pick<UseUrlFiltersProps<T, never>, 'initialSortKey' | 'defaultPageSize'> {}
+export interface UseStateFiltersProps<T> extends Pick<UseUrlFiltersProps<T, never>, 'initialSortKey'> {}
 
 export interface UseStateFiltersReturnType<T>
     extends Pick<
@@ -32,7 +31,7 @@ export interface UseStateFiltersReturnType<T>
         | 'pageSize'
         | 'searchKey'
         | 'handleSearch'
-        | 'areFiltersApplied'
+        | 'isFilterApplied'
     > {}
 
 export interface PaginationType<T> extends Pick<UseUrlFiltersReturnType<T>, 'pageSize'> {

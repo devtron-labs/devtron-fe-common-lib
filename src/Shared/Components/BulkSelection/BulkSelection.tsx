@@ -14,101 +14,84 @@
  * limitations under the License.
  */
 
-import { forwardRef, MouseEvent } from 'react'
-
+import { ReactComponent as ICCheckAll } from '../../../Assets/Icon/ic-check-all.svg'
+import { ReactComponent as ICCheckSquare } from '../../../Assets/Icon/ic-check-square.svg'
 import { ReactComponent as ICChevronDown } from '../../../Assets/Icon/ic-chevron-down.svg'
-import { Checkbox, ConditionalWrap, noop } from '../../../Common'
-import { ActionMenu, ActionMenuItemType, ActionMenuProps } from '../ActionMenu'
+import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
+import { Checkbox, CHECKBOX_VALUE, noop, PopupMenu } from '../../../Common'
+import BulkSelectionDropdownItems from './BulkSelectionDropdownItems'
 import { useBulkSelection } from './BulkSelectionProvider'
 import { BULK_DROPDOWN_TEST_ID, BulkSelectionOptionsLabels } from './constants'
-import { BulkSelectionEvents, BulkSelectionProps } from './types'
+import { BulkSelectionDropdownItemsType, BulkSelectionEvents, BulkSelectionProps } from './types'
 
-const BulkSelection = forwardRef<HTMLLabelElement, BulkSelectionProps>(
-    (
-        { showPagination, disabled = false, showChevronDownIcon = true, selectAllIfNotPaginated = false },
-        forwardedRef,
-    ) => {
-        const { handleBulkSelection, isChecked, checkboxValue, getSelectedIdentifiersCount } = useBulkSelection()
-        const areOptionsSelected = getSelectedIdentifiersCount() > 0
-        const BulkSelectionItems: ActionMenuItemType[] = [
-            {
-                id: BulkSelectionEvents.SELECT_ALL_ON_PAGE,
-                label: BulkSelectionOptionsLabels[BulkSelectionEvents.SELECT_ALL_ON_PAGE],
-                startIcon: { name: 'ic-check-square' },
-            },
-            ...(showPagination
-                ? [
-                      {
-                          id: BulkSelectionEvents.SELECT_ALL_ACROSS_PAGES,
-                          label: BulkSelectionOptionsLabels[BulkSelectionEvents.SELECT_ALL_ACROSS_PAGES],
-                          startIcon: { name: 'ic-check-all' },
-                      } as ActionMenuItemType,
-                  ]
-                : []),
-            ...(areOptionsSelected
-                ? [
-                      {
-                          id: BulkSelectionEvents.CLEAR_ALL_SELECTIONS,
-                          label: BulkSelectionOptionsLabels[BulkSelectionEvents.CLEAR_ALL_SELECTIONS],
-                          startIcon: { name: 'ic-close-small' },
-                          type: 'negative',
-                      } as ActionMenuItemType,
-                  ]
-                : []),
-        ]
+const BulkSelection = <T,>({ showPagination, disabled = false, showChevronDownIcon = true }: BulkSelectionProps) => {
+    const { handleBulkSelection, isChecked, checkboxValue, getSelectedIdentifiersCount } = useBulkSelection<T>()
+    const areOptionsSelected = getSelectedIdentifiersCount() > 0
+    const BulkSelectionItems: BulkSelectionDropdownItemsType[] = [
+        {
+            locator: BulkSelectionEvents.SELECT_ALL_ON_PAGE,
+            label: BulkSelectionOptionsLabels[BulkSelectionEvents.SELECT_ALL_ON_PAGE],
+            isSelected: isChecked && checkboxValue === CHECKBOX_VALUE.CHECKED,
+            icon: ICCheckSquare,
+        },
+        ...(showPagination
+            ? [
+                  {
+                      locator: BulkSelectionEvents.SELECT_ALL_ACROSS_PAGES,
+                      label: BulkSelectionOptionsLabels[BulkSelectionEvents.SELECT_ALL_ACROSS_PAGES],
+                      isSelected: isChecked && checkboxValue === CHECKBOX_VALUE.BULK_CHECKED,
+                      icon: ICCheckAll,
+                  },
+              ]
+            : []),
+        ...(areOptionsSelected
+            ? [
+                  {
+                      locator: BulkSelectionEvents.CLEAR_ALL_SELECTIONS,
+                      label: BulkSelectionOptionsLabels[BulkSelectionEvents.CLEAR_ALL_SELECTIONS],
+                      isSelected: false,
+                      icon: ICClose,
+                      iconClass: 'icon-use-fill-n6',
+                  },
+              ]
+            : []),
+    ]
 
-        const onActionMenuClick: ActionMenuProps['onClick'] = (item) => {
-            handleBulkSelection({
-                action: item.id as BulkSelectionEvents,
-            })
-        }
-
-        const onSinglePageSelectAll = (e: MouseEvent<HTMLButtonElement>) => {
-            e.stopPropagation()
-
-            handleBulkSelection({
-                action: areOptionsSelected
-                    ? BulkSelectionEvents.CLEAR_ALL_SELECTIONS
-                    : BulkSelectionEvents.SELECT_ALL_ON_PAGE,
-            })
-        }
-
-        const shouldWrapActionMenu = !selectAllIfNotPaginated || showPagination
-
-        const wrapWithActionMenu = (children: React.ReactElement) => (
-            <ActionMenu
-                id={BULK_DROPDOWN_TEST_ID}
-                onClick={onActionMenuClick}
-                position="bottom"
-                options={[
-                    {
-                        items: BulkSelectionItems,
-                    },
-                ]}
+    return (
+        <PopupMenu autoClose>
+            <PopupMenu.Button
+                isKebab
+                rootClassName="h-20 flexbox p-0 dc__no-background dc__no-border dc__outline-none-imp"
+                dataTestId={BULK_DROPDOWN_TEST_ID}
+                disabled={disabled}
             >
-                {children}
-            </ActionMenu>
-        )
+                <Checkbox
+                    isChecked={isChecked}
+                    onChange={noop}
+                    rootClassName="icon-dim-20 m-0"
+                    value={checkboxValue}
+                    disabled={disabled}
+                    // Ideally should be disabled but was giving issue with cursor
+                />
 
-        return (
-            <ConditionalWrap wrap={wrapWithActionMenu} condition={shouldWrapActionMenu}>
-                <div className="flexbox dc__gap-4 dc__align-items-center">
-                    <Checkbox
-                        ref={forwardedRef}
-                        isChecked={isChecked}
-                        onChange={noop}
-                        rootClassName="icon-dim-20 m-0"
-                        value={checkboxValue}
-                        disabled={disabled}
-                        onClick={!shouldWrapActionMenu ? onSinglePageSelectAll : null}
-                        // Ideally should be disabled but was giving issue with cursor
+                {showChevronDownIcon && <ICChevronDown className="icon-dim-20 fcn-6 dc__no-shrink" />}
+            </PopupMenu.Button>
+
+            <PopupMenu.Body rootClassName="dc__top-22 w-150 dc__right-0 pt-4 pb-4 pl-0 pr-0 bg__primary flex column dc__content-start dc__align-start dc__position-abs bg__primary dc__border dc__border-radius-4-imp">
+                {BulkSelectionItems.map((item) => (
+                    <BulkSelectionDropdownItems<T>
+                        key={item.locator}
+                        locator={item.locator}
+                        label={item.label}
+                        isSelected={item.isSelected}
+                        icon={item.icon}
+                        handleBulkSelection={handleBulkSelection}
+                        iconClass={item.iconClass}
                     />
-
-                    {showChevronDownIcon && <ICChevronDown className="icon-dim-20 fcn-6 dc__no-shrink" />}
-                </div>
-            </ConditionalWrap>
-        )
-    },
-)
+                ))}
+            </PopupMenu.Body>
+        </PopupMenu>
+    )
+}
 
 export default BulkSelection

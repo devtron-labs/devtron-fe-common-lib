@@ -71,6 +71,11 @@ const FilterSelectPicker = ({
         setSelectedOptions(structuredClone(selectedOptionsToUpdate) as SelectPickerOptionType[])
     }
 
+    const handleMenuClose = () => {
+        closeMenu()
+        setSelectedOptions(structuredClone(appliedFilterOptions ?? []))
+    }
+
     const handleApplyClick: ButtonProps['onClick'] = (e) => {
         handleApplyFilter(selectedOptions)
         resetTriggerAutoClickTimestamp()
@@ -108,7 +113,7 @@ const FilterSelectPicker = ({
                 isMulti
                 menuIsOpen={isMenuOpen}
                 onMenuOpen={openMenu}
-                onMenuClose={handleApplyClick as () => void}
+                onMenuClose={handleMenuClose}
                 onChange={handleSelectOnChange}
                 menuListFooterConfig={{
                     type: 'button',

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactElement, Ref } from 'react'
+import { AnchorHTMLAttributes, ButtonHTMLAttributes, ReactElement } from 'react'
 import { LinkProps } from 'react-router-dom'
 
-import { TooltipProps } from '@Common/Tooltip'
+import { TooltipProps } from '@Common/Tooltip/types'
 import { ComponentSizeType } from '@Shared/constants'
 
 // Using the same for BEM class elements
@@ -48,7 +48,6 @@ export enum ButtonComponentType {
 export type ButtonProps<ComponentType extends ButtonComponentType = ButtonComponentType.button> =
     (ComponentType extends ButtonComponentType.link
         ? {
-              ref?: Ref<HTMLAnchorElement>
               component: ButtonComponentType.link
               /**
                * Props for the link component
@@ -60,7 +59,6 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
           }
         : ComponentType extends ButtonComponentType.anchor
           ? {
-                ref?: Ref<HTMLAnchorElement>
                 component: ButtonComponentType.anchor
                 linkProps?: never
                 buttonProps?: never
@@ -76,7 +74,6 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
                 onClick?: AnchorHTMLAttributes<HTMLAnchorElement>['onClick']
             }
           : {
-                ref?: Ref<HTMLButtonElement>
                 /**
                  * Component to be rendered from the available options
                  *
@@ -149,7 +146,7 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
                   /**
                    * If true, the tooltip is shown for the button
                    */
-                  showTooltip?: boolean
+                  showTooltip: boolean
                   /**
                    * Props for tooltip
                    */

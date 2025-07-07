@@ -27,7 +27,6 @@ export class VisibleModal extends React.Component<{
     onEscape?: (e) => void
 }> {
     modalRef = document.getElementById('visible-modal')
-    previousActiveElement: HTMLElement | null = null
 
     constructor(props) {
         super(props)
@@ -51,8 +50,6 @@ export class VisibleModal extends React.Component<{
         this.modalRef.classList.add(this.props.noBackground ? 'show' : 'show-with-bg')
         preventBodyScroll(true)
 
-        this.previousActiveElement = document.activeElement as HTMLElement
-
         if (this.props.parentClassName) {
             this.modalRef.classList.add(this.props.parentClassName)
         }
@@ -63,8 +60,6 @@ export class VisibleModal extends React.Component<{
         this.modalRef.classList.remove('show')
         this.modalRef.classList.remove('show-with-bg')
         preventBodyScroll(false)
-
-        this.previousActiveElement?.focus({ preventScroll: true })
 
         if (this.props.parentClassName) {
             this.modalRef.classList.remove(this.props.parentClassName)

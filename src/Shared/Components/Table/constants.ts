@@ -11,5 +11,3 @@ export const EVENT_TARGET = new EventTarget()
 export const DRAG_SELECTOR_IDENTIFIER = 'table-drag-selector'
 
 export const SHIMMER_DUMMY_ARRAY = [1, 2, 3]
-
-export const NO_ROWS_OR_GET_ROWS_ERROR = new Error('Neither rows nor getRows function provided')

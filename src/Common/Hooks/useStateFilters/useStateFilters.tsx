@@ -35,7 +35,6 @@ import { PaginationType, UseStateFiltersProps, UseStateFiltersReturnType } from 
  */
 const useStateFilters = <T = string,>({
     initialSortKey,
-    defaultPageSize = DEFAULT_BASE_PAGE_SIZE,
 }: UseStateFiltersProps<T> = {}): UseStateFiltersReturnType<T> => {
     const [sortingConfig, setSortingConfig] = useState({
         sortOrder: SortingOrder.ASC,
@@ -46,7 +45,7 @@ const useStateFilters = <T = string,>({
     const { sortBy, sortOrder } = sortingConfig
 
     const [pagination, setPagination] = useState<PaginationType<T>>({
-        pageSize: defaultPageSize,
+        pageSize: DEFAULT_BASE_PAGE_SIZE,
         pageNumber: DEFAULT_PAGE_NUMBER,
     })
     const offset = pagination.pageSize * (pagination.pageNumber - 1)
@@ -118,7 +117,7 @@ const useStateFilters = <T = string,>({
         changePage,
         changePageSize,
         offset,
-        areFiltersApplied: !!searchKey,
+        isFilterApplied: !!searchKey,
     }
 }
 

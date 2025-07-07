@@ -70,7 +70,6 @@ export interface CDFormType {
     deploymentAppType: string
     deploymentAppName?: string
     releaseMode: ReleaseMode
-    isCustomChart: boolean
     triggerType: string
     preBuildStage?: PipelineBuildStageType
     postBuildStage?: PipelineBuildStageType

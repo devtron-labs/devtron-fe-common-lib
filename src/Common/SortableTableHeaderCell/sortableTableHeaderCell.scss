@@ -15,10 +15,6 @@
  */
 
 .sortable-table-header {
-    &__container > :first-child {
-        margin-right: 6px;
-    }
-
     &__resize-btn {
         > div {
             transition: all 0.1s ease-out;

@@ -14,9 +14,23 @@
  * limitations under the License.
  */
 
-export const VISIBLE_PAGES_LIMIT = 5
-export const FALLBACK_PAGE_SIZE_OPTIONS = [
-    { value: 20, selected: true },
-    { value: 40, selected: false },
-    { value: 50, selected: false },
-]
+import { createContext, useContext } from 'react'
+
+import { MainContext, MainContextProviderProps } from './types'
+
+// TODO: (Arun) - Move to separate folder
+const mainContext = createContext<MainContext>(null)
+
+export const useMainContext = () => {
+    const data = useContext(mainContext)
+
+    if (!data) {
+        throw new Error('Please wrap with MainContextProvider')
+    }
+
+    return data
+}
+
+export const MainContextProvider = ({ children, value }: MainContextProviderProps) => (
+    <mainContext.Provider value={value}>{children}</mainContext.Provider>
+)

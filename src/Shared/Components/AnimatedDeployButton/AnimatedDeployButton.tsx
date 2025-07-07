@@ -18,23 +18,20 @@ import { SyntheticEvent, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
 
 import DeployAudio from '@Sounds/DeployAudio.mp3'
+import { ComponentSizeType } from '@Shared/constants'
 
-import { Button } from '../Button'
+import { Button, ButtonStyleType } from '../Button'
+import { Icon } from '../Icon'
 import { AnimatedDeployButtonProps } from './types'
 
 import './animatedDeployButton.scss'
 
 const AnimatedDeployButton = ({
-    text,
-    style,
-    disabled,
     isLoading,
-    startIcon,
-    endIcon,
-    dataTestId,
+    isVirtualEnvironment,
     onButtonClick,
-    tooltipContent,
-    animateStartIcon = true,
+    exceptionUserConfig,
+    isBulkCDTrigger,
 }: AnimatedDeployButtonProps) => {
     const audioRef = useRef<HTMLAudioElement>(null)
     const timeoutRef = useRef<ReturnType<typeof setTimeout>>(null)
@@ -45,12 +42,9 @@ const AnimatedDeployButton = ({
             rotate: 45,
         },
     }
+    const isExceptionUser = exceptionUserConfig?.canDeploy || exceptionUserConfig?.isImageApprover
 
     const handleButtonClick = async (e: SyntheticEvent) => {
-        if (!animateStartIcon) {
-            onButtonClick(e)
-            return
-        }
         if (clicked) {
             return
         }
@@ -64,7 +58,7 @@ const AnimatedDeployButton = ({
         setClicked(true)
         timeoutRef.current = setTimeout(() => {
             setClicked(false)
-            onButtonClick(e)
+            onButtonClick(e, false)
         }, 700)
     }
 
@@ -75,44 +69,44 @@ const AnimatedDeployButton = ({
         [],
     )
 
-    const startIconAnimated =
-        animateStartIcon && startIcon ? (
-            <motion.div
-                variants={svgMotionVariants}
-                animate={
-                    clicked
-                        ? {
-                              x: 200,
-                              rotate: 45,
-                              transition: {
-                                  duration: 0.5,
-                                  delay: 0.1,
-                              },
-                          }
-                        : {}
-                }
-            >
-                {startIcon}
-            </motion.div>
-        ) : (
-            startIcon
-        )
-
     return (
         <motion.div whileHover="hover" className={`${clicked ? 'hide-button-text' : ''}`}>
             <Button
-                text={text}
-                style={style}
-                endIcon={endIcon}
+                dataTestId="cd-trigger-deploy-button"
                 isLoading={isLoading}
-                dataTestId={dataTestId}
+                text={
+                    exceptionUserConfig?.canDeploy
+                        ? 'Deploy without approval'
+                        : `Deploy${isVirtualEnvironment ? ' to isolated env' : ''}`
+                }
+                startIcon={
+                    <motion.div
+                        variants={svgMotionVariants}
+                        animate={
+                            clicked
+                                ? {
+                                      x: 200,
+                                      rotate: 45,
+                                      transition: {
+                                          duration: 0.5,
+                                          delay: 0.1,
+                                      },
+                                  }
+                                : {}
+                        }
+                    >
+                        <Icon name="ic-rocket-launch" color={null} />
+                    </motion.div>
+                }
+                size={ComponentSizeType.large}
                 onClick={handleButtonClick}
-                startIcon={startIconAnimated}
-                showTooltip={!!tooltipContent}
+                style={isExceptionUser ? ButtonStyleType.warning : ButtonStyleType.default}
+                showTooltip={isExceptionUser}
                 tooltipProps={{
-                    content: tooltipContent,
+                    content: isBulkCDTrigger
+                        ? 'You are authorized to deploy as an exception user for some applications'
+                        : 'You are authorized to deploy as an exception user',
                 }}
-                disabled={disabled}
             />
             {/* Disabling es-lint as captions are not required */}
             {/* eslint-disable-next-line jsx-a11y/media-has-caption */}

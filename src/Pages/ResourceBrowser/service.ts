@@ -39,9 +39,7 @@ export const getK8sResourceList = (
 
 export const createNewResource = (
     resourceListPayload: CreateResourcePayload,
-    abortControllerRef?: APIOptions['abortControllerRef'],
-): Promise<ResponseType<CreateResourceDTO[]>> =>
-    post(ROUTES.K8S_RESOURCE_CREATE, resourceListPayload, { abortControllerRef })
+): Promise<ResponseType<CreateResourceDTO[]>> => post(ROUTES.K8S_RESOURCE_CREATE, resourceListPayload)
 
 export const deleteResource = (
     resourceListPayload: ResourceListPayloadType,
