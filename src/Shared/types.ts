@@ -139,6 +139,7 @@ export enum Nodes {
     Overview = 'Overview',
     MonitoringDashboard = 'MonitoringDashboard',
     UpgradeCluster = 'UpgradeCluster',
+    ResourceRecommender = 'ResourceRecommender',
 }
 
 // FIXME: This should be `typeof Nodes[keyof typeof Nodes]` instead since the key and values are not the same. Same to be removed from duplications in dashboard
@@ -892,6 +893,15 @@ interface CommonTabArgsType {
      * @default false
      */
     shouldRemainMounted?: boolean
+    /**
+     * @default false
+     * If true, tab would contain alpha as badge next to the title
+     */
+    isAlpha?: boolean
+    /**
+     * On tab stop, i.e by pressing cross icon on alive tab [fixed tab expanding on click of tab and remains expanded on other tab click], tab will reset the tab to this default URL if provided
+     */
+    defaultUrl?: string | null
 }
 
 export type InitTabType = Omit<CommonTabArgsType, 'type'> &
@@ -1034,6 +1044,7 @@ export enum CIPipelineNodeType {
     LINKED_CI = 'LINKED-CI',
     JOB_CI = 'JOB-CI',
     LINKED_CD = 'LINKED_CD',
+    CI_CD = 'CI_CD',
 }
 
 export interface ChangeCIPayloadType {
@@ -1250,6 +1261,7 @@ export interface DeploymentStatusDetailsType {
     timelines: DeploymentStatusDetailsTimelineType[]
     wfrStatus?: WorkflowRunnerStatusDTO
     isDeploymentWithoutApproval: boolean
+    deploymentAppType: DeploymentAppTypes
 }
 
 export type DeploymentStatusTimelineType =
@@ -1312,6 +1324,7 @@ export interface DeploymentStatusDetailsBreakdownDataType {
         deploymentErrorMessage: string
         nextTimelineToProcess: DeploymentStatusTimelineType
     } | null
+    deploymentAppType: DeploymentAppTypes
 }
 
 export interface IntelligenceConfig {
