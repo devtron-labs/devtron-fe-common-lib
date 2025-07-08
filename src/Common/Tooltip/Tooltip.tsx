@@ -17,9 +17,10 @@
 import { cloneElement } from 'react'
 import TippyJS from '@tippyjs/react'
 
+import { useIsTextTruncated } from '@Common/Hooks'
+
 import ShortcutKeyComboTooltipContent from './ShortcutKeyComboTooltipContent'
 import { TooltipProps } from './types'
-import useIsTextTruncated from './UseIsTextTruncated'
 
 import './styles.scss'
 

@@ -1,0 +1,72 @@
+import { FindSelectedIdParentNodesProps, GetSelectedIdParentNodesProps } from './types'
+
+/**
+ * Recursively traverses a tree structure to find the parent nodes of the node with the specified `selectedId`.
+ *
+ * @param node - The current tree node to search within.
+ * @param onFindParentNode - Callback invoked with the ID of each parent node found on the path to the selected node.
+ * @returns `true` if the node with `selectedId` is found in the subtree rooted at `node`, otherwise `false`.
+ *
+ * @remarks
+ * - This function is used to collect all parent node IDs leading to a specific node in a tree.
+ * - The callback `onFindParentNode` is called for each parent node in the path from the root to the selected node.
+ * - Only nodes of type `'heading'` are considered to have children.
+ */
+const findSelectedIdParentNodes = <DataAttributeType = null>({
+    node,
+    selectedId,
+    onFindParentNode,
+}: FindSelectedIdParentNodesProps<DataAttributeType>): boolean => {
+    if (node.id === selectedId) {
+        return true
+    }
+
+    if (node.type === 'heading' && node.items?.length) {
+        let found = false
+        node.items.forEach((childNode) => {
+            if (
+                findSelectedIdParentNodes({
+                    node: childNode,
+                    onFindParentNode,
+                    selectedId,
+                })
+            ) {
+                found = true
+                onFindParentNode(node.id)
+            }
+        })
+        return found
+    }
+
+    return false
+}
+
+/**
+ * Retrieves an array of parent node IDs for the currently selected node.
+ *
+ * Iterates through the provided tree nodes and collects the IDs of all parent nodes
+ * leading to the node identified by `selectedId`. If no node is selected, returns an empty array.
+ *
+ * @returns {string[]} An array of parent node IDs for the selected node, or an empty array if no node is selected.
+ */
+export const getSelectedIdParentNodes = <DataAttributeType = null>({
+    nodes,
+    selectedId,
+}: GetSelectedIdParentNodesProps<DataAttributeType>): string[] => {
+    const selectedIdParentNodes: string[] = []
+
+    if (!selectedId) {
+        return selectedIdParentNodes
+    }
+
+    nodes.forEach((node) => {
+        findSelectedIdParentNodes<DataAttributeType>({
+            node,
+            selectedId,
+            onFindParentNode: (id: string) => {
+                selectedIdParentNodes.push(id)
+            },
+        })
+    })
+    return selectedIdParentNodes
+}

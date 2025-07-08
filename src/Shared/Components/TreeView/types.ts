@@ -24,6 +24,9 @@ export type TreeNode<DataAttributeType = null> = TreeHeading<DataAttributeType> 
  * @property dataAttributes - Optional data attributes, present only if `DataAttributeType` extends `DataAttributes`.
  */
 type BaseNode<DataAttributeType = null> = {
+    /**
+     * id - Unique identifier for the node.
+     */
     id: string
     /**
      * The title of the list item.
@@ -33,11 +36,17 @@ type BaseNode<DataAttributeType = null> = {
      * The subtitle of the list item.
      */
     subtitle?: string
+    /**
+     *  Optional configuration for a custom tooltip.
+     */
     customTooltipConfig?: TooltipProps
     /**
      * If true, the title will be rendered with line-through.
      */
     strikeThrough?: boolean
+    /**
+     * Optional configuration for a start icon, which can be either a standard icon (with `name` and `color`) or a custom JSX element.
+     */
     startIconConfig?: {
         tooltipContent?: string
     } & (
@@ -202,4 +211,13 @@ export interface TreeViewNodeContentProps
     extends Pick<BaseNode, 'startIconConfig' | 'title' | 'subtitle' | 'customTooltipConfig' | 'strikeThrough'> {
     type: 'heading' | 'item'
     isSelected: boolean
+}
+
+export interface GetSelectedIdParentNodesProps<DataAttributeType = null>
+    extends Pick<TreeViewProps<DataAttributeType>, 'nodes' | 'selectedId'> {}
+
+export interface FindSelectedIdParentNodesProps<DataAttributeType = null>
+    extends Pick<GetSelectedIdParentNodesProps<DataAttributeType>, 'selectedId'> {
+    node: TreeNode<DataAttributeType>
+    onFindParentNode: (id: string) => void
 }

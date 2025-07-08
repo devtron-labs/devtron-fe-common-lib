@@ -6,7 +6,8 @@ import { Icon } from '../Icon'
 import { TrailingItem } from '../TrailingItem'
 import { DEFAULT_NO_ITEMS_TEXT, VARIANT_TO_BG_CLASS_MAP, VARIANT_TO_HOVER_CLASS_MAP } from './constants'
 import TreeViewNodeContent from './TreeViewNodeContent'
-import { NodeElementType, TreeHeading, TreeItem, TreeNode, TreeViewProps } from './types'
+import { NodeElementType, TreeHeading, TreeItem, TreeViewProps } from './types'
+import { getSelectedIdParentNodes } from './utils'
 
 import './TreeView.scss'
 
@@ -33,50 +34,16 @@ const TreeView = <DataAttributeType = null,>({
     const { pathname } = useLocation()
     const isFirstLevel = depth === 0
 
-    const findSelectedIdParentNodes = (
-        node: TreeNode<DataAttributeType>,
-        onFindParentNode: (id: string) => void,
-    ): boolean => {
-        if (node.id === selectedId) {
-            return true
-        }
-
-        if (node.type === 'heading' && node.items?.length) {
-            let found = false
-            node.items.forEach((childNode) => {
-                if (findSelectedIdParentNodes(childNode, onFindParentNode)) {
-                    found = true
-                    onFindParentNode(node.id)
-                }
-            })
-            return found
-        }
-
-        return false
-    }
-
-    const getSelectedIdParentNodes = (): string[] => {
-        const selectedIdParentNodes: string[] = []
-
-        if (!selectedId) {
-            return selectedIdParentNodes
-        }
-
-        nodes.forEach((node) => {
-            findSelectedIdParentNodes(node, (id: string) => {
-                selectedIdParentNodes.push(id)
-            })
-        })
-        return selectedIdParentNodes
-    }
-
     const getDefaultExpandedMap = (): Record<string, boolean> => {
         const defaultMap: Record<string, boolean> = defaultExpandedMap
         if (!selectedId) {
             return defaultMap
         }
 
-        const selectedIdParentNodes = getSelectedIdParentNodes()
+        const selectedIdParentNodes = getSelectedIdParentNodes<DataAttributeType>({
+            selectedId,
+            nodes,
+        })
         selectedIdParentNodes.forEach((id) => {
             defaultMap[id] = true
         })
@@ -98,7 +65,10 @@ const TreeView = <DataAttributeType = null,>({
     useEffect(() => {
         // isControlled is false for first level of the tree view so should set the expanded map only from first level
         if (isFirstLevel) {
-            const selectedIdParentNodes = getSelectedIdParentNodes()
+            const selectedIdParentNodes = getSelectedIdParentNodes<DataAttributeType>({
+                selectedId,
+                nodes,
+            })
             setCurrentLevelExpandedMap((prev) => {
                 const newExpandedMap = { ...prev }
                 selectedIdParentNodes.forEach((id) => {
@@ -146,8 +116,17 @@ const TreeView = <DataAttributeType = null,>({
         itemsRef.current[id] = el
     }
 
-    // will traverse all the nodes that are expanded and visible in the tree view
-    // and return a flat list of node ids for keyboard navigation
+    /**
+     * Recursively traverses a list of tree nodes and returns an array of all node IDs that are present in DOM.
+     *
+     * For each node in the provided list:
+     * - Adds the node's `id` to the result array.
+     * - If the node is of type `'heading'`, is expanded (as per `expandedMap`), and has child items,
+     *   recursively traverses its child items and includes their IDs as well.
+     *
+     * @param nodeList - The list of nodes to traverse.
+     * @returns An array of strings representing the IDs of all traversed nodes.
+     */
     const traverseNodes = (nodeList: typeof nodes): string[] =>
         nodeList.reduce((acc: string[], node) => {
             acc.push(node.id)

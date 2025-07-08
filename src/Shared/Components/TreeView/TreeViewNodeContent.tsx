@@ -1,5 +1,6 @@
 import { ConditionalWrap } from '@Common/Helper'
-import { Tooltip, TooltipProps, useIsTextTruncated } from '@Common/Tooltip'
+import { useIsTextTruncated } from '@Common/Hooks'
+import { Tooltip, TooltipProps } from '@Common/Tooltip'
 
 import { Icon } from '../Icon'
 import { TreeViewNodeContentProps } from './types'
