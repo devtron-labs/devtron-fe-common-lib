@@ -7,7 +7,7 @@ import { TrailingItem } from '../TrailingItem'
 import { DEFAULT_NO_ITEMS_TEXT, VARIANT_TO_BG_CLASS_MAP, VARIANT_TO_HOVER_CLASS_MAP } from './constants'
 import TreeViewNodeContent from './TreeViewNodeContent'
 import { NodeElementType, TreeHeading, TreeItem, TreeViewProps } from './types'
-import { getSelectedIdParentNodes } from './utils'
+import { getSelectedIdParentNodes, getVisibleNodes } from './utils'
 
 import './TreeView.scss'
 
@@ -116,33 +116,15 @@ const TreeView = <DataAttributeType = null,>({
         itemsRef.current[id] = el
     }
 
-    /**
-     * Recursively traverses a list of tree nodes and returns an array of all node IDs that are present in DOM.
-     *
-     * For each node in the provided list:
-     * - Adds the node's `id` to the result array.
-     * - If the node is of type `'heading'`, is expanded (as per `expandedMap`), and has child items,
-     *   recursively traverses its child items and includes their IDs as well.
-     *
-     * @param nodeList - The list of nodes to traverse.
-     * @returns An array of strings representing the IDs of all traversed nodes.
-     */
-    const traverseNodes = (nodeList: typeof nodes): string[] =>
-        nodeList.reduce((acc: string[], node) => {
-            acc.push(node.id)
-            if (node.type === 'heading' && expandedMap[node.id] && node.items?.length) {
-                // If the node is a heading and expanded, traverse its items
-                acc.push(...traverseNodes(node.items))
-            }
-            return acc
-        }, [])
-
     const flatNodeList = useMemo(() => {
         if (flatNodeListProp) {
             return flatNodeListProp
         }
 
-        return traverseNodes(nodes)
+        return getVisibleNodes<DataAttributeType>({
+            nodeList: nodes,
+            expandedMap,
+        })
     }, [nodes, expandedMap, flatNodeListProp])
 
     const handleKeyDown = (e: React.KeyboardEvent<HTMLDivElement>) => {

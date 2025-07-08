@@ -1,4 +1,4 @@
-import { FindSelectedIdParentNodesProps, GetSelectedIdParentNodesProps } from './types'
+import { FindSelectedIdParentNodesProps, GetSelectedIdParentNodesProps, GetVisibleNodesProps } from './types'
 
 /**
  * Recursively traverses a tree structure to find the parent nodes of the node with the specified `selectedId`.
@@ -70,3 +70,32 @@ export const getSelectedIdParentNodes = <DataAttributeType = null>({
     })
     return selectedIdParentNodes
 }
+
+/**
+ * Recursively traverses a list of tree nodes and returns an array of all node IDs that are present in DOM.
+ *
+ * For each node in the provided list:
+ * - Adds the node's `id` to the result array.
+ * - If the node is of type `'heading'`, is expanded (as per `expandedMap`), and has child items,
+ *   recursively traverses its child items and includes their IDs as well.
+ *
+ * @param nodeList - The list of nodes to traverse.
+ * @returns An array of strings representing the IDs of all traversed nodes.
+ */
+export const getVisibleNodes = <DataAttributeType = null>({
+    nodeList,
+    expandedMap,
+}: GetVisibleNodesProps<DataAttributeType>): string[] =>
+    nodeList.reduce((acc: string[], node) => {
+        acc.push(node.id)
+        if (node.type === 'heading' && expandedMap[node.id] && node.items?.length) {
+            // If the node is a heading and expanded, traverse its items
+            acc.push(
+                ...getVisibleNodes({
+                    nodeList: node.items,
+                    expandedMap,
+                }),
+            )
+        }
+        return acc
+    }, [])

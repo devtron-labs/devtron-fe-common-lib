@@ -221,3 +221,8 @@ export interface FindSelectedIdParentNodesProps<DataAttributeType = null>
     node: TreeNode<DataAttributeType>
     onFindParentNode: (id: string) => void
 }
+
+export interface GetVisibleNodesProps<DataAttributeType = null>
+    extends Pick<TreeViewProps<DataAttributeType>, 'expandedMap'> {
+    nodeList: TreeNode<DataAttributeType>[]
+}
