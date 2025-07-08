@@ -37,7 +37,7 @@ const GenericEmptyState = ({
     layout = 'column',
     contentClassName = '',
     imageStyles = {},
-    illustrationName,
+    imgName,
 }: GenericEmptyStateType): JSX.Element => {
     const isRowLayout = layout === 'row'
 
@@ -58,9 +58,9 @@ const GenericEmptyState = ({
         >
             {!SvgImage ? (
                 !noImage &&
-                (illustrationName ? (
+                (imgName ? (
                     <Illustration
-                        name={illustrationName}
+                        name={imgName}
                         imageProps={{
                             alt: 'empty-state',
                             style: {

@@ -181,7 +181,7 @@ export interface InfoIconTippyProps<T extends boolean = false>
 
 export interface GenericEmptyStateType {
     title: ReactNode
-    illustrationName?: IllustrationName
+    imgName?: IllustrationName
     image?
     classname?: string
     subTitle?: ReactNode
