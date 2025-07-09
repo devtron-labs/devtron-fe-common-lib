@@ -53,17 +53,7 @@ export const useUserPreferences = ({ migrateUserPreferences, recentlyVisitedFetc
             resourceKind,
         })
 
-        const updatedUserPreferences = {
-            ...userPreferencesResponse,
-            resources: {
-                ...userPreferencesResponse?.resources,
-                [resourceKind]: {
-                    ...userPreferencesResponse?.resources?.[resourceKind],
-                    [UserPreferenceResourceActions.RECENTLY_VISITED]: uniqueFilteredApps,
-                },
-            },
-        }
-        localStorage.setItem('userPreferences', JSON.stringify(updatedUserPreferences))
+        localStorage.setItem('userPreferences', JSON.stringify(userPreferencesResponse))
 
         setUserPreferences((prev) => ({
             ...prev,
@@ -82,7 +72,7 @@ export const useUserPreferences = ({ migrateUserPreferences, recentlyVisitedFetc
             userPreferencesResponse,
         })
 
-        return updatedUserPreferences
+        return userPreferencesResponse
     }
 
     const [recentResourcesLoading, recentResourcesResult] = useAsync(

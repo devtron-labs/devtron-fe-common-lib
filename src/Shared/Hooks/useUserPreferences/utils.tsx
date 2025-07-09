@@ -18,7 +18,7 @@ export const getFilteredUniqueAppList = ({
     const isInvalidApp = id && !name
 
     const validEntities = _recentApps.filter((app) => {
-        if (!app?.id || !app?.name) {
+        if (!app?.id || !app.name) {
             return false
         }
 
