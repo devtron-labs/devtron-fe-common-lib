@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactElement, useCallback, useMemo, useRef, useState } from 'react'
+import { ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
     GroupHeadingProps,
     MultiValueProps,
@@ -225,6 +225,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     labelTippyCustomizedConfig,
     labelTooltipConfig,
     hideFormFieldInfo,
+    autoFocus,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const innerRef = useRef<SelectPickerProps<OptionValue, IsMulti>['selectRef']['current']>(null)
@@ -399,6 +400,14 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         props.onChange?.(...params)
     }
 
+    useEffect(() => {
+        if (autoFocus) {
+            setTimeout(() => {
+                selectRef.current?.focus()
+            }, 100)
+        }
+    }, [autoFocus])
+
     return (
         <FormFieldWrapper
             inputId={inputId}
@@ -454,6 +463,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         shouldRenderCustomOptions={shouldRenderCustomOptions || false}
                         isMulti={isMulti}
                         ref={selectRef}
+                        autoFocus={autoFocus}
                         components={{
                             IndicatorSeparator: null,
                             LoadingIndicator: null,

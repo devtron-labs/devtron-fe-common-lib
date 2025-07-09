@@ -26,6 +26,7 @@ import { TooltipProps } from '@Common/Tooltip'
 import { OptionType } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 
+import { ActionMenuProps } from '../ActionMenu'
 import { ButtonComponentType, ButtonProps, ButtonVariantType } from '../Button'
 import { FormFieldWrapperProps } from '../FormFieldWrapper/types'
 
@@ -335,6 +336,9 @@ export interface FilterSelectPickerProps
             | 'reloadOptionList'
             | 'getOptionValue'
             | 'isOptionDisabled'
+            | 'onMenuClose'
+            | 'menuIsOpen'
+            | 'onKeyDown'
         > {
     appliedFilterOptions: SelectPickerOptionType[]
     handleApplyFilter: (filtersToApply: SelectPickerOptionType<number | string>[]) => void
@@ -351,3 +355,15 @@ export type SelectPickerTextAreaProps = Omit<
     | 'shouldRenderTextArea'
 > &
     Pick<ResizableTagTextAreaProps, 'maxHeight' | 'minHeight' | 'refVar' | 'dependentRefs'>
+
+export interface GroupedFilterSelectPickerProps<T extends string | number = string | number>
+    extends Omit<
+        ActionMenuProps<T>,
+        'onClick' | 'disableDescriptionEllipsis' | 'children' | 'buttonProps' | 'isSearchable'
+    > {
+    isFilterApplied?: boolean
+    filterSelectPickerPropsMap: Record<
+        T,
+        Omit<FilterSelectPickerProps, 'autoFocus' | 'menuIsOpen' | 'onMenuClose' | 'onKeyDown'>
+    >
+}
