@@ -19,10 +19,11 @@ import moment from 'moment'
 import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
 import { ReactComponent as Close } from '@Icons/ic-close.svg'
 import { ReactComponent as ICInProgress } from '@Icons/ic-in-progress.svg'
-import { DATE_TIME_FORMATS } from '@Common/Constants'
+import { DATE_TIME_FORMATS, URLS } from '@Common/Constants'
 import { DeploymentAppTypes } from '@Common/Types'
 import { ALL_RESOURCE_KIND_FILTER } from '@Shared/constants'
 import { isTimeStringAvailable } from '@Shared/Helpers'
+import { K8S_EMPTY_GROUP } from '@Pages/ResourceBrowser'
 
 import { DeploymentStatusBreakdownItemType, Node, ResourceKindType, WorkflowStatusEnum } from '../../types'
 import { Icon } from '../Icon'
@@ -233,7 +234,7 @@ export const getHistoryItemStatusIconFromWorkflowStages = (
 }
 
 export const getWorkerPodBaseUrl = (clusterId: number = DEFAULT_CLUSTER_ID, podNamespace: string = DEFAULT_NAMESPACE) =>
-    `/resource-browser/${clusterId}/${podNamespace}/pod/k8sEmptyGroup`
+    `${URLS.RESOURCE_BROWSER}/${clusterId}/${podNamespace}/pod/${K8S_EMPTY_GROUP}`
 
 export const getWorkflowNodeStatusTitle = (status: string) => {
     if (!status) {

@@ -1,12 +1,6 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import {
-    noop,
-    UseRegisterShortcutProvider,
-    useResizableTableConfig,
-    useStateFilters,
-    useUrlFilters,
-} from '@Common/index'
+import { noop, useResizableTableConfig, useStateFilters, useUrlFilters } from '@Common/index'
 
 import { BulkSelectionEvents, BulkSelectionProvider, useBulkSelection } from '../BulkSelection'
 import { BULK_ACTION_GUTTER_LABEL } from './constants'
@@ -61,7 +55,7 @@ const TableWithResizableConfigWrapper = (tableProps: UseResizableTableConfigWrap
     const visibleColumns = useMemo(
         () =>
             bulkActionsConfig
-                ? [{ size: { fixed: 40 }, field: BULK_ACTION_GUTTER_LABEL }, ...columnsWithoutBulkActionGutter]
+                ? [{ size: { fixed: 20 }, field: BULK_ACTION_GUTTER_LABEL }, ...columnsWithoutBulkActionGutter]
                 : columnsWithoutBulkActionGutter,
         [!!bulkActionsConfig, columnsWithoutBulkActionGutter],
     )
@@ -92,7 +86,7 @@ const TableWithUseBulkSelectionReturnValue = (tableProps: TableWithBulkSelection
         (row: RowType) => {
             const isRowSelected = selectedIdentifiers[row.id]
 
-            if (!isRowSelected) {
+            if (!isRowSelected && !isBulkSelectionApplied) {
                 /**
                  * !FIXME: handleBulkSelection does not handle multiple updates in a single call
                  * can be done by using callbacks when setting setIdentifiers in BulkSelectionProvider
@@ -191,19 +185,15 @@ const UseUrlFilterWrapper = (props: FilterWrapperProps) => {
 const TableWrapper = (tableProps: TableProps) => {
     const { filtersVariant } = tableProps
 
-    const renderContent = () => {
-        if (filtersVariant === FiltersTypeEnum.STATE) {
-            return <UseStateFilterWrapper {...tableProps} />
-        }
-
-        if (filtersVariant === FiltersTypeEnum.URL) {
-            return <UseUrlFilterWrapper {...tableProps} />
-        }
-
-        return <VisibleColumnsWrapper {...{ ...tableProps, filterData: null }} />
+    if (filtersVariant === FiltersTypeEnum.STATE) {
+        return <UseStateFilterWrapper {...tableProps} />
     }
 
-    return <UseRegisterShortcutProvider shortcutTimeout={50}>{renderContent()}</UseRegisterShortcutProvider>
+    if (filtersVariant === FiltersTypeEnum.URL) {
+        return <UseUrlFilterWrapper {...tableProps} />
+    }
+
+    return <VisibleColumnsWrapper {...{ ...tableProps, filterData: null }} />
 }
 
 export default TableWrapper

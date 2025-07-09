@@ -16,6 +16,7 @@
 
 import { Fragment } from 'react'
 
+import { DeploymentAppTypes } from '@Common/Types'
 import { TIMELINE_STATUS } from '@Shared/types'
 
 import { InfoBlock } from '../InfoBlock'
@@ -29,6 +30,7 @@ const DeploymentStatusDetailBreakdown = ({
     isVirtualEnvironment,
     appDetails,
     rootClassName = '',
+    deploymentAppType,
 }: DeploymentStatusDetailBreakdownType) => {
     const isHelmManifestPushed =
         deploymentStatusDetailsBreakdownData.deploymentStatusBreakdown[
@@ -58,8 +60,9 @@ const DeploymentStatusDetailBreakdown = ({
                     {(
                         [
                             TIMELINE_STATUS.GIT_COMMIT,
-                            TIMELINE_STATUS.ARGOCD_SYNC,
-                            TIMELINE_STATUS.KUBECTL_APPLY,
+                            ...(deploymentAppType === DeploymentAppTypes.ARGO
+                                ? [TIMELINE_STATUS.ARGOCD_SYNC, TIMELINE_STATUS.KUBECTL_APPLY]
+                                : []),
                         ] as DeploymentStatusDetailRowType['type'][]
                     ).map((timelineStatus) => (
                         <Fragment key={timelineStatus}>

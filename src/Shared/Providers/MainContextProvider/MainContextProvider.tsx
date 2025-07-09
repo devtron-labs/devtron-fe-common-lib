@@ -14,24 +14,22 @@
  * limitations under the License.
  */
 
-.getting-started-card {
-    position: fixed;
-    z-index: 6;
-    right: 20px;
-    top: 54px;
+import { createContext, useContext } from 'react'
+
+import { MainContext, MainContextProviderProps } from './types'
+
+const mainContext = createContext<MainContext>(null)
+
+export const useMainContext = () => {
+    const data = useContext(mainContext)
+
+    if (!data) {
+        throw new Error('Please wrap with MainContextProvider')
+    }
+
+    return data
 }
 
-.arrow-up {
-    width: 0;
-    height: 0;
-    border-left: 12px solid transparent;
-    border-right: 12px solid transparent;
-    border-bottom: 12px solid var(--bg-overlay-primary);
-    right: 64px;
-    position: fixed;
-    top: 42px;
-}
-
-.getting_tippy__position {
-    position: fixed;
-}
+export const MainContextProvider = ({ children, value }: MainContextProviderProps) => (
+    <mainContext.Provider value={value}>{children}</mainContext.Provider>
+)

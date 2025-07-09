@@ -168,8 +168,13 @@ export interface customEnv {
     FEATURE_MANAGE_TRAFFIC_ENABLE?: boolean
     FEATURE_INFRA_PROVISION_INFO_BLOCK_HIDE?: boolean
     /**
+     * If true, will add flux option to deployment types in devtron apps and devtron charts
+     * @default false
+     */
+    FEATURE_FLUX_DEPLOYMENTS_ENABLE?: boolean
+    FEATURE_LINK_EXTERNAL_FLUX_ENABLE?: boolean
+    /**
      * If true, online/offline connectivity banner is enabled
-     *
      *  @default true
      */
     FEATURE_INTERNET_CONNECTIVITY_ENABLE?: boolean
