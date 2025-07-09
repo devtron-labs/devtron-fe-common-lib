@@ -122,7 +122,7 @@ export const getReceiveWorkflowCardsConfig = ({
         )
         .filter(Boolean)
 
-    if (currentPipelineType !== CIPipelineNodeType.LINKED_CD) {
+    if (linkedCDSourceVariant && currentPipelineType !== CIPipelineNodeType.LINKED_CD) {
         config.push(linkedCDSourceVariant)
     }
 

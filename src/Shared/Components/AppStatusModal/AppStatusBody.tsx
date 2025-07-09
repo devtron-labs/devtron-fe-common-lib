@@ -192,6 +192,7 @@ export const AppStatusBody = ({
                     isVirtualEnvironment={appDetails.isVirtualEnvironment}
                     appDetails={appDetails}
                     rootClassName="pb-20"
+                    deploymentAppType={appDetails.deploymentAppType}
                 />
             )}
         </div>

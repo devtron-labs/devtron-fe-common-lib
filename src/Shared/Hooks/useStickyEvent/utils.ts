@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { FALLBACK_SENTINEL_HEIGHT } from './constants'
+import { FALLBACK_SENTINEL_HEIGHT, SENTINEL_HEIGHT_BUFFER } from './constants'
 import { UseStickyEventReturnType } from './types'
 
 export const getHeightForStickyElementTopOffset = <T extends HTMLElement>({
@@ -30,7 +30,7 @@ export const getHeightForStickyElementTopOffset = <T extends HTMLElement>({
     const doesTopOffsetContainCalc = calcRegex.test(topValue)
 
     if (doesTopOffsetContainCalc) {
-        return topValue.replace(calcRegex, (match) => `calc(${match} + 1px)`)
+        return topValue.replace(calcRegex, (match) => `calc(${match} + ${SENTINEL_HEIGHT_BUFFER}px)`)
     }
 
     return topValue.replace(/\d+(\.\d+)?/g, (match) => {
@@ -40,6 +40,6 @@ export const getHeightForStickyElementTopOffset = <T extends HTMLElement>({
             return FALLBACK_SENTINEL_HEIGHT
         }
 
-        return `${nMatch + 1}`
+        return `${nMatch + SENTINEL_HEIGHT_BUFFER}`
     })
 }
