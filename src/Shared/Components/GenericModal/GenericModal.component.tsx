@@ -71,10 +71,10 @@ const GenericModal = ({
     closeOnBackdropClick = false,
     children,
 }: PropsWithChildren<GenericModalProps>) => (
-    <GenericModalProvider value={{ name, onClose }}>
-        <AnimatePresence>
-            {open && (
-                <Backdrop onEscape={onEscape} onClick={closeOnBackdropClick ? onClose : undefined}>
+    <AnimatePresence>
+        {open && (
+            <GenericModalProvider value={{ name, onClose }}>
+                <Backdrop onEscape={onEscape} onClick={closeOnBackdropClick ? onClose : noop}>
                     <motion.div
                         className={`shadow__modal flexbox-col bg__primary border__secondary br-8 dc__m-auto mt-40 dc__overflow-hidden ${MODAL_WIDTH_TO_CLASS_NAME_MAP[width]}`}
                         exit={{ y: 100, opacity: 0, scale: 0.75, transition: { duration: 0.35 } }}
@@ -85,9 +85,9 @@ const GenericModal = ({
                         {children}
                     </motion.div>
                 </Backdrop>
-            )}
-        </AnimatePresence>
-    </GenericModalProvider>
+            </GenericModalProvider>
+        )}
+    </AnimatePresence>
 )
 
 GenericModal.Header = GenericModalHeader

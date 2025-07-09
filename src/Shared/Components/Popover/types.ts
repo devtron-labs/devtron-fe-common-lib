@@ -58,6 +58,7 @@ export interface UsePopoverProps {
      * @default 'menu'
      */
     variant?: 'menu' | 'overlay'
+    disableClose?: boolean
 }
 
 /**
