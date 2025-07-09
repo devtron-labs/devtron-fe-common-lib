@@ -31,7 +31,7 @@ export const FieldRowWithLabel = ({
     <div
         className={
             showLabel
-                ? `display-grid dc__gap-12 rjsf-form-template__field ${shouldAlignCenter ? 'flex-align-center' : ''}`
+                ? `display-grid dc__gap-12 rjsf-form-template__field ${!shouldAlignCenter ? 'rjsf-form-template__field--align-top' : ''}`
                 : ''
         }
     >
