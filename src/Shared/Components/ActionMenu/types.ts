@@ -1,14 +1,9 @@
-import { LegacyRef, MouseEvent, ReactElement, Ref } from 'react'
+import { LegacyRef, MouseEvent, Ref } from 'react'
 import { LinkProps } from 'react-router-dom'
 
-import { OmitNever } from '@Shared/types'
-
-import { ButtonProps } from '../Button'
-import { IconsProps } from '../Icon'
-import { NumbersCountProps } from '../NumbersCount'
 import { PopoverProps, UsePopoverProps } from '../Popover'
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
-import { DTSwitchProps } from '../Switch'
+import { ActionMenuItemIconType, TrailingItemType } from '../TrailingItem'
 
 type ConditionalActionMenuComponentType =
     | {
@@ -30,48 +25,6 @@ type ConditionalActionMenuComponentType =
           /** Specifies the `to` property for react-router `Link` */
           to: LinkProps['to']
           href?: never
-      }
-
-type ActionMenuItemIconType = Pick<IconsProps, 'name'> & {
-    /** @default 'N800' */
-    color?: IconsProps['color']
-}
-
-type TrailingItemType =
-    | {
-          type: 'icon'
-          config: ActionMenuItemIconType
-      }
-    | {
-          type: 'text'
-          config: {
-              value: string
-              icon?: ActionMenuItemIconType
-          }
-      }
-    | {
-          type: 'counter'
-          config: {
-              value: NumbersCountProps['count']
-          }
-      }
-    | {
-          type: 'switch'
-          config: Pick<
-              DTSwitchProps,
-              | 'ariaLabel'
-              | 'isChecked'
-              | 'indeterminate'
-              | 'isDisabled'
-              | 'isLoading'
-              | 'name'
-              | 'onChange'
-              | 'tooltipContent'
-          >
-      }
-    | {
-          type: 'button'
-          config: OmitNever<Omit<Extract<ButtonProps, { icon: ReactElement }>, 'size' | 'variant'>>
       }
 
 export type ActionMenuItemType<T extends string | number = string | number> = Omit<
