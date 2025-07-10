@@ -122,5 +122,5 @@ export type UserPreferenceResourceProps = UserPathValueMapType & {
 }
 
 export interface UserPreferenceFilteredListTypes extends UserPreferenceRecentlyVisitedAppsTypes {
-    userPreferencesResponse: UserPreferencesType
+    userPreferencesResponse?: UserPreferencesType
 }

@@ -20,7 +20,7 @@ import { useAsync } from '@Common/Helper'
 import { ServerErrors } from '@Common/ServerError'
 import { useTheme } from '@Shared/Providers'
 
-import { getUserPreferences, updateUserPreferences } from './service'
+import { getUserPreferences, updateAndPersistUserPreferences } from './service'
 import {
     BaseRecentlyVisitedEntitiesTypes,
     UserPreferenceResourceActions,
@@ -28,7 +28,6 @@ import {
     UseUserPreferencesProps,
     ViewIsPipelineRBACConfiguredRadioTabs,
 } from './types'
-import { getFilteredUniqueAppList } from './utils'
 
 export const useUserPreferences = ({ migrateUserPreferences, recentlyVisitedFetchConfig }: UseUserPreferencesProps) => {
     const [userPreferences, setUserPreferences] = useState<UserPreferencesType>(null)
@@ -39,40 +38,19 @@ export const useUserPreferences = ({ migrateUserPreferences, recentlyVisitedFetc
     const { handleThemeSwitcherDialogVisibilityChange, handleThemePreferenceChange } = useTheme()
 
     const fetchRecentlyVisitedParsedEntities = async (): Promise<UserPreferencesType> => {
-        // Retrieve and parse the user's saved preferences from local storage
-        const userPreferencesResponse = JSON.parse(localStorage.getItem('userPreferences'))
-
-        if (!resourceKind) {
-            return userPreferencesResponse
-        }
-
-        const uniqueFilteredApps = getFilteredUniqueAppList({
-            userPreferencesResponse,
+        // Use the optimized centralized function that handles everything
+        const updatedUserPreferences = await updateAndPersistUserPreferences({
             id,
             name,
             resourceKind,
+            updateLocalStorage: true,
+            shouldThrowError: false,
         })
 
-        localStorage.setItem('userPreferences', JSON.stringify(userPreferencesResponse))
+        // Update local state
+        setUserPreferences(updatedUserPreferences)
 
-        setUserPreferences((prev) => ({
-            ...prev,
-            resources: {
-                ...prev?.resources,
-                [resourceKind]: {
-                    ...prev?.resources?.[resourceKind],
-                    [UserPreferenceResourceActions.RECENTLY_VISITED]: uniqueFilteredApps,
-                },
-            },
-        }))
-        await updateUserPreferences({
-            path: 'resources',
-            value: uniqueFilteredApps,
-            resourceKind,
-            userPreferencesResponse,
-        })
-
-        return userPreferencesResponse
+        return updatedUserPreferences
     }
 
     const [recentResourcesLoading, recentResourcesResult] = useAsync(
