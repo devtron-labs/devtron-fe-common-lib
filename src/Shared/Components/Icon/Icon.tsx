@@ -2,6 +2,7 @@
 
 import { ReactComponent as IC73strings } from '@IconsV2/ic-73strings.svg'
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
+import { ReactComponent as ICActivity } from '@IconsV2/ic-activity.svg'
 import { ReactComponent as ICAdd } from '@IconsV2/ic-add.svg'
 import { ReactComponent as ICAmazonEks } from '@IconsV2/ic-amazon-eks.svg'
 import { ReactComponent as ICApica } from '@IconsV2/ic-apica.svg'
@@ -90,6 +91,7 @@ import { ReactComponent as ICFiles } from '@IconsV2/ic-files.svg'
 import { ReactComponent as ICFilter } from '@IconsV2/ic-filter.svg'
 import { ReactComponent as ICFilterApplied } from '@IconsV2/ic-filter-applied.svg'
 import { ReactComponent as ICFlask } from '@IconsV2/ic-flask.svg'
+import { ReactComponent as ICFolder } from '@IconsV2/ic-folder.svg'
 import { ReactComponent as ICFolderColor } from '@IconsV2/ic-folder-color.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
 import { ReactComponent as ICGavel } from '@IconsV2/ic-gavel.svg'
@@ -147,6 +149,7 @@ import { ReactComponent as ICMissing } from '@IconsV2/ic-missing.svg'
 import { ReactComponent as ICMobile } from '@IconsV2/ic-mobile.svg'
 import { ReactComponent as ICMonitoring } from '@IconsV2/ic-monitoring.svg'
 import { ReactComponent as ICMoreVertical } from '@IconsV2/ic-more-vertical.svg'
+import { ReactComponent as ICNamespace } from '@IconsV2/ic-namespace.svg'
 import { ReactComponent as ICNew } from '@IconsV2/ic-new.svg'
 import { ReactComponent as ICNodeScript } from '@IconsV2/ic-node-script.svg'
 import { ReactComponent as ICOidc } from '@IconsV2/ic-oidc.svg'
@@ -220,6 +223,7 @@ import { IconBaseProps } from './types'
 export const iconMap = {
     'ic-73strings': IC73strings,
     'ic-aborted': ICAborted,
+    'ic-activity': ICActivity,
     'ic-add': ICAdd,
     'ic-amazon-eks': ICAmazonEks,
     'ic-apica': ICApica,
@@ -310,6 +314,7 @@ export const iconMap = {
     'ic-flask': ICFlask,
     'ic-folder-color': ICFolderColor,
     'ic-folder-user': ICFolderUser,
+    'ic-folder': ICFolder,
     'ic-gavel': ICGavel,
     'ic-gear': ICGear,
     'ic-gift-gradient': ICGiftGradient,
@@ -365,6 +370,7 @@ export const iconMap = {
     'ic-mobile': ICMobile,
     'ic-monitoring': ICMonitoring,
     'ic-more-vertical': ICMoreVertical,
+    'ic-namespace': ICNamespace,
     'ic-new': ICNew,
     'ic-node-script': ICNodeScript,
     'ic-oidc': ICOidc,

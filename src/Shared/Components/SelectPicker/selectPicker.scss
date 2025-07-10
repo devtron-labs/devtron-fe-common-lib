@@ -1,10 +1,17 @@
 .select-picker {
     &__menu-list-footer-button {
         &--border-less {
-            button, a {
+            button,
+            a {
                 justify-content: flex-start;
                 border-radius: 0;
             }
         }
+    }
+}
+
+.grouped-filter-select-picker {
+    &__button:hover {
+        border-color: var(--N300);
     }
 }
