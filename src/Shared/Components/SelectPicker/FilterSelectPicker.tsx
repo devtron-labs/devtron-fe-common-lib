@@ -32,11 +32,13 @@ const FilterSelectPicker = ({
     appliedFilterOptions,
     handleApplyFilter,
     options,
+    menuIsOpen = false,
+    onMenuClose,
     ...props
 }: FilterSelectPickerProps) => {
     const selectRef = useRef<SelectPickerProps<string | number, true>['selectRef']['current']>()
 
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [isMenuOpen, setIsMenuOpen] = useState(menuIsOpen)
     const { triggerAutoClickTimestamp, setTriggerAutoClickTimestampToNow, resetTriggerAutoClickTimestamp } =
         useTriggerAutoClickTimestamp()
 
@@ -64,6 +66,7 @@ const FilterSelectPicker = ({
     const closeMenu = () => {
         resetTriggerAutoClickTimestamp()
         setIsMenuOpen(false)
+        onMenuClose?.()
     }
 
     const handleSelectOnChange: SelectPickerProps<number | string, true>['onChange'] = (selectedOptionsToUpdate) => {
@@ -88,6 +91,11 @@ const FilterSelectPicker = ({
         }
     }
 
+    const handleMenuClose = () => {
+        onMenuClose?.()
+        ;(handleApplyClick as () => void)()
+    }
+
     useEffect(() => {
         if (isMenuOpen) {
             registerShortcut({ keys: APPLY_FILTER_SHORTCUT_KEYS, callback: handleApplyClick as () => void })
@@ -108,7 +116,7 @@ const FilterSelectPicker = ({
                 isMulti
                 menuIsOpen={isMenuOpen}
                 onMenuOpen={openMenu}
-                onMenuClose={handleApplyClick as () => void}
+                onMenuClose={handleMenuClose}
                 onChange={handleSelectOnChange}
                 menuListFooterConfig={{
                     type: 'button',

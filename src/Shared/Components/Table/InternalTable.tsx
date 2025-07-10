@@ -65,13 +65,24 @@ const InternalTable = <
 
     useEffect(() => {
         const handleFocusOutEvent = (e: FocusEvent) => {
-            const container = e.currentTarget as HTMLElement
-            const related = e.relatedTarget as HTMLElement | null
+            setTimeout(() => {
+                const container = e.currentTarget as HTMLElement
+                const related = e.relatedTarget as HTMLElement | null
 
-            if (container && (!related || related.tagName === 'BODY')) {
-                const tableElement = wrapperDivRef.current.getElementsByClassName('generic-table')[0] as HTMLDivElement
-                tableElement?.focus()
-            }
+                // NOTE: we want to focus the table if the focus is lost from any element inside the table
+                // and the focus is not moving to another element inside the table. Ideally we don't want to steal focus
+                // inputs, buttons, etc. from the user, but when we blur any element by pressing Escape, we want to focus the table
+                // Keep in mind that if we tab focus onto a div/span with tabIndex then the relatedTarget will be that null
+                if (
+                    !container.contains(document.activeElement) &&
+                    (!related || related.tagName === 'BODY' || document.activeElement === document.body)
+                ) {
+                    const tableElement = wrapperDivRef.current.getElementsByClassName(
+                        'generic-table',
+                    )[0] as HTMLDivElement
+                    tableElement?.focus()
+                }
+            }, 0)
         }
 
         wrapperDivRef.current?.addEventListener('focusout', handleFocusOutEvent)
