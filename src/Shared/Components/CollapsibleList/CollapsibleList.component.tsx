@@ -33,6 +33,9 @@ const renderWithTippy = (tippyProps: TippyProps) => (children: React.ReactElemen
     </Tippy>
 )
 
+/**
+ * @deprecated - Please use `TreeView` component instead.
+ */
 export const CollapsibleList = <TabType extends TabOptions>({
     config,
     tabType,
