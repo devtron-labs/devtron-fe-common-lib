@@ -112,6 +112,7 @@ import { ReactComponent as ICHeartGreen } from '@IconsV2/ic-heart-green.svg'
 import { ReactComponent as ICHeartRed } from '@IconsV2/ic-heart-red.svg'
 import { ReactComponent as ICHeartRedAnimated } from '@IconsV2/ic-heart-red-animated.svg'
 import { ReactComponent as ICHelm } from '@IconsV2/ic-helm.svg'
+import { ReactComponent as ICHelmApp } from '@IconsV2/ic-helm-app.svg'
 import { ReactComponent as ICHelpFilled } from '@IconsV2/ic-help-filled.svg'
 import { ReactComponent as ICHelpOutline } from '@IconsV2/ic-help-outline.svg'
 import { ReactComponent as ICHibernate } from '@IconsV2/ic-hibernate.svg'
@@ -333,6 +334,7 @@ export const iconMap = {
     'ic-heart-green': ICHeartGreen,
     'ic-heart-red-animated': ICHeartRedAnimated,
     'ic-heart-red': ICHeartRed,
+    'ic-helm-app': ICHelmApp,
     'ic-helm': ICHelm,
     'ic-help-filled': ICHelpFilled,
     'ic-help-outline': ICHelpOutline,

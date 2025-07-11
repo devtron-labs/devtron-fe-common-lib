@@ -284,13 +284,6 @@ export type SidebarDataChildType = {
     }
 }
 
-export type SidebarDataType = {
-    label: string
-    isExpanded: boolean
-    children: NonNullable<SidebarDataChildType[]>
-    hideInHelmApp?: boolean
-}
-
 export type EmptyStateType = Pick<GenericEmptyStateType, 'image' | 'SvgImage' | 'subTitle' | 'title' | 'children'>
 
 export const VulnerabilityState = {
