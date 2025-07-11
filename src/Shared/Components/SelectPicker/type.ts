@@ -171,6 +171,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     | 'filterOption'
     | 'noOptionsMessage'
     | 'defaultMenuIsOpen'
+    | 'onFocus'
 > &
     Partial<
         Pick<
