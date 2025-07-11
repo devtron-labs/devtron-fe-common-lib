@@ -16,9 +16,10 @@
 
 const tsconfigPath = require('./tsconfig.json')
 
+
 module.exports = {
     parser: '@typescript-eslint/parser',
-    plugins: ['@typescript-eslint', 'react', 'prettier', 'import', 'simple-import-sort'],
+    plugins: ['@typescript-eslint', 'react', 'prettier', 'import', 'simple-import-sort', '@tanstack/query'],
     env: {
         browser: true,
         es2021: true,
@@ -42,6 +43,7 @@ module.exports = {
         'airbnb',
         'airbnb/hooks',
         'prettier',
+        'plugin:@tanstack/query/recommended'
     ],
     rules: {
         'prettier/prettier': ['error'],

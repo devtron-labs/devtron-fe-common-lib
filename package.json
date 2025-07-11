@@ -39,6 +39,7 @@
         "@esbuild-plugins/node-globals-polyfill": "0.2.3",
         "@laynezh/vite-plugin-lib-assets": "1.1.0",
         "@sentry/browser": "^7.119.1",
+        "@tanstack/eslint-plugin-query": "<5",
         "@testing-library/jest-dom": "^5.16.2",
         "@testing-library/react": "^12.1.4",
         "@tippyjs/react": "^4.2.0",
