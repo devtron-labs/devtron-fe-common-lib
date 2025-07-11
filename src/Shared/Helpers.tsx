@@ -177,6 +177,12 @@ export function versionComparatorBySortOrder(a: string, b: string, orderBy = Sor
     return b?.localeCompare(a, undefined, { numeric: true }) ?? 1
 }
 
+export const dateComparatorBySortOrder = (
+    a: string | number | Date,
+    b: string | number | Date,
+    sortOrder: SortingOrder = SortingOrder.ASC,
+): number => (sortOrder === SortingOrder.ASC ? moment(b).diff(moment(a)) : moment(a).diff(moment(b)))
+
 export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
     switch (eventName) {
         case WebhookEventNameType.PULL_REQUEST:
