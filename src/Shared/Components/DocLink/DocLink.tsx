@@ -3,6 +3,7 @@ import { MouseEvent } from 'react'
 import { DOCUMENTATION_HOME_PAGE } from '@Common/Constants'
 import { Button, ButtonComponentType, ButtonVariantType, Icon } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
+import { useIsSecureConnection } from '@Shared/Hooks'
 import { SidePanelTab, useMainContext } from '@Shared/Providers'
 
 import { DocLinkProps } from './types'
@@ -24,6 +25,7 @@ export const DocLink = <T extends boolean = false>({
 }: DocLinkProps<T>) => {
     // HOOKS
     const { isEnterprise, setSidePanelConfig, isLicenseDashboard } = useMainContext()
+    const isSecureConnection = useIsSecureConnection()
 
     // CONSTANTS
     const documentationLink = getDocumentationUrl({
@@ -36,6 +38,7 @@ export const DocLink = <T extends boolean = false>({
     // HANDLERS
     const handleClick = (e: MouseEvent<HTMLAnchorElement>) => {
         if (
+            isSecureConnection &&
             !isExternalLink &&
             !openInNewTab &&
             !e.metaKey &&
