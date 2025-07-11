@@ -90,12 +90,12 @@ const buildUpdatedResourcesMap = (
 }
 
 /**
- * @description This function updates the user preferences in the server. It constructs a payload with the updated user preferences and sends a PATCH request to the server. If the request is successful, it returns true. If an error occurs, it shows an error message and returns false.
- * @param updatedUserPreferences - The updated user preferences to be sent to the server.
- * @param recentlyVisitedDevtronApps - The recently visited Devtron apps to be sent to the server.
- * @param shouldThrowError - A boolean indicating whether to throw an error if the request fails. Default is false.
- * @returns A promise that resolves to true if the request is successful, or false if an error occurs.
- * @throws Will throw an error if `shouldThrowError` is true and the request fails.
+ * @description This function updates the user preferences in the server.
+ * @param path - The path of the user preference to be updated.
+ * @param value - The value of the user preference to be updated.
+ * @param resourceKind - The resource kind to be updated.
+ * @param userPreferencesResponse - The current user preferences response. If not provided, it will be fetched from the server.
+ * @returns
  */
 
 const getUserPreferencePayload = async ({
