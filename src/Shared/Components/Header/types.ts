@@ -22,6 +22,7 @@ import { DOCUMENTATION } from '../DocLink'
 
 export interface PageHeaderType {
     headerName?: string
+    headerImage?: string
     showTabs?: boolean
     additionalHeaderInfo?: () => JSX.Element
     renderHeaderTabs?: () => JSX.Element
@@ -35,6 +36,7 @@ export interface PageHeaderType {
         tippyMessage?: string
         onClickTippyButton?: () => void
     }
+    onClose?: () => void
 }
 
 export interface ServerInfo {

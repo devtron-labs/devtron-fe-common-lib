@@ -54,7 +54,21 @@ type AIAgentContextType = {
     context: Record<string, string>
 }
 
-// Please make sure to make it optional if not required in gatekeeper
+export interface TempAppWindowConfig {
+    /** Whether the temporary window is open */
+    open: boolean
+    /** Title of the temporary window */
+    title: string
+    /** URL to load in iframe in the window */
+    url?: string
+    /** Image URL to display in the window header */
+    image?: string
+    /** Whether to show an "Open in new tab" button */
+    showOpenInNewTab?: boolean
+    /** React component to render in the window */
+    component?: JSX.Element
+}
+
 type CommonMainContextProps = {
     setServerMode: (serverMode: SERVER_MODE) => void
     isHelpGettingStartedClicked: boolean
@@ -97,6 +111,8 @@ type CommonMainContextProps = {
     setIntelligenceConfig: Dispatch<SetStateAction<IntelligenceConfig>>
     setAIAgentContext: (aiAgentContext: AIAgentContextType) => void
     setSidePanelConfig: Dispatch<SetStateAction<SidePanelConfig>>
+    tempAppWindowConfig: TempAppWindowConfig
+    setTempAppWindowConfig: Dispatch<SetStateAction<TempAppWindowConfig>>
 } & Pick<EnvironmentDataValuesDTO, 'isResourceRecommendationEnabled'>
 
 export type MainContext = CommonMainContextProps &
