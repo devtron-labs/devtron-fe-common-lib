@@ -20,3 +20,9 @@ export const FALLBACK_PAGE_SIZE_OPTIONS = [
     { value: 40, selected: false },
     { value: 50, selected: false },
 ]
+
+export const LARGE_PAGE_SIZE_OPTIONS = [
+    { value: 100, selected: true },
+    { value: 150, selected: false },
+    { value: 200, selected: false },
+]

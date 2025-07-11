@@ -45,7 +45,7 @@ export const AppStatus = ({
                 tooltipProps={{
                     alwaysShowTippyOnHover: true,
                     placement: 'top',
-                    content: 'To fetch app status for Helm based deployments open the app detail page',
+                    content: 'To view app status open the app detail page',
                 }}
                 color="N600"
             />

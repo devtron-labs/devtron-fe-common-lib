@@ -14,57 +14,66 @@
  * limitations under the License.
  */
 
+import { Fragment, ReactNode } from 'react'
 import Tippy from '@tippyjs/react'
 
 import { ConditionalWrap } from '@Common/Helper'
 
+import { Icon } from '../Icon'
 import { SourceTypeCardProps } from './types'
 
-const SourceTypeCard = ({
-    title,
-    subtitle,
-    image,
-    alt,
-    dataTestId,
-    type,
-    handleCardAction,
-    disableInfo,
-    isDisabled = false,
-}: Readonly<SourceTypeCardProps>) => {
-    const disableCard = !!disableInfo || isDisabled
-    const renderTippy = (children) => (
+const renderTippy =
+    ({ disableInfo }: Required<Pick<SourceTypeCardProps, 'disableInfo'>>) =>
+    (children: ReactNode) => (
         <Tippy className="default-tt w-200" placement="top" content={disableInfo} arrow={false}>
             {/* Since in disabled state Tippy does'nt work */}
             <span>{children}</span>
         </Tippy>
     )
 
+const SourceTypeCard = ({
+    title,
+    subtitle,
+    dataTestId,
+    icons,
+    type,
+    disableInfo,
+    disabled = false,
+    onCardAction,
+}: SourceTypeCardProps) => {
+    // CONSTANTS
+    const isDisabled = !!disableInfo || disabled
+
     return (
-        <ConditionalWrap wrap={renderTippy} condition={!!disableInfo}>
-            <div className={disableCard ? 'cursor-not-allowed dc__position-rel' : ''}>
-                <div
-                    className={`flexbox p-12 dc__gap-12 dc__align-self-stretch br-4 border__secondary bg__primary dc__hover-n50  ${
-                        disableCard ? 'dc__disable-click dc__opacity-0_5' : ''
-                    }`}
-                    role="button"
-                    data-testid={dataTestId}
-                    data-pipeline-type={type}
-                    onClick={handleCardAction}
-                    onKeyDown={handleCardAction}
-                    tabIndex={disableCard ? -1 : 0}
-                    aria-disabled={disableCard}
-                >
-                    <div>
-                        <img src={image} className="flex br-8" alt={alt} width={40} height={40} />
+        <ConditionalWrap wrap={renderTippy({ disableInfo })} condition={!!disableInfo}>
+            <div
+                role="button"
+                aria-label={`source-type-card-${type}`}
+                data-testid={dataTestId}
+                data-pipeline-type={type}
+                tabIndex={isDisabled ? -1 : 0}
+                aria-disabled={isDisabled}
+                className={`source-type-card flexbox-col bg__primary br-8 border__secondary-translucent ${isDisabled ? 'dc__disabled' : ''} `}
+                onClick={isDisabled ? undefined : onCardAction}
+                onKeyDown={isDisabled ? undefined : onCardAction}
+            >
+                {!!icons.length && (
+                    <div className="source-type-card__icons flex bg__tertiary br-6 px-12 py-16 m-4">
+                        {icons.map(({ name, color }, index) => (
+                            <Fragment key={name}>
+                                <div className="flex p-8 br-8 bg__primary border__secondary-translucent">
+                                    <Icon name={name} color={color} size={20} />
+                                </div>
+                                {index !== icons.length - 1 && (
+                                    <div className="divider__secondary-translucent--horizontal w-16" />
+                                )}
+                            </Fragment>
+                        ))}
                     </div>
-
-                    <div className="flexbox-col pr-12">
-                        {/* TITLE */}
-                        <p className="m-0 cn-9 fs-13 fw-6 lh-20">{title}</p>
-
-                        {/* SUBTITLE */}
-                        <p className="m-0 cn-7 fs-12 fw-4 lh-16">{subtitle}</p>
-                    </div>
+                )}
+                <div className="flexbox-col dc__gap-2 px-12 pt-4 pb-12">
+                    <p className="m-0 fs-12 lh-18 fw-6 cn-9">{title}</p>
+                    <p className="m-0 fs-11 lh-16 fw-4 cn-7">{subtitle}</p>
                 </div>
             </div>
         </ConditionalWrap>

@@ -23,6 +23,7 @@ export const DOCUMENTATION_VERSION = '/devtron/v0.7'
 export const DISCORD_LINK = 'https://discord.devtron.ai/'
 export const DEFAULT_JSON_SCHEMA_URI = 'https://json-schema.org/draft/2020-12/schema'
 export const LICENSE_DASHBOARD_HOME_PAGE = 'https://license.devtron.ai/dashboard'
+export const DEVTRON_GPT_LINK = 'https://chatgpt.com/g/g-6826efa4362c8191b23e7bfa0ac036db-devtron-expert'
 
 export const PATTERNS = {
     STRING: /^[a-zA-Z0-9_]+$/,
@@ -79,17 +80,20 @@ export const URLS = {
     COMPARE_CLUSTERS: '/compare-clusters',
     APP_CONFIG: 'edit',
     GLOBAL_CONFIG: '/global-config',
+    GLOBAL_CONFIG_MANAGE_CATEGORIES: '/global-config/cluster-env/manage-categories',
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP,
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_CREATE: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/create`,
     // NOTE: using appId since we are re-using AppConfig component
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_DETAIL: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/detail/:appId`,
     LICENSE_AUTH: '/license-auth',
+    GLOBAL_CONFIG_EDIT_CLUSTER: '/global-config/cluster-env/edit/:clusterId',
 } as const
 
 export const ROUTES = {
     APP: 'app',
     APP_ARTIFACT_PROMOTE_MATERIAL: 'app/artifact/promotion-request/material',
     APP_TEMPLATE_DATA: 'app/template/data',
+    ENVIRONMENT_CATEGORIES: 'env/categories',
     PROJECT_LIST_MIN: 'team/autocomplete',
     USER_CHECK_ROLE: 'user/check/roles',
     IMAGE_TAGGING: 'app/image-tagging',
@@ -378,6 +382,7 @@ export const API_STATUS_CODES = {
     NOT_FOUND: 404,
     REQUEST_TIMEOUT: 408,
     CONFLICT: 409,
+    PRE_CONDITION_FAILED: 412,
     EXPECTATION_FAILED: 417,
     UNPROCESSABLE_ENTITY: 422,
     LOCKED: 423,

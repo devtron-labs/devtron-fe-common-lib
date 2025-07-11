@@ -32,11 +32,13 @@ const FilterSelectPicker = ({
     appliedFilterOptions,
     handleApplyFilter,
     options,
+    menuIsOpen = false,
+    onMenuClose,
     ...props
 }: FilterSelectPickerProps) => {
     const selectRef = useRef<SelectPickerProps<string | number, true>['selectRef']['current']>()
 
-    const [isMenuOpen, setIsMenuOpen] = useState(false)
+    const [isMenuOpen, setIsMenuOpen] = useState(menuIsOpen)
     const { triggerAutoClickTimestamp, setTriggerAutoClickTimestampToNow, resetTriggerAutoClickTimestamp } =
         useTriggerAutoClickTimestamp()
 
@@ -64,16 +66,12 @@ const FilterSelectPicker = ({
     const closeMenu = () => {
         resetTriggerAutoClickTimestamp()
         setIsMenuOpen(false)
+        onMenuClose?.()
     }
 
     const handleSelectOnChange: SelectPickerProps<number | string, true>['onChange'] = (selectedOptionsToUpdate) => {
         setTriggerAutoClickTimestampToNow()
         setSelectedOptions(structuredClone(selectedOptionsToUpdate) as SelectPickerOptionType[])
-    }
-
-    const handleMenuClose = () => {
-        closeMenu()
-        setSelectedOptions(structuredClone(appliedFilterOptions ?? []))
     }
 
     const handleApplyClick: ButtonProps['onClick'] = (e) => {
@@ -91,6 +89,11 @@ const FilterSelectPicker = ({
                 selectRef.current.focus()
             }, 100)
         }
+    }
+
+    const handleMenuClose = () => {
+        onMenuClose?.()
+        ;(handleApplyClick as () => void)()
     }
 
     useEffect(() => {

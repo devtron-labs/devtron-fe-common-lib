@@ -21,6 +21,7 @@ import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
 import { Progressing } from '@Common/Progressing'
 
 import { DATE_TIME_FORMATS, ZERO_TIME_STRING } from '../../../../../Common/Constants'
+import SeverityChip from '../../SeverityChip'
 import { OpenDetailViewButton } from '../components'
 import { SCAN_FAILED_EMPTY_STATE, SCAN_IN_PROGRESS_EMPTY_STATE, SEVERITY_DEFAULT_SORT_ORDER } from '../constants'
 import {
@@ -34,6 +35,7 @@ import {
     OpenDetailViewButtonProps,
     ScanResultDTO,
     SecurityModalStateType,
+    SeveritiesDTO,
     StatusType,
     SUB_CATEGORIES,
     TablePropsType,
@@ -232,11 +234,7 @@ const getLicenseDetailData = (element: ImageScanLicenseListType) => ({
                       cellContent: child.classification,
                   },
                   {
-                      component: (
-                          <span className={`severity-chip severity-chip--${child.severity?.toLowerCase()}`}>
-                              {child.severity}
-                          </span>
-                      ),
+                      component: <SeverityChip severity={child.severity as SeveritiesDTO} />,
                       cellContent: child.severity,
                   },
                   {

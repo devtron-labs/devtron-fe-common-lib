@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import { cloneElement, useState } from 'react'
+import { cloneElement } from 'react'
 import TippyJS from '@tippyjs/react'
 
-import { SUB_PIXEL_ERROR } from './constants'
+import { useIsTextTruncated } from '@Common/Hooks'
+
 import ShortcutKeyComboTooltipContent from './ShortcutKeyComboTooltipContent'
 import { TooltipProps } from './types'
 
@@ -32,19 +33,7 @@ const Tooltip = ({
     children: child,
     ...rest
 }: TooltipProps) => {
-    const [isTextTruncated, setIsTextTruncated] = useState(false)
-
-    const handleMouseEnterEvent: React.MouseEventHandler = (event) => {
-        const { currentTarget: node } = event
-        const isTextOverflowing =
-            node.scrollWidth > node.clientWidth + SUB_PIXEL_ERROR ||
-            node.scrollHeight > node.clientHeight + SUB_PIXEL_ERROR
-        if (isTextOverflowing && !isTextTruncated) {
-            setIsTextTruncated(true)
-        } else if (!isTextOverflowing && isTextTruncated) {
-            setIsTextTruncated(false)
-        }
-    }
+    const { isTextTruncated, handleMouseEnterEvent } = useIsTextTruncated()
 
     const showTooltipWhenShortcutKeyComboProvided =
         !!shortcutKeyCombo && (alwaysShowTippyOnHover === undefined || alwaysShowTippyOnHover)

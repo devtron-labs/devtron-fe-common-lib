@@ -161,12 +161,31 @@ export interface customEnv {
     GATEKEEPER_URL?: string
     FEATURE_AI_INTEGRATION_ENABLE?: boolean
     LOGIN_PAGE_IMAGE?: string
+    FEATURE_ASK_DEVTRON_EXPERT?: boolean
     /**
      * If true, the manage traffic feature is enabled in apps & app groups.
      *
      * @default false
      */
     FEATURE_MANAGE_TRAFFIC_ENABLE?: boolean
+    FEATURE_INFRA_PROVISION_INFO_BLOCK_HIDE?: boolean
+    /**
+     * If true, will add flux option to deployment types in devtron apps and devtron charts
+     * @default false
+     */
+    FEATURE_FLUX_DEPLOYMENTS_ENABLE?: boolean
+    FEATURE_LINK_EXTERNAL_FLUX_ENABLE?: boolean
+    /**
+     * If true, online/offline connectivity banner is enabled
+     *  @default true
+     */
+    FEATURE_INTERNET_CONNECTIVITY_ENABLE?: boolean
+    /**
+     * If true, the grouped app list filters will be shown.
+     *
+     * @default false
+     */
+    FEATURE_GROUPED_APP_LIST_FILTERS_ENABLE?: boolean
 }
 declare global {
     interface Window {

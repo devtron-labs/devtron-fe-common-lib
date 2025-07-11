@@ -21,7 +21,6 @@ src/Common/DebouncedSearch/DebouncedSearch.tsx
 src/Common/DebouncedSearch/Utils.ts
 src/Common/DebouncedSearch/__tests__/DebouncedSearch.test.tsx
 src/Common/DevtronProgressing/DevtronProgressing.tsx
-src/Common/Dialogs/ConfirmationDialog.tsx
 src/Common/Dialogs/DialogForm.tsx
 src/Common/DraggableWrapper/DraggableButton.tsx
 src/Common/DraggableWrapper/DraggableWrapper.tsx
@@ -40,7 +39,6 @@ src/Common/PopupMenu.tsx
 src/Common/Progressing.tsx
 src/Common/RJSF/config.ts
 src/Common/RJSF/templates/ArrayFieldTemplate.tsx
-src/Common/RJSF/templates/BaseInput.tsx
 src/Common/RJSF/templates/ButtonTemplates/AddButton.tsx
 src/Common/RJSF/templates/ButtonTemplates/RemoveButton.tsx
 src/Common/RJSF/templates/ButtonTemplates/SubmitButton.tsx
@@ -56,5 +54,4 @@ src/Common/Select/Select.tsx
 src/Common/ServerError.ts
 src/Common/TippyCustomized.tsx
 src/Common/ToastBody.tsx
-src/Common/Toggle/Toggle.tsx
 src/Common/Types.ts

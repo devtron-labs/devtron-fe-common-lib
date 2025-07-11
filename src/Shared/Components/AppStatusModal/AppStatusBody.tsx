@@ -169,7 +169,7 @@ export const AppStatusBody = ({
         <div className="flexbox-col px-20 dc__gap-16 dc__overflow-auto">
             {/* Info card */}
             <div className="flexbox-col pt-20">
-                <div className="flexbox-col br-8 border__primary bg__primary shadow__card--secondary">
+                <div className="flexbox-col br-8 border__primary bg__primary shadow__card--20">
                     {infoCardItems.map((item, index) => (
                         <InfoCardItem
                             key={item.id}
@@ -192,6 +192,7 @@ export const AppStatusBody = ({
                     isVirtualEnvironment={appDetails.isVirtualEnvironment}
                     appDetails={appDetails}
                     rootClassName="pb-20"
+                    deploymentAppType={appDetails.deploymentAppType}
                 />
             )}
         </div>

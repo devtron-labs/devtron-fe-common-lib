@@ -17,6 +17,7 @@
 import { ReactComponent as ICCleanBrush } from '@Icons/ic-medium-clean-brush.svg'
 import { ReactComponent as ICMediumPause } from '@Icons/ic-medium-pause.svg'
 import { ReactComponent as ICMediumPlay } from '@Icons/ic-medium-play.svg'
+import { URLS } from '@Common/Constants'
 import { SelectPickerOptionType } from '@Shared/Components'
 
 import { NodeDrainRequest } from './types'
@@ -111,3 +112,19 @@ export const NODE_DRAIN_OPTIONS_CHECKBOX_CONFIG: {
         label: DRAIN_NODE_MODAL_MESSAGING.IgnoreDaemonSets.heading,
     },
 ] as const
+
+export const GVK_FILTER_KIND_QUERY_PARAM_KEY = 'gvkFilterKind'
+export const GVK_FILTER_API_VERSION_QUERY_PARAM_KEY = 'gvkFilterApiVersion'
+
+export const RESOURCE_BROWSER_ROUTES = {
+    OVERVIEW: `${URLS.RESOURCE_BROWSER}/:clusterId/overview`,
+    MONITORING_DASHBOARD: `${URLS.RESOURCE_BROWSER}/:clusterId/monitoring-dashboard`,
+    TERMINAL: `${URLS.RESOURCE_BROWSER}/:clusterId/terminal`,
+    CLUSTER_UPGRADE: `${URLS.RESOURCE_BROWSER}/:clusterId/cluster-upgrade`,
+    NODE_DETAIL: `${URLS.RESOURCE_BROWSER}/:clusterId/node/detail/:name`,
+    K8S_RESOURCE_DETAIL: `${URLS.RESOURCE_BROWSER}/:clusterId/:namespace/:kind/:group/:name`,
+    K8S_RESOURCE_LIST: `${URLS.RESOURCE_BROWSER}/:clusterId/:kind/:group`,
+    RESOURCE_RECOMMENDER: `${URLS.RESOURCE_BROWSER}/:clusterId/resource-recommender`,
+} as const
+
+export const K8S_EMPTY_GROUP = 'k8sEmptyGroup'

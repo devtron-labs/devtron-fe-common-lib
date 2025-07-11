@@ -150,3 +150,22 @@ export interface InstallationClusterConfigType
     status: InstallationClusterStatus
     correspondingClusterId: number | 0
 }
+
+export enum NodeActionMenuOptionIdEnum {
+    terminal = 'terminal',
+    cordon = 'cordon',
+    uncordon = 'uncordon',
+    drain = 'drain',
+    editTaints = 'edit-taints',
+    editYaml = 'edit-yaml',
+    delete = 'delete',
+}
+
+export enum ResourceBrowserActionMenuEnum {
+    manifest = 'manifest',
+    events = 'events',
+    logs = 'logs',
+    terminal = 'terminal',
+    delete = 'delete',
+    vulnerability = 'vulnerability',
+}
