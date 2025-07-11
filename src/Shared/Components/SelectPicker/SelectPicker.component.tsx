@@ -377,8 +377,12 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         onKeyDown?.(e)
     }
 
-    const handleFocus: ReactSelectProps['onFocus'] = () => {
-        setIsFocussed(true)
+    const handleFocus: ReactSelectProps['onFocus'] = (e) => {
+        if (!shouldRenderTextArea) {
+            setIsFocussed(true)
+        }
+
+        props.onFocus?.(e)
     }
 
     const handleBlur: ReactSelectProps['onFocus'] = (e) => {
@@ -493,7 +497,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         onKeyDown={handleKeyDown}
                         shouldRenderTextArea={shouldRenderTextArea}
                         customDisplayText={customDisplayText}
-                        {...(!shouldRenderTextArea ? { onFocus: handleFocus } : {})}
+                        onFocus={handleFocus}
                         onBlur={handleBlur}
                         onChange={handleChange}
                         controlShouldRenderValue={controlShouldRenderValue}
