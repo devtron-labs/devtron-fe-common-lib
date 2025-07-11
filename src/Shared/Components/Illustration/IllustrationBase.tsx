@@ -33,5 +33,5 @@ export const IllustrationBase = ({
         return <img src={IllustrationComponent} alt={name} {...imageProps} data-testid={dataTestId} />
     }
 
-    return <IllustrationComponent {...svgProps} data-testid={dataTestId} />
+    return <IllustrationComponent {...svgProps} role="img" aria-label={name} data-testid={dataTestId} />
 }

@@ -41,7 +41,7 @@ export const PortalContainer = ({
                 portalParent.removeChild(element)
             }
         }
-    }, [condition])
+    }, [condition, portalParentId])
 
     return targetElement ? createPortal(children, targetElement) : null
 }

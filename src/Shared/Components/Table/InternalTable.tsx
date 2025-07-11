@@ -1,7 +1,9 @@
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 
+import { GenericEmptyState, GenericFilterEmptyState } from '@Common/EmptyState'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
-import { GenericEmptyState, GenericFilterEmptyState, useAsync, UseRegisterShortcutProvider } from '@Common/index'
+import { noop, useAsync } from '@Common/Helper'
+import { UseRegisterShortcutProvider } from '@Common/Hooks'
 
 import { NO_ROWS_OR_GET_ROWS_ERROR } from './constants'
 import TableContent from './TableContent'
@@ -187,7 +189,7 @@ const InternalTable = <
                 clearFilters={clearFilters}
                 filteredRows={filteredRows}
                 handleSearch={handleSearch}
-                updateSearchParams={() => {}}
+                updateSearchParams={noop}
                 offset={offset}
                 searchKey={searchKey}
                 sortBy={sortBy}

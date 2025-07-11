@@ -42,7 +42,10 @@ const generateIllustrationComponent = () => {
         // Remove the .svg extension
         const illustrationName = path.basename(file, '.svg')
         // Convert illustration-name to IllustrationName for importName
-        const importName = illustrationName.replace(/(^\w|-\w)/g, (match) => match.replace('-', '').toUpperCase())
+        const importName = illustrationName
+            .split('-')
+            .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
+            .join('')
         // Push imports statement
         imports.push(`import { ReactComponent as ${importName} } from '@Illustrations/${file}'`)
         // Push illustrations to illustrationMap
