@@ -16,7 +16,6 @@
 
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from '@Shared/Hooks/useUserPreferences/constants'
 import { AppThemeType, ThemeConfigType, ThemePreferenceType } from '@Shared/Providers/ThemeProvider/types'
-import { BaseAppMetaData } from '@Shared/Services'
 import { ResourceKindType } from '@Shared/types'
 
 export interface GetUserPreferencesQueryParamsType {
@@ -31,12 +30,24 @@ export enum ViewIsPipelineRBACConfiguredRadioTabs {
 export enum UserPreferenceResourceActions {
     RECENTLY_VISITED = 'recently-visited',
 }
+export type PreferredResourceKindType =
+    | ResourceKindType.devtronApplication
+    | ResourceKindType.job
+    | 'app-group'
+    | ResourceKindType.cluster
+
+export interface BaseRecentlyVisitedEntitiesTypes {
+    id: number
+    name: string
+}
+export interface UserPreferenceRecentlyVisitedAppsTypes extends BaseRecentlyVisitedEntitiesTypes {
+    resourceKind: PreferredResourceKindType
+}
+
 export interface UserResourceKindActionType {
-    [UserPreferenceResourceActions.RECENTLY_VISITED]: BaseAppMetaData[]
+    [UserPreferenceResourceActions.RECENTLY_VISITED]: BaseRecentlyVisitedEntitiesTypes[]
 }
-export interface UserPreferenceResourceType {
-    [ResourceKindType.devtronApplication]: UserResourceKindActionType
-}
+export type UserPreferenceResourceType = Partial<Record<PreferredResourceKindType, UserResourceKindActionType>>
 export interface GetUserPreferencesParsedDTO {
     viewPermittedEnvOnly?: boolean
     /**
@@ -75,33 +86,41 @@ export interface UserPreferencesType {
 
 export interface UpdatedUserPreferencesType extends UserPreferencesType, Pick<ThemeConfigType, 'appTheme'> {}
 
+export interface RecentlyVisitedFetchConfigType extends UserPreferenceRecentlyVisitedAppsTypes {
+    isDataAvailable?: boolean
+}
+
 export interface UseUserPreferencesProps {
+    userPreferenceResourceKind?: PreferredResourceKindType
     migrateUserPreferences?: (userPreferencesResponse: UserPreferencesType) => Promise<UserPreferencesType>
+    recentlyVisitedFetchConfig?: RecentlyVisitedFetchConfigType
 }
 
 export type UserPathValueMapType =
     | {
           path: 'themePreference'
           value: Required<Pick<UpdatedUserPreferencesType, 'themePreference' | 'appTheme'>>
+          resourceKind?: never
+          userPreferencesResponse?: never
       }
     | {
           path: 'pipelineRBACViewSelectedTab'
           value: Required<Pick<UserPreferencesType, 'pipelineRBACViewSelectedTab'>>
+          resourceKind?: never
+          userPreferencesResponse?: never
       }
     | {
           path: 'resources'
-          value: Required<BaseAppMetaData[]>
+          value: Required<BaseRecentlyVisitedEntitiesTypes[]>
+          resourceKind: PreferredResourceKindType
+          userPreferencesResponse?: UserPreferencesType
       }
 
 export type UserPreferenceResourceProps = UserPathValueMapType & {
     shouldThrowError?: boolean
-}
-
-export interface UserPreferenceRecentlyVisitedAppsTypes {
-    appId: number
-    appName: string
+    userPreferencesResponse?: UserPreferencesType
 }
 
 export interface UserPreferenceFilteredListTypes extends UserPreferenceRecentlyVisitedAppsTypes {
-    userPreferencesResponse: UserPreferencesType
+    userPreferencesResponse?: UserPreferencesType
 }
