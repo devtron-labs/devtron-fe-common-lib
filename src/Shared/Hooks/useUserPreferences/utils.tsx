@@ -1,36 +1,29 @@
-import { BaseAppMetaData } from '@Shared/Services'
-import { ResourceKindType } from '@Shared/types'
-
-import { UserPreferenceFilteredListTypes, UserPreferenceResourceActions, UserPreferenceResourceType } from './types'
-
-export const getUserPreferenceResourcesMetadata = (recentlyVisited: BaseAppMetaData[]): UserPreferenceResourceType => ({
-    [ResourceKindType.devtronApplication]: {
-        [UserPreferenceResourceActions.RECENTLY_VISITED]: recentlyVisited.map(({ appId, appName }) => ({
-            appId,
-            appName,
-        })),
-    },
-})
+import { DEFAULT_RESOURCES_MAP } from './constants'
+import {
+    GetUserPreferencesParsedDTO,
+    UserPreferenceFilteredListTypes,
+    UserPreferenceResourceActions,
+    UserPreferencesType,
+} from './types'
 
 export const getFilteredUniqueAppList = ({
     userPreferencesResponse,
-    appId,
-    appName,
+    id,
+    name,
+    resourceKind,
 }: UserPreferenceFilteredListTypes) => {
     const _recentApps =
-        userPreferencesResponse?.resources?.[ResourceKindType.devtronApplication]?.[
-            UserPreferenceResourceActions.RECENTLY_VISITED
-        ] || []
+        userPreferencesResponse?.resources?.[resourceKind]?.[UserPreferenceResourceActions.RECENTLY_VISITED] || []
 
-    const isInvalidApp = appId && !appName
+    const isInvalidApp = id && !name
 
-    const validApps = _recentApps.filter((app) => {
-        if (!app?.appId || !app?.appName) {
+    const validEntities = _recentApps.filter((app) => {
+        if (!app?.id || !app.name) {
             return false
         }
 
         if (isInvalidApp) {
-            return app.appId !== appId
+            return app.id !== id
         }
 
         return true
@@ -38,8 +31,20 @@ export const getFilteredUniqueAppList = ({
 
     // Convert to a Map for uniqueness while maintaining stacking order
     const uniqueApps = (
-        appId && appName ? [{ appId, appName }, ...validApps.filter((app) => app.appId !== appId)] : validApps
+        id && name ? [{ id, name }, ...validEntities.filter((entity) => entity.id !== id)] : validEntities
     ).slice(0, 6) // Limit to 6 items
 
     return uniqueApps
+}
+
+export const getParsedResourcesMap = (
+    resources: GetUserPreferencesParsedDTO['resources'],
+): UserPreferencesType['resources'] => {
+    const parsedResourcesMap: UserPreferencesType['resources'] = {}
+
+    Object.keys(DEFAULT_RESOURCES_MAP).forEach((resourceKind) => {
+        parsedResourcesMap[resourceKind] = resources?.[resourceKind]
+    })
+
+    return parsedResourcesMap || {}
 }

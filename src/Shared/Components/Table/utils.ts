@@ -11,17 +11,22 @@ import {
     Column,
     ConfigurableColumnsConfigType,
     ConfigurableColumnsType,
+    FiltersTypeEnum,
     GetFilteringPromiseProps,
     RowsType,
     TableProps,
     UseFiltersReturnType,
 } from './types'
 
-export const searchAndSortRows = (
-    rows: TableProps['rows'],
-    filter: TableProps['filter'],
+export const searchAndSortRows = <
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+>(
+    rows: TableProps<RowData, FilterVariant, AdditionalProps>['rows'],
+    filter: TableProps<RowData, FilterVariant, AdditionalProps>['filter'],
     filterData: UseFiltersReturnType,
-    comparator?: Column['comparator'],
+    comparator?: Column<RowData, FilterVariant, AdditionalProps>['comparator'],
 ) => {
     const { sortBy, sortOrder } = filterData ?? {}
 
@@ -35,19 +40,23 @@ export const searchAndSortRows = (
         : filteredRows
 }
 
-export const getVisibleColumnsFromLocalStorage = ({
+export const getVisibleColumnsFromLocalStorage = <
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+>({
     allColumns,
     id,
-}: Pick<ConfigurableColumnsType, 'allColumns'> & Pick<TableProps, 'id'>) => {
+}: Pick<ConfigurableColumnsType<RowData, FilterVariant, AdditionalProps>, 'allColumns'> &
+    Pick<TableProps<RowData, FilterVariant, AdditionalProps>, 'id'>) => {
     if (!LOCAL_STORAGE_EXISTS) {
         // NOTE: show all headers by default
         return allColumns
     }
 
     try {
-        const configurableColumnsConfig: ConfigurableColumnsConfigType = JSON.parse(
-            localStorage.getItem(LOCAL_STORAGE_KEY_FOR_VISIBLE_COLUMNS),
-        )
+        const configurableColumnsConfig: ConfigurableColumnsConfigType<RowData, FilterVariant, AdditionalProps> =
+            JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_FOR_VISIBLE_COLUMNS))
 
         if (!configurableColumnsConfig?.[id]) {
             throw new Error()
@@ -71,16 +80,21 @@ export const getVisibleColumnsFromLocalStorage = ({
     }
 }
 
-export const setVisibleColumnsToLocalStorage = ({
+export const setVisibleColumnsToLocalStorage = <
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+>({
     id,
     visibleColumns,
-}: Pick<ConfigurableColumnsType, 'visibleColumns'> & Pick<TableProps, 'id'>) => {
+}: Pick<ConfigurableColumnsType<RowData, FilterVariant, AdditionalProps>, 'visibleColumns'> &
+    Pick<TableProps<RowData, FilterVariant, AdditionalProps>, 'id'>) => {
     if (!LOCAL_STORAGE_EXISTS || !Array.isArray(visibleColumns)) {
         return
     }
 
     try {
-        const configurableColumnsConfig: ConfigurableColumnsConfigType =
+        const configurableColumnsConfig: ConfigurableColumnsConfigType<RowData, FilterVariant, AdditionalProps> =
             JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY_FOR_VISIBLE_COLUMNS)) ?? {}
 
         localStorage.setItem(
@@ -92,15 +106,22 @@ export const setVisibleColumnsToLocalStorage = ({
     }
 }
 
-export const getVisibleColumns = ({
+export const getVisibleColumns = <
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+>({
     areColumnsConfigurable,
     columns,
     id,
-}: Pick<TableProps, 'areColumnsConfigurable' | 'columns' | 'id'>) =>
+}: Pick<TableProps<RowData, FilterVariant, AdditionalProps>, 'areColumnsConfigurable' | 'columns' | 'id'>) =>
     areColumnsConfigurable ? getVisibleColumnsFromLocalStorage({ allColumns: columns, id }) : columns
 
-export const getFilteringPromise = ({ searchSortTimeoutRef, callback }: GetFilteringPromiseProps) =>
-    new Promise<RowsType>((resolve, reject) => {
+export const getFilteringPromise = <RowData extends unknown>({
+    searchSortTimeoutRef,
+    callback,
+}: GetFilteringPromiseProps<RowData>) =>
+    new Promise<RowsType<RowData>>((resolve, reject) => {
         if (searchSortTimeoutRef.current !== -1) {
             clearTimeout(searchSortTimeoutRef.current)
         }

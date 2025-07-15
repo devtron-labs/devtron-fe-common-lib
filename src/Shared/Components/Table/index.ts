@@ -5,6 +5,7 @@ export type {
     CellComponentProps as TableCellComponentProps,
     Column as TableColumnType,
     TableProps,
+    RowActionsOnHoverComponentProps as TableRowActionsOnHoverComponentProps,
     ViewWrapperProps as TableViewWrapperProps,
 } from './types'
 export { FiltersTypeEnum, PaginationEnum, SignalEnum as TableSignalEnum } from './types'

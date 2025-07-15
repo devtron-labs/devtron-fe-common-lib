@@ -39,6 +39,7 @@ import {
     TaskErrorObj,
     VariableTypeFormat,
 } from '.'
+import { IllustrationName } from '@Shared/Components'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -180,6 +181,7 @@ export interface InfoIconTippyProps<T extends boolean = false>
 
 export interface GenericEmptyStateType {
     title: ReactNode
+    imgName?: IllustrationName
     image?
     classname?: string
     subTitle?: ReactNode

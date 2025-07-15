@@ -21,6 +21,7 @@ export const UserIdentifier = ({
     rootClassName,
     tooltipContent,
     isUserGroup = false,
+    displayYouLabelForCurrentUser = true,
 }: UserIdentifierProps) => {
     // HOOKS
     const { email: currentUserEmail } = useUserEmail()
@@ -46,7 +47,7 @@ export const UserIdentifier = ({
     }
 
     const renderText = () => {
-        if (isCurrentUser) {
+        if (isCurrentUser && displayYouLabelForCurrentUser) {
             return 'You'
         }
 

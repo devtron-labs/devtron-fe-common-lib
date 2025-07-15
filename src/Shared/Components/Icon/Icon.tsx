@@ -112,6 +112,7 @@ import { ReactComponent as ICHeartGreen } from '@IconsV2/ic-heart-green.svg'
 import { ReactComponent as ICHeartRed } from '@IconsV2/ic-heart-red.svg'
 import { ReactComponent as ICHeartRedAnimated } from '@IconsV2/ic-heart-red-animated.svg'
 import { ReactComponent as ICHelm } from '@IconsV2/ic-helm.svg'
+import { ReactComponent as ICHelmApp } from '@IconsV2/ic-helm-app.svg'
 import { ReactComponent as ICHelpFilled } from '@IconsV2/ic-help-filled.svg'
 import { ReactComponent as ICHelpOutline } from '@IconsV2/ic-help-outline.svg'
 import { ReactComponent as ICHibernate } from '@IconsV2/ic-hibernate.svg'
@@ -133,6 +134,7 @@ import { ReactComponent as ICLego } from '@IconsV2/ic-lego.svg'
 import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
 import { ReactComponent as ICLightningFill } from '@IconsV2/ic-lightning-fill.svg'
 import { ReactComponent as ICLinkedBuildColor } from '@IconsV2/ic-linked-build-color.svg'
+import { ReactComponent as ICListBullets } from '@IconsV2/ic-list-bullets.svg'
 import { ReactComponent as ICLivspace } from '@IconsV2/ic-livspace.svg'
 import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
 import { ReactComponent as ICLogs } from '@IconsV2/ic-logs.svg'
@@ -332,6 +334,7 @@ export const iconMap = {
     'ic-heart-green': ICHeartGreen,
     'ic-heart-red-animated': ICHeartRedAnimated,
     'ic-heart-red': ICHeartRed,
+    'ic-helm-app': ICHelmApp,
     'ic-helm': ICHelm,
     'ic-help-filled': ICHelpFilled,
     'ic-help-outline': ICHelpOutline,
@@ -354,6 +357,7 @@ export const iconMap = {
     'ic-lightning-fill': ICLightningFill,
     'ic-lightning': ICLightning,
     'ic-linked-build-color': ICLinkedBuildColor,
+    'ic-list-bullets': ICListBullets,
     'ic-livspace': ICLivspace,
     'ic-logout': ICLogout,
     'ic-logs': ICLogs,

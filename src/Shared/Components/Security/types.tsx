@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { CATEGORIES, SUB_CATEGORIES } from './SecurityModal/types'
+import { CATEGORIES, ScanResultDTO, SUB_CATEGORIES } from './SecurityModal/types'
 
 export type ScanCategories = (typeof CATEGORIES)[keyof typeof CATEGORIES]
 export type ScanSubCategories = (typeof SUB_CATEGORIES)[keyof typeof SUB_CATEGORIES]
@@ -36,4 +36,9 @@ export interface SecurityConfigType {
     imageScan?: SecurityConfigCategoryType
     codeScan?: SecurityConfigCategoryType
     kubernetesManifest?: SecurityConfigCategoryType
+}
+
+export interface GetSidebarDataParamsType extends Record<ScanCategoriesWithLicense, boolean> {
+    selectedId: string
+    scanResult: ScanResultDTO
 }

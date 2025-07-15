@@ -39,7 +39,6 @@ src/Common/PopupMenu.tsx
 src/Common/Progressing.tsx
 src/Common/RJSF/config.ts
 src/Common/RJSF/templates/ArrayFieldTemplate.tsx
-src/Common/RJSF/templates/BaseInput.tsx
 src/Common/RJSF/templates/ButtonTemplates/AddButton.tsx
 src/Common/RJSF/templates/ButtonTemplates/RemoveButton.tsx
 src/Common/RJSF/templates/ButtonTemplates/SubmitButton.tsx
