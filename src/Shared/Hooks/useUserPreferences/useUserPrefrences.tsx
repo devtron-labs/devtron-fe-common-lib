@@ -16,47 +16,52 @@
 
 import { useState } from 'react'
 
+import { useAsync } from '@Common/Helper'
 import { ServerErrors } from '@Common/ServerError'
 import { useTheme } from '@Shared/Providers'
-import { ResourceKindType } from '@Shared/types'
 
-import { getUserPreferences, updateUserPreferences } from './service'
+import { getUserPreferences, updateAndPersistUserPreferences } from './service'
 import {
-    UserPreferenceRecentlyVisitedAppsTypes,
+    BaseRecentlyVisitedEntitiesTypes,
     UserPreferenceResourceActions,
     UserPreferencesType,
     UseUserPreferencesProps,
     ViewIsPipelineRBACConfiguredRadioTabs,
 } from './types'
-import { getFilteredUniqueAppList } from './utils'
 
-export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreferencesProps) => {
+export const useUserPreferences = ({ migrateUserPreferences, recentlyVisitedFetchConfig }: UseUserPreferencesProps) => {
     const [userPreferences, setUserPreferences] = useState<UserPreferencesType>(null)
     const [userPreferencesError, setUserPreferencesError] = useState<ServerErrors>(null)
 
+    const { id, name, resourceKind, isDataAvailable } = recentlyVisitedFetchConfig ?? {}
+
     const { handleThemeSwitcherDialogVisibilityChange, handleThemePreferenceChange } = useTheme()
 
-    const fetchRecentlyVisitedParsedApps = async ({ appId, appName }: UserPreferenceRecentlyVisitedAppsTypes) => {
-        const userPreferencesResponse = await getUserPreferences()
-
-        const uniqueFilteredApps = getFilteredUniqueAppList({
-            userPreferencesResponse,
-            appId,
-            appName,
+    const fetchRecentlyVisitedParsedEntities = async (): Promise<UserPreferencesType> => {
+        // Use the optimized centralized function that handles everything
+        const updatedUserPreferences = await updateAndPersistUserPreferences({
+            id,
+            name,
+            resourceKind,
+            updateLocalStorage: true,
+            shouldThrowError: false,
         })
 
-        setUserPreferences((prev) => ({
-            ...prev,
-            resources: {
-                ...prev?.resources,
-                [ResourceKindType.devtronApplication]: {
-                    ...prev?.resources?.[ResourceKindType.devtronApplication],
-                    [UserPreferenceResourceActions.RECENTLY_VISITED]: uniqueFilteredApps,
-                },
-            },
-        }))
-        await updateUserPreferences({ path: 'resources', value: uniqueFilteredApps })
+        // Update local state
+        setUserPreferences(updatedUserPreferences)
+
+        return updatedUserPreferences
     }
+
+    const [recentResourcesLoading, recentResourcesResult] = useAsync(
+        () => fetchRecentlyVisitedParsedEntities(),
+        [id, name],
+        isDataAvailable && !!resourceKind,
+    )
+
+    const recentlyVisitedResources =
+        recentResourcesResult?.resources?.[resourceKind]?.[UserPreferenceResourceActions.RECENTLY_VISITED] ||
+        ([] as BaseRecentlyVisitedEntitiesTypes[])
 
     const handleInitializeUserPreferencesFromResponse = (userPreferencesResponse: UserPreferencesType) => {
         if (!userPreferencesResponse?.themePreference) {
@@ -103,6 +108,8 @@ export const useUserPreferences = ({ migrateUserPreferences }: UseUserPreference
         handleFetchUserPreferences,
         handleUpdatePipelineRBACViewSelectedTab,
         handleUpdateUserThemePreference,
-        fetchRecentlyVisitedParsedApps,
+        fetchRecentlyVisitedParsedEntities,
+        recentlyVisitedResources,
+        recentResourcesLoading,
     }
 }

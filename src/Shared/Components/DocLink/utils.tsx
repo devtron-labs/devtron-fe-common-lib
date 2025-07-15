@@ -19,7 +19,9 @@ export const getDocumentationUrl = <T extends boolean = false>({
         return docPath
     }
 
-    const utmPath = !isLicenseDashboard ? `?utm-source=product_${isEnterprise ? 'ent' : 'oss'}` : ''
+    const utmPath = !isLicenseDashboard
+        ? `?utm_source=product_${isEnterprise ? 'ent' : 'oss'}&utm_medium=product_app&utm_campaign=docs_navigation`
+        : ''
 
     return `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/${docPath || ''}${utmPath}`
 }
