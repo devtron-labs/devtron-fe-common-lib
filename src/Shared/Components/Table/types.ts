@@ -73,16 +73,12 @@ type BaseColumnType = {
     horizontallySticky?: boolean
 }
 
-interface AdditionalProps {
-    [key: string]: unknown
-}
-
-export type RowType = {
+export type RowType<Data extends unknown> = {
     id: string
-    data: Record<string, unknown>
+    data: Data
 }
 
-export type RowsType = RowType[]
+export type RowsType<Data extends unknown> = RowType<Data>[]
 
 export enum FiltersTypeEnum {
     STATE = 'state',
@@ -90,21 +86,37 @@ export enum FiltersTypeEnum {
     NONE = 'none',
 }
 
-export interface CellComponentProps<T = FiltersTypeEnum.NONE> extends Pick<BaseColumnType, 'field'>, AdditionalProps {
-    signals: SignalsType
-    value: unknown
-    row: RowType
-    filterData: T extends FiltersTypeEnum.NONE
-        ? null
-        : T extends FiltersTypeEnum.STATE
-          ? UseFiltersReturnType
-          : UseUrlFiltersReturnType<string>
-    isRowActive: boolean
-}
+export type CellComponentProps<
+    RowData extends unknown = unknown,
+    FilterVariant extends FiltersTypeEnum = FiltersTypeEnum.NONE,
+    AdditionalProps extends Record<string, any> = {},
+> = Pick<BaseColumnType, 'field'> &
+    AdditionalProps & {
+        signals: SignalsType
+        value: unknown
+        row: RowType<RowData>
+        filterData: FilterVariant extends FiltersTypeEnum.NONE
+            ? null
+            : FilterVariant extends FiltersTypeEnum.STATE
+              ? UseFiltersReturnType
+              : UseUrlFiltersReturnType<string>
+        isRowActive: boolean
+    }
 
-export type Column = Pick<SortableTableHeaderCellProps, 'showTippyOnTruncate'> &
+export type RowActionsOnHoverComponentProps<
+    RowData extends unknown = unknown,
+    AdditionalProps extends Record<string, any> = {},
+> = {
+    row: RowType<RowData>
+} & AdditionalProps
+
+export type Column<
+    RowData extends unknown = unknown,
+    FilterVariant extends FiltersTypeEnum = FiltersTypeEnum.NONE,
+    AdditionalProps extends Record<string, any> = {},
+> = Pick<SortableTableHeaderCellProps, 'showTippyOnTruncate'> &
     BaseColumnType & {
-        CellComponent?: FunctionComponent<CellComponentProps>
+        CellComponent?: FunctionComponent<CellComponentProps<RowData, FilterVariant, AdditionalProps>>
     } & (
         | {
               isSortable: true
@@ -128,11 +140,13 @@ export interface BulkActionsComponentProps {
 
 type BulkSelectionReturnValueType = ReturnType<typeof useBulkSelection>
 
-export interface BulkOperationModalProps<T = string>
-    extends Pick<BulkSelectionReturnValueType, 'isBulkSelectionApplied'> {
+export interface BulkOperationModalProps<
+    T extends string = string,
+    RowData extends Record<string, any> = Record<string, any>,
+> extends Pick<BulkSelectionReturnValueType, 'isBulkSelectionApplied'> {
     action: T
     onClose: () => void
-    selections: RowsType | null
+    selections: RowsType<RowData> | null
     bulkOperationModalData: unknown
 }
 
@@ -148,37 +162,77 @@ export enum PaginationEnum {
     NOT_PAGINATED = 'not-paginated',
 }
 
-export interface ConfigurableColumnsType {
-    allColumns: Column[]
-    visibleColumns: Column[]
-    setVisibleColumns: Dispatch<SetStateAction<ConfigurableColumnsType['visibleColumns']>>
+export interface ConfigurableColumnsType<
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+> {
+    allColumns: Column<RowData, FilterVariant, AdditionalProps>[]
+    visibleColumns: Column<RowData, FilterVariant, AdditionalProps>[]
+    setVisibleColumns: Dispatch<SetStateAction<Column<RowData, FilterVariant, AdditionalProps>[]>>
 }
 
 interface GetRowsProps
     extends Pick<UseFiltersReturnType, 'offset' | 'pageSize' | 'searchKey' | 'sortBy' | 'sortOrder'> {}
 
-type AdditionalFilterPropsType<T extends Exclude<FiltersTypeEnum, FiltersTypeEnum.NONE>> = T extends FiltersTypeEnum.URL
+type AdditionalFilterPropsType<T extends FiltersTypeEnum> = T extends FiltersTypeEnum.URL
     ? Pick<
           UseUrlFiltersProps<string, unknown>,
           'parseSearchParams' | 'localStorageKey' | 'redirectionMethod' | 'initialSortKey' | 'defaultPageSize'
       >
-    : Pick<UseStateFiltersProps<string>, 'initialSortKey' | 'defaultPageSize'>
+    : T extends FiltersTypeEnum.STATE
+      ? Pick<UseStateFiltersProps<string>, 'initialSortKey' | 'defaultPageSize'>
+      : never
 
-export type ViewWrapperProps<T = FiltersTypeEnum.STATE> = PropsWithChildren<
-    (T extends FiltersTypeEnum.NONE
+export type ViewWrapperProps<
+    RowData extends unknown = unknown,
+    FilterVariant extends FiltersTypeEnum = FiltersTypeEnum.NONE,
+    AdditionalProps extends Record<string, any> = {},
+> = PropsWithChildren<
+    (FilterVariant extends FiltersTypeEnum.NONE
         ? {}
         : Pick<
               UseFiltersReturnType,
               'offset' | 'handleSearch' | 'searchKey' | 'sortBy' | 'sortOrder' | 'clearFilters'
           >) &
         AdditionalProps &
-        Partial<ConfigurableColumnsType> & {
+        Partial<ConfigurableColumnsType<RowData, FilterVariant, AdditionalProps>> & {
             areRowsLoading: boolean
-            filteredRows: RowsType | null
-        } & (T extends FiltersTypeEnum.URL ? Pick<UseUrlFiltersReturnType<string>, 'updateSearchParams'> : {})
+            filteredRows: RowsType<RowData> | null
+        } & (FilterVariant extends FiltersTypeEnum.URL
+            ? Pick<UseUrlFiltersReturnType<string>, 'updateSearchParams'>
+            : {})
 >
 
-export type InternalTableProps = Required<Pick<ConfigurableColumnsType, 'visibleColumns' | 'setVisibleColumns'>> & {
+type FilterConfig<FilterVariant extends FiltersTypeEnum, RowData extends unknown> = {
+    filtersVariant: FilterVariant
+    /**
+     * Props for useUrlFilters/useStateFilters hooks
+     */
+    additionalFilterProps?: AdditionalFilterPropsType<FilterVariant>
+    /**
+     * This func is used to filter the rows based on filter data.
+     * Only applicable if filtersVariant is NOT set to NONE
+     *
+     * If filter is only being used for sorting, then send `noop` in this prop
+     */
+    filter: FilterVariant extends FiltersTypeEnum.NONE
+        ? null
+        : (row: RowType<RowData>, filterData: UseFiltersReturnType) => boolean
+    clearFilters?: FilterVariant extends FiltersTypeEnum.URL
+        ? () => void
+        : FilterVariant extends FiltersTypeEnum.STATE
+          ? never
+          : never
+}
+
+export type InternalTableProps<
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+> = Required<
+    Pick<ConfigurableColumnsType<RowData, FilterVariant, AdditionalProps>, 'visibleColumns' | 'setVisibleColumns'>
+> & {
     id: `table__${string}`
 
     loading?: boolean
@@ -189,7 +243,7 @@ export type InternalTableProps = Required<Pick<ConfigurableColumnsType, 'visible
      * For columns from backend: initialize as empty array and set loading
      * to true until API call completes.
      */
-    columns: Column[]
+    columns: Column<RowData, FilterVariant, AdditionalProps>[]
 
     /** If bulk selections are not a concern omit this prop */
     bulkSelectionConfig?: BulkSelectionConfigType
@@ -197,7 +251,7 @@ export type InternalTableProps = Required<Pick<ConfigurableColumnsType, 'visible
     emptyStateConfig: {
         noRowsConfig: Omit<GenericEmptyStateType, 'children'>
         noRowsForFilterConfig?: Pick<GenericFilterEmptyStateProps, 'title' | 'subTitle'> & {
-            clearFilters: () => void
+            clearFilters?: () => void
         }
     }
 
@@ -223,21 +277,21 @@ export type InternalTableProps = Required<Pick<ConfigurableColumnsType, 'visible
     /**
      * Use this component to display additional content at the end of a row when it is hovered over.
      */
-    RowActionsOnHoverComponent?: FunctionComponent<{ row: RowType }>
+    RowActionsOnHoverComponent?: FunctionComponent<RowActionsOnHoverComponentProps<RowData, AdditionalProps>>
 
     bulkSelectionReturnValue: BulkSelectionReturnValueType | null
 
     handleClearBulkSelection: () => void
 
-    handleToggleBulkSelectionOnRow: (row: RowType) => void
+    handleToggleBulkSelectionOnRow: (row: RowType<RowData>) => void
 
-    ViewWrapper?: FunctionComponent<ViewWrapperProps>
+    ViewWrapper?: FunctionComponent<ViewWrapperProps<RowData, FilterVariant, AdditionalProps>>
 } & (
         | {
               /**
                * Direct rows data for frontend-only datasets like resource browser.
                */
-              rows: RowsType
+              rows: RowsType<RowData>
               /**
                * Use `getRows` function instead for data that needs to be fetched from backend with pagination/sorting/filtering.
                */
@@ -246,38 +300,7 @@ export type InternalTableProps = Required<Pick<ConfigurableColumnsType, 'visible
         | {
               rows?: never
               /** NOTE: Sorting on frontend is only handled if rows is provided instead of getRows */
-              getRows: (props: GetRowsProps) => Promise<RowsType>
-          }
-    ) &
-    (
-        | {
-              filtersVariant: FiltersTypeEnum.URL
-
-              /**
-               * props for useUrlFilters/useStateFilters hooks
-               */
-              additionalFilterProps?: AdditionalFilterPropsType<FiltersTypeEnum.URL>
-
-              /**
-               * This func is used to filter the rows based on filter data.
-               * Only applicable if filtersVariant is NOT set to NONE
-               *
-               * If filter is only being used for sorting, then send `noop` in this prop
-               */
-              filter: (row: RowType, filterData: UseFiltersReturnType) => boolean
-              clearFilters?: () => void
-          }
-        | {
-              filtersVariant: FiltersTypeEnum.STATE
-              additionalFilterProps?: AdditionalFilterPropsType<FiltersTypeEnum.STATE>
-              filter: (row: RowType, filterData: UseFiltersReturnType) => boolean
-              clearFilters?: never
-          }
-        | {
-              filtersVariant: FiltersTypeEnum.NONE
-              additionalFilterProps?: never
-              filter?: never
-              clearFilters?: never
+              getRows: (props: GetRowsProps) => Promise<RowsType<RowData>>
           }
     ) &
     (
@@ -289,21 +312,42 @@ export type InternalTableProps = Required<Pick<ConfigurableColumnsType, 'visible
               paginationVariant: Omit<PaginationEnum, 'PAGINATED'>
               pageSizeOptions?: never
           }
-    )
+    ) &
+    FilterConfig<FilterVariant, RowData>
 
-export type UseResizableTableConfigWrapperProps = Omit<InternalTableProps, 'resizableConfig'>
+export type UseResizableTableConfigWrapperProps<
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+> = Omit<InternalTableProps<RowData, FilterVariant, AdditionalProps>, 'resizableConfig'>
 
-export type TableWithBulkSelectionProps = Omit<
-    UseResizableTableConfigWrapperProps,
+export type TableWithBulkSelectionProps<
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+> = Omit<
+    UseResizableTableConfigWrapperProps<RowData, FilterVariant, AdditionalProps>,
     'bulkSelectionReturnValue' | 'handleClearBulkSelection' | 'handleToggleBulkSelectionOnRow'
 >
 
-export type VisibleColumnsWrapperProps = Omit<TableWithBulkSelectionProps, 'visibleColumns' | 'setVisibleColumns'>
+export type VisibleColumnsWrapperProps<
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+> = Omit<TableWithBulkSelectionProps<RowData, FilterVariant, AdditionalProps>, 'visibleColumns' | 'setVisibleColumns'>
 
-export type FilterWrapperProps = Omit<VisibleColumnsWrapperProps, 'filterData'>
+export type FilterWrapperProps<
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+> = Omit<VisibleColumnsWrapperProps<RowData, FilterVariant, AdditionalProps>, 'filterData'>
 
-export type TableProps = Pick<
-    FilterWrapperProps,
+export type TableProps<
+    RowData extends unknown = unknown,
+    FilterVariant extends FiltersTypeEnum = FiltersTypeEnum.NONE,
+    AdditionalProps extends Record<string, any> = {},
+> = Pick<
+    FilterWrapperProps<RowData, FilterVariant, AdditionalProps>,
     | 'additionalFilterProps'
     | 'bulkSelectionConfig'
     | 'areColumnsConfigurable'
@@ -335,16 +379,23 @@ export interface BulkSelectionActionWidgetProps
     setBulkActionState: Dispatch<SetStateAction<BulkActionStateType>>
 }
 
-export type ConfigurableColumnsConfigType = Record<string, ConfigurableColumnsType['visibleColumns']>
+export type ConfigurableColumnsConfigType<
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+> = Record<string, ConfigurableColumnsType<RowData, FilterVariant, AdditionalProps>['visibleColumns']>
 
-export interface GetFilteringPromiseProps {
+export interface GetFilteringPromiseProps<RowData extends unknown> {
     searchSortTimeoutRef: React.MutableRefObject<number>
-    callback: () => Promise<RowsType> | RowsType
+    callback: () => Promise<RowsType<RowData>> | RowsType<RowData>
 }
 
-export interface TableContentProps
-    extends Pick<
-        InternalTableProps,
+export interface TableContentProps<
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+> extends Pick<
+        InternalTableProps<RowData, FilterVariant, AdditionalProps>,
         | 'filterData'
         | 'rows'
         | 'resizableConfig'
@@ -360,6 +411,6 @@ export interface TableContentProps
         | 'RowActionsOnHoverComponent'
         | 'pageSizeOptions'
     > {
-    filteredRows: RowsType
+    filteredRows: RowsType<RowData>
     areFilteredRowsLoading: boolean
 }

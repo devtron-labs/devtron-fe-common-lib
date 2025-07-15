@@ -9,4 +9,9 @@ export interface UserIdentifierProps {
      * @description - If given, would show tooltip on div containing avatar, email and children
      */
     tooltipContent?: string
+    /**
+     * Controls whether to display "You" text for the current user
+     * @default true
+     */
+    displayYouLabelForCurrentUser?: boolean
 }

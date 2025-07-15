@@ -153,6 +153,10 @@ module.exports = {
                                 group: ['IconBase'],
                                 message: 'Please use "Icon" component instead.',
                             },
+                            {
+                                group: ['IllustrationBase'],
+                                message: 'Please use "Illustration" component instead.',
+                            },
                         ],
                     },
                 ],
