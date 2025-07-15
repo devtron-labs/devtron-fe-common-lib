@@ -40,7 +40,5 @@ const queryClient = new QueryClient({
 })
 
 export const QueryClientProvider = ({ children }: PropsWithChildren<{}>) => (
-    <RQQueryClientProvider client={queryClient} contextSharing>
-        {children}
-    </RQQueryClientProvider>
+    <RQQueryClientProvider client={queryClient}>{children}</RQQueryClientProvider>
 )
