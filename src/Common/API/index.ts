@@ -10,5 +10,5 @@ const dashboardAPI = new CoreAPI({
 export const { post, put, patch, get, trash } = dashboardAPI
 export { default as CoreAPI } from './CoreAPI'
 export { QueryClientProvider } from './QueryClientProvider'
-export * from './useQueryClient'
+export * from './reactQueryHooks'
 export { abortPreviousRequests, getIsRequestAborted, handleRedirectToLicenseActivation } from './utils'
