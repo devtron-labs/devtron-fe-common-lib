@@ -3,6 +3,9 @@ import { DOCUMENTATION_HOME_PAGE, DOCUMENTATION_VERSION } from '@Common/Constant
 import { DOCUMENTATION } from './constants'
 import { BaseDocLink } from './types'
 
+export const getUTMPathAppended = ({ isEnterprise, link }: { isEnterprise: boolean; link?: string }) =>
+    `${link}?utm_source=product_${isEnterprise ? 'ent' : 'oss'}&utm_medium=product_app&utm_campaign=docs_navigation`
+
 export const getDocumentationUrl = <T extends boolean = false>({
     docLinkKey,
     isEnterprise = false,
@@ -19,9 +22,7 @@ export const getDocumentationUrl = <T extends boolean = false>({
         return docPath
     }
 
-    const utmPath = !isLicenseDashboard
-        ? `?utm_source=product_${isEnterprise ? 'ent' : 'oss'}&utm_medium=product_app&utm_campaign=docs_navigation`
-        : ''
+    const utmPath = !isLicenseDashboard ? getUTMPathAppended({ isEnterprise }) : ''
 
     return `${DOCUMENTATION_HOME_PAGE}${DOCUMENTATION_VERSION}/${docPath || ''}${utmPath}`
 }
