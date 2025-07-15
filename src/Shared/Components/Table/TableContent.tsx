@@ -10,11 +10,15 @@ import { CHECKBOX_VALUE } from '@Common/Types'
 import { BulkSelection } from '../BulkSelection'
 import BulkSelectionActionWidget from './BulkSelectionActionWidget'
 import { BULK_ACTION_GUTTER_LABEL, EVENT_TARGET, SHIMMER_DUMMY_ARRAY } from './constants'
-import { BulkActionStateType, PaginationEnum, SignalsType, TableContentProps } from './types'
+import { BulkActionStateType, FiltersTypeEnum, PaginationEnum, SignalsType, TableContentProps } from './types'
 import useTableWithKeyboardShortcuts from './useTableWithKeyboardShortcuts'
 import { getStickyColumnConfig, scrollToShowActiveElementIfNeeded } from './utils'
 
-const TableContent = ({
+const TableContent = <
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+>({
     filterData,
     rows,
     resizableConfig,
@@ -31,7 +35,7 @@ const TableContent = ({
     pageSizeOptions,
     filteredRows,
     areFilteredRowsLoading,
-}: TableContentProps) => {
+}: TableContentProps<RowData, FilterVariant, AdditionalProps>) => {
     const rowsContainerRef = useRef<HTMLDivElement>(null)
     const parentRef = useRef<HTMLDivElement>(null)
     const bulkSelectionButtonRef = useRef<HTMLLabelElement>(null)
@@ -253,7 +257,7 @@ const TableContent = ({
                                         {...additionalProps}
                                     />
                                 ) : (
-                                    <span key={field} className="py-12">
+                                    <span key={field} className="dc__inline-block py-12">
                                         {row.data[field]}
                                     </span>
                                 )}
@@ -262,8 +266,8 @@ const TableContent = ({
                     })}
 
                     {RowActionsOnHoverComponent && (
-                        <div className="dc__position-fixed dc__right-0 dc__zi-1 dc__opacity-hover--child">
-                            <RowActionsOnHoverComponent row={row} />
+                        <div className="dc__position-abs dc__right-0 dc__zi-1 dc__opacity-hover--child">
+                            <RowActionsOnHoverComponent row={row} {...additionalProps} />
                         </div>
                     )}
                 </div>
