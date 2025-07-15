@@ -111,8 +111,6 @@ type CommonMainContextProps = {
     setIntelligenceConfig: Dispatch<SetStateAction<IntelligenceConfig>>
     setAIAgentContext: (aiAgentContext: AIAgentContextType) => void
     setSidePanelConfig: Dispatch<SetStateAction<SidePanelConfig>>
-    tempAppWindowConfig: TempAppWindowConfig
-    setTempAppWindowConfig: Dispatch<SetStateAction<TempAppWindowConfig>>
 } & Pick<EnvironmentDataValuesDTO, 'isResourceRecommendationEnabled'>
 
 export type MainContext = CommonMainContextProps &
@@ -143,6 +141,8 @@ export type MainContext = CommonMainContextProps &
                */
               isFELibAvailable: boolean
               aiAgentContext: AIAgentContextType
+              tempAppWindowConfig: TempAppWindowConfig
+              setTempAppWindowConfig: Dispatch<SetStateAction<TempAppWindowConfig>>
           }
         | {
               isLicenseDashboard: true
@@ -159,6 +159,8 @@ export type MainContext = CommonMainContextProps &
               isEnterprise: false
               isFELibAvailable: false
               aiAgentContext: null
+              tempAppWindowConfig: null
+              setTempAppWindowConfig: null
           }
     )
 
