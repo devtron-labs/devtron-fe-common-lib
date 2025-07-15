@@ -130,6 +130,21 @@ class CoreAPI {
         )
     }
 
+    private static mergeAbortSignals = (...signals: (AbortSignal | undefined)[]): AbortSignal => {
+        const controller = new AbortController()
+
+        const onAbort = () => controller.abort()
+
+        signals.forEach((signal) => {
+            if (signal) {
+                if (signal.aborted) controller.abort()
+                else signal.addEventListener('abort', onAbort)
+            }
+        })
+
+        return controller.signal
+    }
+
     private fetchInTime = <T = object>({
         url,
         type,
@@ -138,10 +153,13 @@ class CoreAPI {
         isMultipartRequest,
     }: FetchInTimeParamsType<T>): Promise<ResponseType> => {
         const controller = options?.abortControllerRef?.current ?? new AbortController()
-        const signal = options?.abortControllerRef?.current?.signal || options?.signal || controller.signal
-        const timeoutPromise: Promise<ResponseType> = new Promise((resolve, reject) => {
-            const timeout = options?.timeout || this.timeout
+        const timeoutSignal = controller.signal
 
+        const mergedSignal = CoreAPI.mergeAbortSignals(options?.signal, timeoutSignal)
+
+        const timeout = options?.timeout || this.timeout
+
+        const timeoutPromise: Promise<ResponseType> = new Promise((_, reject) => {
             setTimeout(() => {
                 controller.abort()
                 if (options?.abortControllerRef?.current) {
@@ -165,12 +183,13 @@ class CoreAPI {
                 })
             }, timeout)
         })
+
         return Promise.race([
             this.fetchAPI({
                 url,
                 type,
                 data,
-                signal,
+                signal: mergedSignal,
                 preventAutoLogout: options?.preventAutoLogout || false,
                 preventLicenseRedirect: options?.preventLicenseRedirect || false,
                 shouldParseServerErrorForUnauthorizedUser: options?.shouldParseServerErrorForUnauthorizedUser,
