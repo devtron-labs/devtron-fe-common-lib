@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "1.17.0-pre-12",
+    "version": "1.17.0-pre-15",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -116,6 +116,7 @@
         "codemirror-json-schema": "0.8.0",
         "dayjs": "^1.11.13",
         "fast-json-patch": "^3.1.1",
+        "focus-trap-react": "^10.3.1",
         "framer-motion": "^6.5.1",
         "jsonpath-plus": "^10.3.0",
         "marked": "^13.0.3",

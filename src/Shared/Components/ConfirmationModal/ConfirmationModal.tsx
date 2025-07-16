@@ -32,6 +32,8 @@ import { getConfirmationLabel, getIconFromVariant, getPrimaryButtonStyleFromVari
 
 import './confirmationModal.scss'
 
+const PRIMARY_BUTTON_ID = 'confirmation-primary-button'
+
 const ConfirmationModalBody = ({
     title,
     subtitle,
@@ -85,7 +87,12 @@ const ConfirmationModalBody = ({
     }
 
     return (
-        <Backdrop onEscape={shouldCloseOnEscape ? handleCloseWrapper : noop}>
+        <Backdrop
+            onEscape={shouldCloseOnEscape ? handleCloseWrapper : noop}
+            deactivateFocusOnEscape={shouldCloseOnEscape}
+            // Since when custom input is present, we auto focus on input, else focus on primary button
+            initialFocus={confirmationConfig ? false : `#${PRIMARY_BUTTON_ID}`}
+        >
             <motion.div
                 className={`${isLandscapeView ? 'w-500' : 'w-400'} confirmation-modal border__secondary flexbox-col br-8 bg__primary dc__m-auto mt-40`}
                 exit={{ y: 100, opacity: 0, scale: 0.75, transition: { duration: 0.35 } }}
@@ -146,6 +153,7 @@ const ConfirmationModalBody = ({
 
                     {primaryButtonConfig && (
                         <Button
+                            id={PRIMARY_BUTTON_ID}
                             dataTestId="confirmation-modal-primary-button"
                             size={ComponentSizeType.large}
                             variant={ButtonVariantType.primary}

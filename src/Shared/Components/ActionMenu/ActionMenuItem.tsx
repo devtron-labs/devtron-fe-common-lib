@@ -2,7 +2,9 @@ import { LegacyRef, MouseEvent, Ref } from 'react'
 import { Link } from 'react-router-dom'
 
 import { Tooltip } from '@Common/Tooltip'
+import { useMainContext } from '@Shared/Providers'
 
+import { getUTMPathAppended } from '../DocLink/utils'
 import { Icon } from '../Icon'
 import { getTooltipProps } from '../SelectPicker/common'
 import { TrailingItem } from '../TrailingItem'
@@ -29,6 +31,8 @@ export const ActionMenuItem = <T extends string | number>({
         isDisabled,
         componentType = 'button',
     } = item
+
+    const { isEnterprise } = useMainContext()
 
     // REFS
     const ref: LegacyRef<HTMLLIElement> = (el) => {
@@ -92,7 +96,7 @@ export const ActionMenuItem = <T extends string | number>({
                     <a
                         ref={itemRef as LegacyRef<HTMLAnchorElement>}
                         className={COMMON_ACTION_MENU_ITEM_CLASS}
-                        href={item.href}
+                        href={getUTMPathAppended({ isEnterprise, link: item.href })}
                         target="_blank"
                         rel="noreferrer"
                         onClick={handleClick}
