@@ -15,59 +15,29 @@
  */
 
 import React, { SyntheticEvent } from 'react'
-import ReactDOM from 'react-dom'
-import { POP_UP_MENU_MODAL_ID, preventBodyScroll } from '../../Shared'
-import { stopPropagation } from '../Helper'
+
+import { DTFocusTrapType } from '@Shared/Components/DTFocusTrap'
+
+import { Backdrop, POP_UP_MENU_MODAL_ID } from '../../Shared'
 
 export class VisibleModal extends React.Component<{
     className?: string
     parentClassName?: string
     noBackground?: boolean
-    close?: (e) => void
-    onEscape?: (e) => void
+    close?: (e?) => void
+    onEscape?: (e?) => void
+    initialFocus?: DTFocusTrapType['initialFocus']
 }> {
-    modalRef = document.getElementById('visible-modal')
-    previousActiveElement: HTMLElement | null = null
-
     constructor(props) {
         super(props)
         this.escFunction = this.escFunction.bind(this)
     }
 
-    escFunction(event) {
-        if (event.keyCode === 27 || event.key === 'Escape') {
-            stopPropagation(event)
-            if (this.props.onEscape) {
-                this.props.onEscape(event)
-            } else if (this.props.close) {
-                this.props.close(event)
-            }
-        }
-    }
-
-    componentDidMount() {
-        document.addEventListener('keydown', this.escFunction)
-        // show is also being used in modal (i.e, pop up menu for case where we have noBackground as false, so it works in syc with VisibleModal with noBackground as false)
-        this.modalRef.classList.add(this.props.noBackground ? 'show' : 'show-with-bg')
-        preventBodyScroll(true)
-
-        this.previousActiveElement = document.activeElement as HTMLElement
-
-        if (this.props.parentClassName) {
-            this.modalRef.classList.add(this.props.parentClassName)
-        }
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener('keydown', this.escFunction)
-        this.modalRef.classList.remove('show')
-        this.modalRef.classList.remove('show-with-bg')
-        preventBodyScroll(false)
-
-        this.previousActiveElement?.focus({ preventScroll: true })
-
-        if (this.props.parentClassName) {
-            this.modalRef.classList.remove(this.props.parentClassName)
+    escFunction() {
+        if (this.props.onEscape) {
+            this.props.onEscape()
+        } else if (this.props.close) {
+            this.props.close()
         }
     }
 
@@ -77,20 +47,20 @@ export class VisibleModal extends React.Component<{
             return
         }
         e.stopPropagation()
-
         this.props.close?.(e)
     }
 
     render() {
-        return ReactDOM.createPortal(
-            <div
-                className={`visible-modal__body ${this.props.className || ''}`}
+        return (
+            <Backdrop
+                onEscape={this.escFunction}
                 onClick={this.handleBodyClick}
-                data-testid="visible-modal-close"
+                initialFocus={this.props.initialFocus ?? undefined}
             >
-                {this.props.children}
-            </div>,
-            document.getElementById('visible-modal'),
+                <div className={this.props.parentClassName}>
+                    <div className={`visible-modal__body ${this.props.className || ''}`}>{this.props.children}</div>
+                </div>
+            </Backdrop>
         )
     }
 }

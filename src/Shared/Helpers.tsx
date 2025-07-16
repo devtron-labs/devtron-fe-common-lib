@@ -63,7 +63,6 @@ import {
     IntersectionOptions,
     Node,
     Nodes,
-    PreventOutsideFocusProps,
     TargetPlatformItemDTO,
     TargetPlatformsDTO,
     WebhookEventNameType,
@@ -108,18 +107,6 @@ export const preventBodyScroll = (lock: boolean): void => {
         document.body.style.overflowY = null
         document.body.style.height = null
         document.documentElement.style.overflow = null
-    }
-}
-
-export const preventOutsideFocus = ({ identifier, preventFocus }: PreventOutsideFocusProps) => {
-    const identifierElement = document.getElementById(identifier)
-    if (!identifierElement) {
-        return
-    }
-    if (preventFocus) {
-        identifierElement.setAttribute('inert', 'true')
-    } else {
-        identifierElement.removeAttribute('inert')
     }
 }
 

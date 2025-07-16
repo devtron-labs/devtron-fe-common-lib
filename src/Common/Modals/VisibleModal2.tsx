@@ -15,56 +15,32 @@
  */
 
 import React, { SyntheticEvent } from 'react'
-import ReactDOM from 'react-dom'
-import { preventBodyScroll } from '../../Shared'
-import { stopPropagation } from '../Helper'
+import { Backdrop } from '@Shared/Components'
+import { DTFocusTrapType } from '@Shared/Components/DTFocusTrap'
 
-export class VisibleModal2 extends React.Component<{ className?: string; close?: (e) => void }> {
-    modalRef = document.getElementById('visible-modal-2')
-    previousActiveElement: HTMLElement | null = null
-
+export class VisibleModal2 extends React.Component<{
+    className?: string
+    close?: (e?) => void
+    initialFocus?: DTFocusTrapType['initialFocus']
+}> {
     constructor(props) {
         super(props)
-        this.escFunction = this.escFunction.bind(this)
-    }
-
-    escFunction(event) {
-        stopPropagation(event)
-        if (event.keyCode === 27 && this.props.close) {
-            this.props.close(event)
-        }
-    }
-
-    componentDidMount() {
-        document.addEventListener('keydown', this.escFunction)
-        this.modalRef.classList.add('show-with-bg')
-        preventBodyScroll(true)
-        this.previousActiveElement = document.activeElement as HTMLElement
-    }
-
-    componentWillUnmount() {
-        document.removeEventListener('keydown', this.escFunction)
-        this.modalRef.classList.remove('show-with-bg')
-        preventBodyScroll(false)
-        this.previousActiveElement?.focus({ preventScroll: true })
     }
 
     handleBodyClick = (e: SyntheticEvent) => {
         e.stopPropagation()
-
         this.props.close?.(e)
     }
 
     render() {
-        return ReactDOM.createPortal(
-            <div
-                className={`visible-modal__body ${this.props.className || ''}`}
+        return (
+            <Backdrop
+                onEscape={this.props.close}
                 onClick={this.handleBodyClick}
-                data-testid="visible-modal2-close"
+                initialFocus={this.props.initialFocus ?? undefined}
             >
-                {this.props.children}
-            </div>,
-            document.getElementById('visible-modal-2'),
+                <div className={`visible-modal__body ${this.props.className || ''}`}>{this.props.children}</div>
+            </Backdrop>
         )
     }
 }

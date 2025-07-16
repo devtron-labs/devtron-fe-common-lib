@@ -15,11 +15,11 @@
  */
 
 import { useRef, useEffect } from 'react'
-import { preventBodyScroll } from '../../Shared'
 import { VisibleModal } from '../Modals/VisibleModal'
 import './Drawer.scss'
+import { DTFocusTrapType } from '@Shared/Components/DTFocusTrap'
 
-export interface DrawerProps {
+export interface DrawerProps extends Pick<DTFocusTrapType, 'initialFocus'> {
     position: 'left' | 'right' | 'bottom' | 'top'
     children?: any
     backdrop?: boolean
@@ -44,14 +44,13 @@ export const Drawer = ({
     onEscape,
     onClose,
     disableTransition,
+    initialFocus = undefined,
 }: DrawerProps) => {
     const drawerRef = useRef(null)
     useEffect(() => {
         setTimeout(() => drawerRef.current?.classList?.add('show'), 1)
-        preventBodyScroll(true)
         return () => {
             drawerRef.current?.classList?.remove('show')
-            preventBodyScroll(false)
         }
     }, [])
     const style = {}
@@ -64,8 +63,18 @@ export const Drawer = ({
         style['--height'] = height
     }
     return (
-        <VisibleModal className="drawer--container" parentClassName={parentClassName || ''} onEscape={onEscape} close={onClose}>
-            <aside style={style} ref={drawerRef} className={`drawer ${disableTransition ? 'disable-transition' : ''} ${position}`}>
+        <VisibleModal
+            className="drawer--container"
+            parentClassName={parentClassName || ''}
+            onEscape={onEscape}
+            close={onClose}
+            initialFocus={initialFocus}
+        >
+            <aside
+                style={style}
+                ref={drawerRef}
+                className={`drawer ${disableTransition ? 'disable-transition' : ''} ${position}`}
+            >
                 {children}
             </aside>
         </VisibleModal>
