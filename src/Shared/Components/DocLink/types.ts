@@ -25,3 +25,8 @@ export type DocLinkProps<T extends boolean = false> = Pick<
          */
         openInNewTab?: boolean
     }
+
+export interface URLWithUTMSource {
+    isEnterprise: BaseDocLink<false>['isEnterprise']
+    link?: string
+}
