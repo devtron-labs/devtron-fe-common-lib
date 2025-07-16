@@ -14,7 +14,12 @@
  * limitations under the License.
  */
 
-export { getProgressingStateForStatus, getSidebarData } from './config'
+export {
+    getProgressingStateForStatus,
+    getSecurityModalSidebarChildFromId,
+    getSecurityModalSidebarId,
+    getSidebarData,
+} from './config'
 export { CATEGORY_LABELS } from './constants'
 export { default as SecurityModal } from './SecurityModal'
 export { getSecurityScan } from './service'
@@ -23,7 +28,6 @@ export type {
     GetResourceScanDetailsResponseType,
     ScanResultDTO,
     SidebarDataChildType,
-    SidebarDataType,
     SidebarPropsType,
 } from './types'
 export { SeveritiesDTO } from './types'

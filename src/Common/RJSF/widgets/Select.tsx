@@ -15,22 +15,10 @@
  */
 
 import { WidgetProps } from '@rjsf/utils'
-import ReactSelect, { MenuListProps, components } from 'react-select'
-import { PLACEHOLDERS } from '../constants'
+import { PLACEHOLDERS, RJSF_FORM_SELECT_PORTAL_TARGET_ID } from '../constants'
 
-import { ReactComponent as ArrowDown } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { deepEqual } from '@Common/Helper'
-import { commonSelectStyles } from '@Shared/Components'
-
-const MenuList = ({ children, ...props }: MenuListProps) => (
-    <components.MenuList {...props}>{Array.isArray(children) ? children.slice(0, 20) : children}</components.MenuList>
-)
-
-const DropdownIndicator = (props) => (
-    <components.DropdownIndicator {...props}>
-        <ArrowDown className="icon-dim-20 icon-n5" data-testid="overview-project-edit-dropdown" />
-    </components.DropdownIndicator>
-)
+import { SelectPicker } from '@Shared/Components'
 
 export const SelectWidget = (props: WidgetProps) => {
     const {
@@ -47,7 +35,7 @@ export const SelectWidget = (props: WidgetProps) => {
         placeholder,
     } = props
     const { enumOptions: selectOptions = [] } = options
-    const emptyValue = multiple ? [] : ''
+    const emptyValue = multiple ? [] : null
 
     const handleChange = (option) => {
         onChange(multiple ? option.map((o) => o.value) : option.value)
@@ -59,8 +47,8 @@ export const SelectWidget = (props: WidgetProps) => {
             : selectOptions.find((option) => deepEqual(value, option.value))
 
     return (
-        <ReactSelect
-            id={id}
+        <SelectPicker
+            inputId={`devtron-rjsf-select__${id}`}
             name={id}
             isMulti={multiple}
             value={typeof value === 'undefined' ? emptyValue : getOption(value)}
@@ -71,23 +59,8 @@ export const SelectWidget = (props: WidgetProps) => {
             onFocus={() => onFocus(id, value)}
             placeholder={placeholder || PLACEHOLDERS.SELECT}
             isDisabled={disabled || readonly}
-            styles={{
-                ...commonSelectStyles,
-                control: (base, state) => ({
-                    ...commonSelectStyles.control(base, state),
-                    minHeight: '36px',
-                }),
-                multiValue: (base, state) => ({
-                    ...commonSelectStyles.multiValue(base, state),
-                    margin: '2px 8px 2px 2px',
-                }),
-            }}
-            components={{
-                IndicatorSeparator: null,
-                DropdownIndicator,
-                MenuList,
-            }}
-            menuPlacement="auto"
+            menuPortalTarget={document.getElementById(RJSF_FORM_SELECT_PORTAL_TARGET_ID)}
+            menuPosition='fixed'
         />
     )
 }

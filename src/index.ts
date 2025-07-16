@@ -178,6 +178,12 @@ export interface customEnv {
      *  @default true
      */
     FEATURE_INTERNET_CONNECTIVITY_ENABLE?: boolean
+    /**
+     * If true, the grouped app list filters will be shown.
+     *
+     * @default false
+     */
+    FEATURE_GROUPED_APP_LIST_FILTERS_ENABLE?: boolean
 }
 declare global {
     interface Window {

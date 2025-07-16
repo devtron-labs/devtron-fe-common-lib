@@ -925,10 +925,6 @@ export type InitTabType = Omit<CommonTabArgsType, 'type'> &
 
 export interface DynamicTabType extends CommonTabArgsType {
     id: string
-    /**
-     * Id of the last active tab before switching to current tab
-     */
-    lastActiveTabId: string | null
 }
 
 export interface ResourceApprovalPolicyConfigDTO {

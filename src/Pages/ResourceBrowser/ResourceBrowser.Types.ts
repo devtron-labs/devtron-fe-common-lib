@@ -38,7 +38,6 @@ export interface ApiResourceType {
 
 export interface K8SObjectBaseType {
     name: string
-    isExpanded: boolean
 }
 
 interface K8sRequestResourceIdentifierType {

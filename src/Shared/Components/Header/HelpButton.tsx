@@ -5,6 +5,7 @@ import { SliderButton } from '@typeform/embed-react'
 import { DOCUMENTATION_HOME_PAGE, MAX_LOGIN_COUNT, URLS } from '@Common/Constants'
 import { handleAnalyticsEvent } from '@Shared/Analytics'
 import { ComponentSizeType } from '@Shared/constants'
+import { useIsSecureConnection } from '@Shared/Hooks'
 import { AppThemeType, SidePanelTab, useMainContext, useTheme } from '@Shared/Providers'
 import { InstallationType } from '@Shared/types'
 
@@ -54,6 +55,7 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick, hideGettin
         showGettingStartedCard,
     } = useMainContext()
     const { appTheme } = useTheme()
+    const isSecureConnection = useIsSecureConnection()
 
     // REFS
     const typeFormSliderButtonRef = useRef(null)
@@ -73,7 +75,7 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick, hideGettin
 
     const handleViewDocumentationClick: HelpButtonActionMenuProps['onClick'] = (_, e) => {
         // Opens documentation in side panel when clicked normally, or in a new tab when clicked with the meta/command key
-        if (!e.metaKey) {
+        if (isSecureConnection && !e.metaKey) {
             e.preventDefault()
             setSidePanelConfig((prev) => ({
                 ...prev,
