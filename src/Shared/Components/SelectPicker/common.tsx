@@ -71,8 +71,12 @@ export const SelectPickerDropdownIndicator = <OptionValue,>(
 ) => {
     const {
         isDisabled,
-        selectProps: { isLoading },
+        selectProps: { isLoading, keyboardShortcut },
     } = props
+
+    if (keyboardShortcut) {
+        return null
+    }
 
     return (
         <components.DropdownIndicator {...props}>
@@ -97,7 +101,7 @@ export const SelectPickerControl = <OptionValue,>(props: ControlProps<SelectPick
     const {
         children,
         getValue,
-        selectProps: { icon, showSelectedOptionIcon },
+        selectProps: { icon, showSelectedOptionIcon, keyboardShortcut },
     } = props
     const { startIcon, endIcon } = getValue()?.[0] ?? {}
 
@@ -113,6 +117,11 @@ export const SelectPickerControl = <OptionValue,>(props: ControlProps<SelectPick
                 <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{iconToDisplay}</div>
             )}
             {children}
+            {keyboardShortcut && (
+                <kbd className="icon-dim-20 flex bg__primary border__primary br-2 shadow__key fs-12 lh-20 cn-7 dc__no-shrink">
+                    {keyboardShortcut}
+                </kbd>
+            )}
         </components.Control>
     )
 }

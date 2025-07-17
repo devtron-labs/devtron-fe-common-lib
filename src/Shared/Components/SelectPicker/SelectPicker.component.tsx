@@ -186,6 +186,7 @@ import { getCommonSelectStyle, getSelectPickerOptionByValue } from './utils'
 const SelectPicker = <OptionValue, IsMulti extends boolean>({
     error,
     icon,
+    keyboardShortcut,
     helperText,
     placeholder = 'Select an option',
     label,
@@ -493,6 +494,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         inputValue={props.inputValue ?? inputValue}
                         onInputChange={handleInputChange}
                         icon={icon}
+                        keyboardShortcut={keyboardShortcut}
                         showSelectedOptionIcon={shouldShowSelectedOptionIcon}
                         onKeyDown={handleKeyDown}
                         shouldRenderTextArea={shouldRenderTextArea}
