@@ -252,8 +252,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     } = multiSelectProps
     const controlShouldRenderValue = _controlShouldRenderValue && !customDisplayText
 
-    // Only large variant is supported for multi select picker
-    const selectSize = isMulti && controlShouldRenderValue ? ComponentSizeType.large : size
     const shouldShowSelectedOptionIcon = !isMulti && showSelectedOptionIcon
     const isSelectSearchable = !shouldRenderCustomOptions && isSearchable
 
@@ -262,14 +260,14 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         () =>
             getCommonSelectStyle({
                 error,
-                size: selectSize,
+                size,
                 menuSize,
                 variant,
                 getIsOptionValid,
                 isGroupHeadingSelectable,
                 shouldMenuAlignRight,
             }),
-        [error, selectSize, menuSize, variant, isGroupHeadingSelectable, shouldMenuAlignRight],
+        [error, size, menuSize, variant, isGroupHeadingSelectable, shouldMenuAlignRight],
     )
 
     // Used to show the create new option for creatable select and the option(s) doesn't have the input value
