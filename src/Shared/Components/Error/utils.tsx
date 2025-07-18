@@ -33,7 +33,7 @@ export const getIsImagePullBackOff = (appDetails: AppDetails): boolean => {
     return false
 }
 
-export const renderErrorHeaderMessage = (appDetails: AppDetails, key: string, onClickActionButton?): JSX.Element => (
+export const renderErrorHeaderMessage = (appDetails: AppDetails, key: string, onClickActionButton?) => (
     <div>
         &apos;{appDetails.clusterName}&apos; cluster
         {appDetails.ipsAccessProvided ? ' could not' : ' does not have permission to'} pull container image from ‘
