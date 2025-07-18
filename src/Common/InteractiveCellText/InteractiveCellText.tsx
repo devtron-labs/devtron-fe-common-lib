@@ -25,8 +25,14 @@ export const InteractiveCellText = ({
     rootClassName,
     interactive = false,
     fontSize = 13,
+    tippyContent = null,
 }: InteractiveCellTextProps) => (
-    <Tooltip content={text} placement="bottom" className="mxh-210 dc__overflow-auto" interactive={interactive}>
+    <Tooltip
+        content={tippyContent || text}
+        placement="bottom"
+        className="mxh-210 dc__overflow-auto"
+        interactive={interactive}
+    >
         {typeof onClickHandler === 'function' ? (
             <button
                 type="button"

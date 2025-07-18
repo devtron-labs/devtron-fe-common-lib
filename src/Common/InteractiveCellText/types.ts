@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { TippyCustomizedProps } from '@Common/Types'
+
 export interface InteractiveCellTextProps {
     text: string
     onClickHandler?: () => void
@@ -21,4 +23,5 @@ export interface InteractiveCellTextProps {
     rootClassName?: string
     interactive?: boolean
     fontSize?: number
+    tippyContent?: TippyCustomizedProps<false>['additionalContent']
 }
