@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+import { NavLink } from 'react-router-dom'
+
+import { URLS } from '@Common/Constants'
+
 import { AppType } from '../../types'
 import { InfoBlock } from '../InfoBlock'
 import { ErrorBarType } from './types'
@@ -38,14 +42,19 @@ const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
                 <InfoBlock
                     heading={`ImagePullBackOff: Failed to pull image on ‘${appDetails.clusterName}’ from ‘${appDetails.dockerRegistryId}’ `}
                     description={
-                        <div>
+                        <div className="fs-13 lh-20 cn-9">
                             <span>Possible causes for ImagePullBackOff:</span>
-                            <span>
-                                &nbsp;&bull; The cluster may not have permission to pull images from the registry
-                            </span>
-                            <span>&nbsp;&bull; The image tag might be incorrect or missing in the registry</span>
+                            <div>&nbsp;&bull; The cluster may not have permission to pull images from the registry</div>
+                            <div>&nbsp;&bull; The image tag might be incorrect or missing in the registry</div>
+                            <NavLink
+                                to={`${URLS.GLOBAL_CONFIG_DOCKER}/${appDetails.dockerRegistryId}`}
+                                className="cb-5 fs-13 anchor w-auto dc__no-decor flex ml-8"
+                            >
+                                Manage access&nbsp;&nbsp;
+                            </NavLink>
                         </div>
                     }
+                    variant="error"
                 />
             </div>
         )
