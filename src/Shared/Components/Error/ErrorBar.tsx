@@ -19,6 +19,7 @@ import { NavLink } from 'react-router-dom'
 import { URLS } from '@Common/Constants'
 
 import { AppType } from '../../types'
+import { Icon } from '../Icon'
 import { InfoBlock } from '../InfoBlock'
 import { ErrorBarType } from './types'
 import { getIsImagePullBackOff } from './utils'
@@ -41,8 +42,8 @@ const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
             <div className={`flexbox-col dc__gap-16 ${useParentMargin ? 'm-20' : ''} fs-13`}>
                 <InfoBlock
                     heading={
-                        <div className="flexbox dc__content-space">
-                            <div>
+                        <div className="flexbox dc__content-space fs-13 lh-20 cn-9">
+                            <div className="fw-6">
                                 ImagePullBackOff: Failed to pull image on ‘{appDetails.clusterName}’ from ‘
                                 {appDetails.dockerRegistryId}’
                             </div>
@@ -51,6 +52,7 @@ const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
                                 className="cb-5 fs-13 anchor w-auto dc__no-decor flex ml-8"
                             >
                                 Manage access&nbsp;&nbsp;
+                                <Icon name="ic-arrow-right" color="B500" />
                             </NavLink>
                         </div>
                     }
