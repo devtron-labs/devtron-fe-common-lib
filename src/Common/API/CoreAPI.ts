@@ -131,47 +131,45 @@ class CoreAPI {
     }
 
     /**
-     * Merges multiple AbortSignals into a single AbortSignal that will be aborted
-     * if any of the provided signals is aborted.
+     * Merges multiple AbortSignals into a single AbortSignal that aborts
+     * as soon as any of the input signals abort.
      *
      * This is useful when you want to race multiple async cancellation signals,
      * for example, to support both a global timeout and a user-triggered abort.
      *
-     * @param signals - An array of AbortSignal or undefined values. Any signal in the array may abort the merged signal.
+     * @param signals - AbortSignals to merge.
      * @returns An AbortSignal that aborts if any input signal aborts.
      */
-    private static mergeAbortSignals = (...signals: (AbortSignal | undefined)[]): AbortSignal => {
+    private static mergeAbortSignals(...signals: (AbortSignal | undefined)[]): AbortSignal {
         const controller = new AbortController()
 
-        /** Aborts the merged signal and cleans up all event listeners. */
-        const onAbort = () => {
+        // If any signal is already aborted, abort immediately and don't add listeners
+        if (signals.some((s) => s?.aborted)) {
             controller.abort()
-            cleanup()
+            return controller.signal
         }
 
-        /** Removes the 'abort' event listeners from all source signals. */
-        const cleanup = () => {
-            signals.forEach((signal) => {
-                if (signal) {
-                    signal.removeEventListener('abort', onAbort)
-                }
-            })
-        }
+        const onAbort = () => controller.abort()
 
-        for (const signal of signals) {
-            if (signal) {
-                if (signal.aborted) {
-                    controller.abort()
-                    cleanup()
-                    break
-                } else {
-                    signal.addEventListener('abort', onAbort)
-                }
+        // Keep track of listeners for cleanup later
+        const cleanupFns: (() => void)[] = []
+
+        signals.forEach((signal) => {
+            if (signal && !signal.aborted) {
+                signal.addEventListener('abort', onAbort)
+                cleanupFns.push(() => signal.removeEventListener('abort', onAbort))
             }
-        }
+        })
 
-        // Ensure cleanup happens if the merged signal is aborted directly.
-        controller.signal.addEventListener('abort', cleanup)
+        // Ensure cleanup happens when merged signal is aborted (by any means)
+        controller.signal.addEventListener(
+            'abort',
+            () => {
+                cleanupFns.forEach((fn) => fn())
+            },
+            // This ensures the listener is only run once
+            { once: true },
+        )
 
         return controller.signal
     }
