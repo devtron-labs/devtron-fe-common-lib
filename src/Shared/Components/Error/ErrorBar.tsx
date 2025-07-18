@@ -42,10 +42,14 @@ const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
                 <InfoBlock
                     heading={`ImagePullBackOff: Failed to pull image on ‘${appDetails.clusterName}’ from ‘${appDetails.dockerRegistryId}’ `}
                     description={
-                        <div className="fs-13 lh-20 cn-9">
-                            <span>Possible causes for ImagePullBackOff:</span>
-                            <div>&nbsp;&bull; The cluster may not have permission to pull images from the registry</div>
-                            <div>&nbsp;&bull; The image tag might be incorrect or missing in the registry</div>
+                        <div className="flexbox fs-13 lh-20 cn-9 dc__content-space">
+                            <div>
+                                <span>Possible causes for ImagePullBackOff:</span>
+                                <div>
+                                    &nbsp;&bull; The cluster may not have permission to pull images from the registry
+                                </div>
+                                <div>&nbsp;&bull; The image tag might be incorrect or missing in the registry</div>
+                            </div>
                             <NavLink
                                 to={`${URLS.GLOBAL_CONFIG_DOCKER}/${appDetails.dockerRegistryId}`}
                                 className="cb-5 fs-13 anchor w-auto dc__no-decor flex ml-8"
