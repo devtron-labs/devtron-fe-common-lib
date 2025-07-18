@@ -76,10 +76,10 @@ const InternalTable = <
                 // inputs, buttons, etc. from the user, but when we blur any element by pressing Escape, we want to focus the table
                 // Keep in mind that if we tab focus onto a div/span with tabIndex then the relatedTarget will be that null
                 if (
-                    !container.contains(document.activeElement) &&
+                    !container?.contains(document.activeElement) &&
                     (!related || related.tagName === 'BODY' || document.activeElement === document.body)
                 ) {
-                    const tableElement = wrapperDivRef.current.getElementsByClassName(
+                    const tableElement = wrapperDivRef.current?.getElementsByClassName(
                         'generic-table',
                     )[0] as HTMLDivElement
                     tableElement?.focus()
