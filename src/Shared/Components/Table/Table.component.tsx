@@ -19,7 +19,13 @@ import { getVisibleColumns, setVisibleColumnsToLocalStorage } from './utils'
 
 import './styles.scss'
 
-const UseResizableTableConfigWrapper = (props: InternalTableProps) => {
+const UseResizableTableConfigWrapper = <
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+>(
+    props: InternalTableProps<RowData, FilterVariant, AdditionalProps>,
+) => {
     const { visibleColumns } = props
 
     const resizableConfig = useResizableTableConfig({
@@ -49,7 +55,13 @@ const UseResizableTableConfigWrapper = (props: InternalTableProps) => {
     return <InternalTable {...props} resizableConfig={resizableConfig} />
 }
 
-const TableWithResizableConfigWrapper = (tableProps: UseResizableTableConfigWrapperProps) => {
+const TableWithResizableConfigWrapper = <
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+>(
+    tableProps: UseResizableTableConfigWrapperProps<RowData, FilterVariant, AdditionalProps>,
+) => {
     const { visibleColumns: columnsWithoutBulkActionGutter, bulkSelectionConfig: bulkActionsConfig } = tableProps
 
     const visibleColumns = useMemo(
@@ -60,18 +72,28 @@ const TableWithResizableConfigWrapper = (tableProps: UseResizableTableConfigWrap
         [!!bulkActionsConfig, columnsWithoutBulkActionGutter],
     )
 
-    const isResizable = visibleColumns.some(({ size }) => !!size?.range)
+    const isResizable = visibleColumns.some(({ size }) => size && 'range' in size && size.range)
 
     if (isResizable && visibleColumns.some(({ size }) => size === null)) {
         throw new Error('If any column is resizable, all columns must have a fixed size')
     }
 
-    const commonProps = { ...tableProps, visibleColumns, resizableConfig: null } as InternalTableProps
+    const commonProps = { ...tableProps, visibleColumns, resizableConfig: null } as InternalTableProps<
+        RowData,
+        FilterVariant,
+        AdditionalProps
+    >
 
     return isResizable ? <UseResizableTableConfigWrapper {...commonProps} /> : <InternalTable {...commonProps} />
 }
 
-const TableWithUseBulkSelectionReturnValue = (tableProps: TableWithBulkSelectionProps) => {
+const TableWithUseBulkSelectionReturnValue = <
+    RowData extends unknown = unknown,
+    FilterVariant extends FiltersTypeEnum = FiltersTypeEnum.NONE,
+    AdditionalProps extends Record<string, any> = {},
+>(
+    tableProps: TableWithBulkSelectionProps<RowData, FilterVariant, AdditionalProps>,
+) => {
     const bulkSelectionReturnValue = useBulkSelection()
 
     const { selectedIdentifiers, handleBulkSelection, isBulkSelectionApplied } = bulkSelectionReturnValue
@@ -83,7 +105,7 @@ const TableWithUseBulkSelectionReturnValue = (tableProps: TableWithBulkSelection
     }
 
     const handleToggleBulkSelectionOnRow = useCallback(
-        (row: RowType) => {
+        (row: RowType<RowData>) => {
             const isRowSelected = selectedIdentifiers[row.id]
 
             if (!isRowSelected && !isBulkSelectionApplied) {
@@ -126,7 +148,13 @@ const TableWithUseBulkSelectionReturnValue = (tableProps: TableWithBulkSelection
     )
 }
 
-const TableWithBulkSelection = (tableProps: TableWithBulkSelectionProps) => {
+const TableWithBulkSelection = <
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+>(
+    tableProps: TableWithBulkSelectionProps<RowData, FilterVariant, AdditionalProps>,
+) => {
     const { bulkSelectionConfig } = tableProps
 
     return bulkSelectionConfig ? (
@@ -143,7 +171,13 @@ const TableWithBulkSelection = (tableProps: TableWithBulkSelectionProps) => {
     )
 }
 
-const VisibleColumnsWrapper = (tableProps: VisibleColumnsWrapperProps) => {
+const VisibleColumnsWrapper = <
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+>(
+    tableProps: VisibleColumnsWrapperProps<RowData, FilterVariant, AdditionalProps>,
+) => {
     const { columns, id, areColumnsConfigurable } = tableProps
 
     const [visibleColumns, setVisibleColumns] = useState(getVisibleColumns({ columns, id, areColumnsConfigurable }))
@@ -166,7 +200,9 @@ const VisibleColumnsWrapper = (tableProps: VisibleColumnsWrapperProps) => {
     )
 }
 
-const UseStateFilterWrapper = (props: FilterWrapperProps) => {
+const UseStateFilterWrapper = <RowData extends unknown, AdditionalProps extends Record<string, any>>(
+    props: FilterWrapperProps<RowData, FiltersTypeEnum.STATE, AdditionalProps>,
+) => {
     const { additionalFilterProps } = props
 
     const filterData = useStateFilters<string>(additionalFilterProps)
@@ -174,7 +210,9 @@ const UseStateFilterWrapper = (props: FilterWrapperProps) => {
     return <VisibleColumnsWrapper {...props} filterData={filterData} />
 }
 
-const UseUrlFilterWrapper = (props: FilterWrapperProps) => {
+const UseUrlFilterWrapper = <RowData extends unknown, AdditionalProps extends Record<string, any>>(
+    props: FilterWrapperProps<RowData, FiltersTypeEnum.URL, AdditionalProps>,
+) => {
     const { additionalFilterProps } = props
 
     const filterData = useUrlFilters<string, unknown>(additionalFilterProps)
@@ -182,18 +220,30 @@ const UseUrlFilterWrapper = (props: FilterWrapperProps) => {
     return <VisibleColumnsWrapper {...props} filterData={filterData} />
 }
 
-const TableWrapper = (tableProps: TableProps) => {
+const TableWrapper = <
+    RowData extends unknown = unknown,
+    FilterVariant extends FiltersTypeEnum = FiltersTypeEnum.NONE,
+    AdditionalProps extends Record<string, any> = {},
+>(
+    tableProps: TableProps<RowData, FilterVariant, AdditionalProps>,
+) => {
     const { filtersVariant } = tableProps
 
     if (filtersVariant === FiltersTypeEnum.STATE) {
-        return <UseStateFilterWrapper {...tableProps} />
+        return (
+            <UseStateFilterWrapper {...(tableProps as TableProps<RowData, FiltersTypeEnum.STATE, AdditionalProps>)} />
+        )
     }
 
     if (filtersVariant === FiltersTypeEnum.URL) {
-        return <UseUrlFilterWrapper {...tableProps} />
+        return <UseUrlFilterWrapper {...(tableProps as TableProps<RowData, FiltersTypeEnum.URL, AdditionalProps>)} />
     }
 
-    return <VisibleColumnsWrapper {...{ ...tableProps, filterData: null }} />
+    return (
+        <VisibleColumnsWrapper
+            {...{ ...(tableProps as TableProps<RowData, FiltersTypeEnum.NONE, AdditionalProps>), filterData: null }}
+        />
+    )
 }
 
 export default TableWrapper

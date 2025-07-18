@@ -5,15 +5,22 @@ import { useRegisterShortcut } from '@Common/Hooks'
 
 import { BulkSelectionEvents } from '../BulkSelection'
 import { EVENT_TARGET } from './constants'
-import { InternalTableProps, RowsType, SignalEnum } from './types'
+import { FiltersTypeEnum, InternalTableProps, RowsType, SignalEnum } from './types'
 
-const useTableWithKeyboardShortcuts = (
+const useTableWithKeyboardShortcuts = <
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+>(
     {
         bulkSelectionConfig,
         handleToggleBulkSelectionOnRow,
         bulkSelectionReturnValue,
-    }: Pick<InternalTableProps, 'bulkSelectionConfig' | 'bulkSelectionReturnValue' | 'handleToggleBulkSelectionOnRow'>,
-    visibleRows: RowsType,
+    }: Pick<
+        InternalTableProps<RowData, FilterVariant, AdditionalProps>,
+        'bulkSelectionConfig' | 'bulkSelectionReturnValue' | 'handleToggleBulkSelectionOnRow'
+    >,
+    visibleRows: RowsType<RowData>,
     showPagination: boolean,
     bulkSelectionButtonRef: React.RefObject<HTMLLabelElement>,
 ) => {

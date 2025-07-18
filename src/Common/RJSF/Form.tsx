@@ -20,6 +20,7 @@ import RJSF from '@rjsf/core'
 import { SCHEMA_07_VALIDATOR } from '@Shared/validations'
 
 import { templates, widgets } from './config'
+import { RJSF_FORM_SELECT_PORTAL_TARGET_ID } from './constants'
 import { FormProps } from './types'
 import {
     getFormStateFromFormData,
@@ -82,28 +83,32 @@ export const RJSFForm = forwardRef((props: FormProps, ref: FormProps['ref']) => 
     }
 
     return (
-        <Form
-            noHtml5Validate
-            showErrorList={false}
-            autoComplete="off"
-            {...props}
-            formData={formState}
-            {...(isUpdatePathKeywordPresent
-                ? {
-                      onChange: handleOnChange,
-                      onSubmit: handleOnSubmit,
-                  }
-                : {})}
-            className={`rjsf-form-template__container ${props.className || ''}`}
-            validator={validator}
-            templates={{
-                ...templates,
-                ...props.templates,
-            }}
-            formContext={formState}
-            widgets={{ ...widgets, ...props.widgets }}
-            translateString={translateString}
-            ref={ref}
-        />
+        <>
+            <Form
+                noHtml5Validate
+                showErrorList={false}
+                autoComplete="off"
+                {...props}
+                formData={formState}
+                {...(isUpdatePathKeywordPresent
+                    ? {
+                          onChange: handleOnChange,
+                          onSubmit: handleOnSubmit,
+                      }
+                    : {})}
+                className={`rjsf-form-template__container ${props.className || ''}`}
+                validator={validator}
+                templates={{
+                    ...templates,
+                    ...props.templates,
+                }}
+                formContext={formState}
+                widgets={{ ...widgets, ...props.widgets }}
+                translateString={translateString}
+                ref={ref}
+            />
+            {/* NOTE: due to stacking context issues, we send this id to SelectPicker menuPortalTarget prop */}
+            <div id={RJSF_FORM_SELECT_PORTAL_TARGET_ID} />
+        </>
     )
 })

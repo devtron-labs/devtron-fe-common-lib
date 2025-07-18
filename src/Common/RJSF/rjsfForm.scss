@@ -33,6 +33,22 @@
         }
     }
 
+    &__field {
+        align-items: center;
+    }
+
+    &__field:has([class^="devtron-rjsf-select__"]),
+    &__field.rjsf-form-template__field--align-top {
+        align-items: flex-start;
+    }
+
+    &__field:has([class^="devtron-rjsf-select__"]) {
+        label {
+            line-height: 32px;
+        }
+    }
+
+
     &__additional-fields {
         grid-template-columns: 1fr 1fr;
     }

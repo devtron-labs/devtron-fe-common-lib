@@ -16,11 +16,13 @@
 
 import { NavLink } from 'react-router-dom'
 
-import { ReactComponent as ErrorInfo } from '../../../Assets/Icon/ic-errorInfo.svg'
-import { DISCORD_LINK, URLS } from '../../../Common'
+import { URLS } from '@Common/Constants'
+
 import { AppType } from '../../types'
+import { Icon } from '../Icon'
+import { InfoBlock } from '../InfoBlock'
 import { ErrorBarType } from './types'
-import { getIsImagePullBackOff, renderErrorHeaderMessage } from './utils'
+import { getIsImagePullBackOff } from './utils'
 
 const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
     if (
@@ -37,70 +39,32 @@ const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
 
     return (
         isImagePullBackOff && (
-            <div className={`er-2 bw-1 br-4 ${useParentMargin ? 'm-20' : ''} fs-13`}>
-                <div className="bcr-1 pl-12 pr-12 pt-8 pb-8 dc__border-bottom-r2 flex left dc__top-radius-4">
-                    <ErrorInfo className="icon-dim-24 mr-8" /> <span className="mr-8">IMAGEPULLBACKOFF:</span>
-                    {renderErrorHeaderMessage(appDetails, 'error-bar')}
-                </div>
-                {!appDetails.ipsAccessProvided ? (
-                    <div className="pl-12 pr-12 pt-8 pb-8">
-                        <div className="fw-6">How to resolve? </div>
-                        <div className="flex left">
-                            1. Allow &apos;{appDetails.clusterName}&apos; cluster to access credentials for ‘
-                            {appDetails.dockerRegistryId}’ registry and deploy again.
-                            <br />
+            <div className={`flexbox-col dc__gap-16 ${useParentMargin ? 'm-20' : ''} fs-13`}>
+                <InfoBlock
+                    heading={
+                        <div className="flexbox dc__content-space fs-13 lh-20 cn-9 fw-6">
+                            <div>
+                                ImagePullBackOff: Failed to pull image on ‘{appDetails.clusterName}’ from ‘
+                                {appDetails.dockerRegistryId}’
+                            </div>
                             <NavLink
                                 to={`${URLS.GLOBAL_CONFIG_DOCKER}/${appDetails.dockerRegistryId}`}
                                 className="cb-5 fs-13 anchor w-auto dc__no-decor flex ml-8"
                             >
-                                Manage access&nbsp;&nbsp;
+                                Check Permission&nbsp;&nbsp;
+                                <Icon name="ic-arrow-right" color="B500" />
                             </NavLink>
                         </div>
-                        2. Redeploy the application after allowing access
-                        <span className="flex left">
-                            {/* Will add document link once available */}
-                            {/* <NavLink
-                                to={`${URLS.STACK_MANAGER_DISCOVER_MODULES_DETAILS}`}
-                                className="cb-5 fs-13 anchor w-auto dc__no-decor flex ml-8"
-                                target="_blank"
-                            >
-                                View Documentation&nbsp;
-                            </NavLink> */}
-                        </span>
-                    </div>
-                ) : (
-                    <>
-                        <div className="pl-12 pr-12 pt-8 pb-8">
-                            <div className="fw-6">Possible issues? </div>
-                            1. Provided credentials may not have permission to pull image from ‘
-                            {appDetails.dockerRegistryId}’ registry. <br />
-                            2. Provided credentials may be invalid.
+                    }
+                    description={
+                        <div className="flexbox-col fs-13 lh-20 cn-9 dc__content-space">
+                            <div>Possible causes for ImagePullBackOff:</div>
+                            <div>&nbsp;&bull; The cluster may not have permission to pull images from the registry</div>
+                            <div>&nbsp;&bull; The image tag might be incorrect or missing in the registry</div>
                         </div>
-                        <div className="pl-12 pr-12 pt-8 pb-8" style={{ background: 'var(--bg-secondary)' }}>
-                            <div className="flex left">
-                                <span className="mr-8 fw-6">Already provided permission?</span>
-                                Redeploy the application.
-                                <NavLink
-                                    to={`/app/${appDetails.appId}/${URLS.APP_TRIGGER}`}
-                                    className="cb-5 fs-13 anchor w-auto dc__no-decor flex"
-                                >
-                                    &nbsp; Go to Deploy
-                                </NavLink>
-                            </div>
-                            <div className="flex left">
-                                <span className="mr-8 fw-6">Facing issues?</span>
-                                <a
-                                    href={DISCORD_LINK}
-                                    className="cb-5 fs-13 anchor w-auto dc__no-decor flex"
-                                    target="_blank"
-                                    rel="noreferrer"
-                                >
-                                    Chat with support
-                                </a>
-                            </div>
-                        </div>
-                    </>
-                )}
+                    }
+                    variant="error"
+                />
             </div>
         )
     )

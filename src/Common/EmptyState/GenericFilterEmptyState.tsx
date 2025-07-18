@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import noResult from '@Images/empty-noresult@2x.png'
 import { Button, ButtonVariantType } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
 
@@ -44,7 +43,7 @@ const GenericFilterEmptyState = ({
 
     return (
         <GenericEmptyState
-            image={noResult}
+            imgName="img-no-result"
             title="No results"
             subTitle="We couldn’t find any matching results"
             {...props}

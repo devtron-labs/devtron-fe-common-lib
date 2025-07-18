@@ -57,7 +57,6 @@ export const ProfileMenu = ({ user, onClick }: ProfileMenuProps) => {
                     <div className="flex dc__content-space dc__gap-8 px-8 py-6">
                         <div>
                             <p className="m-0 fs-13 lh-1-5 fw-4 cn-9 dc__truncate">{user}</p>
-                            <p className="m-0 fs-12 lh-1-5 fw-4 cn-7 dc__truncate">{user}</p>
                         </div>
                         {getAlphabetIcon(user, 'dc__no-shrink m-0-imp fs-16 icon-dim-36')}
                     </div>

@@ -14,19 +14,23 @@
  * limitations under the License.
  */
 
-import React from 'react'
 import { getDefaultRegistry } from '@rjsf/core'
 import { BaseInputTemplateProps } from '@rjsf/utils'
+
 import { PLACEHOLDERS } from '../constants'
 
 const {
     templates: { BaseInputTemplate },
 } = getDefaultRegistry()
 
-export const BaseInput = ({ placeholder, ...props }: BaseInputTemplateProps) => (
-    <BaseInputTemplate
-        placeholder={placeholder || PLACEHOLDERS.INPUT}
-        {...props}
-        className="form__input cn-9 fs-13 lh-20 fw-4"
-    />
-)
+export const BaseInput = ({ placeholder, ...props }: BaseInputTemplateProps) => {
+    const { schema } = props
+
+    return (
+        <BaseInputTemplate
+            placeholder={schema.placeholder || placeholder || PLACEHOLDERS.INPUT}
+            {...props}
+            className="form__input cn-9 fs-13 lh-20 fw-4"
+        />
+    )
+}
