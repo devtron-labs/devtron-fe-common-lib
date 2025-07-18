@@ -42,7 +42,7 @@ const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
                 <InfoBlock
                     heading={`ImagePullBackOff: Failed to pull image on ‘${appDetails.clusterName}’ from ‘${appDetails.dockerRegistryId}’ `}
                     description={
-                        <div className="flexbox fs-13 lh-20 cn-9 dc__content-space">
+                        <div className="flexbox top fs-13 lh-20 cn-9 dc__content-space">
                             <div>
                                 <span>Possible causes for ImagePullBackOff:</span>
                                 <div>
