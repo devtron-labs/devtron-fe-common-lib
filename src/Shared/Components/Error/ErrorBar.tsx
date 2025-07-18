@@ -19,6 +19,7 @@ import { NavLink } from 'react-router-dom'
 import { ReactComponent as ErrorInfo } from '../../../Assets/Icon/ic-errorInfo.svg'
 import { DISCORD_LINK, URLS } from '../../../Common'
 import { AppType } from '../../types'
+import { InfoBlock } from '../InfoBlock'
 import { ErrorBarType } from './types'
 import { getIsImagePullBackOff, renderErrorHeaderMessage } from './utils'
 
@@ -43,31 +44,18 @@ const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
                     {renderErrorHeaderMessage(appDetails, 'error-bar')}
                 </div>
                 {!appDetails.ipsAccessProvided ? (
-                    <div className="pl-12 pr-12 pt-8 pb-8">
-                        <div className="fw-6">How to resolve? </div>
-                        <div className="flex left">
-                            1. Allow &apos;{appDetails.clusterName}&apos; cluster to access credentials for ‘
-                            {appDetails.dockerRegistryId}’ registry and deploy again.
-                            <br />
-                            <NavLink
-                                to={`${URLS.GLOBAL_CONFIG_DOCKER}/${appDetails.dockerRegistryId}`}
-                                className="cb-5 fs-13 anchor w-auto dc__no-decor flex ml-8"
-                            >
-                                Manage access&nbsp;&nbsp;
-                            </NavLink>
-                        </div>
-                        2. Redeploy the application after allowing access
-                        <span className="flex left">
-                            {/* Will add document link once available */}
-                            {/* <NavLink
-                                to={`${URLS.STACK_MANAGER_DISCOVER_MODULES_DETAILS}`}
-                                className="cb-5 fs-13 anchor w-auto dc__no-decor flex ml-8"
-                                target="_blank"
-                            >
-                                View Documentation&nbsp;
-                            </NavLink> */}
-                        </span>
-                    </div>
+                    <InfoBlock
+                        heading={`ImagePullBackOff: Failed to pull image on ‘${appDetails.clusterName}’ from ‘${appDetails.dockerRegistryId}’ `}
+                        description={
+                            <div>
+                                <span>Possible causes for ImagePullBackOff:</span>
+                                <span>
+                                    &nbsp;&bull; The cluster may not have permission to pull images from the registry
+                                </span>
+                                <span>&nbsp;&bull; The image tag might be incorrect or missing in the registry</span>
+                            </div>
+                        }
+                    />
                 ) : (
                     <>
                         <div className="pl-12 pr-12 pt-8 pb-8">
