@@ -49,7 +49,7 @@ const Segment = ({ segment, isSelected, name, onChange, fullWidth, size, disable
                             <motion.div
                                 layoutId={`active-segment-control-${name}`}
                                 className="dc__position-abs active-mask dc__top-0 dc__left-0 dc__right-0 dc__bottom-0 bg__primary br-4"
-                                transition={{ type: 'spring' }}
+                                transition={{ duration: 0.2, ease: 'easeInOut' }}
                             />
                         )}
                     </AnimatePresence>
