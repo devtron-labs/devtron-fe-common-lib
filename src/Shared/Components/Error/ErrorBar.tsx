@@ -42,8 +42,8 @@ const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
             <div className={`flexbox-col dc__gap-16 ${useParentMargin ? 'm-20' : ''} fs-13`}>
                 <InfoBlock
                     heading={
-                        <div className="flexbox dc__content-space fs-13 lh-20 cn-9">
-                            <div className="fw-6">
+                        <div className="flexbox dc__content-space fs-13 lh-20 cn-9 fw-6">
+                            <div>
                                 ImagePullBackOff: Failed to pull image on ‘{appDetails.clusterName}’ from ‘
                                 {appDetails.dockerRegistryId}’
                             </div>
@@ -51,7 +51,7 @@ const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
                                 to={`${URLS.GLOBAL_CONFIG_DOCKER}/${appDetails.dockerRegistryId}`}
                                 className="cb-5 fs-13 anchor w-auto dc__no-decor flex ml-8"
                             >
-                                Manage access&nbsp;&nbsp;
+                                Check Permission&nbsp;&nbsp;
                                 <Icon name="ic-arrow-right" color="B500" />
                             </NavLink>
                         </div>
