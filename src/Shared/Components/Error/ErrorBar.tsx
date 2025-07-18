@@ -41,7 +41,7 @@ const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
             <div className={`flexbox-col dc__gap-16 ${useParentMargin ? 'm-20' : ''} fs-13`}>
                 <InfoBlock
                     heading={
-                        <div className="flexbox-col dc__content-space">
+                        <div className="flexbox dc__content-space">
                             <div>
                                 ImagePullBackOff: Failed to pull image on ‘{appDetails.clusterName}’ from ‘
                                 {appDetails.dockerRegistryId}’
@@ -55,8 +55,8 @@ const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
                         </div>
                     }
                     description={
-                        <div className="flexbox top fs-13 lh-20 cn-9 dc__content-space">
-                            <span>Possible causes for ImagePullBackOff:</span>
+                        <div className="flexbox-col fs-13 lh-20 cn-9 dc__content-space">
+                            <div>Possible causes for ImagePullBackOff:</div>
                             <div>&nbsp;&bull; The cluster may not have permission to pull images from the registry</div>
                             <div>&nbsp;&bull; The image tag might be incorrect or missing in the registry</div>
                         </div>
