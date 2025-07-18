@@ -130,17 +130,48 @@ class CoreAPI {
         )
     }
 
+    /**
+     * Merges multiple AbortSignals into a single AbortSignal that will be aborted
+     * if any of the provided signals is aborted.
+     *
+     * This is useful when you want to race multiple async cancellation signals,
+     * for example, to support both a global timeout and a user-triggered abort.
+     *
+     * @param signals - An array of AbortSignal or undefined values. Any signal in the array may abort the merged signal.
+     * @returns An AbortSignal that aborts if any input signal aborts.
+     */
     private static mergeAbortSignals = (...signals: (AbortSignal | undefined)[]): AbortSignal => {
         const controller = new AbortController()
 
-        const onAbort = () => controller.abort()
+        /** Aborts the merged signal and cleans up all event listeners. */
+        const onAbort = () => {
+            controller.abort()
+            cleanup()
+        }
 
-        signals.forEach((signal) => {
+        /** Removes the 'abort' event listeners from all source signals. */
+        const cleanup = () => {
+            signals.forEach((signal) => {
+                if (signal) {
+                    signal.removeEventListener('abort', onAbort)
+                }
+            })
+        }
+
+        for (const signal of signals) {
             if (signal) {
-                if (signal.aborted) controller.abort()
-                else signal.addEventListener('abort', onAbort)
+                if (signal.aborted) {
+                    controller.abort()
+                    cleanup()
+                    break
+                } else {
+                    signal.addEventListener('abort', onAbort)
+                }
             }
-        })
+        }
+
+        // Ensure cleanup happens if the merged signal is aborted directly.
+        controller.signal.addEventListener('abort', cleanup)
 
         return controller.signal
     }
