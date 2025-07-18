@@ -40,15 +40,11 @@ const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
         isImagePullBackOff && (
             <div className={`flexbox-col dc__gap-16 ${useParentMargin ? 'm-20' : ''} fs-13`}>
                 <InfoBlock
-                    heading={`ImagePullBackOff: Failed to pull image on ‘${appDetails.clusterName}’ from ‘${appDetails.dockerRegistryId}’ `}
-                    description={
-                        <div className="flexbox top fs-13 lh-20 cn-9 dc__content-space">
+                    heading={
+                        <div className="flexbox-col dc__content-space">
                             <div>
-                                <span>Possible causes for ImagePullBackOff:</span>
-                                <div>
-                                    &nbsp;&bull; The cluster may not have permission to pull images from the registry
-                                </div>
-                                <div>&nbsp;&bull; The image tag might be incorrect or missing in the registry</div>
+                                ImagePullBackOff: Failed to pull image on ‘{appDetails.clusterName}’ from ‘
+                                {appDetails.dockerRegistryId}’
                             </div>
                             <NavLink
                                 to={`${URLS.GLOBAL_CONFIG_DOCKER}/${appDetails.dockerRegistryId}`}
@@ -56,6 +52,13 @@ const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
                             >
                                 Manage access&nbsp;&nbsp;
                             </NavLink>
+                        </div>
+                    }
+                    description={
+                        <div className="flexbox top fs-13 lh-20 cn-9 dc__content-space">
+                            <span>Possible causes for ImagePullBackOff:</span>
+                            <div>&nbsp;&bull; The cluster may not have permission to pull images from the registry</div>
+                            <div>&nbsp;&bull; The image tag might be incorrect or missing in the registry</div>
                         </div>
                     }
                     variant="error"
