@@ -81,7 +81,7 @@ const InternalTable = <
                 ) {
                     const tableElement = wrapperDivRef.current?.getElementsByClassName(
                         'generic-table',
-                    )[0] as HTMLDivElement
+                    )?.[0] as HTMLDivElement
                     tableElement?.focus()
                 }
             }, 0)
