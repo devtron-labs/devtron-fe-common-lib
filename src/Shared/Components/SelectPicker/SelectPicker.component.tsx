@@ -213,7 +213,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     menuListFooterConfig,
     isCreatable = false,
     onCreateOption,
-    closeMenuOnSelect = false,
+    closeMenuOnSelect: _closeMenuOnSelect,
     shouldShowNoOptionsMessage = true,
     shouldRenderTextArea = false,
     onKeyDown,
@@ -227,6 +227,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     labelTooltipConfig,
     hideFormFieldInfo,
     autoFocus,
+    showCheckboxForMultiSelect = true,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const innerRef = useRef<SelectPickerProps<OptionValue, IsMulti>['selectRef']['current']>(null)
@@ -250,10 +251,11 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         getIsOptionValid = () => true,
         customDisplayText = null,
     } = multiSelectProps
-    const controlShouldRenderValue = _controlShouldRenderValue && !customDisplayText
 
+    const controlShouldRenderValue = _controlShouldRenderValue && !customDisplayText
     const shouldShowSelectedOptionIcon = !isMulti && showSelectedOptionIcon
     const isSelectSearchable = !shouldRenderCustomOptions && isSearchable
+    const closeMenuOnSelect = _closeMenuOnSelect ?? !isMulti
 
     // Option disabled, group null state, checkbox hover, create option visibility (scroll reset on search)
     const selectStyles = useMemo(
@@ -483,7 +485,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                 DropdownIndicator: () => null,
                             }),
                         }}
-                        closeMenuOnSelect={!isMulti || closeMenuOnSelect}
+                        closeMenuOnSelect={closeMenuOnSelect}
                         allowCreateWhileLoading={false}
                         isValidNewOption={isValidNewOption}
                         createOptionPosition="first"
@@ -493,6 +495,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         onInputChange={handleInputChange}
                         icon={icon}
                         keyboardShortcut={keyboardShortcut}
+                        showCheckboxForMultiSelect={showCheckboxForMultiSelect}
                         showSelectedOptionIcon={shouldShowSelectedOptionIcon}
                         onKeyDown={handleKeyDown}
                         shouldRenderTextArea={shouldRenderTextArea}

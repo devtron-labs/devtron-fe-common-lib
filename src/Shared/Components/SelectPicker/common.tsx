@@ -198,7 +198,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
     const {
         label,
         data,
-        selectProps: { isMulti },
+        selectProps: { isMulti, showCheckboxForMultiSelect },
         selectOption,
         isDisabled,
         isSelected,
@@ -220,7 +220,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
         <components.Option {...props}>
             <Tooltip {...getTooltipProps(tooltipProps)}>
                 <div className="flexbox dc__align-items-center dc__gap-8">
-                    {isMulti && !isCreatableOption && (
+                    {isMulti && showCheckboxForMultiSelect && !isCreatableOption && (
                         <Checkbox
                             onChange={noop}
                             onClick={handleChange}

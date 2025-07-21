@@ -112,6 +112,11 @@ declare module 'react-select/base' {
          */
         keyboardShortcut?: string
         /**
+         * If true, checkboxes are shown for options in multi-select mode.
+         * @default true
+         */
+        showCheckboxForMultiSelect?: boolean
+        /**
          * If true, the selected option icon is shown in the container.
          * startIcon has higher priority than endIcon.
          *
@@ -189,6 +194,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
             | 'renderOptionsFooter'
             | 'shouldRenderTextArea'
             | 'keyboardShortcut'
+            | 'showCheckboxForMultiSelect'
         >
     > &
     Required<Pick<SelectProps<OptionValue, IsMulti>, 'inputId'>> &
