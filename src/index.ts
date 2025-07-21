@@ -178,6 +178,11 @@ export interface customEnv {
      *  @default true
      */
     FEATURE_INTERNET_CONNECTIVITY_ENABLE?: boolean
+    /**
+     * Show rollout progress if true, else canary step count in status
+     * @default true
+     */
+    FEATURE_CANARY_ROLLOUT_PROGRESS_ENABLE?: boolean
 }
 declare global {
     interface Window {
