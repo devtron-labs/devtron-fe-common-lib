@@ -202,7 +202,7 @@ const TableContent = <
                     key={row.id}
                     ref={isRowActive ? focusActiveRow : null}
                     onClick={handleChangeActiveRowIndex}
-                    className={`dc__grid px-20 dc__min-width-fit-content checkbox__parent-container ${
+                    className={`dc__grid px-20 dc__min-width-fit-content checkbox__parent-container dc__opacity-hover dc__opacity-hover--parent ${
                         showSeparatorBetweenRows ? 'border__secondary--bottom' : ''
                     } fs-13 fw-4 lh-20 cn-9 generic-table__row dc__gap-16 ${
                         isRowActive ? 'generic-table__row--active checkbox__parent-container--active' : ''
