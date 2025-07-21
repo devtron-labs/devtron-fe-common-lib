@@ -19,12 +19,15 @@ import Tippy from '@tippyjs/react'
 
 import { ReactComponent as ICMediumPaintBucket } from '@IconsV2/ic-medium-paintbucket.svg'
 import { handleAnalyticsEvent } from '@Shared/Analytics'
+import { ComponentSizeType } from '@Shared/constants'
 import { InstallationType } from '@Shared/types'
 
 import { TippyCustomized, TippyTheme, Tooltip } from '../../../Common'
 import { POSTHOG_EVENT_ONBOARDING } from '../../../Common/Constants'
 import { SidePanelTab, useMainContext, useTheme, useUserEmail } from '../../Providers'
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
+import { ImageWithFallback } from '../ImageWithFallback'
 import { InfoIconTippy } from '../InfoIconTippy'
 import { HelpButton } from './HelpButton'
 import { IframePromoButton } from './IframePromoButton'
@@ -37,12 +40,14 @@ import './pageHeader.scss'
 
 const PageHeader = ({
     headerName,
+    headerImage,
     additionalHeaderInfo,
     showTabs = false,
     renderHeaderTabs,
     isBreadcrumbs = false,
     breadCrumbs,
     renderActionButtons,
+    onClose,
     tippyProps,
 }: PageHeaderType) => {
     const { setLoginCount, setShowGettingStartedCard, setSidePanelConfig, sidePanelConfig } = useMainContext()
@@ -178,11 +183,41 @@ const PageHeader = ({
         >
             <h1 className="dc__page-header__title dc__content-space flex fs-16 fw-6 lh-20 h-48">
                 <div className="flex left">
-                    {headerName && (
-                        <span className="fw-6" data-testid="main-header">
-                            {headerName}
-                        </span>
-                    )}
+                    <div className="flex left dc__gap-12">
+                        {!!onClose && (
+                            <Button
+                                dataTestId="page-header-close-button"
+                                ariaLabel="page-header-close-button"
+                                icon={<Icon name="ic-close-large" color={null} />}
+                                variant={ButtonVariantType.secondary}
+                                style={ButtonStyleType.neutral}
+                                size={ComponentSizeType.xs}
+                                onClick={onClose}
+                                showAriaLabelInTippy={false}
+                            />
+                        )}
+                        {(headerImage || headerName) && (
+                            <div className="flex left dc__gap-8">
+                                {headerImage && (
+                                    <ImageWithFallback
+                                        imageProps={{
+                                            className: 'dc__no-shrink icon-dim-24',
+                                            height: 24,
+                                            width: 24,
+                                            src: headerImage,
+                                            alt: 'header-image',
+                                        }}
+                                        fallbackImage={headerImage}
+                                    />
+                                )}
+                                {headerName && (
+                                    <span className="fw-6" data-testid="main-header">
+                                        {headerName}
+                                    </span>
+                                )}
+                            </div>
+                        )}
+                    </div>
                     {additionalHeaderInfo && additionalHeaderInfo()}
                     {isBreadcrumbs && breadCrumbs()}
                     {tippyProps &&
