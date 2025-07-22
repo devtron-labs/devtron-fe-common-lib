@@ -1,0 +1,22 @@
+
+.chip {
+    button[data-testid="filter-chip__remove-btn"] {
+        border-radius: 0;
+        margin-right: -1px; // to make the border part of the button
+    }
+
+    &__border--error {
+        border: 1px solid var(--R200);
+    }
+
+    width: fit-content;
+    transition: background-color 0.2s ease-in-out;
+
+    &:hover {
+        background-color: var(--bg-secondary);
+    }
+
+    &:active {
+        background-color: var(--bg-tertiary);
+    }
+}
