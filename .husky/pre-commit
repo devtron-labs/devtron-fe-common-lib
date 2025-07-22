@@ -20,9 +20,9 @@
 echo "Running pre-commit hook..."
 
 # Check for changes in the Icon folder
-CHANGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E 'IconV2/|generate-icon.cjs' || true)
+ICON_CHANGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E 'IconV2/|generate-icon.cjs' || true)
 
-if [ -n "$CHANGED_FILES" ]; then
+if [ -n "$ICON_CHANGED_FILES" ]; then
     echo "Changes detected in the Icon folder or icon generation script. Running icon generation script..."
     
     if ! npm run generate-icon; then
@@ -34,6 +34,23 @@ if [ -n "$CHANGED_FILES" ]; then
     git add src/Shared/Components/Icon/Icon.tsx
 else
     echo "No changes in the IconsV2 folder. Skipping icon generation."
+fi
+
+# Check for changes in the Illustration folder
+ILLUSTRATION_CHANGED_FILES=$(git diff --cached --name-only --diff-filter=ACMR | grep -E 'Illustration/|generate-illustration.cjs' || true)
+
+if [ -n "$ILLUSTRATION_CHANGED_FILES" ]; then
+    echo "Changes detected in the Illustration folder or illustration generation script. Running illustration generation script..."
+    
+    if ! npm run generate-illustration; then
+        echo "Error: Illustration generation script failed."
+        exit 1
+    fi
+    
+    echo "Illustration.tsx updated. Adding to commit."
+    git add src/Shared/Components/Illustration/Illustration.tsx
+else
+    echo "No changes in the Illustration folder. Skipping illustration generation."
 fi
 
 # TypeScript check

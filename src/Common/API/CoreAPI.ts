@@ -130,6 +130,50 @@ class CoreAPI {
         )
     }
 
+    /**
+     * Merges multiple AbortSignals into a single AbortSignal that aborts
+     * as soon as any of the input signals abort.
+     *
+     * This is useful when you want to race multiple async cancellation signals,
+     * for example, to support both a global timeout and a user-triggered abort.
+     *
+     * @param signals - AbortSignals to merge.
+     * @returns An AbortSignal that aborts if any input signal aborts.
+     */
+    private static mergeAbortSignals(...signals: (AbortSignal | undefined)[]): AbortSignal {
+        const controller = new AbortController()
+
+        // If any signal is already aborted, abort immediately and don't add listeners
+        if (signals.some((s) => s?.aborted)) {
+            controller.abort()
+            return controller.signal
+        }
+
+        const onAbort = () => controller.abort()
+
+        // Keep track of listeners for cleanup later
+        const cleanupFns: (() => void)[] = []
+
+        signals.forEach((signal) => {
+            if (signal && !signal.aborted) {
+                signal.addEventListener('abort', onAbort)
+                cleanupFns.push(() => signal.removeEventListener('abort', onAbort))
+            }
+        })
+
+        // Ensure cleanup happens when merged signal is aborted (by any means)
+        controller.signal.addEventListener(
+            'abort',
+            () => {
+                cleanupFns.forEach((fn) => fn())
+            },
+            // This ensures the listener is only run once
+            { once: true },
+        )
+
+        return controller.signal
+    }
+
     private fetchInTime = <T = object>({
         url,
         type,
@@ -138,10 +182,13 @@ class CoreAPI {
         isMultipartRequest,
     }: FetchInTimeParamsType<T>): Promise<ResponseType> => {
         const controller = options?.abortControllerRef?.current ?? new AbortController()
-        const signal = options?.abortControllerRef?.current?.signal || options?.signal || controller.signal
-        const timeoutPromise: Promise<ResponseType> = new Promise((resolve, reject) => {
-            const timeout = options?.timeout || this.timeout
+        const timeoutSignal = controller.signal
 
+        const mergedSignal = CoreAPI.mergeAbortSignals(options?.signal, timeoutSignal)
+
+        const timeout = options?.timeout || this.timeout
+
+        const timeoutPromise: Promise<ResponseType> = new Promise((_, reject) => {
             setTimeout(() => {
                 controller.abort()
                 if (options?.abortControllerRef?.current) {
@@ -165,12 +212,13 @@ class CoreAPI {
                 })
             }, timeout)
         })
+
         return Promise.race([
             this.fetchAPI({
                 url,
                 type,
                 data,
-                signal,
+                signal: mergedSignal,
                 preventAutoLogout: options?.preventAutoLogout || false,
                 preventLicenseRedirect: options?.preventLicenseRedirect || false,
                 shouldParseServerErrorForUnauthorizedUser: options?.shouldParseServerErrorForUnauthorizedUser,

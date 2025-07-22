@@ -134,6 +134,7 @@ import { ReactComponent as ICLego } from '@IconsV2/ic-lego.svg'
 import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
 import { ReactComponent as ICLightningFill } from '@IconsV2/ic-lightning-fill.svg'
 import { ReactComponent as ICLinkedBuildColor } from '@IconsV2/ic-linked-build-color.svg'
+import { ReactComponent as ICListBullets } from '@IconsV2/ic-list-bullets.svg'
 import { ReactComponent as ICLivspace } from '@IconsV2/ic-livspace.svg'
 import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
 import { ReactComponent as ICLogs } from '@IconsV2/ic-logs.svg'
@@ -357,6 +358,7 @@ export const iconMap = {
     'ic-lightning-fill': ICLightningFill,
     'ic-lightning': ICLightning,
     'ic-linked-build-color': ICLinkedBuildColor,
+    'ic-list-bullets': ICListBullets,
     'ic-livspace': ICLivspace,
     'ic-logout': ICLogout,
     'ic-logs': ICLogs,

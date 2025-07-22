@@ -944,11 +944,6 @@ export type ResourceIdToResourceApprovalPolicyConfigMapType = Record<
     Pick<ResourceApprovalPolicyConfigType, 'isApprovalApplicable' | 'approvalConfigurationMap'>
 >
 
-export interface PreventOutsideFocusProps {
-    identifier: string
-    preventFocus: boolean
-}
-
 export interface PolicyBlockInfo {
     isBlocked: boolean
     blockedBy: TriggerBlockType

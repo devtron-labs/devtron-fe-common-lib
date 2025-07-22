@@ -1,14 +1,20 @@
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 
+import { GenericEmptyState, GenericFilterEmptyState } from '@Common/EmptyState'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
-import { GenericEmptyState, GenericFilterEmptyState, useAsync, UseRegisterShortcutProvider } from '@Common/index'
+import { noop, useAsync } from '@Common/Helper'
+import { UseRegisterShortcutProvider } from '@Common/Hooks'
 
 import { NO_ROWS_OR_GET_ROWS_ERROR } from './constants'
 import TableContent from './TableContent'
 import { FiltersTypeEnum, InternalTableProps, PaginationEnum } from './types'
 import { getFilteringPromise, searchAndSortRows } from './utils'
 
-const InternalTable = ({
+const InternalTable = <
+    RowData extends unknown,
+    FilterVariant extends FiltersTypeEnum,
+    AdditionalProps extends Record<string, any>,
+>({
     filtersVariant,
     filterData,
     rows,
@@ -32,7 +38,7 @@ const InternalTable = ({
     RowActionsOnHoverComponent,
     pageSizeOptions,
     clearFilters: userGivenUrlClearFilters,
-}: InternalTableProps) => {
+}: InternalTableProps<RowData, FilterVariant, AdditionalProps>) => {
     const {
         sortBy,
         sortOrder,
@@ -143,7 +149,10 @@ const InternalTable = ({
 
         if (!areFilteredRowsLoading && !filteredRows?.length && !loading) {
             return filtersVariant !== FiltersTypeEnum.NONE && areFiltersApplied ? (
-                <GenericFilterEmptyState handleClearFilters={userGivenUrlClearFilters ?? clearFilters} />
+                <GenericFilterEmptyState
+                    {...emptyStateConfig.noRowsForFilterConfig}
+                    handleClearFilters={userGivenUrlClearFilters ?? clearFilters}
+                />
             ) : (
                 <GenericEmptyState {...emptyStateConfig.noRowsConfig} />
             )
@@ -176,19 +185,24 @@ const InternalTable = ({
     return (
         <div ref={wrapperDivRef} className="flexbox-col flex-grow-1 dc__overflow-hidden">
             <Wrapper
-                {...{
-                    ...filterData,
-                    ...additionalProps,
-                    areRowsLoading: areFilteredRowsLoading,
-                    filteredRows,
-                    ...(areColumnsConfigurable
-                        ? {
-                              allColumns: columns,
-                              setVisibleColumns,
-                              visibleColumns,
-                          }
-                        : {}),
-                }}
+                areRowsLoading={areFilteredRowsLoading}
+                clearFilters={clearFilters}
+                filteredRows={filteredRows}
+                handleSearch={handleSearch}
+                updateSearchParams={noop}
+                offset={offset}
+                searchKey={searchKey}
+                sortBy={sortBy}
+                sortOrder={sortOrder}
+                {...filterData}
+                {...(areColumnsConfigurable
+                    ? {
+                          allColumns: columns,
+                          setVisibleColumns,
+                          visibleColumns,
+                      }
+                    : {})}
+                {...additionalProps}
             >
                 {renderContent()}
             </Wrapper>
