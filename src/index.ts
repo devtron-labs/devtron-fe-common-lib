@@ -135,12 +135,6 @@ export interface customEnv {
      */
     FEATURE_SWAP_TRAFFIC_ENABLE?: boolean
     /**
-     * Enable cluster map
-     *
-     * @default true
-     */
-    FEATURE_CLUSTER_MAP_ENABLE?: boolean
-    /**
      * @default true
      */
     HIDE_NETWORK_STATUS_INTERFACE?: boolean

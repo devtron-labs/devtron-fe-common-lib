@@ -26,7 +26,6 @@ import { noop } from '@Common/Helper'
 export const Modal = ({
     style = {},
     children,
-    modal = false,
     rootClassName = '',
     onClick = null,
     callbackRef = null,
@@ -63,7 +62,7 @@ export const Modal = ({
     }, [])
 
     return (
-        <Backdrop onEscape={noop} onClick={handleClick}>
+        <Backdrop onEscape={noop} onClick={handleClick} hasClearBackground={noBackDrop}>
             <div
                 tabIndex={0}
                 onClick={handleClick}
@@ -75,7 +74,7 @@ export const Modal = ({
                     innerRef.current = el
                 }}
                 id="popup"
-                className={`${rootClassName} ${POP_UP_MENU_MODAL_ID} ${modal ? 'modal' : ''} ${noBackDrop ? 'no-back-drop' : ''}`}
+                className={`${rootClassName} ${POP_UP_MENU_MODAL_ID}`}
                 style={{ ...style }}
             >
                 {children}

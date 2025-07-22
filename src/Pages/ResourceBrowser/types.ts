@@ -76,7 +76,7 @@ export interface ClusterCapacityType {
     serverVersion: string
     nodeDetails?: NodeDetailsType[]
     nodeErrors: Record<string, string>[]
-    status?: ClusterStatusType
+    status: ClusterStatusType
     isProd: boolean
     installationId?: number
 }
