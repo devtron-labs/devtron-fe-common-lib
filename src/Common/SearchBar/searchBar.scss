@@ -42,4 +42,11 @@
         transform: translateY(-50%);
         z-index: 1;
     }
+
+    &__kbd-shortcut {
+        right: 6px;
+        top: 50%;
+        transform: translateY(-50%);
+        z-index: 1;
+    }
 }
