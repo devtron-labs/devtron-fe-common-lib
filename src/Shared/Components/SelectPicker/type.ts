@@ -377,6 +377,6 @@ export interface GroupedFilterSelectPickerProps<T extends string | number = stri
     isFilterApplied?: boolean
     filterSelectPickerPropsMap: Record<
         T,
-        Omit<FilterSelectPickerProps, 'autoFocus' | 'menuIsOpen' | 'onMenuClose' | 'onKeyDown'>
+        Omit<FilterSelectPickerProps, 'autoFocus' | 'menuIsOpen' | 'onMenuClose' | 'onKeyDown' | 'selectRef'>
     >
 }

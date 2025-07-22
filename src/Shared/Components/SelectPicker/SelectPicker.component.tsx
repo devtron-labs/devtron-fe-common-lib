@@ -464,7 +464,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         shouldRenderCustomOptions={shouldRenderCustomOptions || false}
                         isMulti={isMulti}
                         ref={selectRef}
-                        autoFocus={autoFocus}
                         components={{
                             IndicatorSeparator: null,
                             LoadingIndicator: null,
