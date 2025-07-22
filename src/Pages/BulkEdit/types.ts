@@ -10,10 +10,7 @@ export interface AppEnvDetail {
     message: string
 }
 
-export interface ObjectsWithAppEnvDetail {
-    appName: string
-    envName?: string
-    message: string
+export interface ObjectsWithAppEnvDetail extends AppEnvDetail {
     names: string[]
 }
 
