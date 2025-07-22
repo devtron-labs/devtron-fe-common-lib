@@ -52,3 +52,8 @@ export interface ImpactedObjectsType {
     configMap?: ImpactedCmCs[]
     secret?: ImpactedCmCs[]
 }
+
+export enum BulkEditVersion {
+    v1 = 'batch/v1beta1',
+    v2 = 'batch/v1beta2',
+}
