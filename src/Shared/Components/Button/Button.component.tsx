@@ -264,7 +264,7 @@ const Button = forwardRef<HTMLButtonElement | HTMLAnchorElement, ButtonProps<But
 
         return (
             <Tooltip {...getTooltipProps()}>
-                <div className={`dc__inline-block ${fullWidth ? 'w-100' : ''}`}>
+                <div className={`dc__inline-block flex ${fullWidth ? 'w-100' : ''}`}>
                     <ButtonElement
                         ref={forwardedRef}
                         {...props}
