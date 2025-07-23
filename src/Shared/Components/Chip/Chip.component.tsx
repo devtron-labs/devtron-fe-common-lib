@@ -1,4 +1,4 @@
-import { PropsWithChildren } from 'react'
+import { Children, PropsWithChildren } from 'react'
 import { Link } from 'react-router-dom'
 
 import { ComponentSizeType } from '@Shared/constants'
@@ -21,10 +21,17 @@ const ChipWrapper = ({
     const baseClassName = `flexbox chip dc__w-fit-content br-4 ${style === 'error' ? 'chip--error' : 'border__primary'} bg__primary dc__transition--background dc__user-select-none dc__overflow-hidden dc__mxw-250 ${`chip--${size} dc__align-items-center`}`
 
     if (type === 'button') {
+        const childrenArray = Children.toArray(children)
+        const content = childrenArray[0]
+
         return (
-            <button type="button" onClick={onClick} className={`${baseClassName} dc__outline-none`}>
-                {children}
-            </button>
+            <div className={`${baseClassName} chip--button`}>
+                <button onClick={onClick} className="p-0 m-0 flex dc__transparent" type="button">
+                    {content}
+                </button>
+
+                {...childrenArray.slice(1)}
+            </div>
         )
     }
 
@@ -68,24 +75,24 @@ const Chip = ({
         </div>
     )
 
-    const renderContent = () => {
-        if (value) {
-            return (
-                <>
-                    {renderLabel(false)}
+    const renderContent = () => (
+        // NOTE: always render label and value in a fragment or an element to ensure consistent structure
+        <>
+            {renderLabel(!value)}
 
-                    {value && (
-                        <div className={`px-6 flex border__secondary--left dc__gap-4 ${verticalPadding}`}>
-                            {style === 'error' && <Icon name="ic-error" color="R500" size={iconSize} />}
+            {value && (
+                <div className={`px-6 flex border__secondary--left dc__gap-4 ${verticalPadding}`}>
+                    {style === 'error' && <Icon name="ic-error" color="R500" size={iconSize} />}
 
-                            <span className={`${fontSize} lh-1-5 cn-9 fw-4 dc__open-sans dc__truncate`}>{value}</span>
-                        </div>
-                    )}
-                </>
-            )
-        }
+                    <span className={`${fontSize} lh-1-5 cn-9 fw-4 dc__open-sans dc__truncate`}>{value}</span>
+                </div>
+            )}
+        </>
+    )
 
-        return renderLabel()
+    const onRemoveClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+        event.stopPropagation()
+        onRemove(event)
     }
 
     return (
@@ -101,7 +108,7 @@ const Chip = ({
                     ariaLabel="Remove filter"
                     icon={<Icon name="ic-close-small" color={null} />}
                     size={getRemoveButtonSize(size)}
-                    onClick={onRemove}
+                    onClick={onRemoveClick}
                 />
             )}
 

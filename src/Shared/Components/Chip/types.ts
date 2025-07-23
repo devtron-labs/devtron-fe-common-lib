@@ -1,3 +1,5 @@
+import type { MouseEvent } from 'react'
+
 import { ComponentSizeType } from '@Shared/constants'
 
 import { IconsProps } from '../Icon'
@@ -24,7 +26,7 @@ export type ChipProps = {
     | {
           type: 'button'
           href?: never
-          onClick: () => void
+          onClick: (event: MouseEvent<HTMLButtonElement>) => void
           value?: never
           onRemove?: () => void
       }
@@ -54,7 +56,7 @@ export type ChipProps = {
            * A function that will be called when the remove button is clicked.
            * This is optional and can be used to handle the removal of the chip.
            */
-          onRemove?: () => void
+          onRemove?: (event: MouseEvent<HTMLButtonElement>) => void
       }
 )
 
