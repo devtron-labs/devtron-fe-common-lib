@@ -1,21 +1,73 @@
 
 .chip {
-    button[data-testid="filter-chip__remove-btn"] {
+    div > button[data-testid="chip__remove-btn"],
+    div > a[data-testid="chip__visit-link"] {
         border-radius: 0;
-        margin-right: -1px; // to make the border part of the button
+        margin-right: -1px;
     }
 
-    &__border--error {
-        border: 1px solid var(--R200);
-    }
+    &--link {
+        div:has(> a[data-testid="chip__visit-link"]) {
+            transition: width 0.2s, opacity 0.2s;
+            opacity: 0;
+            width: 0;
+        }
 
-    width: fit-content;
-    transition: background-color 0.2s ease-in-out;
+        &:hover {
+            div:has(> a[data-testid="chip__visit-link"]) {
+                opacity: 1;
+            }
+        }
+
+        &.chip--xs:hover {
+            div:has(> a[data-testid="chip__visit-link"]) {
+                width: 24px;
+            }
+        }
+
+        &.chip--small:hover {
+            div:has(> a[data-testid="chip__visit-link"]) {
+                width: 28px;
+            }
+        }
+
+        &.chip--medium:hover {
+            div:has(> a[data-testid="chip__visit-link"]) {
+                width: 32px;
+            }
+        }
+    }
 
     &:hover {
         background-color: var(--bg-secondary);
     }
 
+    &--error {
+        border: 1px solid var(--R200);
+
+        &:hover {
+            background-color: var(--R50);
+        }
+
+        &:active {
+            background-color: var(--R100);
+        }
+    }
+
+    &--xs {
+        height: 24px;
+    }
+
+    &--small {
+        height: 28px;
+    }
+
+    &--medium {
+        height: 32px;
+    }
+}
+
+button.chip {
     &:active {
         background-color: var(--bg-tertiary);
     }
