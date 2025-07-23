@@ -62,16 +62,14 @@ const Chip = ({
     const fontSize = getFontSize(size)
 
     const renderLabel = (isOnlyLabel = true) => (
-        <div className={`flex dc__gap-4 px-6 ${verticalPadding}`}>
+        <div className={`flex dc__gap-4 px-6 ${verticalPadding} dc__no-shrink dc__mxw-120`}>
             {style === 'error' && isOnlyLabel && <Icon name="ic-error" color="R500" size={iconSize} />}
 
             {(style === 'neutral' || (style === 'error' && !isOnlyLabel)) && startIconProps && (
                 <Icon {...{ ...startIconProps, size: iconSize }} />
             )}
 
-            <span className={`${fontSize} lh-1-5 cn-9 fw-6 dc__open-sans ${isOnlyLabel ? 'dc__truncate' : ''}`}>
-                {label}
-            </span>
+            <span className={`${fontSize} lh-1-5 cn-9 fw-6 dc__open-sans dc__truncate`}>{label}</span>
         </div>
     )
 
