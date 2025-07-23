@@ -18,7 +18,7 @@ const ChipWrapper = ({
     href,
     size,
 }: PropsWithChildren<Required<Pick<ChipProps, 'type' | 'style' | 'onClick' | 'href' | 'size'>>>) => {
-    const baseClassName = `flexbox chip dc__w-fit-content br-4 ${style === 'error' ? 'chip--error' : 'border__primary'} bg__primary dc__transition--background dc__user-select-none dc__overflow-hidden dc__mxw-250 ${`chip--${size} dc__align-items-center`}`
+    const baseClassName = `flexbox chip dc__w-fit-content br-4 ${style === 'error' ? 'chip--error' : 'border__primary'} bg__primary dc__transition--background dc__user-select-none dc__overflow-hidden dc__mxw-250 ${`chip--${size}`}`
 
     if (type === 'button') {
         const childrenArray = Children.toArray(children)
