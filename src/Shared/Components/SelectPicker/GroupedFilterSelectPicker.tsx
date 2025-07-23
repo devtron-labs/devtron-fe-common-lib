@@ -61,7 +61,7 @@ export const GroupedFilterSelectPicker = <T extends string | number>({
     }
 
     return selectedActionMenuItem ? (
-        <div className="w-200">
+        <div className="grouped-filter-select-picker w-200">
             <FilterSelectPicker
                 {...filterSelectPickerPropsMap[selectedActionMenuItem]}
                 menuIsOpen
