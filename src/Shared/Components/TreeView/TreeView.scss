@@ -1,0 +1,40 @@
+.tree-view {
+    &__container {
+        .icon-with-divider {
+            grid-template-rows: 24px auto;
+        }
+
+        @mixin tree-view-divider {
+            .tree-view__divider {
+                background-color: var(--B500);
+                height: 16px;
+                border-radius: 3px;
+            }
+        }
+
+        &--item {
+            &:hover {
+                @include tree-view-divider;
+            }
+        }
+
+        [aria-selected="true"] {
+            @include tree-view-divider;
+
+            .tree-view__container--title {
+                color: var(--B500);
+            }
+        }
+        
+        &--title-wrapper:hover {
+            .title-with-tooltip {
+                text-decoration-line: underline;
+                text-decoration-style: dotted;
+                text-decoration-color: var(--N300);
+                text-decoration-thickness: 12%;
+                text-underline-offset: 20%;
+                text-decoration-skip-ink: auto;
+            }
+        }
+    }
+}

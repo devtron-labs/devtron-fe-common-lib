@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactElement, useCallback, useMemo, useRef, useState } from 'react'
+import { ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
     GroupHeadingProps,
     MultiValueProps,
@@ -225,6 +225,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     labelTippyCustomizedConfig,
     labelTooltipConfig,
     hideFormFieldInfo,
+    autoFocus,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const innerRef = useRef<SelectPickerProps<OptionValue, IsMulti>['selectRef']['current']>(null)
@@ -376,8 +377,12 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         onKeyDown?.(e)
     }
 
-    const handleFocus: ReactSelectProps['onFocus'] = () => {
-        setIsFocussed(true)
+    const handleFocus: ReactSelectProps['onFocus'] = (e) => {
+        if (!shouldRenderTextArea) {
+            setIsFocussed(true)
+        }
+
+        props.onFocus?.(e)
     }
 
     const handleBlur: ReactSelectProps['onFocus'] = (e) => {
@@ -394,6 +399,14 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
 
         props.onChange?.(...params)
     }
+
+    useEffect(() => {
+        if (autoFocus) {
+            setTimeout(() => {
+                selectRef.current?.focus()
+            }, 100)
+        }
+    }, [autoFocus])
 
     return (
         <FormFieldWrapper
@@ -450,6 +463,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         shouldRenderCustomOptions={shouldRenderCustomOptions || false}
                         isMulti={isMulti}
                         ref={selectRef}
+                        autoFocus={autoFocus}
                         components={{
                             IndicatorSeparator: null,
                             LoadingIndicator: null,
@@ -483,7 +497,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         onKeyDown={handleKeyDown}
                         shouldRenderTextArea={shouldRenderTextArea}
                         customDisplayText={customDisplayText}
-                        {...(!shouldRenderTextArea ? { onFocus: handleFocus } : {})}
+                        onFocus={handleFocus}
                         onBlur={handleBlur}
                         onChange={handleChange}
                         controlShouldRenderValue={controlShouldRenderValue}

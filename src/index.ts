@@ -16,6 +16,8 @@
 
 import { OverrideMergeStrategyType } from '@Pages/Applications'
 
+import '@tanstack/react-query'
+
 export interface customEnv {
     SENTRY_ENV?: string
     SENTRY_ERROR_ENABLED?: boolean
@@ -178,12 +180,35 @@ export interface customEnv {
      *  @default true
      */
     FEATURE_INTERNET_CONNECTIVITY_ENABLE?: boolean
+    /**
+     * If true, the grouped app list filters will be shown.
+     *
+     * @default false
+     */
+    FEATURE_GROUPED_APP_LIST_FILTERS_ENABLE?: boolean
 }
 declare global {
     interface Window {
         __BASE_URL__: string
         __ORCHESTRATOR_ROOT__: string
         _env_: customEnv
+    }
+}
+
+declare module '@tanstack/react-query' {
+    export interface QueryMeta {
+        /**
+         * Optional flag indicating whether to display a toast notification for errors.
+         * @default true
+         */
+        showToastError?: boolean
+    }
+    export interface MutationMeta {
+        /**
+         * Optional flag indicating whether to display a toast notification for errors.
+         * @default true
+         */
+        showToastError?: boolean
     }
 }
 

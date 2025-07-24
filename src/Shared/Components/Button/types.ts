@@ -95,6 +95,10 @@ export type ButtonProps<ComponentType extends ButtonComponentType = ButtonCompon
                 onClick?: ButtonHTMLAttributes<HTMLButtonElement>['onClick']
             }) & {
         /**
+         * id of button
+         */
+        id?: string
+        /**
          * Variant of the button
          *
          * @default ButtonVariantType.primary

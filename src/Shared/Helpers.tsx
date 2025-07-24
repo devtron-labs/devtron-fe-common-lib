@@ -63,7 +63,6 @@ import {
     IntersectionOptions,
     Node,
     Nodes,
-    PreventOutsideFocusProps,
     TargetPlatformItemDTO,
     TargetPlatformsDTO,
     WebhookEventNameType,
@@ -108,18 +107,6 @@ export const preventBodyScroll = (lock: boolean): void => {
         document.body.style.overflowY = null
         document.body.style.height = null
         document.documentElement.style.overflow = null
-    }
-}
-
-export const preventOutsideFocus = ({ identifier, preventFocus }: PreventOutsideFocusProps) => {
-    const identifierElement = document.getElementById(identifier)
-    if (!identifierElement) {
-        return
-    }
-    if (preventFocus) {
-        identifierElement.setAttribute('inert', 'true')
-    } else {
-        identifierElement.removeAttribute('inert')
     }
 }
 
@@ -176,6 +163,12 @@ export function versionComparatorBySortOrder(a: string, b: string, orderBy = Sor
 
     return b?.localeCompare(a, undefined, { numeric: true }) ?? 1
 }
+
+export const dateComparatorBySortOrder = (
+    a: string | number | Date,
+    b: string | number | Date,
+    sortOrder: SortingOrder = SortingOrder.ASC,
+): number => (sortOrder === SortingOrder.ASC ? moment(b).diff(moment(a)) : moment(a).diff(moment(b)))
 
 export const getWebhookEventIcon = (eventName: WebhookEventNameType) => {
     switch (eventName) {

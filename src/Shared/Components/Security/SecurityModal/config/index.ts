@@ -16,5 +16,5 @@
 
 export { getProgressingStateForStatus } from './ImageScan'
 export { getInfoCardData } from './InfoCard'
-export { getSidebarData } from './Sidebar'
+export { getSecurityModalSidebarChildFromId, getSecurityModalSidebarId, getSidebarData } from './Sidebar'
 export { getTableData } from './Table'

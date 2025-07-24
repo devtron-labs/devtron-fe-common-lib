@@ -27,3 +27,5 @@ export const HIDE_SUBMIT_BUTTON_UI_SCHEMA = {
         norender: true,
     },
 }
+
+export const RJSF_FORM_SELECT_PORTAL_TARGET_ID = 'rjsf-form-select-portal-target'

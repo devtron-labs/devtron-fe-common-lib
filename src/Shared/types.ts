@@ -925,10 +925,6 @@ export type InitTabType = Omit<CommonTabArgsType, 'type'> &
 
 export interface DynamicTabType extends CommonTabArgsType {
     id: string
-    /**
-     * Id of the last active tab before switching to current tab
-     */
-    lastActiveTabId: string | null
 }
 
 export interface ResourceApprovalPolicyConfigDTO {
@@ -947,11 +943,6 @@ export type ResourceIdToResourceApprovalPolicyConfigMapType = Record<
     ResourceApprovalPolicyConfigType['envId'] | typeof BASE_CONFIGURATION_ENV_ID,
     Pick<ResourceApprovalPolicyConfigType, 'isApprovalApplicable' | 'approvalConfigurationMap'>
 >
-
-export interface PreventOutsideFocusProps {
-    identifier: string
-    preventFocus: boolean
-}
 
 export interface PolicyBlockInfo {
     isBlocked: boolean
