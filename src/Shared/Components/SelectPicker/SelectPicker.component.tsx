@@ -40,8 +40,7 @@ import {
     SelectPickerGroupHeading,
     SelectPickerInput,
     SelectPickerMenuList,
-    SelectPickerMultiValueLabel,
-    SelectPickerMultiValueRemove,
+    SelectPickerMultiValue,
     SelectPickerOption,
     SelectPickerValueContainer,
 } from './common'
@@ -307,9 +306,9 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         [disableDescriptionEllipsis],
     )
 
-    const renderMultiValueLabel = (
-        multiValueLabelProps: MultiValueProps<SelectPickerOptionType<OptionValue>, true>,
-    ) => <SelectPickerMultiValueLabel {...multiValueLabelProps} getIsOptionValid={getIsOptionValid} />
+    const renderMultiValue = (multiValueProps: MultiValueProps<SelectPickerOptionType<OptionValue>, true>) => (
+        <SelectPickerMultiValue {...multiValueProps} getIsOptionValid={getIsOptionValid} />
+    )
 
     const renderGroupHeading = useCallback(
         (groupHeadingProps: GroupHeadingProps<SelectPickerOptionType<OptionValue>>) => (
@@ -473,8 +472,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             MenuList: SelectPickerMenuList,
                             ClearIndicator: SelectPickerClearIndicator,
                             ValueContainer: renderValueContainer,
-                            MultiValueLabel: renderMultiValueLabel,
-                            MultiValueRemove: SelectPickerMultiValueRemove,
+                            MultiValue: renderMultiValue,
                             GroupHeading: renderGroupHeading,
                             NoOptionsMessage: renderNoOptionsMessage,
                             LoadingMessage: renderLoadingMessage,
