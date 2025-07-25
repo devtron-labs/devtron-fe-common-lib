@@ -29,6 +29,7 @@ import { ComponentSizeType } from '@Shared/constants'
 import { ActionMenuProps } from '../ActionMenu'
 import { ButtonComponentType, ButtonProps, ButtonVariantType } from '../Button'
 import { FormFieldWrapperProps } from '../FormFieldWrapper/types'
+import { IconsProps } from '../Icon'
 
 export interface SelectPickerOptionType<OptionValue = string | number, OptionLabel = ReactNode>
     extends OptionType<OptionValue, OptionLabel> {
@@ -39,11 +40,11 @@ export interface SelectPickerOptionType<OptionValue = string | number, OptionLab
     /**
      * Icon at the start of the option
      */
-    startIcon?: ReactElement
+    startIcon?: ReactElement<IconsProps>
     /**
      * Icon at the end of the option
      */
-    endIcon?: ReactElement
+    endIcon?: ReactElement<IconsProps>
     /**
      * Props passed to show the tippy on option
      */
