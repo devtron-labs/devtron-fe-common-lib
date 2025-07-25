@@ -72,6 +72,7 @@ const SearchBar = ({
     dataTestId = 'search-bar',
     noBackgroundAndBorder = false,
     size = ComponentSizeType.medium,
+    keyboardShortcut,
 }: SearchBarProps) => {
     const [showClearButton, setShowClearButton] = useState(!!initialSearchText)
     const inputRef = useRef<HTMLInputElement>()
@@ -141,14 +142,14 @@ const SearchBar = ({
                     {...inputProps}
                     defaultValue={initialSearchText}
                     className={`search-bar__input  dc__position-abs w-100 h-100 br-4 dc__no-border pt-6 pr-10 pb-6 pl-30 fs-13 lh-20 fw-4 cn-9 placeholder-cn5 dc__left-0 ${
-                        showClearButton ? 'pr-30' : 'pr-10'
+                        showClearButton || (!showClearButton && keyboardShortcut) ? 'pr-30' : 'pr-10'
                     } ${noBackgroundAndBorder ? 'dc__no-background' : 'bg__secondary'}`}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     ref={inputCallbackRef}
                 />
                 {/* TODO: Sync with product since it should have ic-enter in case of not applied */}
-                {showClearButton && (
+                {showClearButton ? (
                     <div className="flex search-bar__clear-button dc__position-abs dc__transparent">
                         <Button
                             icon={<ICCross />}
@@ -161,6 +162,12 @@ const SearchBar = ({
                             showAriaLabelInTippy={false}
                         />
                     </div>
+                ) : (
+                    keyboardShortcut && (
+                        <kbd className="icon-dim-20 flex bg__primary border__primary br-2 shadow__key fs-12 lh-20 cn-7 dc__no-shrink dc__position-abs search-bar__kbd-shortcut">
+                            {keyboardShortcut}
+                        </kbd>
+                    )
                 )}
             </div>
         </div>
