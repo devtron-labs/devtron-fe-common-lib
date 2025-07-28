@@ -186,6 +186,11 @@ export interface customEnv {
      * @default false
      */
     FEATURE_GROUPED_APP_LIST_FILTERS_ENABLE?: boolean
+    /**
+     * Show rollout progress if true, else canary step count in status
+     * @default true
+     */
+    FEATURE_CANARY_ROLLOUT_PROGRESS_ENABLE?: boolean
 }
 declare global {
     interface Window {
