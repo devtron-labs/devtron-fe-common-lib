@@ -20,7 +20,7 @@ export const GroupedFilterSelectPicker = <T extends string | number>({
 
     // REFS
     const shouldFocusActionMenuRef = useRef<boolean>(false)
-    const triggerButtonRef = useRef<HTMLButtonElement>()
+    const triggerButtonRef = useRef<HTMLButtonElement | null>(null)
 
     // HOOKS
     const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
@@ -61,7 +61,7 @@ export const GroupedFilterSelectPicker = <T extends string | number>({
     }
 
     return selectedActionMenuItem ? (
-        <div className="w-200">
+        <div className="grouped-filter-select-picker w-200">
             <FilterSelectPicker
                 {...filterSelectPickerPropsMap[selectedActionMenuItem]}
                 menuIsOpen
@@ -76,7 +76,7 @@ export const GroupedFilterSelectPicker = <T extends string | number>({
                 type="button"
                 ref={triggerButtonRef}
                 data-testid={id}
-                className="grouped-filter-select-picker__button dc__transparent px-7 py-5 border__primary br-4 flex dc__gap-6 bg__hover bg__secondary"
+                className="grouped-filter-select-picker__button dc__transparent px-7 py-5 border__primary br-4 flex left dc__gap-6 bg__hover bg__secondary w-100"
             >
                 <Icon name={isFilterApplied ? 'ic-filter-applied' : 'ic-filter'} color="N700" />
                 <span className="fs-12 lh-20 fw-6 cn-9">Filter</span>

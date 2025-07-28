@@ -24,7 +24,7 @@ import { ReactComponent as ICLocked } from '@Icons/ic-locked.svg'
 import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
 import { ReactComponent as ICWarning } from '@Icons/ic-warning.svg'
 import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components'
-import { ComponentSizeType } from '@Shared/constants'
+import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP, ComponentSizeType } from '@Shared/constants'
 
 import { ToastProps, ToastVariantType } from './types'
 
@@ -40,7 +40,8 @@ export const TOAST_BASE_CONFIG: ToastContainerProps = {
     closeButton: ({ closeToast }) => (
         <div className="custom-toast__close-btn">
             <Button
-                icon={<ICCross className="fcn-0" />}
+                // do not use icon component as class is required
+                icon={<ICCross className={`fcn-0 ${ALLOW_ACTION_OUTSIDE_FOCUS_TRAP}`} />}
                 onClick={closeToast}
                 dataTestId="close-toast"
                 ariaLabel="Close toast"

@@ -106,6 +106,17 @@ declare module 'react-select/base' {
          */
         icon?: ReactElement
         /**
+         * Renders the keyboard shortcut key that opens the select picker \
+         * Shortcut key needs to be defined first in order to use it.
+         * @note This is displayed in place of the dropdown indicator
+         */
+        keyboardShortcut?: string
+        /**
+         * If true, checkboxes are shown for options in multi-select mode.
+         * @default true
+         */
+        showCheckboxForMultiSelect?: boolean
+        /**
          * If true, the selected option icon is shown in the container.
          * startIcon has higher priority than endIcon.
          *
@@ -182,6 +193,8 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
             | 'showSelectedOptionIcon'
             | 'renderOptionsFooter'
             | 'shouldRenderTextArea'
+            | 'keyboardShortcut'
+            | 'showCheckboxForMultiSelect'
         >
     > &
     Required<Pick<SelectProps<OptionValue, IsMulti>, 'inputId'>> &
@@ -364,6 +377,6 @@ export interface GroupedFilterSelectPickerProps<T extends string | number = stri
     isFilterApplied?: boolean
     filterSelectPickerPropsMap: Record<
         T,
-        Omit<FilterSelectPickerProps, 'autoFocus' | 'menuIsOpen' | 'onMenuClose' | 'onKeyDown'>
+        Omit<FilterSelectPickerProps, 'autoFocus' | 'menuIsOpen' | 'onMenuClose' | 'onKeyDown' | 'selectRef'>
     >
 }

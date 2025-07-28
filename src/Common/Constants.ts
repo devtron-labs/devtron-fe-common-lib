@@ -19,7 +19,7 @@ export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
 
 export const DOCUMENTATION_HOME_PAGE = 'https://docs.devtron.ai'
 export const DEVTRON_HOME_PAGE = 'https://devtron.ai/'
-export const DOCUMENTATION_VERSION = '/devtron/v0.7'
+export const DOCUMENTATION_VERSION = '/devtron/v1.7'
 export const DISCORD_LINK = 'https://discord.devtron.ai/'
 export const DEFAULT_JSON_SCHEMA_URI = 'https://json-schema.org/draft/2020-12/schema'
 export const LICENSE_DASHBOARD_HOME_PAGE = 'https://license.devtron.ai/dashboard'
@@ -80,7 +80,6 @@ export const URLS = {
     COMPARE_CLUSTERS: '/compare-clusters',
     APP_CONFIG: 'edit',
     GLOBAL_CONFIG: '/global-config',
-    GLOBAL_CONFIG_MANAGE_CATEGORIES: '/global-config/cluster-env/manage-categories',
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP,
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_CREATE: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/create`,
     // NOTE: using appId since we are re-using AppConfig component

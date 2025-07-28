@@ -4,7 +4,7 @@ import { useLocation } from 'react-router-dom'
 import { ComponentSizeType } from '@Shared/constants'
 import { useMainContext } from '@Shared/Providers'
 
-import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
+import { Button, ButtonComponentType, ButtonStyleType, ButtonVariantType } from '../Button'
 import { PageHeader } from '../Header'
 import { Icon } from '../Icon'
 
@@ -14,11 +14,11 @@ const additionalHeaderInfo = (url: string) => () => (
     <div className="ml-12">
         <Button
             dataTestId="open-in-new-tab"
-            ariaLabel="open-in-new-tab"
+            ariaLabel="Open in new tab"
             icon={<Icon name="ic-arrow-square-out" color={null} />}
             variant={ButtonVariantType.borderLess}
+            style={ButtonStyleType.neutral}
             size={ComponentSizeType.xs}
-            showAriaLabelInTippy={false}
             component={ButtonComponentType.anchor}
             anchorProps={{
                 href: url,
