@@ -48,6 +48,7 @@ const Chip = ({
     style = 'neutral',
     type = 'non-interactive',
     onClick,
+    capitalizeLabel = false,
     href,
 }: ChipProps) => {
     const size = getSupportedChipSizes(userSize)
@@ -63,7 +64,9 @@ const Chip = ({
                 <Icon {...{ ...startIconProps, size: iconSize }} />
             )}
 
-            <span className={`${fontSize} cn-9 ${!isOnlyLabel ? 'fw-6' : 'fw-4'} dc__open-sans dc__truncate`}>
+            <span
+                className={`${fontSize} ${capitalizeLabel ? 'dc__capitalize' : ''} cn-9 ${!isOnlyLabel ? 'fw-6' : 'fw-4'} dc__open-sans dc__truncate`}
+            >
                 {label}
             </span>
         </div>

@@ -44,6 +44,7 @@ const FilterChip = ({
                 label={labelToDisplay}
                 value={valueToDisplay as string}
                 onRemove={showRemoveIcon ? removeFilter : null}
+                capitalizeLabel
             />
         )
     )

@@ -22,6 +22,7 @@ export type ChipProps = {
      */
     style?: 'neutral' | 'error'
     startIconProps?: Pick<IconsProps, 'name' | 'color'>
+    capitalizeLabel?: boolean
 } & (
     | {
           type: 'button'
