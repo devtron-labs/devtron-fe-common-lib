@@ -19,6 +19,7 @@ import React, { SyntheticEvent } from 'react'
 import { DTFocusTrapType } from '@Shared/Components/DTFocusTrap'
 
 import { Backdrop, POP_UP_MENU_MODAL_ID } from '../../Shared'
+import { stopPropagation } from '@Common/Helper'
 
 export class VisibleModal extends React.Component<{
     className?: string
@@ -57,7 +58,7 @@ export class VisibleModal extends React.Component<{
                 onClick={this.handleBodyClick}
                 initialFocus={this.props.initialFocus ?? undefined}
             >
-                <div className={this.props.parentClassName}>
+                <div className={this.props.parentClassName} onClick={stopPropagation}>
                     <div className={`visible-modal__body ${this.props.className || ''}`}>{this.props.children}</div>
                 </div>
             </Backdrop>
