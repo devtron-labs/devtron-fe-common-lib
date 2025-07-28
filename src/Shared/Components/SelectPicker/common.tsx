@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ChangeEvent, Children } from 'react'
+import { ChangeEvent, Children, MouseEventHandler } from 'react'
 import {
     ClearIndicatorProps,
     components,
@@ -350,18 +350,13 @@ export const SelectPickerMultiValue = <OptionValue, IsMulti extends boolean>({
     const isOptionValid = getIsOptionValid?.(data) ?? true
     const { startIcon } = data
 
-    const handleRemove = (e) => {
-        e.preventDefault()
-        onClick?.(e)
-    }
-
     return (
         <Chip
             label={String(data.label)}
             style={isOptionValid ? 'neutral' : 'error'}
             size={ComponentSizeType.xs}
             startIconProps={startIcon?.props}
-            onRemove={handleRemove}
+            onRemove={onClick as unknown as MouseEventHandler<HTMLButtonElement>}
         />
     )
 }
