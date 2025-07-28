@@ -17,6 +17,7 @@
 import React, { SyntheticEvent } from 'react'
 import { Backdrop } from '@Shared/Components'
 import { DTFocusTrapType } from '@Shared/Components/DTFocusTrap'
+import { stopPropagation } from '@Common/Helper'
 
 export class VisibleModal2 extends React.Component<{
     className?: string
@@ -39,7 +40,9 @@ export class VisibleModal2 extends React.Component<{
                 onClick={this.handleBodyClick}
                 initialFocus={this.props.initialFocus ?? undefined}
             >
-                <div className={`visible-modal__body ${this.props.className || ''}`}>{this.props.children}</div>
+                <div className={`visible-modal__body ${this.props.className || ''}`} onClick={stopPropagation}>
+                    {this.props.children}
+                </div>
             </Backdrop>
         )
     }
