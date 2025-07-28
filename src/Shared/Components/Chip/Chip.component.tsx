@@ -1,23 +1,16 @@
-import { Children, PropsWithChildren } from 'react'
+import { Children } from 'react'
 import { Link } from 'react-router-dom'
 
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonComponentType, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
-import { ChipProps } from './types'
-import { getFontSize, getIconSize, getRemoveButtonSize, getVerticalPadding } from './utils'
+import { ChipProps, ChipWrapperProps } from './types'
+import { getFontSize, getIconSize, getPadding, getSupportedChipSizes } from './utils'
 
 import './styles.scss'
 
-const ChipWrapper = ({
-    children,
-    type,
-    style,
-    onClick,
-    href,
-    size,
-}: PropsWithChildren<Required<Pick<ChipProps, 'type' | 'style' | 'onClick' | 'href' | 'size'>>>) => {
+const ChipWrapper = ({ children, type, style, onClick, href, size }: ChipWrapperProps) => {
     const baseClassName = `flexbox chip dc__w-fit-content br-4 ${style === 'error' ? 'chip--error' : 'border__primary'} bg__primary dc__transition--background dc__user-select-none dc__overflow-hidden dc__mxw-250 ${`chip--${size}`}`
 
     if (type === 'button') {
@@ -49,7 +42,7 @@ const ChipWrapper = ({
 const Chip = ({
     label,
     startIconProps,
-    size = ComponentSizeType.xs,
+    size: userSize = ComponentSizeType.xs,
     value,
     onRemove,
     style = 'neutral',
@@ -57,19 +50,22 @@ const Chip = ({
     onClick,
     href,
 }: ChipProps) => {
+    const size = getSupportedChipSizes(userSize)
     const iconSize = getIconSize(size)
-    const verticalPadding = getVerticalPadding(size)
+    const padding = getPadding(size)
     const fontSize = getFontSize(size)
 
     const renderLabel = (isOnlyLabel = true) => (
-        <div className={`flex dc__gap-4 px-6 ${verticalPadding} dc__no-shrink dc__mxw-120`}>
+        <div className={`flex dc__gap-4 ${padding} dc__no-shrink dc__mxw-120`}>
             {style === 'error' && isOnlyLabel && <Icon name="ic-error" color="R500" size={iconSize} />}
 
             {(style === 'neutral' || (style === 'error' && !isOnlyLabel)) && startIconProps && (
                 <Icon {...{ ...startIconProps, size: iconSize }} />
             )}
 
-            <span className={`${fontSize} lh-1-5 cn-9 fw-6 dc__open-sans dc__truncate`}>{label}</span>
+            <span className={`${fontSize} cn-9 ${!isOnlyLabel ? 'fw-6' : 'fw-4'} dc__open-sans dc__truncate`}>
+                {label}
+            </span>
         </div>
     )
 
@@ -79,10 +75,10 @@ const Chip = ({
             {renderLabel(!value)}
 
             {value && (
-                <div className={`px-6 flex border__secondary--left dc__gap-4 ${verticalPadding}`}>
+                <div className={`flex border__secondary--left dc__gap-4 ${padding}`}>
                     {style === 'error' && <Icon name="ic-error" color="R500" size={iconSize} />}
 
-                    <span className={`${fontSize} lh-1-5 cn-9 fw-4 dc__open-sans dc__truncate`}>{value}</span>
+                    <span className={`${fontSize} cn-9 fw-4 dc__open-sans dc__truncate`}>{value}</span>
                 </div>
             )}
         </>
@@ -105,7 +101,7 @@ const Chip = ({
                     showAriaLabelInTippy={false}
                     ariaLabel="Remove filter"
                     icon={<Icon name="ic-close-small" color={null} />}
-                    size={getRemoveButtonSize(size)}
+                    size={size}
                     onClick={onRemoveClick}
                 />
             )}
@@ -120,7 +116,7 @@ const Chip = ({
                     showAriaLabelInTippy={false}
                     ariaLabel="Visit link"
                     icon={<Icon name="ic-arrow-square-out" color={null} />}
-                    size={getRemoveButtonSize(size)}
+                    size={size}
                 />
             )}
         </ChipWrapper>

@@ -1,4 +1,4 @@
-import type { MouseEvent } from 'react'
+import type { MouseEvent, PropsWithChildren } from 'react'
 
 import { ComponentSizeType } from '@Shared/constants'
 
@@ -14,7 +14,7 @@ export type ChipProps = {
      * The size of the chip, which determines its padding and icon size.
      * @default ComponentSizeType.xs
      */
-    size?: ComponentSizeType
+    size?: Extract<ComponentSizeType, ComponentSizeType.xs | ComponentSizeType.xxs>
     /**
      * If style is 'error', an error icon will be displayed.
      * If style is 'neutral', a start icon can be provided.
@@ -61,3 +61,7 @@ export type ChipProps = {
 )
 
 export interface GetIconPropsType extends Pick<ChipProps, 'style' | 'startIconProps' | 'size'> {}
+
+export type ChipWrapperProps = PropsWithChildren<
+    Required<Pick<ChipProps, 'type' | 'style' | 'onClick' | 'href' | 'size'>>
+>
