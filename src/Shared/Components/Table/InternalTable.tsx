@@ -187,6 +187,7 @@ const InternalTable = <
             <Wrapper
                 areRowsLoading={areFilteredRowsLoading}
                 clearFilters={clearFilters}
+                rows={rows}
                 filteredRows={filteredRows}
                 handleSearch={handleSearch}
                 updateSearchParams={noop}
