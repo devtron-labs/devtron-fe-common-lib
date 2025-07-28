@@ -103,6 +103,14 @@ const Chip = ({
                     icon={<Icon name="ic-close-small" color={null} />}
                     size={size}
                     onClick={onRemoveClick}
+                    buttonProps={{
+                        onMouseDown: (e) => {
+                            // NOTE: in react-select when using as MultiValue component, need to stop propagation
+                            // to prevent the select from toggling the menu state
+                            e.preventDefault()
+                            e.stopPropagation()
+                        },
+                    }}
                 />
             )}
 
