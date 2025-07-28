@@ -64,4 +64,10 @@ export interface SearchBarProps {
      * @default 'ComponentSizeType.medium'
      */
     size?: ComponentSizeType.medium | ComponentSizeType.large
+    /**
+     * Renders the keyboard shortcut key that opens the select picker \
+     * Shortcut key needs to be defined first in order to use it.
+     * @note This is displayed in place of the dropdown indicator
+     */
+    keyboardShortcut?: string
 }

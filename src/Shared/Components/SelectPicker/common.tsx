@@ -70,8 +70,12 @@ export const SelectPickerDropdownIndicator = <OptionValue,>(
 ) => {
     const {
         isDisabled,
-        selectProps: { isLoading },
+        selectProps: { isLoading, keyboardShortcut },
     } = props
+
+    if (keyboardShortcut) {
+        return null
+    }
 
     return (
         <components.DropdownIndicator {...props}>
@@ -96,7 +100,7 @@ export const SelectPickerControl = <OptionValue,>(props: ControlProps<SelectPick
     const {
         children,
         getValue,
-        selectProps: { icon, showSelectedOptionIcon },
+        selectProps: { icon, showSelectedOptionIcon, keyboardShortcut },
     } = props
     const { startIcon, endIcon } = getValue()?.[0] ?? {}
 
@@ -112,6 +116,11 @@ export const SelectPickerControl = <OptionValue,>(props: ControlProps<SelectPick
                 <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{iconToDisplay}</div>
             )}
             {children}
+            {keyboardShortcut && (
+                <kbd className="icon-dim-20 flex bg__primary border__primary br-2 shadow__key fs-12 lh-20 cn-7 dc__no-shrink">
+                    {keyboardShortcut}
+                </kbd>
+            )}
         </components.Control>
     )
 }
@@ -188,7 +197,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
     const {
         label,
         data,
-        selectProps: { isMulti },
+        selectProps: { isMulti, showCheckboxForMultiSelect },
         selectOption,
         isDisabled,
         isSelected,
@@ -210,7 +219,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
         <components.Option {...props}>
             <Tooltip {...getTooltipProps(tooltipProps)}>
                 <div className="flexbox dc__align-items-center dc__gap-8">
-                    {isMulti && !isCreatableOption && (
+                    {isMulti && showCheckboxForMultiSelect && !isCreatableOption && (
                         <Checkbox
                             onChange={noop}
                             onClick={handleChange}

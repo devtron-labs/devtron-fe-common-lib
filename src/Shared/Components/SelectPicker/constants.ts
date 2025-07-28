@@ -40,3 +40,11 @@ export const SELECT_PICKER_CONTROL_SIZE_MAP: Record<SelectPickerProps['size'], C
     [ComponentSizeType.large]: '36px',
     [ComponentSizeType.xl]: '36px',
 }
+
+export const SELECT_PICKER_MULTI_VALUE_LABEL_SIZE_MAP: Record<SelectPickerProps['size'], CSSProperties['lineHeight']> =
+    {
+        [ComponentSizeType.small]: '16px',
+        [ComponentSizeType.medium]: '16px',
+        [ComponentSizeType.large]: '20px',
+        [ComponentSizeType.xl]: '20px',
+    }
