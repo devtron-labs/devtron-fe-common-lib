@@ -1,42 +1,40 @@
 import { ComponentSizeType } from '@Shared/constants'
 
-export const getIconSize = (size: ComponentSizeType) => {
+import { ChipProps } from './types'
+
+export const getIconSize = (size: ChipProps['size']) => {
     switch (size) {
-        case ComponentSizeType.medium:
-            return 20
-        case ComponentSizeType.small:
-            return 18
+        case ComponentSizeType.xxs:
+            return 14
         default:
             return 16
     }
 }
 
-export const getVerticalPadding = (size: ComponentSizeType) => {
+export const getPadding = (size: ChipProps['size']) => {
+    const baseVerticalPadding = 'py-2'
+
     switch (size) {
-        case ComponentSizeType.medium:
-            return 'py-6'
-        case ComponentSizeType.small:
-            return 'py-4'
+        case ComponentSizeType.xxs:
+            return `px-4 ${baseVerticalPadding}`
         default:
-            return 'py-1'
+            return `px-6 ${baseVerticalPadding}`
     }
 }
 
-export const getRemoveButtonSize = (size: ComponentSizeType) => {
-    if (size !== ComponentSizeType.medium && size !== ComponentSizeType.small) {
+export const getFontSize = (size: ChipProps['size']) => {
+    switch (size) {
+        case ComponentSizeType.xxs:
+            return 'fs-12 lh-16'
+        default:
+            return 'fs-12 lh-20'
+    }
+}
+
+export const getSupportedChipSizes = (size: ComponentSizeType) => {
+    if (size !== ComponentSizeType.xs && size !== ComponentSizeType.xxs) {
         return ComponentSizeType.xs
     }
 
     return size
-}
-
-export const getFontSize = (size: ComponentSizeType) => {
-    switch (size) {
-        case ComponentSizeType.medium:
-            return 'fs-13'
-        case ComponentSizeType.small:
-            return 'fs-12'
-        default:
-            return 'fs-11'
-    }
 }

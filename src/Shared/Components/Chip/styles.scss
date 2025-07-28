@@ -1,7 +1,6 @@
 .chip {
+    --xxs-size: 20px;
     --xs-size: 24px;
-    --small-size: 28px;
-    --medium-size: 32px;
 
     div>button[data-testid="chip__remove-btn"],
     div>a[data-testid="chip__visit-link"] {
@@ -28,15 +27,9 @@
             }
         }
 
-        &.chip--small:hover {
+        &.chip--xxs:hover {
             div:has(> a[data-testid="chip__visit-link"]) {
-                width: var(--small-size);
-            }
-        }
-
-        &.chip--medium:hover {
-            div:has(> a[data-testid="chip__visit-link"]) {
-                width: var(--medium-size);
+                width: var(--xxs-size);
             }
         }
     }
@@ -69,11 +62,7 @@
         height: var(--xs-size);
     }
 
-    &--small {
-        height: var(--small-size);
-    }
-
-    &--medium {
-        height: var(--medium-size);
+    &--xxs {
+        height: var(--xxs-size);
     }
 }
