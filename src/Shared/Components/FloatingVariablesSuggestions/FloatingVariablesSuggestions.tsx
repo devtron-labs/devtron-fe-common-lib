@@ -21,6 +21,7 @@ import Tippy from '@tippyjs/react'
 import { ReactComponent as ICDrag } from '@Icons/ic-drag.svg'
 import { useAsync } from '@Common/Helper'
 import { useWindowSize } from '@Common/Hooks'
+import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP } from '@Shared/constants'
 
 import { Icon } from '../Icon'
 import { SUGGESTIONS_SIZE } from './constants'
@@ -192,7 +193,7 @@ const FloatingVariablesSuggestions = ({
 
                     <Tippy content="Scoped variables" placement="top" className="default-tt" arrow={false}>
                         <button
-                            className="dc__outline-none-imp dc__no-border p-0 bcn-7 h-20"
+                            className={`dc__outline-none-imp dc__no-border p-0 bcn-7 h-20 ${ALLOW_ACTION_OUTSIDE_FOCUS_TRAP}`}
                             type="button"
                             onClick={handleActivation}
                             data-testid="activate-suggestions"
@@ -215,7 +216,7 @@ const FloatingVariablesSuggestions = ({
             onDrag={handleExpandedDrag}
         >
             <div
-                className="flex column dc__no-shrink w-356 dc__content-space dc__border-radius-8-imp dc__border dc__overflow-hidden dc__position-abs mxh-504 bg__overlay--primary"
+                className={`flex column dc__no-shrink w-356 dc__content-space dc__border-radius-8-imp dc__border dc__overflow-hidden dc__position-abs mxh-504 bg__overlay--primary ${ALLOW_ACTION_OUTSIDE_FOCUS_TRAP}`}
                 style={{
                     zIndex,
                     boxShadow: '0px 4px 8px 0px rgba(0, 0, 0, 0.25)',
