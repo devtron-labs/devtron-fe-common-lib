@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
 import { ComponentSizeType } from '@Shared/constants'
 
 export interface SearchBarProps {
@@ -69,5 +70,5 @@ export interface SearchBarProps {
      * Shortcut key needs to be defined first in order to use it.
      * @note This is displayed in place of the dropdown indicator
      */
-    keyboardShortcut?: string
+    keyboardShortcut?: SupportedKeyboardKeysType
 }
