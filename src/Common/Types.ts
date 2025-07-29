@@ -332,7 +332,6 @@ export interface PopupMenuBodyType {
 export interface ModalType {
     style?: React.CSSProperties
     children?: ReactNode
-    modal?: boolean
     rootClassName?: string
     onClick?: any
     callbackRef?: (element?: any) => any

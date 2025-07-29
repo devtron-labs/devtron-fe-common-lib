@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+export * from './ClusterMap'
 export * from './constants'
 export { default as ForceDeleteOption } from './ForceDeleteOption'
 export * from './Helper'
