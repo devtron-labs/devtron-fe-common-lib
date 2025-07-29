@@ -82,7 +82,7 @@ const InternalTable = <
                     const tableElement = wrapperDivRef.current?.getElementsByClassName(
                         'generic-table',
                     )?.[0] as HTMLDivElement
-                    tableElement?.focus()
+                    tableElement?.focus({ preventScroll: true })
                 }
             }, 0)
         }
