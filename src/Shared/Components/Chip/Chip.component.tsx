@@ -1,6 +1,7 @@
 import { Children } from 'react'
 import { Link } from 'react-router-dom'
 
+import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonComponentType, ButtonStyleType, ButtonVariantType } from '../Button'
@@ -64,11 +65,13 @@ const Chip = ({
                 <Icon {...{ ...startIconProps, size: iconSize }} />
             )}
 
-            <span
-                className={`${fontSize} ${capitalizeLabel ? 'dc__capitalize' : ''} cn-9 ${!isOnlyLabel ? 'fw-6' : 'fw-4'} dc__open-sans dc__truncate`}
-            >
-                {label}
-            </span>
+            <Tooltip content={label}>
+                <span
+                    className={`${fontSize} ${capitalizeLabel ? 'dc__capitalize' : ''} cn-9 ${!isOnlyLabel ? 'fw-6' : 'fw-4'} dc__open-sans dc__truncate`}
+                >
+                    {label}
+                </span>
+            </Tooltip>
         </div>
     )
 
@@ -81,7 +84,9 @@ const Chip = ({
                 <div className={`flex border__secondary--left dc__gap-4 ${padding}`}>
                     {style === 'error' && <Icon name="ic-error" color="R500" size={iconSize} />}
 
-                    <span className={`${fontSize} cn-9 fw-4 dc__open-sans dc__truncate`}>{value}</span>
+                    <Tooltip content={value}>
+                        <span className={`${fontSize} cn-9 fw-4 dc__open-sans dc__truncate`}>{value}</span>
+                    </Tooltip>
                 </div>
             )}
         </>
