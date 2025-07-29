@@ -1,0 +1,68 @@
+.chip {
+    --xxs-size: 20px;
+    --xs-size: 24px;
+
+    div>button[data-testid="chip__remove-btn"],
+    div>a[data-testid="chip__visit-link"] {
+        border-radius: 0;
+        margin-right: -1px;
+    }
+
+    &--link {
+        div:has(> a[data-testid="chip__visit-link"]) {
+            transition: width 0.2s, opacity 0.2s;
+            opacity: 0;
+            width: 0;
+        }
+
+        &:hover {
+            div:has(> a[data-testid="chip__visit-link"]) {
+                opacity: 1;
+            }
+        }
+
+        &.chip--xs:hover {
+            div:has(> a[data-testid="chip__visit-link"]) {
+                width: var(--xs-size);
+            }
+        }
+
+        &.chip--xxs:hover {
+            div:has(> a[data-testid="chip__visit-link"]) {
+                width: var(--xxs-size);
+            }
+        }
+    }
+
+    &:hover {
+        background-color: var(--bg-secondary);
+    }
+
+    &--error {
+        border: 1px solid var(--R200);
+
+        &:hover {
+            background-color: var(--R50);
+        }
+    }
+
+    &--button {
+        &:active {
+            background-color: var(--bg-tertiary);
+        }
+
+        &.chip--error {
+            &:active {
+                background-color: var(--R100);
+            }
+        }
+    }
+
+    &--xs {
+        height: var(--xs-size);
+    }
+
+    &--xxs {
+        height: var(--xxs-size);
+    }
+}

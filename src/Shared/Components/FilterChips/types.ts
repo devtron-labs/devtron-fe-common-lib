@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import { ReactNode } from 'react'
-
 export interface FilterChipProps {
     /**
      * Filter label
@@ -32,11 +30,11 @@ export interface FilterChipProps {
     /**
      * If passed, the label will be formatted accordingly
      */
-    getFormattedLabel?: (filterKey: string) => ReactNode
+    getFormattedLabel?: (filterKey: string) => string
     /**
      * If passed, the label will be formatted accordingly
      */
-    getFormattedValue?: (filterKey: string, filterValue: unknown) => ReactNode
+    getFormattedValue?: (filterKey: string, filterValue: unknown) => string
     showRemoveIcon: boolean
     /**
      * If true, would hide the label
