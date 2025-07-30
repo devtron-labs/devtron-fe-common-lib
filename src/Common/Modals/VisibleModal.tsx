@@ -58,7 +58,7 @@ export class VisibleModal extends React.Component<{
                 onClick={this.handleBodyClick}
                 initialFocus={this.props.initialFocus ?? undefined}
             >
-                <div className={this.props.parentClassName} onClick={stopPropagation}>
+                <div className={this.props.parentClassName}>
                     <div className={`visible-modal__body ${this.props.className || ''}`}>{this.props.children}</div>
                 </div>
             </Backdrop>
