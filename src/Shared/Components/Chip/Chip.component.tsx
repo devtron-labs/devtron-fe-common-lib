@@ -43,6 +43,7 @@ const ChipWrapper = ({ children, type, style, onClick, href, size }: ChipWrapper
 const Chip = ({
     label,
     startIconProps,
+    startIcon,
     size: userSize = ComponentSizeType.xs,
     value,
     onRemove,
@@ -57,13 +58,19 @@ const Chip = ({
     const padding = getPadding(size)
     const fontSize = getFontSize(size)
 
+    const renderIcon = () => {
+        if (startIconProps) {
+            return <Icon {...{ ...startIconProps, size: iconSize }} />
+        }
+
+        return startIcon ?? null
+    }
+
     const renderLabel = (isOnlyLabel = true) => (
         <div className={`flex dc__gap-4 ${padding} dc__no-shrink dc__mxw-120`}>
             {style === 'error' && isOnlyLabel && <Icon name="ic-error" color="R500" size={iconSize} />}
 
-            {(style === 'neutral' || (style === 'error' && !isOnlyLabel)) && startIconProps && (
-                <Icon {...{ ...startIconProps, size: iconSize }} />
-            )}
+            {(style === 'neutral' || (style === 'error' && !isOnlyLabel)) && renderIcon()}
 
             <Tooltip content={label}>
                 <span

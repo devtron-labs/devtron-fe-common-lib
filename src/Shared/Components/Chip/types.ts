@@ -3,6 +3,7 @@ import type { MouseEvent, PropsWithChildren } from 'react'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { IconsProps } from '../Icon'
+import { SelectPickerOptionType } from '../SelectPicker'
 
 export type ChipProps = {
     /**
@@ -21,7 +22,6 @@ export type ChipProps = {
      * @default 'neutral'
      */
     style?: 'neutral' | 'error'
-    startIconProps?: Pick<IconsProps, 'name' | 'color'>
     capitalizeLabel?: boolean
 } & (
     | {
@@ -59,7 +59,17 @@ export type ChipProps = {
            */
           onRemove?: (event: MouseEvent<HTMLButtonElement>) => void
       }
-)
+) &
+    (
+        | {
+              startIconProps?: Pick<IconsProps, 'name' | 'color'>
+              startIcon?: never
+          }
+        | {
+              startIconProps?: never
+              startIcon?: SelectPickerOptionType['startIcon']
+          }
+    )
 
 export interface GetIconPropsType extends Pick<ChipProps, 'style' | 'startIconProps' | 'size'> {}
 
