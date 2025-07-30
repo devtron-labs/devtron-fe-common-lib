@@ -10,8 +10,6 @@ import { getTooltipProps } from '../SelectPicker/common'
 import { TrailingItem } from '../TrailingItem'
 import { ActionMenuItemProps } from './types'
 
-const COMMON_ACTION_MENU_ITEM_CLASS = 'w-100 flex left top dc__gap-8 py-6 px-8'
-
 export const ActionMenuItem = <T extends string | number>({
     item,
     itemRef,
@@ -43,9 +41,13 @@ export const ActionMenuItem = <T extends string | number>({
 
     // CONSTANTS
     const isNegativeType = type === 'negative'
+    const COMMON_ACTION_MENU_ITEM_CLASS = `w-100 flex left top dc__gap-8 py-6 px-8 ${isDisabled ? 'dc__disabled' : 'cursor'}`
 
     // HANDLERS
     const handleClick = (e: MouseEvent<HTMLAnchorElement> | MouseEvent<HTMLButtonElement>) => {
+        if (isDisabled) {
+            return
+        }
         onClick(item, e)
     }
 
@@ -100,6 +102,7 @@ export const ActionMenuItem = <T extends string | number>({
                         target="_blank"
                         rel="noreferrer"
                         onClick={handleClick}
+                        aria-disabled={isDisabled}
                     >
                         {renderContent()}
                     </a>
@@ -111,6 +114,7 @@ export const ActionMenuItem = <T extends string | number>({
                         className={COMMON_ACTION_MENU_ITEM_CLASS}
                         to={item.to}
                         onClick={handleClick}
+                        aria-disabled={isDisabled}
                     >
                         {renderContent()}
                     </Link>
@@ -123,6 +127,7 @@ export const ActionMenuItem = <T extends string | number>({
                         type="button"
                         className={`dc__transparent ${COMMON_ACTION_MENU_ITEM_CLASS}`}
                         onClick={handleClick}
+                        disabled={isDisabled}
                     >
                         {renderContent()}
                     </button>
@@ -139,7 +144,7 @@ export const ActionMenuItem = <T extends string | number>({
                 onMouseEnter={onMouseEnter}
                 tabIndex={-1}
                 // Intentionally added margin to the left and right to have the gap on the edges of the options
-                className={`action-menu__option br-4 mr-4 ml-4 ${isDisabled ? 'dc__disabled' : 'cursor'} ${isNegativeType ? 'dc__hover-r50' : 'dc__hover-n50'} ${isFocused ? `action-menu__option--focused${isNegativeType ? '-negative' : ''}` : ''}`}
+                className={`action-menu__option br-4 mr-4 ml-4 ${(!isDisabled && (isNegativeType ? 'dc__hover-r50' : 'dc__hover-n50')) || ''} ${isFocused ? `action-menu__option--focused${isNegativeType ? '-negative' : ''}` : ''}`}
                 aria-disabled={isDisabled}
             >
                 {renderComponent()}

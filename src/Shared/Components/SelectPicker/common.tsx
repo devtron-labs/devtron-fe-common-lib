@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ChangeEvent, Children } from 'react'
+import { ChangeEvent, Children, MouseEventHandler } from 'react'
 import {
     ClearIndicatorProps,
     components,
@@ -24,14 +24,12 @@ import {
     MenuListProps,
     MultiValue,
     MultiValueProps,
-    MultiValueRemoveProps,
     OptionProps,
     ValueContainerProps,
 } from 'react-select'
 
 import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
-import { ReactComponent as ICErrorExclamation } from '@Icons/ic-error-exclamation.svg'
 import { Checkbox } from '@Common/Checkbox'
 import { ReactSelectInputAction } from '@Common/Constants'
 import { noop } from '@Common/Helper'
@@ -42,6 +40,7 @@ import { ComponentSizeType } from '@Shared/constants'
 import { isNullOrUndefined } from '@Shared/Helpers'
 
 import { Button, ButtonProps, ButtonVariantType } from '../Button'
+import { Chip } from '../Chip'
 import { Icon } from '../Icon'
 import { SelectPickerGroupHeadingProps, SelectPickerOptionType, SelectPickerProps } from './type'
 import { getGroupCheckboxValue } from './utils'
@@ -71,8 +70,12 @@ export const SelectPickerDropdownIndicator = <OptionValue,>(
 ) => {
     const {
         isDisabled,
-        selectProps: { isLoading },
+        selectProps: { isLoading, keyboardShortcut },
     } = props
+
+    if (keyboardShortcut) {
+        return null
+    }
 
     return (
         <components.DropdownIndicator {...props}>
@@ -97,7 +100,7 @@ export const SelectPickerControl = <OptionValue,>(props: ControlProps<SelectPick
     const {
         children,
         getValue,
-        selectProps: { icon, showSelectedOptionIcon },
+        selectProps: { icon, showSelectedOptionIcon, keyboardShortcut },
     } = props
     const { startIcon, endIcon } = getValue()?.[0] ?? {}
 
@@ -113,6 +116,11 @@ export const SelectPickerControl = <OptionValue,>(props: ControlProps<SelectPick
                 <div className="dc__no-shrink icon-dim-20 flex dc__fill-available-space">{iconToDisplay}</div>
             )}
             {children}
+            {keyboardShortcut && (
+                <kbd className="icon-dim-20 flex bg__primary border__primary br-2 shadow__key fs-12 lh-20 cn-7 dc__no-shrink">
+                    {keyboardShortcut}
+                </kbd>
+            )}
         </components.Control>
     )
 }
@@ -189,7 +197,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
     const {
         label,
         data,
-        selectProps: { isMulti },
+        selectProps: { isMulti, showCheckboxForMultiSelect },
         selectOption,
         isDisabled,
         isSelected,
@@ -211,7 +219,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
         <components.Option {...props}>
             <Tooltip {...getTooltipProps(tooltipProps)}>
                 <div className="flexbox dc__align-items-center dc__gap-8">
-                    {isMulti && !isCreatableOption && (
+                    {isMulti && showCheckboxForMultiSelect && !isCreatableOption && (
                         <Checkbox
                             onChange={noop}
                             onClick={handleChange}
@@ -339,36 +347,28 @@ export const SelectPickerMenuList = <OptionValue,>(props: MenuListProps<SelectPi
     )
 }
 
-export const SelectPickerMultiValueLabel = <OptionValue, IsMulti extends boolean>({
+export const SelectPickerMultiValue = <OptionValue, IsMulti extends boolean>({
     getIsOptionValid,
     ...props
 }: MultiValueProps<SelectPickerOptionType<OptionValue>, true> &
     Pick<SelectPickerProps<OptionValue, IsMulti>['multiSelectProps'], 'getIsOptionValid'>) => {
-    const { data, selectProps } = props
-    const isOptionValid = getIsOptionValid(data)
-    const iconToDisplay = isOptionValid ? ((data.startIcon || data.endIcon) ?? null) : <ICErrorExclamation />
+    const {
+        data,
+        removeProps: { onClick },
+    } = props
+    const isOptionValid = getIsOptionValid?.(data) ?? true
+    const { startIcon } = data
 
     return (
-        <div className="flex dc__gap-4 mw-0 dc__truncate">
-            {iconToDisplay && (
-                <div
-                    className={`dc__no-shrink ${selectProps.isMulti ? 'icon-dim-16' : 'icon-dim-20'} flex dc__fill-available-space`}
-                >
-                    {iconToDisplay}
-                </div>
-            )}
-            <components.MultiValueLabel {...props} />
-        </div>
+        <Chip
+            label={String(data.label)}
+            style={isOptionValid ? 'neutral' : 'error'}
+            size={ComponentSizeType.xs}
+            startIconProps={startIcon?.props}
+            onRemove={onClick as unknown as MouseEventHandler<HTMLButtonElement>}
+        />
     )
 }
-
-export const SelectPickerMultiValueRemove = (props: MultiValueRemoveProps) => (
-    <components.MultiValueRemove {...props}>
-        <span className="flex dc__no-shrink">
-            <ICClose className="icon-dim-12 icon-use-fill-n6" />
-        </span>
-    </components.MultiValueRemove>
-)
 
 export const SelectPickerGroupHeading = <OptionValue,>({
     isGroupHeadingSelectable,

@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "1.18.0-alpha-1",
+    "version": "1.18.1-pre-4",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -41,6 +41,7 @@
         "@laynezh/vite-plugin-lib-assets": "1.1.0",
         "@sentry/browser": "^7.119.1",
         "@tanstack/eslint-plugin-query": "<5",
+        "@tanstack/react-query-devtools": "<5",
         "@testing-library/jest-dom": "^5.16.2",
         "@testing-library/react": "^12.1.4",
         "@tippyjs/react": "^4.2.0",

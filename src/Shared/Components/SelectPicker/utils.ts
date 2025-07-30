@@ -20,7 +20,12 @@ import { noop } from '@Common/Helper'
 import { CHECKBOX_VALUE } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 
-import { SELECT_PICKER_CONTROL_SIZE_MAP, SELECT_PICKER_FONT_SIZE_MAP, SELECT_PICKER_ICON_SIZE_MAP } from './constants'
+import {
+    SELECT_PICKER_CONTROL_SIZE_MAP,
+    SELECT_PICKER_FONT_SIZE_MAP,
+    SELECT_PICKER_ICON_SIZE_MAP,
+    SELECT_PICKER_MULTI_VALUE_LABEL_SIZE_MAP,
+} from './constants'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 
 const getMenuWidthFromSize = <OptionValue, IsMulti extends boolean>(
@@ -268,7 +273,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
             color: 'var(--N900)',
             fontSize: '12px',
             fontWeight: 400,
-            lineHeight: '20px',
+            lineHeight: SELECT_PICKER_MULTI_VALUE_LABEL_SIZE_MAP[size],
             padding: 0,
             paddingLeft: 0,
         }),

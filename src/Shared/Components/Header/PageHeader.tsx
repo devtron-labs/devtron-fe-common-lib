@@ -183,41 +183,43 @@ const PageHeader = ({
         >
             <h1 className="dc__page-header__title dc__content-space flex fs-16 fw-6 lh-20 h-48">
                 <div className="flex left">
-                    <div className="flex left dc__gap-12">
-                        {!!onClose && (
-                            <Button
-                                dataTestId="page-header-close-button"
-                                ariaLabel="page-header-close-button"
-                                icon={<Icon name="ic-close-large" color={null} />}
-                                variant={ButtonVariantType.secondary}
-                                style={ButtonStyleType.neutral}
-                                size={ComponentSizeType.xs}
-                                onClick={onClose}
-                                showAriaLabelInTippy={false}
-                            />
-                        )}
-                        {(headerImage || headerName) && (
-                            <div className="flex left dc__gap-8">
-                                {headerImage && (
-                                    <ImageWithFallback
-                                        imageProps={{
-                                            className: 'dc__no-shrink icon-dim-24',
-                                            height: 24,
-                                            width: 24,
-                                            src: headerImage,
-                                            alt: 'header-image',
-                                        }}
-                                        fallbackImage={headerImage}
-                                    />
-                                )}
-                                {headerName && (
-                                    <span className="fw-6" data-testid="main-header">
-                                        {headerName}
-                                    </span>
-                                )}
-                            </div>
-                        )}
-                    </div>
+                    {(headerImage || headerName || onClose) && (
+                        <div className="flex left dc__gap-12">
+                            {!!onClose && (
+                                <Button
+                                    dataTestId="page-header-close-button"
+                                    ariaLabel="page-header-close-button"
+                                    icon={<Icon name="ic-close-large" color={null} />}
+                                    variant={ButtonVariantType.secondary}
+                                    style={ButtonStyleType.negativeGrey}
+                                    size={ComponentSizeType.xs}
+                                    onClick={onClose}
+                                    showAriaLabelInTippy={false}
+                                />
+                            )}
+                            {(headerImage || headerName) && (
+                                <div className="flex left dc__gap-8">
+                                    {headerImage && (
+                                        <ImageWithFallback
+                                            imageProps={{
+                                                className: 'dc__no-shrink icon-dim-24',
+                                                height: 24,
+                                                width: 24,
+                                                src: headerImage,
+                                                alt: 'header-image',
+                                            }}
+                                            fallbackImage={headerImage}
+                                        />
+                                    )}
+                                    {headerName && (
+                                        <span className="fw-6" data-testid="main-header">
+                                            {headerName}
+                                        </span>
+                                    )}
+                                </div>
+                            )}
+                        </div>
+                    )}
                     {additionalHeaderInfo && additionalHeaderInfo()}
                     {isBreadcrumbs && breadCrumbs()}
                     {tippyProps &&

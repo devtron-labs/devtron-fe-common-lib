@@ -29,8 +29,10 @@ import { ComponentSizeType } from '@Shared/constants'
 import { ActionMenuProps } from '../ActionMenu'
 import { ButtonComponentType, ButtonProps, ButtonVariantType } from '../Button'
 import { FormFieldWrapperProps } from '../FormFieldWrapper/types'
+import { IconsProps } from '../Icon'
 
-export interface SelectPickerOptionType<OptionValue = string | number> extends OptionType<OptionValue, ReactNode> {
+export interface SelectPickerOptionType<OptionValue = string | number, OptionLabel = ReactNode>
+    extends OptionType<OptionValue, OptionLabel> {
     /**
      * Description to be displayed for the option
      */
@@ -38,11 +40,11 @@ export interface SelectPickerOptionType<OptionValue = string | number> extends O
     /**
      * Icon at the start of the option
      */
-    startIcon?: ReactElement
+    startIcon?: ReactElement<IconsProps>
     /**
      * Icon at the end of the option
      */
-    endIcon?: ReactElement
+    endIcon?: ReactElement<IconsProps>
     /**
      * Props passed to show the tippy on option
      */
@@ -105,6 +107,17 @@ declare module 'react-select/base' {
          * Icon to be rendered in the control
          */
         icon?: ReactElement
+        /**
+         * Renders the keyboard shortcut key that opens the select picker \
+         * Shortcut key needs to be defined first in order to use it.
+         * @note This is displayed in place of the dropdown indicator
+         */
+        keyboardShortcut?: string
+        /**
+         * If true, checkboxes are shown for options in multi-select mode.
+         * @default true
+         */
+        showCheckboxForMultiSelect?: boolean
         /**
          * If true, the selected option icon is shown in the container.
          * startIcon has higher priority than endIcon.
@@ -182,6 +195,8 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
             | 'showSelectedOptionIcon'
             | 'renderOptionsFooter'
             | 'shouldRenderTextArea'
+            | 'keyboardShortcut'
+            | 'showCheckboxForMultiSelect'
         >
     > &
     Required<Pick<SelectProps<OptionValue, IsMulti>, 'inputId'>> &
@@ -364,6 +379,6 @@ export interface GroupedFilterSelectPickerProps<T extends string | number = stri
     isFilterApplied?: boolean
     filterSelectPickerPropsMap: Record<
         T,
-        Omit<FilterSelectPickerProps, 'autoFocus' | 'menuIsOpen' | 'onMenuClose' | 'onKeyDown'>
+        Omit<FilterSelectPickerProps, 'autoFocus' | 'menuIsOpen' | 'onMenuClose' | 'onKeyDown' | 'selectRef'>
     >
 }

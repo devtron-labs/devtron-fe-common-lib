@@ -199,6 +199,7 @@ export type ViewWrapperProps<
         Partial<ConfigurableColumnsType<RowData, FilterVariant, AdditionalProps>> & {
             areRowsLoading: boolean
             filteredRows: RowsType<RowData> | null
+            rows: RowsType<RowData> | null
         } & (FilterVariant extends FiltersTypeEnum.URL
             ? Pick<UseUrlFiltersReturnType<string>, 'updateSearchParams'>
             : {})

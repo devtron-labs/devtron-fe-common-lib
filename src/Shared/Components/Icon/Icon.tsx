@@ -18,6 +18,7 @@ import { ReactComponent as ICAther } from '@IconsV2/ic-ather.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICAzureAks } from '@IconsV2/ic-azure-aks.svg'
 import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
+import { ReactComponent as ICBgEnvironment } from '@IconsV2/ic-bg-environment.svg'
 import { ReactComponent as ICBharatpe } from '@IconsV2/ic-bharatpe.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBookOpen } from '@IconsV2/ic-book-open.svg'
@@ -133,6 +134,7 @@ import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
 import { ReactComponent as ICLego } from '@IconsV2/ic-lego.svg'
 import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
 import { ReactComponent as ICLightningFill } from '@IconsV2/ic-lightning-fill.svg'
+import { ReactComponent as ICLink } from '@IconsV2/ic-link.svg'
 import { ReactComponent as ICLinkedBuildColor } from '@IconsV2/ic-linked-build-color.svg'
 import { ReactComponent as ICListBullets } from '@IconsV2/ic-list-bullets.svg'
 import { ReactComponent as ICLivspace } from '@IconsV2/ic-livspace.svg'
@@ -242,6 +244,7 @@ export const iconMap = {
     'ic-azure-aks': ICAzureAks,
     'ic-azure': ICAzure,
     'ic-bg-cluster': ICBgCluster,
+    'ic-bg-environment': ICBgEnvironment,
     'ic-bharatpe': ICBharatpe,
     'ic-bitbucket': ICBitbucket,
     'ic-book-open': ICBookOpen,
@@ -357,6 +360,7 @@ export const iconMap = {
     'ic-lego': ICLego,
     'ic-lightning-fill': ICLightningFill,
     'ic-lightning': ICLightning,
+    'ic-link': ICLink,
     'ic-linked-build-color': ICLinkedBuildColor,
     'ic-list-bullets': ICListBullets,
     'ic-livspace': ICLivspace,

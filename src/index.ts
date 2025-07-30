@@ -135,12 +135,6 @@ export interface customEnv {
      */
     FEATURE_SWAP_TRAFFIC_ENABLE?: boolean
     /**
-     * Enable cluster map
-     *
-     * @default true
-     */
-    FEATURE_CLUSTER_MAP_ENABLE?: boolean
-    /**
      * @default true
      */
     HIDE_NETWORK_STATUS_INTERFACE?: boolean
@@ -186,6 +180,11 @@ export interface customEnv {
      * @default false
      */
     FEATURE_GROUPED_APP_LIST_FILTERS_ENABLE?: boolean
+    /**
+     * Show rollout progress if true, else canary step count in status
+     * @default true
+     */
+    FEATURE_CANARY_ROLLOUT_PROGRESS_ENABLE?: boolean
 }
 declare global {
     interface Window {

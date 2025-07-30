@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-import { ComponentSizeType } from '@Shared/constants'
-
-import { noop, Tooltip } from '../../../Common'
-import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
-import { Icon } from '../Icon'
+import { noop } from '../../../Common'
+import { Chip } from '../Chip'
 import { FilterChipProps, FilterChipsProps } from './types'
 
 import './styles.scss'
@@ -43,29 +40,12 @@ const FilterChip = ({
     return (
         (labelToDisplay || shouldHideLabel) &&
         valueToDisplay && (
-            <div className="flexbox flex-align-center br-4 dc__border bg__secondary pl-6 dc__user-select-none h-24 dc__gap-6 fs-12 lh-20 cn-9 fw-4 dc__ellipsis-right">
-                {!shouldHideLabel && (
-                    <>
-                        <span className="fw-6 dc__capitalize">{labelToDisplay}</span>
-                        <span className="dc__divider h-24" />
-                    </>
-                )}
-                <Tooltip content={valueToDisplay}>
-                    <span className="dc__ellipsis-right dc__word-break dc__mxw-150">{valueToDisplay}</span>
-                </Tooltip>
-                {showRemoveIcon && (
-                    <Button
-                        variant={ButtonVariantType.borderLess}
-                        style={ButtonStyleType.negativeGrey}
-                        dataTestId="filter-chip__remove-btn"
-                        showAriaLabelInTippy={false}
-                        ariaLabel="Remove filter"
-                        icon={<Icon name="ic-close-small" color={null} />}
-                        size={ComponentSizeType.xs}
-                        onClick={removeFilter}
-                    />
-                )}
-            </div>
+            <Chip
+                label={labelToDisplay}
+                value={valueToDisplay as string}
+                onRemove={showRemoveIcon ? removeFilter : null}
+                capitalizeLabel
+            />
         )
     )
 }

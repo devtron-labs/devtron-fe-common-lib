@@ -40,8 +40,7 @@ import {
     SelectPickerGroupHeading,
     SelectPickerInput,
     SelectPickerMenuList,
-    SelectPickerMultiValueLabel,
-    SelectPickerMultiValueRemove,
+    SelectPickerMultiValue,
     SelectPickerOption,
     SelectPickerValueContainer,
 } from './common'
@@ -186,6 +185,7 @@ import { getCommonSelectStyle, getSelectPickerOptionByValue } from './utils'
 const SelectPicker = <OptionValue, IsMulti extends boolean>({
     error,
     icon,
+    keyboardShortcut,
     helperText,
     placeholder = 'Select an option',
     label,
@@ -212,7 +212,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     menuListFooterConfig,
     isCreatable = false,
     onCreateOption,
-    closeMenuOnSelect = false,
+    closeMenuOnSelect: _closeMenuOnSelect,
     shouldShowNoOptionsMessage = true,
     shouldRenderTextArea = false,
     onKeyDown,
@@ -226,6 +226,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     labelTooltipConfig,
     hideFormFieldInfo,
     autoFocus,
+    showCheckboxForMultiSelect = true,
     ...props
 }: SelectPickerProps<OptionValue, IsMulti>) => {
     const innerRef = useRef<SelectPickerProps<OptionValue, IsMulti>['selectRef']['current']>(null)
@@ -249,26 +250,25 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         getIsOptionValid = () => true,
         customDisplayText = null,
     } = multiSelectProps
-    const controlShouldRenderValue = _controlShouldRenderValue && !customDisplayText
 
-    // Only large variant is supported for multi select picker
-    const selectSize = isMulti && controlShouldRenderValue ? ComponentSizeType.large : size
+    const controlShouldRenderValue = _controlShouldRenderValue && !customDisplayText
     const shouldShowSelectedOptionIcon = !isMulti && showSelectedOptionIcon
     const isSelectSearchable = !shouldRenderCustomOptions && isSearchable
+    const closeMenuOnSelect = _closeMenuOnSelect ?? !isMulti
 
     // Option disabled, group null state, checkbox hover, create option visibility (scroll reset on search)
     const selectStyles = useMemo(
         () =>
             getCommonSelectStyle({
                 error,
-                size: selectSize,
+                size,
                 menuSize,
                 variant,
                 getIsOptionValid,
                 isGroupHeadingSelectable,
                 shouldMenuAlignRight,
             }),
-        [error, selectSize, menuSize, variant, isGroupHeadingSelectable, shouldMenuAlignRight],
+        [error, size, menuSize, variant, isGroupHeadingSelectable, shouldMenuAlignRight],
     )
 
     // Used to show the create new option for creatable select and the option(s) doesn't have the input value
@@ -307,9 +307,9 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
         [disableDescriptionEllipsis],
     )
 
-    const renderMultiValueLabel = (
-        multiValueLabelProps: MultiValueProps<SelectPickerOptionType<OptionValue>, true>,
-    ) => <SelectPickerMultiValueLabel {...multiValueLabelProps} getIsOptionValid={getIsOptionValid} />
+    const renderMultiValue = (multiValueProps: MultiValueProps<SelectPickerOptionType<OptionValue>, true>) => (
+        <SelectPickerMultiValue {...multiValueProps} getIsOptionValid={getIsOptionValid} />
+    )
 
     const renderGroupHeading = useCallback(
         (groupHeadingProps: GroupHeadingProps<SelectPickerOptionType<OptionValue>>) => (
@@ -463,7 +463,6 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         shouldRenderCustomOptions={shouldRenderCustomOptions || false}
                         isMulti={isMulti}
                         ref={selectRef}
-                        autoFocus={autoFocus}
                         components={{
                             IndicatorSeparator: null,
                             LoadingIndicator: null,
@@ -473,8 +472,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                             MenuList: SelectPickerMenuList,
                             ClearIndicator: SelectPickerClearIndicator,
                             ValueContainer: renderValueContainer,
-                            MultiValueLabel: renderMultiValueLabel,
-                            MultiValueRemove: SelectPickerMultiValueRemove,
+                            MultiValue: renderMultiValue,
                             GroupHeading: renderGroupHeading,
                             NoOptionsMessage: renderNoOptionsMessage,
                             LoadingMessage: renderLoadingMessage,
@@ -484,7 +482,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                                 DropdownIndicator: () => null,
                             }),
                         }}
-                        closeMenuOnSelect={!isMulti || closeMenuOnSelect}
+                        closeMenuOnSelect={closeMenuOnSelect}
                         allowCreateWhileLoading={false}
                         isValidNewOption={isValidNewOption}
                         createOptionPosition="first"
@@ -493,6 +491,8 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
                         inputValue={props.inputValue ?? inputValue}
                         onInputChange={handleInputChange}
                         icon={icon}
+                        keyboardShortcut={keyboardShortcut}
+                        showCheckboxForMultiSelect={showCheckboxForMultiSelect}
                         showSelectedOptionIcon={shouldShowSelectedOptionIcon}
                         onKeyDown={handleKeyDown}
                         shouldRenderTextArea={shouldRenderTextArea}
