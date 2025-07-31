@@ -1090,3 +1090,10 @@ export interface ClusterEnvironmentCategoryDTO {
 }
 
 export interface ClusterEnvironmentCategoryType extends ClusterEnvironmentCategoryDTO {}
+
+
+export interface ShortcutKeyBadgeProps {
+    rootClassName?: string
+    shortcutKey: string
+    onClick?: (e?: any) => void
+}
