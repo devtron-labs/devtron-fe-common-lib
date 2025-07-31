@@ -173,6 +173,7 @@ import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
 import { ReactComponent as ICPlayOutline } from '@IconsV2/ic-play-outline.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
+import { ReactComponent as ICResizeHandle } from '@IconsV2/ic-resize-handle.svg'
 import { ReactComponent as ICRocketGear } from '@IconsV2/ic-rocket-gear.svg'
 import { ReactComponent as ICRocketLaunch } from '@IconsV2/ic-rocket-launch.svg'
 import { ReactComponent as ICSelected } from '@IconsV2/ic-selected.svg'
@@ -401,6 +402,7 @@ export const iconMap = {
     'ic-play-outline': ICPlayOutline,
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
+    'ic-resize-handle': ICResizeHandle,
     'ic-rocket-gear': ICRocketGear,
     'ic-rocket-launch': ICRocketLaunch,
     'ic-selected': ICSelected,

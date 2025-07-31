@@ -7,6 +7,7 @@ import { ClusterStatusType } from '../types'
 export interface ClusterStatusAndType {
     isProd: boolean
     status: ClusterStatusType
+    isVirtualCluster?: boolean
 }
 
 export interface ClusterMapProps {
@@ -19,6 +20,7 @@ export interface StatusCountEnum {
     unhealthyCount: number
     connectionFailedCount: number
     prodCount: number
+    virtualCount: number
 }
 
 export interface StatusEntity {

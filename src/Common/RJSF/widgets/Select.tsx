@@ -33,6 +33,7 @@ export const SelectWidget = (props: WidgetProps) => {
         onBlur,
         onFocus,
         placeholder,
+        schema,
     } = props
     const { enumOptions: selectOptions = [] } = options
     const emptyValue = multiple ? [] : null
@@ -57,7 +58,7 @@ export const SelectWidget = (props: WidgetProps) => {
             options={selectOptions}
             onBlur={() => onBlur(id, value)}
             onFocus={() => onFocus(id, value)}
-            placeholder={placeholder || PLACEHOLDERS.SELECT}
+            placeholder={schema.placeholder || placeholder || PLACEHOLDERS.SELECT}
             isDisabled={disabled || readonly}
             menuPortalTarget={document.getElementById(RJSF_FORM_SELECT_PORTAL_TARGET_ID)}
             menuPosition='fixed'

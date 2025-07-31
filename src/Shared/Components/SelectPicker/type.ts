@@ -30,7 +30,8 @@ import { ActionMenuProps } from '../ActionMenu'
 import { ButtonComponentType, ButtonProps, ButtonVariantType } from '../Button'
 import { FormFieldWrapperProps } from '../FormFieldWrapper/types'
 
-export interface SelectPickerOptionType<OptionValue = string | number> extends OptionType<OptionValue, ReactNode> {
+export interface SelectPickerOptionType<OptionValue = string | number, OptionLabel = ReactNode>
+    extends OptionType<OptionValue, OptionLabel> {
     /**
      * Description to be displayed for the option
      */
