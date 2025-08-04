@@ -35,7 +35,7 @@ import {
     DATE_TIME_FORMATS,
 } from './Constants'
 import { ServerErrors } from './ServerError'
-import { AsyncOptions, AsyncState, DeploymentNodeType, ShortcutKeyBadgeProps, UseSearchString } from './Types'
+import { AsyncOptions, AsyncState, DeploymentNodeType, UseSearchString } from './Types'
 import {
     scrollableInterface,
     DATE_TIME_FORMAT_STRING,
@@ -1134,13 +1134,4 @@ export const findRight = <T,>(arr: T[], predicate: (item: T) => boolean): T | nu
     return null
 }
 
-export const ShortcutKeyBadge = ({ rootClassName, shortcutKey, onClick }: ShortcutKeyBadgeProps) => (
-    <div
-        className={`shortcut-key-badge dc__position-abs flex fs-12 lh-20 icon-dim-20 bg__primary cn-7 fw-6 dc__border br-2 ${
-            rootClassName ?? ''
-        }`}
-        onClick={onClick}
-    >
-        {shortcutKey}
-    </div>
-)
+
