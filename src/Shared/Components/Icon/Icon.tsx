@@ -140,6 +140,7 @@ import { ReactComponent as ICLink } from '@IconsV2/ic-link.svg'
 import { ReactComponent as ICLinkedBuildColor } from '@IconsV2/ic-linked-build-color.svg'
 import { ReactComponent as ICListBullets } from '@IconsV2/ic-list-bullets.svg'
 import { ReactComponent as ICLivspace } from '@IconsV2/ic-livspace.svg'
+import { ReactComponent as ICLocked } from '@IconsV2/ic-locked.svg'
 import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
 import { ReactComponent as ICLogs } from '@IconsV2/ic-logs.svg'
 import { ReactComponent as ICMagnifyingGlass } from '@IconsV2/ic-magnifying-glass.svg'
@@ -201,6 +202,7 @@ import { ReactComponent as ICStrategyRollingColor } from '@IconsV2/ic-strategy-r
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
 import { ReactComponent as ICSun } from '@IconsV2/ic-sun.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
+import { ReactComponent as ICTag } from '@IconsV2/ic-tag.svg'
 import { ReactComponent as ICTata1mg } from '@IconsV2/ic-tata1mg.svg'
 import { ReactComponent as ICTerminal } from '@IconsV2/ic-terminal.svg'
 import { ReactComponent as ICTerminalFill } from '@IconsV2/ic-terminal-fill.svg'
@@ -370,6 +372,7 @@ export const iconMap = {
     'ic-linked-build-color': ICLinkedBuildColor,
     'ic-list-bullets': ICListBullets,
     'ic-livspace': ICLivspace,
+    'ic-locked': ICLocked,
     'ic-logout': ICLogout,
     'ic-logs': ICLogs,
     'ic-magnifying-glass': ICMagnifyingGlass,
@@ -431,6 +434,7 @@ export const iconMap = {
     'ic-success': ICSuccess,
     'ic-sun': ICSun,
     'ic-suspended': ICSuspended,
+    'ic-tag': ICTag,
     'ic-tata1mg': ICTata1mg,
     'ic-terminal-fill': ICTerminalFill,
     'ic-terminal': ICTerminal,
