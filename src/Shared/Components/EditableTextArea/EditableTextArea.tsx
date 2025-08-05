@@ -83,6 +83,7 @@ const TextArea = (
                 onChange={handleChange}
                 name="editable-description"
                 error={!error.isValid && error.message}
+                autoFocus
             />
             <div className="flex dc__gap-12 ml-auto">
                 <Button
