@@ -122,6 +122,7 @@ import { ReactComponent as ICInProgress } from '@IconsV2/ic-in-progress.svg'
 import { ReactComponent as ICInfoFilled } from '@IconsV2/ic-info-filled.svg'
 import { ReactComponent as ICInfoFilledColor } from '@IconsV2/ic-info-filled-color.svg'
 import { ReactComponent as ICInfoOutline } from '@IconsV2/ic-info-outline.svg'
+import { ReactComponent as ICInput } from '@IconsV2/ic-input.svg'
 import { ReactComponent as ICInstall } from '@IconsV2/ic-install.svg'
 import { ReactComponent as ICJobColor } from '@IconsV2/ic-job-color.svg'
 import { ReactComponent as ICK3s } from '@IconsV2/ic-k3s.svg'
@@ -348,6 +349,7 @@ export const iconMap = {
     'ic-info-filled-color': ICInfoFilledColor,
     'ic-info-filled': ICInfoFilled,
     'ic-info-outline': ICInfoOutline,
+    'ic-input': ICInput,
     'ic-install': ICInstall,
     'ic-job-color': ICJobColor,
     'ic-k3s': ICK3s,
