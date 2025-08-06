@@ -19,6 +19,7 @@ import { useState } from 'react'
 import { API_STATUS_CODES, Host } from '@Common/Constants'
 import { showError } from '@Common/Helper'
 import { ServerErrors } from '@Common/ServerError'
+import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP } from '@Shared/constants'
 import { getFileNameFromHeaders } from '@Shared/Helpers'
 import { ToastManager, ToastVariantType } from '@Shared/Services'
 
@@ -30,7 +31,7 @@ const useDownload = ({ shouldOpenInNewTab }: UseDownloadProps = {}): UseDownload
 
     /**
      * @param downloadUrl - API url for downloading file
-     * @param filterType - Show toast 'Preparing file for download'
+     * @param showFilePreparingToast - Show toast 'Preparing file for download'
      * @param fileName - fileName of the downloaded file
      * @param showSuccessfulToast - show toast on successful download
      * @param downloadSuccessToastContent - Content to show in toast on successful download
@@ -69,6 +70,8 @@ const useDownload = ({ shouldOpenInNewTab }: UseDownloadProps = {}): UseDownload
                 // Create a link element
                 const a = document.createElement('a')
                 a.href = blobUrl
+                // Add class so that link is clickable outside focus
+                a.classList.add(ALLOW_ACTION_OUTSIDE_FOCUS_TRAP)
 
                 a.download = fileName || getFileNameFromHeaders(response.headers) || 'file.tgz'
 

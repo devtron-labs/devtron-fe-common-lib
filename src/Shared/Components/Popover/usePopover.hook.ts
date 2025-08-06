@@ -1,5 +1,7 @@
 import { useLayoutEffect, useRef, useState } from 'react'
 
+import { stopPropagation } from '@Common/Helper'
+
 import { UsePopoverProps, UsePopoverReturnType } from './types'
 import {
     getPopoverActualPositionAlignment,
@@ -17,6 +19,7 @@ export const usePopover = ({
     onOpen,
     onPopoverKeyDown,
     onTriggerKeyDown,
+    disableClose = false,
 }: UsePopoverProps): UsePopoverReturnType => {
     // STATES
     const [open, setOpen] = useState(false)
@@ -44,6 +47,9 @@ export const usePopover = ({
     }
 
     const closePopover = () => {
+        if (disableClose) {
+            return
+        }
         updateOpenState(false)
         const triggerButton = triggerRef.current?.querySelector('button')
         triggerButton?.blur()
@@ -143,8 +149,8 @@ export const usePopover = ({
             id,
             ref: popover,
             role: 'listbox',
-            tabIndex: 0,
             className: `dc__position-abs dc__outline-none-imp ${variant === 'menu' ? 'bg__menu--primary shadow__menu' : 'bg__overlay--primary shadow__overlay'} border__primary br-6 dc__overflow-hidden ${isAutoWidth ? 'dc_width-max-content dc__mxw-250' : ''}`,
+            onClick: stopPropagation,
             onKeyDown: handlePopoverKeyDown,
             style: {
                 width: !isAutoWidth ? `${width}px` : undefined,

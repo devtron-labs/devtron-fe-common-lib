@@ -57,7 +57,14 @@ export const useActionMenu = <T extends string | number>({
                     closePopover()
                     break
                 case 'ArrowDown':
+                case 'Tab':
                     e.preventDefault()
+
+                    if (e.shiftKey && e.key === 'Tab') {
+                        setFocusedIndex((i) => getNextIndex(i, -1))
+                        break
+                    }
+
                     setFocusedIndex((i) => getNextIndex(i, 1))
                     break
                 case 'ArrowUp':

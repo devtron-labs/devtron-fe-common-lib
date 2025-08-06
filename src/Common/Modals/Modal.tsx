@@ -15,9 +15,10 @@
  */
 
 import React, { useEffect } from 'react'
-import ReactDOM from 'react-dom'
 import { ModalType } from '../Types'
 import { POP_UP_MENU_MODAL_ID } from '@Shared/constants'
+import { Backdrop } from '@Shared/Components'
+import { noop } from '@Common/Helper'
 
 /**
  * @deprecated Use VisibleModal instead
@@ -25,7 +26,6 @@ import { POP_UP_MENU_MODAL_ID } from '@Shared/constants'
 export const Modal = ({
     style = {},
     children,
-    modal = false,
     rootClassName = '',
     onClick = null,
     callbackRef = null,
@@ -55,35 +55,30 @@ export const Modal = ({
         }
     }
     useEffect(() => {
-        document.addEventListener('click', handleClick)
-        const modal = document.getElementById('visible-modal')
-        if (modal) modal.classList.add('show')
-        if (noBackDrop) modal.classList.add('no-back-drop')
         if (!preventWheelDisable) document.body.addEventListener('wheel', disableWheel, { passive: false })
         return () => {
             if (!preventWheelDisable) document.body.removeEventListener('wheel', disableWheel)
-            document.removeEventListener('click', handleClick)
-            if (modal) modal.classList.remove('show')
-            if (noBackDrop) modal.classList.remove('no-back-drop')
         }
     }, [])
-    return ReactDOM.createPortal(
-        <div
-            tabIndex={0}
-            onClick={handleClick}
-            data-testid="common-modal"
-            ref={(el) => {
-                if (typeof callbackRef === 'function') {
-                    callbackRef(el)
-                }
-                innerRef.current = el
-            }}
-            id="popup"
-            className={`${rootClassName} ${POP_UP_MENU_MODAL_ID} ${modal ? 'modal' : ''}`}
-            style={{ ...style }}
-        >
-            {children}
-        </div>,
-        document.getElementById('visible-modal'),
+
+    return (
+        <Backdrop onEscape={noop} onClick={handleClick} hasClearBackground={noBackDrop}>
+            <div
+                tabIndex={0}
+                onClick={handleClick}
+                data-testid="common-modal"
+                ref={(el) => {
+                    if (typeof callbackRef === 'function') {
+                        callbackRef(el)
+                    }
+                    innerRef.current = el
+                }}
+                id="popup"
+                className={`${rootClassName} ${POP_UP_MENU_MODAL_ID}`}
+                style={{ ...style }}
+            >
+                {children}
+            </div>
+        </Backdrop>
     )
 }

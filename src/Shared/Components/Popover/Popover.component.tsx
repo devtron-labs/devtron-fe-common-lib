@@ -25,7 +25,11 @@ export const Popover = ({
         <AnimatePresence>
             {open && (
                 <Backdrop {...overlayProps}>
-                    <div className="dc__position-abs" style={{ left: bounds.left, top: bounds.top }}>
+                    <div
+                        className="dc__position-abs"
+                        style={{ left: bounds.left, top: bounds.top }}
+                        onClick={triggerProps.onClick}
+                    >
                         <div className="dc__visibility-hidden" style={{ width: bounds.width, height: bounds.height }} />
                         <motion.div {...popoverProps} data-testid={popoverProps.id}>
                             {children}

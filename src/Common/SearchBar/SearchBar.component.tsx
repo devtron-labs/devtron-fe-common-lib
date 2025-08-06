@@ -18,10 +18,11 @@ import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useRef, useState } 
 
 import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
 import { ReactComponent as Search } from '@Icons/ic-search.svg'
+import { useRegisterShortcut } from '@Common/Hooks'
 import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
 
-import { debounce } from '../Helper'
+import { debounce, noop } from '../Helper'
 import { SearchBarProps } from './types'
 import { getSearchBarHeightFromSize } from './utils'
 
@@ -72,6 +73,7 @@ const SearchBar = ({
     dataTestId = 'search-bar',
     noBackgroundAndBorder = false,
     size = ComponentSizeType.medium,
+    keyboardShortcut,
 }: SearchBarProps) => {
     const [showClearButton, setShowClearButton] = useState(!!initialSearchText)
     const inputRef = useRef<HTMLInputElement>()
@@ -79,6 +81,7 @@ const SearchBar = ({
         handleSearchChange,
         debounceTimeout,
     ])
+    const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
 
     // assuming initialSearchText will change if we are changing history otherwise will be constant and will not change
     // since on changing history we expect to make api call using useAsync so not applying handleEnter
@@ -86,6 +89,23 @@ const SearchBar = ({
         inputRef.current.value = initialSearchText
         setShowClearButton(!!initialSearchText)
     }, [initialSearchText])
+
+    useEffect(() => {
+        if (keyboardShortcut) {
+            registerShortcut({
+                keys: [keyboardShortcut],
+                callback: () => {
+                    inputRef.current?.focus()
+                },
+            })
+
+            return () => {
+                unregisterShortcut([keyboardShortcut])
+            }
+        }
+
+        return noop
+    }, [keyboardShortcut])
 
     const _applySearch = (value: string) => {
         handleSearchChange(value)
@@ -128,6 +148,12 @@ const SearchBar = ({
         inputRef.current = node
     }
 
+    const handleFilterKeyUp = (e: KeyboardEvent): void => {
+        if (e.key === 'Escape' || e.key === 'Esc') {
+            inputRef.current?.blur()
+        }
+    }
+
     return (
         <div className={`search-bar-container ${containerClassName || ''}`}>
             <div
@@ -141,14 +167,15 @@ const SearchBar = ({
                     {...inputProps}
                     defaultValue={initialSearchText}
                     className={`search-bar__input  dc__position-abs w-100 h-100 br-4 dc__no-border pt-6 pr-10 pb-6 pl-30 fs-13 lh-20 fw-4 cn-9 placeholder-cn5 dc__left-0 ${
-                        showClearButton ? 'pr-30' : 'pr-10'
+                        showClearButton || (!showClearButton && keyboardShortcut) ? 'pr-30' : 'pr-10'
                     } ${noBackgroundAndBorder ? 'dc__no-background' : 'bg__secondary'}`}
                     onChange={handleChange}
                     onKeyDown={handleKeyDown}
                     ref={inputCallbackRef}
+                    onKeyUp={handleFilterKeyUp}
                 />
                 {/* TODO: Sync with product since it should have ic-enter in case of not applied */}
-                {showClearButton && (
+                {showClearButton ? (
                     <div className="flex search-bar__clear-button dc__position-abs dc__transparent">
                         <Button
                             icon={<ICCross />}
@@ -161,6 +188,12 @@ const SearchBar = ({
                             showAriaLabelInTippy={false}
                         />
                     </div>
+                ) : (
+                    keyboardShortcut && (
+                        <kbd className="icon-dim-20 flex bg__primary border__primary br-2 shadow__key fs-12 lh-20 cn-7 dc__no-shrink dc__position-abs search-bar__kbd-shortcut">
+                            {keyboardShortcut}
+                        </kbd>
+                    )
                 )}
             </div>
         </div>
