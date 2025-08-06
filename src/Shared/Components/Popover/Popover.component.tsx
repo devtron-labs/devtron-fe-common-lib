@@ -1,4 +1,3 @@
-import { MouseEvent } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { Backdrop } from '../Backdrop'
@@ -19,35 +18,25 @@ export const Popover = ({
     buttonProps,
     triggerElement,
     children,
-}: PopoverProps) => {
-    const handleTriggerClick = (e: MouseEvent<HTMLDivElement>) => {
-        e.stopPropagation()
-        triggerProps.onClick(e)
-    }
+}: PopoverProps) => (
+    <>
+        <div {...triggerProps}>{triggerElement || <Button {...buttonProps} />}</div>
 
-    return (
-        <>
-            <div {...triggerProps}>{triggerElement || <Button {...buttonProps} />}</div>
-
-            <AnimatePresence>
-                {open && (
-                    <Backdrop {...overlayProps}>
-                        <div
-                            className="dc__position-abs"
-                            style={{ left: bounds.left, top: bounds.top }}
-                            onClick={handleTriggerClick}
-                        >
-                            <div
-                                className="dc__visibility-hidden"
-                                style={{ width: bounds.width, height: bounds.height }}
-                            />
-                            <motion.div {...popoverProps} data-testid={popoverProps.id}>
-                                {children}
-                            </motion.div>
-                        </div>
-                    </Backdrop>
-                )}
-            </AnimatePresence>
-        </>
-    )
-}
+        <AnimatePresence>
+            {open && (
+                <Backdrop {...overlayProps}>
+                    <div
+                        className="dc__position-abs"
+                        style={{ left: bounds.left, top: bounds.top }}
+                        onClick={triggerProps.onClick}
+                    >
+                        <div className="dc__visibility-hidden" style={{ width: bounds.width, height: bounds.height }} />
+                        <motion.div {...popoverProps} data-testid={popoverProps.id}>
+                            {children}
+                        </motion.div>
+                    </div>
+                </Backdrop>
+            )}
+        </AnimatePresence>
+    </>
+)
