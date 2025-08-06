@@ -27,17 +27,21 @@ export const searchAndSortRows = <
     filter: TableProps<RowData, FilterVariant, AdditionalProps>['filter'],
     filterData: UseFiltersReturnType,
     comparator?: Column<RowData, FilterVariant, AdditionalProps>['comparator'],
-) => {
+): Awaited<ReturnType<TableProps<RowData>['getRows']>> => {
     const { sortBy, sortOrder } = filterData ?? {}
 
     const filteredRows = filter ? rows.filter((row) => filter(row, filterData)) : rows
 
-    return comparator && sortBy
-        ? filteredRows.sort(
-              (rowA, rowB) =>
-                  (sortOrder === SortingOrder.ASC ? 1 : -1) * comparator(rowA.data[sortBy], rowB.data[sortBy]),
-          )
-        : filteredRows
+    return {
+        rows:
+            comparator && sortBy
+                ? filteredRows.sort(
+                      (rowA, rowB) =>
+                          (sortOrder === SortingOrder.ASC ? 1 : -1) * comparator(rowA.data[sortBy], rowB.data[sortBy]),
+                  )
+                : filteredRows,
+        totalRows: filteredRows.length,
+    }
 }
 
 export const getVisibleColumnsFromLocalStorage = <

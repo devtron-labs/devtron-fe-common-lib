@@ -99,24 +99,51 @@ const InternalTable = <
         handleClearBulkSelection()
     }, [rows])
 
-    const [_areFilteredRowsLoading, filteredRows, filteredRowsError, reloadFilteredRows] = useAsync(async () => {
-        if (!rows && !getRows) {
-            throw NO_ROWS_OR_GET_ROWS_ERROR
-        }
+    // useAsync hook for 'rows' scenario
+    const [_areRowsLoading, rowsResult, rowsError, reloadRows] = useAsync(
+        async () => {
+            let totalRows = rows.length
+            const filteredRows = await getFilteringPromise({
+                searchSortTimeoutRef,
+                callback: () => {
+                    const { rows: filteredAndSortedRows, totalRows: total } = searchAndSortRows(
+                        rows,
+                        filter,
+                        filterData,
+                        visibleColumns.find(({ field }) => field === sortBy)?.comparator,
+                    )
 
-        return getFilteringPromise({
-            searchSortTimeoutRef,
-            callback: rows
-                ? () =>
-                      searchAndSortRows(
-                          rows,
-                          filter,
-                          filterData,
-                          visibleColumns.find(({ field }) => field === sortBy)?.comparator,
-                      )
-                : () => getRows(filterData),
-        })
-    }, [searchKey, sortBy, sortOrder, rows, JSON.stringify(otherFilters), visibleColumns])
+                    totalRows = total
+
+                    return filteredAndSortedRows
+                },
+            })
+            return { filteredRows, totalRows }
+        },
+        [searchKey, sortBy, sortOrder, rows, JSON.stringify(otherFilters), visibleColumns],
+        !!rows,
+    )
+
+    // useAsync hook for 'getRows' scenario
+    const [_areGetRowsLoading, getRowsResult, getRowsError, reloadGetRows] = useAsync(
+        async () => {
+            let totalRows = 0
+            const { rows: newRows, totalRows: total } = await getRows(filterData)
+            totalRows = total
+            return { filteredRows: newRows, totalRows }
+        },
+        [searchKey, sortBy, sortOrder, rows, offset, pageSize, JSON.stringify(otherFilters), visibleColumns],
+        !!getRows,
+        { resetOnChange: false },
+    )
+
+    // Combine results based on whether getRows is provided
+    const _areFilteredRowsLoading = getRows ? _areGetRowsLoading : _areRowsLoading
+    const filteredRowsResult = getRows ? getRowsResult : rowsResult
+    const filteredRowsError = getRows ? getRowsError : rowsError
+    const reloadFilteredRows = getRows ? reloadGetRows : reloadRows
+
+    const { filteredRows, totalRows } = filteredRowsResult ?? { filteredRows: [], totalRows: 0 }
 
     const areFilteredRowsLoading = _areFilteredRowsLoading || filteredRowsError === NO_ROWS_OR_GET_ROWS_ERROR
 
@@ -177,6 +204,8 @@ const InternalTable = <
                     pageSizeOptions={pageSizeOptions}
                     rows={rows}
                     stylesConfig={stylesConfig}
+                    getRows={getRows}
+                    totalRows={totalRows}
                 />
             </UseRegisterShortcutProvider>
         )
