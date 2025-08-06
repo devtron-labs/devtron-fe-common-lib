@@ -1,3 +1,19 @@
+<!--
+  - Copyright (c) 2024. Devtron Inc.
+  -
+  - Licensed under the Apache License, Version 2.0 (the "License");
+  - you may not use this file except in compliance with the License.
+  - You may obtain a copy of the License at
+  -
+  -     http://www.apache.org/licenses/LICENSE-2.0
+  -
+  - Unless required by applicable law or agreed to in writing, software
+  - distributed under the License is distributed on an "AS IS" BASIS,
+  - WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+  - See the License for the specific language governing permissions and
+  - limitations under the License.
+  -->
+
 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
   <path fill="#3B444C" d="M3.75 12A8.25 8.25 0 0 1 12 3.75v-1.5A9.75 9.75 0 0 0 2.25 12h1.5ZM12 3.75A8.25 8.25 0 0 1 20.25 12h1.5A9.75 9.75 0 0 0 12 2.25v1.5Zm3 7.5a3 3 0 0 1-3 3v1.5a4.5 4.5 0 0 0 4.5-4.5H15Zm-3 3a3 3 0 0 1-3-3H7.5a4.5 4.5 0 0 0 4.5 4.5v-1.5Zm-3-3a3 3 0 0 1 3-3v-1.5a4.5 4.5 0 0 0-4.5 4.5H9Zm3-3a3 3 0 0 1 3 3h1.5a4.5 4.5 0 0 0-4.5-4.5v1.5ZM6.63 19.014a6.004 6.004 0 0 1 2.232-2.378l-.784-1.279c-1.171.718-2.152 1.734-2.784 2.977l1.337.68Zm2.232-2.378A6.002 6.002 0 0 1 12 15.75v-1.5a7.502 7.502 0 0 0-3.922 1.107l.784 1.279ZM12 15.75c1.108 0 2.194.306 3.138.886l.784-1.279A7.502 7.502 0 0 0 12 14.25v1.5Zm3.138.886c.955.585 1.736 1.4 2.233 2.377l1.337-.68c-.633-1.245-1.616-2.258-2.786-2.976l-.784 1.279ZM20.25 12a8.227 8.227 0 0 1-2.714 6.117l1.007 1.111A9.727 9.727 0 0 0 21.75 12h-1.5Zm-2.714 6.117A8.217 8.217 0 0 1 12 20.25v1.5a9.717 9.717 0 0 0 6.543-2.521l-1.007-1.112ZM12 20.25c-2.13 0-4.07-.806-5.534-2.132L5.459 19.23A9.717 9.717 0 0 0 12 21.75v-1.5Zm-5.534-2.132A8.227 8.227 0 0 1 3.75 12h-1.5a9.727 9.727 0 0 0 3.209 7.23l1.007-1.112Z"/>
 </svg>
