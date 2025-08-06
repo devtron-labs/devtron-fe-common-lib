@@ -223,6 +223,7 @@ import { ReactComponent as ICViewVariableToggle } from '@IconsV2/ic-view-variabl
 import { ReactComponent as ICVisibilityOff } from '@IconsV2/ic-visibility-off.svg'
 import { ReactComponent as ICVisibilityOn } from '@IconsV2/ic-visibility-on.svg'
 import { ReactComponent as ICWarning } from '@IconsV2/ic-warning.svg'
+import { ReactComponent as ICWarningFill } from '@IconsV2/ic-warning-fill.svg'
 import { ReactComponent as ICWebhook } from '@IconsV2/ic-webhook.svg'
 import { ReactComponent as ICWifiSlash } from '@IconsV2/ic-wifi-slash.svg'
 import { ReactComponent as ICWorldGlobe } from '@IconsV2/ic-world-globe.svg'
@@ -454,6 +455,7 @@ export const iconMap = {
     'ic-view-variable-toggle': ICViewVariableToggle,
     'ic-visibility-off': ICVisibilityOff,
     'ic-visibility-on': ICVisibilityOn,
+    'ic-warning-fill': ICWarningFill,
     'ic-warning': ICWarning,
     'ic-webhook': ICWebhook,
     'ic-wifi-slash': ICWifiSlash,
