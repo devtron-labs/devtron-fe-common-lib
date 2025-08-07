@@ -7,7 +7,7 @@ import {
     UseUrlFiltersProps,
     UseUrlFiltersReturnType,
 } from '@Common/Hooks'
-import { GenericEmptyStateType } from '@Common/index'
+import { APIOptions, GenericEmptyStateType } from '@Common/index'
 import { PageSizeOption } from '@Common/Pagination/types'
 import { SortableTableHeaderCellProps, useResizableTableConfig } from '@Common/SortableTableHeaderCell'
 
@@ -193,7 +193,7 @@ export type ViewWrapperProps<
         ? {}
         : Pick<
               UseFiltersReturnType,
-              'offset' | 'handleSearch' | 'searchKey' | 'sortBy' | 'sortOrder' | 'clearFilters'
+              'offset' | 'handleSearch' | 'searchKey' | 'sortBy' | 'sortOrder' | 'clearFilters' | 'areFiltersApplied'
           >) &
         AdditionalProps &
         Partial<ConfigurableColumnsType<RowData, FilterVariant, AdditionalProps>> & {
@@ -301,7 +301,10 @@ export type InternalTableProps<
         | {
               rows?: never
               /** NOTE: Sorting on frontend is only handled if rows is provided instead of getRows */
-              getRows: (props: GetRowsProps) => Promise<RowsType<RowData>>
+              getRows: (
+                  props: GetRowsProps,
+                  abortControllerRef: APIOptions['abortControllerRef'],
+              ) => Promise<{ rows: RowsType<RowData>; totalRows: number }>
           }
     ) &
     (
@@ -411,7 +414,9 @@ export interface TableContentProps<
         | 'paginationVariant'
         | 'RowActionsOnHoverComponent'
         | 'pageSizeOptions'
+        | 'getRows'
     > {
     filteredRows: RowsType<RowData>
     areFilteredRowsLoading: boolean
+    totalRows: number
 }

@@ -35,6 +35,8 @@ const TableContent = <
     pageSizeOptions,
     filteredRows,
     areFilteredRowsLoading,
+    getRows,
+    totalRows,
 }: TableContentProps<RowData, FilterVariant, AdditionalProps>) => {
     const rowsContainerRef = useRef<HTMLDivElement>(null)
     const parentRef = useRef<HTMLDivElement>(null)
@@ -92,16 +94,19 @@ const TableContent = <
         const normalizedFilteredRows = filteredRows ?? []
 
         const paginatedRows =
-            paginationVariant !== PaginationEnum.PAGINATED
+            paginationVariant !== PaginationEnum.PAGINATED ||
+            (paginationVariant === PaginationEnum.PAGINATED && getRows)
                 ? normalizedFilteredRows
                 : normalizedFilteredRows.slice(offset, offset + pageSize)
 
         return paginatedRows
     }, [paginationVariant, offset, pageSize, filteredRows])
 
+    const isBEPagination = !!getRows
+
     const showPagination =
         paginationVariant === PaginationEnum.PAGINATED &&
-        filteredRows?.length > (pageSizeOptions?.[0]?.value ?? DEFAULT_BASE_PAGE_SIZE)
+        (isBEPagination || filteredRows?.length > (pageSizeOptions?.[0]?.value ?? DEFAULT_BASE_PAGE_SIZE))
 
     const { activeRowIndex, setActiveRowIndex, shortcutContainerProps } = useTableWithKeyboardShortcuts(
         { bulkSelectionConfig, bulkSelectionReturnValue, handleToggleBulkSelectionOnRow },
@@ -382,14 +387,14 @@ const TableContent = <
                 )}
             </div>
 
-            {showPagination && (
+            {showPagination && !areFilteredRowsLoading && (
                 <Pagination
                     pageSize={pageSize}
                     changePage={changePage}
                     changePageSize={changePageSize}
                     offset={offset}
                     rootClassName="border__secondary--top flex dc__content-space px-20"
-                    size={filteredRows.length}
+                    size={totalRows}
                     pageSizeOptions={pageSizeOptions}
                 />
             )}
