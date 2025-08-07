@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { SingleDatePicker } from 'react-dates'
 import CustomizableCalendarDay from 'react-dates/esm/components/CustomizableCalendarDay'
 import { SelectInstance } from 'react-select'
@@ -28,6 +28,7 @@ import { ComponentSizeType } from '@Shared/constants'
 import 'react-dates/initialize'
 
 import { DATE_TIME_FORMATS } from '../../../Common'
+import { useFocusTrapControl } from '../DTFocusTrap'
 import { SelectPicker } from '../SelectPicker'
 import { customDayStyles, DATE_PICKER_IDS, DATE_PICKER_PLACEHOLDER } from './constants'
 import { DateTimePickerProps } from './types'
@@ -56,6 +57,8 @@ const DateTimePicker = ({
     const selectedTimeOption = DEFAULT_TIME_OPTIONS.find((option) => option.value === time) ?? DEFAULT_TIME_OPTIONS[0]
     const [isFocused, setFocused] = useState(false)
 
+    const { disableFocusTrap, resumeFocusTrap } = useFocusTrapControl()
+
     const handleFocusChange = ({ focused }) => {
         setFocused(focused)
     }
@@ -70,6 +73,14 @@ const DateTimePicker = ({
     const today = moment()
     // Function to disable dates including today and all past dates
     const isDayBlocked = (day) => isTodayBlocked && !day.isAfter(today)
+
+    useEffect(() => {
+        if (isFocused) {
+            disableFocusTrap()
+            return
+        }
+        resumeFocusTrap()
+    }, [isFocused])
 
     return (
         <div className="date-time-picker">

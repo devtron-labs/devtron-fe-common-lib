@@ -19,6 +19,8 @@ import { PLACEHOLDERS, RJSF_FORM_SELECT_PORTAL_TARGET_ID } from '../constants'
 
 import { deepEqual } from '@Common/Helper'
 import { SelectPicker } from '@Shared/Components'
+import { useEffect, useState } from 'react'
+import { getUniqueId } from '@Shared/Helpers'
 
 export const SelectWidget = (props: WidgetProps) => {
     const {
@@ -42,6 +44,14 @@ export const SelectWidget = (props: WidgetProps) => {
         onChange(multiple ? option.map((o) => o.value) : option.value)
     }
 
+    const [key, setKey] = useState<string>()
+
+    useEffect(() => {
+        // NOTE: need to trigger a re-render after re-mount since react-select
+        // has an issue with menuPortalTarget after re-mounting
+        setKey(getUniqueId(8))
+    }, [])
+
     const getOption = (value) =>
         multiple
             ? selectOptions.filter((option) => value.some((val) => deepEqual(val, option.value)))
@@ -49,6 +59,7 @@ export const SelectWidget = (props: WidgetProps) => {
 
     return (
         <SelectPicker
+            key={key}
             inputId={`devtron-rjsf-select__${id}`}
             name={id}
             isMulti={multiple}
