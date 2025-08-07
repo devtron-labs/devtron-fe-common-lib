@@ -30,6 +30,7 @@ import { showError, stopPropagation } from './Helper'
 import { setImageTags } from './Common.service'
 import { Progressing } from './Progressing'
 import { InfoIconTippy, Textarea, ToastManager, ToastVariantType } from '../Shared'
+import { BULK_DEPLOY_LATEST_IMAGE_TAG } from './Constants'
 
 export const ImageTagsContainer = ({
     // Setting it to zero in case of external pipeline
@@ -122,7 +123,13 @@ export const ImageTagsContainer = ({
         for (let i = 0; i < displayedTags?.length; i++) {
             if (displayedTags[i].tagName.toLowerCase() === lowercaseValue) isTagExistsInDisplayedTags = true
         }
-        if (isTagExistsInExistingTags || isTagExistsInDisplayedTags || lowercaseValue === 'latest') {
+
+        if (lowercaseValue === BULK_DEPLOY_LATEST_IMAGE_TAG.value || lowercaseValue === BULK_DEPLOY_LATEST_IMAGE_TAG.value) {
+            setTagErrorMessage('Label name cannot be "latest" or "active"')
+            return false
+        }
+
+        if (isTagExistsInExistingTags || isTagExistsInDisplayedTags) {
             setTagErrorMessage('This label is already being used in this application')
             return false
         }

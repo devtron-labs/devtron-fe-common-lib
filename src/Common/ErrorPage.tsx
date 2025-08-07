@@ -21,9 +21,13 @@ import { ERROR_EMPTY_SCREEN, ERROR_STATUS_CODE, ROUTES } from './Constants'
 import { noop, refresh, reportIssue } from './Helper'
 import { ErrorPageType } from './Types'
 
-const ErrorPage = ({ code, image, title, subTitle, imageType, redirectURL, reload }: ErrorPageType) => {
+const ErrorPage = ({ code, image, title, subTitle, imageType, redirectURL, reload, on404Redirect }: ErrorPageType) => {
     const { push } = useHistory()
     const redirectToHome = () => {
+        if (on404Redirect) {
+            on404Redirect()
+            return
+        }
         push(redirectURL || `/${ROUTES.APP_LIST}`)
     }
 

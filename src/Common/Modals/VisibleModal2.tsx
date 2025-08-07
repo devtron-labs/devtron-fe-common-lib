@@ -17,7 +17,6 @@
 import React, { SyntheticEvent } from 'react'
 import { Backdrop } from '@Shared/Components'
 import { DTFocusTrapType } from '@Shared/Components/DTFocusTrap'
-import { stopPropagation } from '@Common/Helper'
 
 export class VisibleModal2 extends React.Component<{
     className?: string
