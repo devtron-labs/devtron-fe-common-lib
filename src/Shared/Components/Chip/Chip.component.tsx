@@ -1,3 +1,19 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { Children } from 'react'
 import { Link } from 'react-router-dom'
 
@@ -43,6 +59,7 @@ const ChipWrapper = ({ children, type, style, onClick, href, size }: ChipWrapper
 const Chip = ({
     label,
     startIconProps,
+    startIcon,
     size: userSize = ComponentSizeType.xs,
     value,
     onRemove,
@@ -57,13 +74,19 @@ const Chip = ({
     const padding = getPadding(size)
     const fontSize = getFontSize(size)
 
+    const renderIcon = () => {
+        if (startIconProps) {
+            return <Icon {...{ ...startIconProps, size: iconSize }} />
+        }
+
+        return startIcon ?? null
+    }
+
     const renderLabel = (isOnlyLabel = true) => (
         <div className={`flex dc__gap-4 ${padding} dc__no-shrink dc__mxw-120`}>
             {style === 'error' && isOnlyLabel && <Icon name="ic-error" color="R500" size={iconSize} />}
 
-            {(style === 'neutral' || (style === 'error' && !isOnlyLabel)) && startIconProps && (
-                <Icon {...{ ...startIconProps, size: iconSize }} />
-            )}
+            {(style === 'neutral' || (style === 'error' && !isOnlyLabel)) && renderIcon()}
 
             <Tooltip content={label}>
                 <span

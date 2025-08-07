@@ -1,5 +1,21 @@
 /*
  * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
+/*
+ * Copyright (c) 2024. Devtron Inc.
  */
 
 import { ClusterEntitiesTypes, ClusterStatusAndType, StatusCountEnum } from './types'
@@ -7,35 +23,38 @@ import { ClusterEntitiesTypes, ClusterStatusAndType, StatusCountEnum } from './t
 /**
  *
  * @param filteredList
- * @returns healthyCount, unhealthyCount, connectionFailedCount, prodCount
+ * @returns healthyCount, unhealthyCount, connectionFailedCount, prodCount, virtualCount
  */
-export const getStatusCount = (filteredList: ClusterStatusAndType[]): StatusCountEnum =>
-    filteredList.reduce(
+export const getStatusCount = (filteredList: ClusterStatusAndType[]): StatusCountEnum => {
+    const statusCounts = filteredList.reduce(
         (acc, dataItem) => {
-            const updatedCounts = { ...acc }
-
             if (dataItem.isProd) {
-                updatedCounts.prodCount += 1
+                acc.prodCount += 1
             }
-
+            if (dataItem.isVirtualCluster) {
+                acc.virtualCount += 1
+                return acc // Skip further processing for virtual clusters as we ignore their status
+            }
             switch (dataItem.status) {
                 case 'healthy':
-                    updatedCounts.healthyCount += 1
+                    acc.healthyCount += 1
                     break
                 case 'unhealthy':
-                    updatedCounts.unhealthyCount += 1
+                    acc.unhealthyCount += 1
                     break
                 case 'connection failed':
-                    updatedCounts.connectionFailedCount += 1
+                    acc.connectionFailedCount += 1
                     break
                 default:
-                    break // Handle cases for unexpected or missing properties, if needed
+                    break
             }
-
-            return updatedCounts
+            return acc
         },
-        { healthyCount: 0, unhealthyCount: 0, connectionFailedCount: 0, prodCount: 0 },
+        { healthyCount: 0, unhealthyCount: 0, connectionFailedCount: 0, virtualCount: 0, prodCount: 0 },
     )
+
+    return statusCounts
+}
 
 /**
  *
@@ -44,7 +63,8 @@ export const getStatusCount = (filteredList: ClusterStatusAndType[]): StatusCoun
  *
  */
 export const getEntities = (filteredList: ClusterStatusAndType[]): ClusterEntitiesTypes => {
-    const { healthyCount, unhealthyCount, connectionFailedCount, prodCount } = getStatusCount(filteredList)
+    const { healthyCount, unhealthyCount, connectionFailedCount, prodCount, virtualCount } =
+        getStatusCount(filteredList)
 
     const statusEntities = [
         {
@@ -64,6 +84,12 @@ export const getEntities = (filteredList: ClusterStatusAndType[]): ClusterEntiti
             label: 'Connection Failed',
             color: 'var(--R500)',
             proportionalValue: `${connectionFailedCount}/${filteredList.length}`,
+        },
+        {
+            value: virtualCount,
+            label: 'Isolated Clusters',
+            color: 'var(--N300)',
+            proportionalValue: `${virtualCount}/${filteredList.length}`,
         },
     ]
 

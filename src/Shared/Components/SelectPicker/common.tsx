@@ -354,17 +354,26 @@ export const SelectPickerMultiValue = <OptionValue, IsMulti extends boolean>({
     Pick<SelectPickerProps<OptionValue, IsMulti>['multiSelectProps'], 'getIsOptionValid'>) => {
     const {
         data,
+        isMulti,
         removeProps: { onClick },
     } = props
     const isOptionValid = getIsOptionValid?.(data) ?? true
-    const { startIcon } = data
+    const { startIcon, endIcon } = data
+    const iconToDisplay = (startIcon || endIcon) ?? null
+
+    const renderStartIcon = () =>
+        iconToDisplay && (
+            <div className={`dc__no-shrink ${isMulti ? 'icon-dim-16' : 'icon-dim-20'} flex dc__fill-available-space`}>
+                {iconToDisplay}
+            </div>
+        )
 
     return (
         <Chip
             label={String(data.label)}
             style={isOptionValid ? 'neutral' : 'error'}
             size={ComponentSizeType.xs}
-            startIconProps={startIcon?.props}
+            startIcon={renderStartIcon()}
             onRemove={onClick as unknown as MouseEventHandler<HTMLButtonElement>}
         />
     )

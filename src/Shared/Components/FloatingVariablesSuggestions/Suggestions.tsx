@@ -20,7 +20,7 @@ import { ReactComponent as ICClose } from '@Icons/ic-cross.svg'
 import { ReactComponent as ICSearch } from '@Icons/ic-search.svg'
 import NoVariables from '@Images/no-artifact.webp'
 import { DebouncedSearch, GenericEmptyState, Progressing, Reload } from '@Common/index'
-import { ComponentSizeType } from '@Shared/constants'
+import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP, ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
@@ -87,7 +87,7 @@ const Suggestions = ({
 
                 <div className="h-100">
                     <Button
-                        icon={<ICClose />}
+                        icon={<ICClose className={ALLOW_ACTION_OUTSIDE_FOCUS_TRAP} />}
                         ariaLabel="Close suggestions"
                         showAriaLabelInTippy={false}
                         dataTestId="deactivate-suggestions"

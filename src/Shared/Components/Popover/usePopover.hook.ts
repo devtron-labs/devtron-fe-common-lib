@@ -1,4 +1,22 @@
+/*
+ * Copyright (c) 2024. Devtron Inc.
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+
 import { useLayoutEffect, useRef, useState } from 'react'
+
+import { stopPropagation } from '@Common/Helper'
 
 import { UsePopoverProps, UsePopoverReturnType } from './types'
 import {
@@ -148,6 +166,7 @@ export const usePopover = ({
             ref: popover,
             role: 'listbox',
             className: `dc__position-abs dc__outline-none-imp ${variant === 'menu' ? 'bg__menu--primary shadow__menu' : 'bg__overlay--primary shadow__overlay'} border__primary br-6 dc__overflow-hidden ${isAutoWidth ? 'dc_width-max-content dc__mxw-250' : ''}`,
+            onClick: stopPropagation,
             onKeyDown: handlePopoverKeyDown,
             style: {
                 width: !isAutoWidth ? `${width}px` : undefined,
