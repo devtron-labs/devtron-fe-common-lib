@@ -439,10 +439,12 @@ export function fetchChartTemplateVersions() {
 
 export const getDefaultConfig = (): Promise<ResponseType> => get(`${ROUTES.NOTIFIER}/channel/config`)
 
-export function getEnvironmentListMinPublic(includeAllowedDeploymentTypes?: boolean) {
-    return get(
-        `${ROUTES.ENVIRONMENT_LIST_MIN}?auth=false${includeAllowedDeploymentTypes ? '&showDeploymentOptions=true' : ''}`,
-    )
+export function getEnvironmentListMinPublic(includeAllowedDeploymentTypes?: boolean, options?: APIOptions) {
+    const url = getUrlWithSearchParams(ROUTES.ENVIRONMENT_LIST_MIN, {
+        auth: false,
+        ...(includeAllowedDeploymentTypes ? { showDeploymentOptions: true } : {}),
+    })
+    return get(url, options)
 }
 
 export function getClusterListMin() {
