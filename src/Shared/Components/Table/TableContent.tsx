@@ -387,7 +387,7 @@ const TableContent = <
                 )}
             </div>
 
-            {showPagination && (
+            {showPagination && !areFilteredRowsLoading && (
                 <Pagination
                     pageSize={pageSize}
                     changePage={changePage}

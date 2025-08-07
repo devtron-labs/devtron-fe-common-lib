@@ -1,5 +1,6 @@
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 
+import { abortPreviousRequests, getIsRequestAborted } from '@Common/API/utils'
 import { GenericEmptyState, GenericFilterEmptyState } from '@Common/EmptyState'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
 import { noop, useAsync } from '@Common/Helper'
@@ -58,6 +59,8 @@ const InternalTable = <
         handleSearch,
         ...otherFilters
     } = filterData ?? {}
+
+    const abortControllerRef = useRef<AbortController>(new AbortController())
 
     const wrapperDivRef = useRef<HTMLDivElement>(null)
 
@@ -125,17 +128,23 @@ const InternalTable = <
     )
 
     // useAsync hook for 'getRows' scenario
-    const [_areGetRowsLoading, getRowsResult, getRowsError, reloadGetRows] = useAsync(
-        async () => {
-            let totalRows = 0
-            const { rows: newRows, totalRows: total } = await getRows(filterData)
-            totalRows = total
-            return { filteredRows: newRows, totalRows }
-        },
-        [searchKey, sortBy, sortOrder, rows, offset, pageSize, JSON.stringify(otherFilters), visibleColumns],
+    const [_areGetRowsLoadingWithoutAbortError, getRowsResult, getRowsErrorWithAbortError, reloadGetRows] = useAsync(
+        () =>
+            abortPreviousRequests(async () => {
+                let totalRows = 0
+                const { rows: newRows, totalRows: total } = await getRows(filterData, abortControllerRef)
+                totalRows = total
+                return { filteredRows: newRows, totalRows }
+            }, abortControllerRef),
+        [searchKey, sortBy, sortOrder, getRows, offset, pageSize, JSON.stringify(otherFilters), visibleColumns],
         !!getRows,
         { resetOnChange: false },
     )
+
+    const _areGetRowsLoading = _areGetRowsLoadingWithoutAbortError || !!getIsRequestAborted(getRowsErrorWithAbortError)
+
+    const getRowsError =
+        !getIsRequestAborted(getRowsErrorWithAbortError) && !_areGetRowsLoading ? getRowsErrorWithAbortError : null
 
     // Combine results based on whether getRows is provided
     const _areFilteredRowsLoading = getRows ? _areGetRowsLoading : _areRowsLoading
