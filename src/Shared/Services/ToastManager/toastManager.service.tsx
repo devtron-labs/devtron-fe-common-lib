@@ -18,7 +18,7 @@
 import { toast, ToastContainer, ToastOptions } from 'react-toastify'
 
 import { TOAST_BASE_CONFIG, TOAST_VARIANT_TO_CONFIG_MAP } from './constants'
-import { ToastContent } from './ToastContent'
+import { ShortcutToastContent, ToastContent } from './ToastContent'
 import { ToastProps, ToastVariantType } from './types'
 
 import './toastManager.scss'
@@ -106,9 +106,23 @@ class ToastManager {
             description,
             buttonProps,
             progressBarBg: customProgressBarBg,
+            text,
+            shortcuts,
         }: ToastProps,
         options: Pick<ToastOptions, 'autoClose'> = {},
     ) => {
+        if (variant === ToastVariantType.shortcut) {
+            return toast(<ShortcutToastContent text={text} shortcuts={shortcuts} />, {
+                position: 'top-center',
+                containerId: 'devtron-shortcut-toast',
+                className: 'shortcut-toast',
+                hideProgressBar: true,
+                closeButton: false,
+                autoClose: 3000,
+                closeOnClick: true,
+            })
+        }
+
         const { icon, type, title: defaultTitle, progressBarBg } = TOAST_VARIANT_TO_CONFIG_MAP[variant]
 
         return toast(
