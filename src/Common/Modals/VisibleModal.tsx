@@ -19,7 +19,6 @@ import React, { SyntheticEvent } from 'react'
 import { DTFocusTrapType } from '@Shared/Components/DTFocusTrap'
 
 import { Backdrop, POP_UP_MENU_MODAL_ID } from '../../Shared'
-import { stopPropagation } from '@Common/Helper'
 
 export class VisibleModal extends React.Component<{
     className?: string
