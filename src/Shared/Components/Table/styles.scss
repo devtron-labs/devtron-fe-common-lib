@@ -72,7 +72,8 @@
             background-color: var(--B100);
         }
 
-        &:hover {
+        &:hover,
+        &--active {
             .generic-table__row__hover-item {
                 display: inherit;
             }

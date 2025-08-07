@@ -187,5 +187,5 @@ export const scrollToShowActiveElementIfNeeded = (
         scrollTop += bottom - parentBottom
     }
 
-    parent.scrollTo({ top: scrollTop, behavior: 'smooth' })
+    parent.scrollTo({ top: scrollTop, behavior: 'auto' })
 }
