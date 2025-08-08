@@ -17,6 +17,7 @@
 import { MutableRefObject } from 'react'
 import moment from 'moment'
 import {
+    getIsApprovalPolicyConfigured,
     sanitizeApprovalConfigData,
     sanitizeTargetPlatforms,
     sanitizeUserApprovalList,
@@ -49,6 +50,7 @@ import {
     EnvAppsMetaDTO,
     GetAppsInfoForEnvProps,
     AppMeta,
+    ApprovalRuntimeStateType,
 } from './Types'
 import { ApiResourceType, STAGE_MAP } from '../Pages'
 import { RefVariableType, VariableTypeFormat } from './CIPipeline.Types'
@@ -116,6 +118,8 @@ const cdMaterialListModal = ({
     artifactId,
     artifactStatus,
     disableDefaultSelection,
+    isExceptionUser,
+    isApprovalConfigured,
 }: CDMaterialListModalServiceUtilProps) => {
     if (!artifacts || !artifacts.length) return []
 
@@ -131,8 +135,15 @@ const cdMaterialListModal = ({
             artifactStatusValue = artifactStatus
         }
 
+        const isConsumedNonApprovedImage =
+            !isExceptionUser && isApprovalConfigured &&
+            (!material.userApprovalMetadata ||
+            material.userApprovalMetadata.approvalRuntimeState !== ApprovalRuntimeStateType.approved)
+
         const selectImage =
-            !isImageMarked && markFirstSelected && filterState === FilterStates.ALLOWED ? !material.vulnerable : false
+            !isImageMarked && markFirstSelected && filterState === FilterStates.ALLOWED && !isConsumedNonApprovedImage
+                ? !material.vulnerable
+                : false
         if (selectImage) {
             isImageMarked = true
         }
@@ -328,17 +339,27 @@ export const processCDMaterialServiceResponse = (
         }
     }
 
+    const approvalInfo = processCDMaterialsApprovalInfo(
+        stage === DeploymentNodeType.CD || stage === DeploymentNodeType.APPROVAL,
+        cdMaterialsResult,
+    )
+
+    const isApprovalConfigured = getIsApprovalPolicyConfigured(
+        approvalInfo?.deploymentApprovalInfo?.approvalConfigData,
+    )
+
+    const isExceptionUser = approvalInfo?.deploymentApprovalInfo?.approvalConfigData?.isExceptionUser ?? false
+
     const materials = cdMaterialListModal({
         artifacts: cdMaterialsResult.ci_artifacts,
         offset: offset ?? 0,
         artifactId: cdMaterialsResult.latest_wf_artifact_id,
         artifactStatus: cdMaterialsResult.latest_wf_artifact_status,
         disableDefaultSelection,
+        isApprovalConfigured,
+        isExceptionUser,
     })
-    const approvalInfo = processCDMaterialsApprovalInfo(
-        stage === DeploymentNodeType.CD || stage === DeploymentNodeType.APPROVAL,
-        cdMaterialsResult,
-    )
+
     const metaInfo = processCDMaterialsMetaInfo(cdMaterialsResult)
     const imagePromotionInfo = processImagePromotionInfo(cdMaterialsResult)
 
@@ -455,7 +476,10 @@ export function getClusterListMin() {
 export const getResourceGroupListRaw = (clusterId: string): Promise<ResponseType<ApiResourceType>> =>
     get(`${ROUTES.API_RESOURCE}/${ROUTES.GVK}/${clusterId}`)
 
-export function getNamespaceListMin(clusterIdsCsv: string, abortControllerRef?: APIOptions['abortControllerRef']): Promise<EnvironmentListHelmResponse> {
+export function getNamespaceListMin(
+    clusterIdsCsv: string,
+    abortControllerRef?: APIOptions['abortControllerRef'],
+): Promise<EnvironmentListHelmResponse> {
     const URL = `${ROUTES.NAMESPACE}/autocomplete?ids=${clusterIdsCsv}`
     return get(URL, { abortControllerRef })
 }
