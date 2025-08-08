@@ -189,7 +189,7 @@ const Body = ({
     style = {},
     autoWidth = false,
     preventWheelDisable = false,
-    noBackDrop,
+    noBackDrop = true,
 }: PopupMenuBodyType) => {
     const { handleClose, popupPosition, opacity, callbackRef, buttonWidth } = usePopupContext()
     return popupPosition ? (
