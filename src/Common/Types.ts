@@ -63,9 +63,6 @@ export interface ResponseType<T = any> {
 
 export interface APIOptions {
     timeout?: number
-    /**
-     * @deprecated Use abortController instead
-     */
     signal?: AbortSignal
     abortControllerRef?: MutableRefObject<AbortController>
     /**

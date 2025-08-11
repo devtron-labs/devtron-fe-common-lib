@@ -39,13 +39,14 @@ import { getFilteredUniqueAppList, getParsedResourcesMap } from './utils'
  * @description This function fetches the user preferences from the server. It uses the `get` method to make a request to the server and retrieves the user preferences based on the `USER_PREFERENCES_ATTRIBUTE_KEY`. The result is parsed and returned as a `UserPreferencesType` object.
  * @throws Will throw an error if the request fails or if the result is not in the expected format.
  */
-export const getUserPreferences = async (): Promise<UserPreferencesType> => {
+export const getUserPreferences = async (signal?: AbortSignal): Promise<UserPreferencesType> => {
     const queryParamsPayload: Pick<GetUserPreferencesQueryParamsType, 'key'> = {
         key: USER_PREFERENCES_ATTRIBUTE_KEY,
     }
 
     const { result } = await get<{ value: string }>(
         getUrlWithSearchParams(`${ROUTES.ATTRIBUTES_USER}/${ROUTES.GET}`, queryParamsPayload),
+        { signal },
     )
 
     if (!result?.value) {
@@ -65,6 +66,11 @@ export const getUserPreferences = async (): Promise<UserPreferencesType> => {
                 ? THEME_PREFERENCE_MAP.auto
                 : parsedResult.computedAppTheme,
         resources: getParsedResourcesMap(parsedResult.resources),
+        commandBar: {
+            recentNavigationActions: parsedResult.commandBar?.recentNavigationActions?.length
+                ? parsedResult.commandBar.recentNavigationActions
+                : [],
+        },
     }
 }
 /**
