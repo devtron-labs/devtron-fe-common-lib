@@ -69,7 +69,7 @@ const TableContent = <
     const {
         handleResize,
         gridTemplateColumns = visibleColumns
-            .map((column) => (typeof column.size?.fixed === 'number' ? `${column.size.fixed}px` : '1fr'))
+            .map((column) => (typeof column.size?.fixed === 'number' ? `${column.size.fixed}px` : 'minmax(200px, 1fr)'))
             .join(' '),
     } = resizableConfig ?? {}
 
