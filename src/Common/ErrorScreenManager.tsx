@@ -28,6 +28,7 @@ const ErrorScreenManager = ({
     subtitle,
     reloadClass,
     redirectURL,
+    on404Redirect,
     imageType = ImageType.Large,
 }: ErrorScreenManagerProps) => {
     const getMessage = () => {
@@ -72,6 +73,7 @@ const ErrorScreenManager = ({
                         image={notFound}
                         imageType={imageType}
                         redirectURL={redirectURL}
+                        on404Redirect={on404Redirect}
                     />
                 )
             case ERROR_STATUS_CODE.INTERNAL_SERVER_ERROR:
