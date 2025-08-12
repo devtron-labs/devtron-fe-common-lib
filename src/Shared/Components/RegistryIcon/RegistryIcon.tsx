@@ -33,7 +33,6 @@ const registryIconMap: Record<RegistryType, IconName> = {
     [RegistryType.GCR]: 'ic-google-container-registry',
     [RegistryType.OTHER]: 'ic-container-registry',
 }
-// || 'ic-container-registry'
 
 const getRegistryUrlIconName = (registryUrl: string): IconName => {
     if (registryUrl.includes(RegistryType.ECR)) {
