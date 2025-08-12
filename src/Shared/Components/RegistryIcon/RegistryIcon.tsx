@@ -33,7 +33,47 @@ const registryIconMap: Record<RegistryType, IconName> = {
     [RegistryType.GCR]: 'ic-google-container-registry',
     [RegistryType.OTHER]: 'ic-container-registry',
 }
+// || 'ic-container-registry'
 
-export const RegistryIcon = ({ registryType, size = 20 }: RegistryIconProps) => (
-    <Icon name={registryIconMap[registryType] || 'ic-container-registry'} size={size} color={null} />
+const getRegistryUrlIconName = (registryUrl: string): IconName => {
+    if (registryUrl.includes(RegistryType.ECR)) {
+        return registryIconMap[RegistryType.ECR]
+    }
+    if (registryUrl.includes(RegistryType.GCR)) {
+        return registryIconMap[RegistryType.GCR]
+    }
+    if (registryUrl.includes(RegistryType.DOCKER_HUB) || registryUrl.includes(RegistryType.DOCKER)) {
+        return registryIconMap[RegistryType.DOCKER_HUB]
+    }
+    if (registryUrl.includes(RegistryType.QUAY)) {
+        return registryIconMap[RegistryType.QUAY]
+    }
+    if (registryUrl.includes(RegistryType.GITLAB)) {
+        return registryIconMap[RegistryType.GITLAB]
+    }
+    if (registryUrl.includes(RegistryType.GITHUB)) {
+        return registryIconMap[RegistryType.GITHUB]
+    }
+    if (registryUrl.includes(RegistryType.BITBUCKET)) {
+        return registryIconMap[RegistryType.BITBUCKET]
+    }
+    if (registryUrl.includes(RegistryType.ACR)) {
+        return registryIconMap[RegistryType.ACR]
+    }
+    if (registryUrl.includes(RegistryType.ARTIFACT_REGISTRY)) {
+        return registryIconMap[RegistryType.ARTIFACT_REGISTRY]
+    }
+
+    if (registryUrl.includes(RegistryType.QUAY)) {
+        return registryIconMap[RegistryType.QUAY]
+    }
+    return 'ic-container-registry'
+}
+
+export const RegistryIcon = ({ registryType, size = 20, registryUrl }: RegistryIconProps) => (
+    <Icon
+        name={registryType ? registryIconMap[registryType] : getRegistryUrlIconName(registryUrl)}
+        size={size}
+        color={null}
+    />
 )

@@ -435,6 +435,7 @@ export type CIListItemType = Pick<History, 'promotionApprovalMetadata' | 'isDepl
               tagsEditable: boolean
               hideImageTaggingHardDelete: boolean
               isSuperAdmin: boolean
+              artifact: string
           }
         | {
               type: 'report'
@@ -448,6 +449,7 @@ export type CIListItemType = Pick<History, 'promotionApprovalMetadata' | 'isDepl
               tagsEditable?: never
               hideImageTaggingHardDelete?: never
               isSuperAdmin?: never
+              artifact?: never
           }
     )
 
