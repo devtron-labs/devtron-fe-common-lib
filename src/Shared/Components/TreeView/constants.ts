@@ -21,9 +21,17 @@ export const DEFAULT_NO_ITEMS_TEXT = 'No items found'
 export const VARIANT_TO_BG_CLASS_MAP: Record<TreeViewProps['variant'], string> = {
     primary: 'bg__primary',
     secondary: 'bg__secondary',
+    nav: 'bg__transparent',
 }
 
 export const VARIANT_TO_HOVER_CLASS_MAP: Record<TreeViewProps['variant'], string> = {
     primary: 'bg__hover--opaque',
     secondary: 'bg__hover-secondary--opaque',
+    nav: 'bg__hover-sidebar-item',
+}
+
+export const VARIANT_TO_TEXT_CLASS_MAP: Record<TreeViewProps['variant'], string> = {
+    primary: 'cn-9',
+    secondary: 'cn-9',
+    nav: 'text__sidebar',
 }

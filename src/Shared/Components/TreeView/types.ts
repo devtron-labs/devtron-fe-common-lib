@@ -122,10 +122,12 @@ export type TreeItem<DataAttributeType = null> = BaseNode<DataAttributeType> & {
               onClick?: (e: SyntheticEvent) => void
               href?: never
               clearQueryParamsOnNavigation?: never
+              activeClassName?: never
           }
         | {
               as: 'link'
               href: string
+              activeClassName?: string
               /**
                * The callback function to handle click events on the nav link.
                */
@@ -141,6 +143,7 @@ export type TreeItem<DataAttributeType = null> = BaseNode<DataAttributeType> & {
               href?: never
               onClick?: never
               clearQueryParamsOnNavigation?: never
+              activeClassName?: never
           }
     )
 
@@ -181,10 +184,12 @@ export type TreeViewProps<DataAttributeType = null> = {
      */
     mode?: 'navigation' | 'form'
     /**
-     * If primary the background color will be bg__primary and bg__hover--opaque, if secondary the background color will be bg__secondary bg__hover-secondary--opaque.
+     * If primary the background color will be bg__primary and bg__hover--opaque \
+     * if secondary the background color will be bg__secondary bg__hover-secondary--opaque,
+     * if nav the background color will be bg__transparent bg__hover-sidebar-item.
      * @default 'primary'
      */
-    variant?: 'primary' | 'secondary'
+    variant?: 'primary' | 'secondary' | 'nav'
     /**
      * @default {}
      */
@@ -224,7 +229,8 @@ export type TreeViewProps<DataAttributeType = null> = {
 )
 
 export interface TreeViewNodeContentProps
-    extends Pick<BaseNode, 'startIconConfig' | 'title' | 'subtitle' | 'customTooltipConfig' | 'strikeThrough'> {
+    extends Pick<BaseNode, 'startIconConfig' | 'title' | 'subtitle' | 'customTooltipConfig' | 'strikeThrough'>,
+        Required<Pick<TreeViewProps, 'variant'>> {
     type: 'heading' | 'item'
     isSelected: boolean
 }

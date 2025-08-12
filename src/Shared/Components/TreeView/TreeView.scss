@@ -25,6 +25,10 @@
                 background-color: var(--B500);
                 height: 16px;
                 border-radius: 3px;
+
+                &--nav {
+                    background-color: var(--sidebar-icon) !important;
+                }
             }
         }
 
@@ -34,14 +38,14 @@
             }
         }
 
-        [aria-selected="true"] {
+        [aria-selected='true'] {
             @include tree-view-divider;
 
             .tree-view__container--title {
                 color: var(--B500);
             }
         }
-        
+
         &--title-wrapper:hover {
             .title-with-tooltip {
                 text-decoration-line: underline;

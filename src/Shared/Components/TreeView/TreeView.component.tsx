@@ -224,6 +224,7 @@ const TreeView = <DataAttributeType = null,>({
                 <NavLink
                     to={node.clearQueryParamsOnNavigation ? { pathname: node.href, search: '' } : node.href}
                     className={baseClass}
+                    activeClassName={node.activeClassName}
                     onClick={getNodeItemNavLinkClick(node)}
                     tabIndex={isSelected ? 0 : fallbackTabIndex}
                     data-node-id={node.id}
@@ -278,6 +279,7 @@ const TreeView = <DataAttributeType = null,>({
                         customTooltipConfig={node.customTooltipConfig}
                         strikeThrough={node.strikeThrough}
                         isSelected={isSelected}
+                        variant={variant}
                     />
                 )
 
@@ -318,7 +320,9 @@ const TreeView = <DataAttributeType = null,>({
                                         >
                                             {depth > 0 && (
                                                 <span className="dc__grid dc__align-self-stretch dc__content-center pl-8 w-24 dc__no-shrink dc__align-items-center">
-                                                    <span className="dc__inline-block w-1 bcn-2 h-100 tree-view__divider" />
+                                                    <span
+                                                        className={`dc__inline-block w-1 bcn-2 h-100 tree-view__divider tree-view__divider--${variant}`}
+                                                    />
                                                 </span>
                                             )}
 
@@ -326,7 +330,7 @@ const TreeView = <DataAttributeType = null,>({
                                                 <span className="dc__no-shrink pl-8 pt-8">
                                                     <Icon
                                                         name="ic-expand-sm"
-                                                        color={null}
+                                                        color={variant === 'nav' ? 'white' : null}
                                                         rotateBy={isExpanded ? 270 : 180}
                                                         size={16}
                                                     />
@@ -402,7 +406,9 @@ const TreeView = <DataAttributeType = null,>({
                 const itemDivider =
                     depth > 0 ? (
                         <span className="dc__grid dc__align-self-stretch dc__content-center pl-8 w-24 dc__no-shrink dc__align-items-center">
-                            <span className="dc__inline-block w-1 bcn-2 h-100 tree-view__divider" />
+                            <span
+                                className={`dc__inline-block w-1 bcn-2 h-100 tree-view__divider tree-view__divider--${variant}`}
+                            />
                         </span>
                     ) : null
 
