@@ -1099,6 +1099,7 @@ export enum LicensingErrorCodes {
     LicKeyMismatch = '11006',
     NoCertFound = '11007',
     LicKeyNotFound = '11008',
+    ClusterLimitExceeded = '11011',
 }
 
 export interface LicenseErrorStruct {
@@ -1109,6 +1110,7 @@ export interface LicenseErrorStruct {
 export interface DevtronLicenseBaseDTO {
     fingerprint: string | null
     isTrial: boolean | null
+    isFreemium: boolean | null
     /**
      * In timestamp format
      */

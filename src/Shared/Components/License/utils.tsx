@@ -54,8 +54,17 @@ export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard ext
     licenseDTO: DevtronLicenseDTO<isCentralDashboard>,
     currentUserEmail?: isCentralDashboard extends true ? string : never,
 ): Omit<DevtronLicenseCardProps, 'appTheme'> => {
-    const { isTrial, expiry, ttl, reminderThreshold, organisationMetadata, license, claimedByUserDetails } =
-        licenseDTO || {}
+    const {
+        isTrial,
+        expiry,
+        ttl,
+        reminderThreshold,
+        organisationMetadata,
+        license,
+        claimedByUserDetails,
+        isFreemium,
+        licenseStatusError,
+    } = licenseDTO || {}
 
     return {
         enterpriseName: organisationMetadata?.name || 'Devtron Enterprise',
@@ -63,6 +72,8 @@ export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard ext
         ttl,
         licenseStatus: getDevtronLicenseStatus({ ttl, reminderThreshold }),
         isTrial,
+        isFreemium,
+        licenseStatusError,
         ...(currentUserEmail && currentUserEmail === claimedByUserDetails?.email
             ? { licenseKey: license }
             : { licenseSuffix: license }),

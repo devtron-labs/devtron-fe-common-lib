@@ -15,7 +15,7 @@
  */
 
 import { AppThemeType } from '@Shared/Providers'
-import { DevtronLicenseBaseDTO, DevtronLicenseDTO } from '@Shared/types'
+import { DevtronLicenseBaseDTO, DevtronLicenseDTO, LicenseErrorStruct } from '@Shared/types'
 
 export enum LicenseStatus {
     ACTIVE = 'ACTIVE',
@@ -29,7 +29,9 @@ export type DevtronLicenseCardProps = {
     ttl: number
     licenseStatus: LicenseStatus
     isTrial: boolean
+    isFreemium: boolean
     appTheme: AppThemeType
+    licenseStatusError: LicenseErrorStruct
 } & (
     | {
           licenseKey: string
