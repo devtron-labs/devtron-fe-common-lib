@@ -20,11 +20,11 @@ import { THEME_PREFERENCE_MAP } from '@Shared/Providers/ThemeProvider/types'
 
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
 import {
+    GetUserPreferencePayloadParams,
     GetUserPreferencesParsedDTO,
     GetUserPreferencesQueryParamsType,
     PreferredResourceKindType,
     UpdateUserPreferencesPayloadType,
-    UserPathValueMapType,
     UserPreferenceFilteredListTypes,
     UserPreferenceResourceActions,
     UserPreferenceResourceProps,
@@ -109,7 +109,7 @@ const getUserPreferencePayload = async ({
     value,
     resourceKind,
     userPreferencesResponse,
-}: UserPathValueMapType): Promise<Partial<UserPreferencesPayloadValueType>> => {
+}: GetUserPreferencePayloadParams): Promise<Partial<UserPreferencesPayloadValueType>> => {
     switch (path) {
         case 'themePreference':
             return {
@@ -127,6 +127,16 @@ const getUserPreferencePayload = async ({
                 resources: buildUpdatedResourcesMap(userPreferencesResponse?.resources, resourceKind, value),
             }
         }
+
+        case 'commandBar.recentNavigationActions': {
+            return {
+                commandBar: {
+                    ...userPreferencesResponse?.commandBar,
+                    recentNavigationActions: value,
+                },
+            }
+        }
+
         default:
             return {}
     }
@@ -151,7 +161,7 @@ export const updateUserPreferences = async ({
                     value,
                     resourceKind,
                     userPreferencesResponse: currentUserPreferences,
-                } as UserPathValueMapType),
+                } as GetUserPreferencePayloadParams),
             ),
         }
 

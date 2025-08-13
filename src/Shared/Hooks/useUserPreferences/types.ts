@@ -161,7 +161,7 @@ export interface UseUserPreferencesProps {
     recentlyVisitedFetchConfig?: RecentlyVisitedFetchConfigType
 }
 
-export type UserPathValueMapType =
+type UserPathValueMapType =
     | {
           path: 'themePreference'
           value: Required<Pick<UpdatedUserPreferencesType, 'themePreference' | 'appTheme'>>
@@ -180,6 +180,34 @@ export type UserPathValueMapType =
           resourceKind: PreferredResourceKindType
           userPreferencesResponse?: UserPreferencesType
       }
+    | {
+          path: 'commandBar.recentNavigationActions'
+          value: UserPreferencesType['commandBar']['recentNavigationActions']
+          resourceKind?: never
+          userPreferencesResponse?: never
+      }
+
+export type GetUserPreferencePayloadParams = {
+    userPreferencesResponse: UserPreferencesType
+    resourceKind?: PreferredResourceKindType
+} & (
+    | {
+          path: 'themePreference'
+          value: Required<Pick<UpdatedUserPreferencesType, 'themePreference' | 'appTheme'>>
+      }
+    | {
+          path: 'pipelineRBACViewSelectedTab'
+          value: Required<Pick<UserPreferencesType, 'pipelineRBACViewSelectedTab'>>
+      }
+    | {
+          path: 'resources'
+          value: Required<BaseRecentlyVisitedEntitiesTypes[]>
+      }
+    | {
+          path: 'commandBar.recentNavigationActions'
+          value: UserPreferencesType['commandBar']['recentNavigationActions']
+      }
+)
 
 export type UserPreferenceResourceProps = UserPathValueMapType & {
     shouldThrowError?: boolean
