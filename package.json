@@ -116,6 +116,7 @@
         "@uiw/react-codemirror": "4.23.7",
         "@xyflow/react": "12.4.2",
         "ansi_up": "^5.2.1",
+        "chart.js": "^4.5.0",
         "codemirror-json-schema": "0.8.0",
         "dayjs": "^1.11.13",
         "fast-json-patch": "^3.1.1",
