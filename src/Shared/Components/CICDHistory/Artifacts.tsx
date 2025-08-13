@@ -101,7 +101,7 @@ export const CIListItem = ({
                 <div className="flex left dc__gap-12">
                     <div className="bcn-1 flex br-4 icon-dim-40">
                         {type === 'report' ? (
-                            <img src={folder} className="icon-dim-20" alt="type" />
+                            <img src={folder} width={20} height={20} alt="type" />
                         ) : (
                             <RegistryIcon registryUrl={artifact} />
                         )}

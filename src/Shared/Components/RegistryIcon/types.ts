@@ -30,3 +30,29 @@ export interface RegistryIconProps {
      */
     registryUrl?: string
 }
+
+export type RegistryIconProp =
+    | {
+          registryType?: RegistryType
+          /**
+           * The size of the icon in pixels.
+           * @default 20
+           */
+          size?: IconsProps['size']
+          /**
+           * The registry URL to determine the icon.
+           */
+          registryUrl?: never
+      }
+    | {
+          registryType?: never
+          /**
+           * The size of the icon in pixels.
+           * @default 20
+           */
+          size?: IconsProps['size']
+          /**
+           * The registry URL to determine the icon.
+           */
+          registryUrl: string
+      }

@@ -62,10 +62,6 @@ const getRegistryUrlIconName = (registryUrl: string): IconName => {
     if (registryUrl.includes(RegistryType.ARTIFACT_REGISTRY)) {
         return registryIconMap[RegistryType.ARTIFACT_REGISTRY]
     }
-
-    if (registryUrl.includes(RegistryType.QUAY)) {
-        return registryIconMap[RegistryType.QUAY]
-    }
     return 'ic-container-registry'
 }
 
