@@ -30,6 +30,12 @@ export const VARIANT_TO_HOVER_CLASS_MAP: Record<TreeViewProps['variant'], string
     nav: 'bg__hover-sidebar-item',
 }
 
+export const VARIANT_TO_SELECTED_CLASS_MAP: Record<TreeViewProps['variant'], string> = {
+    primary: 'bcb-1',
+    secondary: 'bcb-1',
+    nav: 'bg__sidebar-item',
+}
+
 export const VARIANT_TO_TEXT_CLASS_MAP: Record<TreeViewProps['variant'], string> = {
     primary: 'cn-9',
     secondary: 'cn-9',

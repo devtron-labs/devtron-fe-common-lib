@@ -194,6 +194,11 @@ export type TreeViewProps<DataAttributeType = null> = {
      * @default {}
      */
     defaultExpandedMap?: Record<string, boolean>
+    /**
+     * When true, the selected heading (`selectedId`) will be highlighted only when it is collapsed.
+     * @default false
+     */
+    highlightSelectedHeadingOnlyWhenCollapsed?: boolean
 } /**
  * WARNING: For internal use only.
  */ & (

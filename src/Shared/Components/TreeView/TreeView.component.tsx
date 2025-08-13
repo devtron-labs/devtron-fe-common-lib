@@ -20,7 +20,12 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 import { Icon } from '../Icon'
 import { TrailingItem } from '../TrailingItem'
-import { DEFAULT_NO_ITEMS_TEXT, VARIANT_TO_BG_CLASS_MAP, VARIANT_TO_HOVER_CLASS_MAP } from './constants'
+import {
+    DEFAULT_NO_ITEMS_TEXT,
+    VARIANT_TO_BG_CLASS_MAP,
+    VARIANT_TO_HOVER_CLASS_MAP,
+    VARIANT_TO_SELECTED_CLASS_MAP,
+} from './constants'
 import TreeViewNodeContent from './TreeViewNodeContent'
 import { NodeElementType, TreeHeading, TreeItem, TreeViewProps } from './types'
 import { getSelectedIdParentNodes, getVisibleNodes } from './utils'
@@ -46,6 +51,7 @@ const TreeView = <DataAttributeType = null,>({
     getUpdateItemsRefMap: getUpdateItemsRefMapProp,
     variant = 'primary',
     defaultExpandedMap = {},
+    highlightSelectedHeadingOnlyWhenCollapsed = false,
 }: TreeViewProps<DataAttributeType>) => {
     const { pathname } = useLocation()
     const isFirstLevel = depth === 0
@@ -188,6 +194,11 @@ const TreeView = <DataAttributeType = null,>({
     }
 
     const getNodeItemNavLinkClick = (node: TreeItem<DataAttributeType>) => (e: SyntheticEvent) => {
+        if (node.isDisabled) {
+            e.preventDefault()
+            return
+        }
+
         // Prevent navigation to the same page
         if (node.href === pathname) {
             e.preventDefault()
@@ -223,8 +234,8 @@ const TreeView = <DataAttributeType = null,>({
             return (
                 <NavLink
                     to={node.clearQueryParamsOnNavigation ? { pathname: node.href, search: '' } : node.href}
-                    className={baseClass}
-                    activeClassName={node.activeClassName}
+                    className={`${baseClass} ${node.isDisabled ? 'dc__disabled' : ''}`}
+                    activeClassName={`tree-view__container__nav-link--active ${node.activeClassName}`}
                     onClick={getNodeItemNavLinkClick(node)}
                     tabIndex={isSelected ? 0 : fallbackTabIndex}
                     data-node-id={node.id}
@@ -302,7 +313,7 @@ const TreeView = <DataAttributeType = null,>({
                                     {dividerPrefix}
 
                                     <div
-                                        className={`flexbox w-100 dc__align-start br-4 ${isSelected ? 'bcb-1' : VARIANT_TO_HOVER_CLASS_MAP[variant]}`}
+                                        className={`flexbox w-100 dc__align-start br-4 ${isSelected && (!highlightSelectedHeadingOnlyWhenCollapsed || !isExpanded) ? VARIANT_TO_SELECTED_CLASS_MAP[variant] : VARIANT_TO_HOVER_CLASS_MAP[variant]}`}
                                     >
                                         <button
                                             type="button"

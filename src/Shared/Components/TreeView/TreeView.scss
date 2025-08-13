@@ -38,6 +38,12 @@
             }
         }
 
+        &__nav-link {
+            &--active {
+                @include tree-view-divider;
+            }
+        }
+
         [aria-selected='true'] {
             @include tree-view-divider;
 
