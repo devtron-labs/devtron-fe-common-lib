@@ -71,14 +71,16 @@ const LicenseCardSubText = ({
                 />
             </div>
             {freemiumLimitReached && (
-                <Button
-                    dataTestId="mail-support"
-                    startIcon={<Icon name="ic-email" color={null} />}
-                    text={ENTERPRISE_SUPPORT_LINK}
-                    variant={ButtonVariantType.text}
-                    component={ButtonComponentType.anchor}
-                    anchorProps={{ href: `mailto:${ENTERPRISE_SUPPORT_LINK}` }}
-                />
+                <div className="mail-support">
+                    <Button
+                        dataTestId="mail-support"
+                        startIcon={<Icon name="ic-email" color={null} />}
+                        text={ENTERPRISE_SUPPORT_LINK}
+                        variant={ButtonVariantType.text}
+                        component={ButtonComponentType.anchor}
+                        anchorProps={{ href: `mailto:${ENTERPRISE_SUPPORT_LINK}` }}
+                    />
+                </div>
             )}
             <Button
                 dataTestId="contact-support"
@@ -158,7 +160,7 @@ export const DevtronLicenseCard = ({
         : useMotionTemplate`linear-gradient(55deg, transparent, rgba(255, 255, 255, ${sheenOpacity}) ${sheenPosition}%, transparent)`
 
     return (
-        <div className="flexbox-col p-8 br-16" style={{ backgroundColor: bgColor }}>
+        <div className="license-card-wrapper flexbox-col p-8 br-16" style={{ backgroundColor: bgColor }}>
             <div style={{ perspective: '1000px' }}>
                 <motion.div
                     className={`license-card shadow__overlay border__secondary flexbox-col br-12 h-200 dc__overflow-hidden bg__tertiary ${getThemeOppositeThemeClass(appTheme)}`}
