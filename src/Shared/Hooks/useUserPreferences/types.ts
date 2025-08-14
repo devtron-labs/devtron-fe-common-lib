@@ -35,7 +35,6 @@ export type NavigationItemID =
     | 'software-release-management-overview'
     | 'software-release-management-software-release'
     | 'cost-visibility-overview'
-    | 'cost-visibility-trends'
     | 'cost-visibility-cost-breakdown'
     | 'cost-visibility-configurations'
     | 'security-center-overview'

@@ -1,0 +1,6 @@
+export enum CostBreakdownViewType {
+    CLUSTERS = 'CLUSTERS',
+    ENVIRONMENTS = 'ENVIRONMENTS',
+    PROJECTS = 'PROJECTS',
+    APPLICATIONS = 'APPLICATIONS',
+}

@@ -213,4 +213,5 @@ declare module '@tanstack/react-query' {
 
 export * from './Common'
 export * from './Pages'
+export * from './Pages-Devtron-2.0'
 export * from './Shared'
