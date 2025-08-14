@@ -88,7 +88,7 @@ export const URLS = {
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_DETAIL: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/detail/:appId`,
     LICENSE_AUTH: '/license-auth',
     GLOBAL_CONFIG_EDIT_CLUSTER: '/global-config/cluster-env/edit/:clusterId',
-    COST_VISIBILITY: '/cost-visibility',
+    COST_VISIBILITY_OVERVIEW: '/cost-visibility/overview',
     COST_BREAKDOWN_ROUTE: '/cost-visibility/breakdown/:breakdownViewType',
     COST_BREAKDOWN_CLUSTERS: `/cost-visibility/breakdown/${CostBreakdownViewType.CLUSTERS}`,
     COST_BREAKDOWN_ENVIRONMENTS: `/cost-visibility/breakdown/${CostBreakdownViewType.ENVIRONMENTS}`,
