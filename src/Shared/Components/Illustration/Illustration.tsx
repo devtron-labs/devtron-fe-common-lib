@@ -3,6 +3,7 @@
 import ImgCode from '@Illustrations/img-code.webp'
 import ImgManOnRocket from '@Illustrations/img-man-on-rocket.webp'
 import ImgNoResult from '@Illustrations/img-no-result.webp'
+import NoClusterCostEnabled from '@Illustrations/no-cluster-cost-enabled.webp'
 
 // eslint-disable-next-line no-restricted-imports
 import { IllustrationBase } from './IllustrationBase'
@@ -12,6 +13,7 @@ export const illustrationMap = {
     'img-code': ImgCode,
     'img-man-on-rocket': ImgManOnRocket,
     'img-no-result': ImgNoResult,
+    'no-cluster-cost-enabled': NoClusterCostEnabled,
 }
 
 export type IllustrationName = keyof typeof illustrationMap
