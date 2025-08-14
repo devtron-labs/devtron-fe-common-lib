@@ -1141,11 +1141,16 @@ export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = Devt
               } | null
               showLicenseData?: never
               licenseStatusError?: never
+              moduleLimits?: never
           }
         : {
               claimedByUserDetails?: never
               showLicenseData: boolean
               licenseStatusError?: LicenseErrorStruct
+              moduleLimits: {
+                  allAllowed: boolean
+                  maxAllowedClusters: number
+              }
           })
 
 export type CountryISO2Type = ParsedCountry['iso2']

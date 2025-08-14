@@ -46,7 +46,7 @@ export type DevtronLicenseCardProps = {
 )
 
 export type DevtronLicenseInfo = Omit<DevtronLicenseCardProps, 'appTheme'> &
-    Pick<DevtronLicenseDTO, 'fingerprint' | 'showLicenseData' | 'licenseStatusError'>
+    Pick<DevtronLicenseDTO, 'fingerprint' | 'showLicenseData' | 'licenseStatusError' | 'moduleLimits'>
 
 export interface ActivateLicenseDialogProps extends Pick<DevtronLicenseBaseDTO, 'fingerprint'> {
     enterpriseName: string

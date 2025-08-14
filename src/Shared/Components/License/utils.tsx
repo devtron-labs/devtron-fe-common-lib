@@ -20,6 +20,7 @@ import { DATE_TIME_FORMATS } from '@Common/Constants'
 import { getUrlWithSearchParams } from '@Common/index'
 import { DevtronLicenseDTO } from '@Shared/types'
 
+import { ALLOWED_CLUSTER_IN_FREEMIUM } from './constants'
 import { DevtronLicenseCardProps, DevtronLicenseInfo, LicenseStatus } from './types'
 
 export const getLicenseColorsAccordingToStatus = (
@@ -87,6 +88,10 @@ export const parseDevtronLicenseData = (result: DevtronLicenseDTO): DevtronLicen
         fingerprint: result?.fingerprint || '',
         showLicenseData: result?.showLicenseData,
         licenseStatusError: result?.licenseStatusError,
+        moduleLimits: {
+            allAllowed: result?.moduleLimits?.allAllowed || false,
+            maxAllowedClusters: result?.moduleLimits?.maxAllowedClusters || ALLOWED_CLUSTER_IN_FREEMIUM,
+        },
     }
 }
 
