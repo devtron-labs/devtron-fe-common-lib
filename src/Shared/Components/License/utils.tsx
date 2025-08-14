@@ -18,14 +18,25 @@ import moment from 'moment'
 
 import { DATE_TIME_FORMATS } from '@Common/Constants'
 import { getUrlWithSearchParams } from '@Common/index'
-import { DevtronLicenseDTO } from '@Shared/types'
+import { DevtronLicenseDTO, LicensingErrorCodes } from '@Shared/types'
 
 import { ALLOWED_CLUSTER_IN_FREEMIUM } from './constants'
 import { DevtronLicenseCardProps, DevtronLicenseInfo, LicenseStatus } from './types'
 
-export const getLicenseColorsAccordingToStatus = (
-    licenseStatus: LicenseStatus,
-): { bgColor: string; textColor: string } => {
+export const getLicenseColorsAccordingToStatus = ({
+    isFreemium,
+    licenseStatus,
+    licenseStatusError,
+}: Pick<DevtronLicenseCardProps, 'licenseStatus' | 'isFreemium' | 'licenseStatusError'>): {
+    bgColor: string
+    textColor: string
+} => {
+    if (isFreemium) {
+        const freemiumLimitReached = licenseStatusError?.code === LicensingErrorCodes.ClusterLimitExceeded
+        return freemiumLimitReached
+            ? { bgColor: 'var(--R100)', textColor: 'var(--R500)' }
+            : { bgColor: 'var(--G100)', textColor: 'var(--G500)' }
+    }
     switch (licenseStatus) {
         case LicenseStatus.ACTIVE:
             return { bgColor: 'var(--G100)', textColor: 'var(--G500)' }

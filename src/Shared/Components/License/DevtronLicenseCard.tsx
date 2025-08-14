@@ -34,6 +34,17 @@ import './licenseCard.scss'
 
 const DAMPEN_FACTOR = 50
 
+const ContactSupportButton = () => (
+    <Button
+        dataTestId="contact-support"
+        startIcon={<ICChatSupport />}
+        text="Contact support"
+        variant={ButtonVariantType.text}
+        component={ButtonComponentType.anchor}
+        anchorProps={{ href: CONTACT_SUPPORT_LINK }}
+    />
+)
+
 const LicenseCardSubText = ({
     isFreemium,
     licenseStatus,
@@ -43,34 +54,29 @@ const LicenseCardSubText = ({
         return null
     }
 
-    const isLicenseValid = licenseStatus !== LicenseStatus.EXPIRED && !licenseStatusError
     const freemiumLimitReached = licenseStatusError?.code === LicensingErrorCodes.ClusterLimitExceeded
 
-    return licenseStatus !== LicenseStatus.ACTIVE ? (
-        <div className="p-16 fs-13 lh-1-5 flexbox-col dc__gap-8">
-            <div className="flexbox dc__gap-8">
-                {freemiumLimitReached ? (
-                    <div className="flexbox-col dc__gap-4 fs-13 fw-4 lh-20 cn-9">
-                        <span className="fw-6">Multiple Clusters Detected</span>
-                        <span>
-                            Your account is connected to multiple clusters, which isn’t allowed on the freemium plan.
-                            Upgrade to an Enterprise license or contact us.
-                        </span>
-                    </div>
-                ) : (
-                    <span>
-                        To renew your license mail us at&nbsp;
-                        <a href={`mailto:${ENTERPRISE_SUPPORT_LINK}`}>{ENTERPRISE_SUPPORT_LINK}</a> or contact your
-                        Devtron representative.
-                    </span>
-                )}
-                <Icon
-                    name={isLicenseValid ? 'ic-timer' : 'ic-error'}
-                    color={isLicenseValid ? 'Y500' : 'R500'}
-                    size={16}
-                />
-            </div>
-            {freemiumLimitReached && (
+    if (licenseStatus === LicenseStatus.ACTIVE && isFreemium) {
+        return (
+            <div className="p-16 fs-13 lh-1-5 flexbox-col dc__gap-8">
+                <div className="flexbox dc__gap-8 dc__content-space fs-13 fw-4 lh-20 cn-9">
+                    {freemiumLimitReached ? (
+                        <div className="flexbox-col dc__gap-4">
+                            <span className="fw-6">Multiple Clusters Detected</span>
+                            <span>
+                                Your account is connected to multiple clusters, which isn’t allowed on the freemium
+                                plan. Upgrade to an Enterprise license or contact us.
+                            </span>
+                        </div>
+                    ) : (
+                        <span className="fw-6">Unlimited single cluster usage</span>
+                    )}
+                    <Icon
+                        name={freemiumLimitReached ? 'ic-error' : 'ic-success'}
+                        color={freemiumLimitReached ? 'R500' : 'G500'}
+                        size={20}
+                    />
+                </div>
                 <div className="mail-support">
                     <Button
                         dataTestId="mail-support"
@@ -81,20 +87,28 @@ const LicenseCardSubText = ({
                         anchorProps={{ href: `mailto:${ENTERPRISE_SUPPORT_LINK}` }}
                     />
                 </div>
-            )}
-            <Button
-                dataTestId="contact-support"
-                startIcon={<ICChatSupport />}
-                text="Contact support"
-                variant={ButtonVariantType.text}
-                component={ButtonComponentType.anchor}
-                anchorProps={{ href: CONTACT_SUPPORT_LINK }}
-            />
-        </div>
-    ) : (
-        <div className="flexbox p-16 cn-9 fw-6 fs-13 lh-1-5 dc__align-items-center dc__content-space">
-            <span>Unlimited single cluster usage</span>
-            <Icon name="ic-success" size={20} color={null} />
+                <ContactSupportButton />
+            </div>
+        )
+    }
+
+    const isLicenseExpired = licenseStatus === LicenseStatus.EXPIRED
+
+    return (
+        <div className="p-16 fs-13 lh-1-5 flexbox-col dc__gap-8">
+            <div className="flexbox dc__gap-8 dc__content-space">
+                <span>
+                    To renew your license mail us at&nbsp;
+                    <a href={`mailto:${ENTERPRISE_SUPPORT_LINK}`}>{ENTERPRISE_SUPPORT_LINK}</a> or contact your Devtron
+                    representative.
+                </span>
+                <Icon
+                    name={isLicenseExpired ? 'ic-error' : 'ic-timer'}
+                    color={isLicenseExpired ? 'R500' : 'Y500'}
+                    size={16}
+                />
+            </div>
+            <ContactSupportButton />
         </div>
     )
 }
@@ -112,7 +126,7 @@ export const DevtronLicenseCard = ({
     handleCopySuccess,
     licenseStatusError,
 }: DevtronLicenseCardProps) => {
-    const { bgColor, textColor } = getLicenseColorsAccordingToStatus(licenseStatus)
+    const { bgColor, textColor } = getLicenseColorsAccordingToStatus({ isFreemium, licenseStatus, licenseStatusError })
     const remainingTime = getTTLInHumanReadableFormat(ttl)
     const remainingTimeString = ttl < 0 ? `Expired ${remainingTime} ago` : `${remainingTime} remaining`
     const isThemeDark = appTheme === AppThemeType.dark
