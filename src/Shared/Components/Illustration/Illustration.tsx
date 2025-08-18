@@ -2,6 +2,7 @@
 
 import ImgCode from '@Illustrations/img-code.webp'
 import ImgManOnRocket from '@Illustrations/img-man-on-rocket.webp'
+import { ReactComponent as ImgMechanicalOperation } from '@Illustrations/img-mechanical-operation.svg'
 import ImgNoResult from '@Illustrations/img-no-result.webp'
 
 // eslint-disable-next-line no-restricted-imports
@@ -9,6 +10,7 @@ import { IllustrationBase } from './IllustrationBase'
 import { IllustrationBaseProps } from './types'
 
 export const illustrationMap = {
+    'img-mechanical-operation': ImgMechanicalOperation,
     'img-code': ImgCode,
     'img-man-on-rocket': ImgManOnRocket,
     'img-no-result': ImgNoResult,
