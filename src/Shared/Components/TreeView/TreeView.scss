@@ -26,8 +26,8 @@
                 height: 16px;
                 border-radius: 3px;
 
-                &--nav {
-                    background-color: var(--sidebar-icon) !important;
+                &.tree-view__divider--sidenav {
+                    background-color: var(--sidenav-icon);
                 }
             }
         }
@@ -49,6 +49,10 @@
 
             .tree-view__container--title {
                 color: var(--B500);
+
+                &.tree-view__container--title--sidenav {
+                    color: var(--sidenav-text);
+                }
             }
         }
 
