@@ -67,6 +67,9 @@ import { ReactComponent as ICDevtronAi } from '@IconsV2/ic-devtron-ai.svg'
 import { ReactComponent as ICDevtronApp } from '@IconsV2/ic-devtron-app.svg'
 import { ReactComponent as ICDevtronHeaderLogo } from '@IconsV2/ic-devtron-header-logo.svg'
 import { ReactComponent as ICDevtronJob } from '@IconsV2/ic-devtron-job.svg'
+import { ReactComponent as ICDiffAdded } from '@IconsV2/ic-diff-added.svg'
+import { ReactComponent as ICDiffDeleted } from '@IconsV2/ic-diff-deleted.svg'
+import { ReactComponent as ICDiffUpdated } from '@IconsV2/ic-diff-updated.svg'
 import { ReactComponent as ICDisconnect } from '@IconsV2/ic-disconnect.svg'
 import { ReactComponent as ICDiscordFill } from '@IconsV2/ic-discord-fill.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
@@ -302,6 +305,9 @@ export const iconMap = {
     'ic-devtron-header-logo': ICDevtronHeaderLogo,
     'ic-devtron-job': ICDevtronJob,
     'ic-devtron': ICDevtron,
+    'ic-diff-added': ICDiffAdded,
+    'ic-diff-deleted': ICDiffDeleted,
+    'ic-diff-updated': ICDiffUpdated,
     'ic-disconnect': ICDisconnect,
     'ic-discord-fill': ICDiscordFill,
     'ic-dockerhub': ICDockerhub,
