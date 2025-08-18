@@ -333,7 +333,7 @@ const TreeView = <DataAttributeType = null,>({
                                             {depth > 0 && (
                                                 <span className="dc__grid dc__align-self-stretch dc__content-center pl-8 w-24 dc__no-shrink dc__align-items-center">
                                                     <span
-                                                        className={`dc__inline-block w-1 bcn-2 h-100 tree-view__divider tree-view__divider--${variant}`}
+                                                        className={`dc__inline-block w-1 h-100 tree-view__divider tree-view__divider--${variant}`}
                                                     />
                                                 </span>
                                             )}
@@ -350,7 +350,9 @@ const TreeView = <DataAttributeType = null,>({
 
                                                 {isExpanded && (
                                                     <span className="flex pl-8">
-                                                        <span className="dc__inline-block w-1 bcn-2 h-100" />
+                                                        <span
+                                                            className={`tree-view__node-heading-divider tree-view__node-heading-divider--${variant} dc__inline-block w-1 h-100`}
+                                                        />
                                                     </span>
                                                 )}
                                             </span>
@@ -419,7 +421,7 @@ const TreeView = <DataAttributeType = null,>({
                     depth > 0 ? (
                         <span className="dc__grid dc__align-self-stretch dc__content-center pl-8 w-24 dc__no-shrink dc__align-items-center">
                             <span
-                                className={`dc__inline-block w-1 bcn-2 h-100 tree-view__divider tree-view__divider--${variant}`}
+                                className={`dc__inline-block w-1 h-100 tree-view__divider tree-view__divider--${variant}`}
                             />
                         </span>
                     ) : null
