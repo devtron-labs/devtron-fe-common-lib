@@ -493,6 +493,8 @@ export interface CDMaterialListModalServiceUtilProps {
     artifactId?: number
     artifactStatus?: string
     disableDefaultSelection?: boolean
+    isExceptionUser: boolean
+    isApprovalConfigured: boolean
 }
 
 export interface CDMaterialType {
