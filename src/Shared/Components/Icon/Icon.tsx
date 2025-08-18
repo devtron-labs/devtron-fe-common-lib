@@ -15,6 +15,7 @@ import { ReactComponent as ICArrowsClockwise } from '@IconsV2/ic-arrows-clockwis
 import { ReactComponent as ICArrowsLeftRight } from '@IconsV2/ic-arrows-left-right.svg'
 import { ReactComponent as ICAsterisk } from '@IconsV2/ic-asterisk.svg'
 import { ReactComponent as ICAther } from '@IconsV2/ic-ather.svg'
+import { ReactComponent as ICAwsCodecommit } from '@IconsV2/ic-aws-codecommit.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICAzureAks } from '@IconsV2/ic-azure-aks.svg'
 import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
@@ -104,6 +105,7 @@ import { ReactComponent as ICGift } from '@IconsV2/ic-gift.svg'
 import { ReactComponent as ICGiftGradient } from '@IconsV2/ic-gift-gradient.svg'
 import { ReactComponent as ICGit } from '@IconsV2/ic-git.svg'
 import { ReactComponent as ICGitBranch } from '@IconsV2/ic-git-branch.svg'
+import { ReactComponent as ICGitea } from '@IconsV2/ic-gitea.svg'
 import { ReactComponent as ICGithub } from '@IconsV2/ic-github.svg'
 import { ReactComponent as ICGitlab } from '@IconsV2/ic-gitlab.svg'
 import { ReactComponent as ICGoogle } from '@IconsV2/ic-google.svg'
@@ -253,6 +255,7 @@ export const iconMap = {
     'ic-arrows-left-right': ICArrowsLeftRight,
     'ic-asterisk': ICAsterisk,
     'ic-ather': ICAther,
+    'ic-aws-codecommit': ICAwsCodecommit,
     'ic-azure-aks': ICAzureAks,
     'ic-azure': ICAzure,
     'ic-bg-cluster': ICBgCluster,
@@ -342,6 +345,7 @@ export const iconMap = {
     'ic-gift': ICGift,
     'ic-git-branch': ICGitBranch,
     'ic-git': ICGit,
+    'ic-gitea': ICGitea,
     'ic-github': ICGithub,
     'ic-gitlab': ICGitlab,
     'ic-google-artifact-registry': ICGoogleArtifactRegistry,

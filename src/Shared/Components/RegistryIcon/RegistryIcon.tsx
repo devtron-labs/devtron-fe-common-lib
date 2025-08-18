@@ -35,6 +35,7 @@ const registryIconMap: Record<RegistryType, IconName> = {
 }
 
 const getRegistryUrlIconName = (registryUrl: string): IconName => {
+    if (!registryUrl) return 'ic-container-registry'
     if (registryUrl.includes(RegistryType.ECR)) {
         return registryIconMap[RegistryType.ECR]
     }
