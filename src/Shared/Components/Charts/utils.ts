@@ -1,5 +1,6 @@
-import { ChartData, ChartOptions, ChartType as ChartJSChartType } from 'chart.js'
+import { ChartData, ChartDataset, ChartOptions, ChartType as ChartJSChartType } from 'chart.js'
 
+import { LEGENDS_LABEL_CONFIG } from './constants'
 import { ChartType, SimpleDataset } from './types'
 
 const getCSSVariableValue = (variableName: string) => {
@@ -12,7 +13,7 @@ const getCSSVariableValue = (variableName: string) => {
         console.error(`CSS variable "${variableName}" not found`)
     }
 
-    return value ?? 'rgba(0, 0, 0, 0.1)'
+    return value ?? 'transparent'
 }
 
 // Map our chart types to Chart.js types
@@ -35,64 +36,75 @@ export const getDefaultOptions = (type: ChartType): ChartOptions => {
     const baseOptions: ChartOptions = {
         responsive: true,
         maintainAspectRatio: false,
+        devicePixelRatio: 3,
         plugins: {
             legend: {
                 position: 'bottom' as const,
+                labels: LEGENDS_LABEL_CONFIG,
             },
             title: {
                 display: false,
             },
         },
+        elements: {
+            line: {
+                fill: true,
+                tension: 0.4,
+            },
+            bar: {
+                borderSkipped: 'start' as const,
+                borderWidth: 2,
+                borderColor: 'transparent',
+                borderRadius: 4,
+            },
+            arc: {
+                spacing: 2,
+            },
+        },
+    }
+
+    const gridConfig = {
+        color: getCSSVariableValue('--N50'),
     }
 
     switch (type) {
         case 'area':
             return {
                 ...baseOptions,
-                elements: {
-                    line: {
-                        fill: true,
+                plugins: {
+                    ...baseOptions.plugins,
+                    tooltip: {
+                        mode: 'index',
                     },
+                },
+                interaction: {
+                    mode: 'nearest',
+                    axis: 'x',
+                    intersect: false,
                 },
                 scales: {
                     y: {
+                        stacked: true,
                         beginAtZero: true,
-                        grid: {
-                            color: getCSSVariableValue('--N50'),
-                        },
+                        grid: gridConfig,
                     },
                     x: {
-                        grid: {
-                            color: getCSSVariableValue('--N50'),
-                        },
+                        grid: gridConfig,
                     },
                 },
-            }
+            } as ChartOptions<'line'>
         case 'stackedBar':
             return {
                 ...baseOptions,
                 scales: {
                     x: {
                         stacked: true,
-                        grid: {
-                            color: getCSSVariableValue('--N50'),
-                        },
+                        grid: gridConfig,
                     },
                     y: {
                         stacked: true,
                         beginAtZero: true,
-                        grid: {
-                            color: getCSSVariableValue('--N50'),
-                        },
-                    },
-                },
-                elements: {
-                    bar: {
-                        // Add gap between bars
-                        borderSkipped: 'start',
-                        borderWidth: 2,
-                        borderColor: 'transparent',
-                        borderRadius: 4,
+                        grid: gridConfig,
                     },
                 },
             }
@@ -104,24 +116,11 @@ export const getDefaultOptions = (type: ChartType): ChartOptions => {
                     x: {
                         stacked: true,
                         beginAtZero: true,
-                        grid: {
-                            color: getCSSVariableValue('--N50'),
-                        },
+                        grid: gridConfig,
                     },
                     y: {
                         stacked: true,
-                        grid: {
-                            color: getCSSVariableValue('--N50'),
-                        },
-                    },
-                },
-                elements: {
-                    bar: {
-                        // Add gap between bars
-                        borderSkipped: 'start',
-                        borderWidth: 2,
-                        borderColor: 'transparent',
-                        borderRadius: 4,
+                        grid: gridConfig,
                     },
                 },
             }
@@ -135,32 +134,39 @@ export const getDefaultOptions = (type: ChartType): ChartOptions => {
                         align: 'center',
                     },
                 },
-                elements: {
-                    arc: {
-                        spacing: 2,
-                    },
-                },
             }
         default:
             return baseOptions
     }
 }
 
-// Define color palette for consistent styling
-const getColorPalette = () => [
-    'rgba(54, 162, 235, 0.8)', // Blue
-    'rgba(255, 99, 132, 0.8)', // Red
-    'rgba(255, 205, 86, 0.8)', // Yellow
-    'rgba(75, 192, 192, 0.8)', // Green
-    'rgba(153, 102, 255, 0.8)', // Purple
-    'rgba(255, 159, 64, 0.8)', // Orange
-    'rgba(199, 199, 199, 0.8)', // Grey
-    'rgba(83, 102, 255, 0.8)', // Indigo
-]
+// Generates a palette of pastel HSL colors
+const generateColors = (count: number): string[] => {
+    const colors: string[] = []
+    for (let i = 0; i < count; i++) {
+        const hue = (i * 360) / count
+        const saturation = 50 // Pastel: 40-60%
+        const lightness = 75 // Pastel: 80-90%
+        colors.push(`hsl(${hue}, ${saturation}%, ${lightness}%)`)
+    }
+    return colors
+}
+
+// Generates a slightly darker shade for a given HSL color string
+const generateCorrespondingBorderColor = (hsl: string): string => {
+    // Parse hsl string: hsl(hue, saturation%, lightness%)
+    const match = hsl.match(/hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/)
+    if (!match) throw new Error('Invalid HSL color format')
+    const hue = Number(match[1])
+    const saturation = Number(match[2])
+    let lightness = Number(match[3])
+    lightness = Math.max(0, lightness - 15) // Clamp to 0
+    return `hsl(${hue}, ${saturation}%, ${lightness}%)`
+}
 
 // Transform simple data to Chart.js format with consistent styling
 export const transformDataForChart = (labels: string[], datasets: SimpleDataset[], type: ChartType): ChartData => {
-    const colors = getColorPalette()
+    const colors = generateColors(type === 'pie' ? datasets[0].data.length : datasets.length)
 
     const transformedDatasets = datasets.map((dataset, index) => {
         const colorIndex = index % colors.length
@@ -175,10 +181,14 @@ export const transformDataForChart = (labels: string[], datasets: SimpleDataset[
                 return {
                     ...baseDataset,
                     fill: true,
-                    tension: 0.4,
                     pointRadius: 0,
-                    backgroundColor: colors[colorIndex].replace('0.8', '0.2'),
-                }
+                    pointHoverRadius: 10,
+                    pointHitRadius: 20,
+                    pointStyle: 'rectRounded',
+                    pointBorderWidth: 0,
+                    borderWidth: 2,
+                    borderColor: generateCorrespondingBorderColor(colors[colorIndex]),
+                } as ChartDataset<'line'>
             case 'pie':
                 return {
                     ...baseDataset,
@@ -186,9 +196,6 @@ export const transformDataForChart = (labels: string[], datasets: SimpleDataset[
                 }
             case 'stackedBar':
             case 'stackedBarHorizontal':
-                return {
-                    ...baseDataset,
-                }
             default:
                 return baseDataset
         }

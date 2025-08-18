@@ -16,6 +16,7 @@ import {
     Tooltip,
 } from 'chart.js'
 
+import { LEGENDS_LABEL_CONFIG } from './constants'
 import { ChartProps } from './types'
 import { getChartJSType, getDefaultOptions, transformDataForChart } from './utils'
 
@@ -36,20 +37,17 @@ ChartJS.register(
     Filler,
 )
 
+ChartJS.overrides.doughnut.plugins.legend.labels = {
+    ...ChartJS.overrides.doughnut.plugins.legend.labels,
+    ...LEGENDS_LABEL_CONFIG,
+}
+
 const Chart = ({ id, type, labels, datasets, className, style }: ChartProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const chartRef = useRef<ChartJS | null>(null)
 
     useEffect(() => {
-        if (!canvasRef.current) return
-
         const ctx = canvasRef.current.getContext('2d')
-        if (!ctx) return
-
-        // Destroy existing chart if it exists
-        if (chartRef.current) {
-            chartRef.current.destroy()
-        }
 
         // Get Chart.js type and transform data
         const chartJSType = getChartJSType(type)
@@ -62,18 +60,11 @@ const Chart = ({ id, type, labels, datasets, className, style }: ChartProps) => 
             data: transformedData,
             options: defaultOptions,
         })
-    }, [type, datasets, labels])
 
-    // Cleanup on unmount
-    useEffect(
-        () => () => {
-            if (chartRef.current) {
-                chartRef.current.destroy()
-                chartRef.current = null
-            }
-        },
-        [],
-    )
+        return () => {
+            chartRef.current?.destroy()
+        }
+    }, [type, datasets, labels])
 
     return (
         <div className="flex" style={style}>
