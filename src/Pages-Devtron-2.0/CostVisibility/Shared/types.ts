@@ -4,3 +4,7 @@ export enum CostBreakdownViewType {
     PROJECTS = 'projects',
     APPLICATIONS = 'applications',
 }
+
+export enum CostBreakdownItemViewParamsType {
+    ITEM_NAME = 'itemName',
+}

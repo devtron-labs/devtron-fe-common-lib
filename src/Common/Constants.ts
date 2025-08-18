@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { CostBreakdownViewType } from 'src/Pages-Devtron-2.0'
+import { CostBreakdownItemViewParamsType, CostBreakdownViewType } from 'src/Pages-Devtron-2.0'
 
 export const FALLBACK_REQUEST_TIMEOUT = 60000
 export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
@@ -94,6 +94,7 @@ export const URLS = {
     COST_BREAKDOWN_ENVIRONMENTS: `/cost-visibility/breakdown/${CostBreakdownViewType.ENVIRONMENTS}`,
     COST_BREAKDOWN_PROJECTS: `/cost-visibility/breakdown/${CostBreakdownViewType.PROJECTS}`,
     COST_BREAKDOWN_APPLICATIONS: `/cost-visibility/breakdown/${CostBreakdownViewType.APPLICATIONS}`,
+    COST_BREAKDOWN_ITEM_NAME: `:${CostBreakdownItemViewParamsType.ITEM_NAME}`,
     COST_CONFIGURATIONS: '/cost-visibility/configurations',
 } as const
 
