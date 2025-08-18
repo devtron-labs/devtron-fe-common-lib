@@ -62,7 +62,7 @@ const Chart = ({ id, type, labels, datasets, className, style }: ChartProps) => 
             data: transformedData,
             options: defaultOptions,
         })
-    }, [])
+    }, [type, datasets, labels])
 
     // Cleanup on unmount
     useEffect(

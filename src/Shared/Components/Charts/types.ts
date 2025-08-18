@@ -1,4 +1,4 @@
-export type ChartType = 'bar' | 'line' | 'area' | 'pie' | 'horizontalBar' | 'stackedBar'
+export type ChartType = 'area' | 'pie' | 'stackedBar' | 'stackedBarHorizontal'
 
 export interface SimpleDataset {
     label: string
