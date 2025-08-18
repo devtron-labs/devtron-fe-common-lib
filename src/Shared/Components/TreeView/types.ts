@@ -186,10 +186,10 @@ export type TreeViewProps<DataAttributeType = null> = {
     /**
      * If primary the background color will be bg__primary and bg__hover--opaque \
      * if secondary the background color will be bg__secondary bg__hover-secondary--opaque,
-     * if nav the background color will be bg__transparent bg__hover-sidebar-item.
+     * if sidenav the background color will be bg__transparent bg__hover-sidebar-item.
      * @default 'primary'
      */
-    variant?: 'primary' | 'secondary' | 'nav'
+    variant?: 'primary' | 'secondary' | 'sidenav'
     /**
      * @default {}
      */

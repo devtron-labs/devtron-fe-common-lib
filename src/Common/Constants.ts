@@ -16,6 +16,8 @@
 
 import { CostBreakdownItemViewParamsType, CostBreakdownViewType } from 'src/Pages-Devtron-2.0'
 
+import { SelectPickerOptionType } from '@Shared/Components'
+
 export const FALLBACK_REQUEST_TIMEOUT = 60000
 export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
 
@@ -476,4 +478,14 @@ export enum SSOProvider {
     ldap = 'ldap',
     oidc = 'oidc',
     openshift = 'openshift',
+}
+
+export const BULK_DEPLOY_LATEST_IMAGE_TAG: SelectPickerOptionType<string> = {
+    value: 'latest',
+    label: 'latest',
+}
+
+export const BULK_DEPLOY_ACTIVE_IMAGE_TAG: SelectPickerOptionType<string> = {
+    value: 'active',
+    label: 'active',
 }

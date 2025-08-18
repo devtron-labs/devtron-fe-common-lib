@@ -92,7 +92,7 @@ const TreeViewNodeContent = ({
             >
                 <span className="flexbox-col tree-view__container--title-wrapper">
                     <span
-                        className={`tree-view__container--title dc__truncate dc__align-left ${VARIANT_TO_TEXT_CLASS_MAP[variant]} fs-13 lh-1-5 ${type === 'heading' || isSelected ? 'fw-6' : 'fw-4'} ${customTooltipConfig && type === 'item' ? 'title-with-tooltip' : ''} ${strikeThrough ? 'dc__strike-through' : ''}`}
+                        className={`tree-view__container--title tree-view__container--title--${variant} dc__truncate dc__align-left ${VARIANT_TO_TEXT_CLASS_MAP[variant]} fs-13 lh-1-5 ${type === 'heading' || isSelected ? 'fw-6' : 'fw-4'} ${customTooltipConfig && type === 'item' ? 'title-with-tooltip' : ''} ${strikeThrough ? 'dc__strike-through' : ''}`}
                         onMouseEnter={handleTitleMouseEnter}
                     >
                         {title}

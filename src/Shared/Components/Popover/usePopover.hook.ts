@@ -59,6 +59,9 @@ export const usePopover = ({
     }
 
     const togglePopover = () => {
+        if (disableClose && open) {
+            return
+        }
         updateOpenState(!open)
     }
 

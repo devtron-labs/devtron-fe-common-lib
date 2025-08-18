@@ -21,23 +21,29 @@ export const DEFAULT_NO_ITEMS_TEXT = 'No items found'
 export const VARIANT_TO_BG_CLASS_MAP: Record<TreeViewProps['variant'], string> = {
     primary: 'bg__primary',
     secondary: 'bg__secondary',
-    nav: 'bg__transparent',
+    sidenav: 'bg__transparent',
 }
 
 export const VARIANT_TO_HOVER_CLASS_MAP: Record<TreeViewProps['variant'], string> = {
     primary: 'bg__hover--opaque',
     secondary: 'bg__hover-secondary--opaque',
-    nav: 'bg__hover-sidebar-item',
+    sidenav: 'bg__hover-sidenav-subsection-item',
 }
 
 export const VARIANT_TO_SELECTED_CLASS_MAP: Record<TreeViewProps['variant'], string> = {
     primary: 'bcb-1',
     secondary: 'bcb-1',
-    nav: 'bg__sidebar-item',
+    sidenav: 'bg__sidenav-subsection-item',
 }
 
 export const VARIANT_TO_TEXT_CLASS_MAP: Record<TreeViewProps['variant'], string> = {
     primary: 'cn-9',
     secondary: 'cn-9',
-    nav: 'text__sidebar',
+    sidenav: 'text__sidenav',
+}
+
+export const VARIANT_TO_TREE_ITEM_ACTIVE_BG_CLASS_MAP: Record<TreeViewProps['variant'], string> = {
+    primary: 'bcb-1',
+    secondary: 'bcb-1',
+    sidenav: 'bg__sidenav-subsection-item',
 }

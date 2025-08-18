@@ -25,6 +25,7 @@ import {
     VARIANT_TO_BG_CLASS_MAP,
     VARIANT_TO_HOVER_CLASS_MAP,
     VARIANT_TO_SELECTED_CLASS_MAP,
+    VARIANT_TO_TREE_ITEM_ACTIVE_BG_CLASS_MAP,
 } from './constants'
 import TreeViewNodeContent from './TreeViewNodeContent'
 import { NodeElementType, TreeHeading, TreeItem, TreeViewProps } from './types'
@@ -235,7 +236,7 @@ const TreeView = <DataAttributeType = null,>({
                 <NavLink
                     to={node.clearQueryParamsOnNavigation ? { pathname: node.href, search: '' } : node.href}
                     className={`${baseClass} ${node.isDisabled ? 'dc__disabled' : ''}`}
-                    activeClassName={`tree-view__container__nav-link--active ${node.activeClassName}`}
+                    activeClassName={`tree-view__container__nav-link--active ${node.activeClassName || ''}`}
                     onClick={getNodeItemNavLinkClick(node)}
                     tabIndex={isSelected ? 0 : fallbackTabIndex}
                     data-node-id={node.id}
@@ -341,7 +342,7 @@ const TreeView = <DataAttributeType = null,>({
                                                 <span className="dc__no-shrink pl-8 pt-8">
                                                     <Icon
                                                         name="ic-expand-sm"
-                                                        color={variant === 'nav' ? 'white' : null}
+                                                        color={variant === 'sidenav' ? 'white' : null}
                                                         rotateBy={isExpanded ? 270 : 180}
                                                         size={16}
                                                     />
@@ -434,7 +435,7 @@ const TreeView = <DataAttributeType = null,>({
                         {dividerPrefix}
 
                         <div
-                            className={`flexbox flex-grow-1 w-100 br-4 ${isSelected ? 'bcb-1' : VARIANT_TO_HOVER_CLASS_MAP[variant]}`}
+                            className={`flexbox flex-grow-1 w-100 br-4 ${isSelected ? VARIANT_TO_TREE_ITEM_ACTIVE_BG_CLASS_MAP[variant] : VARIANT_TO_HOVER_CLASS_MAP[variant]}`}
                         >
                             {renderNodeItemAction(node, itemDivider, content)}
 
