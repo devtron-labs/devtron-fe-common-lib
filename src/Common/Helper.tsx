@@ -123,11 +123,11 @@ export function sortCallback(key: string, a: any, b: any, isCaseSensitive?: bool
 }
 
 export const stopPropagation = (event): void => {
-    event.stopPropagation()
+    event?.stopPropagation()
 }
 
 export const preventDefault = (event: SyntheticEvent): void => {
-    event.preventDefault()
+    event?.preventDefault()
 }
 
 export function useThrottledEffect(callback, delay, deps = []) {
@@ -1133,3 +1133,5 @@ export const findRight = <T,>(arr: T[], predicate: (item: T) => boolean): T | nu
 
     return null
 }
+
+

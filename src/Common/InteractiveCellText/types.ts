@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-import { CIMaterialType } from '../../Services/app.types'
+import { TippyCustomizedProps } from '@Common/Types'
 
-export interface MaterialHistoryProps {
-    material: CIMaterialType
-    pipelineName: string
-    selectCommit?: (commitId: string) => void
-    isCommitInfoModal?: boolean
+export interface InteractiveCellTextProps {
+    text: string
+    onClickHandler?: () => void
+    dataTestId?: string
+    rootClassName?: string
+    interactive?: boolean
+    fontSize?: number
+    tippyContent?: TippyCustomizedProps<false>['additionalContent']
 }

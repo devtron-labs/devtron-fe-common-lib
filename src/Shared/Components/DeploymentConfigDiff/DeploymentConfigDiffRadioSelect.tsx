@@ -57,8 +57,7 @@ const DeploymentConfigDiffRadioSelect = ({
             overlayProps={overlayProps}
             triggerProps={triggerProps}
         >
-            {/* TODO: Remove any after syncing with develop */}
-            <div className="flexbox-col dc__overflow-auto" ref={scrollableRef as any}>
+            <div className="flexbox-col dc__overflow-auto" ref={scrollableRef}>
                 <div className="p-12 flexbox dc__content-space border__primary--bottom">
                     <span className="fs-13 fw-6 lh-20 cn-9">Deployment with Configuration</span>
                     <Button
