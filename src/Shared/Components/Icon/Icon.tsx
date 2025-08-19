@@ -22,6 +22,7 @@ import { ReactComponent as ICBgEnvironment } from '@IconsV2/ic-bg-environment.sv
 import { ReactComponent as ICBharatpe } from '@IconsV2/ic-bharatpe.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBookOpen } from '@IconsV2/ic-book-open.svg'
+import { ReactComponent as ICBot } from '@IconsV2/ic-bot.svg'
 import { ReactComponent as ICBrain } from '@IconsV2/ic-brain.svg'
 import { ReactComponent as ICBrowser } from '@IconsV2/ic-browser.svg'
 import { ReactComponent as ICBug } from '@IconsV2/ic-bug.svg'
@@ -42,13 +43,16 @@ import { ReactComponent as ICChecks } from '@IconsV2/ic-checks.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
 import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
 import { ReactComponent as ICCleanBrush } from '@IconsV2/ic-clean-brush.svg'
+import { ReactComponent as ICClipboard } from '@IconsV2/ic-clipboard.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
 import { ReactComponent as ICCloseLarge } from '@IconsV2/ic-close-large.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
+import { ReactComponent as ICCloud } from '@IconsV2/ic-cloud.svg'
 import { ReactComponent as ICCloudVms } from '@IconsV2/ic-cloud-vms.svg'
 import { ReactComponent as ICCluster } from '@IconsV2/ic-cluster.svg'
 import { ReactComponent as ICClusterIsolated } from '@IconsV2/ic-cluster-isolated.svg'
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
+import { ReactComponent as ICCoins } from '@IconsV2/ic-coins.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICContainerRegistry } from '@IconsV2/ic-container-registry.svg'
 import { ReactComponent as ICCookr } from '@IconsV2/ic-cookr.svg'
@@ -67,6 +71,7 @@ import { ReactComponent as ICDevtronAi } from '@IconsV2/ic-devtron-ai.svg'
 import { ReactComponent as ICDevtronApp } from '@IconsV2/ic-devtron-app.svg'
 import { ReactComponent as ICDevtronHeaderLogo } from '@IconsV2/ic-devtron-header-logo.svg'
 import { ReactComponent as ICDevtronJob } from '@IconsV2/ic-devtron-job.svg'
+import { ReactComponent as ICDevtronText } from '@IconsV2/ic-devtron-text.svg'
 import { ReactComponent as ICDiffAdded } from '@IconsV2/ic-diff-added.svg'
 import { ReactComponent as ICDiffDeleted } from '@IconsV2/ic-diff-deleted.svg'
 import { ReactComponent as ICDiffUpdated } from '@IconsV2/ic-diff-updated.svg'
@@ -92,6 +97,7 @@ import { ReactComponent as ICFileCode } from '@IconsV2/ic-file-code.svg'
 import { ReactComponent as ICFileEdit } from '@IconsV2/ic-file-edit.svg'
 import { ReactComponent as ICFileKey } from '@IconsV2/ic-file-key.svg'
 import { ReactComponent as ICFiles } from '@IconsV2/ic-files.svg'
+import { ReactComponent as ICFilesChanged } from '@IconsV2/ic-files-changed.svg'
 import { ReactComponent as ICFilter } from '@IconsV2/ic-filter.svg'
 import { ReactComponent as ICFilterApplied } from '@IconsV2/ic-filter-applied.svg'
 import { ReactComponent as ICFlask } from '@IconsV2/ic-flask.svg'
@@ -218,6 +224,7 @@ import { ReactComponent as ICTimeoutDash } from '@IconsV2/ic-timeout-dash.svg'
 import { ReactComponent as ICTimer } from '@IconsV2/ic-timer.svg'
 import { ReactComponent as ICTrafficSignal } from '@IconsV2/ic-traffic-signal.svg'
 import { ReactComponent as ICTravclan } from '@IconsV2/ic-travclan.svg'
+import { ReactComponent as ICTrendUp } from '@IconsV2/ic-trend-up.svg'
 import { ReactComponent as ICTwoCubes } from '@IconsV2/ic-two-cubes.svg'
 import { ReactComponent as ICUbuntu } from '@IconsV2/ic-ubuntu.svg'
 import { ReactComponent as ICUnknown } from '@IconsV2/ic-unknown.svg'
@@ -260,6 +267,7 @@ export const iconMap = {
     'ic-bharatpe': ICBharatpe,
     'ic-bitbucket': ICBitbucket,
     'ic-book-open': ICBookOpen,
+    'ic-bot': ICBot,
     'ic-brain': ICBrain,
     'ic-browser': ICBrowser,
     'ic-bug': ICBug,
@@ -280,13 +288,16 @@ export const iconMap = {
     'ic-ci-linked': ICCiLinked,
     'ic-circle-loader': ICCircleLoader,
     'ic-clean-brush': ICCleanBrush,
+    'ic-clipboard': ICClipboard,
     'ic-clock': ICClock,
     'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
     'ic-cloud-vms': ICCloudVms,
+    'ic-cloud': ICCloud,
     'ic-cluster-isolated': ICClusterIsolated,
     'ic-cluster': ICCluster,
     'ic-code': ICCode,
+    'ic-coins': ICCoins,
     'ic-container-registry': ICContainerRegistry,
     'ic-container': ICContainer,
     'ic-cookr': ICCookr,
@@ -304,6 +315,7 @@ export const iconMap = {
     'ic-devtron-app': ICDevtronApp,
     'ic-devtron-header-logo': ICDevtronHeaderLogo,
     'ic-devtron-job': ICDevtronJob,
+    'ic-devtron-text': ICDevtronText,
     'ic-devtron': ICDevtron,
     'ic-diff-added': ICDiffAdded,
     'ic-diff-deleted': ICDiffDeleted,
@@ -329,6 +341,7 @@ export const iconMap = {
     'ic-file-edit': ICFileEdit,
     'ic-file-key': ICFileKey,
     'ic-file': ICFile,
+    'ic-files-changed': ICFilesChanged,
     'ic-files': ICFiles,
     'ic-filter-applied': ICFilterApplied,
     'ic-filter': ICFilter,
@@ -456,6 +469,7 @@ export const iconMap = {
     'ic-timer': ICTimer,
     'ic-traffic-signal': ICTrafficSignal,
     'ic-travclan': ICTravclan,
+    'ic-trend-up': ICTrendUp,
     'ic-two-cubes': ICTwoCubes,
     'ic-ubuntu': ICUbuntu,
     'ic-unknown': ICUnknown,

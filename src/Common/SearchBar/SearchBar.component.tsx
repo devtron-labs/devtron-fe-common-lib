@@ -74,6 +74,7 @@ const SearchBar = ({
     noBackgroundAndBorder = false,
     size = ComponentSizeType.medium,
     keyboardShortcut,
+    variant = 'default',
 }: SearchBarProps) => {
     const [showClearButton, setShowClearButton] = useState(!!initialSearchText)
     const inputRef = useRef<HTMLInputElement>()
@@ -157,11 +158,14 @@ const SearchBar = ({
     return (
         <div className={`search-bar-container ${containerClassName || ''}`}>
             <div
-                className={`search-bar ${noBackgroundAndBorder ? 'dc__no-border dc__no-background dc__hover-n50' : 'bg__secondary en-2 dc__hover-border-n300'} focus-within-border-b5 dc__block w-100 min-w-200 dc__position-rel br-4 bw-1 ${getSearchBarHeightFromSize(size)}`}
+                className={`search-bar search-bar--${variant} ${noBackgroundAndBorder ? 'dc__no-border dc__no-background dc__hover-n50' : 'bg__secondary en-2 dc__hover-border-n300'} focus-within-border-b5 dc__block w-100 min-w-200 dc__position-rel br-4 bw-1 ${getSearchBarHeightFromSize(size)}`}
             >
-                <Search className="search-bar__icon dc__position-abs icon-color-n6 icon-dim-16" />
+                <Search
+                    className={`search-bar__icon dc__position-abs icon-dim-16 ${variant === 'sidenav' ? 'icon-fill__sidenav' : 'icon-color-n6'}`}
+                />
                 <input
                     placeholder="Search"
+                    data-variant={variant}
                     data-testid={dataTestId}
                     type="text"
                     {...inputProps}

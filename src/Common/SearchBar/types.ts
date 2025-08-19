@@ -71,4 +71,8 @@ export interface SearchBarProps {
      * @note This is displayed in place of the dropdown indicator
      */
     keyboardShortcut?: SupportedKeyboardKeysType
+    /**
+     * @default 'default'
+     */
+    variant?: 'default' | 'sidenav'
 }
