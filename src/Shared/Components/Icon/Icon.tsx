@@ -212,6 +212,7 @@ import { ReactComponent as ICTravclan } from '@IconsV2/ic-travclan.svg'
 import { ReactComponent as ICTwoCubes } from '@IconsV2/ic-two-cubes.svg'
 import { ReactComponent as ICUbuntu } from '@IconsV2/ic-ubuntu.svg'
 import { ReactComponent as ICUnknown } from '@IconsV2/ic-unknown.svg'
+import { ReactComponent as ICUpgradeEnterprise } from '@IconsV2/ic-upgrade-enterprise.svg'
 import { ReactComponent as ICUserCircle } from '@IconsV2/ic-user-circle.svg'
 import { ReactComponent as ICUserKey } from '@IconsV2/ic-user-key.svg'
 import { ReactComponent as ICUsers } from '@IconsV2/ic-users.svg'
@@ -438,6 +439,7 @@ export const iconMap = {
     'ic-two-cubes': ICTwoCubes,
     'ic-ubuntu': ICUbuntu,
     'ic-unknown': ICUnknown,
+    'ic-upgrade-enterprise': ICUpgradeEnterprise,
     'ic-user-circle': ICUserCircle,
     'ic-user-key': ICUserKey,
     'ic-users': ICUsers,
