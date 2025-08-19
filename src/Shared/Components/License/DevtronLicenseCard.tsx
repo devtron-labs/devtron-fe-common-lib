@@ -73,17 +73,21 @@ const LicenseCardSubText = ({
                         size={20}
                     />
                 </div>
-                <div className="mail-support">
-                    <Button
-                        dataTestId="mail-support"
-                        startIcon={<Icon name="ic-email" color={null} />}
-                        text={ENTERPRISE_SUPPORT_LINK}
-                        variant={ButtonVariantType.text}
-                        component={ButtonComponentType.anchor}
-                        anchorProps={{ href: `mailto:${ENTERPRISE_SUPPORT_LINK}` }}
-                    />
-                </div>
-                <ContactSupportButton />
+                {freemiumLimitReached && (
+                    <>
+                        <div className="mail-support">
+                            <Button
+                                dataTestId="mail-support"
+                                startIcon={<Icon name="ic-email" color={null} />}
+                                text={ENTERPRISE_SUPPORT_LINK}
+                                variant={ButtonVariantType.text}
+                                component={ButtonComponentType.anchor}
+                                anchorProps={{ href: `mailto:${ENTERPRISE_SUPPORT_LINK}` }}
+                            />
+                        </div>
+                        <ContactSupportButton />
+                    </>
+                )}
             </div>
         )
     }
