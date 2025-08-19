@@ -96,7 +96,7 @@ export const URLS = {
     COST_BREAKDOWN_ENVIRONMENTS: `/cost-visibility/breakdown/${CostBreakdownViewType.ENVIRONMENTS}`,
     COST_BREAKDOWN_PROJECTS: `/cost-visibility/breakdown/${CostBreakdownViewType.PROJECTS}`,
     COST_BREAKDOWN_APPLICATIONS: `/cost-visibility/breakdown/${CostBreakdownViewType.APPLICATIONS}`,
-    COST_BREAKDOWN_ITEM_NAME: `:${CostBreakdownItemViewParamsType.ITEM_NAME}`,
+    COST_BREAKDOWN_DETAIL: `:${CostBreakdownItemViewParamsType.ITEM_NAME}/:${CostBreakdownItemViewParamsType.VIEW}/:${CostBreakdownItemViewParamsType.DETAIL}?`,
     COST_CONFIGURATIONS: '/cost-visibility/configurations',
 } as const
 
