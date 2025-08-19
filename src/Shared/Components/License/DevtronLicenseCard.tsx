@@ -50,13 +50,9 @@ const LicenseCardSubText = ({
     licenseStatus,
     licenseStatusError,
 }: Pick<DevtronLicenseCardProps, 'isFreemium' | 'licenseStatus' | 'licenseStatusError'>) => {
-    if (licenseStatus === LicenseStatus.ACTIVE && !isFreemium) {
-        return null
-    }
+    if (isFreemium) {
+        const freemiumLimitReached = licenseStatusError?.code === LicensingErrorCodes.ClusterLimitExceeded
 
-    const freemiumLimitReached = licenseStatusError?.code === LicensingErrorCodes.ClusterLimitExceeded
-
-    if (licenseStatus === LicenseStatus.ACTIVE && isFreemium) {
         return (
             <div className="p-16 fs-13 lh-1-5 flexbox-col dc__gap-8">
                 <div className="flexbox dc__gap-8 dc__content-space fs-13 fw-4 lh-20 cn-9">
@@ -90,6 +86,12 @@ const LicenseCardSubText = ({
                 <ContactSupportButton />
             </div>
         )
+    }
+
+    // Cases when not freemium
+
+    if (licenseStatus === LicenseStatus.ACTIVE) {
+        return null
     }
 
     const isLicenseExpired = licenseStatus === LicenseStatus.EXPIRED
