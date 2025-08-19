@@ -16,11 +16,23 @@
 
 .tree-view {
     &__container {
-        .icon-with-divider {
-            grid-template-rows: 24px auto;
+        .tree-view__divider {
+            background-color: var(--N200);
+
+            &--sidenav {
+                background-color: var(--sidenav-border-primary);
+            }
         }
 
-        @mixin tree-view-divider {
+        .tree-view__node-heading-divider {
+            background-color: var(--N200);
+
+            &--sidenav {
+                background-color: var(--sidenav-border-primary);
+            }
+        }
+
+        @mixin tree-view-divider-selected {
             .tree-view__divider {
                 background-color: var(--B500);
                 height: 16px;
@@ -34,18 +46,28 @@
 
         &--item {
             &:hover {
-                @include tree-view-divider;
+                @include tree-view-divider-selected;
+            }
+        }
+
+        &--item-container {
+            &:has(.tree-view__container__nav-link--active), &:has(.tree-view__container__nav-link--active):hover {
+                background-color: var(--B100);
+            }
+
+            &--sidenav:has(.tree-view__container__nav-link--active), &--sidenav:has(.tree-view__container__nav-link--active):hover {
+                background-color: var(--sidenav-subsection-item-selected);
             }
         }
 
         &__nav-link {
             &--active {
-                @include tree-view-divider;
+                @include tree-view-divider-selected;
             }
         }
 
         [aria-selected='true'] {
-            @include tree-view-divider;
+            @include tree-view-divider-selected;
 
             .tree-view__container--title {
                 color: var(--B500);
