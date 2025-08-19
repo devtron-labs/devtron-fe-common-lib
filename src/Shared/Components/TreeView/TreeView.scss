@@ -50,6 +50,16 @@
             }
         }
 
+        &--item-container {
+            &:has(.tree-view__container__nav-link--active), &:has(.tree-view__container__nav-link--active):hover {
+                background-color: var(--B100);
+            }
+
+            &--sidenav:has(.tree-view__container__nav-link--active), &--sidenav:has(.tree-view__container__nav-link--active):hover {
+                background-color: var(--sidenav-subsection-item-selected);
+            }
+        }
+
         &__nav-link {
             &--active {
                 @include tree-view-divider-selected;

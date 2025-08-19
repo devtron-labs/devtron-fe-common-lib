@@ -437,7 +437,7 @@ const TreeView = <DataAttributeType = null,>({
                         {dividerPrefix}
 
                         <div
-                            className={`flexbox flex-grow-1 w-100 br-4 ${isSelected ? VARIANT_TO_TREE_ITEM_ACTIVE_BG_CLASS_MAP[variant] : VARIANT_TO_HOVER_CLASS_MAP[variant]}`}
+                            className={`tree-view__container--item-container tree-view__container--item-container--${variant} flexbox flex-grow-1 w-100 br-4 ${isSelected ? VARIANT_TO_TREE_ITEM_ACTIVE_BG_CLASS_MAP[variant] : VARIANT_TO_HOVER_CLASS_MAP[variant]}`}
                         >
                             {renderNodeItemAction(node, itemDivider, content)}
 
