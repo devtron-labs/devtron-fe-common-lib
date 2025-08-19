@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { CostBreakdownItemViewParamsType, CostBreakdownViewType } from 'src/Pages-Devtron-2.0'
+
 import { SelectPickerOptionType } from '@Shared/Components'
 
 export const FALLBACK_REQUEST_TIMEOUT = 60000
@@ -88,6 +90,14 @@ export const URLS = {
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_DETAIL: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/detail/:appId`,
     LICENSE_AUTH: '/license-auth',
     GLOBAL_CONFIG_EDIT_CLUSTER: '/global-config/cluster-env/edit/:clusterId',
+    COST_VISIBILITY_OVERVIEW: '/cost-visibility/overview',
+    COST_BREAKDOWN_ROUTE: '/cost-visibility/breakdown/:breakdownViewType',
+    COST_BREAKDOWN_CLUSTERS: `/cost-visibility/breakdown/${CostBreakdownViewType.CLUSTERS}`,
+    COST_BREAKDOWN_ENVIRONMENTS: `/cost-visibility/breakdown/${CostBreakdownViewType.ENVIRONMENTS}`,
+    COST_BREAKDOWN_PROJECTS: `/cost-visibility/breakdown/${CostBreakdownViewType.PROJECTS}`,
+    COST_BREAKDOWN_APPLICATIONS: `/cost-visibility/breakdown/${CostBreakdownViewType.APPLICATIONS}`,
+    COST_BREAKDOWN_ITEM_NAME: `:${CostBreakdownItemViewParamsType.ITEM_NAME}`,
+    COST_CONFIGURATIONS: '/cost-visibility/configurations',
 } as const
 
 export const ROUTES = {
