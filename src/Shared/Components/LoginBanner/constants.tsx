@@ -48,12 +48,6 @@ export const TESTIMONIAL_CARD_DATA: TestimonialCardConfig[] = [
         iconName: 'ic-73strings',
     },
     {
-        quote: 'Partnering with Devtron has revolutionized the way we deliver solutions to our customers. Their Kubernetes-native platform has empowered us to automate and scale our deployments, reducing time-to-market and significantly boosting DevOps efficiency. The collaboration has not only streamlined our processes but also enhanced our ability to serve customers with agility and precision.',
-        designation: 'CPTO at Apica',
-        name: 'Ranjan Parthasarathy',
-        iconName: 'ic-apica',
-    },
-    {
         quote: "Devtron CI has been instrumental in our migration to ARM architecture. The automation and efficiency it provides have not only cut costs but also significantly improved our system performance. Devtron's support made the transition smooth and effective, setting a new standard for our infrastructure operations.",
         designation: 'Principal Engineer at Spinny',
         name: 'Spinny',
