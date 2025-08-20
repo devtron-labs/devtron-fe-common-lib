@@ -8,7 +8,14 @@ import {
     CHART_GRID_LINES_COLORS,
     LEGENDS_LABEL_CONFIG,
 } from './constants'
-import { ChartColorKey, ChartProps, ChartType, SimpleDataset, SimpleDatasetForLine, SimpleDatasetForPie } from './types'
+import {
+    ChartColorKey,
+    ChartType,
+    GetBackgroundAndBorderColorProps,
+    SimpleDataset,
+    TransformDataForChartProps,
+    TransformDatasetProps,
+} from './types'
 
 // Map our chart types to Chart.js types
 export const getChartJSType = (type: ChartType): ChartJSChartType => {
@@ -157,22 +164,16 @@ const generateCorrespondingBorderColor = (colorKey: ChartColorKey): string => {
     return CHART_COLORS[borderColorKey] || CHART_COLORS[colorKey]
 }
 
-const getBackgroundAndBorderColor = (
-    type: ChartType,
-    dataset: SimpleDataset | SimpleDatasetForPie | SimpleDatasetForLine,
-    appTheme: AppThemeType,
-) => {
+const getBackgroundAndBorderColor = ({ type, dataset, appTheme }: GetBackgroundAndBorderColorProps) => {
     if (type === 'pie') {
         return {
-            backgroundColor: (dataset as SimpleDatasetForPie).backgroundColor.map((colorKey) =>
-                getColorValue(colorKey, appTheme),
-            ),
+            backgroundColor: dataset.backgroundColor.map((colorKey) => getColorValue(colorKey, appTheme)),
             borderColor: 'transparent',
         }
     }
 
     if (type === 'line') {
-        const borderColor = getColorValue((dataset as SimpleDatasetForLine).borderColor, appTheme)
+        const borderColor = getColorValue(dataset.borderColor, appTheme)
 
         return {
             backgroundColor: borderColor,
@@ -181,7 +182,7 @@ const getBackgroundAndBorderColor = (
     }
 
     if (type === 'area') {
-        const bgColor = getColorValue((dataset as SimpleDataset).backgroundColor, appTheme)
+        const bgColor = getColorValue(dataset.backgroundColor, appTheme)
 
         return {
             backgroundColor(context) {
@@ -208,12 +209,10 @@ const getBackgroundAndBorderColor = (
     }
 }
 
-const transformDataset = (
-    type: ChartType,
-    dataset: SimpleDataset | SimpleDatasetForPie | SimpleDatasetForLine,
-    appTheme: AppThemeType,
-) => {
-    const { backgroundColor, borderColor } = getBackgroundAndBorderColor(type, dataset, appTheme)
+const transformDataset = (props: TransformDatasetProps) => {
+    const { dataset, type } = props
+
+    const { backgroundColor, borderColor } = getBackgroundAndBorderColor(props)
 
     const baseDataset = {
         label: dataset.datasetName,
@@ -243,22 +242,28 @@ const transformDataset = (
     }
 }
 
-export const transformDataForChart = (type: ChartType, datasets: ChartProps['datasets'], appTheme: AppThemeType) => {
+export const transformDataForChart = (props: TransformDataForChartProps) => {
+    const { type, datasets, appTheme } = props
+
     if (!datasets) {
         // eslint-disable-next-line no-console
         console.error('No datasets provided for chart transformation')
         return []
     }
 
-    if (type === 'pie') {
-        return [transformDataset(type, datasets as SimpleDatasetForPie, appTheme)]
-    }
-
-    if (!Array.isArray(datasets)) {
+    if (type !== 'pie' && !Array.isArray(datasets)) {
         // eslint-disable-next-line no-console
         console.error('Invalid datasets format. Expected an array.')
         return []
     }
 
-    return datasets.map((dataset: SimpleDatasetForLine | SimpleDataset) => transformDataset(type, dataset, appTheme))
+    switch (type) {
+        case 'pie':
+            return [transformDataset({ type, dataset: datasets, appTheme })]
+        /** Not not clubbing it with the default case for better typing */
+        case 'line':
+            return datasets.map((dataset) => transformDataset({ type, dataset, appTheme }))
+        default:
+            return datasets.map((dataset) => transformDataset({ type, dataset, appTheme }))
+    }
 }

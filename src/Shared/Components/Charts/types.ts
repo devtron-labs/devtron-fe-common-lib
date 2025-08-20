@@ -1,3 +1,5 @@
+import { AppThemeType } from '@Shared/Providers'
+
 export type ChartType = 'area' | 'pie' | 'stackedBar' | 'stackedBarHorizontal' | 'line'
 
 type ColorTokensType = 'DeepPlum' | 'Magenta' | 'Slate' | 'LavenderPurple' | 'SkyBlue' | 'AquaTeal'
@@ -25,13 +27,7 @@ export interface SimpleDatasetForLine extends BaseSimpleDataset {
     borderColor: ChartColorKey
 }
 
-export type ChartProps = {
-    id: string
-    /**
-     * The x-axis labels. Needs to be memoized
-     */
-    xAxisLabels: string[]
-} & (
+type TypeAndDatasetsType =
     | {
           type: 'pie'
           /**
@@ -47,4 +43,34 @@ export type ChartProps = {
           type: Exclude<ChartType, 'pie' | 'line'>
           datasets: SimpleDataset[]
       }
+
+export type ChartProps = {
+    id: string
+    /**
+     * The x-axis labels. Needs to be memoized
+     */
+    xAxisLabels: string[]
+} & TypeAndDatasetsType
+
+export type TransformDatasetProps = {
+    appTheme: AppThemeType
+} & (
+    | {
+          type: 'pie'
+          dataset: SimpleDatasetForPie
+      }
+    | {
+          type: 'line'
+          dataset: SimpleDatasetForLine
+      }
+    | {
+          type: Exclude<ChartType, 'pie' | 'line'>
+          dataset: SimpleDataset
+      }
 )
+
+export type GetBackgroundAndBorderColorProps = TransformDatasetProps
+
+export type TransformDataForChartProps = {
+    appTheme: AppThemeType
+} & TypeAndDatasetsType

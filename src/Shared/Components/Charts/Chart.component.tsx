@@ -148,7 +148,11 @@ ChartJS.overrides.doughnut.plugins.legend.labels = {
  * - Colors should reference CHART_COLORS tokens for consistency
  * - Component destroys and recreates Chart.js instance on prop changes for optimal performance
  */
-const Chart = ({ id, type, xAxisLabels: labels, datasets }: ChartProps) => {
+const Chart = (props: ChartProps) => {
+    /** Using this technique for typing in transformDataForChart */
+    const { id, xAxisLabels: labels, ...typeAndDatasets } = props
+    const { type, datasets } = typeAndDatasets
+
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const chartRef = useRef<ChartJS | null>(null)
 
@@ -164,7 +168,7 @@ const Chart = ({ id, type, xAxisLabels: labels, datasets }: ChartProps) => {
 
         // Get Chart.js type and transform data
         const chartJSType = getChartJSType(type)
-        const transformedData = { labels, datasets: transformDataForChart(type, datasets, appTheme) }
+        const transformedData = { labels, datasets: transformDataForChart({ ...typeAndDatasets, appTheme }) }
         const defaultOptions = getDefaultOptions(type, appTheme)
 
         // Create new chart
