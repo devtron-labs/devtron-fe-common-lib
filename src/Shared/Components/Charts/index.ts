@@ -1,2 +1,2 @@
 export { default as Chart } from './Chart.component'
-export type { ChartProps, SimpleDataset } from './types'
+export type { ChartColorKey, ChartProps, ChartType, SimpleDataset, SimpleDatasetForPie } from './types'

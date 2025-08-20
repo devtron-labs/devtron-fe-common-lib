@@ -1,25 +1,15 @@
-import { ChartData, ChartDataset, ChartOptions, ChartType as ChartJSChartType } from 'chart.js'
+import { ChartDataset, ChartOptions, ChartType as ChartJSChartType } from 'chart.js'
 
-import { LEGENDS_LABEL_CONFIG } from './constants'
-import { ChartType, SimpleDataset } from './types'
+import { AppThemeType } from '@Shared/Providers'
 
-const getCSSVariableValue = (variableName: string) => {
-    const value = getComputedStyle(document.querySelector('#devtron-base-main-identifier')).getPropertyValue(
-        variableName,
-    )
-
-    if (!value) {
-        // eslint-disable-next-line no-console
-        console.error(`CSS variable "${variableName}" not found`)
-    }
-
-    return value ?? 'transparent'
-}
+import { CHART_COLORS, CHART_GRID_COLORS, LEGENDS_LABEL_CONFIG } from './constants'
+import { ChartColorKey, ChartProps, ChartType, SimpleDataset, SimpleDatasetForLine, SimpleDatasetForPie } from './types'
 
 // Map our chart types to Chart.js types
 export const getChartJSType = (type: ChartType): ChartJSChartType => {
     switch (type) {
         case 'area':
+        case 'line':
             return 'line'
         case 'pie':
             return 'doughnut'
@@ -32,11 +22,10 @@ export const getChartJSType = (type: ChartType): ChartJSChartType => {
 }
 
 // Get default options based on chart type
-export const getDefaultOptions = (type: ChartType): ChartOptions => {
+export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType): ChartOptions => {
     const baseOptions: ChartOptions = {
         responsive: true,
         maintainAspectRatio: false,
-        devicePixelRatio: 3,
         plugins: {
             legend: {
                 position: 'bottom' as const,
@@ -48,7 +37,7 @@ export const getDefaultOptions = (type: ChartType): ChartOptions => {
         },
         elements: {
             line: {
-                fill: true,
+                fill: type === 'area',
                 tension: 0.4,
             },
             bar: {
@@ -58,17 +47,20 @@ export const getDefaultOptions = (type: ChartType): ChartOptions => {
                 borderRadius: 4,
             },
             arc: {
-                spacing: 2,
+                spacing: 12,
+                borderRadius: 4,
+                borderWidth: 0,
             },
         },
     }
 
     const gridConfig = {
-        color: getCSSVariableValue('--N50'),
+        color: CHART_GRID_COLORS[appTheme],
     }
 
     switch (type) {
         case 'area':
+        case 'line':
             return {
                 ...baseOptions,
                 plugins: {
@@ -84,7 +76,7 @@ export const getDefaultOptions = (type: ChartType): ChartOptions => {
                 },
                 scales: {
                     y: {
-                        stacked: true,
+                        stacked: type === 'area',
                         beginAtZero: true,
                         grid: gridConfig,
                     },
@@ -107,7 +99,7 @@ export const getDefaultOptions = (type: ChartType): ChartOptions => {
                         grid: gridConfig,
                     },
                 },
-            }
+            } as ChartOptions<'bar'>
         case 'stackedBarHorizontal':
             return {
                 ...baseOptions,
@@ -123,7 +115,7 @@ export const getDefaultOptions = (type: ChartType): ChartOptions => {
                         grid: gridConfig,
                     },
                 },
-            }
+            } as ChartOptions<'bar'>
         case 'pie':
             return {
                 ...baseOptions,
@@ -134,75 +126,115 @@ export const getDefaultOptions = (type: ChartType): ChartOptions => {
                         align: 'center',
                     },
                 },
-            }
+                cutout: '60%',
+                radius: '80%',
+            } as ChartOptions<'doughnut'>
         default:
             return baseOptions
     }
 }
 
-// Generates a palette of pastel HSL colors
-const generateColors = (count: number): string[] => {
-    const colors: string[] = []
-    for (let i = 0; i < count; i++) {
-        const hue = (i * 360) / count
-        const saturation = 50 // Pastel: 40-60%
-        const lightness = 75 // Pastel: 80-90%
-        colors.push(`hsl(${hue}, ${saturation}%, ${lightness}%)`)
+// Get color value from chart color key
+const getColorValue = (colorKey: ChartColorKey, appTheme: AppThemeType): string => CHART_COLORS[appTheme][colorKey]
+
+// Generates a slightly darker shade for a given color key
+const generateCorrespondingBorderColor = (colorKey: ChartColorKey): string => {
+    // Extract the base color name and shade number
+    const colorName = colorKey.replace(/\d+$/, '')
+    const shadeMatch = colorKey.match(/\d+$/)
+    const currentShade = shadeMatch ? parseInt(shadeMatch[0], 10) : 500
+
+    // Try to get a darker shade (higher number)
+    const darkerShade = Math.min(currentShade + 200, 800)
+    const borderColorKey = `${colorName}${darkerShade}` as ChartColorKey
+
+    // If the darker shade exists, use it; otherwise, use the current color
+    return CHART_COLORS[borderColorKey] || CHART_COLORS[colorKey]
+}
+
+const getBackgroundAndBorderColor = (
+    type: ChartType,
+    dataset: SimpleDataset | SimpleDatasetForPie | SimpleDatasetForLine,
+    appTheme: AppThemeType,
+) => {
+    if (type === 'pie') {
+        return {
+            backgroundColor: (dataset as SimpleDatasetForPie).backgroundColor.map((colorKey) =>
+                getColorValue(colorKey, appTheme),
+            ),
+            borderColor: 'transparent',
+        }
     }
-    return colors
-}
 
-// Generates a slightly darker shade for a given HSL color string
-const generateCorrespondingBorderColor = (hsl: string): string => {
-    // Parse hsl string: hsl(hue, saturation%, lightness%)
-    const match = hsl.match(/hsl\((\d+),\s*([\d.]+)%,\s*([\d.]+)%\)/)
-    if (!match) throw new Error('Invalid HSL color format')
-    const hue = Number(match[1])
-    const saturation = Number(match[2])
-    let lightness = Number(match[3])
-    lightness = Math.max(0, lightness - 15) // Clamp to 0
-    return `hsl(${hue}, ${saturation}%, ${lightness}%)`
-}
+    if (type === 'line') {
+        const borderColor = getColorValue((dataset as SimpleDatasetForLine).borderColor, appTheme)
 
-// Transform simple data to Chart.js format with consistent styling
-export const transformDataForChart = (labels: string[], datasets: SimpleDataset[], type: ChartType): ChartData => {
-    const colors = generateColors(type === 'pie' ? datasets[0].data.length : datasets.length)
-
-    const transformedDatasets = datasets.map((dataset, index) => {
-        const colorIndex = index % colors.length
-        const baseDataset = {
-            label: dataset.label,
-            data: dataset.data,
-            backgroundColor: colors[colorIndex],
+        return {
+            backgroundColor: borderColor,
+            borderColor,
         }
-
-        switch (type) {
-            case 'area':
-                return {
-                    ...baseDataset,
-                    fill: true,
-                    pointRadius: 0,
-                    pointHoverRadius: 10,
-                    pointHitRadius: 20,
-                    pointStyle: 'rectRounded',
-                    pointBorderWidth: 0,
-                    borderWidth: 2,
-                    borderColor: generateCorrespondingBorderColor(colors[colorIndex]),
-                } as ChartDataset<'line'>
-            case 'pie':
-                return {
-                    ...baseDataset,
-                    backgroundColor: colors.slice(0, dataset.data.length),
-                }
-            case 'stackedBar':
-            case 'stackedBarHorizontal':
-            default:
-                return baseDataset
-        }
-    })
+    }
 
     return {
-        labels,
-        datasets: transformedDatasets,
+        backgroundColor: getColorValue((dataset as SimpleDataset).backgroundColor, appTheme),
+        borderColor:
+            type === 'area'
+                ? generateCorrespondingBorderColor((dataset as SimpleDataset).backgroundColor)
+                : 'transparent',
     }
+}
+
+const transformDataset = (
+    type: ChartType,
+    dataset: SimpleDataset | SimpleDatasetForPie | SimpleDatasetForLine,
+    appTheme: AppThemeType,
+) => {
+    const { backgroundColor, borderColor } = getBackgroundAndBorderColor(type, dataset, appTheme)
+
+    const baseDataset = {
+        label: dataset.datasetName,
+        data: dataset.yAxisValues,
+        backgroundColor,
+        borderColor,
+    }
+
+    switch (type) {
+        case 'line':
+        case 'area':
+            return {
+                ...baseDataset,
+                fill: type === 'area',
+                pointRadius: 0,
+                pointHoverRadius: 10,
+                pointHitRadius: 20,
+                pointStyle: 'rectRounded',
+                pointBorderWidth: 0,
+                borderWidth: 2,
+            } as ChartDataset<'line'>
+        case 'pie':
+        case 'stackedBar':
+        case 'stackedBarHorizontal':
+        default:
+            return baseDataset
+    }
+}
+
+export const transformDataForChart = (type: ChartType, datasets: ChartProps['datasets'], appTheme: AppThemeType) => {
+    if (!datasets) {
+        // eslint-disable-next-line no-console
+        console.error('No datasets provided for chart transformation')
+        return []
+    }
+
+    if (type === 'pie') {
+        return [transformDataset(type, datasets as SimpleDatasetForPie, appTheme)]
+    }
+
+    if (!Array.isArray(datasets)) {
+        // eslint-disable-next-line no-console
+        console.error('Invalid datasets format. Expected an array.')
+        return []
+    }
+
+    return datasets.map((dataset: SimpleDatasetForLine | SimpleDataset) => transformDataset(type, dataset, appTheme))
 }

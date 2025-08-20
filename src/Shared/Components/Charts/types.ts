@@ -1,15 +1,50 @@
-export type ChartType = 'area' | 'pie' | 'stackedBar' | 'stackedBarHorizontal'
+export type ChartType = 'area' | 'pie' | 'stackedBar' | 'stackedBarHorizontal' | 'line'
 
-export interface SimpleDataset {
-    label: string
-    data: number[]
+type ColorTokensType = 'DeepPlum' | 'Magenta' | 'Slate' | 'LavenderPurple' | 'SkyBlue' | 'AquaTeal'
+
+type VariantsType = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800
+
+export type ChartColorKey = `${ColorTokensType}${VariantsType}`
+
+export type ChartTypeWithoutPie = Exclude<ChartType, 'pie'>
+
+interface BaseSimpleDataset {
+    datasetName: string
+    yAxisValues: number[]
 }
 
-export interface ChartProps {
+export interface SimpleDataset extends BaseSimpleDataset {
+    backgroundColor: ChartColorKey
+}
+
+export interface SimpleDatasetForPie extends BaseSimpleDataset {
+    backgroundColor: Array<ChartColorKey>
+}
+
+export interface SimpleDatasetForLine extends BaseSimpleDataset {
+    borderColor: ChartColorKey
+}
+
+export type ChartProps = {
     id: string
-    type: ChartType
-    labels: string[]
-    datasets: SimpleDataset[]
-    className?: string
-    style?: React.CSSProperties
-}
+    /**
+     * The x-axis labels. Needs to be memoized
+     */
+    xAxisLabels: string[]
+} & (
+    | {
+          type: 'pie'
+          /**
+           * Needs to be memoized
+           */
+          datasets: SimpleDatasetForPie
+      }
+    | {
+          type: 'line'
+          datasets: SimpleDatasetForLine[]
+      }
+    | {
+          type: Exclude<ChartType, 'pie' | 'line'>
+          datasets: SimpleDataset[]
+      }
+)
