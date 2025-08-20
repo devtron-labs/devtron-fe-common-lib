@@ -15,6 +15,8 @@
  */
 
 .search-bar {
+    $root: &;
+
     &:focus,
     &:focus-within {
         outline: none;
@@ -29,11 +31,38 @@
         }
     }
 
+    &#{$root}--sidenav {
+        background: transparent;
+        border-color: var(--sidenav-input-border);
+
+        &:hover {
+            border-color: var(--sidenav-input-border-hover);
+        }
+
+        &:focus,
+        &:focus-within {
+            border: solid 1px var(--sidenav-input-border-focus) !important;
+        }
+
+        #{$root}__input {
+            color: var(--sidenav-text);
+            background: transparent;
+
+            &::placeholder {
+                color: var(--sidenav-input-placeholder);
+            }
+        }
+    }
+
     &__icon {
         z-index: 1;
         top: 50%;
         left: 8px;
         transform: translateY(-50%);
+
+        *[fill^='#'] {
+            fill: var(--sidenav-input-icon);
+        }
     }
 
     &__clear-button {

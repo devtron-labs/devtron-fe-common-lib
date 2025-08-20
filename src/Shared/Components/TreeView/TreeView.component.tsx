@@ -20,7 +20,13 @@ import { AnimatePresence, motion } from 'framer-motion'
 
 import { Icon } from '../Icon'
 import { TrailingItem } from '../TrailingItem'
-import { DEFAULT_NO_ITEMS_TEXT, VARIANT_TO_BG_CLASS_MAP, VARIANT_TO_HOVER_CLASS_MAP } from './constants'
+import {
+    DEFAULT_NO_ITEMS_TEXT,
+    VARIANT_TO_BG_CLASS_MAP,
+    VARIANT_TO_HOVER_CLASS_MAP,
+    VARIANT_TO_SELECTED_CLASS_MAP,
+    VARIANT_TO_TREE_ITEM_ACTIVE_BG_CLASS_MAP,
+} from './constants'
 import TreeViewNodeContent from './TreeViewNodeContent'
 import { NodeElementType, TreeHeading, TreeItem, TreeViewProps } from './types'
 import { getSelectedIdParentNodes, getVisibleNodes } from './utils'
@@ -46,6 +52,7 @@ const TreeView = <DataAttributeType = null,>({
     getUpdateItemsRefMap: getUpdateItemsRefMapProp,
     variant = 'primary',
     defaultExpandedMap = {},
+    highlightSelectedHeadingOnlyWhenCollapsed = false,
 }: TreeViewProps<DataAttributeType>) => {
     const { pathname } = useLocation()
     const isFirstLevel = depth === 0
@@ -188,6 +195,11 @@ const TreeView = <DataAttributeType = null,>({
     }
 
     const getNodeItemNavLinkClick = (node: TreeItem<DataAttributeType>) => (e: SyntheticEvent) => {
+        if (node.isDisabled) {
+            e.preventDefault()
+            return
+        }
+
         // Prevent navigation to the same page
         if (node.href === pathname) {
             e.preventDefault()
@@ -223,7 +235,8 @@ const TreeView = <DataAttributeType = null,>({
             return (
                 <NavLink
                     to={node.clearQueryParamsOnNavigation ? { pathname: node.href, search: '' } : node.href}
-                    className={baseClass}
+                    className={`${baseClass} ${node.isDisabled ? 'dc__disabled' : ''}`}
+                    activeClassName={`tree-view__container__nav-link--active ${node.activeClassName || ''}`}
                     onClick={getNodeItemNavLinkClick(node)}
                     tabIndex={isSelected ? 0 : fallbackTabIndex}
                     data-node-id={node.id}
@@ -278,6 +291,7 @@ const TreeView = <DataAttributeType = null,>({
                         customTooltipConfig={node.customTooltipConfig}
                         strikeThrough={node.strikeThrough}
                         isSelected={isSelected}
+                        variant={variant}
                     />
                 )
 
@@ -300,7 +314,7 @@ const TreeView = <DataAttributeType = null,>({
                                     {dividerPrefix}
 
                                     <div
-                                        className={`flexbox w-100 dc__align-start br-4 ${isSelected ? 'bcb-1' : VARIANT_TO_HOVER_CLASS_MAP[variant]}`}
+                                        className={`flexbox w-100 dc__align-start br-4 ${isSelected && (!highlightSelectedHeadingOnlyWhenCollapsed || !isExpanded) ? VARIANT_TO_SELECTED_CLASS_MAP[variant] : VARIANT_TO_HOVER_CLASS_MAP[variant]}`}
                                     >
                                         <button
                                             type="button"
@@ -318,7 +332,9 @@ const TreeView = <DataAttributeType = null,>({
                                         >
                                             {depth > 0 && (
                                                 <span className="dc__grid dc__align-self-stretch dc__content-center pl-8 w-24 dc__no-shrink dc__align-items-center">
-                                                    <span className="dc__inline-block w-1 bcn-2 h-100 tree-view__divider" />
+                                                    <span
+                                                        className={`dc__inline-block w-1 h-100 tree-view__divider tree-view__divider--${variant}`}
+                                                    />
                                                 </span>
                                             )}
 
@@ -326,7 +342,7 @@ const TreeView = <DataAttributeType = null,>({
                                                 <span className="dc__no-shrink pl-8 pt-8">
                                                     <Icon
                                                         name="ic-expand-sm"
-                                                        color={null}
+                                                        color={variant === 'sidenav' ? 'white' : null}
                                                         rotateBy={isExpanded ? 270 : 180}
                                                         size={16}
                                                     />
@@ -334,7 +350,9 @@ const TreeView = <DataAttributeType = null,>({
 
                                                 {isExpanded && (
                                                     <span className="flex pl-8">
-                                                        <span className="dc__inline-block w-1 bcn-2 h-100" />
+                                                        <span
+                                                            className={`tree-view__node-heading-divider tree-view__node-heading-divider--${variant} dc__inline-block w-1 h-100`}
+                                                        />
                                                     </span>
                                                 )}
                                             </span>
@@ -402,7 +420,9 @@ const TreeView = <DataAttributeType = null,>({
                 const itemDivider =
                     depth > 0 ? (
                         <span className="dc__grid dc__align-self-stretch dc__content-center pl-8 w-24 dc__no-shrink dc__align-items-center">
-                            <span className="dc__inline-block w-1 bcn-2 h-100 tree-view__divider" />
+                            <span
+                                className={`dc__inline-block w-1 h-100 tree-view__divider tree-view__divider--${variant}`}
+                            />
                         </span>
                     ) : null
 
@@ -417,7 +437,7 @@ const TreeView = <DataAttributeType = null,>({
                         {dividerPrefix}
 
                         <div
-                            className={`flexbox flex-grow-1 w-100 br-4 ${isSelected ? 'bcb-1' : VARIANT_TO_HOVER_CLASS_MAP[variant]}`}
+                            className={`tree-view__container--item-container tree-view__container--item-container--${variant} flexbox flex-grow-1 w-100 br-4 ${isSelected ? VARIANT_TO_TREE_ITEM_ACTIVE_BG_CLASS_MAP[variant] : VARIANT_TO_HOVER_CLASS_MAP[variant]}`}
                         >
                             {renderNodeItemAction(node, itemDivider, content)}
 

@@ -14,11 +14,20 @@
  * limitations under the License.
  */
 
-import { MouseEvent, ReactNode } from 'react'
+import { MouseEvent, ReactNode, SyntheticEvent } from 'react'
 
 import { DTFocusTrapType } from '../DTFocusTrap'
 
-export interface BackdropProps extends Pick<DTFocusTrapType, 'deactivateFocusOnEscape' | 'initialFocus' | 'onEscape'> {
+export interface BackdropProps extends Pick<DTFocusTrapType, 'deactivateFocusOnEscape' | 'initialFocus'> {
+    /**
+     * Callback function that gets triggered when the Escape key is pressed. \
+     * Should be wrapped in useCallback to prevent unnecessary re-renders.
+     * @example
+     * const handleEscape = useCallback(() => {
+     *   // Handle escape key press
+     * }, []);
+     */
+    onEscape: (e?: SyntheticEvent) => void
     /**
      * The content to be rendered within the backdrop component.
      */

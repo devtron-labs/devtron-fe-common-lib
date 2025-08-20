@@ -26,7 +26,7 @@ import { ReactComponent as ICWarning } from '@Icons/ic-warning.svg'
 import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components'
 import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP, ComponentSizeType } from '@Shared/constants'
 
-import { ToastProps, ToastVariantType } from './types'
+import { BaseToastProps, ToastProps, ToastVariantType } from './types'
 
 export const TOAST_BASE_CONFIG: ToastContainerProps = {
     autoClose: 5000,
@@ -55,7 +55,7 @@ export const TOAST_BASE_CONFIG: ToastContainerProps = {
 }
 
 export const TOAST_VARIANT_TO_CONFIG_MAP: Record<
-    ToastVariantType,
+    BaseToastProps['variant'],
     Required<Pick<ToastProps, 'icon' | 'title' | 'progressBarBg'>> & Pick<ToastOptions, 'type'>
 > = {
     [ToastVariantType.info]: {

@@ -16,47 +16,23 @@
 
 import { AppConfigProps, GetTemplateAPIRouteType } from '@Pages/index'
 
-import { get, getUrlWithSearchParams, ResponseType, ROUTES, showError } from '../../Common'
+import { get, getUrlWithSearchParams, ResponseType, ROUTES } from '../../Common'
 import { getTemplateAPIRoute } from '..'
 import {
     AppEnvDeploymentConfigDTO,
     AppEnvDeploymentConfigPayloadType,
     CIMaterialInfoDTO,
-    CIMaterialInfoType,
     GetCITriggerInfoParamsType,
 } from './app.types'
-import { getParsedCIMaterialInfo } from './utils'
 
-export const getCITriggerInfo = async (params: GetCITriggerInfoParamsType): Promise<CIMaterialInfoType> => {
-    try {
-        const { result } = (await get(
-            `${ROUTES.APP}/material-info/${params.envId}/${params.ciArtifactId}`,
-        )) as ResponseType<CIMaterialInfoDTO>
-
-        return getParsedCIMaterialInfo(result)
-    } catch (err) {
-        showError(err)
-        throw err
-    }
-}
+export const getCITriggerInfo = async (params: GetCITriggerInfoParamsType) =>
+    get<CIMaterialInfoDTO>(`${ROUTES.APP}/material-info/${params.envId}/${params.ciArtifactId}`)
 
 /**
  * The only difference between this and getCITriggerInfo is it doesn't have env and trigger related meta info
  */
-export const getArtifactInfo = async (
-    params: Pick<GetCITriggerInfoParamsType, 'ciArtifactId'>,
-): Promise<CIMaterialInfoType> => {
-    try {
-        const { result } = (await get(
-            `${ROUTES.APP}/material-info/${params.ciArtifactId}`,
-        )) as ResponseType<CIMaterialInfoDTO>
-
-        return getParsedCIMaterialInfo(result)
-    } catch (err) {
-        showError(err)
-        throw err
-    }
-}
+export const getArtifactInfo = (params: Pick<GetCITriggerInfoParamsType, 'ciArtifactId'>) =>
+    get<CIMaterialInfoDTO>(`${ROUTES.APP}/material-info/${params.ciArtifactId}`)
 
 export const getAppEnvDeploymentConfig = ({
     params,
