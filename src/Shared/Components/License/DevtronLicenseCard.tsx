@@ -56,17 +56,16 @@ const LicenseCardSubText = ({
         return (
             <div className="p-16 fs-13 lh-1-5 flexbox-col dc__gap-8">
                 <div className="flexbox dc__gap-8 dc__content-space fs-13 fw-4 lh-20 cn-9">
-                    {freemiumLimitReached ? (
-                        <div className="flexbox-col dc__gap-4">
-                            <span className="fw-6">Multiple Clusters Detected</span>
-                            <span>
-                                Your account is connected to multiple clusters, which isn’t allowed on the freemium
-                                plan. Upgrade to an Enterprise license or contact us.
-                            </span>
-                        </div>
-                    ) : (
-                        <span className="fw-6">Unlimited single cluster usage</span>
-                    )}
+                    <div className="flexbox-col dc__gap-4">
+                        <span className="fw-6">
+                            {freemiumLimitReached ? 'Freemium Limit Reached' : 'What’s Included in Freemium'}
+                        </span>
+                        <span>
+                            {freemiumLimitReached
+                                ? 'You’ve connected more than 2 clusters, which isn’t supported on the freemium plan. Contact Support to unlock your access or upgrade to Enterprise plan.'
+                                : 'Freemium plan allows managing the Devtron host cluster along with one additional cluster.'}
+                        </span>
+                    </div>
                     <Icon
                         name={freemiumLimitReached ? 'ic-error' : 'ic-success'}
                         color={freemiumLimitReached ? 'R500' : 'G500'}
@@ -74,7 +73,7 @@ const LicenseCardSubText = ({
                     />
                 </div>
                 {freemiumLimitReached && (
-                    <>
+                    <div className="flexbox-col dc__gap-4">
                         <div className="mail-support">
                             <Button
                                 dataTestId="mail-support"
@@ -86,7 +85,7 @@ const LicenseCardSubText = ({
                             />
                         </div>
                         <ContactSupportButton />
-                    </>
+                    </div>
                 )}
             </div>
         )
