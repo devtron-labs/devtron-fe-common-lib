@@ -139,7 +139,12 @@ export const CHART_COLORS: Record<AppThemeType, Record<ChartColorKey, string>> =
     },
 } as const
 
-export const CHART_GRID_COLORS: Record<AppThemeType, string> = {
+export const CHART_GRID_LINES_COLORS: Record<AppThemeType, string> = {
     [AppThemeType.light]: '#f1f5f9',
+    [AppThemeType.dark]: '#1e293b',
+}
+
+export const CHART_CANVAS_BACKGROUND_COLORS: Record<AppThemeType, string> = {
+    [AppThemeType.light]: '#ffffff',
     [AppThemeType.dark]: '#1e293b',
 }

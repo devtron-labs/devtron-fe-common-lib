@@ -2,7 +2,12 @@ import { ChartDataset, ChartOptions, ChartType as ChartJSChartType } from 'chart
 
 import { AppThemeType } from '@Shared/Providers'
 
-import { CHART_COLORS, CHART_GRID_COLORS, LEGENDS_LABEL_CONFIG } from './constants'
+import {
+    CHART_CANVAS_BACKGROUND_COLORS,
+    CHART_COLORS,
+    CHART_GRID_LINES_COLORS,
+    LEGENDS_LABEL_CONFIG,
+} from './constants'
 import { ChartColorKey, ChartProps, ChartType, SimpleDataset, SimpleDatasetForLine, SimpleDatasetForPie } from './types'
 
 // Map our chart types to Chart.js types
@@ -55,7 +60,7 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType): Char
     }
 
     const gridConfig = {
-        color: CHART_GRID_COLORS[appTheme],
+        color: CHART_GRID_LINES_COLORS[appTheme],
     }
 
     switch (type) {
@@ -175,12 +180,31 @@ const getBackgroundAndBorderColor = (
         }
     }
 
+    if (type === 'area') {
+        const bgColor = getColorValue((dataset as SimpleDataset).backgroundColor, appTheme)
+
+        return {
+            backgroundColor(context) {
+                const { ctx, chartArea } = context.chart
+
+                if (!chartArea) {
+                    // happens on initial render
+                    return null
+                }
+
+                const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom)
+                gradient.addColorStop(0, bgColor)
+                gradient.addColorStop(1, CHART_CANVAS_BACKGROUND_COLORS[appTheme])
+
+                return gradient
+            },
+            borderColor: generateCorrespondingBorderColor((dataset as SimpleDataset).backgroundColor),
+        } as Pick<ChartDataset<'line'>, 'backgroundColor' | 'borderColor'>
+    }
+
     return {
         backgroundColor: getColorValue((dataset as SimpleDataset).backgroundColor, appTheme),
-        borderColor:
-            type === 'area'
-                ? generateCorrespondingBorderColor((dataset as SimpleDataset).backgroundColor)
-                : 'transparent',
+        borderColor: 'transparent',
     }
 }
 
