@@ -199,6 +199,10 @@ export type TreeViewProps<DataAttributeType = null> = {
      * @default false
      */
     highlightSelectedHeadingOnlyWhenCollapsed?: boolean
+    /**
+     * @default true
+     */
+    useOverflowAuto?: boolean
 } /**
  * WARNING: For internal use only.
  */ & (
