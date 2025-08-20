@@ -73,7 +73,7 @@ const LicenseCardSubText = ({
                     />
                 </div>
                 {freemiumLimitReached && (
-                    <>
+                    <div className="flexbox-col dc__gap-4">
                         <div className="mail-support">
                             <Button
                                 dataTestId="mail-support"
@@ -85,7 +85,7 @@ const LicenseCardSubText = ({
                             />
                         </div>
                         <ContactSupportButton />
-                    </>
+                    </div>
                 )}
             </div>
         )
