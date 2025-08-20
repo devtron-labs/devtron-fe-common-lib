@@ -34,6 +34,7 @@
     &#{$root}--sidenav {
         background: transparent;
         border-color: var(--sidenav-input-border);
+        min-width: 0;
 
         &:hover {
             border-color: var(--sidenav-input-border-hover);
