@@ -35,27 +35,13 @@ const registryIconMap: Record<RegistryType, IconName> = {
 }
 
 const getRegistryUrlIconName = (registryUrl: string): IconName => {
-    if (!registryUrl) return 'ic-container-registry'
+    if (!registryUrl) return registryIconMap[RegistryType.OTHER]
 
-    const registryTypesToCheck: RegistryType[] = [
-        RegistryType.ECR,
-        RegistryType.GCR,
-        RegistryType.DOCKER_HUB,
-        RegistryType.DOCKER,
-        RegistryType.QUAY,
-        RegistryType.GITLAB,
-        RegistryType.GITHUB,
-        RegistryType.BITBUCKET,
-        RegistryType.ACR,
-        RegistryType.ARTIFACT_REGISTRY,
-    ]
+    const matchedType = Object.values(RegistryType).find(
+        (type) => type !== RegistryType.OTHER && registryUrl.includes(type),
+    )
 
-    const matchedType = registryTypesToCheck.find((type) => registryUrl.includes(type))
-
-    if (!matchedType) return 'ic-container-registry'
-
-    // Special case for Docker/DockerHub
-    return matchedType === RegistryType.DOCKER ? registryIconMap[RegistryType.DOCKER_HUB] : registryIconMap[matchedType]
+    return matchedType ? registryIconMap[matchedType] : registryIconMap[RegistryType.OTHER]
 }
 
 export const RegistryIcon = ({ registryType, size = 20, registryUrl }: RegistryIconProps) => (
