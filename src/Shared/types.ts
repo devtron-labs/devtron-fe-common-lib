@@ -1336,3 +1336,15 @@ export interface PipelineDeploymentStrategy {
     strategies: Strategy[]
     error: ServerError
 }
+
+export enum RemoteConnectionType {
+    Direct = 'DIRECT',
+    Proxy = 'PROXY',
+    SSHTunnel = 'SSH',
+}
+
+export enum AuthenticationType {
+    BASIC = 'BASIC',
+    ANONYMOUS = 'ANONYMOUS',
+    IAM = 'IAM',
+}
