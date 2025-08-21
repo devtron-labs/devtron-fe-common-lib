@@ -148,7 +148,7 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick, hideGettin
                 alignment="end"
                 width={220}
                 options={getHelpActionMenuOptions({
-                    isTrial: licenseData?.isTrial ?? false,
+                    isTrialOrFreemium: (licenseData?.isTrial || licenseData?.isFreemium) ?? false,
                     isEnterprise,
                 })}
                 onClick={handleActionMenuClick}
