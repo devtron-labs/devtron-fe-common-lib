@@ -38,6 +38,7 @@ export const IconBase = ({
     dataTestId,
     rotateBy,
     fillSpace = false,
+    flip,
 }: IconBaseProps) => {
     const IconComponent = iconMap[name]
 
@@ -45,17 +46,33 @@ export const IconBase = ({
         throw new Error(`Icon with name "${name}" does not exist.`)
     }
 
+    const getFlipVariableValue = (): Record<string, number> => {
+        if (isNullOrUndefined(flip)) {
+            return {
+                '--flip-x': 1,
+                '--flip-y': 1,
+            }
+        }
+
+        if (flip === 'horizontal') {
+            return { '--flip-x': -1, '--flip-y': 1 }
+        }
+
+        return { '--flip-x': 1, '--flip-y': -1 }
+    }
+
     return (
         <ConditionalWrap condition={!!tooltipProps?.content} wrap={conditionalWrap(tooltipProps)}>
             <IconComponent
                 data-testid={dataTestId}
-                className={`${size ? `icon-dim-${size}` : ''} ${color ? 'icon-component-color' : ''} ${ICON_STROKE_WIDTH_MAP[size] ? 'icon-component-stroke-width' : ''} ${!isNullOrUndefined(rotateBy) ? 'rotate' : ''} ${fillSpace ? 'dc__fill-available-space' : ''} dc__no-shrink`}
+                className={`icon-component ${size ? `icon-dim-${size}` : ''} ${color ? 'icon-component-color' : ''} ${ICON_STROKE_WIDTH_MAP[size] ? 'icon-component-stroke-width' : ''} ${fillSpace ? 'dc__fill-available-space' : ''} dc__no-shrink`}
                 style={{
                     ...(color ? { ['--iconColor' as string]: `var(--${color})` } : {}),
                     ...(ICON_STROKE_WIDTH_MAP[size]
                         ? { ['--strokeWidth' as string]: ICON_STROKE_WIDTH_MAP[size] }
                         : {}),
                     ...(!isNullOrUndefined(rotateBy) ? { ['--rotateBy' as string]: `${rotateBy}deg` } : {}),
+                    ...getFlipVariableValue(),
                 }}
             />
         </ConditionalWrap>

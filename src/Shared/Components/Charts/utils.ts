@@ -34,7 +34,7 @@ export const getChartJSType = (type: ChartType): ChartJSChartType => {
 }
 
 // Get default options based on chart type
-export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType): ChartOptions => {
+export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType, hideAxis: boolean): ChartOptions => {
     const baseOptions: ChartOptions = {
         responsive: true,
         maintainAspectRatio: false,
@@ -42,6 +42,7 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType): Char
             legend: {
                 position: 'bottom' as const,
                 labels: LEGENDS_LABEL_CONFIG,
+                display: !hideAxis,
             },
             title: {
                 display: false,
@@ -50,7 +51,7 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType): Char
         elements: {
             line: {
                 fill: type === 'area',
-                tension: 0.4,
+                tension: 0.1,
             },
             bar: {
                 borderSkipped: 'start' as const,
@@ -58,17 +59,15 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType): Char
                 borderColor: 'transparent',
                 borderRadius: 4,
             },
-            arc: {
-                spacing: 12,
-                borderRadius: 4,
-                borderWidth: 0,
-            },
         },
     }
 
-    const gridConfig = {
-        color: CHART_GRID_LINES_COLORS[appTheme],
-    }
+    const commonScaleConfig = {
+        display: !hideAxis,
+        grid: {
+            color: CHART_GRID_LINES_COLORS[appTheme],
+        },
+    } as ChartOptions['scales']['x']
 
     switch (type) {
         case 'area':
@@ -90,11 +89,9 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType): Char
                     y: {
                         stacked: type === 'area',
                         beginAtZero: true,
-                        grid: gridConfig,
+                        ...commonScaleConfig,
                     },
-                    x: {
-                        grid: gridConfig,
-                    },
+                    x: commonScaleConfig,
                 },
             } as ChartOptions<'line'>
         case 'stackedBar':
@@ -103,12 +100,12 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType): Char
                 scales: {
                     x: {
                         stacked: true,
-                        grid: gridConfig,
+                        ...commonScaleConfig,
                     },
                     y: {
                         stacked: true,
                         beginAtZero: true,
-                        grid: gridConfig,
+                        ...commonScaleConfig,
                     },
                 },
             } as ChartOptions<'bar'>
@@ -120,11 +117,11 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType): Char
                     x: {
                         stacked: true,
                         beginAtZero: true,
-                        grid: gridConfig,
+                        ...commonScaleConfig,
                     },
                     y: {
                         stacked: true,
-                        grid: gridConfig,
+                        ...commonScaleConfig,
                     },
                 },
             } as ChartOptions<'bar'>
@@ -157,7 +154,7 @@ const generateCorrespondingBorderColor = (colorKey: ChartColorKey): string => {
     const currentShade = shadeMatch ? parseInt(shadeMatch[0], 10) : 500
 
     // Try to get a darker shade (higher number)
-    const darkerShade = Math.min(currentShade + 200, 800)
+    const darkerShade = Math.min(currentShade + 200, 900)
     const borderColorKey = `${colorName}${darkerShade}` as ChartColorKey
 
     // If the darker shade exists, use it; otherwise, use the current color
