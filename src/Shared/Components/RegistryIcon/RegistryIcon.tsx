@@ -34,6 +34,20 @@ const registryIconMap: Record<RegistryType, IconName> = {
     [RegistryType.OTHER]: 'ic-container-registry',
 }
 
-export const RegistryIcon = ({ registryType, size = 20 }: RegistryIconProps) => (
-    <Icon name={registryIconMap[registryType] || 'ic-container-registry'} size={size} color={null} />
+const getRegistryUrlIconName = (registryUrl: string): IconName => {
+    if (!registryUrl) return registryIconMap[RegistryType.OTHER]
+
+    const matchedType = Object.values(RegistryType).find(
+        (type) => type !== RegistryType.OTHER && registryUrl.includes(type),
+    )
+
+    return matchedType ? registryIconMap[matchedType] : registryIconMap[RegistryType.OTHER]
+}
+
+export const RegistryIcon = ({ registryType, size = 20, registryUrl }: RegistryIconProps) => (
+    <Icon
+        name={registryType ? registryIconMap[registryType] : getRegistryUrlIconName(registryUrl)}
+        size={size}
+        color={null}
+    />
 )
