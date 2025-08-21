@@ -34,9 +34,6 @@ export const getGitIconName = (repoUrl: string): IconName => {
     if (repoUrl.includes(GitProviderType.AZURE)) {
         return 'ic-azure'
     }
-    if (repoUrl.includes(GitProviderType.GITEA)) {
-        return 'ic-gitea'
-    }
     if (isAWSCodeCommitURL(repoUrl)) {
         return 'ic-aws-codecommit'
     }

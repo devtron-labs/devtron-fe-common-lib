@@ -105,7 +105,6 @@ import { ReactComponent as ICGift } from '@IconsV2/ic-gift.svg'
 import { ReactComponent as ICGiftGradient } from '@IconsV2/ic-gift-gradient.svg'
 import { ReactComponent as ICGit } from '@IconsV2/ic-git.svg'
 import { ReactComponent as ICGitBranch } from '@IconsV2/ic-git-branch.svg'
-import { ReactComponent as ICGitea } from '@IconsV2/ic-gitea.svg'
 import { ReactComponent as ICGithub } from '@IconsV2/ic-github.svg'
 import { ReactComponent as ICGitlab } from '@IconsV2/ic-gitlab.svg'
 import { ReactComponent as ICGoogle } from '@IconsV2/ic-google.svg'
@@ -345,7 +344,6 @@ export const iconMap = {
     'ic-gift': ICGift,
     'ic-git-branch': ICGitBranch,
     'ic-git': ICGit,
-    'ic-gitea': ICGitea,
     'ic-github': ICGithub,
     'ic-gitlab': ICGitlab,
     'ic-google-artifact-registry': ICGoogleArtifactRegistry,
