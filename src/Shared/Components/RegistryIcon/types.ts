@@ -20,7 +20,7 @@ import { IconsProps } from '../Icon'
 
 export type RegistryIconProps =
     | {
-          registryType?: RegistryType
+          registryType: RegistryType
           /**
            * The size of the icon in pixels.
            * @default 20
