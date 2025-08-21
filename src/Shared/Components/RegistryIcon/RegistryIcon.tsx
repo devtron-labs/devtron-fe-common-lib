@@ -36,34 +36,26 @@ const registryIconMap: Record<RegistryType, IconName> = {
 
 const getRegistryUrlIconName = (registryUrl: string): IconName => {
     if (!registryUrl) return 'ic-container-registry'
-    if (registryUrl.includes(RegistryType.ECR)) {
-        return registryIconMap[RegistryType.ECR]
-    }
-    if (registryUrl.includes(RegistryType.GCR)) {
-        return registryIconMap[RegistryType.GCR]
-    }
-    if (registryUrl.includes(RegistryType.DOCKER_HUB) || registryUrl.includes(RegistryType.DOCKER)) {
-        return registryIconMap[RegistryType.DOCKER_HUB]
-    }
-    if (registryUrl.includes(RegistryType.QUAY)) {
-        return registryIconMap[RegistryType.QUAY]
-    }
-    if (registryUrl.includes(RegistryType.GITLAB)) {
-        return registryIconMap[RegistryType.GITLAB]
-    }
-    if (registryUrl.includes(RegistryType.GITHUB)) {
-        return registryIconMap[RegistryType.GITHUB]
-    }
-    if (registryUrl.includes(RegistryType.BITBUCKET)) {
-        return registryIconMap[RegistryType.BITBUCKET]
-    }
-    if (registryUrl.includes(RegistryType.ACR)) {
-        return registryIconMap[RegistryType.ACR]
-    }
-    if (registryUrl.includes(RegistryType.ARTIFACT_REGISTRY)) {
-        return registryIconMap[RegistryType.ARTIFACT_REGISTRY]
-    }
-    return 'ic-container-registry'
+
+    const registryTypesToCheck: RegistryType[] = [
+        RegistryType.ECR,
+        RegistryType.GCR,
+        RegistryType.DOCKER_HUB,
+        RegistryType.DOCKER,
+        RegistryType.QUAY,
+        RegistryType.GITLAB,
+        RegistryType.GITHUB,
+        RegistryType.BITBUCKET,
+        RegistryType.ACR,
+        RegistryType.ARTIFACT_REGISTRY,
+    ]
+
+    const matchedType = registryTypesToCheck.find((type) => registryUrl.includes(type))
+
+    if (!matchedType) return 'ic-container-registry'
+
+    // Special case for Docker/DockerHub
+    return matchedType === RegistryType.DOCKER ? registryIconMap[RegistryType.DOCKER_HUB] : registryIconMap[matchedType]
 }
 
 export const RegistryIcon = ({ registryType, size = 20, registryUrl }: RegistryIconProps) => (
