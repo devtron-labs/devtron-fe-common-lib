@@ -60,17 +60,21 @@
         top: 50%;
         left: 8px;
         transform: translateY(-50%);
-
-        *[fill^='#'] {
-            fill: var(--sidenav-input-icon);
-        }
     }
 
-    &__clear-button {
-        right: 0;
+    &__clear-btn {
+        right: 2px;
         top: 50%;
         transform: translateY(-50%);
         z-index: 1;
+
+        &#{$root}__clear-btn--sidenav {
+            .button {
+                svg *[stroke^='#']:not([data-style-override='false']) {
+                    stroke: var(--sidenav-input-icon);
+                }
+            }
+        }
     }
 
     &__kbd-shortcut {
