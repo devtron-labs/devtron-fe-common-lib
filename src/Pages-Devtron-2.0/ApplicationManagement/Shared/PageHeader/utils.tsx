@@ -1,6 +1,7 @@
 import { matchPath } from 'react-router-dom'
 
-import { BreadcrumbText, URLS, useBreadcrumb } from '@Common/index'
+import { URLS } from '@Common/Constants'
+import { BreadcrumbText, useBreadcrumb } from '@Common/index'
 import { Button, ButtonComponentType, ButtonVariantType, Icon } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
 
