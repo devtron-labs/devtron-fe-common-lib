@@ -27,6 +27,7 @@ import { ReactComponent as ICBrain } from '@IconsV2/ic-brain.svg'
 import { ReactComponent as ICBrowser } from '@IconsV2/ic-browser.svg'
 import { ReactComponent as ICBug } from '@IconsV2/ic-bug.svg'
 import { ReactComponent as ICBuildColor } from '@IconsV2/ic-build-color.svg'
+import { ReactComponent as ICBuilding } from '@IconsV2/ic-building.svg'
 import { ReactComponent as ICCalendar } from '@IconsV2/ic-calendar.svg'
 import { ReactComponent as ICCancelled } from '@IconsV2/ic-cancelled.svg'
 import { ReactComponent as ICCardStack } from '@IconsV2/ic-card-stack.svg'
@@ -60,6 +61,7 @@ import { ReactComponent as ICCopy } from '@IconsV2/ic-copy.svg'
 import { ReactComponent as ICCpu } from '@IconsV2/ic-cpu.svg'
 import { ReactComponent as ICCrown } from '@IconsV2/ic-crown.svg'
 import { ReactComponent as ICCube } from '@IconsV2/ic-cube.svg'
+import { ReactComponent as ICDatabaseBackup } from '@IconsV2/ic-database-backup.svg'
 import { ReactComponent as ICDelete } from '@IconsV2/ic-delete.svg'
 import { ReactComponent as ICDeleteDots } from '@IconsV2/ic-delete-dots.svg'
 import { ReactComponent as ICDeleteLightning } from '@IconsV2/ic-delete-lightning.svg'
@@ -274,6 +276,7 @@ export const iconMap = {
     'ic-browser': ICBrowser,
     'ic-bug': ICBug,
     'ic-build-color': ICBuildColor,
+    'ic-building': ICBuilding,
     'ic-calendar': ICCalendar,
     'ic-cancelled': ICCancelled,
     'ic-card-stack': ICCardStack,
@@ -307,6 +310,7 @@ export const iconMap = {
     'ic-cpu': ICCpu,
     'ic-crown': ICCrown,
     'ic-cube': ICCube,
+    'ic-database-backup': ICDatabaseBackup,
     'ic-delete-dots': ICDeleteDots,
     'ic-delete-lightning': ICDeleteLightning,
     'ic-delete': ICDelete,
