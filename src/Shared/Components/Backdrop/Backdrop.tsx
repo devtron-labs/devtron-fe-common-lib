@@ -18,6 +18,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion } from 'framer-motion'
 
+import { noop } from '@Common/Helper'
 import { useRegisterShortcut } from '@Common/Hooks'
 import { getUniqueId } from '@Shared/Helpers'
 
@@ -86,7 +87,7 @@ const Backdrop = ({
     useEffect(() => {
         registerShortcut({
             keys: ['Escape'],
-            callback: onEscape,
+            callback: onEscape || noop,
         })
 
         return () => {
