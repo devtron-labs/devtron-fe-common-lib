@@ -81,32 +81,14 @@ const Backdrop = ({
         }
     }, [])
 
-    useEffect(() => {
-        const escapeHandler = (event: KeyboardEvent) => {
-            if (event.key === 'Escape' && onEscape) {
-                event.stopPropagation()
-                onEscape(event as any)
-            }
-        }
-
-        if (onEscape) {
-            window.addEventListener('keydown', escapeHandler)
-        }
-
-        return () => {
-            if (onEscape) {
-                window.removeEventListener('keydown', escapeHandler)
-            }
-        }
-    }, [onEscape])
-
     if (portalContainer === null) {
         return null
     }
 
     return createPortal(
         <DTFocusTrap
-            deactivateFocusOnEscape={!onEscape ? false : deactivateFocusOnEscape}
+            onEscape={onEscape}
+            deactivateFocusOnEscape={deactivateFocusOnEscape}
             initialFocus={initialFocus ?? undefined}
         >
             <motion.div
