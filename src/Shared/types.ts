@@ -1099,6 +1099,7 @@ export enum LicensingErrorCodes {
     LicKeyMismatch = '11006',
     NoCertFound = '11007',
     LicKeyNotFound = '11008',
+    ClusterLimitExceeded = '11011',
 }
 
 export interface LicenseErrorStruct {
@@ -1109,6 +1110,7 @@ export interface LicenseErrorStruct {
 export interface DevtronLicenseBaseDTO {
     fingerprint: string | null
     isTrial: boolean | null
+    isFreemium: boolean | null
     /**
      * In timestamp format
      */
@@ -1139,11 +1141,16 @@ export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = Devt
               } | null
               showLicenseData?: never
               licenseStatusError?: never
+              moduleLimits?: never
           }
         : {
               claimedByUserDetails?: never
               showLicenseData: boolean
               licenseStatusError?: LicenseErrorStruct
+              moduleLimits: {
+                  allAllowed: boolean
+                  maxAllowedClusters: number
+              }
           })
 
 export type CountryISO2Type = ParsedCountry['iso2']
@@ -1177,6 +1184,7 @@ export type IconBaseSizeType =
     | 42
     | 44
     | 48
+    | 64
     | 72
     | 80
 
