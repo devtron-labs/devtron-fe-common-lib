@@ -44,10 +44,10 @@ export const setActionWithExpiry = (key: string, days: number): void => {
 
 export const getHelpActionMenuOptions = ({
     isEnterprise,
-    isTrial,
+    isTrialOrFreemium,
 }: {
     isEnterprise: boolean
-    isTrial: boolean
+    isTrialOrFreemium: boolean
 }): HelpButtonActionMenuProps['options'] => [
     {
         items: COMMON_HELP_ACTION_MENU_ITEMS,
@@ -56,7 +56,9 @@ export const getHelpActionMenuOptions = ({
         ? [
               {
                   groupLabel: 'Enterprise Support',
-                  items: isTrial ? ENTERPRISE_TRIAL_HELP_ACTION_MENU_ITEMS : ENTERPRISE_HELP_ACTION_MENU_ITEMS,
+                  items: isTrialOrFreemium
+                      ? ENTERPRISE_TRIAL_HELP_ACTION_MENU_ITEMS
+                      : ENTERPRISE_HELP_ACTION_MENU_ITEMS,
               },
           ]
         : [

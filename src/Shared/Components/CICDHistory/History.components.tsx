@@ -204,6 +204,7 @@ export const GitChanges = ({
                         renderCIListHeader={renderCIListHeader}
                         targetPlatforms={targetPlatforms}
                         isDeploymentWithoutApproval={isDeploymentWithoutApproval}
+                        artifact={artifact}
                     >
                         <div className="flex column left hover-trigger">
                             <div className="cn-9 fs-14 flex left">

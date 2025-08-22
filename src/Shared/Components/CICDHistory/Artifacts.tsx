@@ -18,9 +18,7 @@ import { useParams } from 'react-router-dom'
 
 import { ReactComponent as Down } from '@Icons/ic-arrow-forward.svg'
 import { ReactComponent as OpenInNew } from '@Icons/ic-arrow-out.svg'
-import docker from '@Icons/ic-docker.svg'
 import { ReactComponent as Download } from '@Icons/ic-download.svg'
-import folder from '@Icons/ic-folder.svg'
 import { ReactComponent as ICHelpOutline } from '@Icons/ic-help.svg'
 import { ReactComponent as MechanicalOperation } from '@Icons/ic-mechanical-operation.svg'
 import noartifact from '@Images/no-artifact.webp'
@@ -30,6 +28,8 @@ import { useDownload } from '@Shared/Hooks'
 import { ClipboardButton, extractImage, GenericEmptyState, ImageTagsContainer, useGetUserRoles } from '../../../Common'
 import { EMPTY_STATE_STATUS } from '../../constants'
 import { DocLink } from '../DocLink'
+import { Icon } from '../Icon'
+import { RegistryIcon } from '../RegistryIcon'
 import { TargetPlatformBadgeList } from '../TargetPlatforms'
 import { TERMINAL_STATUS_MAP } from './constants'
 import { ArtifactType, CIListItemType } from './types'
@@ -62,6 +62,7 @@ export const CIListItem = ({
     renderCIListHeader,
     targetPlatforms,
     isDeploymentWithoutApproval,
+    artifact,
 }: CIListItemType) => {
     const showCIListHeader =
         !!renderCIListHeader &&
@@ -99,7 +100,11 @@ export const CIListItem = ({
             >
                 <div className="flex left dc__gap-12">
                     <div className="bcn-1 flex br-4 icon-dim-40">
-                        <img src={type === 'report' ? folder : docker} className="icon-dim-20" alt="type" />
+                        {type === 'report' ? (
+                            <Icon name="ic-folder" size={20} color="N500" />
+                        ) : (
+                            <RegistryIcon registryUrl={artifact} />
+                        )}
                     </div>
                     {children}
                 </div>
@@ -228,6 +233,7 @@ const Artifacts = ({
                         isSuperAdmin={isSuperAdmin}
                         renderCIListHeader={renderCIListHeader}
                         targetPlatforms={targetPlatforms}
+                        artifact={artifact}
                     >
                         <div className="flex column left hover-trigger">
                             <div className="cn-9 fs-14 flex left" data-testid="artifact-text-visibility">
