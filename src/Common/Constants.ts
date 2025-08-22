@@ -52,6 +52,9 @@ export const PATTERNS = {
 
 const GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP = '/global-config/templates/devtron-apps'
 
+const APPLICATION_MANAGEMENT_ROOT = '/application-management'
+const COST_VISIBILITY_ROOT = '/cost-visibility'
+
 export const URLS = {
     LOGIN: '/login',
     LOGIN_SSO: '/login/sso',
@@ -90,14 +93,17 @@ export const URLS = {
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_DETAIL: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/detail/:appId`,
     LICENSE_AUTH: '/license-auth',
     GLOBAL_CONFIG_EDIT_CLUSTER: '/global-config/cluster-env/edit/:clusterId',
-    COST_VISIBILITY_OVERVIEW: '/cost-visibility/overview',
-    COST_BREAKDOWN_ROUTE: '/cost-visibility/breakdown/:breakdownViewType',
-    COST_BREAKDOWN_CLUSTERS: `/cost-visibility/breakdown/${CostBreakdownViewType.CLUSTERS}`,
-    COST_BREAKDOWN_ENVIRONMENTS: `/cost-visibility/breakdown/${CostBreakdownViewType.ENVIRONMENTS}`,
-    COST_BREAKDOWN_PROJECTS: `/cost-visibility/breakdown/${CostBreakdownViewType.PROJECTS}`,
-    COST_BREAKDOWN_APPLICATIONS: `/cost-visibility/breakdown/${CostBreakdownViewType.APPLICATIONS}`,
+    COST_VISIBILITY: COST_VISIBILITY_ROOT,
+    COST_VISIBILITY_OVERVIEW: `${COST_VISIBILITY_ROOT}/overview`,
+    COST_BREAKDOWN_ROUTE: `${COST_VISIBILITY_ROOT}/breakdown/:breakdownViewType`,
+    COST_BREAKDOWN_CLUSTERS: `${COST_VISIBILITY_ROOT}/breakdown/${CostBreakdownViewType.CLUSTERS}`,
+    COST_BREAKDOWN_ENVIRONMENTS: `${COST_VISIBILITY_ROOT}/breakdown/${CostBreakdownViewType.ENVIRONMENTS}`,
+    COST_BREAKDOWN_PROJECTS: `${COST_VISIBILITY_ROOT}/breakdown/${CostBreakdownViewType.PROJECTS}`,
+    COST_BREAKDOWN_APPLICATIONS: `${COST_VISIBILITY_ROOT}/breakdown/${CostBreakdownViewType.APPLICATIONS}`,
     COST_BREAKDOWN_ITEM_NAME: `:${CostBreakdownItemViewParamsType.ITEM_NAME}`,
-    COST_CONFIGURATIONS: '/cost-visibility/configurations',
+    COST_CONFIGURATIONS: `${COST_VISIBILITY_ROOT}/configurations`,
+    APPLICATION_MANAGEMENT: APPLICATION_MANAGEMENT_ROOT,
+    APPLICATION_MANAGEMENT_OVERVIEW: `${APPLICATION_MANAGEMENT_ROOT}/overview`,
 } as const
 
 export const ROUTES = {

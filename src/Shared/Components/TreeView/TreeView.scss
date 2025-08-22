@@ -16,6 +16,10 @@
 
 .tree-view {
     &__container {
+        .icon-with-divider {
+            grid-template-rows: 24px auto;
+        }
+
         .tree-view__divider {
             background-color: var(--N200);
 
@@ -51,11 +55,13 @@
         }
 
         &--item-container {
-            &:has(.tree-view__container__nav-link--active), &:has(.tree-view__container__nav-link--active):hover {
+            &:has(.tree-view__container__nav-link--active),
+            &:has(.tree-view__container__nav-link--active):hover {
                 background-color: var(--B100);
             }
 
-            &--sidenav:has(.tree-view__container__nav-link--active), &--sidenav:has(.tree-view__container__nav-link--active):hover {
+            &--sidenav:has(.tree-view__container__nav-link--active),
+            &--sidenav:has(.tree-view__container__nav-link--active):hover {
                 background-color: var(--sidenav-subsection-item-selected);
             }
         }
