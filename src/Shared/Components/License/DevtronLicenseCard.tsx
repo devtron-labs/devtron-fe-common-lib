@@ -23,6 +23,7 @@ import { ClipboardButton, getTTLInHumanReadableFormat } from '@Common/index'
 import { CONTACT_SUPPORT_LINK, ENTERPRISE_SUPPORT_LINK } from '@Shared/constants'
 import { AppThemeType } from '@Shared/Providers'
 import { getThemeOppositeThemeClass } from '@Shared/Providers/ThemeProvider/utils'
+import { LicensingErrorCodes } from '@Shared/types'
 
 import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
@@ -33,6 +34,90 @@ import './licenseCard.scss'
 
 const DAMPEN_FACTOR = 50
 
+const ContactSupportButton = () => (
+    <Button
+        dataTestId="contact-support"
+        startIcon={<ICChatSupport />}
+        text="Contact support"
+        variant={ButtonVariantType.text}
+        component={ButtonComponentType.anchor}
+        anchorProps={{ href: CONTACT_SUPPORT_LINK }}
+    />
+)
+
+const LicenseCardSubText = ({
+    isFreemium,
+    licenseStatus,
+    licenseStatusError,
+}: Pick<DevtronLicenseCardProps, 'isFreemium' | 'licenseStatus' | 'licenseStatusError'>) => {
+    if (isFreemium) {
+        const freemiumLimitReached = licenseStatusError?.code === LicensingErrorCodes.ClusterLimitExceeded
+
+        return (
+            <div className="p-16 fs-13 lh-1-5 flexbox-col dc__gap-8">
+                <div className="flexbox dc__gap-8 dc__content-space fs-13 fw-4 lh-20 cn-9">
+                    <div className="flexbox-col dc__gap-4">
+                        <span className="fw-6">
+                            {freemiumLimitReached ? 'Freemium Limit Reached' : 'What’s Included in Freemium'}
+                        </span>
+                        <span>
+                            {freemiumLimitReached
+                                ? 'You’ve connected more than 2 clusters, which isn’t supported on the freemium plan. Contact Support to unlock your access or upgrade to Enterprise plan.'
+                                : 'Freemium plan allows managing the Devtron host cluster along with one additional cluster.'}
+                        </span>
+                    </div>
+                    <Icon
+                        name={freemiumLimitReached ? 'ic-error' : 'ic-success'}
+                        color={freemiumLimitReached ? 'R500' : 'G500'}
+                        size={20}
+                    />
+                </div>
+                {freemiumLimitReached && (
+                    <div className="flexbox-col dc__gap-4">
+                        <div className="mail-support">
+                            <Button
+                                dataTestId="mail-support"
+                                startIcon={<Icon name="ic-email" color={null} />}
+                                text={ENTERPRISE_SUPPORT_LINK}
+                                variant={ButtonVariantType.text}
+                                component={ButtonComponentType.anchor}
+                                anchorProps={{ href: `mailto:${ENTERPRISE_SUPPORT_LINK}` }}
+                            />
+                        </div>
+                        <ContactSupportButton />
+                    </div>
+                )}
+            </div>
+        )
+    }
+
+    // Cases when not freemium
+
+    if (licenseStatus === LicenseStatus.ACTIVE) {
+        return null
+    }
+
+    const isLicenseExpired = licenseStatus === LicenseStatus.EXPIRED
+
+    return (
+        <div className="p-16 fs-13 lh-1-5 flexbox-col dc__gap-8">
+            <div className="flexbox dc__gap-8 dc__content-space">
+                <span>
+                    To renew your license mail us at&nbsp;
+                    <a href={`mailto:${ENTERPRISE_SUPPORT_LINK}`}>{ENTERPRISE_SUPPORT_LINK}</a> or contact your Devtron
+                    representative.
+                </span>
+                <Icon
+                    name={isLicenseExpired ? 'ic-error' : 'ic-timer'}
+                    color={isLicenseExpired ? 'R500' : 'Y500'}
+                    size={16}
+                />
+            </div>
+            <ContactSupportButton />
+        </div>
+    )
+}
+
 export const DevtronLicenseCard = ({
     enterpriseName,
     licenseKey,
@@ -40,14 +125,15 @@ export const DevtronLicenseCard = ({
     expiryDate,
     licenseStatus,
     isTrial,
+    isFreemium,
     ttl,
     appTheme,
     handleCopySuccess,
+    licenseStatusError,
 }: DevtronLicenseCardProps) => {
-    const { bgColor, textColor } = getLicenseColorsAccordingToStatus(licenseStatus)
+    const { bgColor, textColor } = getLicenseColorsAccordingToStatus({ isFreemium, licenseStatus, licenseStatusError })
     const remainingTime = getTTLInHumanReadableFormat(ttl)
     const remainingTimeString = ttl < 0 ? `Expired ${remainingTime} ago` : `${remainingTime} remaining`
-    const isLicenseValid = licenseStatus !== LicenseStatus.EXPIRED
     const isThemeDark = appTheme === AppThemeType.dark
 
     const cardRef = useRef<HTMLDivElement>(null)
@@ -93,7 +179,7 @@ export const DevtronLicenseCard = ({
         : useMotionTemplate`linear-gradient(55deg, transparent, rgba(255, 255, 255, ${sheenOpacity}) ${sheenPosition}%, transparent)`
 
     return (
-        <div className="flexbox-col p-8 br-16" style={{ backgroundColor: bgColor }}>
+        <div className="license-card-wrapper flexbox-col p-8 br-16" style={{ backgroundColor: bgColor }}>
             <div style={{ perspective: '1000px' }}>
                 <motion.div
                     className={`license-card shadow__overlay border__secondary flexbox-col br-12 h-200 dc__overflow-hidden bg__tertiary ${getThemeOppositeThemeClass(appTheme)}`}
@@ -130,43 +216,30 @@ export const DevtronLicenseCard = ({
                                 )}
                             </div>
                             <div className="flexbox dc__align-items-center dc__gap-4 flex-wrap fs-12">
-                                <span className="font-ibm-plex-mono cn-9">{expiryDate}</span>
-                                <span className="cn-9">·</span>
-                                <span style={{ color: textColor }}>{remainingTimeString}</span>
+                                <span className="font-ibm-plex-mono cn-9">
+                                    {isFreemium ? 'VALID FOREVER' : expiryDate}
+                                </span>
+                                {!isFreemium && (
+                                    <>
+                                        <span className="cn-9">·</span>
+                                        <span style={{ color: textColor }}>{remainingTimeString}</span>
+                                    </>
+                                )}
                             </div>
                         </div>
                     </div>
-                    {isTrial && (
+                    {(isTrial || isFreemium) && (
                         <span className="trial-license-badge flexbox dc__align-items-center px-20 py-6 cn-9 fs-11 fw-5 lh-1-5 dc__zi-2">
-                            TRIAL LICENSE
+                            {isFreemium ? 'FREEMIUM' : 'TRIAL'} LICENSE
                         </span>
                     )}
                 </motion.div>
             </div>
-            {licenseStatus !== LicenseStatus.ACTIVE && (
-                <div className="p-16 fs-13 lh-1-5 flexbox-col dc__gap-8">
-                    <div className="flexbox dc__gap-8">
-                        <span>
-                            To renew your license mail us at&nbsp;
-                            <a href={`mailto:${ENTERPRISE_SUPPORT_LINK}`}>{ENTERPRISE_SUPPORT_LINK}</a> or contact your
-                            Devtron representative.
-                        </span>
-                        <Icon
-                            name={isLicenseValid ? 'ic-timer' : 'ic-error'}
-                            color={isLicenseValid ? 'Y500' : 'R500'}
-                            size={16}
-                        />
-                    </div>
-                    <Button
-                        dataTestId="contact-support"
-                        startIcon={<ICChatSupport />}
-                        text="Contact support"
-                        variant={ButtonVariantType.text}
-                        component={ButtonComponentType.anchor}
-                        anchorProps={{ href: CONTACT_SUPPORT_LINK }}
-                    />
-                </div>
-            )}
+            <LicenseCardSubText
+                isFreemium={isFreemium}
+                licenseStatusError={licenseStatusError}
+                licenseStatus={licenseStatus}
+            />
         </div>
     )
 }

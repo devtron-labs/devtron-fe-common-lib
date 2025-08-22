@@ -18,13 +18,25 @@ import moment from 'moment'
 
 import { DATE_TIME_FORMATS } from '@Common/Constants'
 import { getUrlWithSearchParams } from '@Common/index'
-import { DevtronLicenseDTO } from '@Shared/types'
+import { DevtronLicenseDTO, LicensingErrorCodes } from '@Shared/types'
 
+import { ALLOWED_CLUSTER_IN_FREEMIUM } from './constants'
 import { DevtronLicenseCardProps, DevtronLicenseInfo, LicenseStatus } from './types'
 
-export const getLicenseColorsAccordingToStatus = (
-    licenseStatus: LicenseStatus,
-): { bgColor: string; textColor: string } => {
+export const getLicenseColorsAccordingToStatus = ({
+    isFreemium,
+    licenseStatus,
+    licenseStatusError,
+}: Pick<DevtronLicenseCardProps, 'licenseStatus' | 'isFreemium' | 'licenseStatusError'>): {
+    bgColor: string
+    textColor: string
+} => {
+    if (isFreemium) {
+        const freemiumLimitReached = licenseStatusError?.code === LicensingErrorCodes.ClusterLimitExceeded
+        return freemiumLimitReached
+            ? { bgColor: 'var(--R100)', textColor: 'var(--R500)' }
+            : { bgColor: 'var(--G100)', textColor: 'var(--G500)' }
+    }
     switch (licenseStatus) {
         case LicenseStatus.ACTIVE:
             return { bgColor: 'var(--G100)', textColor: 'var(--G500)' }
@@ -54,8 +66,17 @@ export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard ext
     licenseDTO: DevtronLicenseDTO<isCentralDashboard>,
     currentUserEmail?: isCentralDashboard extends true ? string : never,
 ): Omit<DevtronLicenseCardProps, 'appTheme'> => {
-    const { isTrial, expiry, ttl, reminderThreshold, organisationMetadata, license, claimedByUserDetails } =
-        licenseDTO || {}
+    const {
+        isTrial,
+        expiry,
+        ttl,
+        reminderThreshold,
+        organisationMetadata,
+        license,
+        claimedByUserDetails,
+        isFreemium,
+        licenseStatusError,
+    } = licenseDTO || {}
 
     return {
         enterpriseName: organisationMetadata?.name || 'Devtron Enterprise',
@@ -63,6 +84,8 @@ export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard ext
         ttl,
         licenseStatus: getDevtronLicenseStatus({ ttl, reminderThreshold }),
         isTrial,
+        isFreemium,
+        licenseStatusError,
         ...(currentUserEmail && currentUserEmail === claimedByUserDetails?.email
             ? { licenseKey: license }
             : { licenseSuffix: license }),
@@ -76,6 +99,10 @@ export const parseDevtronLicenseData = (result: DevtronLicenseDTO): DevtronLicen
         fingerprint: result?.fingerprint || '',
         showLicenseData: result?.showLicenseData,
         licenseStatusError: result?.licenseStatusError,
+        moduleLimits: {
+            allAllowed: result?.moduleLimits?.allAllowed || false,
+            maxAllowedClusters: result?.moduleLimits?.maxAllowedClusters || ALLOWED_CLUSTER_IN_FREEMIUM,
+        },
     }
 }
 
