@@ -87,9 +87,9 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType, hideA
                 },
                 scales: {
                     y: {
+                        ...commonScaleConfig,
                         stacked: type === 'area',
                         beginAtZero: true,
-                        ...commonScaleConfig,
                     },
                     x: commonScaleConfig,
                 },
@@ -99,13 +99,13 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType, hideA
                 ...baseOptions,
                 scales: {
                     x: {
-                        stacked: true,
                         ...commonScaleConfig,
+                        stacked: true,
                     },
                     y: {
+                        ...commonScaleConfig,
                         stacked: true,
                         beginAtZero: true,
-                        ...commonScaleConfig,
                     },
                 },
             } as ChartOptions<'bar'>
@@ -115,13 +115,13 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType, hideA
                 indexAxis: 'y' as const,
                 scales: {
                     x: {
+                        ...commonScaleConfig,
                         stacked: true,
                         beginAtZero: true,
-                        ...commonScaleConfig,
                     },
                     y: {
-                        stacked: true,
                         ...commonScaleConfig,
+                        stacked: true,
                     },
                 },
             } as ChartOptions<'bar'>

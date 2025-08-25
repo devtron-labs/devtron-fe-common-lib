@@ -65,7 +65,7 @@ export const IconBase = ({
         <ConditionalWrap condition={!!tooltipProps?.content} wrap={conditionalWrap(tooltipProps)}>
             <IconComponent
                 data-testid={dataTestId}
-                className={`icon-component ${size ? `icon-dim-${size}` : ''} ${color ? 'icon-component-color' : ''} ${ICON_STROKE_WIDTH_MAP[size] ? 'icon-component-stroke-width' : ''} ${fillSpace ? 'dc__fill-available-space' : ''} dc__no-shrink`}
+                className={`icon-component-transform ${size ? `icon-dim-${size}` : ''} ${color ? 'icon-component-color' : ''} ${ICON_STROKE_WIDTH_MAP[size] ? 'icon-component-stroke-width' : ''} ${fillSpace ? 'dc__fill-available-space' : ''} dc__no-shrink`}
                 style={{
                     ...(color ? { ['--iconColor' as string]: `var(--${color})` } : {}),
                     ...(ICON_STROKE_WIDTH_MAP[size]

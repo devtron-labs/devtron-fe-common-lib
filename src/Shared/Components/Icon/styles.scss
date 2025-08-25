@@ -32,7 +32,7 @@
     }
 }
 
-.icon-component {
+.icon-component-transform {
     transform: rotate(var(--rotateBy)) scaleX(var(--flip-x)) scaleY(var(--flip-y));
     transition: transform 0.3s;
 }
