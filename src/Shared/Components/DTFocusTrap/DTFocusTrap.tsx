@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { createContext, useContext, useEffect, useMemo, useState } from 'react'
+import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
 import FocusTrap from 'focus-trap-react'
 
 import { noop } from '@Common/Helper'
@@ -39,8 +39,21 @@ export const useFocusTrapControl = () => {
     return context
 }
 
-const DTFocusTrap = ({ deactivateFocusOnEscape = true, children, initialFocus = undefined }: DTFocusTrapType) => {
+const DTFocusTrap = ({
+    onEscape,
+    deactivateFocusOnEscape = true,
+    children,
+    initialFocus = undefined,
+}: DTFocusTrapType) => {
     const [isFocusEnabled, setIsFocusEnabled] = useState(true)
+
+    const handleEscape = useCallback(
+        (e?: KeyboardEvent | MouseEvent) => {
+            onEscape(e)
+            return deactivateFocusOnEscape
+        },
+        [onEscape, deactivateFocusOnEscape],
+    )
 
     useEffect(() => {
         preventBodyScroll(true)
@@ -63,7 +76,7 @@ const DTFocusTrap = ({ deactivateFocusOnEscape = true, children, initialFocus = 
             <FocusTrap
                 active={isFocusEnabled}
                 focusTrapOptions={{
-                    escapeDeactivates: deactivateFocusOnEscape,
+                    escapeDeactivates: handleEscape,
                     initialFocus,
                     allowOutsideClick: (event) => {
                         // Allow up to 3 parent levels to check for the allowed class
