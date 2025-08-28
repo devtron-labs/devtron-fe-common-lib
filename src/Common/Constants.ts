@@ -131,6 +131,7 @@ export const URLS = {
     // AI RECOMMENDATIONS
     AI_RECOMMENDATIONS: AI_RECOMMENDATIONS_ROOT,
     AI_RECOMMENDATIONS_OVERVIEW: `${AI_RECOMMENDATIONS_ROOT}/overview`,
+    RESOURCE_BROWSER: 'resource-browser',
 } as const
 
 export const ROUTES = {
