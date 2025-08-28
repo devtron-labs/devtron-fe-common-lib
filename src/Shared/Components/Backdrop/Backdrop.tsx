@@ -18,7 +18,6 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
 import { motion } from 'framer-motion'
 
-import { useRegisterShortcut } from '@Common/Hooks'
 import { getUniqueId } from '@Shared/Helpers'
 
 import { DTFocusTrap } from '../DTFocusTrap'
@@ -34,7 +33,6 @@ const Backdrop = ({
     deactivateFocusOnEscape = true,
     initialFocus,
 }: BackdropProps) => {
-    const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
     // STATES
     const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null)
 
@@ -83,23 +81,16 @@ const Backdrop = ({
         }
     }, [])
 
-    useEffect(() => {
-        registerShortcut({
-            keys: ['Escape'],
-            callback: onEscape,
-        })
-
-        return () => {
-            unregisterShortcut(['Escape'])
-        }
-    }, [onEscape])
-
     if (portalContainer === null) {
         return null
     }
 
     return createPortal(
-        <DTFocusTrap deactivateFocusOnEscape={deactivateFocusOnEscape} initialFocus={initialFocus ?? undefined}>
+        <DTFocusTrap
+            onEscape={onEscape}
+            deactivateFocusOnEscape={deactivateFocusOnEscape}
+            initialFocus={initialFocus ?? undefined}
+        >
             <motion.div
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
