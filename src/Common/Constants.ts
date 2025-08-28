@@ -63,7 +63,6 @@ const AI_RECOMMENDATIONS_ROOT = '/ai-recommendations'
 export const URLS = {
     LOGIN: '/login',
     LOGIN_SSO: '/login/sso',
-    PERMISSION_GROUPS: '/global-config/auth/groups',
     APP_LIST: 'list',
     CREATE_JOB: 'create-job',
     GETTING_STARTED: 'getting-started',
@@ -79,14 +78,11 @@ export const URLS = {
     DETAILS: '/details',
     CD_DETAILS: 'cd-details',
     APP_TRIGGER: 'trigger',
-    GLOBAL_CONFIG_DOCKER: '/global-config/docker',
     DEPLOYMENT_HISTORY_CONFIGURATIONS: '/configuration',
     NETWORK_STATUS_INTERFACE: '/network-status-interface',
     COMPARE_CLUSTERS: '/compare-clusters',
     APP_CONFIG: 'edit',
-    GLOBAL_CONFIG: '/global-config',
     LICENSE_AUTH: '/license-auth',
-    GLOBAL_CONFIG_EDIT_CLUSTER: '/global-config/cluster-env/edit/:clusterId',
     // APPLICATION MANAGEMENT
     APPLICATION_MANAGEMENT: APPLICATION_MANAGEMENT_ROOT,
     APPLICATION_MANAGEMENT_OVERVIEW: `${APPLICATION_MANAGEMENT_ROOT}/overview`,
@@ -128,8 +124,10 @@ export const URLS = {
     AUTOMATION_AND_ENABLEMENT: AUTOMATION_AND_ENABLEMENT_ROOT,
     AUTOMATION_AND_ENABLEMENT_JOB: `${AUTOMATION_AND_ENABLEMENT_ROOT}/job`,
     // GLOBAL CONFIGURATION
-    // TODO: update this to GLOBAL_CONFIG
-    GLOBAL_CONFIG_ROOT,
+    GLOBAL_CONFIG: GLOBAL_CONFIG_ROOT,
+    GLOBAL_CONFIG_DOCKER: `${GLOBAL_CONFIG_ROOT}/docker`,
+    GLOBAL_CONFIG_EDIT_CLUSTER: `${GLOBAL_CONFIG_ROOT}/cluster-env/edit/:clusterId`,
+    PERMISSION_GROUPS: `${GLOBAL_CONFIG_ROOT}/auth/groups`,
     // AI RECOMMENDATIONS
     AI_RECOMMENDATIONS: AI_RECOMMENDATIONS_ROOT,
     AI_RECOMMENDATIONS_OVERVIEW: `${AI_RECOMMENDATIONS_ROOT}/overview`,
