@@ -14,10 +14,18 @@
  * limitations under the License.
  */
 
-.license-card { 
+.license-card-wrapper {
+    .license-card {
+        .trial-license-badge {
+            background-color: var(--divider-secondary-translucent);
+            letter-spacing: 0.55px;
+        }
+    }
 
-    .trial-license-badge {
-        background-color: var(--divider-secondary-translucent);
-        letter-spacing: 0.55px;
+    .mail-support {
+        .button {
+            text-transform: lowercase;
+        }
     }
 }
+

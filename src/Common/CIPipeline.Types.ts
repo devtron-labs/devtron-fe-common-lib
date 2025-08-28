@@ -27,6 +27,7 @@ export interface MaterialType {
     gitProviderId: number
     regex?: string
     isRegex: boolean
+    url: string
 }
 
 export interface Githost {
