@@ -49,8 +49,10 @@ const PageHeader = ({
     renderActionButtons,
     onClose,
     tippyProps,
+    closeIcon,
 }: PageHeaderType) => {
-    const { setLoginCount, setShowGettingStartedCard, setSidePanelConfig, sidePanelConfig } = useMainContext()
+    const { setLoginCount, setShowGettingStartedCard, setSidePanelConfig, sidePanelConfig, tempAppWindowConfig } =
+        useMainContext()
     const { showSwitchThemeLocationTippy, handleShowSwitchThemeLocationTippyChange } = useTheme()
 
     const {
@@ -137,18 +139,20 @@ const PageHeader = ({
 
     const renderLogoutHelpSection = () => (
         <>
-            {window._env_?.FEATURE_ASK_DEVTRON_EXPERT && sidePanelConfig.state === 'closed' && (
-                <Tooltip content="Ask Devtron AI" placement="bottom" alwaysShowTippyOnHover delay={[500, null]}>
-                    <button
-                        className="enable-svg-animation--hover flex dc__no-background p-2 dc__outline-none-imp dc__no-border"
-                        onClick={onAskButtonClick}
-                        type="button"
-                        aria-label="Ask Devtron Expert"
-                    >
-                        <Icon name="ic-devtron-ai" color={null} size={28} />
-                    </button>
-                </Tooltip>
-            )}
+            {window._env_?.FEATURE_ASK_DEVTRON_EXPERT &&
+                sidePanelConfig.state === 'closed' &&
+                !tempAppWindowConfig.open && (
+                    <Tooltip content="Ask Devtron AI" placement="bottom" alwaysShowTippyOnHover delay={[500, null]}>
+                        <button
+                            className="enable-svg-animation--hover flex dc__no-background p-2 dc__outline-none-imp dc__no-border"
+                            onClick={onAskButtonClick}
+                            type="button"
+                            aria-label="Ask Devtron Expert"
+                        >
+                            <Icon name="ic-devtron-ai" color={null} size={28} />
+                        </button>
+                    </Tooltip>
+                )}
             <HelpButton
                 serverInfo={currentServerInfo.serverInfo}
                 fetchingServerInfo={currentServerInfo.fetchingServerInfo}
@@ -196,7 +200,7 @@ const PageHeader = ({
                                 <Button
                                     dataTestId="page-header-close-button"
                                     ariaLabel="page-header-close-button"
-                                    icon={<Icon name="ic-close-large" color={null} />}
+                                    icon={closeIcon ?? <Icon name="ic-close-large" color={null} />}
                                     variant={ButtonVariantType.secondary}
                                     style={ButtonStyleType.negativeGrey}
                                     size={ComponentSizeType.xs}

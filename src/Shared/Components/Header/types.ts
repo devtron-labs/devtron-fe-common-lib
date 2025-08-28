@@ -38,6 +38,7 @@ export interface PageHeaderType {
         tippyHeader?: string
     }
     onClose?: () => void
+    closeIcon?: JSX.Element
 }
 
 export interface ServerInfo {

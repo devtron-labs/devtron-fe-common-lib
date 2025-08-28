@@ -56,6 +56,7 @@ export type NavigationItemID =
     | 'backup-and-restore-backup-repositories'
     | 'backup-and-restore-backup-locations'
     | 'backup-and-restore-history-and-logs'
+    | 'ai-recommendations-overview'
 
 export type NavigationSubMenuItemID =
     | 'application-management-configurations-gitops'
@@ -73,6 +74,7 @@ export type NavigationSubMenuItemID =
     | 'application-management-policies-pull-image-digest'
     | 'application-management-policies-tag-policy'
     | 'application-management-policies-filter-conditions'
+    | 'application-management-policies-image-promotion'
     | 'application-management-policies-lock-deployment-configuration'
     | 'cost-visibility-cost-breakdown-clusters'
     | 'cost-visibility-cost-breakdown-environments'
