@@ -82,6 +82,7 @@ const GenericModal = ({
     name,
     open,
     width = 600,
+    borderRadius = 8,
     onClose,
     onEscape = noop,
     closeOnBackdropClick = false,
@@ -92,7 +93,7 @@ const GenericModal = ({
             <GenericModalProvider value={{ name, onClose }}>
                 <Backdrop onEscape={onEscape} onClick={closeOnBackdropClick ? onClose : noop}>
                     <motion.div
-                        className={`shadow__modal flexbox-col bg__primary border__secondary br-8 dc__m-auto mt-40 dc__overflow-hidden ${MODAL_WIDTH_TO_CLASS_NAME_MAP[width]}`}
+                        className={`shadow__modal flexbox-col bg__primary border__secondary br-${borderRadius} dc__m-auto mt-40 dc__overflow-hidden ${MODAL_WIDTH_TO_CLASS_NAME_MAP[width]}`}
                         exit={{ y: 100, opacity: 0, scale: 0.75, transition: { duration: 0.35 } }}
                         initial={{ y: 100, opacity: 0, scale: 0.75 }}
                         animate={{ y: 0, opacity: 1, scale: 1 }}

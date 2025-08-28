@@ -5,7 +5,6 @@ import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
 import { ReactComponent as ICActivity } from '@IconsV2/ic-activity.svg'
 import { ReactComponent as ICAdd } from '@IconsV2/ic-add.svg'
 import { ReactComponent as ICAmazonEks } from '@IconsV2/ic-amazon-eks.svg'
-import { ReactComponent as ICApica } from '@IconsV2/ic-apica.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
 import { ReactComponent as ICAppTemplate } from '@IconsV2/ic-app-template.svg'
 import { ReactComponent as ICArrowClockwise } from '@IconsV2/ic-arrow-clockwise.svg'
@@ -15,6 +14,7 @@ import { ReactComponent as ICArrowsClockwise } from '@IconsV2/ic-arrows-clockwis
 import { ReactComponent as ICArrowsLeftRight } from '@IconsV2/ic-arrows-left-right.svg'
 import { ReactComponent as ICAsterisk } from '@IconsV2/ic-asterisk.svg'
 import { ReactComponent as ICAther } from '@IconsV2/ic-ather.svg'
+import { ReactComponent as ICAwsCodecommit } from '@IconsV2/ic-aws-codecommit.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICAzureAks } from '@IconsV2/ic-azure-aks.svg'
 import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
@@ -27,6 +27,7 @@ import { ReactComponent as ICBrain } from '@IconsV2/ic-brain.svg'
 import { ReactComponent as ICBrowser } from '@IconsV2/ic-browser.svg'
 import { ReactComponent as ICBug } from '@IconsV2/ic-bug.svg'
 import { ReactComponent as ICBuildColor } from '@IconsV2/ic-build-color.svg'
+import { ReactComponent as ICBuilding } from '@IconsV2/ic-building.svg'
 import { ReactComponent as ICCalendar } from '@IconsV2/ic-calendar.svg'
 import { ReactComponent as ICCancelled } from '@IconsV2/ic-cancelled.svg'
 import { ReactComponent as ICCardStack } from '@IconsV2/ic-card-stack.svg'
@@ -60,6 +61,7 @@ import { ReactComponent as ICCopy } from '@IconsV2/ic-copy.svg'
 import { ReactComponent as ICCpu } from '@IconsV2/ic-cpu.svg'
 import { ReactComponent as ICCrown } from '@IconsV2/ic-crown.svg'
 import { ReactComponent as ICCube } from '@IconsV2/ic-cube.svg'
+import { ReactComponent as ICDatabaseBackup } from '@IconsV2/ic-database-backup.svg'
 import { ReactComponent as ICDelete } from '@IconsV2/ic-delete.svg'
 import { ReactComponent as ICDeleteDots } from '@IconsV2/ic-delete-dots.svg'
 import { ReactComponent as ICDeleteLightning } from '@IconsV2/ic-delete-lightning.svg'
@@ -229,6 +231,7 @@ import { ReactComponent as ICTrendUp } from '@IconsV2/ic-trend-up.svg'
 import { ReactComponent as ICTwoCubes } from '@IconsV2/ic-two-cubes.svg'
 import { ReactComponent as ICUbuntu } from '@IconsV2/ic-ubuntu.svg'
 import { ReactComponent as ICUnknown } from '@IconsV2/ic-unknown.svg'
+import { ReactComponent as ICUpgradeEnterprise } from '@IconsV2/ic-upgrade-enterprise.svg'
 import { ReactComponent as ICUserCircle } from '@IconsV2/ic-user-circle.svg'
 import { ReactComponent as ICUserKey } from '@IconsV2/ic-user-key.svg'
 import { ReactComponent as ICUsers } from '@IconsV2/ic-users.svg'
@@ -251,7 +254,6 @@ export const iconMap = {
     'ic-activity': ICActivity,
     'ic-add': ICAdd,
     'ic-amazon-eks': ICAmazonEks,
-    'ic-apica': ICApica,
     'ic-app-group': ICAppGroup,
     'ic-app-template': ICAppTemplate,
     'ic-arrow-clockwise': ICArrowClockwise,
@@ -261,6 +263,7 @@ export const iconMap = {
     'ic-arrows-left-right': ICArrowsLeftRight,
     'ic-asterisk': ICAsterisk,
     'ic-ather': ICAther,
+    'ic-aws-codecommit': ICAwsCodecommit,
     'ic-azure-aks': ICAzureAks,
     'ic-azure': ICAzure,
     'ic-bg-cluster': ICBgCluster,
@@ -273,6 +276,7 @@ export const iconMap = {
     'ic-browser': ICBrowser,
     'ic-bug': ICBug,
     'ic-build-color': ICBuildColor,
+    'ic-building': ICBuilding,
     'ic-calendar': ICCalendar,
     'ic-cancelled': ICCancelled,
     'ic-card-stack': ICCardStack,
@@ -306,6 +310,7 @@ export const iconMap = {
     'ic-cpu': ICCpu,
     'ic-crown': ICCrown,
     'ic-cube': ICCube,
+    'ic-database-backup': ICDatabaseBackup,
     'ic-delete-dots': ICDeleteDots,
     'ic-delete-lightning': ICDeleteLightning,
     'ic-delete': ICDelete,
@@ -475,6 +480,7 @@ export const iconMap = {
     'ic-two-cubes': ICTwoCubes,
     'ic-ubuntu': ICUbuntu,
     'ic-unknown': ICUnknown,
+    'ic-upgrade-enterprise': ICUpgradeEnterprise,
     'ic-user-circle': ICUserCircle,
     'ic-user-key': ICUserKey,
     'ic-users': ICUsers,

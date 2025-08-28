@@ -53,6 +53,8 @@ export const TempAppWindow = () => {
 
     // HANDLERS
     const handleClose = () => {
+        tempAppWindowConfig.customCloseConfig?.beforeClose()
+
         setTempAppWindowConfig({ open: false, title: null, url: null, component: null, image: null })
     }
 
@@ -78,6 +80,7 @@ export const TempAppWindow = () => {
                 headerImage={image}
                 additionalHeaderInfo={url && showOpenInNewTab ? additionalHeaderInfo(url) : null}
                 onClose={handleClose}
+                closeIcon={tempAppWindowConfig.customCloseConfig?.icon}
             />
             {!!url && (
                 <iframe
