@@ -54,7 +54,7 @@ const SuggestionsInfo = () => {
                         Use a scoped variable for dynamic values, which are defined in the&nbsp;
                         <Link
                             className="cb-5 m-0"
-                            to={URLS.GLOBAL_CONFIG_SCOPED_VARIABLES}
+                            to={URLS.APPLICATION_MANAGEMENT_CONFIGURATIONS_SCOPED_VARIABLES}
                             target="_blank"
                             rel="noopener noreferrer"
                         >
