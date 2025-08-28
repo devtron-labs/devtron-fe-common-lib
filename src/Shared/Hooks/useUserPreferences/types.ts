@@ -73,6 +73,7 @@ export type NavigationSubMenuItemID =
     | 'application-management-policies-pull-image-digest'
     | 'application-management-policies-tag-policy'
     | 'application-management-policies-filter-conditions'
+    | 'application-management-policies-image-promotion'
     | 'application-management-policies-lock-deployment-configuration'
     | 'cost-visibility-cost-breakdown-clusters'
     | 'cost-visibility-cost-breakdown-environments'
