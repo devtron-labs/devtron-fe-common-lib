@@ -10,13 +10,3 @@ export enum CostBreakdownItemViewParamsType {
     VIEW = 'view',
     DETAIL = 'detail',
 }
-
-type TrendSignType = '+' | '-'
-export type CostTrendType = '0' | `${TrendSignType}${number}`
-
-export enum CostBreakdownSubComponents {
-    MEMORY = 'memory',
-    CPU = 'cpu',
-    STORAGE = 'storage',
-    GPU = 'gpu',
-}

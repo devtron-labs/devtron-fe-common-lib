@@ -67,7 +67,7 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType, hideA
         grid: {
             color: CHART_GRID_LINES_COLORS[appTheme],
         },
-    } as ChartOptions['scales']['x']
+    } satisfies ChartOptions['scales']['x']
 
     switch (type) {
         case 'area':
@@ -93,7 +93,7 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType, hideA
                     },
                     x: commonScaleConfig,
                 },
-            } as ChartOptions<'line'>
+            } satisfies ChartOptions<'line'>
         case 'stackedBar':
             return {
                 ...baseOptions,
@@ -108,7 +108,7 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType, hideA
                         beginAtZero: true,
                     },
                 },
-            } as ChartOptions<'bar'>
+            } satisfies ChartOptions<'bar'>
         case 'stackedBarHorizontal':
             return {
                 ...baseOptions,
@@ -124,7 +124,7 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType, hideA
                         stacked: true,
                     },
                 },
-            } as ChartOptions<'bar'>
+            } satisfies ChartOptions<'bar'>
         case 'pie':
             return {
                 ...baseOptions,
