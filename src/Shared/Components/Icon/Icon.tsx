@@ -7,6 +7,7 @@ import { ReactComponent as ICAdd } from '@IconsV2/ic-add.svg'
 import { ReactComponent as ICAmazonEks } from '@IconsV2/ic-amazon-eks.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
 import { ReactComponent as ICAppTemplate } from '@IconsV2/ic-app-template.svg'
+import { ReactComponent as ICArgocdApp } from '@IconsV2/ic-argocd-app.svg'
 import { ReactComponent as ICArrowClockwise } from '@IconsV2/ic-arrow-clockwise.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICArrowSquareOut } from '@IconsV2/ic-arrow-square-out.svg'
@@ -17,8 +18,13 @@ import { ReactComponent as ICAther } from '@IconsV2/ic-ather.svg'
 import { ReactComponent as ICAwsCodecommit } from '@IconsV2/ic-aws-codecommit.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICAzureAks } from '@IconsV2/ic-azure-aks.svg'
+import { ReactComponent as ICBgBuild } from '@IconsV2/ic-bg-build.svg'
 import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
+import { ReactComponent as ICBgDeploy } from '@IconsV2/ic-bg-deploy.svg'
 import { ReactComponent as ICBgEnvironment } from '@IconsV2/ic-bg-environment.svg'
+import { ReactComponent as ICBgProductionPipelines } from '@IconsV2/ic-bg-production-pipelines.svg'
+import { ReactComponent as ICBgProject } from '@IconsV2/ic-bg-project.svg'
+import { ReactComponent as ICBgScan } from '@IconsV2/ic-bg-scan.svg'
 import { ReactComponent as ICBharatpe } from '@IconsV2/ic-bharatpe.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBookOpen } from '@IconsV2/ic-book-open.svg'
@@ -256,6 +262,7 @@ export const iconMap = {
     'ic-amazon-eks': ICAmazonEks,
     'ic-app-group': ICAppGroup,
     'ic-app-template': ICAppTemplate,
+    'ic-argocd-app': ICArgocdApp,
     'ic-arrow-clockwise': ICArrowClockwise,
     'ic-arrow-right': ICArrowRight,
     'ic-arrow-square-out': ICArrowSquareOut,
@@ -266,8 +273,13 @@ export const iconMap = {
     'ic-aws-codecommit': ICAwsCodecommit,
     'ic-azure-aks': ICAzureAks,
     'ic-azure': ICAzure,
+    'ic-bg-build': ICBgBuild,
     'ic-bg-cluster': ICBgCluster,
+    'ic-bg-deploy': ICBgDeploy,
     'ic-bg-environment': ICBgEnvironment,
+    'ic-bg-production-pipelines': ICBgProductionPipelines,
+    'ic-bg-project': ICBgProject,
+    'ic-bg-scan': ICBgScan,
     'ic-bharatpe': ICBharatpe,
     'ic-bitbucket': ICBitbucket,
     'ic-book-open': ICBookOpen,
