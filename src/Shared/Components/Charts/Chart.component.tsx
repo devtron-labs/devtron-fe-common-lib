@@ -150,7 +150,7 @@ ChartJS.overrides.doughnut.plugins.legend.labels = {
  */
 const Chart = (props: ChartProps) => {
     /** Using this technique for typing in transformDataForChart */
-    const { id, xAxisLabels: labels, ...typeAndDatasets } = props
+    const { id, xAxisLabels: labels, hideAxis = false, ...typeAndDatasets } = props
     const { type, datasets } = typeAndDatasets
 
     const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -169,7 +169,7 @@ const Chart = (props: ChartProps) => {
         // Get Chart.js type and transform data
         const chartJSType = getChartJSType(type)
         const transformedData = { labels, datasets: transformDataForChart({ ...typeAndDatasets, appTheme }) }
-        const defaultOptions = getDefaultOptions(type, appTheme)
+        const defaultOptions = getDefaultOptions(type, appTheme, hideAxis)
 
         // Create new chart
         chartRef.current = new ChartJS(ctx, {
@@ -181,7 +181,7 @@ const Chart = (props: ChartProps) => {
         return () => {
             chartRef.current.destroy()
         }
-    }, [type, datasets, labels, appTheme])
+    }, [type, datasets, labels, appTheme, hideAxis])
 
     return (
         <div className="h-100 w-100">

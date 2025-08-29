@@ -17,8 +17,11 @@
 import React from 'react'
 import { motion } from 'framer-motion'
 
+import { ComponentSizeType } from '@Shared/constants'
+
 import { FALLBACK_ENTITY } from './constants'
 import { Entity, SegmentedBarChartProps } from './types'
+import { getBarHeightForSize } from './utils'
 
 import './styles.scss'
 
@@ -32,10 +35,12 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
     swapLegendAndBar = false,
     showAnimationOnBar = false,
     isLoading,
+    size = ComponentSizeType.medium,
 }) => {
     const entities = isLoading ? [FALLBACK_ENTITY] : userEntities
     const total = entities.reduce((sum, entity) => entity.value + sum, 0)
     const filteredEntities = entities.filter((entity) => !!entity.value)
+    const barHeight = getBarHeightForSize(size)
 
     const calcSegmentWidth = (entityValue: Entity['value']) => `${(entityValue / total) * 100}%`
 
@@ -116,7 +121,7 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
                 <div
                     // eslint-disable-next-line react/no-array-index-key
                     key={index}
-                    className={`h-8 ${index === 0 ? 'dc__left-radius-4' : ''} ${
+                    className={`${barHeight} ${index === 0 ? 'dc__left-radius-4' : ''} ${
                         index === map.length - 1 ? 'dc__right-radius-4' : ''
                     } ${isLoading ? 'shimmer' : ''}`}
                     style={{ backgroundColor: entity.color, width: calcSegmentWidth(entity.value) }}

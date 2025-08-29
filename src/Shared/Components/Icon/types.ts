@@ -58,6 +58,12 @@ export interface IconBaseProps {
      */
     rotateBy?: number
     /**
+     * Flips the icon in the specified direction
+     *
+     * @default undefined
+     */
+    flip?: 'horizontal' | 'vertical'
+    /**
      * If true, the icon will expand to fill the available space of its container.
      */
     fillSpace?: boolean
