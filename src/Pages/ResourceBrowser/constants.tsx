@@ -117,14 +117,14 @@ export const GVK_FILTER_KIND_QUERY_PARAM_KEY = 'gvkFilterKind'
 export const GVK_FILTER_API_VERSION_QUERY_PARAM_KEY = 'gvkFilterApiVersion'
 
 export const RESOURCE_BROWSER_ROUTES = {
-    OVERVIEW: `${URLS.RESOURCE_BROWSER}/:clusterId/overview`,
-    MONITORING_DASHBOARD: `${URLS.RESOURCE_BROWSER}/:clusterId/monitoring-dashboard`,
-    TERMINAL: `${URLS.RESOURCE_BROWSER}/:clusterId/terminal`,
-    CLUSTER_UPGRADE: `${URLS.RESOURCE_BROWSER}/:clusterId/cluster-upgrade`,
-    NODE_DETAIL: `${URLS.RESOURCE_BROWSER}/:clusterId/node/detail/:name`,
-    K8S_RESOURCE_DETAIL: `${URLS.RESOURCE_BROWSER}/:clusterId/:namespace/:kind/:group/:name`,
-    K8S_RESOURCE_LIST: `${URLS.RESOURCE_BROWSER}/:clusterId/:kind/:group`,
-    RESOURCE_RECOMMENDER: `${URLS.RESOURCE_BROWSER}/:clusterId/resource-recommender`,
+    OVERVIEW: `${URLS.INFRASTRUCTURE_MANAGEMENT_RESOURCE_BROWSER}/:clusterId/overview`,
+    MONITORING_DASHBOARD: `${URLS.INFRASTRUCTURE_MANAGEMENT_RESOURCE_BROWSER}/:clusterId/monitoring-dashboard`,
+    TERMINAL: `${URLS.INFRASTRUCTURE_MANAGEMENT_RESOURCE_BROWSER}/:clusterId/terminal`,
+    CLUSTER_UPGRADE: `${URLS.INFRASTRUCTURE_MANAGEMENT_RESOURCE_BROWSER}/:clusterId/cluster-upgrade`,
+    NODE_DETAIL: `${URLS.INFRASTRUCTURE_MANAGEMENT_RESOURCE_BROWSER}/:clusterId/node/detail/:name`,
+    K8S_RESOURCE_DETAIL: `${URLS.INFRASTRUCTURE_MANAGEMENT_RESOURCE_BROWSER}/:clusterId/:namespace/:kind/:group/:name`,
+    K8S_RESOURCE_LIST: `${URLS.INFRASTRUCTURE_MANAGEMENT_RESOURCE_BROWSER}/:clusterId/:kind/:group`,
+    RESOURCE_RECOMMENDER: `${URLS.INFRASTRUCTURE_MANAGEMENT_RESOURCE_BROWSER}/:clusterId/resource-recommender`,
 } as const
 
 export const K8S_EMPTY_GROUP = 'k8sEmptyGroup'

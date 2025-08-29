@@ -28,8 +28,18 @@ import {
 import { ServerErrors } from '@Common/ServerError'
 import { ResponseType } from '@Common/Types'
 
-export const useQuery = <TQueryFnData = unknown, TData = TQueryFnData, TQueryKey extends QueryKey = QueryKey>(
-    options: UseQueryOptions<ResponseType<TQueryFnData>, ServerErrors, TData, TQueryKey>,
+export const useQuery = <
+    TQueryFnData = unknown,
+    TData = TQueryFnData,
+    TQueryKey extends QueryKey = QueryKey,
+    WrapWithResponseType extends boolean = true,
+>(
+    options: UseQueryOptions<
+        WrapWithResponseType extends true ? ResponseType<TQueryFnData> : TQueryFnData,
+        ServerErrors,
+        TData,
+        TQueryKey
+    >,
 ): UseQueryResult<TData, ServerErrors> => rqUseQuery(options)
 
 export const useMutation = <TData = unknown, TVariables = void, TContext = unknown>(
