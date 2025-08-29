@@ -116,7 +116,6 @@ export const URLS = {
     COST_BREAKDOWN_ENVIRONMENTS: `${COST_VISIBILITY_ROOT}/breakdown/${CostBreakdownViewType.ENVIRONMENTS}`,
     COST_BREAKDOWN_PROJECTS: `${COST_VISIBILITY_ROOT}/breakdown/${CostBreakdownViewType.PROJECTS}`,
     COST_BREAKDOWN_APPLICATIONS: `${COST_VISIBILITY_ROOT}/breakdown/${CostBreakdownViewType.APPLICATIONS}`,
-    COST_BREAKDOWN_ITEM_NAME: `:${CostBreakdownItemViewParamsType.ITEM_NAME}`,
     COST_BREAKDOWN_DETAIL: `:${CostBreakdownItemViewParamsType.ITEM_NAME}/:${CostBreakdownItemViewParamsType.VIEW}/:${CostBreakdownItemViewParamsType.DETAIL}?`,
     COST_CONFIGURATIONS: `${COST_VISIBILITY_ROOT}/configurations`,
     // SECURITY CENTER
