@@ -689,7 +689,7 @@ export const clearCookieOnLogout = () => {
 }
 
 export const getAppDetailsURL = (appId: number | string, envId?: number | string): string => {
-    const baseURL = `${URLS.APP}/${appId}/${URLS.APP_DETAILS}`
+    const baseURL = `${URLS.APPLICATION_MANAGEMENT_APP}/${appId}/${URLS.APP_DETAILS}`
     if (envId) {
         return `${baseURL}/${envId}`
     }
