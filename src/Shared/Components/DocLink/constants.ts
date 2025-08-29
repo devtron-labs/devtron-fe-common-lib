@@ -116,7 +116,7 @@ export const DOCUMENTATION = {
     GLOBAL_CONFIG_PULL_IMAGE_DIGEST: 'global-configurations/pull-image-digest',
     GLOBAL_CONFIG_TAGS: 'getting-started/global-configurations/tags-policy',
 
-    // Software distribution hub
+    // Software Release Management
     SOFTWARE_DISTRIBUTION_HUB: 'usage/software-distribution-hub',
     RELEASE_TRACKS: 'usage/software-distribution-hub/release-hub#creating-release-tracks-and-versions',
     RELEASES: 'usage/software-distribution-hub/release-hub#creating-release-tracks-and-versions',
