@@ -53,6 +53,7 @@ const TreeView = <DataAttributeType = null,>({
     variant = 'primary',
     defaultExpandedMap = {},
     highlightSelectedHeadingOnlyWhenCollapsed = false,
+    useOverflowAuto = true,
 }: TreeViewProps<DataAttributeType>) => {
     const { pathname } = useLocation()
     const isFirstLevel = depth === 0
@@ -268,9 +269,11 @@ const TreeView = <DataAttributeType = null,>({
         )
     }
 
+    const overflowClass = isFirstLevel && useOverflowAuto ? 'dc__overflow-auto' : ''
+
     return (
         <div
-            className={`tree-view__container ${VARIANT_TO_BG_CLASS_MAP[variant]} ${isFirstLevel ? 'dc__overflow-auto w-100 h-100 flex-grow-1' : ''}`}
+            className={`tree-view__container ${overflowClass} ${VARIANT_TO_BG_CLASS_MAP[variant]} ${isFirstLevel ? 'w-100 h-100 flex-grow-1' : ''}`}
             // Setting key down event here instead of button and navlink to minimize the number of event listeners
             {...(isFirstLevel ? { role: 'tree', onKeyDown: handleKeyDown } : {})}
         >
