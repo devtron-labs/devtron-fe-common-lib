@@ -84,7 +84,8 @@ export const BUILD_INFRA_TEXT = {
 
 export const BUILD_INFRA_BREADCRUMB: UseBreadcrumbProps = {
     alias: {
-        'global-config': null,
+        'application-management': null,
+        configurations: null,
         'build-infra': {
             component: <h2 className="m-0 cn-9 fs-16 fw-6 lh-32">{BUILD_INFRA_TEXT.HEADING}</h2>,
             linked: false,

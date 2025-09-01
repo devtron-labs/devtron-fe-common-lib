@@ -36,7 +36,7 @@ export const HeaderWithCreateButton = ({ headerName, additionalHeaderInfo }: Hea
     const location = useLocation()
 
     // CONSTANTS
-    const createCustomAppURL = `${URLS.APP}/${URLS.APP_LIST}/${params.appType ?? AppListConstants.AppType.DEVTRON_APPS}/${AppListConstants.CREATE_DEVTRON_APP_URL}${location.search}`
+    const createCustomAppURL = `${URLS.APPLICATION_MANAGEMENT_APP}/${URLS.APP_LIST}/${params.appType ?? AppListConstants.AppType.DEVTRON_APPS}/${AppListConstants.CREATE_DEVTRON_APP_URL}${location.search}`
 
     const renderActionButtons = () =>
         serverMode === SERVER_MODE.FULL ? (
@@ -56,7 +56,7 @@ export const HeaderWithCreateButton = ({ headerName, additionalHeaderInfo }: Hea
             <Button
                 text="Deploy helm charts"
                 component={ButtonComponentType.link}
-                linkProps={{ to: URLS.CHARTS_DISCOVER }}
+                linkProps={{ to: URLS.APPLICATION_MANAGEMENT_CHART_STORE_DISCOVER }}
                 dataTestId="deploy-helm-chart-on-header"
                 size={ComponentSizeType.small}
             />
