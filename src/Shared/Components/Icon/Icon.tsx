@@ -46,6 +46,7 @@ import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
 import { ReactComponent as ICCleanBrush } from '@IconsV2/ic-clean-brush.svg'
 import { ReactComponent as ICClipboard } from '@IconsV2/ic-clipboard.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
+import { ReactComponent as ICClockCounterclockwise } from '@IconsV2/ic-clock-counterclockwise.svg'
 import { ReactComponent as ICCloseLarge } from '@IconsV2/ic-close-large.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
 import { ReactComponent as ICCloud } from '@IconsV2/ic-cloud.svg'
@@ -103,6 +104,7 @@ import { ReactComponent as ICFilesChanged } from '@IconsV2/ic-files-changed.svg'
 import { ReactComponent as ICFilter } from '@IconsV2/ic-filter.svg'
 import { ReactComponent as ICFilterApplied } from '@IconsV2/ic-filter-applied.svg'
 import { ReactComponent as ICFlask } from '@IconsV2/ic-flask.svg'
+import { ReactComponent as ICFloppyDisk } from '@IconsV2/ic-floppy-disk.svg'
 import { ReactComponent as ICFolder } from '@IconsV2/ic-folder.svg'
 import { ReactComponent as ICFolderColor } from '@IconsV2/ic-folder-color.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
@@ -294,6 +296,7 @@ export const iconMap = {
     'ic-circle-loader': ICCircleLoader,
     'ic-clean-brush': ICCleanBrush,
     'ic-clipboard': ICClipboard,
+    'ic-clock-counterclockwise': ICClockCounterclockwise,
     'ic-clock': ICClock,
     'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
@@ -352,6 +355,7 @@ export const iconMap = {
     'ic-filter-applied': ICFilterApplied,
     'ic-filter': ICFilter,
     'ic-flask': ICFlask,
+    'ic-floppy-disk': ICFloppyDisk,
     'ic-folder-color': ICFolderColor,
     'ic-folder-user': ICFolderUser,
     'ic-folder': ICFolder,
