@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
+import { getParsedCIMaterialInfo } from '@Shared/Services/utils'
+
 import { ReactComponent as ICArrowDown } from '../../../Assets/Icon/ic-arrow-down.svg'
 import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
-import { Drawer, GenericEmptyState, useAsync } from '../../../Common'
+import { Drawer, GenericEmptyState, useQuery } from '../../../Common'
 import { getArtifactInfo, getCITriggerInfo } from '../../Services/app.service'
 import { APIResponseHandler } from '../APIResponseHandler'
 import { Artifacts } from '../CICDHistory'
@@ -30,8 +32,14 @@ const ArtifactInfoModal = ({
     renderCIListHeader,
     fetchOnlyArtifactInfo = false,
 }: ArtifactInfoModalProps) => {
-    const [isInfoLoading, artifactInfo, infoError, refetchArtifactInfo] = useAsync(
-        () =>
+    const {
+        isLoading,
+        isFetching,
+        data: artifactInfo,
+        error: infoError,
+        refetch: refetchArtifactInfo,
+    } = useQuery({
+        queryFn: () =>
             fetchOnlyArtifactInfo
                 ? getArtifactInfo({
                       ciArtifactId,
@@ -40,8 +48,11 @@ const ArtifactInfoModal = ({
                       ciArtifactId,
                       envId,
                   }),
-        [ciArtifactId, envId, fetchOnlyArtifactInfo],
-    )
+        queryKey: [ciArtifactId, envId, fetchOnlyArtifactInfo],
+        select: ({ result }) => getParsedCIMaterialInfo(result),
+    })
+
+    const isInfoLoading = isLoading || isFetching
 
     const isArtifactInfoAvailable = !!artifactInfo?.materials?.length
     const showDescription = isArtifactInfoAvailable && !fetchOnlyArtifactInfo

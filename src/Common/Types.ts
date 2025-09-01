@@ -206,21 +206,32 @@ export interface ErrorPageType
         Pick<ErrorScreenManagerProps, 'reload' | 'redirectURL'> {
     code: number
     redirectURL?: string
+    on404Redirect?: () => void
     reload?: () => void
 }
 
-export interface ErrorScreenManagerProps {
+export type ErrorScreenManagerProps = {
     code?: number
     imageType?: ImageType
     reload?: (...args) => any
     subtitle?: React.ReactChild
     reloadClass?: string
-    /**
-     * Would be used to redirect URL in case of 404
-     * @default - APP_LIST
-     */
-    redirectURL?: string
-}
+} & (
+    | {
+        /**
+         * Would be used to redirect URL in case of 404
+         * @default - APP_LIST
+         */
+        redirectURL?: string
+        on404Redirect?: never
+    } | {
+        redirectURL?: never
+        on404Redirect: () => void
+    } | {
+        redirectURL?: never
+        on404Redirect?: never
+    }
+)
 
 export interface ErrorScreenNotAuthorizedProps {
     subtitle?: React.ReactChild
@@ -482,6 +493,8 @@ export interface CDMaterialListModalServiceUtilProps {
     artifactId?: number
     artifactStatus?: string
     disableDefaultSelection?: boolean
+    isExceptionUser: boolean
+    isApprovalConfigured: boolean
 }
 
 export interface CDMaterialType {

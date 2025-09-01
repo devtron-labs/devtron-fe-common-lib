@@ -14,6 +14,7 @@ import { ReactComponent as ICArrowsClockwise } from '@IconsV2/ic-arrows-clockwis
 import { ReactComponent as ICArrowsLeftRight } from '@IconsV2/ic-arrows-left-right.svg'
 import { ReactComponent as ICAsterisk } from '@IconsV2/ic-asterisk.svg'
 import { ReactComponent as ICAther } from '@IconsV2/ic-ather.svg'
+import { ReactComponent as ICAwsCodecommit } from '@IconsV2/ic-aws-codecommit.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICAzureAks } from '@IconsV2/ic-azure-aks.svg'
 import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
@@ -66,6 +67,9 @@ import { ReactComponent as ICDevtronAi } from '@IconsV2/ic-devtron-ai.svg'
 import { ReactComponent as ICDevtronApp } from '@IconsV2/ic-devtron-app.svg'
 import { ReactComponent as ICDevtronHeaderLogo } from '@IconsV2/ic-devtron-header-logo.svg'
 import { ReactComponent as ICDevtronJob } from '@IconsV2/ic-devtron-job.svg'
+import { ReactComponent as ICDiffAdded } from '@IconsV2/ic-diff-added.svg'
+import { ReactComponent as ICDiffDeleted } from '@IconsV2/ic-diff-deleted.svg'
+import { ReactComponent as ICDiffUpdated } from '@IconsV2/ic-diff-updated.svg'
 import { ReactComponent as ICDisconnect } from '@IconsV2/ic-disconnect.svg'
 import { ReactComponent as ICDiscordFill } from '@IconsV2/ic-discord-fill.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
@@ -107,6 +111,8 @@ import { ReactComponent as ICGoogleArtifactRegistry } from '@IconsV2/ic-google-a
 import { ReactComponent as ICGoogleContainerRegistry } from '@IconsV2/ic-google-container-registry.svg'
 import { ReactComponent as ICGoogleGke } from '@IconsV2/ic-google-gke.svg'
 import { ReactComponent as ICGridView } from '@IconsV2/ic-grid-view.svg'
+import { ReactComponent as ICGroupFilter } from '@IconsV2/ic-group-filter.svg'
+import { ReactComponent as ICGroupFilterApplied } from '@IconsV2/ic-group-filter-applied.svg'
 import { ReactComponent as ICHandPointing } from '@IconsV2/ic-hand-pointing.svg'
 import { ReactComponent as ICHeartGreen } from '@IconsV2/ic-heart-green.svg'
 import { ReactComponent as ICHeartRed } from '@IconsV2/ic-heart-red.svg'
@@ -121,6 +127,7 @@ import { ReactComponent as ICInProgress } from '@IconsV2/ic-in-progress.svg'
 import { ReactComponent as ICInfoFilled } from '@IconsV2/ic-info-filled.svg'
 import { ReactComponent as ICInfoFilledColor } from '@IconsV2/ic-info-filled-color.svg'
 import { ReactComponent as ICInfoOutline } from '@IconsV2/ic-info-outline.svg'
+import { ReactComponent as ICInput } from '@IconsV2/ic-input.svg'
 import { ReactComponent as ICInstall } from '@IconsV2/ic-install.svg'
 import { ReactComponent as ICJobColor } from '@IconsV2/ic-job-color.svg'
 import { ReactComponent as ICK3s } from '@IconsV2/ic-k3s.svg'
@@ -137,6 +144,7 @@ import { ReactComponent as ICLink } from '@IconsV2/ic-link.svg'
 import { ReactComponent as ICLinkedBuildColor } from '@IconsV2/ic-linked-build-color.svg'
 import { ReactComponent as ICListBullets } from '@IconsV2/ic-list-bullets.svg'
 import { ReactComponent as ICLivspace } from '@IconsV2/ic-livspace.svg'
+import { ReactComponent as ICLocked } from '@IconsV2/ic-locked.svg'
 import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
 import { ReactComponent as ICLogs } from '@IconsV2/ic-logs.svg'
 import { ReactComponent as ICMagnifyingGlass } from '@IconsV2/ic-magnifying-glass.svg'
@@ -187,6 +195,7 @@ import { ReactComponent as ICSprayCan } from '@IconsV2/ic-spray-can.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
 import { ReactComponent as ICStamp } from '@IconsV2/ic-stamp.svg'
 import { ReactComponent as ICStopFill } from '@IconsV2/ic-stop-fill.svg'
+import { ReactComponent as ICStorage } from '@IconsV2/ic-storage.svg'
 import { ReactComponent as ICStrategyBlueGreen } from '@IconsV2/ic-strategy-blue-green.svg'
 import { ReactComponent as ICStrategyBlueGreenColor } from '@IconsV2/ic-strategy-blue-green-color.svg'
 import { ReactComponent as ICStrategyCanary } from '@IconsV2/ic-strategy-canary.svg'
@@ -198,6 +207,7 @@ import { ReactComponent as ICStrategyRollingColor } from '@IconsV2/ic-strategy-r
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
 import { ReactComponent as ICSun } from '@IconsV2/ic-sun.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
+import { ReactComponent as ICTag } from '@IconsV2/ic-tag.svg'
 import { ReactComponent as ICTata1mg } from '@IconsV2/ic-tata1mg.svg'
 import { ReactComponent as ICTerminal } from '@IconsV2/ic-terminal.svg'
 import { ReactComponent as ICTerminalFill } from '@IconsV2/ic-terminal-fill.svg'
@@ -216,7 +226,10 @@ import { ReactComponent as ICUserCircle } from '@IconsV2/ic-user-circle.svg'
 import { ReactComponent as ICUserKey } from '@IconsV2/ic-user-key.svg'
 import { ReactComponent as ICUsers } from '@IconsV2/ic-users.svg'
 import { ReactComponent as ICViewVariableToggle } from '@IconsV2/ic-view-variable-toggle.svg'
+import { ReactComponent as ICVisibilityOff } from '@IconsV2/ic-visibility-off.svg'
+import { ReactComponent as ICVisibilityOn } from '@IconsV2/ic-visibility-on.svg'
 import { ReactComponent as ICWarning } from '@IconsV2/ic-warning.svg'
+import { ReactComponent as ICWarningFill } from '@IconsV2/ic-warning-fill.svg'
 import { ReactComponent as ICWebhook } from '@IconsV2/ic-webhook.svg'
 import { ReactComponent as ICWifiSlash } from '@IconsV2/ic-wifi-slash.svg'
 import { ReactComponent as ICWorldGlobe } from '@IconsV2/ic-world-globe.svg'
@@ -240,6 +253,7 @@ export const iconMap = {
     'ic-arrows-left-right': ICArrowsLeftRight,
     'ic-asterisk': ICAsterisk,
     'ic-ather': ICAther,
+    'ic-aws-codecommit': ICAwsCodecommit,
     'ic-azure-aks': ICAzureAks,
     'ic-azure': ICAzure,
     'ic-bg-cluster': ICBgCluster,
@@ -292,6 +306,9 @@ export const iconMap = {
     'ic-devtron-header-logo': ICDevtronHeaderLogo,
     'ic-devtron-job': ICDevtronJob,
     'ic-devtron': ICDevtron,
+    'ic-diff-added': ICDiffAdded,
+    'ic-diff-deleted': ICDiffDeleted,
+    'ic-diff-updated': ICDiffUpdated,
     'ic-disconnect': ICDisconnect,
     'ic-discord-fill': ICDiscordFill,
     'ic-dockerhub': ICDockerhub,
@@ -333,6 +350,8 @@ export const iconMap = {
     'ic-google-gke': ICGoogleGke,
     'ic-google': ICGoogle,
     'ic-grid-view': ICGridView,
+    'ic-group-filter-applied': ICGroupFilterApplied,
+    'ic-group-filter': ICGroupFilter,
     'ic-hand-pointing': ICHandPointing,
     'ic-heart-green': ICHeartGreen,
     'ic-heart-red-animated': ICHeartRedAnimated,
@@ -347,6 +366,7 @@ export const iconMap = {
     'ic-info-filled-color': ICInfoFilledColor,
     'ic-info-filled': ICInfoFilled,
     'ic-info-outline': ICInfoOutline,
+    'ic-input': ICInput,
     'ic-install': ICInstall,
     'ic-job-color': ICJobColor,
     'ic-k3s': ICK3s,
@@ -363,6 +383,7 @@ export const iconMap = {
     'ic-linked-build-color': ICLinkedBuildColor,
     'ic-list-bullets': ICListBullets,
     'ic-livspace': ICLivspace,
+    'ic-locked': ICLocked,
     'ic-logout': ICLogout,
     'ic-logs': ICLogs,
     'ic-magnifying-glass': ICMagnifyingGlass,
@@ -413,6 +434,7 @@ export const iconMap = {
     'ic-stack': ICStack,
     'ic-stamp': ICStamp,
     'ic-stop-fill': ICStopFill,
+    'ic-storage': ICStorage,
     'ic-strategy-blue-green-color': ICStrategyBlueGreenColor,
     'ic-strategy-blue-green': ICStrategyBlueGreen,
     'ic-strategy-canary-color': ICStrategyCanaryColor,
@@ -424,6 +446,7 @@ export const iconMap = {
     'ic-success': ICSuccess,
     'ic-sun': ICSun,
     'ic-suspended': ICSuspended,
+    'ic-tag': ICTag,
     'ic-tata1mg': ICTata1mg,
     'ic-terminal-fill': ICTerminalFill,
     'ic-terminal': ICTerminal,
@@ -442,6 +465,9 @@ export const iconMap = {
     'ic-user-key': ICUserKey,
     'ic-users': ICUsers,
     'ic-view-variable-toggle': ICViewVariableToggle,
+    'ic-visibility-off': ICVisibilityOff,
+    'ic-visibility-on': ICVisibilityOn,
+    'ic-warning-fill': ICWarningFill,
     'ic-warning': ICWarning,
     'ic-webhook': ICWebhook,
     'ic-wifi-slash': ICWifiSlash,

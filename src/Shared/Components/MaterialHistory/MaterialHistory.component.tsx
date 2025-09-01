@@ -23,17 +23,11 @@ import { SourceTypeMap } from '../../../Common'
 import { GitCommitInfoGeneric } from '../GitCommitInfoGeneric'
 import { MaterialHistoryProps } from './types'
 
-const MaterialHistory = ({
-    material,
-    pipelineName,
-    ciPipelineId,
-    selectCommit,
-    isCommitInfoModal,
-}: MaterialHistoryProps) => {
+const MaterialHistory = ({ material, pipelineName, selectCommit, isCommitInfoModal }: MaterialHistoryProps) => {
     const onClickMaterialHistory = (e, _commitId, isExcluded) => {
         e.stopPropagation()
         if (selectCommit && !isExcluded) {
-            selectCommit(material.id.toString(), _commitId, ciPipelineId)
+            selectCommit(_commitId)
         }
     }
 

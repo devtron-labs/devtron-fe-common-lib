@@ -17,7 +17,7 @@
 import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
 
-import { ToastProps } from './types'
+import { ShortcutToastContentProps, ToastProps } from './types'
 
 export const ToastContent = ({
     title,
@@ -37,5 +37,19 @@ export const ToastContent = ({
                 style={ButtonStyleType.neutral}
             />
         )}
+    </div>
+)
+
+export const ShortcutToastContent = ({ shortcuts, text }: ShortcutToastContentProps) => (
+    <div className="p-12 br-12 dc__border ev-5 bcv-1 flex dc__gap-6 dc__w-fit-content">
+        {shortcuts.map((shortcutKey) => (
+            <kbd
+                key={shortcutKey}
+                className="flex bg__primary border__primary br-2 shadow__key fs-13 lh-14 fw-5 cn-8 icon-dim-20 dc__no-shrink"
+            >
+                {shortcutKey}
+            </kbd>
+        ))}
+        <span className="cn-9 fw-5 lh-20 fs-13 font-ibm-plex-sans">{text}</span>
     </div>
 )
