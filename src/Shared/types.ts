@@ -1345,6 +1345,17 @@ export interface PipelineDeploymentStrategy {
     error: ServerError
 }
 
+export enum RemoteConnectionType {
+    Direct = 'DIRECT',
+    Proxy = 'PROXY',
+    SSHTunnel = 'SSH',
+}
+
+export enum AuthenticationType {
+    BASIC = 'BASIC',
+    ANONYMOUS = 'ANONYMOUS',
+    IAM = 'IAM',
+}
 /**
  * Makes all props in T optional and set to never when isLoading is true.
  * Used for components with loading states.

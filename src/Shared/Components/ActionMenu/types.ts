@@ -62,6 +62,8 @@ export type ActionMenuItemType<T extends string | number = string | number> = Om
     startIcon?: ActionMenuItemIconType
     /** Defines the item to be displayed at the end of the menu item. */
     trailingItem?: TrailingItemType
+    /** Prevents the menu from closing when the item is clicked. */
+    doNotCloseMenuOnClick?: boolean
 } & ConditionalActionMenuComponentType
 
 export type ActionMenuOptionType<T extends string | number> = {
