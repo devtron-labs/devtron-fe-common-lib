@@ -23,6 +23,7 @@ import {
     ConfigurationType,
     DeploymentStrategyTypeWithDefault,
     IconBaseColorType,
+    RemoteConnectionType,
 } from './types'
 
 export const ARTIFACT_STATUS = {
@@ -606,3 +607,9 @@ export const CUBIC_BEZIER_CURVE: [number, number, number, number] = [0.33, 1, 0.
 
 // Use this class on an element to allow clicking on it outside focus trap
 export const ALLOW_ACTION_OUTSIDE_FOCUS_TRAP = 'allow-action-outside-focus-trap'
+
+export const REMOTE_CONNECTION_TYPE_LABEL_MAP: Record<RemoteConnectionType, string> = {
+    [RemoteConnectionType.Direct]: 'Direct Connection',
+    [RemoteConnectionType.Proxy]: 'Via Proxy',
+    [RemoteConnectionType.SSHTunnel]: 'Via SSH Tunnel',
+}

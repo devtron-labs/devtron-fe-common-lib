@@ -149,6 +149,7 @@ import { ReactComponent as ICK8sJob } from '@IconsV2/ic-k8s-job.svg'
 import { ReactComponent as ICKey } from '@IconsV2/ic-key.svg'
 import { ReactComponent as ICKeyEnter } from '@IconsV2/ic-key-enter.svg'
 import { ReactComponent as ICKind } from '@IconsV2/ic-kind.svg'
+import { ReactComponent as ICKubernetes } from '@IconsV2/ic-kubernetes.svg'
 import { ReactComponent as ICLaptop } from '@IconsV2/ic-laptop.svg'
 import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
 import { ReactComponent as ICLego } from '@IconsV2/ic-lego.svg'
@@ -161,6 +162,7 @@ import { ReactComponent as ICLivspace } from '@IconsV2/ic-livspace.svg'
 import { ReactComponent as ICLocked } from '@IconsV2/ic-locked.svg'
 import { ReactComponent as ICLogout } from '@IconsV2/ic-logout.svg'
 import { ReactComponent as ICLogs } from '@IconsV2/ic-logs.svg'
+import { ReactComponent as ICMagicWand } from '@IconsV2/ic-magic-wand.svg'
 import { ReactComponent as ICMagnifyingGlass } from '@IconsV2/ic-magnifying-glass.svg'
 import { ReactComponent as ICMediumDelete } from '@IconsV2/ic-medium-delete.svg'
 import { ReactComponent as ICMediumPaintbucket } from '@IconsV2/ic-medium-paintbucket.svg'
@@ -404,6 +406,7 @@ export const iconMap = {
     'ic-key-enter': ICKeyEnter,
     'ic-key': ICKey,
     'ic-kind': ICKind,
+    'ic-kubernetes': ICKubernetes,
     'ic-laptop': ICLaptop,
     'ic-ldap': ICLdap,
     'ic-lego': ICLego,
@@ -416,6 +419,7 @@ export const iconMap = {
     'ic-locked': ICLocked,
     'ic-logout': ICLogout,
     'ic-logs': ICLogs,
+    'ic-magic-wand': ICMagicWand,
     'ic-magnifying-glass': ICMagnifyingGlass,
     'ic-medium-delete': ICMediumDelete,
     'ic-medium-paintbucket': ICMediumPaintbucket,
