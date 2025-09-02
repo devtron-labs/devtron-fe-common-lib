@@ -14,4 +14,4 @@
  * limitations under the License.
  */
 
-export type { NewClusterFormFooterProps, NewClusterFormProps } from './types'
+export { default as VirtualClusterSidebar } from './VirtualClusterSidebar'
