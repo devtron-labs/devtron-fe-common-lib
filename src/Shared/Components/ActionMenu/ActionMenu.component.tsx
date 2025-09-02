@@ -67,7 +67,9 @@ export const ActionMenu = <T extends string | number = string | number>({
 
     const handleOptionOnClick: ActionMenuItemProps<T>['onClick'] = (item, e) => {
         onClick(item, e)
-        closePopover()
+        if (!item.doNotCloseMenuOnClick) {
+            closePopover()
+        }
     }
 
     return (
