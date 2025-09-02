@@ -14,9 +14,8 @@
  * limitations under the License.
  */
 
-import { CostBreakdownItemViewParamsType, CostBreakdownViewType } from 'src/Pages-Devtron-2.0'
-
 import { SelectPickerOptionType } from '@Shared/Components'
+import { CostBreakdownItemViewParamsType, CostBreakdownViewType } from '@PagesDevtron2.0/CostVisibility'
 
 export const FALLBACK_REQUEST_TIMEOUT = 60000
 export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
@@ -50,16 +49,21 @@ export const PATTERNS = {
     EMAIL: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 }
 
-const GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP = '/global-config/templates/devtron-apps'
+const APPLICATION_MANAGEMENT_ROOT = '/application-management'
+const APPLICATION_MANAGEMENT_TEMPLATES_DEVTRON_APP = `${APPLICATION_MANAGEMENT_ROOT}/templates/devtron-app`
+const APPLICATION_MANAGEMENT_CONFIGURATIONS = `${APPLICATION_MANAGEMENT_ROOT}/configurations`
+const INFRASTRUCTURE_MANAGEMENT_ROOT = '/infrastructure-management'
+const SOFTWARE_RELEASE_MANAGEMENT_ROOT = '/software-release-management'
+const COST_VISIBILITY_ROOT = '/cost-visibility'
+const SECURITY_CENTER_ROOT = '/security-center'
+const AUTOMATION_AND_ENABLEMENT_ROOT = '/automation-and-enablement'
+const GLOBAL_CONFIG_ROOT = '/global-configuration'
+const AI_RECOMMENDATIONS_ROOT = '/ai-recommendations'
 
 export const URLS = {
     LOGIN: '/login',
     LOGIN_SSO: '/login/sso',
-    PERMISSION_GROUPS: '/global-config/auth/groups',
-    APP: '/app',
     APP_LIST: 'list',
-    CHARTS_DISCOVER: '/chart-store/discover',
-    JOB: '/job',
     CREATE_JOB: 'create-job',
     GETTING_STARTED: 'getting-started',
     STACK_MANAGER_ABOUT: '/stack-manager/about',
@@ -74,30 +78,60 @@ export const URLS = {
     DETAILS: '/details',
     CD_DETAILS: 'cd-details',
     APP_TRIGGER: 'trigger',
-    GLOBAL_CONFIG_DOCKER: '/global-config/docker',
     DEPLOYMENT_HISTORY_CONFIGURATIONS: '/configuration',
-    GLOBAL_CONFIG_SCOPED_VARIABLES: '/global-config/scoped-variables',
-    GLOBAL_CONFIG_DEPLOYMENT_CHARTS_LIST: '/global-config/deployment-charts',
-    GLOBAL_CONFIG_DEPLOYMENT_CHARTS_UPLOAD_CHART: '/global-config/deployment-charts/upload-chart',
     NETWORK_STATUS_INTERFACE: '/network-status-interface',
-    RESOURCE_BROWSER: '/resource-browser',
     COMPARE_CLUSTERS: '/compare-clusters',
     APP_CONFIG: 'edit',
-    GLOBAL_CONFIG: '/global-config',
-    GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP,
-    GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_CREATE: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/create`,
-    // NOTE: using appId since we are re-using AppConfig component
-    GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_DETAIL: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/detail/:appId`,
     LICENSE_AUTH: '/license-auth',
-    GLOBAL_CONFIG_EDIT_CLUSTER: '/global-config/cluster-env/edit/:clusterId',
-    COST_VISIBILITY_OVERVIEW: '/cost-visibility/overview',
-    COST_BREAKDOWN_ROUTE: '/cost-visibility/breakdown/:breakdownViewType',
-    COST_BREAKDOWN_CLUSTERS: `/cost-visibility/breakdown/${CostBreakdownViewType.CLUSTERS}`,
-    COST_BREAKDOWN_ENVIRONMENTS: `/cost-visibility/breakdown/${CostBreakdownViewType.ENVIRONMENTS}`,
-    COST_BREAKDOWN_PROJECTS: `/cost-visibility/breakdown/${CostBreakdownViewType.PROJECTS}`,
-    COST_BREAKDOWN_APPLICATIONS: `/cost-visibility/breakdown/${CostBreakdownViewType.APPLICATIONS}`,
+    // APPLICATION MANAGEMENT
+    APPLICATION_MANAGEMENT: APPLICATION_MANAGEMENT_ROOT,
+    APPLICATION_MANAGEMENT_OVERVIEW: `${APPLICATION_MANAGEMENT_ROOT}/overview`,
+    APPLICATION_MANAGEMENT_APP: `${APPLICATION_MANAGEMENT_ROOT}/app`,
+    APPLICATION_MANAGEMENT_APPLICATION_GROUP: `${APPLICATION_MANAGEMENT_ROOT}/application-group`,
+    APPLICATION_MANAGEMENT_CHART_STORE: `${APPLICATION_MANAGEMENT_ROOT}/chart-store`,
+    APPLICATION_MANAGEMENT_CHART_STORE_DISCOVER: `${APPLICATION_MANAGEMENT_ROOT}/chart-store/discover`,
+    APPLICATION_MANAGEMENT_TEMPLATES_DEVTRON_APP,
+    APPLICATION_MANAGEMENT_TEMPLATES_DEVTRON_APP_CREATE: `${APPLICATION_MANAGEMENT_TEMPLATES_DEVTRON_APP}/create`,
+    // NOTE: using appId since we are re-using AppConfig component
+    APPLICATION_MANAGEMENT_TEMPLATES_DEVTRON_APP_DETAIL: `${APPLICATION_MANAGEMENT_TEMPLATES_DEVTRON_APP}/detail/:appId`,
+    APPLICATION_MANAGEMENT_PROJECTS: `${APPLICATION_MANAGEMENT_ROOT}/projects`,
+    APPLICATION_MANAGEMENT_CONFIGURATIONS,
+    APPLICATION_MANAGEMENT_CONFIGURATIONS_DEPLOYMENT_CHARTS: `${APPLICATION_MANAGEMENT_CONFIGURATIONS}/deployment-charts`,
+    APPLICATION_MANAGEMENT_CONFIGURATIONS_CATALOG_FRAMEWORK: `${APPLICATION_MANAGEMENT_CONFIGURATIONS}/catalog-framework`,
+    APPLICATION_MANAGEMENT_CONFIGURATIONS_SCOPED_VARIABLES: `${APPLICATION_MANAGEMENT_CONFIGURATIONS}/scoped-variables`,
+    APPLICATION_MANAGEMENT_CONFIGURATIONS_BUILD_INFRA: `${APPLICATION_MANAGEMENT_CONFIGURATIONS}/build-infra`,
+    APPLICATION_MANAGEMENT_CONFIGURATIONS_NOTIFICATIONS: `${APPLICATION_MANAGEMENT_CONFIGURATIONS}/notifications`,
+    // INFRASTRUCTURE MANAGEMENT
+    INFRASTRUCTURE_MANAGEMENT: INFRASTRUCTURE_MANAGEMENT_ROOT,
+    INFRASTRUCTURE_MANAGEMENT_OVERVIEW: `${INFRASTRUCTURE_MANAGEMENT_ROOT}/overview`,
+    INFRASTRUCTURE_MANAGEMENT_RESOURCE_BROWSER: `${INFRASTRUCTURE_MANAGEMENT_ROOT}/resource-browser`,
+    INFRASTRUCTURE_MANAGEMENT_RESOURCE_WATCHER: `${INFRASTRUCTURE_MANAGEMENT_ROOT}/resource-watcher`,
+    // SOFTWARE RELEASE MANAGEMENT
+    SOFTWARE_RELEASE_MANAGEMENT: SOFTWARE_RELEASE_MANAGEMENT_ROOT,
+    // COST VISIBILITY
+    COST_VISIBILITY: COST_VISIBILITY_ROOT,
+    COST_VISIBILITY_OVERVIEW: `${COST_VISIBILITY_ROOT}/overview`,
+    COST_BREAKDOWN_ROUTE: `${COST_VISIBILITY_ROOT}/breakdown/:breakdownViewType`,
+    COST_BREAKDOWN_CLUSTERS: `${COST_VISIBILITY_ROOT}/breakdown/${CostBreakdownViewType.CLUSTERS}`,
+    COST_BREAKDOWN_ENVIRONMENTS: `${COST_VISIBILITY_ROOT}/breakdown/${CostBreakdownViewType.ENVIRONMENTS}`,
+    COST_BREAKDOWN_PROJECTS: `${COST_VISIBILITY_ROOT}/breakdown/${CostBreakdownViewType.PROJECTS}`,
+    COST_BREAKDOWN_APPLICATIONS: `${COST_VISIBILITY_ROOT}/breakdown/${CostBreakdownViewType.APPLICATIONS}`,
     COST_BREAKDOWN_ITEM_NAME: `:${CostBreakdownItemViewParamsType.ITEM_NAME}`,
-    COST_CONFIGURATIONS: '/cost-visibility/configurations',
+    COST_BREAKDOWN_DETAIL: `:${CostBreakdownItemViewParamsType.ITEM_NAME}/:${CostBreakdownItemViewParamsType.VIEW}/:${CostBreakdownItemViewParamsType.DETAIL}?`,
+    COST_CONFIGURATIONS: `${COST_VISIBILITY_ROOT}/configurations`,
+    // SECURITY CENTER
+    SECURITY_CENTER: SECURITY_CENTER_ROOT,
+    // AUTOMATION AND ENABLEMENT
+    AUTOMATION_AND_ENABLEMENT: AUTOMATION_AND_ENABLEMENT_ROOT,
+    AUTOMATION_AND_ENABLEMENT_JOB: `${AUTOMATION_AND_ENABLEMENT_ROOT}/job`,
+    // GLOBAL CONFIGURATION
+    GLOBAL_CONFIG: GLOBAL_CONFIG_ROOT,
+    GLOBAL_CONFIG_DOCKER: `${GLOBAL_CONFIG_ROOT}/docker`,
+    GLOBAL_CONFIG_EDIT_CLUSTER: `${GLOBAL_CONFIG_ROOT}/cluster-env/edit/:clusterId`,
+    PERMISSION_GROUPS: `${GLOBAL_CONFIG_ROOT}/auth/groups`,
+    // AI RECOMMENDATIONS
+    AI_RECOMMENDATIONS: AI_RECOMMENDATIONS_ROOT,
+    AI_RECOMMENDATIONS_OVERVIEW: `${AI_RECOMMENDATIONS_ROOT}/overview`,
 } as const
 
 export const ROUTES = {

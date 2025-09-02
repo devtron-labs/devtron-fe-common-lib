@@ -2,9 +2,19 @@ import { AppThemeType } from '@Shared/Providers'
 
 export type ChartType = 'area' | 'pie' | 'stackedBar' | 'stackedBarHorizontal' | 'line'
 
-type ColorTokensType = 'DeepPlum' | 'Magenta' | 'Slate' | 'LavenderPurple' | 'SkyBlue' | 'AquaTeal'
-
-type VariantsType = 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800
+type ColorTokensType =
+    | 'DeepPlum'
+    | 'Magenta'
+    | 'Slate'
+    | 'Lavender'
+    | 'SkyBlue'
+    | 'AquaTeal'
+    | 'LimeGreen'
+    | 'CoralRed'
+    | 'GoldenYellow'
+    | 'CharcoalGray'
+    | 'Gray'
+type VariantsType = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950
 
 export type ChartColorKey = `${ColorTokensType}${VariantsType}`
 
@@ -50,6 +60,11 @@ export type ChartProps = {
      * The x-axis labels. Needs to be memoized
      */
     xAxisLabels: string[]
+    /**
+     * Hide the x and y axis and grid lines
+     * @default false
+     */
+    hideAxis?: boolean
 } & TypeAndDatasetsType
 
 export type TransformDatasetProps = {

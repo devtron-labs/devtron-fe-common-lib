@@ -1356,3 +1356,11 @@ export enum AuthenticationType {
     ANONYMOUS = 'ANONYMOUS',
     IAM = 'IAM',
 }
+/**
+ * Makes all props in T optional and set to never when isLoading is true.
+ * Used for components with loading states.
+ * @example See usage in CostVisibility -> cards
+ */
+export type PropsTypeWithIsLoading<T extends Record<string, any>> =
+    | (Partial<Record<keyof T, never>> & { isLoading: true })
+    | ({ isLoading?: false } & T)

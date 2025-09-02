@@ -29,6 +29,15 @@ type FocusTargetOrFalse = FocusTargetValueOrFalse | (() => FocusTargetValueOrFal
 
 export interface DTFocusTrapType {
     /**
+     * Callback function that gets triggered when the Escape key is pressed. \
+     * Should be wrapped in useCallback to prevent unnecessary re-renders.
+     * @example
+     * const handleEscape = useCallback(() => {
+     *   // Handle escape key press
+     * }, []);
+     */
+    onEscape: (e?: KeyboardEvent | MouseEvent) => void
+    /**
      * If focus should be deactivated on escape, pass false when escape is disabled or has no action
      * true for cases when we are closing modals or dialogs
      * @default true

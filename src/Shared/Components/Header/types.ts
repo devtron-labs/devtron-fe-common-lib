@@ -37,6 +37,7 @@ export interface PageHeaderType {
         onClickTippyButton?: () => void
     }
     onClose?: () => void
+    closeIcon?: JSX.Element
 }
 
 export interface ServerInfo {
