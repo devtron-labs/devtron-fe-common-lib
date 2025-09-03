@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { ComponentSizeType } from '@Shared/constants'
+
 export type Entity = {
     color: string
     label: string
@@ -38,4 +40,5 @@ export type SegmentedBarChartProps = {
     swapLegendAndBar?: boolean
     showAnimationOnBar?: boolean
     isLoading?: boolean
+    size?: ComponentSizeType
 } & EntityPropType

@@ -22,7 +22,7 @@ import Tippy from '@tippyjs/react'
 import { animate } from 'framer-motion'
 import moment from 'moment'
 import { nanoid } from 'nanoid'
-import { Pair } from 'yaml'
+import { Pair, parse } from 'yaml'
 
 import { ReactComponent as ICAWSCodeCommit } from '@Icons/ic-aws-codecommit.svg'
 import { ReactComponent as ICBitbucket } from '@Icons/ic-bitbucket.svg'
@@ -726,4 +726,14 @@ export const getGroupVersionFromApiVersion = (apiVersion: string): Pick<Node, 'g
 
     // If the apiVersion has more than two parts, we consider the first part as group and the rest as version
     return { group: parts[0], version: parts.slice(1).join('/') }
+}
+
+export const YAMLtoJSON = (yamlString: string) => {
+    try {
+        const obj = parse(yamlString)
+        const jsonStr = JSON.stringify(obj)
+        return jsonStr
+    } catch {
+        return ''
+    }
 }
