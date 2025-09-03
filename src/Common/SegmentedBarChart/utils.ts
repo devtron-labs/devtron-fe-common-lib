@@ -6,7 +6,6 @@ export const getBarHeightForSize = (size: ComponentSizeType) => {
             return 'h-20'
         case ComponentSizeType.xs:
             return 'h-6'
-        case ComponentSizeType.small:
         default:
             return 'h-8'
     }
