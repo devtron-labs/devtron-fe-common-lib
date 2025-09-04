@@ -185,6 +185,10 @@ export interface customEnv {
      * @default true
      */
     FEATURE_CANARY_ROLLOUT_PROGRESS_ENABLE?: boolean
+    /**
+     * Time interval in seconds to refetch command bar data - Applications List
+     */
+    COMMAND_BAR_REFETCH_INTERVAL?: number
 }
 declare global {
     interface Window {

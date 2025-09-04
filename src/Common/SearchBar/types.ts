@@ -75,4 +75,8 @@ export interface SearchBarProps {
      * @default 'default'
      */
     variant?: 'default' | 'sidenav'
+    /**
+     * If true, would convert the magnifying glass icon to a loading spinner
+     */
+    isLoading?: boolean
 }
