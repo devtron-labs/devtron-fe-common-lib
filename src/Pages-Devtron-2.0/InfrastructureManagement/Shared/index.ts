@@ -1,1 +1,1 @@
-export * from './InfrastructureManagementIcon/index1'
+export * from './InfrastructureManagementIcon'
