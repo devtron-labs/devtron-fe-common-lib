@@ -1,8 +1,6 @@
 import { URLS } from '@Common/Constants'
+import { Button, ButtonComponentType, ButtonVariantType, Icon } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
-
-import { Button, ButtonComponentType, ButtonVariantType } from '../../../../Shared/Components/Button'
-import { Icon } from '../../../../Shared/Components/Icon'
 
 export const InfrastructureManagementIcon = () => (
     <Button

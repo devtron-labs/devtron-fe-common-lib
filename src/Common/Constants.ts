@@ -204,7 +204,6 @@ export const ROUTES = {
     LICENSE_DATA: 'license/data',
     ENV: 'env',
     APP_METADATA: 'app-metadata',
-    SOFTWARE_DISTRIBUTION_HUB: '/software-distribution-hub',
 } as const
 
 export enum KEY_VALUE {
