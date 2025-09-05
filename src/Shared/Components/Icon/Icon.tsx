@@ -7,6 +7,7 @@ import { ReactComponent as ICAdd } from '@IconsV2/ic-add.svg'
 import { ReactComponent as ICAmazonEks } from '@IconsV2/ic-amazon-eks.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
 import { ReactComponent as ICAppTemplate } from '@IconsV2/ic-app-template.svg'
+import { ReactComponent as ICArgocdApp } from '@IconsV2/ic-argocd-app.svg'
 import { ReactComponent as ICArrowClockwise } from '@IconsV2/ic-arrow-clockwise.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICArrowSquareOut } from '@IconsV2/ic-arrow-square-out.svg'
@@ -46,6 +47,7 @@ import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
 import { ReactComponent as ICCleanBrush } from '@IconsV2/ic-clean-brush.svg'
 import { ReactComponent as ICClipboard } from '@IconsV2/ic-clipboard.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
+import { ReactComponent as ICClockCounterclockwise } from '@IconsV2/ic-clock-counterclockwise.svg'
 import { ReactComponent as ICCloseLarge } from '@IconsV2/ic-close-large.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
 import { ReactComponent as ICCloud } from '@IconsV2/ic-cloud.svg'
@@ -103,6 +105,8 @@ import { ReactComponent as ICFilesChanged } from '@IconsV2/ic-files-changed.svg'
 import { ReactComponent as ICFilter } from '@IconsV2/ic-filter.svg'
 import { ReactComponent as ICFilterApplied } from '@IconsV2/ic-filter-applied.svg'
 import { ReactComponent as ICFlask } from '@IconsV2/ic-flask.svg'
+import { ReactComponent as ICFloppyDisk } from '@IconsV2/ic-floppy-disk.svg'
+import { ReactComponent as ICFluxcdApp } from '@IconsV2/ic-fluxcd-app.svg'
 import { ReactComponent as ICFolder } from '@IconsV2/ic-folder.svg'
 import { ReactComponent as ICFolderColor } from '@IconsV2/ic-folder-color.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
@@ -218,6 +222,7 @@ import { ReactComponent as ICStrategyRollingColor } from '@IconsV2/ic-strategy-r
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
 import { ReactComponent as ICSun } from '@IconsV2/ic-sun.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
+import { ReactComponent as ICSymbolGreaterThan } from '@IconsV2/ic-symbol-greater-than.svg'
 import { ReactComponent as ICTag } from '@IconsV2/ic-tag.svg'
 import { ReactComponent as ICTata1mg } from '@IconsV2/ic-tata1mg.svg'
 import { ReactComponent as ICTerminal } from '@IconsV2/ic-terminal.svg'
@@ -258,6 +263,7 @@ export const iconMap = {
     'ic-amazon-eks': ICAmazonEks,
     'ic-app-group': ICAppGroup,
     'ic-app-template': ICAppTemplate,
+    'ic-argocd-app': ICArgocdApp,
     'ic-arrow-clockwise': ICArrowClockwise,
     'ic-arrow-right': ICArrowRight,
     'ic-arrow-square-out': ICArrowSquareOut,
@@ -296,6 +302,7 @@ export const iconMap = {
     'ic-circle-loader': ICCircleLoader,
     'ic-clean-brush': ICCleanBrush,
     'ic-clipboard': ICClipboard,
+    'ic-clock-counterclockwise': ICClockCounterclockwise,
     'ic-clock': ICClock,
     'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
@@ -354,6 +361,8 @@ export const iconMap = {
     'ic-filter-applied': ICFilterApplied,
     'ic-filter': ICFilter,
     'ic-flask': ICFlask,
+    'ic-floppy-disk': ICFloppyDisk,
+    'ic-fluxcd-app': ICFluxcdApp,
     'ic-folder-color': ICFolderColor,
     'ic-folder-user': ICFolderUser,
     'ic-folder': ICFolder,
@@ -469,6 +478,7 @@ export const iconMap = {
     'ic-success': ICSuccess,
     'ic-sun': ICSun,
     'ic-suspended': ICSuspended,
+    'ic-symbol-greater-than': ICSymbolGreaterThan,
     'ic-tag': ICTag,
     'ic-tata1mg': ICTata1mg,
     'ic-terminal-fill': ICTerminalFill,

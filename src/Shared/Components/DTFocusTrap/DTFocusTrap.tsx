@@ -44,6 +44,7 @@ const DTFocusTrap = ({
     deactivateFocusOnEscape = true,
     children,
     initialFocus = undefined,
+    returnFocusOnDeactivate = true,
 }: DTFocusTrapType) => {
     const [isFocusEnabled, setIsFocusEnabled] = useState(true)
 
@@ -91,6 +92,7 @@ const DTFocusTrap = ({
                         }
                         return false
                     },
+                    returnFocusOnDeactivate,
                 }}
             >
                 {children}
