@@ -7,4 +7,6 @@ export enum CostBreakdownViewType {
 
 export enum CostBreakdownItemViewParamsType {
     ITEM_NAME = 'itemName',
+    VIEW = 'view',
+    DETAIL = 'detail',
 }

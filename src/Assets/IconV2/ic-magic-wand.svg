@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="none" viewBox="0 0 24 24">
+    <path
+        stroke="#3B444C"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth="1.5"
+        d="M3 5.5h2.5m0 0H8m-2.5 0V3m0 2.5V8M13 20.5h1.5m0 0H16m-1.5 0V19m0 1.5V22m3.5-7h2m0 0h2m-2 0v-2m0 2v2m-6.586-9.243L4.222 16.95a1 1 0 0 0 0 1.414l1.414 1.414a1 1 0 0 0 1.414 0l9.193-9.192m-2.829-2.829 3.536-3.535a1 1 0 0 1 1.414 0l1.414 1.414a1 1 0 0 1 0 1.414l-3.535 3.536m-2.829-2.829 2.829 2.829"
+        vectorEffect="non-scaling-stroke"
+    />
+</svg>
