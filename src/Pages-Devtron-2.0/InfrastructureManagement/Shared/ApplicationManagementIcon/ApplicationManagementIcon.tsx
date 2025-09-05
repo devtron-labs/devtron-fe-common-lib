@@ -9,7 +9,7 @@ export const ApplicationManagementIcon = () => (
         size={ComponentSizeType.xs}
         variant={ButtonVariantType.borderLess}
         linkProps={{
-            to: URLS.APP_LIST,
+            to: URLS.APPLICATION_MANAGEMENT_APP,
         }}
         ariaLabel="Redirect to Devtron Apps"
         showAriaLabelInTippy={false}
