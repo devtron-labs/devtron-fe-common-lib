@@ -55,8 +55,15 @@ const PageHeader = ({
         useMainContext()
     const { showSwitchThemeLocationTippy, handleShowSwitchThemeLocationTippyChange } = useTheme()
 
-    const { isTippyCustomized, tippyRedirectLink, TippyIcon, tippyMessage, onClickTippyButton, additionalContent } =
-        tippyProps || {}
+    const {
+        isTippyCustomized,
+        tippyRedirectLink,
+        TippyIcon,
+        tippyMessage,
+        onClickTippyButton,
+        additionalContent,
+        tippyHeader,
+    } = tippyProps || {}
     const { email } = useUserEmail()
     const [currentServerInfo, setCurrentServerInfo] = useState<{ serverInfo: ServerInfo; fetchingServerInfo: boolean }>(
         {
@@ -230,7 +237,7 @@ const PageHeader = ({
                         (isTippyCustomized ? (
                             <InfoIconTippy
                                 infoText={tippyMessage}
-                                heading={headerName}
+                                heading={headerName || tippyHeader}
                                 iconClassName="icon-dim-20 ml-8 fcn-5"
                                 documentationLink={tippyRedirectLink}
                                 documentationLinkText="View Documentation"
