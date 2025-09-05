@@ -1,2 +1,2 @@
 export * from './Overview'
-export * from './Shared/index1'
+export * from './Shared'
