@@ -73,6 +73,7 @@ const SearchBar = ({
     size = ComponentSizeType.medium,
     keyboardShortcut,
     variant = 'default',
+    isLoading = false,
 }: SearchBarProps) => {
     const [showClearButton, setShowClearButton] = useState(!!initialSearchText)
     const inputRef = useRef<HTMLInputElement>()
@@ -164,7 +165,10 @@ const SearchBar = ({
                         variant === 'sidenav' ? { ['--overrideIconColor' as string]: 'var(--sidenav-input-icon)' } : {}
                     }
                 >
-                    <Icon name="ic-magnifying-glass" color="N600" />
+                    <Icon
+                        name={isLoading ? 'ic-circle-loader' : 'ic-magnifying-glass'}
+                        color={isLoading ? 'O500' : 'N600'}
+                    />
                 </span>
                 <input
                     placeholder="Search"

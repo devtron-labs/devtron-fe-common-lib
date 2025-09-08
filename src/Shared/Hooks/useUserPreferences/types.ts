@@ -52,7 +52,8 @@ export type NavigationItemID =
     | 'global-configuration-container-oci-registry'
     | 'global-configuration-authorization'
     | 'backup-and-restore-overview'
-    | 'backup-and-restore-item'
+    | 'backup-and-restore-backup-and-schedule'
+    | 'backup-and-restore-restores'
     | 'backup-and-restore-backup-repositories'
     | 'backup-and-restore-backup-locations'
     | 'backup-and-restore-history-and-logs'
@@ -114,6 +115,14 @@ export interface UserResourceKindActionType {
     [UserPreferenceResourceActions.RECENTLY_VISITED]: BaseRecentlyVisitedEntitiesTypes[]
 }
 export type UserPreferenceResourceType = Partial<Record<PreferredResourceKindType, UserResourceKindActionType>>
+
+export type CommandBarAdditionalItemsId =
+    | 'app-management-devtron-app-list'
+    | 'app-management-helm-app-list'
+    | 'app-management-flux-app-list'
+    | 'app-management-argo-app-list'
+    | `app-management-devtron-app-list-${number}`
+
 export interface GetUserPreferencesParsedDTO {
     viewPermittedEnvOnly?: boolean
     /**
@@ -128,7 +137,7 @@ export interface GetUserPreferencesParsedDTO {
      */
     resources?: UserPreferenceResourceType
     commandBar: {
-        recentNavigationActions: { id: NavigationItemID | NavigationSubMenuItemID }[]
+        recentNavigationActions: { id: NavigationItemID | NavigationSubMenuItemID | CommandBarAdditionalItemsId }[]
     }
 }
 export interface UserPreferencesPayloadValueType extends GetUserPreferencesParsedDTO {}

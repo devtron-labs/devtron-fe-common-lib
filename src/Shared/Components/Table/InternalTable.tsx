@@ -49,6 +49,7 @@ const InternalTable = <
     loading,
     bulkSelectionConfig,
     bulkSelectionReturnValue,
+    id,
     handleClearBulkSelection,
     handleToggleBulkSelectionOnRow,
     paginationVariant,
@@ -237,7 +238,7 @@ const InternalTable = <
     }
 
     return (
-        <div ref={wrapperDivRef} className="flexbox-col flex-grow-1 dc__overflow-hidden">
+        <div ref={wrapperDivRef} className="flexbox-col flex-grow-1 dc__overflow-hidden" id={`table-wrapper-${id}`}>
             <Wrapper
                 areRowsLoading={areFilteredRowsLoading}
                 clearFilters={clearFilters}
