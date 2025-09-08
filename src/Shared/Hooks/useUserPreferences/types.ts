@@ -122,7 +122,13 @@ export type CommandBarAdditionalItemsId =
     | 'app-management-flux-app-list'
     | 'app-management-argo-app-list'
     | `app-management-devtron-app-list-${number}`
+    | 'search-app-list-view'
     | `chart-list-${number}`
+    | 'search-chart-list-view'
+    | `helm-app-list-${number}`
+    | 'search-helm-app-list-view'
+    | `cluster-list-${number}`
+    | 'search-cluster-list-view'
 
 export interface GetUserPreferencesParsedDTO {
     viewPermittedEnvOnly?: boolean
