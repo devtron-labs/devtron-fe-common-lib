@@ -1,3 +1,5 @@
+import { ChartConfiguration, ChartOptions } from 'chart.js'
+
 import { AppThemeType } from '@Shared/Providers'
 
 export type ChartType = 'area' | 'pie' | 'stackedBar' | 'stackedBarHorizontal' | 'line'
@@ -65,6 +67,14 @@ export type ChartProps = {
      * @default false
      */
     hideAxis?: boolean
+    /**
+     * Custom plugins for chart
+     */
+    customPlugins?: ChartConfiguration['plugins']
+    /**
+     * Callback function for chart click events
+     */
+    onChartClick?: ChartOptions['onClick']
 } & TypeAndDatasetsType
 
 export type TransformDatasetProps = {
@@ -89,3 +99,8 @@ export type GetBackgroundAndBorderColorProps = TransformDatasetProps
 export type TransformDataForChartProps = {
     appTheme: AppThemeType
 } & TypeAndDatasetsType
+
+export interface GetDefaultOptionsParams extends Pick<ChartProps, 'hideAxis' | 'onChartClick'> {
+    type: ChartType
+    appTheme: AppThemeType
+}
