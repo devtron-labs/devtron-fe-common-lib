@@ -20,10 +20,9 @@ import { ROUTES } from '@Common/Constants'
 import { ResponseType, Teams } from '@Common/Types'
 import { EnvironmentTypeEnum } from '@Shared/constants'
 import { stringComparatorBySortOrder } from '@Shared/Helpers'
-import { ClusterType } from '@Shared/Services'
 import { EnvListMinDTO } from '@Shared/types'
 
-import { AppsGroupedByProjectsType, ClusterDTO, EnvironmentsGroupedByClustersType } from './types'
+import { AppsGroupedByProjectsType, EnvironmentsGroupedByClustersType } from './types'
 
 export const getAppOptionsGroupedByProjects = async (): Promise<AppsGroupedByProjectsType> => {
     const { result } = (await get(ROUTES.APP_LIST_MIN)) as ResponseType<AppsGroupedByProjectsType>
@@ -51,23 +50,6 @@ export const getProjectOptions = async (): Promise<Pick<Teams, 'id' | 'name'>[]>
         .map(({ id, name }) => ({
             id,
             name,
-        }))
-        .sort((a, b) => stringComparatorBySortOrder(a.name, b.name))
-}
-
-export const getClusterOptions = async (): Promise<ClusterType[]> => {
-    const { result } = (await get(ROUTES.CLUSTER_LIST_MIN)) as ResponseType<ClusterDTO[]>
-
-    if (!result) {
-        return []
-    }
-
-    return result
-        .map(({ id, cluster_name: name, isVirtualCluster, isProd }) => ({
-            id,
-            name,
-            isVirtual: isVirtualCluster ?? false,
-            isProd: isProd ?? false,
         }))
         .sort((a, b) => stringComparatorBySortOrder(a.name, b.name))
 }

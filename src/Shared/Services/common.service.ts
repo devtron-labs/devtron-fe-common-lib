@@ -17,7 +17,7 @@
 import { AppConfigProps, GetTemplateAPIRouteType } from '@Pages/index'
 
 import { get, getUrlWithSearchParams, post, ROUTES } from '../../Common'
-import { getTemplateAPIRoute } from '..'
+import { ClusterMinDTO, ClusterType, getTemplateAPIRoute, stringComparatorBySortOrder } from '..'
 import { EnvironmentDataValuesDTO, GetPolicyApiUrlProps, GetResourceApiUrlProps } from './types'
 
 export const getResourceApiUrl = <T>({ baseUrl, kind, version, suffix, queryParams }: GetResourceApiUrlProps<T>) =>
@@ -40,3 +40,20 @@ export const saveCDPipeline = (request, { isTemplateView }: Required<Pick<AppCon
 }
 
 export const getEnvironmentData = () => get<EnvironmentDataValuesDTO>(ROUTES.ENVIRONMENT_DATA)
+
+export const getClusterOptions = async (): Promise<ClusterType[]> => {
+    const { result } = await get<ClusterMinDTO[]>(ROUTES.CLUSTER_LIST_MIN)
+
+    if (!result) {
+        return []
+    }
+
+    return result
+        .map(({ id, cluster_name: name, isVirtualCluster, isProd }) => ({
+            id,
+            name,
+            isVirtual: isVirtualCluster ?? false,
+            isProd: isProd ?? false,
+        }))
+        .sort((a, b) => stringComparatorBySortOrder(a.name, b.name))
+}
