@@ -180,7 +180,7 @@ const Chart = (props: ChartProps) => {
         return () => {
             chartRef.current.destroy()
         }
-    }, [type, datasets, labels, appTheme, hideAxis])
+    }, [type, datasets, labels, appTheme, hideAxis, customPlugins])
 
     return (
         <div className="h-100 w-100">
