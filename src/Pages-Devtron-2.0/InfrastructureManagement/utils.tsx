@@ -1,4 +1,5 @@
 import { URLS } from '@Common/Constants'
+import { BreadcrumbText } from '@Common/index'
 import { Button, ButtonComponentType, ButtonVariantType, Icon } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
 
@@ -20,4 +21,6 @@ export const getAutomationEnablementBreadcrumbConfig = () => ({
         ),
         linked: true,
     },
+    list: { component: <BreadcrumbText heading="Jobs" isActive /> },
+    'jobId(\\d+)': null,
 })

@@ -18,7 +18,7 @@ import { useLocation, useParams } from 'react-router-dom'
 
 import { SERVER_MODE, URLS } from '@Common/Constants'
 import { noop } from '@Common/Helper'
-import { BreadCrumb, BreadcrumbText, useBreadcrumb } from '@Common/index'
+import { BreadCrumb, useBreadcrumb } from '@Common/index'
 import { ActionMenu } from '@Shared/Components/ActionMenu'
 import { ButtonComponentType } from '@Shared/Components/Button'
 import Button from '@Shared/Components/Button/Button.component'
@@ -69,13 +69,6 @@ export const HeaderWithCreateButton = ({ isJobView }: HeaderWithCreateButtonProp
         {
             alias: {
                 ...(isJobView ? getAutomationEnablementBreadcrumbConfig() : getApplicationManagementBreadcrumb()),
-                app: {
-                    component: <BreadcrumbText heading="Applications" isActive />,
-                },
-                list: { component: <BreadcrumbText heading="Jobs" isActive /> },
-                d: null,
-                l: null,
-                'jobId(\\d+)': null,
                 ':appType': null,
             },
         },
