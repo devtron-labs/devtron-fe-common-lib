@@ -18,18 +18,21 @@ import { useLocation, useParams } from 'react-router-dom'
 
 import { SERVER_MODE, URLS } from '@Common/Constants'
 import { noop } from '@Common/Helper'
+import { BreadCrumb, BreadcrumbText, useBreadcrumb } from '@Common/index'
 import { ActionMenu } from '@Shared/Components/ActionMenu'
 import { ButtonComponentType } from '@Shared/Components/Button'
 import Button from '@Shared/Components/Button/Button.component'
 import { Icon } from '@Shared/Components/Icon'
 import { AppListConstants, ComponentSizeType } from '@Shared/constants'
 import { useMainContext } from '@Shared/Providers'
+import { getApplicationManagementBreadcrumb } from '@PagesDevtron2.0/InfrastructureManagement'
+import { getAutomationEnablementBreadcrumbConfig } from '@PagesDevtron2.0/InfrastructureManagement/utils'
 
 import PageHeader from '../PageHeader'
 import { HeaderWithCreateButtonProps } from './types'
 import { getCreateActionMenuOptions } from './utils'
 
-export const HeaderWithCreateButton = ({ headerName, additionalHeaderInfo }: HeaderWithCreateButtonProps) => {
+export const HeaderWithCreateButton = ({ isJobView }: HeaderWithCreateButtonProps) => {
     // HOOKS
     const { serverMode } = useMainContext()
     const params = useParams<{ appType: string }>()
@@ -62,12 +65,41 @@ export const HeaderWithCreateButton = ({ headerName, additionalHeaderInfo }: Hea
             />
         )
 
+    const { breadcrumbs } = useBreadcrumb(
+        {
+            alias: {
+                ...(isJobView ? getAutomationEnablementBreadcrumbConfig() : getApplicationManagementBreadcrumb()),
+                app: {
+                    component: <BreadcrumbText heading="Applications" isActive />,
+                },
+                list: { component: <BreadcrumbText heading="Jobs" isActive /> },
+                d: null,
+                l: null,
+                'jobId(\\d+)': null,
+                ':appType': null,
+            },
+        },
+        [location.pathname],
+    )
+    const renderBreadcrumbs = () => <BreadCrumb breadcrumbs={breadcrumbs} />
+
     return (
         <div className="create-button-container dc__position-sticky dc__top-0 bg__primary dc__zi-4">
             <PageHeader
-                headerName={headerName}
+                isBreadcrumbs
+                breadCrumbs={renderBreadcrumbs}
                 renderActionButtons={renderActionButtons}
-                additionalHeaderInfo={additionalHeaderInfo}
+                {...(isJobView
+                    ? {
+                          tippyProps: {
+                              isTippyCustomized: true,
+                              tippyRedirectLink: 'JOBS',
+                              tippyMessage:
+                                  'Job allows execution of repetitive tasks in a manual or automated manner. Execute custom tasks or choose from a library of preset plugins in your job pipeline.',
+                              tippyHeader: 'Job',
+                          },
+                      }
+                    : {})}
             />
         </div>
     )
