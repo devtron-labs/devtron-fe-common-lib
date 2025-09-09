@@ -29,6 +29,7 @@ import {
     StatusType,
     DocLinkProps,
     DeploymentStrategyType,
+    EnvironmentType,
 } from '../Shared'
 import {
     ACTION_STATE,
@@ -215,19 +216,21 @@ export type ErrorScreenManagerProps = {
     reloadClass?: string
 } & (
     | {
-        /**
-         * Would be used to redirect URL in case of 404
-         * @default - APP_LIST
-         */
-        redirectURL?: string
-        on404Redirect?: never
-    } | {
-        redirectURL?: never
-        on404Redirect: () => void
-    } | {
-        redirectURL?: never
-        on404Redirect?: never
-    }
+          /**
+           * Would be used to redirect URL in case of 404
+           * @default - APP_LIST
+           */
+          redirectURL?: string
+          on404Redirect?: never
+      }
+    | {
+          redirectURL?: never
+          on404Redirect: () => void
+      }
+    | {
+          redirectURL?: never
+          on404Redirect?: never
+      }
 )
 
 export interface ErrorScreenNotAuthorizedProps {
@@ -1100,3 +1103,16 @@ export interface ClusterEnvironmentCategoryDTO {
 }
 
 export interface ClusterEnvironmentCategoryType extends ClusterEnvironmentCategoryDTO {}
+
+export type AppsGroupedByProjectsType = {
+    projectId: number
+    projectName: string
+    appList: {
+        name: string
+    }[]
+}[]
+
+export type EnvironmentsGroupedByClustersType = {
+    clusterName: EnvironmentType['cluster']
+    envList: EnvironmentType[]
+}[]
