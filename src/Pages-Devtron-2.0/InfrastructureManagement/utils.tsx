@@ -21,6 +21,7 @@ export const getAutomationEnablementBreadcrumbConfig = () => ({
         ),
         linked: true,
     },
+    job: null,
     list: { component: <BreadcrumbText heading="Jobs" isActive /> },
     'jobId(\\d+)': null,
 })
