@@ -127,6 +127,7 @@ import { ReactComponent as ICGoogle } from '@IconsV2/ic-google.svg'
 import { ReactComponent as ICGoogleArtifactRegistry } from '@IconsV2/ic-google-artifact-registry.svg'
 import { ReactComponent as ICGoogleContainerRegistry } from '@IconsV2/ic-google-container-registry.svg'
 import { ReactComponent as ICGoogleGke } from '@IconsV2/ic-google-gke.svg'
+import { ReactComponent as ICGraphNegative } from '@IconsV2/ic-graph-negative.svg'
 import { ReactComponent as ICGridView } from '@IconsV2/ic-grid-view.svg'
 import { ReactComponent as ICGroupFilter } from '@IconsV2/ic-group-filter.svg'
 import { ReactComponent as ICGroupFilterApplied } from '@IconsV2/ic-group-filter-applied.svg'
@@ -388,6 +389,7 @@ export const iconMap = {
     'ic-google-container-registry': ICGoogleContainerRegistry,
     'ic-google-gke': ICGoogleGke,
     'ic-google': ICGoogle,
+    'ic-graph-negative': ICGraphNegative,
     'ic-grid-view': ICGridView,
     'ic-group-filter-applied': ICGroupFilterApplied,
     'ic-group-filter': ICGroupFilter,
