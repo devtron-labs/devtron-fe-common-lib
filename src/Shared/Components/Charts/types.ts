@@ -1,4 +1,4 @@
-import { ChartConfiguration, ChartOptions } from 'chart.js'
+import { ChartOptions } from 'chart.js'
 
 import { AppThemeType } from '@Shared/Providers'
 
@@ -46,14 +46,26 @@ type TypeAndDatasetsType =
            * Needs to be memoized
            */
           datasets: SimpleDatasetForPie
+          separatorIndex?: never
+          averageLineValue?: never
       }
     | {
           type: 'line'
           datasets: SimpleDatasetForLine[]
+          separatorIndex?: never
+          averageLineValue?: number
       }
     | {
-          type: Exclude<ChartType, 'pie' | 'line'>
+          type: 'area'
           datasets: SimpleDataset[]
+          separatorIndex?: never
+          averageLineValue?: number
+      }
+    | {
+          type: Exclude<ChartType, 'pie' | 'line' | 'area'>
+          datasets: SimpleDataset[]
+          separatorIndex?: number
+          averageLineValue?: never
       }
 
 export type ChartProps = {
@@ -67,10 +79,6 @@ export type ChartProps = {
      * @default false
      */
     hideAxis?: boolean
-    /**
-     * Custom plugins for chart
-     */
-    customPlugins?: ChartConfiguration['plugins']
     /**
      * Callback function for chart click events
      */

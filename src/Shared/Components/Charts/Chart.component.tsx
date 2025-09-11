@@ -20,6 +20,7 @@ import { noop } from '@Common/Helper'
 import { useTheme } from '@Shared/Providers'
 
 import { LEGENDS_LABEL_CONFIG } from './constants'
+import { getAverageLinePlugin, getSeparatorLinePlugin } from './plugins'
 import { ChartProps } from './types'
 import { getChartJSType, getDefaultOptions, transformDataForChart } from './utils'
 
@@ -150,7 +151,15 @@ ChartJS.overrides.doughnut.plugins.legend.labels = {
  */
 const Chart = (props: ChartProps) => {
     /** Using this technique for typing in transformDataForChart */
-    const { id, xAxisLabels: labels, hideAxis = false, customPlugins = [], onChartClick, ...typeAndDatasets } = props
+    const {
+        id,
+        xAxisLabels: labels,
+        hideAxis = false,
+        onChartClick,
+        separatorIndex,
+        averageLineValue,
+        ...typeAndDatasets
+    } = props
     const { type, datasets } = typeAndDatasets
 
     const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -173,14 +182,19 @@ const Chart = (props: ChartProps) => {
         chartRef.current = new ChartJS(ctx, {
             type: chartJSType,
             data: transformedData,
-            options: defaultOptions,
-            plugins: [...customPlugins],
+            options: {
+                ...defaultOptions,
+            },
+            plugins: [
+                ...(averageLineValue ? [getAverageLinePlugin(averageLineValue, appTheme)] : []),
+                ...(separatorIndex ? [getSeparatorLinePlugin(separatorIndex, type, appTheme)] : []),
+            ],
         })
 
         return () => {
             chartRef.current.destroy()
         }
-    }, [type, datasets, labels, appTheme, hideAxis, customPlugins])
+    }, [type, datasets, labels, appTheme, hideAxis, averageLineValue, separatorIndex])
 
     return (
         <div className="h-100 w-100">
