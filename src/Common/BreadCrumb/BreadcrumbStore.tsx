@@ -22,7 +22,7 @@ const initialState = {
 }
 
 export const BreadcrumbText = ({ heading, isActive, shouldTruncate = false }: BreadcrumbTextProps) => (
-    <span className={`anchor cb-5 fs-16 lh-1-5 dc__mxw-155 dc__ellipsis-right ${shouldTruncate ? 'dc__truncate' : ''} ${isActive ? 'cn-9 fw-6' : 'cb-5 fw-4'}`}>{heading}</span>
+    <span className={`dc__breadcrumb-text cb-5 fs-16 lh-1-5 dc__mxw-155 dc__ellipsis-right ${shouldTruncate ? 'dc__truncate' : ''} ${isActive ? 'cn-9 fw-6' : 'cb-5 fw-4'}`}>{heading}</span>
 )
 
 const Store = ({ children }) => {
