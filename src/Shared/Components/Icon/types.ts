@@ -46,7 +46,7 @@ export interface IconBaseProps {
      *
      * @example 'B500', 'N200', 'G50', 'R700'
      */
-    color: IconBaseColorType
+    color?: IconBaseColorType
     /**
      * A unique identifier for testing purposes, typically used in test automation.
      */
