@@ -1,6 +1,7 @@
 import { ChartOptions } from 'chart.js'
 
 import { AppThemeType } from '@Shared/Providers'
+import { Never } from '@Shared/types'
 
 export type ChartType = 'area' | 'pie' | 'stackedBar' | 'stackedBarHorizontal' | 'line'
 
@@ -39,8 +40,13 @@ export interface SimpleDatasetForLine extends BaseSimpleDataset {
     borderColor: ChartColorKey
 }
 
+type XYAxisMax = {
+    xAxisMax?: number
+    yAxisMax?: number
+}
+
 type TypeAndDatasetsType =
-    | {
+    | ({
           type: 'pie'
           /**
            * Needs to be memoized
@@ -48,25 +54,25 @@ type TypeAndDatasetsType =
           datasets: SimpleDatasetForPie
           separatorIndex?: never
           averageLineValue?: never
-      }
-    | {
+      } & Never<XYAxisMax>)
+    | ({
           type: 'line'
           datasets: SimpleDatasetForLine[]
           separatorIndex?: never
           averageLineValue?: number
-      }
-    | {
+      } & XYAxisMax)
+    | ({
           type: 'area'
           datasets: SimpleDataset[]
           separatorIndex?: never
           averageLineValue?: number
-      }
-    | {
+      } & XYAxisMax)
+    | ({
           type: Exclude<ChartType, 'pie' | 'line' | 'area'>
           datasets: SimpleDataset[]
           separatorIndex?: number
           averageLineValue?: never
-      }
+      } & XYAxisMax)
 
 export type ChartProps = {
     id: string
@@ -108,7 +114,7 @@ export type TransformDataForChartProps = {
     appTheme: AppThemeType
 } & TypeAndDatasetsType
 
-export interface GetDefaultOptionsParams extends Pick<ChartProps, 'hideAxis' | 'onChartClick'> {
-    type: ChartType
+export interface GetDefaultOptionsParams
+    extends Pick<ChartProps, 'hideAxis' | 'onChartClick' | 'type' | 'xAxisMax' | 'yAxisMax'> {
     appTheme: AppThemeType
 }

@@ -158,6 +158,8 @@ const Chart = (props: ChartProps) => {
         onChartClick,
         separatorIndex,
         averageLineValue,
+        xAxisMax,
+        yAxisMax,
         ...typeAndDatasets
     } = props
     const { type, datasets } = typeAndDatasets
@@ -177,7 +179,14 @@ const Chart = (props: ChartProps) => {
         // Get Chart.js type and transform data
         const chartJSType = getChartJSType(type)
         const transformedData = { labels, datasets: transformDataForChart({ ...typeAndDatasets, appTheme }) }
-        const defaultOptions = getDefaultOptions({ type, appTheme, hideAxis, onChartClick })
+        const defaultOptions = getDefaultOptions({
+            type,
+            appTheme,
+            hideAxis,
+            onChartClick,
+            xAxisMax,
+            yAxisMax,
+        })
 
         chartRef.current = new ChartJS(ctx, {
             type: chartJSType,

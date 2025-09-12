@@ -39,6 +39,8 @@ export const getDefaultOptions = ({
     type,
     appTheme,
     hideAxis,
+    xAxisMax,
+    yAxisMax,
     onChartClick,
 }: GetDefaultOptionsParams): ChartOptions => {
     const baseOptions: ChartOptions = {
@@ -76,6 +78,16 @@ export const getDefaultOptions = ({
         },
     } satisfies ChartOptions['scales']['x']
 
+    const commonXScaleConfig = {
+        ...commonScaleConfig,
+        max: xAxisMax,
+    } satisfies ChartOptions['scales']['x']
+
+    const commonYScaleConfig = {
+        ...commonScaleConfig,
+        max: yAxisMax,
+    } satisfies ChartOptions['scales']['y']
+
     switch (type) {
         case 'area':
         case 'line':
@@ -94,11 +106,11 @@ export const getDefaultOptions = ({
                 },
                 scales: {
                     y: {
-                        ...commonScaleConfig,
+                        ...commonYScaleConfig,
                         stacked: type === 'area',
                         beginAtZero: true,
                     },
-                    x: commonScaleConfig,
+                    x: commonXScaleConfig,
                 },
             } satisfies ChartOptions<'line'>
         case 'stackedBar':
@@ -106,11 +118,11 @@ export const getDefaultOptions = ({
                 ...baseOptions,
                 scales: {
                     x: {
-                        ...commonScaleConfig,
+                        ...commonXScaleConfig,
                         stacked: true,
                     },
                     y: {
-                        ...commonScaleConfig,
+                        ...commonYScaleConfig,
                         stacked: true,
                         beginAtZero: true,
                     },
@@ -122,12 +134,12 @@ export const getDefaultOptions = ({
                 indexAxis: 'y' as const,
                 scales: {
                     x: {
-                        ...commonScaleConfig,
+                        ...commonXScaleConfig,
                         stacked: true,
                         beginAtZero: true,
                     },
                     y: {
-                        ...commonScaleConfig,
+                        ...commonYScaleConfig,
                         stacked: true,
                     },
                 },
