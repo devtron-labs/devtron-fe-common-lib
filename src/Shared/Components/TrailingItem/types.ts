@@ -18,6 +18,7 @@ import { ReactElement } from 'react'
 
 import { OmitNever } from '@Shared/types'
 
+import { ActionMenuProps } from '../ActionMenu'
 import { ButtonProps } from '../Button'
 import { IconsProps } from '../Icon'
 import { NumbersCountProps } from '../NumbersCount'
@@ -63,6 +64,10 @@ export type TrailingItemType =
     | {
           type: 'button'
           config: OmitNever<Omit<Extract<ButtonProps, { icon: ReactElement }>, 'size' | 'variant'>>
+      }
+    | {
+          type: 'action-menu'
+          config: ActionMenuProps
       }
 
 export type TrailingItemProps = TrailingItemType & {

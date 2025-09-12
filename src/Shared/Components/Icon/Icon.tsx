@@ -4,6 +4,7 @@ import { ReactComponent as IC73strings } from '@IconsV2/ic-73strings.svg'
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
 import { ReactComponent as ICActivity } from '@IconsV2/ic-activity.svg'
 import { ReactComponent as ICAdd } from '@IconsV2/ic-add.svg'
+import { ReactComponent as ICAlibaba } from '@IconsV2/ic-alibaba.svg'
 import { ReactComponent as ICAmazonEks } from '@IconsV2/ic-amazon-eks.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
 import { ReactComponent as ICAppTemplate } from '@IconsV2/ic-app-template.svg'
@@ -15,6 +16,7 @@ import { ReactComponent as ICArrowsClockwise } from '@IconsV2/ic-arrows-clockwis
 import { ReactComponent as ICArrowsLeftRight } from '@IconsV2/ic-arrows-left-right.svg'
 import { ReactComponent as ICAsterisk } from '@IconsV2/ic-asterisk.svg'
 import { ReactComponent as ICAther } from '@IconsV2/ic-ather.svg'
+import { ReactComponent as ICAws } from '@IconsV2/ic-aws.svg'
 import { ReactComponent as ICAwsCodecommit } from '@IconsV2/ic-aws-codecommit.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICAzureAks } from '@IconsV2/ic-azure-aks.svg'
@@ -120,6 +122,7 @@ import { ReactComponent as ICGithub } from '@IconsV2/ic-github.svg'
 import { ReactComponent as ICGitlab } from '@IconsV2/ic-gitlab.svg'
 import { ReactComponent as ICGoogle } from '@IconsV2/ic-google.svg'
 import { ReactComponent as ICGoogleArtifactRegistry } from '@IconsV2/ic-google-artifact-registry.svg'
+import { ReactComponent as ICGoogleCloud } from '@IconsV2/ic-google-cloud.svg'
 import { ReactComponent as ICGoogleContainerRegistry } from '@IconsV2/ic-google-container-registry.svg'
 import { ReactComponent as ICGoogleGke } from '@IconsV2/ic-google-gke.svg'
 import { ReactComponent as ICGridView } from '@IconsV2/ic-grid-view.svg'
@@ -182,6 +185,8 @@ import { ReactComponent as ICOpenBox } from '@IconsV2/ic-open-box.svg'
 import { ReactComponent as ICOpenInNew } from '@IconsV2/ic-open-in-new.svg'
 import { ReactComponent as ICOpenai } from '@IconsV2/ic-openai.svg'
 import { ReactComponent as ICOpenshift } from '@IconsV2/ic-openshift.svg'
+import { ReactComponent as ICOracleCloud } from '@IconsV2/ic-oracle-cloud.svg'
+import { ReactComponent as ICOtcCloud } from '@IconsV2/ic-otc-cloud.svg'
 import { ReactComponent as ICOutOfSync } from '@IconsV2/ic-out-of-sync.svg'
 import { ReactComponent as ICPaperPlane } from '@IconsV2/ic-paper-plane.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
@@ -260,6 +265,7 @@ export const iconMap = {
     'ic-aborted': ICAborted,
     'ic-activity': ICActivity,
     'ic-add': ICAdd,
+    'ic-alibaba': ICAlibaba,
     'ic-amazon-eks': ICAmazonEks,
     'ic-app-group': ICAppGroup,
     'ic-app-template': ICAppTemplate,
@@ -272,6 +278,7 @@ export const iconMap = {
     'ic-asterisk': ICAsterisk,
     'ic-ather': ICAther,
     'ic-aws-codecommit': ICAwsCodecommit,
+    'ic-aws': ICAws,
     'ic-azure-aks': ICAzureAks,
     'ic-azure': ICAzure,
     'ic-bg-cluster': ICBgCluster,
@@ -375,6 +382,7 @@ export const iconMap = {
     'ic-github': ICGithub,
     'ic-gitlab': ICGitlab,
     'ic-google-artifact-registry': ICGoogleArtifactRegistry,
+    'ic-google-cloud': ICGoogleCloud,
     'ic-google-container-registry': ICGoogleContainerRegistry,
     'ic-google-gke': ICGoogleGke,
     'ic-google': ICGoogle,
@@ -438,6 +446,8 @@ export const iconMap = {
     'ic-open-in-new': ICOpenInNew,
     'ic-openai': ICOpenai,
     'ic-openshift': ICOpenshift,
+    'ic-oracle-cloud': ICOracleCloud,
+    'ic-otc-cloud': ICOtcCloud,
     'ic-out-of-sync': ICOutOfSync,
     'ic-paper-plane-color': ICPaperPlaneColor,
     'ic-paper-plane': ICPaperPlane,
