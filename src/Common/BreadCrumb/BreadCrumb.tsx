@@ -90,7 +90,7 @@ export function useBreadcrumb(props?: UseBreadcrumbOptionalProps, deps?: any[]):
 export const BreadCrumb: React.FC<Breadcrumbs> = ({
     breadcrumbs,
     sep = '/',
-    className = 'dc__devtron-breadcrumb__item',
+    className = 'dc__devtron-breadcrumb__item fs-16 fw-4 lh-1-5 dc__ellipsis-right dc__mxw-155',
 }) => {
     const { url } = useRouteMatch()
     const filteredCrumbs = breadcrumbs.filter((crumb) => !!crumb.name)
@@ -102,7 +102,7 @@ export const BreadCrumb: React.FC<Breadcrumbs> = ({
                         condition={!!breadcrumb.to}
                         wrap={(children) => (
                             <Link
-                                className={`${url === breadcrumb.to ? 'active' : ''} ${className} ${
+                                className={`${url === breadcrumb.to ? 'active' : ''} ${className}  ${
                                     breadcrumb.className || ''
                                 }`}
                                 to={breadcrumb.to}
@@ -115,7 +115,7 @@ export const BreadCrumb: React.FC<Breadcrumbs> = ({
                     </ConditionalWrap>
 
                     {idx + 1 !== filteredCrumbs.length && breadcrumb.name && (
-                        <span className={`${className}__separator cn-5`}>{sep}</span>
+                        <span className="dc__devtron-breadcrumb__item__separator">{sep}</span>
                     )}
                 </React.Fragment>
             ))}

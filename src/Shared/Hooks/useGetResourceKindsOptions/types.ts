@@ -17,9 +17,10 @@
 // ====== Service Types: Start ====== //
 
 import { ServerErrors } from '@Common/ServerError'
+import { getClusterOptions } from '@Shared/index'
 import { EnvironmentType, ResourceKindType } from '@Shared/types'
 
-import { getAppOptionsGroupedByProjects, getClusterOptions, getProjectOptions } from './service'
+import { getAppOptionsGroupedByProjects, getProjectOptions } from './service'
 
 export interface AppType {
     name: string
@@ -35,13 +36,6 @@ export type EnvironmentsGroupedByClustersType = {
     clusterName: EnvironmentType['cluster']
     envList: EnvironmentType[]
 }[]
-
-export interface ClusterDTO {
-    id: number
-    cluster_name: string
-    isVirtualCluster: boolean
-    isProd: boolean
-}
 
 // ====== Service Types: End ====== //
 
