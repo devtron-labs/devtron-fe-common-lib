@@ -7,6 +7,7 @@ import { ReactComponent as ICPriorityLowFill } from '@Icons/ic-priority-low-fill
 import { ReactComponent as ICPriorityMediumFill } from '@Icons/ic-priority-medium-fill.svg'
 import { ReactComponent as ICPriorityUrgentFill } from '@Icons/ic-priority-urgent-fill.svg'
 import { ReactComponent as ICSpider } from '@Icons/ic-spider.svg'
+import { ReactComponent as ICVector } from '@Icons/ic-vector.svg'
 import { ReactComponent as IC73strings } from '@IconsV2/ic-73strings.svg'
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
 import { ReactComponent as ICActivity } from '@IconsV2/ic-activity.svg'
@@ -556,6 +557,7 @@ export const iconMap = {
     'ic-priority-medium-fill': ICPriorityMediumFill,
     'ic-priority-urgent-fill': ICPriorityUrgentFill,
     'ic-spider': ICSpider,
+    'ic-vector': ICVector,
 }
 
 export type IconName = keyof typeof iconMap
