@@ -2,7 +2,7 @@ import { AppThemeType } from '@Shared/Providers'
 
 export type ChartType = 'area' | 'pie' | 'stackedBar' | 'stackedBarHorizontal' | 'line'
 
-type ColorTokensType =
+export type ColorTokensType =
     | 'DeepPlum'
     | 'Magenta'
     | 'Slate'
@@ -14,7 +14,7 @@ type ColorTokensType =
     | 'GoldenYellow'
     | 'CharcoalGray'
     | 'Gray'
-type VariantsType = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950
+export type VariantsType = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950
 
 export type ChartColorKey = `${ColorTokensType}${VariantsType}`
 
