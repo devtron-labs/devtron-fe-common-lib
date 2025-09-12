@@ -15,7 +15,7 @@
  */
 
 import { ComponentSizeType } from '@Shared/constants'
-import { IconBaseColorType } from '@Shared/types'
+import { IconBaseColorType, IconBaseSizeType } from '@Shared/types'
 
 import { BadgeProps } from './types'
 
@@ -49,4 +49,10 @@ export const getClassNameAccToSize = (size: BadgeProps['size']) => {
         default:
             return 'fs-13 lh-20 px-6 py-2'
     }
+}
+
+export const COMPONENT_SIZE_TO_ICON_SIZE_MAP: Record<BadgeProps['size'], IconBaseSizeType> = {
+    [ComponentSizeType.xxxs]: 12,
+    [ComponentSizeType.xxs]: 16,
+    [ComponentSizeType.xs]: 20,
 }
