@@ -20,8 +20,13 @@ import { ReactComponent as ICAws } from '@IconsV2/ic-aws.svg'
 import { ReactComponent as ICAwsCodecommit } from '@IconsV2/ic-aws-codecommit.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICAzureAks } from '@IconsV2/ic-azure-aks.svg'
+import { ReactComponent as ICBgBuild } from '@IconsV2/ic-bg-build.svg'
 import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
+import { ReactComponent as ICBgDeploy } from '@IconsV2/ic-bg-deploy.svg'
 import { ReactComponent as ICBgEnvironment } from '@IconsV2/ic-bg-environment.svg'
+import { ReactComponent as ICBgProductionPipelines } from '@IconsV2/ic-bg-production-pipelines.svg'
+import { ReactComponent as ICBgProject } from '@IconsV2/ic-bg-project.svg'
+import { ReactComponent as ICBgScan } from '@IconsV2/ic-bg-scan.svg'
 import { ReactComponent as ICBharatpe } from '@IconsV2/ic-bharatpe.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBookOpen } from '@IconsV2/ic-book-open.svg'
@@ -125,6 +130,7 @@ import { ReactComponent as ICGoogleArtifactRegistry } from '@IconsV2/ic-google-a
 import { ReactComponent as ICGoogleCloud } from '@IconsV2/ic-google-cloud.svg'
 import { ReactComponent as ICGoogleContainerRegistry } from '@IconsV2/ic-google-container-registry.svg'
 import { ReactComponent as ICGoogleGke } from '@IconsV2/ic-google-gke.svg'
+import { ReactComponent as ICGraphNegative } from '@IconsV2/ic-graph-negative.svg'
 import { ReactComponent as ICGridView } from '@IconsV2/ic-grid-view.svg'
 import { ReactComponent as ICGroupFilter } from '@IconsV2/ic-group-filter.svg'
 import { ReactComponent as ICGroupFilterApplied } from '@IconsV2/ic-group-filter-applied.svg'
@@ -281,8 +287,13 @@ export const iconMap = {
     'ic-aws': ICAws,
     'ic-azure-aks': ICAzureAks,
     'ic-azure': ICAzure,
+    'ic-bg-build': ICBgBuild,
     'ic-bg-cluster': ICBgCluster,
+    'ic-bg-deploy': ICBgDeploy,
     'ic-bg-environment': ICBgEnvironment,
+    'ic-bg-production-pipelines': ICBgProductionPipelines,
+    'ic-bg-project': ICBgProject,
+    'ic-bg-scan': ICBgScan,
     'ic-bharatpe': ICBharatpe,
     'ic-bitbucket': ICBitbucket,
     'ic-book-open': ICBookOpen,
@@ -386,6 +397,7 @@ export const iconMap = {
     'ic-google-container-registry': ICGoogleContainerRegistry,
     'ic-google-gke': ICGoogleGke,
     'ic-google': ICGoogle,
+    'ic-graph-negative': ICGraphNegative,
     'ic-grid-view': ICGridView,
     'ic-group-filter-applied': ICGroupFilterApplied,
     'ic-group-filter': ICGroupFilter,

@@ -13,6 +13,7 @@ import {
     ChartType,
     ColorTokensType,
     GetBackgroundAndBorderColorProps,
+    GetDefaultOptionsParams,
     SimpleDataset,
     TransformDataForChartProps,
     TransformDatasetProps,
@@ -36,7 +37,14 @@ export const getChartJSType = (type: ChartType): ChartJSChartType => {
 }
 
 // Get default options based on chart type
-export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType, hideAxis: boolean): ChartOptions => {
+export const getDefaultOptions = ({
+    type,
+    appTheme,
+    hideAxis,
+    xAxisMax,
+    yAxisMax,
+    onChartClick,
+}: GetDefaultOptionsParams): ChartOptions => {
     const baseOptions: ChartOptions = {
         responsive: true,
         maintainAspectRatio: false,
@@ -62,6 +70,7 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType, hideA
                 borderRadius: 4,
             },
         },
+        ...(onChartClick ? { onClick: onChartClick } : {}),
     }
 
     const commonScaleConfig = {
@@ -70,6 +79,16 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType, hideA
             color: CHART_GRID_LINES_COLORS[appTheme],
         },
     } satisfies ChartOptions['scales']['x']
+
+    const commonXScaleConfig = {
+        ...commonScaleConfig,
+        max: xAxisMax,
+    } satisfies ChartOptions['scales']['x']
+
+    const commonYScaleConfig = {
+        ...commonScaleConfig,
+        max: yAxisMax,
+    } satisfies ChartOptions['scales']['y']
 
     switch (type) {
         case 'area':
@@ -89,11 +108,11 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType, hideA
                 },
                 scales: {
                     y: {
-                        ...commonScaleConfig,
+                        ...commonYScaleConfig,
                         stacked: type === 'area',
                         beginAtZero: true,
                     },
-                    x: commonScaleConfig,
+                    x: commonXScaleConfig,
                 },
             } satisfies ChartOptions<'line'>
         case 'stackedBar':
@@ -101,11 +120,11 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType, hideA
                 ...baseOptions,
                 scales: {
                     x: {
-                        ...commonScaleConfig,
+                        ...commonXScaleConfig,
                         stacked: true,
                     },
                     y: {
-                        ...commonScaleConfig,
+                        ...commonYScaleConfig,
                         stacked: true,
                         beginAtZero: true,
                     },
@@ -117,12 +136,12 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType, hideA
                 indexAxis: 'y' as const,
                 scales: {
                     x: {
-                        ...commonScaleConfig,
+                        ...commonXScaleConfig,
                         stacked: true,
                         beginAtZero: true,
                     },
                     y: {
-                        ...commonScaleConfig,
+                        ...commonYScaleConfig,
                         stacked: true,
                     },
                 },
@@ -133,6 +152,7 @@ export const getDefaultOptions = (type: ChartType, appTheme: AppThemeType, hideA
                 plugins: {
                     ...baseOptions.plugins,
                     legend: {
+                        ...baseOptions.plugins.legend,
                         position: 'right',
                         align: 'center',
                     },
@@ -199,7 +219,9 @@ const getBackgroundAndBorderColor = ({ type, dataset, appTheme }: GetBackgroundA
                 return gradient
             },
             borderColor: generateCorrespondingBorderColor((dataset as SimpleDataset).backgroundColor),
-        } as Pick<ChartDataset<'line'>, 'backgroundColor' | 'borderColor'>
+            pointBackgroundColor: bgColor,
+            pointBorderColor: bgColor,
+        } as Pick<ChartDataset<'line'>, 'backgroundColor' | 'borderColor' | 'pointBackgroundColor' | 'pointBorderColor'>
     }
 
     return {
@@ -211,13 +233,15 @@ const getBackgroundAndBorderColor = ({ type, dataset, appTheme }: GetBackgroundA
 const transformDataset = (props: TransformDatasetProps) => {
     const { dataset, type } = props
 
-    const { backgroundColor, borderColor } = getBackgroundAndBorderColor(props)
+    const { backgroundColor, borderColor, pointBackgroundColor, pointBorderColor } = getBackgroundAndBorderColor(props)
 
     const baseDataset = {
         label: dataset.datasetName,
         data: dataset.yAxisValues,
         backgroundColor,
         borderColor,
+        pointBackgroundColor,
+        pointBorderColor,
     }
 
     switch (type) {
