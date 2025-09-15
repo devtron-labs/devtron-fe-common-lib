@@ -1,11 +1,13 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-icon` to update.
 
 import { ReactComponent as ICBulb } from '@Icons/ic-bulb.svg'
+import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ReactComponent as ICPiggybank } from '@Icons/ic-piggybank.svg'
 import { ReactComponent as ICPriorityHighFill } from '@Icons/ic-priority-high-fill.svg'
 import { ReactComponent as ICPriorityLowFill } from '@Icons/ic-priority-low-fill.svg'
 import { ReactComponent as ICPriorityMediumFill } from '@Icons/ic-priority-medium-fill.svg'
 import { ReactComponent as ICPriorityUrgentFill } from '@Icons/ic-priority-urgent-fill.svg'
+import { ReactComponent as ICRedBulb } from '@Icons/ic-red-bulb.svg'
 import { ReactComponent as ICSpider } from '@Icons/ic-spider.svg'
 import { ReactComponent as ICVector } from '@Icons/ic-vector.svg'
 import { ReactComponent as IC73strings } from '@IconsV2/ic-73strings.svg'
@@ -339,6 +341,7 @@ export const iconMap = {
     'ic-clipboard': ICClipboard,
     'ic-clock-counterclockwise': ICClockCounterclockwise,
     'ic-clock': ICClock,
+    'ic-close': ICClose,
     'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
     'ic-cloud-vms': ICCloudVms,
@@ -550,7 +553,8 @@ export const iconMap = {
     'ic-webhook': ICWebhook,
     'ic-wifi-slash': ICWifiSlash,
     'ic-world-globe': ICWorldGlobe,
-    'ic-bulb': ICBulb,
+    'ic-bulb': ICRedBulb,
+    'ic-red-bulb': ICBulb,
     'ic-piggybank': ICPiggybank,
     'ic-priority-high-fill': ICPriorityHighFill,
     'ic-priority-low-fill': ICPriorityLowFill,
