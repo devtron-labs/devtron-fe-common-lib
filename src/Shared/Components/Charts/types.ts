@@ -1,5 +1,7 @@
-import { ChartOptions } from 'chart.js'
+import { ReactNode } from 'react'
+import { ChartOptions, TooltipOptions } from 'chart.js'
 
+import { TooltipProps } from '@Common/Tooltip'
 import { AppThemeType } from '@Shared/Providers'
 import { Never } from '@Shared/types'
 
@@ -89,6 +91,13 @@ export type ChartProps = {
      * Callback function for chart click events
      */
     onChartClick?: ChartOptions['onClick']
+    tooltipConfig?: {
+        getTooltipContent?: (args: Parameters<TooltipOptions['external']>[0]) => ReactNode
+        /**
+         * @default 'top'
+         */
+        placement: TooltipProps['placement']
+    }
 } & TypeAndDatasetsType
 
 export type TransformDatasetProps = {
@@ -117,4 +126,5 @@ export type TransformDataForChartProps = {
 export interface GetDefaultOptionsParams
     extends Pick<ChartProps, 'hideAxis' | 'onChartClick' | 'type' | 'xAxisMax' | 'yAxisMax'> {
     appTheme: AppThemeType
+    externalTooltipHandler: TooltipOptions['external']
 }
