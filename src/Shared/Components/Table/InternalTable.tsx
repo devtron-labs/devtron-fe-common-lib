@@ -238,7 +238,11 @@ const InternalTable = <
     }
 
     return (
-        <div ref={wrapperDivRef} className="flexbox-col flex-grow-1 dc__overflow-hidden" id={`table-wrapper-${id}`}>
+        <div
+            ref={wrapperDivRef}
+            className="flexbox-col flex-grow-1 dc__overflow-hidden dc__no-shrink"
+            id={`table-wrapper-${id}`}
+        >
             <Wrapper
                 areRowsLoading={areFilteredRowsLoading}
                 clearFilters={clearFilters}

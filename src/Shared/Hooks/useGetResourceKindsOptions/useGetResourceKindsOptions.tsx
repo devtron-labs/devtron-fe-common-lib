@@ -16,11 +16,12 @@
 
 import { useMemo } from 'react'
 
+import { getAppOptionsGroupedByProjects, getEnvironmentOptionsGroupedByClusters } from '@Common/Common.service'
 import { useAsync } from '@Common/Helper'
 import { getClusterOptions } from '@Shared/index'
 import { ResourceKindType } from '@Shared/types'
 
-import { getAppOptionsGroupedByProjects, getEnvironmentOptionsGroupedByClusters, getProjectOptions } from './service'
+import { getProjectOptions } from './service'
 import { UseGetResourceKindOptionsReturnType, UseGetResourceKindsOptionsProps } from './types'
 import { getResourcesToFetchMap } from './utils'
 
