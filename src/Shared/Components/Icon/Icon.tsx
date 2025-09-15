@@ -1,7 +1,10 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-icon` to update.
 
 import { ReactComponent as ICBulb } from '@Icons/ic-bulb.svg'
+import { ReactComponent as ICStatusProgress } from '@Icons/ic-circle-progress.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
+import { ReactComponent as ICStatusPending } from '@Icons/ic-dot-circle.svg'
+import { ReactComponent as ICStatusFailed } from '@Icons/ic-failure-color.svg'
 import { ReactComponent as ICPiggybank } from '@Icons/ic-piggybank.svg'
 import { ReactComponent as ICPriorityHighFill } from '@Icons/ic-priority-high-fill.svg'
 import { ReactComponent as ICPriorityLowFill } from '@Icons/ic-priority-low-fill.svg'
@@ -555,6 +558,9 @@ export const iconMap = {
     'ic-world-globe': ICWorldGlobe,
     'ic-bulb': ICRedBulb,
     'ic-red-bulb': ICBulb,
+    'ic-failure-color': ICStatusFailed,
+    'ic-dot-circle.svg': ICStatusPending,
+    'ic-circle-progress': ICStatusProgress,
     'ic-piggybank': ICPiggybank,
     'ic-priority-high-fill': ICPriorityHighFill,
     'ic-priority-low-fill': ICPriorityLowFill,
