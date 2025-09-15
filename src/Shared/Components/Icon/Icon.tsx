@@ -559,7 +559,7 @@ export const iconMap = {
     'ic-bulb': ICRedBulb,
     'ic-red-bulb': ICBulb,
     'ic-failure-color': ICStatusFailed,
-    'ic-dot-circle.svg': ICStatusPending,
+    'ic-dot-circle': ICStatusPending,
     'ic-circle-progress': ICStatusProgress,
     'ic-piggybank': ICPiggybank,
     'ic-priority-high-fill': ICPriorityHighFill,
