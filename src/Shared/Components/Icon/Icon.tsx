@@ -98,11 +98,10 @@ import { ReactComponent as ICFlask } from '@IconsV2/ic-flask.svg'
 import { ReactComponent as ICFolder } from '@IconsV2/ic-folder.svg'
 import { ReactComponent as ICFolderColor } from '@IconsV2/ic-folder-color.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
-import { ReactComponent as ICFreemiumDevtron } from '@IconsV2/ic-freemium-devtron.svg'
 import { ReactComponent as ICGavel } from '@IconsV2/ic-gavel.svg'
 import { ReactComponent as ICGear } from '@IconsV2/ic-gear.svg'
 import { ReactComponent as ICGift } from '@IconsV2/ic-gift.svg'
-import { ReactComponent as ICGiftFilled } from '@IconsV2/ic-gift-filled.svg'
+import { ReactComponent as ICGiftAnimated } from '@IconsV2/ic-gift-animated.svg'
 import { ReactComponent as ICGiftGradient } from '@IconsV2/ic-gift-gradient.svg'
 import { ReactComponent as ICGit } from '@IconsV2/ic-git.svg'
 import { ReactComponent as ICGitBranch } from '@IconsV2/ic-git-branch.svg'
@@ -341,10 +340,9 @@ export const iconMap = {
     'ic-folder-color': ICFolderColor,
     'ic-folder-user': ICFolderUser,
     'ic-folder': ICFolder,
-    'ic-freemium-devtron': ICFreemiumDevtron,
     'ic-gavel': ICGavel,
     'ic-gear': ICGear,
-    'ic-gift-filled': ICGiftFilled,
+    'ic-gift-animated': ICGiftAnimated,
     'ic-gift-gradient': ICGiftGradient,
     'ic-gift': ICGift,
     'ic-git-branch': ICGitBranch,
