@@ -410,29 +410,33 @@ export interface GetFilteringPromiseProps<RowData extends unknown> {
     callback: () => Promise<RowsType<RowData>> | RowsType<RowData>
 }
 
+export interface RowsResultType<RowData extends unknown> {
+    filteredRows: RowsType<RowData>
+    totalRows: number
+}
+
 export interface TableContentProps<
     RowData extends unknown,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
 > extends Pick<
-        InternalTableProps<RowData, FilterVariant, AdditionalProps>,
-        | 'filterData'
-        | 'rows'
-        | 'resizableConfig'
-        | 'additionalProps'
-        | 'visibleColumns'
-        | 'stylesConfig'
-        | 'loading'
-        | 'bulkSelectionConfig'
-        | 'bulkSelectionReturnValue'
-        | 'handleClearBulkSelection'
-        | 'handleToggleBulkSelectionOnRow'
-        | 'paginationVariant'
-        | 'RowActionsOnHoverComponent'
-        | 'pageSizeOptions'
-        | 'getRows'
-    > {
-    filteredRows: RowsType<RowData>
+            InternalTableProps<RowData, FilterVariant, AdditionalProps>,
+            | 'filterData'
+            | 'rows'
+            | 'resizableConfig'
+            | 'additionalProps'
+            | 'visibleColumns'
+            | 'stylesConfig'
+            | 'loading'
+            | 'bulkSelectionConfig'
+            | 'bulkSelectionReturnValue'
+            | 'handleClearBulkSelection'
+            | 'handleToggleBulkSelectionOnRow'
+            | 'paginationVariant'
+            | 'RowActionsOnHoverComponent'
+            | 'pageSizeOptions'
+            | 'getRows'
+        >,
+        RowsResultType<RowData> {
     areFilteredRowsLoading: boolean
-    totalRows: number
 }

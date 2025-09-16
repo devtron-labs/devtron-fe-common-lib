@@ -1,3 +1,4 @@
+/* eslint-disable @tanstack/query/exhaustive-deps */
 /*
  * Copyright (c) 2024. Devtron Inc.
  *
@@ -16,15 +17,16 @@
 
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 
+import { useQuery } from '@Common/API'
 import { abortPreviousRequests, getIsRequestAborted } from '@Common/API/utils'
 import { GenericEmptyState, GenericFilterEmptyState } from '@Common/EmptyState'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
-import { noop, useAsync } from '@Common/Helper'
+import { noop } from '@Common/Helper'
 import { UseRegisterShortcutProvider } from '@Common/Hooks'
 
 import { NO_ROWS_OR_GET_ROWS_ERROR } from './constants'
 import TableContent from './TableContent'
-import { FiltersTypeEnum, InternalTableProps, PaginationEnum } from './types'
+import { FiltersTypeEnum, InternalTableProps, PaginationEnum, RowsResultType } from './types'
 import { getFilteringPromise, searchAndSortRows } from './utils'
 
 const InternalTable = <
@@ -120,8 +122,13 @@ const InternalTable = <
     }, [rows])
 
     // useAsync hook for 'rows' scenario
-    const [_areRowsLoading, rowsResult, rowsError, reloadRows] = useAsync(
-        async () => {
+    const {
+        isLoading: _areRowsLoading,
+        data: rowsResult,
+        error: rowsError,
+        refetch: reloadRows,
+    } = useQuery<unknown, RowsResultType<RowData>, unknown[], false>({
+        queryFn: async () => {
             let totalRows = rows.length
             const filteredRows = await getFilteringPromise({
                 searchSortTimeoutRef,
@@ -140,23 +147,37 @@ const InternalTable = <
             })
             return { filteredRows, totalRows }
         },
-        [searchKey, sortBy, sortOrder, rows, JSON.stringify(otherFilters), visibleColumns],
-        !!rows,
-    )
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
+        queryKey: [searchKey, sortBy, sortOrder, rows, JSON.stringify(otherFilters), visibleColumns],
+        enabled: !!rows,
+    })
 
     // useAsync hook for 'getRows' scenario
-    const [_areGetRowsLoadingWithoutAbortError, getRowsResult, getRowsErrorWithAbortError, reloadGetRows] = useAsync(
-        () =>
+    const {
+        isLoading: _areGetRowsLoadingWithoutAbortError,
+        data: getRowsResult,
+        error: getRowsErrorWithAbortError,
+        refetch: reloadGetRows,
+    } = useQuery<unknown, RowsResultType<RowData>, unknown[], false>({
+        queryFn: () =>
             abortPreviousRequests(async () => {
                 let totalRows = 0
                 const { rows: newRows, totalRows: total } = await getRows(filterData, abortControllerRef)
                 totalRows = total
                 return { filteredRows: newRows, totalRows }
             }, abortControllerRef),
-        [searchKey, sortBy, sortOrder, getRows, offset, pageSize, JSON.stringify(otherFilters), visibleColumns],
-        !!getRows,
-        { resetOnChange: false },
-    )
+        queryKey: [
+            searchKey,
+            sortBy,
+            sortOrder,
+            getRows,
+            offset,
+            pageSize,
+            JSON.stringify(otherFilters),
+            visibleColumns,
+        ],
+        enabled: !!getRows,
+    })
 
     const _areGetRowsLoading = _areGetRowsLoadingWithoutAbortError || !!getIsRequestAborted(getRowsErrorWithAbortError)
 
