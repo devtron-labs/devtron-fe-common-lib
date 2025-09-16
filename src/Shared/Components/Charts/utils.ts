@@ -11,11 +11,13 @@ import {
 import {
     ChartColorKey,
     ChartType,
+    ColorTokensType,
     GetBackgroundAndBorderColorProps,
     GetDefaultOptionsParams,
     SimpleDataset,
     TransformDataForChartProps,
     TransformDatasetProps,
+    VariantsType,
 } from './types'
 
 // Map our chart types to Chart.js types
@@ -286,5 +288,29 @@ export const transformDataForChart = (props: TransformDataForChartProps) => {
             return datasets.map((dataset) => transformDataset({ type, dataset, appTheme }))
         default:
             return datasets.map((dataset) => transformDataset({ type, dataset, appTheme }))
+    }
+}
+
+export function* chartColorGenerator() {
+    const WEIGHTS: VariantsType[] = [400, 500, 600, 700, 300, 800, 200, 900, 100, 50, 950]
+    const TOKENS: ColorTokensType[] = [
+        'SkyBlue',
+        'DeepPlum',
+        'AquaTeal',
+        'GoldenYellow',
+        'Lavender',
+        'CharcoalGray',
+        'Magenta',
+        'CoralRed',
+        'LimeGreen',
+        'Slate',
+        'Gray',
+    ]
+
+    for (let i = 0; i < WEIGHTS.length; i++) {
+        for (let j = 0; j < TOKENS.length; j++) {
+            // Yield a color key like 'SkyBlue500'
+            yield `${TOKENS[j]}${WEIGHTS[i]}` as ChartColorKey
+        }
     }
 }
