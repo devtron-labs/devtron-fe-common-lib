@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { ChartDataset, ChartOptions, ChartType as ChartJSChartType, TooltipOptions } from 'chart.js'
+import { ChartDataset, ChartOptions, ChartType as ChartJSChartType, TooltipLabelStyle, TooltipOptions } from 'chart.js'
 
 import { AppThemeType } from '@Shared/Providers'
 
@@ -323,6 +323,18 @@ export function* chartColorGenerator() {
     }
 }
 
+const getBorderRadiusForTooltip = (labelBorderRadius: TooltipLabelStyle['borderRadius']) => {
+    if (!labelBorderRadius) {
+        return null
+    }
+
+    if (typeof labelBorderRadius === 'number') {
+        return `${labelBorderRadius}px`
+    }
+
+    return `${labelBorderRadius.topLeft}px ${labelBorderRadius.topRight}px ${labelBorderRadius.bottomRight}px ${labelBorderRadius.bottomLeft}px`
+}
+
 export const buildChartTooltipFromContext = ({
     title,
     body,
@@ -346,18 +358,26 @@ export const buildChartTooltipFromContext = ({
                 {bodyLines.map((bodyLine, index) => (
                     // eslint-disable-next-line react/no-array-index-key
                     <div key={index} className="flexbox dc__gap-4 dc__align-items-center">
-                        {labelColors[index] && (
-                            <span
-                                className="dc__br-4"
-                                style={{
-                                    display: 'inline-block',
-                                    width: '12px',
-                                    height: '12px',
-                                    background: labelColors[index].backgroundColor.toString(),
-                                    borderColor: labelColors[index].borderColor.toString(),
-                                }}
-                            />
-                        )}
+                        {labelColors[index] &&
+                            typeof labelColors[index].backgroundColor === 'string' &&
+                            typeof labelColors[index].borderColor === 'string' && (
+                                <span
+                                    style={{
+                                        display: 'inline-block',
+                                        width: '12px',
+                                        height: '12px',
+                                        background: labelColors[index].backgroundColor,
+                                        borderColor: labelColors[index].borderColor,
+                                        ...(getBorderRadiusForTooltip(labelColors[index].borderRadius)
+                                            ? {
+                                                  borderRadius: getBorderRadiusForTooltip(
+                                                      labelColors[index].borderRadius,
+                                                  ),
+                                              }
+                                            : {}),
+                                    }}
+                                />
+                            )}
                         <span className="fs-12 fw-4 lh-20 dc__truncate">{bodyLine}</span>
                     </div>
                 ))}

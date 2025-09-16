@@ -96,7 +96,7 @@ export type ChartProps = {
         /**
          * @default 'top'
          */
-        placement: TooltipProps['placement']
+        placement?: TooltipProps['placement']
     }
 } & TypeAndDatasetsType
 
