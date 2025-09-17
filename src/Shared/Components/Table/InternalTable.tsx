@@ -18,7 +18,6 @@
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 
 import { useQuery } from '@Common/API'
-import { abortPreviousRequests, getIsRequestAborted } from '@Common/API/utils'
 import { GenericEmptyState, GenericFilterEmptyState } from '@Common/EmptyState'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
 import { noop } from '@Common/Helper'
@@ -79,8 +78,6 @@ const InternalTable = <
         ...otherFilters
     } = filterData ?? {}
 
-    const abortControllerRef = useRef<AbortController>(new AbortController())
-
     const wrapperDivRef = useRef<HTMLDivElement>(null)
 
     const { setIdentifiers } = bulkSelectionReturnValue ?? {}
@@ -123,7 +120,7 @@ const InternalTable = <
 
     // useAsync hook for 'rows' scenario
     const {
-        isLoading: _areRowsLoading,
+        isFetching: _areRowsLoading,
         data: rowsResult,
         error: rowsError,
         refetch: reloadRows,
@@ -154,18 +151,17 @@ const InternalTable = <
 
     // useAsync hook for 'getRows' scenario
     const {
-        isLoading: _areGetRowsLoadingWithoutAbortError,
+        isFetching: _areGetRowsLoading,
         data: getRowsResult,
-        error: getRowsErrorWithAbortError,
+        error: getRowsError,
         refetch: reloadGetRows,
     } = useQuery<unknown, RowsResultType<RowData>, unknown[], false>({
-        queryFn: () =>
-            abortPreviousRequests(async () => {
-                let totalRows = 0
-                const { rows: newRows, totalRows: total } = await getRows(filterData, abortControllerRef)
-                totalRows = total
-                return { filteredRows: newRows, totalRows }
-            }, abortControllerRef),
+        queryFn: async ({ signal }) => {
+            let totalRows = 0
+            const { rows: newRows, totalRows: total } = await getRows(filterData, signal)
+            totalRows = total
+            return { filteredRows: newRows, totalRows }
+        },
         queryKey: [
             searchKey,
             sortBy,
@@ -178,11 +174,6 @@ const InternalTable = <
         ],
         enabled: !!getRows,
     })
-
-    const _areGetRowsLoading = _areGetRowsLoadingWithoutAbortError || !!getIsRequestAborted(getRowsErrorWithAbortError)
-
-    const getRowsError =
-        !getIsRequestAborted(getRowsErrorWithAbortError) && !_areGetRowsLoading ? getRowsErrorWithAbortError : null
 
     // Combine results based on whether getRows is provided
     const _areFilteredRowsLoading = getRows ? _areGetRowsLoading : _areRowsLoading

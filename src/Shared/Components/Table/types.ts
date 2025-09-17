@@ -23,7 +23,7 @@ import {
     UseUrlFiltersProps,
     UseUrlFiltersReturnType,
 } from '@Common/Hooks'
-import { APIOptions, GenericEmptyStateType } from '@Common/index'
+import { GenericEmptyStateType } from '@Common/index'
 import { PageSizeOption } from '@Common/Pagination/types'
 import { SortableTableHeaderCellProps, useResizableTableConfig } from '@Common/SortableTableHeaderCell'
 
@@ -319,7 +319,7 @@ export type InternalTableProps<
               /** NOTE: Sorting on frontend is only handled if rows is provided instead of getRows */
               getRows: (
                   props: GetRowsProps,
-                  abortControllerRef: APIOptions['abortControllerRef'],
+                  signal: AbortSignal,
               ) => Promise<{ rows: RowsType<RowData>; totalRows: number }>
           }
     ) &
