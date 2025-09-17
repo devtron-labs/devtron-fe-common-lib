@@ -1,4 +1,3 @@
-/* eslint-disable @tanstack/query/exhaustive-deps */
 /*
  * Copyright (c) 2024. Devtron Inc.
  *
@@ -157,11 +156,10 @@ const InternalTable = <
         refetch: reloadGetRows,
     } = useQuery<unknown, RowsResultType<RowData>, unknown[], false>({
         queryFn: async ({ signal }) => {
-            let totalRows = 0
-            const { rows: newRows, totalRows: total } = await getRows(filterData, signal)
-            totalRows = total
+            const { rows: newRows, totalRows } = await getRows(filterData, signal)
             return { filteredRows: newRows, totalRows }
         },
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: [
             searchKey,
             sortBy,
