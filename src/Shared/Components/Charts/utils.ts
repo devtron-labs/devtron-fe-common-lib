@@ -41,6 +41,7 @@ export const getDefaultOptions = ({
     type,
     appTheme,
     hideAxis,
+    hideXAxisLabels,
     xAxisMax,
     yAxisMax,
     onChartClick,
@@ -83,6 +84,9 @@ export const getDefaultOptions = ({
     const commonXScaleConfig = {
         ...commonScaleConfig,
         max: xAxisMax,
+        ticks: {
+            display: !hideXAxisLabels,
+        },
     } satisfies ChartOptions['scales']['x']
 
     const commonYScaleConfig = {

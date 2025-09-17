@@ -85,6 +85,7 @@ export type ChartProps = {
      * @default false
      */
     hideAxis?: boolean
+    hideXAxisLabels?: boolean
     /**
      * Callback function for chart click events
      */
@@ -115,6 +116,6 @@ export type TransformDataForChartProps = {
 } & TypeAndDatasetsType
 
 export interface GetDefaultOptionsParams
-    extends Pick<ChartProps, 'hideAxis' | 'onChartClick' | 'type' | 'xAxisMax' | 'yAxisMax'> {
+    extends Pick<ChartProps, 'hideAxis' | 'onChartClick' | 'type' | 'xAxisMax' | 'yAxisMax' | 'hideXAxisLabels'> {
     appTheme: AppThemeType
 }

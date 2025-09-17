@@ -158,6 +158,7 @@ const Chart = (props: ChartProps) => {
         onChartClick,
         separatorIndex,
         averageLineValue,
+        hideXAxisLabels = false,
         xAxisMax,
         yAxisMax,
         ...typeAndDatasets
@@ -186,6 +187,7 @@ const Chart = (props: ChartProps) => {
             onChartClick,
             xAxisMax,
             yAxisMax,
+            hideXAxisLabels,
         })
 
         chartRef.current = new ChartJS(ctx, {
