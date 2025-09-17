@@ -120,6 +120,7 @@ import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
 import { ReactComponent as ICGavel } from '@IconsV2/ic-gavel.svg'
 import { ReactComponent as ICGear } from '@IconsV2/ic-gear.svg'
 import { ReactComponent as ICGift } from '@IconsV2/ic-gift.svg'
+import { ReactComponent as ICGiftAnimated } from '@IconsV2/ic-gift-animated.svg'
 import { ReactComponent as ICGiftGradient } from '@IconsV2/ic-gift-gradient.svg'
 import { ReactComponent as ICGit } from '@IconsV2/ic-git.svg'
 import { ReactComponent as ICGitBranch } from '@IconsV2/ic-git-branch.svg'
@@ -202,6 +203,7 @@ import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
 import { ReactComponent as ICPlayOutline } from '@IconsV2/ic-play-outline.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
+import { ReactComponent as ICRatings } from '@IconsV2/ic-ratings.svg'
 import { ReactComponent as ICResizeHandle } from '@IconsV2/ic-resize-handle.svg'
 import { ReactComponent as ICRightPanelCollapse } from '@IconsV2/ic-right-panel-collapse.svg'
 import { ReactComponent as ICRocketGear } from '@IconsV2/ic-rocket-gear.svg'
@@ -231,6 +233,7 @@ import { ReactComponent as ICStrategyRecreateColor } from '@IconsV2/ic-strategy-
 import { ReactComponent as ICStrategyRolling } from '@IconsV2/ic-strategy-rolling.svg'
 import { ReactComponent as ICStrategyRollingColor } from '@IconsV2/ic-strategy-rolling-color.svg'
 import { ReactComponent as ICSuccess } from '@IconsV2/ic-success.svg'
+import { ReactComponent as ICSuccessBlue } from '@IconsV2/ic-success-blue.svg'
 import { ReactComponent as ICSun } from '@IconsV2/ic-sun.svg'
 import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICSymbolGreaterThan } from '@IconsV2/ic-symbol-greater-than.svg'
@@ -386,6 +389,7 @@ export const iconMap = {
     'ic-folder': ICFolder,
     'ic-gavel': ICGavel,
     'ic-gear': ICGear,
+    'ic-gift-animated': ICGiftAnimated,
     'ic-gift-gradient': ICGiftGradient,
     'ic-gift': ICGift,
     'ic-git-branch': ICGitBranch,
@@ -469,6 +473,7 @@ export const iconMap = {
     'ic-play-outline': ICPlayOutline,
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
+    'ic-ratings': ICRatings,
     'ic-resize-handle': ICResizeHandle,
     'ic-right-panel-collapse': ICRightPanelCollapse,
     'ic-rocket-gear': ICRocketGear,
@@ -497,6 +502,7 @@ export const iconMap = {
     'ic-strategy-recreate': ICStrategyRecreate,
     'ic-strategy-rolling-color': ICStrategyRollingColor,
     'ic-strategy-rolling': ICStrategyRolling,
+    'ic-success-blue': ICSuccessBlue,
     'ic-success': ICSuccess,
     'ic-sun': ICSun,
     'ic-suspended': ICSuspended,
