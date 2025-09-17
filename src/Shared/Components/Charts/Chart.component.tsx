@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react'
+import { ReactNode, useEffect, useRef, useState } from 'react'
+import Tippy from '@tippyjs/react'
 import {
     ArcElement,
     BarController,
@@ -13,16 +14,17 @@ import {
     LineElement,
     PointElement,
     Title,
-    Tooltip,
+    Tooltip as ChartJSTooltip,
 } from 'chart.js'
 
-import { noop } from '@Common/Helper'
+import { noop, useDebounce } from '@Common/Helper'
+import { DEVTRON_BASE_MAIN_ID } from '@Shared/constants'
 import { useTheme } from '@Shared/Providers'
 
 import { LEGENDS_LABEL_CONFIG } from './constants'
 import { getAverageLinePlugin, getSeparatorLinePlugin } from './plugins'
-import { ChartProps } from './types'
-import { getChartJSType, getDefaultOptions, transformDataForChart } from './utils'
+import { ChartProps, GetDefaultOptionsParams } from './types'
+import { buildChartTooltipFromContext, getChartJSType, getDefaultOptions, transformDataForChart } from './utils'
 
 // Register Chart.js components
 ChartJS.register(
@@ -36,7 +38,7 @@ ChartJS.register(
     DoughnutController,
     ArcElement,
     Title,
-    Tooltip,
+    ChartJSTooltip,
     Legend,
     Filler,
 )
@@ -160,15 +162,57 @@ const Chart = (props: ChartProps) => {
         averageLineValue,
         xAxisMax,
         yAxisMax,
+        tooltipConfig,
         ...typeAndDatasets
     } = props
     const { type, datasets } = typeAndDatasets
+    const { getTooltipContent, placement } = tooltipConfig || { placement: 'top' }
 
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const chartRef = useRef<ChartJS | null>(null)
+    const tooltipRef = useRef<HTMLSpanElement>(null)
+
+    const [tooltipVisible, setTooltipVisible] = useState(false)
+    const [tooltipContent, setTooltipContent] = useState<ReactNode>(null)
 
     /** Trigger a re-render when the theme changes to reflect the latest changes */
     const { appTheme } = useTheme()
+
+    // NOTE: Do not refer any state variable inside this function, it will only have its initial value
+    const externalTooltipHandler: GetDefaultOptionsParams['externalTooltipHandler'] = (context) => {
+        const tooltipModel = context.tooltip
+
+        if (
+            !tooltipRef.current ||
+            !chartRef.current ||
+            !tooltipModel ||
+            tooltipModel.opacity === 0 ||
+            !tooltipModel.body
+        ) {
+            // Note: Not setting content to null, since would render empty tooltip on next hover for a split second
+            setTooltipVisible(false)
+            return
+        }
+
+        // Move reference element to caret position
+        const { caretX, caretY } = tooltipModel
+        const { offsetLeft, offsetTop } = context.chart.canvas
+        tooltipRef.current.style.transform = `translate(${offsetLeft + caretX}px, ${offsetTop + caretY}px)`
+        tooltipRef.current.style.pointerEvents = 'none'
+
+        const content = getTooltipContent
+            ? getTooltipContent(context)
+            : buildChartTooltipFromContext({
+                  title: tooltipModel.title,
+                  body: tooltipModel.body,
+                  labelColors: tooltipModel.labelColors,
+              })
+
+        setTooltipContent(content)
+        setTooltipVisible(true)
+    }
+
+    const debouncedExternalTooltipHandler = useDebounce(externalTooltipHandler, 16)
 
     useEffect(() => {
         const ctx = canvasRef.current?.getContext('2d')
@@ -186,6 +230,7 @@ const Chart = (props: ChartProps) => {
             onChartClick,
             xAxisMax,
             yAxisMax,
+            externalTooltipHandler: debouncedExternalTooltipHandler,
         })
 
         chartRef.current = new ChartJS(ctx, {
@@ -206,8 +251,18 @@ const Chart = (props: ChartProps) => {
     }, [type, datasets, labels, appTheme, hideAxis, averageLineValue, separatorIndex])
 
     return (
-        <div className="h-100 w-100">
+        <div className="h-100 w-100 dc__position-rel">
             <canvas id={id} ref={canvasRef} />
+
+            <Tippy
+                content={tooltipContent}
+                visible={tooltipVisible}
+                placement={placement}
+                appendTo={document.getElementById(DEVTRON_BASE_MAIN_ID)}
+                className="default-tt dc__mxw-400 dc__word-break"
+            >
+                <span ref={tooltipRef} style={{ position: 'absolute', left: 0, top: 0, width: 0, height: 0 }} />
+            </Tippy>
         </div>
     )
 }
