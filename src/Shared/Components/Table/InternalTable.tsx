@@ -169,7 +169,10 @@ const InternalTable = <
     const filteredRowsError = getRows ? getRowsError : rowsError
     const reloadFilteredRows = getRows ? reloadGetRows : reloadRows
 
-    const { filteredRows, totalRows } = filteredRowsResult ?? { filteredRows: [], totalRows: 0 }
+    const { filteredRows, totalRows } = useMemo(
+        () => filteredRowsResult ?? { filteredRows: [], totalRows: 0 },
+        [filteredRowsResult],
+    )
 
     const areFilteredRowsLoading = _areFilteredRowsLoading || filteredRowsError === NO_ROWS_OR_GET_ROWS_ERROR
 
@@ -238,11 +241,7 @@ const InternalTable = <
     }
 
     return (
-        <div
-            ref={wrapperDivRef}
-            className="flexbox-col flex-grow-1 dc__overflow-hidden dc__no-shrink"
-            id={`table-wrapper-${id}`}
-        >
+        <div ref={wrapperDivRef} className="flexbox-col flex-grow-1 dc__overflow-hidden" id={`table-wrapper-${id}`}>
             <Wrapper
                 areRowsLoading={areFilteredRowsLoading}
                 clearFilters={clearFilters}
