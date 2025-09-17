@@ -1,6 +1,7 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-illustration` to update.
 
 import ImgCode from '@Illustrations/img-code.webp'
+import ImgDevtronFreemium from '@Illustrations/img-devtron-freemium.webp'
 import ImgManOnRocket from '@Illustrations/img-man-on-rocket.webp'
 import { ReactComponent as ImgMechanicalOperation } from '@Illustrations/img-mechanical-operation.svg'
 import ImgNoResult from '@Illustrations/img-no-result.webp'
@@ -12,6 +13,7 @@ import { IllustrationBaseProps } from './types'
 export const illustrationMap = {
     'img-mechanical-operation': ImgMechanicalOperation,
     'img-code': ImgCode,
+    'img-devtron-freemium': ImgDevtronFreemium,
     'img-man-on-rocket': ImgManOnRocket,
     'img-no-result': ImgNoResult,
 }
