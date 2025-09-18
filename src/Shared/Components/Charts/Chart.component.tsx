@@ -22,7 +22,7 @@ import { DEVTRON_BASE_MAIN_ID } from '@Shared/constants'
 import { useTheme } from '@Shared/Providers'
 
 import { LEGENDS_LABEL_CONFIG } from './constants'
-import { getAverageLinePlugin, getSeparatorLinePlugin } from './plugins'
+import { drawReferenceLine, getSeparatorLinePlugin } from './plugins'
 import { ChartProps, GetDefaultOptionsParams } from './types'
 import { buildChartTooltipFromContext, getChartJSType, getDefaultOptions, transformDataForChart } from './utils'
 
@@ -159,7 +159,7 @@ const Chart = (props: ChartProps) => {
         hideAxis = false,
         onChartClick,
         separatorIndex,
-        averageLineValue,
+        referenceLines,
         hideXAxisLabels = false,
         xAxisMax,
         yAxisMax,
@@ -242,7 +242,7 @@ const Chart = (props: ChartProps) => {
                 ...defaultOptions,
             },
             plugins: [
-                ...(averageLineValue ? [getAverageLinePlugin(averageLineValue, appTheme)] : []),
+                ...(referenceLines ?? []).map((rl, idx) => drawReferenceLine(rl, `reference-line-${idx}`, appTheme)),
                 ...(separatorIndex ? [getSeparatorLinePlugin(separatorIndex, type, appTheme)] : []),
             ],
         })
@@ -250,7 +250,7 @@ const Chart = (props: ChartProps) => {
         return () => {
             chartRef.current.destroy()
         }
-    }, [type, datasets, labels, appTheme, hideAxis, averageLineValue, separatorIndex])
+    }, [type, datasets, labels, appTheme, hideAxis, referenceLines, separatorIndex])
 
     return (
         <div className="h-100 w-100 dc__position-rel">

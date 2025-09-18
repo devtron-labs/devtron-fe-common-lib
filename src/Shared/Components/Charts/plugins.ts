@@ -3,21 +3,21 @@ import { Chart, Plugin } from 'chart.js'
 import { AppThemeType } from '@Shared/Providers'
 
 import { CHART_COLORS } from './constants'
-import { ChartType } from './types'
+import { ChartType, ReferenceLineConfigType } from './types'
 
-export const getAverageLinePlugin = (averageValue: number, appTheme: AppThemeType): Plugin => ({
-    id: 'averageLine',
+export const drawReferenceLine = (config: ReferenceLineConfigType, id: string, appTheme: AppThemeType): Plugin => ({
+    id,
     afterDraw: (chart) => {
         const { ctx, chartArea, scales } = chart
-        if (!scales || !scales.y || !averageValue) {
+        if (!scales || !scales.y || !config?.value) {
             return
         }
-        const yValue = scales.y.getPixelForValue(averageValue)
+        const yValue = scales.y.getPixelForValue(config.value)
         ctx.save()
         ctx.beginPath()
         ctx.setLineDash([6, 6])
-        ctx.strokeStyle = CHART_COLORS[appTheme].CharcoalGray700
-        ctx.lineWidth = 1
+        ctx.strokeStyle = CHART_COLORS[appTheme][config.color ?? 'CharcoalGray700']
+        ctx.lineWidth = config.strokeWidth ?? 1
         ctx.moveTo(chartArea.left, yValue)
         ctx.lineTo(chartArea.right, yValue)
         ctx.stroke()

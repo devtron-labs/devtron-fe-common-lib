@@ -42,9 +42,19 @@ export interface SimpleDatasetForLine extends BaseSimpleDataset {
     borderColor: ChartColorKey
 }
 
+export interface ReferenceLineConfigType {
+    strokeWidth?: number
+    color?: ChartColorKey
+    value: number
+}
+
 type XYAxisMax = {
     xAxisMax?: number
     yAxisMax?: number
+    /**
+     * Optional reference lines to draw across the chart
+     */
+    referenceLines?: ReferenceLineConfigType[]
 }
 
 type TypeAndDatasetsType =
@@ -55,25 +65,21 @@ type TypeAndDatasetsType =
            */
           datasets: SimpleDatasetForPie
           separatorIndex?: never
-          averageLineValue?: never
       } & Never<XYAxisMax>)
     | ({
           type: 'line'
           datasets: SimpleDatasetForLine[]
           separatorIndex?: never
-          averageLineValue?: number
       } & XYAxisMax)
     | ({
           type: 'area'
           datasets: SimpleDataset[]
           separatorIndex?: never
-          averageLineValue?: number
       } & XYAxisMax)
     | ({
           type: Exclude<ChartType, 'pie' | 'line' | 'area'>
           datasets: SimpleDataset[]
           separatorIndex?: number
-          averageLineValue?: number
       } & XYAxisMax)
 
 export type ChartProps = {
