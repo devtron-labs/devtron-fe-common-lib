@@ -7,6 +7,7 @@ import { DATE_TIME_FORMATS } from '@Common/Constants'
 import { showError } from '@Common/Helper'
 import { ServerErrors } from '@Common/ServerError'
 import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP, ComponentSizeType } from '@Shared/constants'
+import { isNullOrUndefined } from '@Shared/Helpers'
 
 import { Button, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
@@ -71,7 +72,7 @@ const ExportToCsv = <HeaderItemType extends string>({
     )
 
     useEffect(() => {
-        if (downloadRequestId) {
+        if (!isNullOrUndefined(downloadRequestId)) {
             // eslint-disable-next-line @typescript-eslint/no-floating-promises
             handleExportButtonClick()
         }
@@ -116,7 +117,7 @@ const ExportToCsv = <HeaderItemType extends string>({
             return <Button {...triggerElementConfig.buttonProps} onClick={handleExportButtonClick} />
         }
 
-        if (!triggerElementConfig.isExternalTrigger && triggerElementConfig.customButton) {
+        if (triggerElementConfig.customButton) {
             return (
                 <button
                     data-testid="export-csv-button"
