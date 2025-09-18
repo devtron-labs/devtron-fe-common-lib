@@ -26,7 +26,7 @@ const ExportToCsv = <HeaderItemType extends string>({
     const abortControllerRef = useRef<AbortController>(new AbortController())
 
     const [dataToExport, setDataToExport] = useState<Awaited<ReturnType<typeof apiPromise>>>([])
-    const [showConfirmationModal, setShowConfirmationModal] = useState(false)
+    const [confirmationModalType, setConfirmationModalType] = useState<'default' | 'custom' | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const [dataFetchError, setDataFetchError] = useState<ServerErrors>(null)
 
@@ -54,11 +54,13 @@ const ExportToCsv = <HeaderItemType extends string>({
     }
 
     const handleExportButtonClick = async () => {
-        if (!modalConfig || !modalConfig.hideDialog) {
-            setShowConfirmationModal(true)
+        if (!modalConfig?.hideDialog) {
+            setConfirmationModalType(!modalConfig ? 'default' : 'custom')
         }
 
-        await handleInitiateDownload()
+        if (!modalConfig || modalConfig.hideDialog) {
+            await handleInitiateDownload()
+        }
     }
 
     useEffect(
@@ -78,7 +80,7 @@ const ExportToCsv = <HeaderItemType extends string>({
     const handleCancelRequest = () => {
         abortControllerRef.current.abort()
         abortControllerRef.current = new AbortController()
-        setShowConfirmationModal(false)
+        setConfirmationModalType(null)
         setIsLoading(false)
     }
 
@@ -131,13 +133,23 @@ const ExportToCsv = <HeaderItemType extends string>({
         return null
     }
 
+    const proceedWithDownloadFromCustomModal = async (shouldProceed: boolean) => {
+        if (!shouldProceed) {
+            setConfirmationModalType(null)
+            return
+        }
+
+        setConfirmationModalType('default')
+        await handleInitiateDownload()
+    }
+
     const renderModal = () => {
-        if (!showConfirmationModal || modalConfig?.hideDialog) {
+        if (!confirmationModalType || modalConfig?.hideDialog) {
             return null
         }
 
-        if (modalConfig?.renderCustomModal) {
-            return modalConfig.renderCustomModal()
+        if (confirmationModalType === 'custom' && modalConfig?.renderCustomModal) {
+            return modalConfig.renderCustomModal(proceedWithDownloadFromCustomModal)
         }
 
         return (

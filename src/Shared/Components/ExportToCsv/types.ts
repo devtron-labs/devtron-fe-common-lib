@@ -34,7 +34,9 @@ type TriggerElementConfigType =
 
 export interface ExportToCsvProps<HeaderItemKeyType extends string> {
     headers: { label: string; key: HeaderItemKeyType }[]
-    apiPromise: ({ signal }: Pick<APIOptions, 'signal'>) => Promise<Record<HeaderItemKeyType, string | number>[]>
+    apiPromise: ({
+        signal,
+    }: Pick<APIOptions, 'signal'>) => Promise<Record<HeaderItemKeyType, string | number | boolean>[]>
     fileName: string
     /**
      * If nothing given will render a Button with "Export CSV" text
@@ -49,11 +51,11 @@ export interface ExportToCsvProps<HeaderItemKeyType extends string> {
      */
     modalConfig?:
         | {
-              hideDialog: true
-              renderCustomModal?: () => JSX.Element
+              hideDialog: false
+              renderCustomModal?: (proceedWithDownload: (shouldProceed: boolean) => void) => JSX.Element
           }
         | {
-              hideDialog: false
+              hideDialog: true
               renderCustomModal?: never
           }
     /**
