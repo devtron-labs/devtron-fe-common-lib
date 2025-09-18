@@ -1,4 +1,5 @@
-import { ChartDataset, ChartOptions, ChartType as ChartJSChartType } from 'chart.js'
+import { ReactNode } from 'react'
+import { ChartDataset, ChartOptions, ChartType as ChartJSChartType, TooltipLabelStyle, TooltipOptions } from 'chart.js'
 
 import { AppThemeType } from '@Shared/Providers'
 
@@ -45,6 +46,7 @@ export const getDefaultOptions = ({
     xAxisMax,
     yAxisMax,
     onChartClick,
+    externalTooltipHandler,
 }: GetDefaultOptionsParams): ChartOptions => {
     const baseOptions: ChartOptions = {
         responsive: true,
@@ -57,6 +59,11 @@ export const getDefaultOptions = ({
             },
             title: {
                 display: false,
+            },
+            tooltip: {
+                enabled: false,
+                position: 'nearest',
+                external: externalTooltipHandler,
             },
         },
         elements: {
@@ -103,6 +110,7 @@ export const getDefaultOptions = ({
                     ...baseOptions.plugins,
                     tooltip: {
                         mode: 'index',
+                        ...baseOptions.plugins.tooltip,
                     },
                 },
                 interaction: {
@@ -317,4 +325,67 @@ export function* chartColorGenerator() {
             yield `${TOKENS[j]}${WEIGHTS[i]}` as ChartColorKey
         }
     }
+}
+
+const getBorderRadiusForTooltip = (labelBorderRadius: TooltipLabelStyle['borderRadius']) => {
+    if (!labelBorderRadius) {
+        return null
+    }
+
+    if (typeof labelBorderRadius === 'number') {
+        return `${labelBorderRadius}px`
+    }
+
+    return `${labelBorderRadius.topLeft}px ${labelBorderRadius.topRight}px ${labelBorderRadius.bottomRight}px ${labelBorderRadius.bottomLeft}px`
+}
+
+export const buildChartTooltipFromContext = ({
+    title,
+    body,
+    labelColors: labelColorsProp,
+}: Pick<Parameters<TooltipOptions['external']>[0]['tooltip'], 'title' | 'body' | 'labelColors'>): ReactNode => {
+    const titleLines = title || []
+    const bodyLines = body.map((b) => b.lines)
+    const labelColors = labelColorsProp || []
+
+    return (
+        <div className="flexbox-col dc__overflow-auto mxh-200">
+            <div className="flexbox-col dc__gap-2">
+                {titleLines.map((titleLine, index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <h6 key={index} className="m-0 fs-12 fw-6 lh-20 dc__truncate">
+                        {titleLine}
+                    </h6>
+                ))}
+
+                {/* Will show a rounded label color and next it will paste bodyline */}
+                {bodyLines.map((bodyLine, index) => (
+                    // eslint-disable-next-line react/no-array-index-key
+                    <div key={index} className="flexbox dc__gap-4 dc__align-items-center">
+                        {labelColors[index] &&
+                            typeof labelColors[index].backgroundColor === 'string' &&
+                            typeof labelColors[index].borderColor === 'string' && (
+                                <span
+                                    style={{
+                                        display: 'inline-block',
+                                        width: '12px',
+                                        height: '12px',
+                                        background: labelColors[index].backgroundColor,
+                                        borderColor: labelColors[index].borderColor,
+                                        ...(getBorderRadiusForTooltip(labelColors[index].borderRadius)
+                                            ? {
+                                                  borderRadius: getBorderRadiusForTooltip(
+                                                      labelColors[index].borderRadius,
+                                                  ),
+                                              }
+                                            : {}),
+                                    }}
+                                />
+                            )}
+                        <span className="fs-12 fw-4 lh-20 dc__truncate">{bodyLine}</span>
+                    </div>
+                ))}
+            </div>
+        </div>
+    )
 }
