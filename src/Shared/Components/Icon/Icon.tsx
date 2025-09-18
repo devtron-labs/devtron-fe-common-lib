@@ -1,5 +1,5 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-icon` to update.
-
+import { ReactComponent as ICNewChat } from '@Icons/ic-new-chat.svg'
 import { ReactComponent as IC73strings } from '@IconsV2/ic-73strings.svg'
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
 import { ReactComponent as ICActivity } from '@IconsV2/ic-activity.svg'
@@ -542,6 +542,7 @@ export const iconMap = {
     'ic-webhook': ICWebhook,
     'ic-wifi-slash': ICWifiSlash,
     'ic-world-globe': ICWorldGlobe,
+    'ic-new-chat': ICNewChat,
 }
 
 export type IconName = keyof typeof iconMap
