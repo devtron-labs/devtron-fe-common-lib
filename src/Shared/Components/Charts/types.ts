@@ -71,7 +71,7 @@ type TypeAndDatasetsType =
           type: Exclude<ChartType, 'pie' | 'line' | 'area'>
           datasets: SimpleDataset[]
           separatorIndex?: number
-          averageLineValue?: never
+          averageLineValue?: number
       } & XYAxisMax)
 
 export type ChartProps = {
