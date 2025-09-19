@@ -13,6 +13,7 @@ import {
     LineController,
     LineElement,
     PointElement,
+    TimeScale,
     Title,
     Tooltip as ChartJSTooltip,
 } from 'chart.js'
@@ -21,10 +22,17 @@ import { noop, useDebounce } from '@Common/Helper'
 import { DEVTRON_BASE_MAIN_ID } from '@Shared/constants'
 import { useTheme } from '@Shared/Providers'
 
-import { LEGENDS_LABEL_CONFIG } from './constants'
-import { drawReferenceLine, getSeparatorLinePlugin } from './plugins'
+import 'chartjs-adapter-moment'
+
+import { drawReferenceLine } from './plugins'
 import { ChartProps, GetDefaultOptionsParams } from './types'
-import { buildChartTooltipFromContext, getChartJSType, getDefaultOptions, transformDataForChart } from './utils'
+import {
+    buildChartTooltipFromContext,
+    getChartJSType,
+    getDefaultOptions,
+    getLegendsLabelConfig,
+    transformDataForChart,
+} from './utils'
 
 // Register Chart.js components
 ChartJS.register(
@@ -37,20 +45,12 @@ ChartJS.register(
     PointElement,
     DoughnutController,
     ArcElement,
+    TimeScale,
     Title,
     ChartJSTooltip,
     Legend,
     Filler,
 )
-
-/**
- * The doughnut chart overrides the default legend label configuration.
- * Therefore need to set the custom legend label configuration.
- */
-ChartJS.overrides.doughnut.plugins.legend.labels = {
-    ...ChartJS.overrides.doughnut.plugins.legend.labels,
-    ...LEGENDS_LABEL_CONFIG,
-}
 
 /**
  * A versatile Chart component that renders different types of charts using Chart.js.
@@ -156,6 +156,8 @@ const Chart = (props: ChartProps) => {
     const {
         id,
         xAxisLabels: labels,
+        xAxisType,
+        timeUnit,
         hideAxis = false,
         onChartClick,
         separatorIndex,
@@ -221,6 +223,17 @@ const Chart = (props: ChartProps) => {
             return noop
         }
 
+        if (type === 'pie') {
+            /**
+             * The doughnut chart overrides the default legend label configuration.
+             * Therefore need to set the custom legend label configuration.
+             */
+            ChartJS.overrides.doughnut.plugins.legend.labels = {
+                ...ChartJS.overrides.doughnut.plugins.legend.labels,
+                ...getLegendsLabelConfig(appTheme),
+            }
+        }
+
         // Get Chart.js type and transform data
         const chartJSType = getChartJSType(type)
         const transformedData = { labels, datasets: transformDataForChart({ ...typeAndDatasets, appTheme }) }
@@ -232,6 +245,8 @@ const Chart = (props: ChartProps) => {
             xAxisMax,
             yAxisMax,
             hideXAxisLabels,
+            xAxisType,
+            timeUnit,
             externalTooltipHandler: debouncedExternalTooltipHandler,
         })
 
@@ -243,7 +258,6 @@ const Chart = (props: ChartProps) => {
             },
             plugins: [
                 ...(referenceLines ?? []).map((rl, idx) => drawReferenceLine(rl, `reference-line-${idx}`, appTheme)),
-                ...(separatorIndex ? [getSeparatorLinePlugin(separatorIndex, type, appTheme)] : []),
             ],
         })
 

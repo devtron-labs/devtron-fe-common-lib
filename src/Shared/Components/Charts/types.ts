@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { ChartOptions, TooltipOptions } from 'chart.js'
+import { ChartOptions, TimeUnit, TooltipOptions } from 'chart.js'
 
 import { TooltipProps } from '@Common/Tooltip'
 import { AppThemeType } from '@Shared/Providers'
@@ -73,7 +73,7 @@ type TypeAndDatasetsType =
       } & XYAxisMax)
     | ({
           type: 'area'
-          datasets: SimpleDataset[]
+          datasets: SimpleDataset
           separatorIndex?: never
       } & XYAxisMax)
     | ({
@@ -81,6 +81,16 @@ type TypeAndDatasetsType =
           datasets: SimpleDataset[]
           separatorIndex?: number
       } & XYAxisMax)
+
+type XAxisDataPointsType =
+    | {
+          xAxisType: 'category'
+          timeUnit?: never
+      }
+    | {
+          timeUnit: TimeUnit
+          xAxisType: 'time'
+      }
 
 export type ChartProps = {
     id: string
@@ -105,7 +115,8 @@ export type ChartProps = {
          */
         placement?: TooltipProps['placement']
     }
-} & TypeAndDatasetsType
+} & TypeAndDatasetsType &
+    XAxisDataPointsType
 
 export type TransformDatasetProps = {
     appTheme: AppThemeType
@@ -131,7 +142,11 @@ export type TransformDataForChartProps = {
 } & TypeAndDatasetsType
 
 export interface GetDefaultOptionsParams
-    extends Pick<ChartProps, 'hideAxis' | 'onChartClick' | 'type' | 'xAxisMax' | 'yAxisMax' | 'hideXAxisLabels'> {
+    extends Pick<
+        ChartProps,
+        'hideAxis' | 'onChartClick' | 'type' | 'xAxisMax' | 'yAxisMax' | 'hideXAxisLabels' | 'xAxisType'
+    > {
     appTheme: AppThemeType
     externalTooltipHandler: TooltipOptions['external']
+    timeUnit: TimeUnit | null
 }

@@ -4,10 +4,10 @@ import { ChartDataset, ChartOptions, ChartType as ChartJSChartType, TooltipLabel
 import { AppThemeType } from '@Shared/Providers'
 
 import {
+    CHART_AXIS_LABELS_COLOR,
     CHART_CANVAS_BACKGROUND_COLORS,
     CHART_COLORS,
     CHART_GRID_LINES_COLORS,
-    LEGENDS_LABEL_CONFIG,
 } from './constants'
 import {
     ChartColorKey,
@@ -20,6 +20,21 @@ import {
     TransformDatasetProps,
     VariantsType,
 } from './types'
+
+export const getLegendsLabelConfig = (appTheme: AppThemeType) =>
+    ({
+        usePointStyle: true,
+        pointStyle: 'rectRounded',
+        pointStyleWidth: 12,
+        pointStyleHeight: 12,
+        font: {
+            family: "'IBM Plex Sans', 'Open Sans', 'Roboto'",
+            size: 13,
+            lineHeight: '150%',
+            weight: 400,
+            color: appTheme === AppThemeType.dark ? '#ffffff' : 'rgb(0, 10, 20)',
+        },
+    }) as const
 
 // Map our chart types to Chart.js types
 export const getChartJSType = (type: ChartType): ChartJSChartType => {
@@ -45,16 +60,20 @@ export const getDefaultOptions = ({
     hideXAxisLabels,
     xAxisMax,
     yAxisMax,
+    xAxisType,
+    timeUnit,
     onChartClick,
     externalTooltipHandler,
 }: GetDefaultOptionsParams): ChartOptions => {
     const baseOptions: ChartOptions = {
         responsive: true,
+        devicePixelRatio: 4,
         maintainAspectRatio: false,
+        animation: false,
         plugins: {
             legend: {
                 position: 'bottom' as const,
-                labels: LEGENDS_LABEL_CONFIG,
+                labels: getLegendsLabelConfig(appTheme),
                 display: !hideAxis,
             },
             title: {
@@ -69,7 +88,7 @@ export const getDefaultOptions = ({
         elements: {
             line: {
                 fill: type === 'area',
-                tension: 0.1,
+                tension: 0,
             },
             bar: {
                 borderSkipped: 'start' as const,
@@ -86,13 +105,29 @@ export const getDefaultOptions = ({
         grid: {
             color: CHART_GRID_LINES_COLORS[appTheme],
         },
+        ticks: {
+            display: !hideXAxisLabels,
+            color: CHART_AXIS_LABELS_COLOR[appTheme],
+            font: {
+                family: "'IBM Plex Sans', 'Open Sans', 'Roboto'",
+                size: 12,
+                lineHeight: '150%',
+                weight: 400,
+            },
+        },
     } satisfies ChartOptions['scales']['x']
 
     const commonXScaleConfig = {
         ...commonScaleConfig,
         max: xAxisMax,
-        ticks: {
-            display: !hideXAxisLabels,
+        type: xAxisType,
+        time: {
+            unit: timeUnit ?? 'day',
+            displayFormats: {
+                day: 'DD',
+                hour: 'HH',
+            },
+            tooltipFormat: 'D MMMM YYYY, hh:mm a',
         },
     } satisfies ChartOptions['scales']['x']
 
@@ -150,7 +185,6 @@ export const getDefaultOptions = ({
                     x: {
                         ...commonXScaleConfig,
                         stacked: true,
-                        beginAtZero: true,
                     },
                     y: {
                         ...commonYScaleConfig,
@@ -298,6 +332,8 @@ export const transformDataForChart = (props: TransformDataForChartProps) => {
         /** Not not clubbing it with the default case for better typing */
         case 'line':
             return datasets.map((dataset) => transformDataset({ type, dataset, appTheme }))
+        case 'area':
+            return [transformDataset({ type, dataset: datasets, appTheme })]
         default:
             return datasets.map((dataset) => transformDataset({ type, dataset, appTheme }))
     }
