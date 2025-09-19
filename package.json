@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "1.20.2-pre-1",
+    "version": "1.20.2-pre-4",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -117,6 +117,7 @@
         "@xyflow/react": "12.4.2",
         "ansi_up": "^5.2.1",
         "chart.js": "^4.5.0",
+        "chartjs-adapter-moment": "^1.0.1",
         "codemirror-json-schema": "0.8.0",
         "dayjs": "^1.11.13",
         "fast-json-patch": "^3.1.1",

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { ChartOptions, TooltipOptions } from 'chart.js'
+import { ChartOptions, TimeUnit, TooltipOptions } from 'chart.js'
 
 import { TooltipProps } from '@Common/Tooltip'
 import { AppThemeType } from '@Shared/Providers'
@@ -42,9 +42,19 @@ export interface SimpleDatasetForLine extends BaseSimpleDataset {
     borderColor: ChartColorKey
 }
 
+export interface ReferenceLineConfigType {
+    strokeWidth?: number
+    color?: ChartColorKey
+    value: number
+}
+
 type XYAxisMax = {
     xAxisMax?: number
     yAxisMax?: number
+    /**
+     * Optional reference lines to draw across the chart
+     */
+    referenceLines?: ReferenceLineConfigType[]
 }
 
 type TypeAndDatasetsType =
@@ -55,26 +65,32 @@ type TypeAndDatasetsType =
            */
           datasets: SimpleDatasetForPie
           separatorIndex?: never
-          averageLineValue?: never
       } & Never<XYAxisMax>)
     | ({
           type: 'line'
           datasets: SimpleDatasetForLine[]
           separatorIndex?: never
-          averageLineValue?: number
       } & XYAxisMax)
     | ({
           type: 'area'
-          datasets: SimpleDataset[]
+          datasets: SimpleDataset
           separatorIndex?: never
-          averageLineValue?: number
       } & XYAxisMax)
     | ({
           type: Exclude<ChartType, 'pie' | 'line' | 'area'>
           datasets: SimpleDataset[]
           separatorIndex?: number
-          averageLineValue?: never
       } & XYAxisMax)
+
+type XAxisDataPointsType =
+    | {
+          xAxisType: 'category'
+          timeUnit?: never
+      }
+    | {
+          timeUnit: TimeUnit
+          xAxisType: 'time'
+      }
 
 export type ChartProps = {
     id: string
@@ -87,6 +103,7 @@ export type ChartProps = {
      * @default false
      */
     hideAxis?: boolean
+    hideXAxisLabels?: boolean
     /**
      * Callback function for chart click events
      */
@@ -98,7 +115,8 @@ export type ChartProps = {
          */
         placement?: TooltipProps['placement']
     }
-} & TypeAndDatasetsType
+} & TypeAndDatasetsType &
+    XAxisDataPointsType
 
 export type TransformDatasetProps = {
     appTheme: AppThemeType
@@ -124,7 +142,11 @@ export type TransformDataForChartProps = {
 } & TypeAndDatasetsType
 
 export interface GetDefaultOptionsParams
-    extends Pick<ChartProps, 'hideAxis' | 'onChartClick' | 'type' | 'xAxisMax' | 'yAxisMax'> {
+    extends Pick<
+        ChartProps,
+        'hideAxis' | 'onChartClick' | 'type' | 'xAxisMax' | 'yAxisMax' | 'hideXAxisLabels' | 'xAxisType'
+    > {
     appTheme: AppThemeType
     externalTooltipHandler: TooltipOptions['external']
+    timeUnit: TimeUnit | null
 }
