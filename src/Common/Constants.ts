@@ -465,6 +465,7 @@ export const DATE_TIME_FORMATS = {
     DD_MMM_YYYY_HH_MM: 'DD MMM YYYY, hh:mm',
     DD_MMM_YYYY: 'DD MMM YYYY',
     'DD/MM/YYYY': 'DD/MM/YYYY',
+    DD_MMM: 'DD MMM',
 }
 
 export const SEMANTIC_VERSION_DOCUMENTATION_LINK = 'https://semver.org/'
