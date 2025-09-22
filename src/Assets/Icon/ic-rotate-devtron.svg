@@ -17,28 +17,37 @@
 <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
   <style>
     .svg__loader_group-top {
+      will-change: transform;
+      transform: translate3d(0,0,0);
       animation: top-shape 1.2s infinite;
       transform-origin: center center;
       transform-box: fill-box;
     }
 
     .svg__loader_group-bottom {
+      will-change: transform;
+      transform: translate3d(0,0,0);
       animation: bottom-shape 1.2s infinite;
       transform-origin: center center;
       transform-box: fill-box;
     }
 
     .svg__loader_shapepath-top {
+      will-change: transform;
+      transform: translate3d(0,0,0);
       animation: path-fill 1.2s infinite;
       transform-box: fill-box;
     }
 
     .svg__loader_shapepath-bottom {
+      transform: translate3d(0,0,0);
       animation: path-fill 1.2s infinite;
       transform-box: fill-box;
     }
 
     .svg__loader_rotating-group {
+      will-change: transform;
+      transform: translate3d(0,0,0);
       animation: rotate-group 1.2s infinite reverse;
       transform-origin: center center;
       transform-box: fill-box;
