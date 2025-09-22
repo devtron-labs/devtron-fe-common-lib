@@ -112,6 +112,7 @@ export const DOCUMENTATION = {
     GLOBAL_CONFIG_PLUGINS_POLICY: 'global-configurations/plugins-policy',
     GLOBAL_CONFIG_APPROVAL_POLICY: 'global-configurations/approval-policy',
     GLOBAL_CONFIG_SSO_LOGIN_LDAP: 'global-configurations/authorization/sso-login/ldap',
+    GLOBAL_CONFIG_SSO_LOGIN_OIDC: 'global-configurations/authorization/sso-login/oidc',
     GLOBAL_CONFIG_SSO_LOGIN_MICROSOFT: 'global-configurations/authorization/sso-login/microsoft',
     GLOBAL_CONFIG_PULL_IMAGE_DIGEST: 'global-configurations/pull-image-digest',
     GLOBAL_CONFIG_TAGS: 'getting-started/global-configurations/tags-policy',
