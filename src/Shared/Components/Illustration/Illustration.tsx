@@ -2,6 +2,8 @@
 
 import ImgCode from '@Illustrations/img-code.webp'
 import ImgDevtronFreemium from '@Illustrations/img-devtron-freemium.webp'
+import ImgDevtronFreemium289x40 from '@Illustrations/img-devtron-freemium-289x40.webp'
+import ImgDevtronFreemium578x80 from '@Illustrations/img-devtron-freemium-578x80.webp'
 import ImgManOnRocket from '@Illustrations/img-man-on-rocket.webp'
 import { ReactComponent as ImgMechanicalOperation } from '@Illustrations/img-mechanical-operation.svg'
 import ImgNoResult from '@Illustrations/img-no-result.webp'
@@ -13,6 +15,8 @@ import { IllustrationBaseProps } from './types'
 export const illustrationMap = {
     'img-mechanical-operation': ImgMechanicalOperation,
     'img-code': ImgCode,
+    'img-devtron-freemium-289x40': ImgDevtronFreemium289x40,
+    'img-devtron-freemium-578x80': ImgDevtronFreemium578x80,
     'img-devtron-freemium': ImgDevtronFreemium,
     'img-man-on-rocket': ImgManOnRocket,
     'img-no-result': ImgNoResult,
