@@ -737,3 +737,16 @@ export const YAMLtoJSON = (yamlString: string) => {
         return ''
     }
 }
+
+export const formatNumberToCurrency = (value: number, currency: string): string => {
+    try {
+        const data = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency,
+        }).format(value)
+
+        return data
+    } catch {
+        return value.toFixed(2)
+    }
+}
