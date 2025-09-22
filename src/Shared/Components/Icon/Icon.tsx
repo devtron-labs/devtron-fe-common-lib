@@ -93,6 +93,7 @@ import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
 import { ReactComponent as ICDownload } from '@IconsV2/ic-download.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEdit } from '@IconsV2/ic-edit.svg'
+import { ReactComponent as ICEditLines } from '@IconsV2/ic-edit-lines.svg'
 import { ReactComponent as ICEmail } from '@IconsV2/ic-email.svg'
 import { ReactComponent as ICEnterpriseFeat } from '@IconsV2/ic-enterprise-feat.svg'
 import { ReactComponent as ICEnterpriseTag } from '@IconsV2/ic-enterprise-tag.svg'
@@ -363,6 +364,7 @@ export const iconMap = {
     'ic-dockerhub': ICDockerhub,
     'ic-download': ICDownload,
     'ic-ecr': ICEcr,
+    'ic-edit-lines': ICEditLines,
     'ic-edit': ICEdit,
     'ic-email': ICEmail,
     'ic-enterprise-feat': ICEnterpriseFeat,
