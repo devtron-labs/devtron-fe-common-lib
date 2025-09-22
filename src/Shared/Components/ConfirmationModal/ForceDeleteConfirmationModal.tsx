@@ -23,6 +23,7 @@ export const ForceDeleteConfirmationModal = ({
     subtitle,
     onDelete,
     closeConfirmationModal,
+    isDeleting,
 }: ForceDeleteConfirmationProps) => {
     const renderSubtitle = () => (
         <>
@@ -43,6 +44,7 @@ export const ForceDeleteConfirmationModal = ({
                 primaryButtonConfig: {
                     text: 'Force Delete',
                     onClick: onDelete,
+                    isLoading: isDeleting,
                 },
             }}
             handleClose={closeConfirmationModal}
