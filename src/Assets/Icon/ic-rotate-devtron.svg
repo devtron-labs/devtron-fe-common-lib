@@ -17,40 +17,26 @@
 <svg width="80" height="80" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
   <style>
     .svg__loader_group-top {
-      will-change: transform;
-      transform: translate3d(0,0,0);
       animation: top-shape 1.2s infinite;
       transform-origin: center center;
-      transform-box: fill-box;
     }
 
     .svg__loader_group-bottom {
-      will-change: transform;
-      transform: translate3d(0,0,0);
       animation: bottom-shape 1.2s infinite;
       transform-origin: center center;
-      transform-box: fill-box;
     }
 
     .svg__loader_shapepath-top {
-      will-change: transform;
-      transform: translate3d(0,0,0);
       animation: path-fill 1.2s infinite;
-      transform-box: fill-box;
     }
 
     .svg__loader_shapepath-bottom {
-      transform: translate3d(0,0,0);
       animation: path-fill 1.2s infinite;
-      transform-box: fill-box;
     }
 
     .svg__loader_rotating-group {
-      will-change: transform;
-      transform: translate3d(0,0,0);
       animation: rotate-group 1.2s infinite reverse;
       transform-origin: center center;
-      transform-box: fill-box;
     }
 
     @keyframes path-fill {
@@ -73,59 +59,51 @@
 
     @keyframes top-shape {
       0% {
-        transform: translateX(0px) translateY(0px) rotate(0deg);
-        transform-origin: center center;
+        transform: translate3d(0, 0, 0) rotate(0deg);
       }
 
       30% {
-        transform: translateX(0px) translateY(0px) rotate(10deg);
-        transform-origin: center center;
+        transform: translate3d(0, 0, 0) rotate(10deg);
       }
 
       45% {
-        transform: translateX(-6px) translateY(-6px) rotate(15deg);
-        transform-origin: center center;
+        transform: translate3d(-6px, -6px, 0) rotate(15deg);
       }
 
       100% {
-        transform: translateX(0px) translateY(0px) rotate(0deg);
-        transform-origin: center center;
+        transform: translate3d(0, 0, 0) rotate(0deg);
       }
     }
 
     @keyframes bottom-shape {
       0% {
-        transform: translateX(0px) translateY(0px) rotate(0deg);
-        transform-origin: center center;
+        transform: translate3d(0, 0, 0) rotate(0deg);
       }
 
       30% {
-        transform: translateX(0px) translateY(0px) rotate(10deg);
-        transform-origin: center center;
+        transform: translate3d(0, 0, 0) rotate(10deg);
       }
 
       45% {
-        transform: translateX(6px) translateY(6px) rotate(15deg);
-        transform-origin: center center;
+        transform: translate3d(6px, 6px, 0) rotate(15deg);
       }
 
       100% {
-        transform: translateX(0px) translateY(0px) rotate(0deg);
-        transform-origin: center center;
+        transform: translate3d(0, 0, 0) rotate(0deg);
       }
     }
 
     @keyframes rotate-group {
       0% {
-        transform: rotate(0deg);
+        transform: rotate3d(0, 0, 1, 0deg);
       }
 
       44% {
-        transform: rotate(0deg);
+        transform: rotate3d(0, 0, 1, 0deg);
       }
 
       100% {
-        transform: rotate(360deg);
+        transform: rotate3d(0, 0, 1, 360deg);
         animation-timing-function: ease-in-out;
       }
     }
