@@ -194,6 +194,7 @@ declare global {
     interface Window {
         __BASE_URL__: string
         __ORCHESTRATOR_ROOT__: string
+        __ATHENA_ROOT__: string
         _env_: customEnv
     }
 }
