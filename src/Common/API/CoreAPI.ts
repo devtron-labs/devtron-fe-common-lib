@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { API_STATUS_CODES, FALLBACK_REQUEST_TIMEOUT, Host } from '@Common/Constants'
+import { API_STATUS_CODES, FALLBACK_REQUEST_TIMEOUT, Host, SERVICE_PATHS } from '@Common/Constants'
 import { noop } from '@Common/Helper'
 import { ServerErrors } from '@Common/ServerError'
 import { APIOptions, ResponseType } from '@Common/Types'
@@ -40,6 +40,30 @@ class CoreAPI {
         this.handleRedirectToLicenseActivation = handleRedirectToLicenseActivation || noop
     }
 
+    /**
+     * Constructs the final URL by detecting service paths and applying appropriate routing
+     * @param url - The endpoint URL
+     * @returns The final URL with correct base path
+     */
+    private constructUrl = (url: string): string => {
+        // Check if URL starts with a known service path
+        const isServicePath = Object.values(SERVICE_PATHS).some(
+            (servicePath) => url.startsWith(`${servicePath}/`) || url.startsWith(`/${servicePath}/`),
+        )
+
+        // Check if it's a non-orchestrator service path
+        const isNonOrchestratorService =
+            isServicePath && !url.startsWith('orchestrator/') && !url.startsWith('/orchestrator/')
+
+        if (isNonOrchestratorService) {
+            // For service paths like 'athena/', use as-is but ensure single leading slash
+            return url.startsWith('/') ? url : `/${url}`
+        }
+        // For orchestrator paths or relative paths, add Host prefix
+        const cleanUrl = url.startsWith('/') ? url.slice(1) : url
+        return `${this.host}/${cleanUrl}`
+    }
+
     private fetchAPI = async <K = object>({
         url,
         type,
@@ -54,11 +78,14 @@ class CoreAPI {
             method: type,
             signal,
             body: data ? JSON.stringify(data) : undefined,
+            headers: {
+                'Content-Type': 'application/json',
+            },
         }
         // eslint-disable-next-line dot-notation
         options['credentials'] = 'include' as RequestCredentials
         return fetch(
-            `${this.host}/${url}`,
+            this.constructUrl(url),
             !isMultipartRequest
                 ? options
                 : ({
