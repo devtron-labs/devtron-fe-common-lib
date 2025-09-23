@@ -1,18 +1,5 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-icon` to update.
 
-import { ReactComponent as ICBulb } from '@Icons/ic-bulb.svg'
-import { ReactComponent as ICStatusProgress } from '@Icons/ic-circle-progress.svg'
-import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
-import { ReactComponent as ICStatusPending } from '@Icons/ic-dot-circle.svg'
-import { ReactComponent as ICStatusFailed } from '@Icons/ic-failure-color.svg'
-import { ReactComponent as ICPiggybank } from '@Icons/ic-piggybank.svg'
-import { ReactComponent as ICPriorityHighFill } from '@Icons/ic-priority-high-fill.svg'
-import { ReactComponent as ICPriorityLowFill } from '@Icons/ic-priority-low-fill.svg'
-import { ReactComponent as ICPriorityMediumFill } from '@Icons/ic-priority-medium-fill.svg'
-import { ReactComponent as ICPriorityUrgentFill } from '@Icons/ic-priority-urgent-fill.svg'
-import { ReactComponent as ICRedBulb } from '@Icons/ic-red-bulb.svg'
-import { ReactComponent as ICSpider } from '@Icons/ic-spider.svg'
-import { ReactComponent as ICVector } from '@Icons/ic-vector.svg'
 import { ReactComponent as IC73strings } from '@IconsV2/ic-73strings.svg'
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
 import { ReactComponent as ICActivity } from '@IconsV2/ic-activity.svg'
@@ -26,6 +13,7 @@ import { ReactComponent as ICArrowClockwise } from '@IconsV2/ic-arrow-clockwise.
 import { ReactComponent as ICArrowLineDown } from '@IconsV2/ic-arrow-line-down.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICArrowSquareOut } from '@IconsV2/ic-arrow-square-out.svg'
+import { ReactComponent as ICArrowWhite } from '@IconsV2/ic-arrow-white.svg'
 import { ReactComponent as ICArrowsClockwise } from '@IconsV2/ic-arrows-clockwise.svg'
 import { ReactComponent as ICArrowsLeftRight } from '@IconsV2/ic-arrows-left-right.svg'
 import { ReactComponent as ICAsterisk } from '@IconsV2/ic-asterisk.svg'
@@ -182,6 +170,7 @@ import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
 import { ReactComponent as ICLego } from '@IconsV2/ic-lego.svg'
 import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
 import { ReactComponent as ICLightningFill } from '@IconsV2/ic-lightning-fill.svg'
+import { ReactComponent as ICLine } from '@IconsV2/ic-line.svg'
 import { ReactComponent as ICLink } from '@IconsV2/ic-link.svg'
 import { ReactComponent as ICLinkedBuildColor } from '@IconsV2/ic-linked-build-color.svg'
 import { ReactComponent as ICListBullets } from '@IconsV2/ic-list-bullets.svg'
@@ -305,6 +294,7 @@ export const iconMap = {
     'ic-arrow-line-down': ICArrowLineDown,
     'ic-arrow-right': ICArrowRight,
     'ic-arrow-square-out': ICArrowSquareOut,
+    'ic-arrow-white': ICArrowWhite,
     'ic-arrows-clockwise': ICArrowsClockwise,
     'ic-arrows-left-right': ICArrowsLeftRight,
     'ic-asterisk': ICAsterisk,
@@ -352,7 +342,6 @@ export const iconMap = {
     'ic-clipboard': ICClipboard,
     'ic-clock-counterclockwise': ICClockCounterclockwise,
     'ic-clock': ICClock,
-    'ic-close': ICClose,
     'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
     'ic-cloud-vms': ICCloudVms,
@@ -462,6 +451,7 @@ export const iconMap = {
     'ic-lego': ICLego,
     'ic-lightning-fill': ICLightningFill,
     'ic-lightning': ICLightning,
+    'ic-line': ICLine,
     'ic-link': ICLink,
     'ic-linked-build-color': ICLinkedBuildColor,
     'ic-list-bullets': ICListBullets,
@@ -566,18 +556,6 @@ export const iconMap = {
     'ic-webhook': ICWebhook,
     'ic-wifi-slash': ICWifiSlash,
     'ic-world-globe': ICWorldGlobe,
-    'ic-bulb': ICRedBulb,
-    'ic-red-bulb': ICBulb,
-    'ic-failure-color': ICStatusFailed,
-    'ic-dot-circle': ICStatusPending,
-    'ic-circle-progress': ICStatusProgress,
-    'ic-piggybank': ICPiggybank,
-    'ic-priority-high-fill': ICPriorityHighFill,
-    'ic-priority-low-fill': ICPriorityLowFill,
-    'ic-priority-medium-fill': ICPriorityMediumFill,
-    'ic-priority-urgent-fill': ICPriorityUrgentFill,
-    'ic-spider': ICSpider,
-    'ic-vector': ICVector,
 }
 
 export type IconName = keyof typeof iconMap
