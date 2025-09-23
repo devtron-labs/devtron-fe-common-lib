@@ -278,6 +278,10 @@ class CoreAPI {
 
     trash = <T = any, K = object>(url: string, data?: K, options?: APIOptions): Promise<ResponseType<T>> =>
         this.fetchInTime<K>({ url, type: 'DELETE', data, options })
+
+    setGlobalAPITimeout = (timeout: number) => {
+        this.timeout = timeout || FALLBACK_REQUEST_TIMEOUT
+    }
 }
 
 export default CoreAPI
