@@ -6,6 +6,7 @@ export type {
     ChartType,
     ReferenceLineConfigType,
     SimpleDataset,
+    SimpleDatasetForLineAndArea,
     SimpleDatasetForPie,
 } from './types'
 export { chartColorGenerator } from './utils'

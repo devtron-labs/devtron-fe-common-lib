@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { ChartOptions, TimeUnit, TooltipOptions } from 'chart.js'
+import { ChartOptions, TimeUnit, TooltipOptions, TooltipPositionerFunction } from 'chart.js'
 
 import { TooltipProps } from '@Common/Tooltip'
 import { AppThemeType } from '@Shared/Providers'
@@ -31,15 +31,15 @@ interface BaseSimpleDataset {
 }
 
 export interface SimpleDataset extends BaseSimpleDataset {
-    backgroundColor: ChartColorKey
+    color: ChartColorKey
+    hoverColor: ChartColorKey | null
 }
+
+export interface SimpleDatasetForLineAndArea extends Omit<SimpleDataset, 'hoverColor'> {}
 
 export interface SimpleDatasetForPie extends BaseSimpleDataset {
-    backgroundColor: Array<ChartColorKey>
-}
-
-export interface SimpleDatasetForLine extends BaseSimpleDataset {
-    borderColor: ChartColorKey
+    colors: Array<ChartColorKey>
+    hoverColors: Array<ChartColorKey> | null
 }
 
 export interface ReferenceLineConfigType {
@@ -68,12 +68,12 @@ type TypeAndDatasetsType =
       } & Never<XYAxisMax>)
     | ({
           type: 'line'
-          datasets: SimpleDatasetForLine[]
+          datasets: SimpleDatasetForLineAndArea[]
           separatorIndex?: never
       } & XYAxisMax)
     | ({
           type: 'area'
-          datasets: SimpleDataset
+          datasets: SimpleDatasetForLineAndArea
           separatorIndex?: never
       } & XYAxisMax)
     | ({
@@ -84,7 +84,7 @@ type TypeAndDatasetsType =
 
 type XAxisDataPointsType =
     | {
-          xAxisType: 'category'
+          xAxisType: 'linear'
           timeUnit?: never
       }
     | {
@@ -126,11 +126,11 @@ export type TransformDatasetProps = {
           dataset: SimpleDatasetForPie
       }
     | {
-          type: 'line'
-          dataset: SimpleDatasetForLine
+          type: 'area' | 'line'
+          dataset: SimpleDatasetForLineAndArea
       }
     | {
-          type: Exclude<ChartType, 'pie' | 'line'>
+          type: Exclude<ChartType, 'pie' | 'area' | 'line'>
           dataset: SimpleDataset
       }
 )
@@ -149,4 +149,10 @@ export interface GetDefaultOptionsParams
     appTheme: AppThemeType
     externalTooltipHandler: TooltipOptions['external']
     timeUnit: TimeUnit | null
+}
+
+declare module 'chart.js' {
+    interface TooltipPositionerMap {
+        barElementCenterPositioner: TooltipPositionerFunction<'bar'>
+    }
 }

@@ -52,6 +52,18 @@ ChartJS.register(
     Filler,
 )
 
+ChartJSTooltip.positioners.barElementCenterPositioner = (elements) => {
+    if (!elements || elements.length === 0) {
+        return false
+    }
+
+    const bar = elements[0].element
+
+    const { x: barX, y: barY } = bar
+    const { height: barHeight } = bar.getProps(['width', 'height'])
+    return { x: barX, y: barY + barHeight / 2 }
+}
+
 /**
  * A versatile Chart component that renders different types of charts using Chart.js.
  * Supports area charts, pie charts, stacked bar charts (vertical/horizontal), and line charts.
@@ -215,7 +227,7 @@ const Chart = (props: ChartProps) => {
         setTooltipVisible(true)
     }
 
-    const debouncedExternalTooltipHandler = useDebounce(externalTooltipHandler, 16)
+    const debouncedExternalTooltipHandler = useDebounce(externalTooltipHandler, 50)
 
     useEffect(() => {
         const ctx = canvasRef.current?.getContext('2d')
@@ -276,8 +288,19 @@ const Chart = (props: ChartProps) => {
                 placement={placement}
                 appendTo={document.getElementById(DEVTRON_BASE_MAIN_ID)}
                 className="default-tt dc__mxw-400 dc__word-break"
+                moveTransition="transform 200ms cubic-bezier(.42,.61,.64,.81)"
             >
-                <span ref={tooltipRef} style={{ position: 'absolute', left: 0, top: 0, width: 0, height: 0 }} />
+                <span
+                    ref={tooltipRef}
+                    style={{
+                        position: 'absolute',
+                        left: 0,
+                        top: 0,
+                        width: 0,
+                        height: 0,
+                        willChange: 'transform',
+                    }}
+                />
             </Tippy>
         </div>
     )
