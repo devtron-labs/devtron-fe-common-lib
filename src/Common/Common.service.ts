@@ -53,6 +53,8 @@ import {
     ApprovalRuntimeStateType,
     EnvironmentsGroupedByClustersType,
     AppsGroupedByProjectsType,
+    ClusterDetailListType,
+    ClusterDetailDTO,
 } from './Types'
 import { ApiResourceType, STAGE_MAP } from '../Pages'
 import { RefVariableType, VariableTypeFormat } from './CIPipeline.Types'
@@ -630,4 +632,36 @@ export const getEnvironmentOptionsGroupedByClusters = async (): Promise<Environm
     ).sort((a, b) => stringComparatorBySortOrder(a.clusterName, b.clusterName))
 
     return envGroupedByCluster
+}
+
+export const getDetailedClusterList = async (clusterIds?: number[], signal?: AbortSignal): Promise<ClusterDetailListType[]> => {
+    const url = getUrlWithSearchParams(ROUTES.CLUSTER, { clusterId: clusterIds?.join() })
+    const { result } = await get<ClusterDetailDTO[]>(url, { signal })
+
+    return (result ?? [])
+        .map(
+            ({
+                id,
+                server_url: serverUrl,
+                cluster_name: clusterName,
+                prometheus_url: prometheusUrl,
+                category,
+                clusterStatus,
+                ...res
+            }) => ({
+                ...res,
+                clusterId: id,
+                serverUrl,
+                clusterName,
+                prometheusUrl,
+                category: category?.name
+                    ? {
+                          label: category.name,
+                          value: category.id,
+                      }
+                    : null,
+                status: clusterStatus,
+            }),
+        )
+        .sort((a, b) => stringComparatorBySortOrder(a.clusterName, b.clusterName))
 }
