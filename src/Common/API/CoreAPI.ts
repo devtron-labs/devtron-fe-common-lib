@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { API_STATUS_CODES, FALLBACK_REQUEST_TIMEOUT, Host } from '@Common/Constants'
+import { API_STATUS_CODES, FALLBACK_REQUEST_TIMEOUT, Host, SERVICE_PATHS } from '@Common/Constants'
 import { noop } from '@Common/Helper'
 import { ServerErrors } from '@Common/ServerError'
 import { APIOptions, ResponseType } from '@Common/Types'
@@ -55,11 +55,23 @@ class CoreAPI {
             method: type,
             signal,
             body: data ? JSON.stringify(data) : undefined,
+            headers: {
+                'Content-Type': 'application/json',
+            },
         }
         // eslint-disable-next-line dot-notation
         options['credentials'] = 'include' as RequestCredentials
+        let currentUrl: string
+        if (isProxyHost) {
+            // Remove leading slash from url if it exists to avoid double slash after /proxy
+            const proxyUrl = url.startsWith('/') ? url.slice(1) : url
+            currentUrl = `/proxy/${proxyUrl}`
+        } else {
+            currentUrl = `${this.host}/${url}`
+        }
+        
         return fetch(
-            `${isProxyHost ? '/proxy' : this.host}/${url}`,
+            currentUrl,
             !isMultipartRequest
                 ? options
                 : ({
@@ -197,7 +209,8 @@ class CoreAPI {
         data,
         options,
         isMultipartRequest,
-    }: FetchInTimeParamsType<T>): Promise<ResponseType> => {
+        isProxyHost = false,
+    }: FetchInTimeParamsType<T> & { isProxyHost?: boolean }): Promise<ResponseType> => {
         const controller = options?.abortControllerRef?.current ?? new AbortController()
         const timeoutSignal = controller.signal
 
@@ -267,19 +280,20 @@ class CoreAPI {
         data: K,
         options?: APIOptions,
         isMultipartRequest?: boolean,
-    ): Promise<ResponseType<T>> => this.fetchInTime<K>({ url, type: 'POST', data, options, isMultipartRequest })
+        isProxyHost?: boolean,
+    ): Promise<ResponseType<T>> => this.fetchInTime<K>({ url, type: 'POST', data, options, isMultipartRequest, isProxyHost })
 
-    put = <T = any, K = object>(url: string, data: K, options?: APIOptions): Promise<ResponseType<T>> =>
-        this.fetchInTime<K>({ url, type: 'PUT', data, options })
+    put = <T = any, K = object>(url: string, data: K, options?: APIOptions, isProxyHost?: boolean): Promise<ResponseType<T>> =>
+        this.fetchInTime<K>({ url, type: 'PUT', data, options, isProxyHost })
 
-    patch = <T = any, K = object>(url: string, data: K, options?: APIOptions): Promise<ResponseType<T>> =>
-        this.fetchInTime<K>({ url, type: 'PATCH', data, options })
+    patch = <T = any, K = object>(url: string, data: K, options?: APIOptions, isProxyHost?: boolean): Promise<ResponseType<T>> =>
+        this.fetchInTime<K>({ url, type: 'PATCH', data, options, isProxyHost })
 
-    get = <T = any>(url: string, options?: APIOptions): Promise<ResponseType<T>> =>
-        this.fetchInTime({ url, type: 'GET', data: null, options })
+    get = <T = any>(url: string, options?: APIOptions, isProxyHost?: boolean): Promise<ResponseType<T>> =>
+        this.fetchInTime({ url, type: 'GET', data: null, options, isProxyHost })
 
-    trash = <T = any, K = object>(url: string, data?: K, options?: APIOptions): Promise<ResponseType<T>> =>
-        this.fetchInTime<K>({ url, type: 'DELETE', data, options })
+    trash = <T = any, K = object>(url: string, data?: K, options?: APIOptions, isProxyHost?: boolean): Promise<ResponseType<T>> =>
+        this.fetchInTime<K>({ url, type: 'DELETE', data, options, isProxyHost })
 
     setGlobalAPITimeout = (timeout: number) => {
         this.timeout = timeout || FALLBACK_REQUEST_TIMEOUT
