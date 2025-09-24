@@ -1,5 +1,12 @@
 import { ReactNode } from 'react'
-import { ChartDataset, ChartOptions, ChartType as ChartJSChartType, TooltipLabelStyle, TooltipOptions } from 'chart.js'
+import {
+    ActiveElement,
+    ChartDataset,
+    ChartOptions,
+    ChartType as ChartJSChartType,
+    TooltipLabelStyle,
+    TooltipOptions,
+} from 'chart.js'
 
 import { AppThemeType } from '@Shared/Providers'
 
@@ -11,6 +18,7 @@ import {
 } from './constants'
 import {
     ChartColorKey,
+    ChartProps,
     ChartType,
     ColorTokensType,
     GetBackgroundAndBorderColorProps,
@@ -51,19 +59,72 @@ export const getChartJSType = (type: ChartType): ChartJSChartType => {
     }
 }
 
+const handleChartClick =
+    ({ type, onChartClick, datasets, xAxisLabels }: ChartProps) =>
+    (_, elements: ActiveElement[]) => {
+        if (!elements || elements.length === 0 || !datasets || (Array.isArray(datasets) && datasets.length === 0)) {
+            return
+        }
+
+        const { datasetIndex, index } = elements[0]
+
+        if (type === 'pie') {
+            if (!datasets.isClickable?.[index]) {
+                return
+            }
+
+            onChartClick?.(xAxisLabels[index], index)
+        } else if (type !== 'area' && type !== 'line') {
+            if (!datasets[datasetIndex]?.isClickable) {
+                return
+            }
+
+            onChartClick?.(datasets[datasetIndex].datasetName, index)
+        }
+    }
+
+const handleChartHover =
+    ({ type, datasets }: ChartProps): ChartOptions['onHover'] =>
+    (_, elements: ActiveElement[], chart) => {
+        const { canvas } = chart
+
+        if (!elements || elements.length === 0 || !datasets || (Array.isArray(datasets) && datasets.length === 0)) {
+            // eslint-disable-next-line no-param-reassign
+            canvas.style.cursor = 'default'
+            return
+        }
+
+        const { datasetIndex, index } = elements[0]
+
+        if (type === 'pie') {
+            if (!datasets.isClickable?.[index]) {
+                // eslint-disable-next-line no-param-reassign
+                canvas.style.cursor = 'default'
+                return
+            }
+
+            // eslint-disable-next-line no-param-reassign
+            canvas.style.cursor = 'pointer'
+        } else if (type !== 'area' && type !== 'line') {
+            if (!datasets[datasetIndex]?.isClickable) {
+                // eslint-disable-next-line no-param-reassign
+                canvas.style.cursor = 'default'
+                return
+            }
+
+            // eslint-disable-next-line no-param-reassign
+            canvas.style.cursor = 'pointer'
+        }
+    }
+
 // Get default options based on chart type
 export const getDefaultOptions = ({
-    type,
-    appTheme,
-    hideAxis,
-    hideXAxisLabels,
-    xAxisMax,
-    yAxisMax,
-    xAxisType,
     timeUnit,
-    onChartClick,
+    chartProps,
+    appTheme,
     externalTooltipHandler,
 }: GetDefaultOptionsParams): ChartOptions => {
+    const { onChartClick, type, hideAxis, hideXAxisLabels = false, xAxisMax, yAxisMax, xAxisType } = chartProps
     const baseOptions: ChartOptions = {
         responsive: true,
         devicePixelRatio: 3,
@@ -98,7 +159,12 @@ export const getDefaultOptions = ({
                 borderRadius: 4,
             },
         },
-        ...(onChartClick ? { onClick: onChartClick } : {}),
+        ...(onChartClick
+            ? {
+                  onClick: handleChartClick(chartProps),
+                  onHover: handleChartHover(chartProps),
+              }
+            : {}),
     }
 
     const commonScaleConfig = {

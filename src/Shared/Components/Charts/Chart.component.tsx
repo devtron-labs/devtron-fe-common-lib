@@ -25,7 +25,7 @@ import { useTheme } from '@Shared/Providers'
 import 'chartjs-adapter-moment'
 
 import { drawReferenceLine } from './plugins'
-import { ChartProps, GetDefaultOptionsParams } from './types'
+import { ChartProps, GetDefaultOptionsParams, TypeAndDatasetsType } from './types'
 import {
     buildChartTooltipFromContext,
     getChartJSType,
@@ -165,22 +165,7 @@ ChartJSTooltip.positioners.barElementCenterPositioner = (elements) => {
  */
 const Chart = (props: ChartProps) => {
     /** Using this technique for typing in transformDataForChart */
-    const {
-        id,
-        xAxisLabels: labels,
-        xAxisType,
-        timeUnit,
-        hideAxis = false,
-        onChartClick,
-        separatorIndex,
-        referenceLines,
-        hideXAxisLabels = false,
-        xAxisMax,
-        yAxisMax,
-        tooltipConfig,
-        ...typeAndDatasets
-    } = props
-    const { type, datasets } = typeAndDatasets
+    const { id, xAxisLabels: labels, timeUnit, hideAxis = false, referenceLines, tooltipConfig, type, datasets } = props
     const { getTooltipContent, placement } = tooltipConfig || { placement: 'top' }
 
     const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -248,16 +233,13 @@ const Chart = (props: ChartProps) => {
 
         // Get Chart.js type and transform data
         const chartJSType = getChartJSType(type)
-        const transformedData = { labels, datasets: transformDataForChart({ ...typeAndDatasets, appTheme }) }
+        const transformedData = {
+            labels,
+            datasets: transformDataForChart({ ...({ type, datasets } as TypeAndDatasetsType), appTheme }),
+        }
         const defaultOptions = getDefaultOptions({
-            type,
+            chartProps: props,
             appTheme,
-            hideAxis,
-            onChartClick,
-            xAxisMax,
-            yAxisMax,
-            hideXAxisLabels,
-            xAxisType,
             timeUnit,
             externalTooltipHandler: debouncedExternalTooltipHandler,
         })
@@ -276,7 +258,7 @@ const Chart = (props: ChartProps) => {
         return () => {
             chartRef.current.destroy()
         }
-    }, [type, datasets, labels, appTheme, hideAxis, referenceLines, separatorIndex])
+    }, [type, datasets, labels, appTheme, hideAxis, referenceLines])
 
     return (
         <div className="h-100 w-100 dc__position-rel">

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { ChartOptions, TimeUnit, TooltipOptions, TooltipPositionerFunction } from 'chart.js'
+import { TimeUnit, TooltipOptions, TooltipPositionerFunction } from 'chart.js'
 
 import { TooltipProps } from '@Common/Tooltip'
 import { AppThemeType } from '@Shared/Providers'
@@ -33,6 +33,7 @@ interface BaseSimpleDataset {
 export interface SimpleDataset extends BaseSimpleDataset {
     color: ChartColorKey
     hoverColor: ChartColorKey | null
+    isClickable?: boolean
 }
 
 export interface SimpleDatasetForLineAndArea extends Omit<SimpleDataset, 'hoverColor'> {}
@@ -40,6 +41,7 @@ export interface SimpleDatasetForLineAndArea extends Omit<SimpleDataset, 'hoverC
 export interface SimpleDatasetForPie extends BaseSimpleDataset {
     colors: Array<ChartColorKey>
     hoverColors: Array<ChartColorKey> | null
+    isClickable?: boolean[]
 }
 
 export interface ReferenceLineConfigType {
@@ -57,29 +59,32 @@ type XYAxisMax = {
     referenceLines?: ReferenceLineConfigType[]
 }
 
-type TypeAndDatasetsType =
+type OnChartClickHandler = (datasetName: string, value: number) => void
+
+export type TypeAndDatasetsType =
     | ({
           type: 'pie'
           /**
            * Needs to be memoized
            */
           datasets: SimpleDatasetForPie
-          separatorIndex?: never
+          onChartClick?: OnChartClickHandler
       } & Never<XYAxisMax>)
     | ({
           type: 'line'
           datasets: SimpleDatasetForLineAndArea[]
-          separatorIndex?: never
+          onChartClick?: OnChartClickHandler
       } & XYAxisMax)
     | ({
           type: 'area'
           datasets: SimpleDatasetForLineAndArea
-          separatorIndex?: never
+          /* onChartClick is not applicable for area charts */
+          onChartClick?: never
       } & XYAxisMax)
     | ({
           type: Exclude<ChartType, 'pie' | 'line' | 'area'>
           datasets: SimpleDataset[]
-          separatorIndex?: number
+          onChartClick?: OnChartClickHandler
       } & XYAxisMax)
 
 type XAxisDataPointsType =
@@ -104,10 +109,6 @@ export type ChartProps = {
      */
     hideAxis?: boolean
     hideXAxisLabels?: boolean
-    /**
-     * Callback function for chart click events
-     */
-    onChartClick?: ChartOptions['onClick']
     tooltipConfig?: {
         getTooltipContent?: (args: Parameters<TooltipOptions['external']>[0]) => ReactNode
         /**
@@ -141,11 +142,8 @@ export type TransformDataForChartProps = {
     appTheme: AppThemeType
 } & TypeAndDatasetsType
 
-export interface GetDefaultOptionsParams
-    extends Pick<
-        ChartProps,
-        'hideAxis' | 'onChartClick' | 'type' | 'xAxisMax' | 'yAxisMax' | 'hideXAxisLabels' | 'xAxisType'
-    > {
+export interface GetDefaultOptionsParams {
+    chartProps: ChartProps
     appTheme: AppThemeType
     externalTooltipHandler: TooltipOptions['external']
     timeUnit: TimeUnit | null
