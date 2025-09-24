@@ -1,9 +1,11 @@
 import { ReactNode } from 'react'
 import {
     ActiveElement,
+    Chart,
     ChartDataset,
     ChartOptions,
     ChartType as ChartJSChartType,
+    ScaleOptions,
     TooltipLabelStyle,
     TooltipOptions,
 } from 'chart.js'
@@ -12,9 +14,11 @@ import { AppThemeType } from '@Shared/Providers'
 
 import {
     CHART_AXIS_LABELS_COLOR,
+    CHART_AXIS_TICKS_TITLE_COLOR,
     CHART_CANVAS_BACKGROUND_COLORS,
     CHART_COLORS,
     CHART_GRID_LINES_COLORS,
+    LINE_DASH,
 } from './constants'
 import {
     ChartColorKey,
@@ -28,12 +32,8 @@ import {
     VariantsType,
 } from './types'
 
-export const getLegendsLabelConfig = (appTheme: AppThemeType) =>
-    ({
-        usePointStyle: true,
-        pointStyle: 'rectRounded',
-        boxHeight: 10,
-        boxWidth: 10,
+export const getLegendsLabelConfig = (type: ChartType, appTheme: AppThemeType) => {
+    const baseConfig = {
         color: CHART_AXIS_LABELS_COLOR[appTheme],
         font: {
             family: "'IBM Plex Sans', 'Open Sans', 'Roboto'",
@@ -41,7 +41,41 @@ export const getLegendsLabelConfig = (appTheme: AppThemeType) =>
             lineHeight: '150%',
             weight: 400,
         },
-    }) satisfies ChartOptions['plugins']['legend']['labels']
+    } satisfies ChartOptions['plugins']['legend']['labels']
+
+    if (type === 'line') {
+        return {
+            ...baseConfig,
+            ...({
+                usePointStyle: false,
+                boxHeight: 0,
+                generateLabels: (chart: Chart<'line'>) => {
+                    const originalFn = Chart.defaults.plugins.legend.labels.generateLabels
+                    const labels = originalFn(chart)
+                    return labels.map((label) => {
+                        const { borderColor, borderDash } = chart.data.datasets[label.datasetIndex]
+
+                        return {
+                            ...label,
+                            fillStyle: 'transparent',
+                            strokeStyle: borderColor as string,
+                            lineDash: borderDash ? LINE_DASH : undefined,
+                            lineWidth: 2,
+                        }
+                    })
+                },
+            } satisfies ChartOptions<'line'>['plugins']['legend']['labels']),
+        }
+    }
+
+    return {
+        ...baseConfig,
+        usePointStyle: true,
+        boxHeight: 10,
+        boxWidth: 10,
+        pointStyle: 'rectRounded',
+    } satisfies ChartOptions['plugins']['legend']['labels']
+}
 
 // Map our chart types to Chart.js types
 export const getChartJSType = (type: ChartType): ChartJSChartType => {
@@ -117,13 +151,35 @@ const handleChartHover =
         }
     }
 
+const getScaleTickTitleConfig = (title: string, appTheme: AppThemeType): ScaleOptions<'linear'>['title'] => ({
+    display: !!title,
+    text: title,
+    align: 'center',
+    font: {
+        family: "'IBM Plex Sans', 'Open Sans', 'Roboto'",
+        size: 13,
+        lineHeight: '150%',
+        weight: 400,
+    },
+    color: CHART_AXIS_TICKS_TITLE_COLOR[appTheme],
+})
+
 // Get default options based on chart type
 export const getDefaultOptions = ({
     chartProps,
     appTheme,
     externalTooltipHandler,
 }: GetDefaultOptionsParams): ChartOptions => {
-    const { onChartClick, type, hideAxis, hideXAxisLabels = false, xAxisMax, yAxisMax } = chartProps
+    const {
+        onChartClick,
+        type,
+        hideAxis,
+        hideXAxisLabels = false,
+        xAxisMax,
+        yAxisMax,
+        xScaleTitle,
+        yScaleTitle,
+    } = chartProps
     const baseOptions: ChartOptions = {
         responsive: true,
         devicePixelRatio: 3,
@@ -134,7 +190,7 @@ export const getDefaultOptions = ({
                     display: false,
                 },
                 position: 'bottom' as const,
-                labels: getLegendsLabelConfig(appTheme),
+                labels: getLegendsLabelConfig(type, appTheme),
                 display: !hideAxis,
             },
             title: {
@@ -181,17 +237,19 @@ export const getDefaultOptions = ({
                 weight: 400,
             },
         },
-    } satisfies ChartOptions['scales']['x']
+    } satisfies ScaleOptions<'linear'>
 
     const commonXScaleConfig = {
         ...commonScaleConfig,
         max: xAxisMax,
-    } satisfies ChartOptions['scales']['x']
+        title: getScaleTickTitleConfig(xScaleTitle, appTheme),
+    } satisfies ScaleOptions<'linear'>
 
     const commonYScaleConfig = {
         ...commonScaleConfig,
         max: yAxisMax,
-    } satisfies ChartOptions['scales']['y']
+        title: getScaleTickTitleConfig(yScaleTitle, appTheme),
+    } satisfies ScaleOptions<'linear'>
 
     switch (type) {
         case 'area':
@@ -357,19 +415,24 @@ const transformDataset = (props: TransformDatasetProps) => {
         ...styles,
     }
 
+    const commonLineAndAreaConfig = {
+        ...baseDataset,
+        fill: type === 'area',
+        pointRadius: 0,
+        pointHoverRadius: 8,
+        pointHitRadius: 20,
+        pointStyle: 'rectRounded',
+        borderWidth: 2,
+    } as ChartDataset<'line'>
+
     switch (type) {
         case 'line':
-        case 'area':
             return {
-                ...baseDataset,
-                fill: type === 'area',
-                pointRadius: 0,
-                pointHoverRadius: 8,
-                pointHitRadius: 20,
-                pointStyle: 'circle',
-                pointBorderWidth: 0,
-                borderWidth: 2,
-            } as ChartDataset<'line'>
+                ...commonLineAndAreaConfig,
+                borderDash: dataset.isDashed ? LINE_DASH : undefined,
+            } satisfies ChartDataset<'line'>
+        case 'area':
+            return commonLineAndAreaConfig
         case 'pie':
         case 'stackedBar':
         case 'stackedBarHorizontal':
@@ -399,6 +462,8 @@ export const transformDataForChart = (props: TransformDataForChartProps) => {
             return [transformDataset({ type, dataset: datasets, appTheme })]
         case 'area':
             return [transformDataset({ type, dataset: datasets, appTheme })]
+        case 'line':
+            return datasets.map((dataset) => transformDataset({ type, dataset, appTheme }))
         default:
             return datasets.map((dataset) => transformDataset({ type, dataset, appTheme }))
     }

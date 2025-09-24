@@ -35,6 +35,10 @@ export interface SimpleDataset extends BaseSimpleDataset {
     isClickable?: boolean
 }
 
+export interface SimpleDatasetForLineAndArea extends Omit<SimpleDataset, 'isClickable'> {
+    isDashed?: boolean
+}
+
 export interface SimpleDatasetForPie extends BaseSimpleDataset {
     colors: Array<ChartColorKey>
     isClickable?: boolean[]
@@ -68,12 +72,12 @@ export type TypeAndDatasetsType =
       } & Never<XYAxisMax>)
     | ({
           type: 'line'
-          datasets: SimpleDataset[]
+          datasets: SimpleDatasetForLineAndArea[]
           onChartClick?: never
       } & XYAxisMax)
     | ({
           type: 'area'
-          datasets: SimpleDataset
+          datasets: SimpleDatasetForLineAndArea
           /* onChartClick is not applicable for area charts */
           onChartClick?: never
       } & XYAxisMax)
@@ -102,6 +106,10 @@ export type ChartProps = {
          */
         placement?: TooltipProps['placement']
     }
+    /** A title for x axis */
+    xScaleTitle?: string
+    /** A title for y axis */
+    yScaleTitle?: string
 } & TypeAndDatasetsType
 
 export type TransformDatasetProps = {
@@ -112,7 +120,11 @@ export type TransformDatasetProps = {
           dataset: SimpleDatasetForPie
       }
     | {
-          type: Exclude<ChartType, 'pie'>
+          type: 'line' | 'area'
+          dataset: SimpleDatasetForLineAndArea
+      }
+    | {
+          type: Exclude<ChartType, 'pie' | 'line' | 'area'>
           dataset: SimpleDataset
       }
 )

@@ -225,7 +225,7 @@ const Chart = (props: ChartProps) => {
              */
             ChartJS.overrides.doughnut.plugins.legend.labels = {
                 ...ChartJS.overrides.doughnut.plugins.legend.labels,
-                ...getLegendsLabelConfig(appTheme),
+                ...getLegendsLabelConfig('pie', appTheme),
             }
         }
 

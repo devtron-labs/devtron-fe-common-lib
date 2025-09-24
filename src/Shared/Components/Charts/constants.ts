@@ -303,7 +303,14 @@ export const CHART_AXIS_LABELS_COLOR: Record<AppThemeType, string> = {
     [AppThemeType.light]: '#1e293b',
 }
 
+export const CHART_AXIS_TICKS_TITLE_COLOR: Record<AppThemeType, string> = {
+    [AppThemeType.dark]: 'rgb(59, 68, 76)',
+    [AppThemeType.light]: 'rgb(200, 203, 206)',
+}
+
 export const CHART_CANVAS_BACKGROUND_COLORS: Record<AppThemeType, string> = {
     [AppThemeType.light]: '#ffffff',
     [AppThemeType.dark]: '#1e293b',
 }
+
+export const LINE_DASH = [6, 6]
