@@ -278,14 +278,14 @@ export const getDefaultOptions = ({
 const getColorValue = (colorKey: ChartColorKey, appTheme: AppThemeType): string => CHART_COLORS[appTheme][colorKey]
 
 // Generates a slightly darker shade for a given color key
-const generateCorrespondingBorderColor = (colorKey: ChartColorKey, appTheme: AppThemeType): string => {
+const getDarkerShadeBy = (colorKey: ChartColorKey, appTheme: AppThemeType, delta: VariantsType = 100): string => {
     // Extract the base color name and shade number
     const colorName = colorKey.replace(/\d+$/, '')
     const shadeMatch = colorKey.match(/\d+$/)
     const currentShade = shadeMatch ? parseInt(shadeMatch[0], 10) : 500
 
     // Try to get a darker shade (higher number)
-    const darkerShade = Math.min(currentShade + 100, 900)
+    const darkerShade = Math.min(currentShade + delta, 900)
     const borderColorKey = `${colorName}${darkerShade}` as ChartColorKey
 
     // If the darker shade exists, use it; otherwise, use the current color
@@ -296,8 +296,7 @@ const getBackgroundAndBorderColor = ({ type, dataset, appTheme }: GetBackgroundA
     if (type === 'pie') {
         return {
             backgroundColor: dataset.colors.map((colorKey) => getColorValue(colorKey, appTheme)),
-            hoverBackgroundColor:
-                dataset.hoverColors?.map((colorKey) => getColorValue(colorKey, appTheme)) ?? undefined,
+            hoverBackgroundColor: dataset.colors.map((colorKey) => getDarkerShadeBy(colorKey, appTheme)),
             borderColor: 'transparent',
         } satisfies Pick<ChartDataset<'doughnut'>, 'hoverBackgroundColor' | 'backgroundColor' | 'borderColor'>
     }
@@ -305,7 +304,7 @@ const getBackgroundAndBorderColor = ({ type, dataset, appTheme }: GetBackgroundA
     if (type === 'stackedBar' || type === 'stackedBarHorizontal') {
         return {
             backgroundColor: getColorValue(dataset.color, appTheme),
-            hoverBackgroundColor: dataset.hoverColor ? getColorValue(dataset.hoverColor, appTheme) : undefined,
+            hoverBackgroundColor: getDarkerShadeBy(dataset.color, appTheme),
             borderColor: 'transparent',
         } satisfies Pick<ChartDataset<'bar'>, 'backgroundColor' | 'borderColor' | 'hoverBackgroundColor'>
     }
@@ -341,7 +340,7 @@ const getBackgroundAndBorderColor = ({ type, dataset, appTheme }: GetBackgroundA
 
             return gradient
         },
-        borderColor: generateCorrespondingBorderColor(dataset.color, appTheme),
+        borderColor: getDarkerShadeBy(dataset.color, appTheme),
         pointBackgroundColor: bgColor,
         pointBorderColor: bgColor,
     } as Pick<ChartDataset<'line'>, 'backgroundColor' | 'borderColor' | 'pointBackgroundColor' | 'pointBorderColor'>

@@ -32,15 +32,11 @@ interface BaseSimpleDataset {
 
 export interface SimpleDataset extends BaseSimpleDataset {
     color: ChartColorKey
-    hoverColor: ChartColorKey | null
     isClickable?: boolean
 }
 
-export interface SimpleDatasetForLineAndArea extends Omit<SimpleDataset, 'hoverColor'> {}
-
 export interface SimpleDatasetForPie extends BaseSimpleDataset {
     colors: Array<ChartColorKey>
-    hoverColors: Array<ChartColorKey> | null
     isClickable?: boolean[]
 }
 
@@ -72,12 +68,12 @@ export type TypeAndDatasetsType =
       } & Never<XYAxisMax>)
     | ({
           type: 'line'
-          datasets: SimpleDatasetForLineAndArea[]
-          onChartClick?: OnChartClickHandler
+          datasets: SimpleDataset[]
+          onChartClick?: never
       } & XYAxisMax)
     | ({
           type: 'area'
-          datasets: SimpleDatasetForLineAndArea
+          datasets: SimpleDataset
           /* onChartClick is not applicable for area charts */
           onChartClick?: never
       } & XYAxisMax)
@@ -116,11 +112,7 @@ export type TransformDatasetProps = {
           dataset: SimpleDatasetForPie
       }
     | {
-          type: 'area' | 'line'
-          dataset: SimpleDatasetForLineAndArea
-      }
-    | {
-          type: Exclude<ChartType, 'pie' | 'area' | 'line'>
+          type: Exclude<ChartType, 'pie'>
           dataset: SimpleDataset
       }
 )
