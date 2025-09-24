@@ -187,7 +187,7 @@ export interface CannotDeleteModalProps
  * and `ConfirmationModalProps` to configure the force delete confirmation modal.
  */
 export interface ForceDeleteConfirmationProps
-    extends Partial<Pick<DeleteConfirmationModalProps, 'onDelete' | 'closeConfirmationModal'>>,
+    extends Partial<Pick<DeleteConfirmationModalProps, 'onDelete' | 'closeConfirmationModal' | 'isDeleting'>>,
         Partial<Pick<ConfirmationModalProps, 'title' | 'subtitle'>> {}
 
 export interface ConfirmationModalContextType {

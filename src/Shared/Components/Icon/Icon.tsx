@@ -10,6 +10,7 @@ import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
 import { ReactComponent as ICAppTemplate } from '@IconsV2/ic-app-template.svg'
 import { ReactComponent as ICArgocdApp } from '@IconsV2/ic-argocd-app.svg'
 import { ReactComponent as ICArrowClockwise } from '@IconsV2/ic-arrow-clockwise.svg'
+import { ReactComponent as ICArrowLineDown } from '@IconsV2/ic-arrow-line-down.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICArrowSquareOut } from '@IconsV2/ic-arrow-square-out.svg'
 import { ReactComponent as ICArrowsClockwise } from '@IconsV2/ic-arrows-clockwise.svg'
@@ -27,6 +28,7 @@ import { ReactComponent as ICBgEnvironment } from '@IconsV2/ic-bg-environment.sv
 import { ReactComponent as ICBgProductionPipelines } from '@IconsV2/ic-bg-production-pipelines.svg'
 import { ReactComponent as ICBgProject } from '@IconsV2/ic-bg-project.svg'
 import { ReactComponent as ICBgScan } from '@IconsV2/ic-bg-scan.svg'
+import { ReactComponent as ICBgWebhook } from '@IconsV2/ic-bg-webhook.svg'
 import { ReactComponent as ICBharatpe } from '@IconsV2/ic-bharatpe.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBookOpen } from '@IconsV2/ic-book-open.svg'
@@ -92,6 +94,7 @@ import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
 import { ReactComponent as ICDownload } from '@IconsV2/ic-download.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEdit } from '@IconsV2/ic-edit.svg'
+import { ReactComponent as ICEditLines } from '@IconsV2/ic-edit-lines.svg'
 import { ReactComponent as ICEmail } from '@IconsV2/ic-email.svg'
 import { ReactComponent as ICEnterpriseFeat } from '@IconsV2/ic-enterprise-feat.svg'
 import { ReactComponent as ICEnterpriseTag } from '@IconsV2/ic-enterprise-tag.svg'
@@ -131,7 +134,6 @@ import { ReactComponent as ICGoogleArtifactRegistry } from '@IconsV2/ic-google-a
 import { ReactComponent as ICGoogleCloud } from '@IconsV2/ic-google-cloud.svg'
 import { ReactComponent as ICGoogleContainerRegistry } from '@IconsV2/ic-google-container-registry.svg'
 import { ReactComponent as ICGoogleGke } from '@IconsV2/ic-google-gke.svg'
-import { ReactComponent as ICGraphNegative } from '@IconsV2/ic-graph-negative.svg'
 import { ReactComponent as ICGridView } from '@IconsV2/ic-grid-view.svg'
 import { ReactComponent as ICGroupFilter } from '@IconsV2/ic-group-filter.svg'
 import { ReactComponent as ICGroupFilterApplied } from '@IconsV2/ic-group-filter-applied.svg'
@@ -201,6 +203,7 @@ import { ReactComponent as ICPath } from '@IconsV2/ic-path.svg'
 import { ReactComponent as ICPauseCircle } from '@IconsV2/ic-pause-circle.svg'
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
 import { ReactComponent as ICPlayOutline } from '@IconsV2/ic-play-outline.svg'
+import { ReactComponent as ICPriorityMediumFill } from '@IconsV2/ic-priority-medium-fill.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
 import { ReactComponent as ICRatings } from '@IconsV2/ic-ratings.svg'
@@ -280,6 +283,7 @@ export const iconMap = {
     'ic-app-template': ICAppTemplate,
     'ic-argocd-app': ICArgocdApp,
     'ic-arrow-clockwise': ICArrowClockwise,
+    'ic-arrow-line-down': ICArrowLineDown,
     'ic-arrow-right': ICArrowRight,
     'ic-arrow-square-out': ICArrowSquareOut,
     'ic-arrows-clockwise': ICArrowsClockwise,
@@ -297,6 +301,7 @@ export const iconMap = {
     'ic-bg-production-pipelines': ICBgProductionPipelines,
     'ic-bg-project': ICBgProject,
     'ic-bg-scan': ICBgScan,
+    'ic-bg-webhook': ICBgWebhook,
     'ic-bharatpe': ICBharatpe,
     'ic-bitbucket': ICBitbucket,
     'ic-book-open': ICBookOpen,
@@ -361,6 +366,7 @@ export const iconMap = {
     'ic-dockerhub': ICDockerhub,
     'ic-download': ICDownload,
     'ic-ecr': ICEcr,
+    'ic-edit-lines': ICEditLines,
     'ic-edit': ICEdit,
     'ic-email': ICEmail,
     'ic-enterprise-feat': ICEnterpriseFeat,
@@ -401,7 +407,6 @@ export const iconMap = {
     'ic-google-container-registry': ICGoogleContainerRegistry,
     'ic-google-gke': ICGoogleGke,
     'ic-google': ICGoogle,
-    'ic-graph-negative': ICGraphNegative,
     'ic-grid-view': ICGridView,
     'ic-group-filter-applied': ICGroupFilterApplied,
     'ic-group-filter': ICGroupFilter,
@@ -471,6 +476,7 @@ export const iconMap = {
     'ic-pause-circle': ICPauseCircle,
     'ic-pencil': ICPencil,
     'ic-play-outline': ICPlayOutline,
+    'ic-priority-medium-fill': ICPriorityMediumFill,
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
     'ic-ratings': ICRatings,
