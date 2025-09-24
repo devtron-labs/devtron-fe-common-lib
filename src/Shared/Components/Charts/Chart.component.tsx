@@ -22,8 +22,6 @@ import { noop, useDebounce } from '@Common/Helper'
 import { DEVTRON_BASE_MAIN_ID } from '@Shared/constants'
 import { useTheme } from '@Shared/Providers'
 
-import 'chartjs-adapter-moment'
-
 import { drawReferenceLine } from './plugins'
 import { ChartProps, GetDefaultOptionsParams, TypeAndDatasetsType } from './types'
 import {
@@ -165,7 +163,7 @@ ChartJSTooltip.positioners.barElementCenterPositioner = (elements) => {
  */
 const Chart = (props: ChartProps) => {
     /** Using this technique for typing in transformDataForChart */
-    const { id, xAxisLabels: labels, timeUnit, hideAxis = false, referenceLines, tooltipConfig, type, datasets } = props
+    const { id, xAxisLabels: labels, hideAxis = false, referenceLines, tooltipConfig, type, datasets } = props
     const { getTooltipContent, placement } = tooltipConfig || { placement: 'top' }
 
     const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -240,7 +238,6 @@ const Chart = (props: ChartProps) => {
         const defaultOptions = getDefaultOptions({
             chartProps: props,
             appTheme,
-            timeUnit,
             externalTooltipHandler: debouncedExternalTooltipHandler,
         })
 

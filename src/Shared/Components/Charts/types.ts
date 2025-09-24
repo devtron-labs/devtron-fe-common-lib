@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { TimeUnit, TooltipOptions, TooltipPositionerFunction } from 'chart.js'
+import { TooltipOptions, TooltipPositionerFunction } from 'chart.js'
 
 import { TooltipProps } from '@Common/Tooltip'
 import { AppThemeType } from '@Shared/Providers'
@@ -87,16 +87,6 @@ export type TypeAndDatasetsType =
           onChartClick?: OnChartClickHandler
       } & XYAxisMax)
 
-type XAxisDataPointsType =
-    | {
-          xAxisType: 'linear'
-          timeUnit?: never
-      }
-    | {
-          timeUnit: TimeUnit
-          xAxisType: 'time'
-      }
-
 export type ChartProps = {
     id: string
     /**
@@ -116,8 +106,7 @@ export type ChartProps = {
          */
         placement?: TooltipProps['placement']
     }
-} & TypeAndDatasetsType &
-    XAxisDataPointsType
+} & TypeAndDatasetsType
 
 export type TransformDatasetProps = {
     appTheme: AppThemeType
@@ -146,7 +135,6 @@ export interface GetDefaultOptionsParams {
     chartProps: ChartProps
     appTheme: AppThemeType
     externalTooltipHandler: TooltipOptions['external']
-    timeUnit: TimeUnit | null
 }
 
 declare module 'chart.js' {

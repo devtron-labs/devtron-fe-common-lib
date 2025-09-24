@@ -119,12 +119,11 @@ const handleChartHover =
 
 // Get default options based on chart type
 export const getDefaultOptions = ({
-    timeUnit,
     chartProps,
     appTheme,
     externalTooltipHandler,
 }: GetDefaultOptionsParams): ChartOptions => {
-    const { onChartClick, type, hideAxis, hideXAxisLabels = false, xAxisMax, yAxisMax, xAxisType } = chartProps
+    const { onChartClick, type, hideAxis, hideXAxisLabels = false, xAxisMax, yAxisMax } = chartProps
     const baseOptions: ChartOptions = {
         responsive: true,
         devicePixelRatio: 3,
@@ -187,15 +186,6 @@ export const getDefaultOptions = ({
     const commonXScaleConfig = {
         ...commonScaleConfig,
         max: xAxisMax,
-        type: xAxisType,
-        time: {
-            unit: timeUnit ?? 'day',
-            displayFormats: {
-                day: 'DD',
-                hour: 'HH',
-            },
-            tooltipFormat: 'D MMMM YYYY, hh:mm a',
-        },
     } satisfies ChartOptions['scales']['x']
 
     const commonYScaleConfig = {
