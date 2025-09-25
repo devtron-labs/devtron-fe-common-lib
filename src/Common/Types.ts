@@ -1121,9 +1121,7 @@ export type EnvironmentsGroupedByClustersType = {
 export type ClusterCostModuleConfigPayload =
     | {
           enabled: true
-          config?: {
-              cloudProviderApiKey: string
-          }
+          config?: Record<string, any>
       }
     | {
           enabled: false
@@ -1133,7 +1131,7 @@ export type ClusterCostModuleConfigPayload =
 interface ClusterCostModuleDetailsDTO extends Pick<ClusterCostModuleConfigPayload, 'enabled' | 'config'> {
     // Note that these status are independent of `enabled` flag
     // e.g. cost module can be disabled but still in `Success` state
-    installationStatus: 'Success' | 'Installing' | 'NotInstalled' | 'Failed'
+    installationStatus: 'Success' | 'Installing' | 'Upgrading' | 'NotInstalled' | 'Failed'
     installationError?: string
 }
 
