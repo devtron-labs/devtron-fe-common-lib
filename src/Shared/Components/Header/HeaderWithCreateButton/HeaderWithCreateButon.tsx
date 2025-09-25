@@ -25,7 +25,7 @@ import Button from '@Shared/Components/Button/Button.component'
 import { Icon } from '@Shared/Components/Icon'
 import { AppListConstants, ComponentSizeType } from '@Shared/constants'
 import { useMainContext } from '@Shared/Providers'
-import { getApplicationManagementBreadcrumb } from '@PagesDevtron2.0/InfrastructureManagement'
+import { getApplicationManagementBreadcrumb } from '@PagesDevtron2.0/ApplicationManagement'
 import { getAutomationEnablementBreadcrumbConfig } from '@PagesDevtron2.0/InfrastructureManagement/utils'
 
 import PageHeader from '../PageHeader'
