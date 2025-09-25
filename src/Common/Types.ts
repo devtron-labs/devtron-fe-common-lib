@@ -1118,7 +1118,7 @@ export type EnvironmentsGroupedByClustersType = {
     envList: EnvironmentType[]
 }[]
 
-export type ClusterCostModuleConfigDTO =
+export type ClusterCostModuleConfigPayload =
     | {
           enabled: true
           config?: {
@@ -1130,7 +1130,7 @@ export type ClusterCostModuleConfigDTO =
           config?: never
       }
 
-type ClusterCostModuleDetailsDTO = ClusterCostModuleConfigDTO & {
+interface ClusterCostModuleDetailsDTO extends Pick<ClusterCostModuleConfigPayload, 'enabled' | 'config'> {
     // Note that these status are independent of `enabled` flag
     // e.g. cost module can be disabled but still in `Success` state
     installationStatus: 'Success' | 'Installing' | 'NotInstalled' | 'Failed'

@@ -55,7 +55,6 @@ import {
     AppsGroupedByProjectsType,
     ClusterDetailListType,
     ClusterDetailDTO,
-    ClusterCostModuleConfigDTO,
 } from './Types'
 import { ApiResourceType, STAGE_MAP } from '../Pages'
 import { RefVariableType, VariableTypeFormat } from './CIPipeline.Types'
@@ -651,27 +650,19 @@ export const getDetailedClusterList = async (
                 costModuleConfig,
                 ...res
             }) => {
-                const baseCostModuleConfig: ClusterCostModuleConfigDTO = costModuleConfig?.enabled
-                    ? {
-                          enabled: true,
-                          config: {
-                              cloudProviderApiKey: costModuleConfig.config?.cloudProviderApiKey || '',
-                          },
-                      }
-                    : {
-                          enabled: false,
-                      }
-
                 const costModuleInstallationStatus = costModuleConfig?.installationStatus || 'NotInstalled'
 
                 const costModuleData: ClusterDetailListType['costModuleConfig'] = {
-                    ...baseCostModuleConfig,
+                    enabled: costModuleConfig?.enabled || false,
+                    config: {
+                        cloudProviderApiKey: costModuleConfig.config?.cloudProviderApiKey || '',
+                    },
                     installationStatus: costModuleConfig?.installationStatus || 'NotInstalled',
                     ...(costModuleInstallationStatus === 'Failed'
                         ? {
                               installationError: costModuleConfig?.installationError || 'Some error occurred',
                           }
-                        : {})
+                        : {}),
                 }
 
                 return {
