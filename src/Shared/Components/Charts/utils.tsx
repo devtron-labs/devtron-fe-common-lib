@@ -5,6 +5,7 @@ import {
     ChartDataset,
     ChartOptions,
     ChartType as ChartJSChartType,
+    Point,
     ScaleOptions,
     TooltipLabelStyle,
     TooltipOptions,
@@ -14,7 +15,6 @@ import { AppThemeType } from '@Shared/Providers'
 
 import {
     CHART_AXIS_LABELS_COLOR,
-    CHART_AXIS_TICKS_TITLE_COLOR,
     CHART_CANVAS_BACKGROUND_COLORS,
     CHART_COLORS,
     CHART_GRID_LINES_COLORS,
@@ -161,7 +161,7 @@ const getScaleTickTitleConfig = (title: string, appTheme: AppThemeType): ScaleOp
         lineHeight: '150%',
         weight: 400,
     },
-    color: CHART_AXIS_TICKS_TITLE_COLOR[appTheme],
+    color: CHART_AXIS_LABELS_COLOR[appTheme],
 })
 
 // Get default options based on chart type
@@ -555,3 +555,5 @@ export const buildChartTooltipFromContext = ({
         </div>
     )
 }
+
+export const distanceBetweenPoints = (pt1: Point, pt2: Point) => Math.sqrt((pt2.x - pt1.x) ** 2 + (pt2.y - pt1.y) ** 2)

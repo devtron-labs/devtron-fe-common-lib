@@ -26,6 +26,7 @@ import { drawReferenceLine } from './plugins'
 import { ChartProps, GetDefaultOptionsParams, TypeAndDatasetsType } from './types'
 import {
     buildChartTooltipFromContext,
+    distanceBetweenPoints,
     getChartJSType,
     getDefaultOptions,
     getLegendsLabelConfig,
@@ -50,16 +51,41 @@ ChartJS.register(
     Filler,
 )
 
-ChartJSTooltip.positioners.barElementCenterPositioner = (elements) => {
-    if (!elements || elements.length === 0) {
+ChartJSTooltip.positioners.barElementCenterPositioner = (items, eventPosition) => {
+    if (!items.length) {
         return false
     }
 
-    const bar = elements[0].element
+    let { x } = eventPosition
+    let { y } = eventPosition
+    let minDistance = Number.POSITIVE_INFINITY
+    let i: number
+    let len: number
+    let nearestElement: BarElement
 
-    const { x: barX, y: barY } = bar
-    const { height: barHeight } = bar.getProps(['width', 'height'])
-    return { x: barX, y: barY + barHeight / 2 }
+    for (i = 0, len = items.length; i < len; ++i) {
+        const el = items[i].element
+        if (el && el.hasValue()) {
+            const center = (el as BarElement).getCenterPoint()
+            const d = distanceBetweenPoints(eventPosition, center)
+
+            if (d < minDistance) {
+                minDistance = d
+                nearestElement = el as BarElement
+            }
+        }
+    }
+
+    if (nearestElement) {
+        const tp = nearestElement.getCenterPoint()
+        x = tp.x
+        y = tp.y
+    }
+
+    return {
+        x,
+        y,
+    }
 }
 
 /**

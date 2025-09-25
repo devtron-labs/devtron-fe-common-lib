@@ -294,23 +294,18 @@ export const CHART_COLORS: Record<AppThemeType, Record<ChartColorKey, string>> =
 } as const
 
 export const CHART_GRID_LINES_COLORS: Record<AppThemeType, string> = {
-    [AppThemeType.light]: '#f1f5f9',
-    [AppThemeType.dark]: '#1e293b',
+    [AppThemeType.light]: 'rgb(247, 250, 252)',
+    [AppThemeType.dark]: 'rgb(31, 32, 41)',
 }
 
 export const CHART_AXIS_LABELS_COLOR: Record<AppThemeType, string> = {
-    [AppThemeType.dark]: '#ffffff',
-    [AppThemeType.light]: '#1e293b',
-}
-
-export const CHART_AXIS_TICKS_TITLE_COLOR: Record<AppThemeType, string> = {
-    [AppThemeType.dark]: 'rgb(59, 68, 76)',
-    [AppThemeType.light]: 'rgb(200, 203, 206)',
+    [AppThemeType.dark]: 'rgb(248, 248, 249)',
+    [AppThemeType.light]: 'rgb(0, 10, 20)',
 }
 
 export const CHART_CANVAS_BACKGROUND_COLORS: Record<AppThemeType, string> = {
-    [AppThemeType.light]: '#ffffff',
-    [AppThemeType.dark]: '#1e293b',
+    [AppThemeType.light]: 'rgb(255, 255, 255)',
+    [AppThemeType.dark]: 'rgb(21, 22, 31)',
 }
 
 export const LINE_DASH = [6, 6]
