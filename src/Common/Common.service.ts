@@ -652,19 +652,6 @@ export const getDetailedClusterList = async (
             }) => {
                 const costModuleInstallationStatus = costModuleConfig?.installationStatus || 'NotInstalled'
 
-                const costModuleData: ClusterDetailListType['costModuleConfig'] = {
-                    enabled: costModuleConfig?.enabled || false,
-                    config: {
-                        cloudProviderApiKey: costModuleConfig.config?.cloudProviderApiKey || '',
-                    },
-                    installationStatus: costModuleConfig?.installationStatus || 'NotInstalled',
-                    ...(costModuleInstallationStatus === 'Failed'
-                        ? {
-                              installationError: costModuleConfig?.installationError || 'Some error occurred',
-                          }
-                        : {}),
-                }
-
                 return {
                     ...res,
                     clusterId: id,
@@ -678,7 +665,18 @@ export const getDetailedClusterList = async (
                           }
                         : null,
                     status: clusterStatus,
-                    costModuleConfig: costModuleData,
+                    costModuleConfig: {
+                        enabled: costModuleConfig?.enabled || false,
+                        config: {
+                            cloudProviderApiKey: costModuleConfig.config?.cloudProviderApiKey || '',
+                        },
+                        installationStatus: costModuleInstallationStatus,
+                        ...(costModuleInstallationStatus === 'Failed'
+                            ? {
+                                  installationError: costModuleConfig?.installationError || 'Some error occurred',
+                              }
+                            : {}),
+                    } satisfies ClusterDetailListType['costModuleConfig'],
                 }
             },
         )
