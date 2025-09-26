@@ -1,5 +1,6 @@
 import { ReactNode } from 'react'
 
+import { RJSFFormSchema } from '@Common/RJSF'
 import { ClusterDetailListType } from '@Common/Types'
 
 export enum CostBreakdownViewType {
@@ -39,3 +40,8 @@ export type ClusterProviderType =
     | 'OTC'
     | 'DigitalOcean'
     | 'Unknown'
+
+export interface ClusterProviderDetailsType {
+    clusterProvider: ClusterProviderType
+    costModuleSchema: RJSFFormSchema
+}
