@@ -1,18 +1,14 @@
-import { noop } from '@Common/Helper'
 import RadioGroup from '@Common/RadioGroup'
 import RadioGroupItem from '@Common/RadioGroupItem'
 import { AuthenticationType } from '@Shared/types'
 
-import { ButtonVariantType } from '../Button'
 import { CustomInput, PasswordField } from '../CustomInput'
-import { Icon } from '../Icon'
 import { InfoBlock } from '../InfoBlock'
 import { Textarea } from '../Textarea'
 import { PromoetheusConfigProps } from './types'
 
 const PromoetheusConfigCard = ({
     prometheusConfig,
-    isCostPrometheus,
     handleOnChange,
     onPrometheusAuthTypeChange,
 }: PromoetheusConfigProps) => {
@@ -26,19 +22,6 @@ const PromoetheusConfigCard = ({
                     Devtron uses prometheus to store and track cluster metrics
                 </span>
             </div>
-            {isCostPrometheus && (
-                <InfoBlock
-                    variant="help"
-                    description="Reuse Prometheus configuration from Application Monitoring"
-                    buttonProps={{
-                        dataTestId: 'autofill-prometheus',
-                        text: 'Autofill',
-                        onClick: noop, // TODO: Update onClick when cost prometheus is supported
-                        variant: ButtonVariantType.text,
-                        startIcon: <Icon name="ic-magic-wand" color={null} />,
-                    }}
-                />
-            )}
             {(userName.error || password.error || endpoint.error) && (
                 <InfoBlock
                     variant="error"

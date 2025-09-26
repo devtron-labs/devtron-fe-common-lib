@@ -1118,6 +1118,23 @@ export type EnvironmentsGroupedByClustersType = {
     envList: EnvironmentType[]
 }[]
 
+export type ClusterCostModuleConfigPayload =
+    | {
+          enabled: true
+          config?: Record<string, any>
+      }
+    | {
+          enabled: false
+          config?: never
+      }
+
+interface ClusterCostModuleDetailsDTO extends Pick<ClusterCostModuleConfigPayload, 'enabled' | 'config'> {
+    // Note that these status are independent of `enabled` flag
+    // e.g. cost module can be disabled but still in `Success` state
+    installationStatus: 'Success' | 'Installing' | 'Upgrading' | 'NotInstalled' | 'Failed'
+    installationError?: string
+}
+
 export interface ClusterDetailDTO {
     category: ClusterEnvironmentCategoryType
     cluster_name: string
@@ -1133,6 +1150,7 @@ export interface ClusterDetailDTO {
     proxyUrl: string
     toConnectWithSSHTunnel: boolean
     clusterStatus: ClusterStatusType
+    costModuleConfig: ClusterCostModuleDetailsDTO
 }
 
 export interface ClusterDetailListType

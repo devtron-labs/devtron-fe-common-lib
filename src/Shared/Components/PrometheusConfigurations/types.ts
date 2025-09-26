@@ -20,5 +20,4 @@ export interface PromoetheusConfigProps {
     prometheusConfig: PromoetheusConfig
     handleOnChange: (event: SyntheticEvent) => void
     onPrometheusAuthTypeChange: (event: SyntheticEvent) => void
-    isCostPrometheus?: boolean
 }

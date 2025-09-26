@@ -141,9 +141,10 @@ const cdMaterialListModal = ({
         }
 
         const isConsumedNonApprovedImage =
-            !isExceptionUser && isApprovalConfigured &&
+            !isExceptionUser &&
+            isApprovalConfigured &&
             (!material.userApprovalMetadata ||
-            material.userApprovalMetadata.approvalRuntimeState !== ApprovalRuntimeStateType.approved)
+                material.userApprovalMetadata.approvalRuntimeState !== ApprovalRuntimeStateType.approved)
 
         const selectImage =
             !isImageMarked && markFirstSelected && filterState === FilterStates.ALLOWED && !isConsumedNonApprovedImage
@@ -349,9 +350,7 @@ export const processCDMaterialServiceResponse = (
         cdMaterialsResult,
     )
 
-    const isApprovalConfigured = getIsApprovalPolicyConfigured(
-        approvalInfo?.deploymentApprovalInfo?.approvalConfigData,
-    )
+    const isApprovalConfigured = getIsApprovalPolicyConfigured(approvalInfo?.deploymentApprovalInfo?.approvalConfigData)
 
     const isExceptionUser = approvalInfo?.deploymentApprovalInfo?.approvalConfigData?.isExceptionUser ?? false
 
@@ -570,7 +569,6 @@ export const getAppsInfoForEnv = async ({ envId, appIds }: GetAppsInfoForEnvProp
     }
 }
 
-
 export const getAppOptionsGroupedByProjects = async (): Promise<AppsGroupedByProjectsType> => {
     const { result } = await get<AppsGroupedByProjectsType>(ROUTES.APP_LIST_MIN)
 
@@ -585,7 +583,6 @@ export const getAppOptionsGroupedByProjects = async (): Promise<AppsGroupedByPro
         }))
         .sort((a, b) => stringComparatorBySortOrder(a.projectName, b.projectName))
 }
-
 
 export const getEnvironmentOptionsGroupedByClusters = async (): Promise<EnvironmentsGroupedByClustersType> => {
     const { result } = (await get(ROUTES.ENVIRONMENT_LIST_MIN)) as ResponseType<EnvListMinDTO[]>
@@ -634,7 +631,10 @@ export const getEnvironmentOptionsGroupedByClusters = async (): Promise<Environm
     return envGroupedByCluster
 }
 
-export const getDetailedClusterList = async (clusterIds?: number[], signal?: AbortSignal): Promise<ClusterDetailListType[]> => {
+export const getDetailedClusterList = async (
+    clusterIds?: number[],
+    signal?: AbortSignal,
+): Promise<ClusterDetailListType[]> => {
     const url = getUrlWithSearchParams(ROUTES.CLUSTER, { clusterId: clusterIds?.join() })
     const { result } = await get<ClusterDetailDTO[]>(url, { signal })
 
@@ -647,21 +647,47 @@ export const getDetailedClusterList = async (clusterIds?: number[], signal?: Abo
                 prometheus_url: prometheusUrl,
                 category,
                 clusterStatus,
+                costModuleConfig,
                 ...res
-            }) => ({
-                ...res,
-                clusterId: id,
-                serverUrl,
-                clusterName,
-                prometheusUrl,
-                category: category?.name
-                    ? {
-                          label: category.name,
-                          value: category.id,
-                      }
-                    : null,
-                status: clusterStatus,
-            }),
+            }) => {
+                const costModuleInstallationStatus = costModuleConfig?.installationStatus || 'NotInstalled'
+                // Need to remove following keys from config if present: openCostServiceName, openCostServicePort, releaseName, namespace
+                const sanitizedCostConfig = costModuleConfig?.config
+                    ? Object.fromEntries(
+                          Object.entries(costModuleConfig.config).filter(
+                              ([key]) =>
+                                  !['openCostServiceName', 'openCostServicePort', 'releaseName', 'namespace'].includes(
+                                      key,
+                                  ),
+                          ),
+                      )
+                    : undefined
+
+                return {
+                    ...res,
+                    clusterId: id,
+                    serverUrl,
+                    clusterName,
+                    prometheusUrl,
+                    category: category?.name
+                        ? {
+                              label: category.name,
+                              value: category.id,
+                          }
+                        : null,
+                    status: clusterStatus,
+                    costModuleConfig: {
+                        enabled: costModuleConfig?.enabled || false,
+                        config: sanitizedCostConfig,
+                        installationStatus: costModuleInstallationStatus,
+                        ...(costModuleInstallationStatus === 'Failed'
+                            ? {
+                                  installationError: costModuleConfig?.installationError || 'Some error occurred',
+                              }
+                            : {}),
+                    } satisfies ClusterDetailListType['costModuleConfig'],
+                }
+            },
         )
         .sort((a, b) => stringComparatorBySortOrder(a.clusterName, b.clusterName))
 }
