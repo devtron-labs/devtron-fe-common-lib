@@ -13,6 +13,7 @@ import {
     LineController,
     LineElement,
     PointElement,
+    TimeScale,
     Title,
     Tooltip as ChartJSTooltip,
 } from 'chart.js'
@@ -21,10 +22,16 @@ import { noop, useDebounce } from '@Common/Helper'
 import { DEVTRON_BASE_MAIN_ID } from '@Shared/constants'
 import { useTheme } from '@Shared/Providers'
 
-import { LEGENDS_LABEL_CONFIG } from './constants'
-import { getAverageLinePlugin, getSeparatorLinePlugin } from './plugins'
-import { ChartProps, GetDefaultOptionsParams } from './types'
-import { buildChartTooltipFromContext, getChartJSType, getDefaultOptions, transformDataForChart } from './utils'
+import { drawReferenceLine } from './plugins'
+import { ChartProps, GetDefaultOptionsParams, TypeAndDatasetsType } from './types'
+import {
+    buildChartTooltipFromContext,
+    distanceBetweenPoints,
+    getChartJSType,
+    getDefaultOptions,
+    getLegendsLabelConfig,
+    transformDataForChart,
+} from './utils'
 
 // Register Chart.js components
 ChartJS.register(
@@ -37,19 +44,48 @@ ChartJS.register(
     PointElement,
     DoughnutController,
     ArcElement,
+    TimeScale,
     Title,
     ChartJSTooltip,
     Legend,
     Filler,
 )
 
-/**
- * The doughnut chart overrides the default legend label configuration.
- * Therefore need to set the custom legend label configuration.
- */
-ChartJS.overrides.doughnut.plugins.legend.labels = {
-    ...ChartJS.overrides.doughnut.plugins.legend.labels,
-    ...LEGENDS_LABEL_CONFIG,
+ChartJSTooltip.positioners.barElementCenterPositioner = (items, eventPosition) => {
+    if (!items.length) {
+        return false
+    }
+
+    let { x } = eventPosition
+    let { y } = eventPosition
+    let minDistance = Number.POSITIVE_INFINITY
+    let i: number
+    let len: number
+    let nearestElement: BarElement
+
+    for (i = 0, len = items.length; i < len; ++i) {
+        const el = items[i].element
+        if (el && el.hasValue()) {
+            const center = (el as BarElement).getCenterPoint()
+            const d = distanceBetweenPoints(eventPosition, center)
+
+            if (d < minDistance) {
+                minDistance = d
+                nearestElement = el as BarElement
+            }
+        }
+    }
+
+    if (nearestElement) {
+        const tp = nearestElement.getCenterPoint()
+        x = tp.x
+        y = tp.y
+    }
+
+    return {
+        x,
+        y,
+    }
 }
 
 /**
@@ -157,15 +193,15 @@ const Chart = (props: ChartProps) => {
         id,
         xAxisLabels: labels,
         hideAxis = false,
-        onChartClick,
-        separatorIndex,
-        averageLineValue,
-        xAxisMax,
-        yAxisMax,
+        referenceLines,
         tooltipConfig,
-        ...typeAndDatasets
+        type,
+        datasets,
+        xAxisMax,
+        xScaleTitle,
+        yAxisMax,
+        yScaleTitle,
     } = props
-    const { type, datasets } = typeAndDatasets
     const { getTooltipContent, placement } = tooltipConfig || { placement: 'top' }
 
     const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -212,7 +248,7 @@ const Chart = (props: ChartProps) => {
         setTooltipVisible(true)
     }
 
-    const debouncedExternalTooltipHandler = useDebounce(externalTooltipHandler, 16)
+    const debouncedExternalTooltipHandler = useDebounce(externalTooltipHandler, 50)
 
     useEffect(() => {
         const ctx = canvasRef.current?.getContext('2d')
@@ -220,16 +256,26 @@ const Chart = (props: ChartProps) => {
             return noop
         }
 
+        if (type === 'pie') {
+            /**
+             * The doughnut chart overrides the default legend label configuration.
+             * Therefore need to set the custom legend label configuration.
+             */
+            ChartJS.overrides.doughnut.plugins.legend.labels = {
+                ...ChartJS.overrides.doughnut.plugins.legend.labels,
+                ...getLegendsLabelConfig('pie', appTheme),
+            }
+        }
+
         // Get Chart.js type and transform data
         const chartJSType = getChartJSType(type)
-        const transformedData = { labels, datasets: transformDataForChart({ ...typeAndDatasets, appTheme }) }
+        const transformedData = {
+            labels,
+            datasets: transformDataForChart({ ...({ type, datasets } as TypeAndDatasetsType), appTheme }),
+        }
         const defaultOptions = getDefaultOptions({
-            type,
+            chartProps: props,
             appTheme,
-            hideAxis,
-            onChartClick,
-            xAxisMax,
-            yAxisMax,
             externalTooltipHandler: debouncedExternalTooltipHandler,
         })
 
@@ -240,15 +286,14 @@ const Chart = (props: ChartProps) => {
                 ...defaultOptions,
             },
             plugins: [
-                ...(averageLineValue ? [getAverageLinePlugin(averageLineValue, appTheme)] : []),
-                ...(separatorIndex ? [getSeparatorLinePlugin(separatorIndex, type, appTheme)] : []),
+                ...(referenceLines ?? []).map((rl, idx) => drawReferenceLine(rl, `reference-line-${idx}`, appTheme)),
             ],
         })
 
         return () => {
             chartRef.current.destroy()
         }
-    }, [type, datasets, labels, appTheme, hideAxis, averageLineValue, separatorIndex])
+    }, [type, datasets, labels, appTheme, hideAxis, referenceLines, xAxisMax, xScaleTitle, yAxisMax, yScaleTitle])
 
     return (
         <div className="h-100 w-100 dc__position-rel">
@@ -260,8 +305,19 @@ const Chart = (props: ChartProps) => {
                 placement={placement}
                 appendTo={document.getElementById(DEVTRON_BASE_MAIN_ID)}
                 className="default-tt dc__mxw-400 dc__word-break"
+                moveTransition="transform 200ms cubic-bezier(.42,.61,.64,.81)"
             >
-                <span ref={tooltipRef} style={{ position: 'absolute', left: 0, top: 0, width: 0, height: 0 }} />
+                <span
+                    ref={tooltipRef}
+                    style={{
+                        position: 'absolute',
+                        left: 0,
+                        top: 0,
+                        width: 0,
+                        height: 0,
+                        willChange: 'transform',
+                    }}
+                />
             </Tippy>
         </div>
     )
