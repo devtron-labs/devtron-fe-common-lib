@@ -189,7 +189,19 @@ ChartJSTooltip.positioners.barElementCenterPositioner = (items, eventPosition) =
  */
 const Chart = (props: ChartProps) => {
     /** Using this technique for typing in transformDataForChart */
-    const { id, xAxisLabels: labels, hideAxis = false, referenceLines, tooltipConfig, type, datasets } = props
+    const {
+        id,
+        xAxisLabels: labels,
+        hideAxis = false,
+        referenceLines,
+        tooltipConfig,
+        type,
+        datasets,
+        xAxisMax,
+        xScaleTitle,
+        yAxisMax,
+        yScaleTitle,
+    } = props
     const { getTooltipContent, placement } = tooltipConfig || { placement: 'top' }
 
     const canvasRef = useRef<HTMLCanvasElement>(null)
@@ -281,7 +293,7 @@ const Chart = (props: ChartProps) => {
         return () => {
             chartRef.current.destroy()
         }
-    }, [type, datasets, labels, appTheme, hideAxis, referenceLines])
+    }, [type, datasets, labels, appTheme, hideAxis, referenceLines, xAxisMax, xScaleTitle, yAxisMax, yScaleTitle])
 
     return (
         <div className="h-100 w-100 dc__position-rel">
