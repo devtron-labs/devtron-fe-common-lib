@@ -294,8 +294,13 @@ export const CHART_COLORS: Record<AppThemeType, Record<ChartColorKey, string>> =
 } as const
 
 export const CHART_GRID_LINES_COLORS: Record<AppThemeType, string> = {
-    [AppThemeType.light]: 'rgb(247, 250, 252)',
-    [AppThemeType.dark]: 'rgb(31, 32, 41)',
+    [AppThemeType.light]: 'rgb(237, 241, 245)',
+    [AppThemeType.dark]: 'rgb(40, 43, 51)',
+}
+
+export const CHART_AXIS_COLORS: Record<AppThemeType, string> = {
+    [AppThemeType.light]: 'rgb(208, 212, 217)',
+    [AppThemeType.dark]: 'rgb(60, 63, 71)',
 }
 
 export const CHART_AXIS_LABELS_COLOR: Record<AppThemeType, string> = {

@@ -14,6 +14,7 @@ import {
 import { AppThemeType } from '@Shared/Providers'
 
 import {
+    CHART_AXIS_COLORS,
     CHART_AXIS_LABELS_COLOR,
     CHART_CANVAS_BACKGROUND_COLORS,
     CHART_COLORS,
@@ -224,6 +225,9 @@ export const getDefaultOptions = ({
 
     const commonScaleConfig = {
         display: !hideAxis,
+        border: {
+            color: CHART_AXIS_COLORS[appTheme],
+        },
         grid: {
             color: CHART_GRID_LINES_COLORS[appTheme],
         },
