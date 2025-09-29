@@ -1,5 +1,6 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-illustration` to update.
 
+import { ReactComponent as IcRestore } from '@Illustrations/ic-restore.svg'
 import ImgCode from '@Illustrations/img-code.webp'
 import ImgDevtronFreemium from '@Illustrations/img-devtron-freemium.webp'
 import ImgManOnRocket from '@Illustrations/img-man-on-rocket.webp'
@@ -12,6 +13,7 @@ import { IllustrationBase } from './IllustrationBase'
 import { IllustrationBaseProps } from './types'
 
 export const illustrationMap = {
+    'ic-restore': IcRestore,
     'img-mechanical-operation': ImgMechanicalOperation,
     'img-code': ImgCode,
     'img-devtron-freemium': ImgDevtronFreemium,
