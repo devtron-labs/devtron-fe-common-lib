@@ -81,7 +81,7 @@ export interface BuildInfraDescriptorProps {
      * In case we want to restrict the max-width
      */
     additionalContainerClasses?: string
-    breadCrumbs: Breadcrumb[]
+    breadCrumbs?: Breadcrumb[]
     /**
      * Would stick at right of div
      */
