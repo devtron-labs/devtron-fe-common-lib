@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
-import { ChartOptions, TooltipOptions } from 'chart.js'
+import { TooltipOptions, TooltipPositionerFunction } from 'chart.js'
 
 import { TooltipProps } from '@Common/Tooltip'
 import { AppThemeType } from '@Shared/Providers'
@@ -31,49 +31,60 @@ interface BaseSimpleDataset {
 }
 
 export interface SimpleDataset extends BaseSimpleDataset {
-    backgroundColor: ChartColorKey
+    color: ChartColorKey
+    isClickable?: boolean
+}
+
+export interface SimpleDatasetForLineAndArea extends Omit<SimpleDataset, 'isClickable'> {
+    isDashed?: boolean
 }
 
 export interface SimpleDatasetForPie extends BaseSimpleDataset {
-    backgroundColor: Array<ChartColorKey>
+    colors: Array<ChartColorKey>
+    isClickable?: boolean[]
 }
 
-export interface SimpleDatasetForLine extends BaseSimpleDataset {
-    borderColor: ChartColorKey
+export interface ReferenceLineConfigType {
+    strokeWidth?: number
+    color?: ChartColorKey
+    value: number
 }
 
 type XYAxisMax = {
     xAxisMax?: number
     yAxisMax?: number
+    /**
+     * Optional reference lines to draw across the chart
+     */
+    referenceLines?: ReferenceLineConfigType[]
 }
 
-type TypeAndDatasetsType =
+type OnChartClickHandler = (datasetName: string, value: number) => void
+
+export type TypeAndDatasetsType =
     | ({
           type: 'pie'
           /**
            * Needs to be memoized
            */
           datasets: SimpleDatasetForPie
-          separatorIndex?: never
-          averageLineValue?: never
+          onChartClick?: OnChartClickHandler
       } & Never<XYAxisMax>)
     | ({
           type: 'line'
-          datasets: SimpleDatasetForLine[]
-          separatorIndex?: never
-          averageLineValue?: number
+          datasets: SimpleDatasetForLineAndArea[]
+          onChartClick?: never
       } & XYAxisMax)
     | ({
           type: 'area'
-          datasets: SimpleDataset[]
-          separatorIndex?: never
-          averageLineValue?: number
+          datasets: SimpleDatasetForLineAndArea
+          /* onChartClick is not applicable for area charts */
+          onChartClick?: never
       } & XYAxisMax)
     | ({
           type: Exclude<ChartType, 'pie' | 'line' | 'area'>
           datasets: SimpleDataset[]
-          separatorIndex?: number
-          averageLineValue?: never
+          onChartClick?: OnChartClickHandler
       } & XYAxisMax)
 
 export type ChartProps = {
@@ -87,10 +98,7 @@ export type ChartProps = {
      * @default false
      */
     hideAxis?: boolean
-    /**
-     * Callback function for chart click events
-     */
-    onChartClick?: ChartOptions['onClick']
+    hideXAxisLabels?: boolean
     tooltipConfig?: {
         getTooltipContent?: (args: Parameters<TooltipOptions['external']>[0]) => ReactNode
         /**
@@ -98,6 +106,10 @@ export type ChartProps = {
          */
         placement?: TooltipProps['placement']
     }
+    /** A title for x axis */
+    xScaleTitle?: string
+    /** A title for y axis */
+    yScaleTitle?: string
 } & TypeAndDatasetsType
 
 export type TransformDatasetProps = {
@@ -108,11 +120,11 @@ export type TransformDatasetProps = {
           dataset: SimpleDatasetForPie
       }
     | {
-          type: 'line'
-          dataset: SimpleDatasetForLine
+          type: 'line' | 'area'
+          dataset: SimpleDatasetForLineAndArea
       }
     | {
-          type: Exclude<ChartType, 'pie' | 'line'>
+          type: Exclude<ChartType, 'pie' | 'line' | 'area'>
           dataset: SimpleDataset
       }
 )
@@ -123,8 +135,14 @@ export type TransformDataForChartProps = {
     appTheme: AppThemeType
 } & TypeAndDatasetsType
 
-export interface GetDefaultOptionsParams
-    extends Pick<ChartProps, 'hideAxis' | 'onChartClick' | 'type' | 'xAxisMax' | 'yAxisMax'> {
+export interface GetDefaultOptionsParams {
+    chartProps: ChartProps
     appTheme: AppThemeType
     externalTooltipHandler: TooltipOptions['external']
+}
+
+declare module 'chart.js' {
+    interface TooltipPositionerMap {
+        barElementCenterPositioner: TooltipPositionerFunction<'bar'>
+    }
 }
