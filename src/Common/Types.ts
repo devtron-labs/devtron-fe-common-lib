@@ -40,7 +40,8 @@ import {
     TaskErrorObj,
     VariableTypeFormat,
 } from '.'
-import { IllustrationName } from '@Shared/Components'
+import { IllustrationName, SelectPickerOptionType } from '@Shared/Components'
+import { ClusterStatusType } from '@Pages/ResourceBrowser'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -1116,3 +1117,33 @@ export type EnvironmentsGroupedByClustersType = {
     clusterName: EnvironmentType['cluster']
     envList: EnvironmentType[]
 }[]
+
+export interface ClusterDetailDTO {
+    category: ClusterEnvironmentCategoryType
+    cluster_name: string
+    description: string
+    id: number
+    insecureSkipTlsVerify: boolean
+    installationId: number
+    isProd: boolean
+    isVirtualCluster: boolean
+    server_url: string
+    sshTunnelConfig: any
+    prometheus_url: string
+    proxyUrl: string
+    toConnectWithSSHTunnel: boolean
+    clusterStatus: ClusterStatusType
+}
+
+export interface ClusterDetailListType
+    extends Omit<
+        ClusterDetailDTO,
+        'server_url' | 'cluster_name' | 'prometheus_url' | 'id' | 'category' | 'clusterStatus'
+    > {
+    serverUrl: ClusterDetailDTO['server_url']
+    clusterName: ClusterDetailDTO['cluster_name']
+    prometheusUrl: ClusterDetailDTO['prometheus_url']
+    clusterId: ClusterDetailDTO['id']
+    category: SelectPickerOptionType
+    status: ClusterStatusType
+}

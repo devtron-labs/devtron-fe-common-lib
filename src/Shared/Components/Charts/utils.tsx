@@ -1,25 +1,82 @@
 import { ReactNode } from 'react'
-import { ChartDataset, ChartOptions, ChartType as ChartJSChartType, TooltipLabelStyle, TooltipOptions } from 'chart.js'
+import {
+    ActiveElement,
+    Chart,
+    ChartDataset,
+    ChartOptions,
+    ChartType as ChartJSChartType,
+    Point,
+    ScaleOptions,
+    TooltipLabelStyle,
+    TooltipOptions,
+} from 'chart.js'
 
 import { AppThemeType } from '@Shared/Providers'
 
 import {
+    CHART_AXIS_COLORS,
+    CHART_AXIS_LABELS_COLOR,
     CHART_CANVAS_BACKGROUND_COLORS,
     CHART_COLORS,
     CHART_GRID_LINES_COLORS,
-    LEGENDS_LABEL_CONFIG,
+    LINE_DASH,
 } from './constants'
 import {
     ChartColorKey,
+    ChartProps,
     ChartType,
     ColorTokensType,
     GetBackgroundAndBorderColorProps,
     GetDefaultOptionsParams,
-    SimpleDataset,
     TransformDataForChartProps,
     TransformDatasetProps,
     VariantsType,
 } from './types'
+
+export const getLegendsLabelConfig = (type: ChartType, appTheme: AppThemeType) => {
+    const baseConfig = {
+        color: CHART_AXIS_LABELS_COLOR[appTheme],
+        font: {
+            family: "'IBM Plex Sans', 'Open Sans', 'Roboto'",
+            size: 13,
+            lineHeight: '150%',
+            weight: 400,
+        },
+    } satisfies ChartOptions['plugins']['legend']['labels']
+
+    if (type === 'line') {
+        return {
+            ...baseConfig,
+            ...({
+                usePointStyle: false,
+                boxHeight: 0,
+                generateLabels: (chart: Chart<'line'>) => {
+                    const originalFn = Chart.defaults.plugins.legend.labels.generateLabels
+                    const labels = originalFn(chart)
+                    return labels.map((label) => {
+                        const { borderColor, borderDash } = chart.data.datasets[label.datasetIndex]
+
+                        return {
+                            ...label,
+                            fillStyle: 'transparent',
+                            strokeStyle: borderColor as string,
+                            lineDash: borderDash ? LINE_DASH : undefined,
+                            lineWidth: 2,
+                        }
+                    })
+                },
+            } satisfies ChartOptions<'line'>['plugins']['legend']['labels']),
+        }
+    }
+
+    return {
+        ...baseConfig,
+        usePointStyle: true,
+        boxHeight: 10,
+        boxWidth: 10,
+        pointStyle: 'rectRounded',
+    } satisfies ChartOptions['plugins']['legend']['labels']
+}
 
 // Map our chart types to Chart.js types
 export const getChartJSType = (type: ChartType): ChartJSChartType => {
@@ -37,23 +94,104 @@ export const getChartJSType = (type: ChartType): ChartJSChartType => {
     }
 }
 
+const handleChartClick =
+    ({ type, onChartClick, datasets, xAxisLabels }: ChartProps) =>
+    (_, elements: ActiveElement[]) => {
+        if (!elements || elements.length === 0 || !datasets || (Array.isArray(datasets) && datasets.length === 0)) {
+            return
+        }
+
+        const { datasetIndex, index } = elements[0]
+
+        if (type === 'pie') {
+            if (!datasets.isClickable?.[index]) {
+                return
+            }
+
+            onChartClick?.(xAxisLabels[index], index)
+        } else if (type !== 'area' && type !== 'line') {
+            if (!datasets[datasetIndex]?.isClickable) {
+                return
+            }
+
+            onChartClick?.(datasets[datasetIndex].datasetName, index)
+        }
+    }
+
+const handleChartHover =
+    ({ type, datasets }: ChartProps): ChartOptions['onHover'] =>
+    (_, elements: ActiveElement[], chart) => {
+        const { canvas } = chart
+
+        if (!elements || elements.length === 0 || !datasets || (Array.isArray(datasets) && datasets.length === 0)) {
+            // eslint-disable-next-line no-param-reassign
+            canvas.style.cursor = 'default'
+            return
+        }
+
+        const { datasetIndex, index } = elements[0]
+
+        if (type === 'pie') {
+            if (!datasets.isClickable?.[index]) {
+                // eslint-disable-next-line no-param-reassign
+                canvas.style.cursor = 'default'
+                return
+            }
+
+            // eslint-disable-next-line no-param-reassign
+            canvas.style.cursor = 'pointer'
+        } else if (type !== 'area' && type !== 'line') {
+            if (!datasets[datasetIndex]?.isClickable) {
+                // eslint-disable-next-line no-param-reassign
+                canvas.style.cursor = 'default'
+                return
+            }
+
+            // eslint-disable-next-line no-param-reassign
+            canvas.style.cursor = 'pointer'
+        }
+    }
+
+const getScaleTickTitleConfig = (title: string, appTheme: AppThemeType): ScaleOptions<'linear'>['title'] => ({
+    display: !!title,
+    text: title,
+    align: 'center',
+    font: {
+        family: "'IBM Plex Sans', 'Open Sans', 'Roboto'",
+        size: 13,
+        lineHeight: '150%',
+        weight: 400,
+    },
+    color: CHART_AXIS_LABELS_COLOR[appTheme],
+})
+
 // Get default options based on chart type
 export const getDefaultOptions = ({
-    type,
+    chartProps,
     appTheme,
-    hideAxis,
-    xAxisMax,
-    yAxisMax,
-    onChartClick,
     externalTooltipHandler,
 }: GetDefaultOptionsParams): ChartOptions => {
+    const {
+        onChartClick,
+        type,
+        hideAxis,
+        hideXAxisLabels = false,
+        xAxisMax,
+        yAxisMax,
+        xScaleTitle,
+        yScaleTitle,
+    } = chartProps
     const baseOptions: ChartOptions = {
         responsive: true,
+        devicePixelRatio: 3,
         maintainAspectRatio: false,
         plugins: {
             legend: {
+                title: {
+                    display: false,
+                },
                 position: 'bottom' as const,
-                labels: LEGENDS_LABEL_CONFIG,
+                labels: getLegendsLabelConfig(type, appTheme),
                 display: !hideAxis,
             },
             title: {
@@ -68,7 +206,7 @@ export const getDefaultOptions = ({
         elements: {
             line: {
                 fill: type === 'area',
-                tension: 0.1,
+                tension: 0,
             },
             bar: {
                 borderSkipped: 'start' as const,
@@ -77,25 +215,45 @@ export const getDefaultOptions = ({
                 borderRadius: 4,
             },
         },
-        ...(onChartClick ? { onClick: onChartClick } : {}),
+        ...(onChartClick
+            ? {
+                  onClick: handleChartClick(chartProps),
+                  onHover: handleChartHover(chartProps),
+              }
+            : {}),
     }
 
     const commonScaleConfig = {
         display: !hideAxis,
+        border: {
+            color: CHART_AXIS_COLORS[appTheme],
+        },
         grid: {
             color: CHART_GRID_LINES_COLORS[appTheme],
         },
-    } satisfies ChartOptions['scales']['x']
+        ticks: {
+            display: !hideXAxisLabels,
+            color: CHART_AXIS_LABELS_COLOR[appTheme],
+            font: {
+                family: "'IBM Plex Sans', 'Open Sans', 'Roboto'",
+                size: 12,
+                lineHeight: '150%',
+                weight: 400,
+            },
+        },
+    } satisfies ScaleOptions<'linear'>
 
     const commonXScaleConfig = {
         ...commonScaleConfig,
         max: xAxisMax,
-    } satisfies ChartOptions['scales']['x']
+        title: getScaleTickTitleConfig(xScaleTitle, appTheme),
+    } satisfies ScaleOptions<'linear'>
 
     const commonYScaleConfig = {
         ...commonScaleConfig,
         max: yAxisMax,
-    } satisfies ChartOptions['scales']['y']
+        title: getScaleTickTitleConfig(yScaleTitle, appTheme),
+    } satisfies ScaleOptions<'linear'>
 
     switch (type) {
         case 'area':
@@ -118,7 +276,6 @@ export const getDefaultOptions = ({
                     y: {
                         ...commonYScaleConfig,
                         stacked: type === 'area',
-                        beginAtZero: true,
                     },
                     x: commonXScaleConfig,
                 },
@@ -126,6 +283,13 @@ export const getDefaultOptions = ({
         case 'stackedBar':
             return {
                 ...baseOptions,
+                plugins: {
+                    ...baseOptions.plugins,
+                    tooltip: {
+                        ...baseOptions.plugins.tooltip,
+                        position: 'barElementCenterPositioner',
+                    },
+                },
                 scales: {
                     x: {
                         ...commonXScaleConfig,
@@ -146,7 +310,6 @@ export const getDefaultOptions = ({
                     x: {
                         ...commonXScaleConfig,
                         stacked: true,
-                        beginAtZero: true,
                     },
                     y: {
                         ...commonYScaleConfig,
@@ -177,94 +340,103 @@ export const getDefaultOptions = ({
 const getColorValue = (colorKey: ChartColorKey, appTheme: AppThemeType): string => CHART_COLORS[appTheme][colorKey]
 
 // Generates a slightly darker shade for a given color key
-const generateCorrespondingBorderColor = (colorKey: ChartColorKey): string => {
+const getDarkerShadeBy = (colorKey: ChartColorKey, appTheme: AppThemeType, delta: VariantsType = 100): string => {
     // Extract the base color name and shade number
     const colorName = colorKey.replace(/\d+$/, '')
     const shadeMatch = colorKey.match(/\d+$/)
     const currentShade = shadeMatch ? parseInt(shadeMatch[0], 10) : 500
 
     // Try to get a darker shade (higher number)
-    const darkerShade = Math.min(currentShade + 200, 900)
+    const darkerShade = Math.min(currentShade + delta, 900)
     const borderColorKey = `${colorName}${darkerShade}` as ChartColorKey
 
     // If the darker shade exists, use it; otherwise, use the current color
-    return CHART_COLORS[borderColorKey] || CHART_COLORS[colorKey]
+    return CHART_COLORS[appTheme][borderColorKey] || CHART_COLORS[appTheme][colorKey]
 }
 
 const getBackgroundAndBorderColor = ({ type, dataset, appTheme }: GetBackgroundAndBorderColorProps) => {
     if (type === 'pie') {
         return {
-            backgroundColor: dataset.backgroundColor.map((colorKey) => getColorValue(colorKey, appTheme)),
+            backgroundColor: dataset.colors.map((colorKey) => getColorValue(colorKey, appTheme)),
+            hoverBackgroundColor: dataset.colors.map((colorKey) => getDarkerShadeBy(colorKey, appTheme)),
             borderColor: 'transparent',
-        }
+        } satisfies Pick<ChartDataset<'doughnut'>, 'hoverBackgroundColor' | 'backgroundColor' | 'borderColor'>
+    }
+
+    if (type === 'stackedBar' || type === 'stackedBarHorizontal') {
+        return {
+            backgroundColor: getColorValue(dataset.color, appTheme),
+            hoverBackgroundColor: getDarkerShadeBy(dataset.color, appTheme),
+            borderColor: 'transparent',
+        } satisfies Pick<ChartDataset<'bar'>, 'backgroundColor' | 'borderColor' | 'hoverBackgroundColor'>
     }
 
     if (type === 'line') {
-        const borderColor = getColorValue(dataset.borderColor, appTheme)
+        const borderColor = getColorValue(dataset.color, appTheme)
 
         return {
             backgroundColor: borderColor,
             borderColor,
-        }
+            pointBackgroundColor: borderColor,
+            pointBorderColor: borderColor,
+        } satisfies Pick<
+            ChartDataset<'line'>,
+            'backgroundColor' | 'borderColor' | 'pointBackgroundColor' | 'pointBorderColor'
+        >
     }
 
-    if (type === 'area') {
-        const bgColor = getColorValue(dataset.backgroundColor, appTheme)
-
-        return {
-            backgroundColor(context) {
-                const { ctx, chartArea } = context.chart
-
-                if (!chartArea) {
-                    // happens on initial render
-                    return null
-                }
-
-                const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom)
-                gradient.addColorStop(0, bgColor)
-                gradient.addColorStop(1, CHART_CANVAS_BACKGROUND_COLORS[appTheme])
-
-                return gradient
-            },
-            borderColor: generateCorrespondingBorderColor((dataset as SimpleDataset).backgroundColor),
-            pointBackgroundColor: bgColor,
-            pointBorderColor: bgColor,
-        } as Pick<ChartDataset<'line'>, 'backgroundColor' | 'borderColor' | 'pointBackgroundColor' | 'pointBorderColor'>
-    }
+    const bgColor = getColorValue(dataset.color, appTheme)
 
     return {
-        backgroundColor: getColorValue((dataset as SimpleDataset).backgroundColor, appTheme),
-        borderColor: 'transparent',
-    }
+        backgroundColor(context) {
+            const { ctx, chartArea } = context.chart
+
+            if (!chartArea) {
+                // happens on initial render
+                return null
+            }
+
+            const gradient = ctx.createLinearGradient(0, chartArea.top, 0, chartArea.bottom)
+            gradient.addColorStop(0, bgColor)
+            gradient.addColorStop(1, CHART_CANVAS_BACKGROUND_COLORS[appTheme])
+
+            return gradient
+        },
+        borderColor: getDarkerShadeBy(dataset.color, appTheme),
+        pointBackgroundColor: bgColor,
+        pointBorderColor: bgColor,
+    } as Pick<ChartDataset<'line'>, 'backgroundColor' | 'borderColor' | 'pointBackgroundColor' | 'pointBorderColor'>
 }
 
 const transformDataset = (props: TransformDatasetProps) => {
     const { dataset, type } = props
 
-    const { backgroundColor, borderColor, pointBackgroundColor, pointBorderColor } = getBackgroundAndBorderColor(props)
+    const styles = getBackgroundAndBorderColor(props)
 
     const baseDataset = {
         label: dataset.datasetName,
         data: dataset.yAxisValues,
-        backgroundColor,
-        borderColor,
-        pointBackgroundColor,
-        pointBorderColor,
+        ...styles,
     }
+
+    const commonLineAndAreaConfig = {
+        ...baseDataset,
+        fill: type === 'area',
+        pointRadius: 0,
+        pointHoverRadius: 8,
+        pointHitRadius: 20,
+        pointStyle: 'rectRounded',
+        borderWidth: 2,
+    } as ChartDataset<'line'>
 
     switch (type) {
         case 'line':
-        case 'area':
             return {
-                ...baseDataset,
-                fill: type === 'area',
-                pointRadius: 0,
-                pointHoverRadius: 10,
-                pointHitRadius: 20,
-                pointStyle: 'rectRounded',
-                pointBorderWidth: 0,
-                borderWidth: 2,
-            } as ChartDataset<'line'>
+                ...commonLineAndAreaConfig,
+                borderDash: dataset.isDashed ? LINE_DASH : undefined,
+            } satisfies ChartDataset<'line'>
+        case 'area':
+            return commonLineAndAreaConfig
         case 'pie':
         case 'stackedBar':
         case 'stackedBarHorizontal':
@@ -282,16 +454,18 @@ export const transformDataForChart = (props: TransformDataForChartProps) => {
         return []
     }
 
-    if (type !== 'pie' && !Array.isArray(datasets)) {
+    if (type !== 'pie' && type !== 'area' && !Array.isArray(datasets)) {
         // eslint-disable-next-line no-console
         console.error('Invalid datasets format. Expected an array.')
         return []
     }
 
     switch (type) {
+        /** Not not clubbing it with the default case for better typing */
         case 'pie':
             return [transformDataset({ type, dataset: datasets, appTheme })]
-        /** Not not clubbing it with the default case for better typing */
+        case 'area':
+            return [transformDataset({ type, dataset: datasets, appTheme })]
         case 'line':
             return datasets.map((dataset) => transformDataset({ type, dataset, appTheme }))
         default:
@@ -385,3 +559,5 @@ export const buildChartTooltipFromContext = ({
         </div>
     )
 }
+
+export const distanceBetweenPoints = (pt1: Point, pt2: Point) => Math.sqrt((pt2.x - pt1.x) ** 2 + (pt2.y - pt1.y) ** 2)

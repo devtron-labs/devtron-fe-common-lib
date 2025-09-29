@@ -2,18 +2,6 @@ import { AppThemeType } from '@Shared/Providers'
 
 import { ChartColorKey } from './types'
 
-export const LEGENDS_LABEL_CONFIG = {
-    usePointStyle: true,
-    pointStyle: 'rectRounded',
-    pointStyleWidth: 0,
-    font: {
-        family: "'IBM Plex Sans', 'Open Sans', 'Roboto'",
-        size: 13,
-        lineHeight: '150%',
-        weight: 400,
-    },
-} as const
-
 export const CHART_COLORS: Record<AppThemeType, Record<ChartColorKey, string>> = {
     [AppThemeType.light]: {
         // Sky Blue
@@ -306,11 +294,23 @@ export const CHART_COLORS: Record<AppThemeType, Record<ChartColorKey, string>> =
 } as const
 
 export const CHART_GRID_LINES_COLORS: Record<AppThemeType, string> = {
-    [AppThemeType.light]: '#f1f5f9',
-    [AppThemeType.dark]: '#1e293b',
+    [AppThemeType.light]: 'rgb(237, 241, 245)',
+    [AppThemeType.dark]: 'rgb(40, 43, 51)',
+}
+
+export const CHART_AXIS_COLORS: Record<AppThemeType, string> = {
+    [AppThemeType.light]: 'rgb(208, 212, 217)',
+    [AppThemeType.dark]: 'rgb(60, 63, 71)',
+}
+
+export const CHART_AXIS_LABELS_COLOR: Record<AppThemeType, string> = {
+    [AppThemeType.dark]: 'rgb(248, 248, 249)',
+    [AppThemeType.light]: 'rgb(0, 10, 20)',
 }
 
 export const CHART_CANVAS_BACKGROUND_COLORS: Record<AppThemeType, string> = {
-    [AppThemeType.light]: '#ffffff',
-    [AppThemeType.dark]: '#1e293b',
+    [AppThemeType.light]: 'rgb(255, 255, 255)',
+    [AppThemeType.dark]: 'rgb(21, 22, 31)',
 }
+
+export const LINE_DASH = [6, 6]

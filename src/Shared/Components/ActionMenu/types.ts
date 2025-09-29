@@ -64,6 +64,7 @@ export type ActionMenuItemType<T extends string | number = string | number> = Om
     trailingItem?: TrailingItemType
     /** Prevents the menu from closing when the item is clicked. */
     doNotCloseMenuOnClick?: boolean
+    dataAttributesId?: number
 } & ConditionalActionMenuComponentType
 
 export type ActionMenuOptionType<T extends string | number> = {
