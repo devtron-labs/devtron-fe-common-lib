@@ -12,6 +12,7 @@ import { ReactComponent as ICArgocdApp } from '@IconsV2/ic-argocd-app.svg'
 import { ReactComponent as ICArrowClockwise } from '@IconsV2/ic-arrow-clockwise.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICArrowSquareOut } from '@IconsV2/ic-arrow-square-out.svg'
+import { ReactComponent as ICArrowWhite } from '@IconsV2/ic-arrow-white.svg'
 import { ReactComponent as ICArrowsClockwise } from '@IconsV2/ic-arrows-clockwise.svg'
 import { ReactComponent as ICArrowsLeftRight } from '@IconsV2/ic-arrows-left-right.svg'
 import { ReactComponent as ICAsterisk } from '@IconsV2/ic-asterisk.svg'
@@ -162,6 +163,7 @@ import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
 import { ReactComponent as ICLego } from '@IconsV2/ic-lego.svg'
 import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
 import { ReactComponent as ICLightningFill } from '@IconsV2/ic-lightning-fill.svg'
+import { ReactComponent as ICLine } from '@IconsV2/ic-line.svg'
 import { ReactComponent as ICLink } from '@IconsV2/ic-link.svg'
 import { ReactComponent as ICLinkedBuildColor } from '@IconsV2/ic-linked-build-color.svg'
 import { ReactComponent as ICListBullets } from '@IconsV2/ic-list-bullets.svg'
@@ -280,6 +282,7 @@ export const iconMap = {
     'ic-arrow-clockwise': ICArrowClockwise,
     'ic-arrow-right': ICArrowRight,
     'ic-arrow-square-out': ICArrowSquareOut,
+    'ic-arrow-white': ICArrowWhite,
     'ic-arrows-clockwise': ICArrowsClockwise,
     'ic-arrows-left-right': ICArrowsLeftRight,
     'ic-asterisk': ICAsterisk,
@@ -430,6 +433,7 @@ export const iconMap = {
     'ic-lego': ICLego,
     'ic-lightning-fill': ICLightningFill,
     'ic-lightning': ICLightning,
+    'ic-line': ICLine,
     'ic-link': ICLink,
     'ic-linked-build-color': ICLinkedBuildColor,
     'ic-list-bullets': ICListBullets,
