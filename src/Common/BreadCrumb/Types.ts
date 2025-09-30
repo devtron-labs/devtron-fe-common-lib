@@ -52,3 +52,9 @@ export interface BreadcrumbTextProps {
      */
     shouldTruncate?: boolean
 }
+
+export interface NestedBreadCrumbProps {
+    redirectUrl: string
+    linkText: string
+    profileName: string
+}
