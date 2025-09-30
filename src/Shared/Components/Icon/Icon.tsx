@@ -1,5 +1,5 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-icon` to update.
-import { ReactComponent as ICNewChat } from '@Icons/ic-new-chat.svg'
+
 import { ReactComponent as IC73strings } from '@IconsV2/ic-73strings.svg'
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
 import { ReactComponent as ICActivity } from '@IconsV2/ic-activity.svg'
@@ -194,6 +194,7 @@ import { ReactComponent as ICMonitoring } from '@IconsV2/ic-monitoring.svg'
 import { ReactComponent as ICMoreVertical } from '@IconsV2/ic-more-vertical.svg'
 import { ReactComponent as ICNamespace } from '@IconsV2/ic-namespace.svg'
 import { ReactComponent as ICNew } from '@IconsV2/ic-new.svg'
+import { ReactComponent as ICNewChat } from '@IconsV2/ic-new-chat.svg'
 import { ReactComponent as ICNodeScript } from '@IconsV2/ic-node-script.svg'
 import { ReactComponent as ICOidc } from '@IconsV2/ic-oidc.svg'
 import { ReactComponent as ICOpenBox } from '@IconsV2/ic-open-box.svg'
@@ -474,6 +475,7 @@ export const iconMap = {
     'ic-monitoring': ICMonitoring,
     'ic-more-vertical': ICMoreVertical,
     'ic-namespace': ICNamespace,
+    'ic-new-chat': ICNewChat,
     'ic-new': ICNew,
     'ic-node-script': ICNodeScript,
     'ic-oidc': ICOidc,
@@ -556,7 +558,6 @@ export const iconMap = {
     'ic-webhook': ICWebhook,
     'ic-wifi-slash': ICWifiSlash,
     'ic-world-globe': ICWorldGlobe,
-    'ic-new-chat': ICNewChat,
 }
 
 export type IconName = keyof typeof iconMap
