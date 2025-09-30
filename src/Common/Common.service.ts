@@ -678,7 +678,10 @@ export const getDetailedClusterList = async (
                     status: clusterStatus,
                     costModuleConfig: {
                         enabled: costModuleConfig?.enabled || false,
-                        config: sanitizedCostConfig,
+                        config: {
+                            ...sanitizedCostConfig,
+                            detectedProvider: costModuleConfig?.config?.detectedProvider,
+                        },
                         installationStatus: costModuleInstallationStatus,
                         ...(costModuleInstallationStatus === 'Failed'
                             ? {
