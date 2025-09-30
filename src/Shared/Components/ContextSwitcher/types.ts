@@ -36,6 +36,7 @@ export interface ContextSwitcherTypes
     > {
     options: GroupBase<SelectPickerOptionType<string | number>>[]
     isAppDataAvailable?: boolean
+    resource: 'Cluster' | 'Release' | 'Tenant' | 'Application' | 'Job' | 'Application Group' | 'Chart Store'
 }
 
 export interface RecentlyVisitedOptions extends SelectPickerOptionType<number> {
