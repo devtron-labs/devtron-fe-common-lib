@@ -45,7 +45,6 @@ export const ContextSwitcher = ({
     optionListError,
     reloadOptionList,
     classNamePrefix,
-    resource,
 }: ContextSwitcherTypes) => {
     const selectRef = useRef<SelectInstance<SelectPickerOptionType>>(null)
     const shouldShowToastRef = useRef<boolean>(true)
@@ -61,7 +60,7 @@ export const ContextSwitcher = ({
         if (shouldShowToastRef.current) {
             ToastManager.showToast({
                 variant: ToastVariantType.shortcut,
-                text: `to switch ${resource}`,
+                text: 'to switch Applications',
                 shortcuts: ['S'],
             })
         }
