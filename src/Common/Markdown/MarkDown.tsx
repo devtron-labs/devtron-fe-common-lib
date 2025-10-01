@@ -81,9 +81,6 @@ const MarkDown = ({
 
     renderer.heading = ({ text, depth }: Tokens.Heading) => {
         // Alternative debugging - add to window object
-        if (typeof window !== 'undefined') {
-            ;(window as any).debugHeadingText = text
-        }
         const escapedText = disableEscapedText ? '' : text.toLowerCase().replace(/[^\w]+/g, '-')
 
         return `
