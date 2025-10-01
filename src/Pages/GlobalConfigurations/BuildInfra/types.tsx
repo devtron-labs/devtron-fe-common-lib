@@ -19,7 +19,6 @@ import { FormEvent, FunctionComponent, ReactNode, SyntheticEvent } from 'react'
 import { BUILD_INFRA_INHERIT_ACTIONS, useBuildInfraForm } from '@Pages/index'
 
 import { ServerErrors } from '../../../Common'
-import { Breadcrumb } from '../../../Common/BreadCrumb/Types'
 import {
     CMSecretComponentType,
     CMSecretConfigData,
@@ -76,21 +75,31 @@ export enum BuildInfraProfileVariants {
     CUSTOM = 'CUSTOM',
 }
 
-export interface BuildInfraDescriptorProps {
+export type BuildInfraDescriptorProps = {
     /**
      * In case we want to restrict the max-width
      */
     additionalContainerClasses?: string
-    breadCrumbs?: Breadcrumb[]
     /**
      * Would stick at right of div
      */
     children?: ReactNode
-    tippyInfoText?: string
-    tippyAdditionalContent?: ReactNode
-    tooltipNode?: ReactNode
-    tooltipHeading?: string
-}
+} & (
+    | {
+          tooltipNode: ReactNode
+          tippyInfoText?: never
+          tooltipHeading?: never
+          tippyAdditionalContent?: never
+          profileName?: never
+      }
+    | {
+          tooltipNode?: never
+          tippyInfoText: string
+          tooltipHeading?: string
+          tippyAdditionalContent?: ReactNode
+          profileName?: string
+      }
+)
 
 export type NumericBuildInfraConfigTypes = Extract<
     BuildInfraConfigTypes,
