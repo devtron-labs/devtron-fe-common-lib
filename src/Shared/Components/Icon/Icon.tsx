@@ -1,5 +1,17 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-icon` to update.
-
+import { ReactComponent as ICBulb } from '@Icons/ic-bulb.svg'
+import { ReactComponent as ICStatusProgress } from '@Icons/ic-circle-progress.svg'
+import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
+import { ReactComponent as ICStatusPending } from '@Icons/ic-dot-circle.svg'
+import { ReactComponent as ICStatusFailed } from '@Icons/ic-failure-color.svg'
+import { ReactComponent as ICPiggybank } from '@Icons/ic-piggybank.svg'
+import { ReactComponent as ICPriorityHighFill } from '@Icons/ic-priority-high-fill.svg'
+import { ReactComponent as ICPriorityLowFill } from '@Icons/ic-priority-low-fill.svg'
+import { ReactComponent as ICPriorityMediumFill } from '@Icons/ic-priority-medium-fill.svg'
+import { ReactComponent as ICPriorityUrgentFill } from '@Icons/ic-priority-urgent-fill.svg'
+import { ReactComponent as ICRedBulb } from '@Icons/ic-red-bulb.svg'
+import { ReactComponent as ICSpider } from '@Icons/ic-spider.svg'
+import { ReactComponent as ICVector } from '@Icons/ic-vector.svg'
 import { ReactComponent as IC73strings } from '@IconsV2/ic-73strings.svg'
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
 import { ReactComponent as ICActivity } from '@IconsV2/ic-activity.svg'
@@ -560,6 +572,19 @@ export const iconMap = {
     'ic-webhook': ICWebhook,
     'ic-wifi-slash': ICWifiSlash,
     'ic-world-globe': ICWorldGlobe,
+    'ic-bulb': ICRedBulb,
+    'ic-red-bulb': ICBulb,
+    'ic-failure-color': ICStatusFailed,
+    'ic-dot-circle': ICStatusPending,
+    'ic-circle-progress': ICStatusProgress,
+    'ic-piggybank': ICPiggybank,
+    'ic-priority-high-fill': ICPriorityHighFill,
+    'ic-priority-low-fill': ICPriorityLowFill,
+    'ic-priority-medium-fill': ICPriorityMediumFill,
+    'ic-priority-urgent-fill': ICPriorityUrgentFill,
+    'ic-spider': ICSpider,
+    'ic-vector': ICVector,
+    'ic-close': ICClose,
 }
 
 export type IconName = keyof typeof iconMap
