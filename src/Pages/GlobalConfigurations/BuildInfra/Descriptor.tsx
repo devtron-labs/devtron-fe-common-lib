@@ -23,9 +23,9 @@ import { BuildInfraDescriptorProps } from './types'
 const Descriptor = ({
     additionalContainerClasses,
     children,
+    tooltipNode,
     tippyInfoText,
     tippyAdditionalContent,
-    tooltipNode,
     tooltipHeading,
     profileName,
 }: BuildInfraDescriptorProps) => (

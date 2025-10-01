@@ -9,8 +9,20 @@ export const NestedBreadCrumb = ({ redirectUrl, linkText, profileName }: NestedB
 
     const breadcrumbs = [
         { type: 'link', label: linkText, to: redirectUrl },
-        { type: 'link', label: 'Profiles', to: redirectUrl },
-        { type: 'text', label: profileName },
+        ...(profileName
+            ? [
+                  { type: 'link', label: 'Profiles', to: redirectUrl },
+                  {
+                      type: 'text',
+                      label: profileName,
+                  },
+              ]
+            : [
+                  {
+                      type: 'text',
+                      label: 'Create Profile',
+                  },
+              ]),
     ]
 
     return (
