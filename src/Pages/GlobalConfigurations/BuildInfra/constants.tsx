@@ -19,7 +19,6 @@ import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
 import { ReactComponent as ICTimer } from '@Icons/ic-timer.svg'
 import { ReactComponent as ICCpu } from '@IconsV2/ic-cpu.svg'
 import { ReactComponent as ICMemory } from '@IconsV2/ic-memory.svg'
-import { UseBreadcrumbProps } from '@Common/BreadCrumb/Types'
 import { CMSecretComponentType } from '@Shared/Services'
 
 import {
@@ -81,17 +80,6 @@ export const BUILD_INFRA_TEXT = {
     },
     INVALID_FORM_MESSAGE: 'Valid input is required for all mandatory fields.',
 } as const
-
-export const BUILD_INFRA_BREADCRUMB: UseBreadcrumbProps = {
-    alias: {
-        'application-management': null,
-        configurations: null,
-        'build-infra': {
-            component: <h2 className="m-0 cn-9 fs-16 fw-6 lh-32">{BUILD_INFRA_TEXT.HEADING}</h2>,
-            linked: false,
-        },
-    },
-}
 
 export const BUILD_INFRA_LOCATOR_MARKER_MAP: Readonly<Record<BuildInfraLocators, BuildInfraFormFieldType['marker']>> = {
     [BuildInfraLocators.CPU]: ICCpu,
