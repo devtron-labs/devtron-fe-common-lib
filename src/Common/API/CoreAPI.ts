@@ -49,6 +49,7 @@ class CoreAPI {
         preventLicenseRedirect = false,
         shouldParseServerErrorForUnauthorizedUser = false,
         isMultipartRequest,
+        isProxyHost = false,
     }: FetchAPIParamsType<K>): Promise<ResponseType> => {
         const options: RequestInit = {
             method: type,
@@ -58,7 +59,7 @@ class CoreAPI {
         // eslint-disable-next-line dot-notation
         options['credentials'] = 'include' as RequestCredentials
         return fetch(
-            `${this.host}/${url}`,
+            `${isProxyHost ? '/proxy' : this.host}/${url}`,
             !isMultipartRequest
                 ? options
                 : ({
