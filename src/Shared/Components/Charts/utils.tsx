@@ -20,6 +20,7 @@ import {
     CHART_COLORS,
     CHART_GRID_LINES_COLORS,
     LINE_DASH,
+    MAX_BAR_THICKNESS,
 } from './constants'
 import {
     ChartColorKey,
@@ -301,6 +302,11 @@ export const getDefaultOptions = ({
                         beginAtZero: true,
                     },
                 },
+                datasets: {
+                    bar: {
+                        maxBarThickness: MAX_BAR_THICKNESS,
+                    },
+                },
             } satisfies ChartOptions<'bar'>
         case 'stackedBarHorizontal':
             return {
@@ -314,6 +320,11 @@ export const getDefaultOptions = ({
                     y: {
                         ...commonYScaleConfig,
                         stacked: true,
+                    },
+                },
+                datasets: {
+                    bar: {
+                        maxBarThickness: MAX_BAR_THICKNESS,
                     },
                 },
             } satisfies ChartOptions<'bar'>
