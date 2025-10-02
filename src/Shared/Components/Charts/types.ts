@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { Dispatch, ReactNode, SetStateAction } from 'react'
 import { TooltipOptions, TooltipPositionerFunction } from 'chart.js'
 
 import { TooltipProps } from '@Common/Tooltip'
@@ -139,6 +139,7 @@ export interface GetDefaultOptionsParams {
     chartProps: ChartProps
     appTheme: AppThemeType
     externalTooltipHandler: TooltipOptions['external']
+    setTooltipVisible: Dispatch<SetStateAction<boolean>>
 }
 
 declare module 'chart.js' {

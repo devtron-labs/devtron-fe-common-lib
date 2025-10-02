@@ -51,6 +51,7 @@ import { ReactComponent as ICChatCircleDots } from '@IconsV2/ic-chat-circle-dots
 import { ReactComponent as ICChatCircleOnline } from '@IconsV2/ic-chat-circle-online.svg'
 import { ReactComponent as ICCheck } from '@IconsV2/ic-check.svg'
 import { ReactComponent as ICCheckAll } from '@IconsV2/ic-check-all.svg'
+import { ReactComponent as ICCheckCircle } from '@IconsV2/ic-check-circle.svg'
 import { ReactComponent as ICCheckSquare } from '@IconsV2/ic-check-square.svg'
 import { ReactComponent as ICChecks } from '@IconsV2/ic-checks.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
@@ -327,6 +328,7 @@ export const iconMap = {
     'ic-chat-circle-dots': ICChatCircleDots,
     'ic-chat-circle-online': ICChatCircleOnline,
     'ic-check-all': ICCheckAll,
+    'ic-check-circle': ICCheckCircle,
     'ic-check-square': ICCheckSquare,
     'ic-check': ICCheck,
     'ic-checks': ICChecks,
