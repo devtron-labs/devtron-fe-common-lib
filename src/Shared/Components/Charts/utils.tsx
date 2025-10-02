@@ -95,7 +95,13 @@ export const getChartJSType = (type: ChartType): ChartJSChartType => {
 }
 
 const handleChartClick =
-    ({ type, onChartClick, datasets, xAxisLabels }: ChartProps) =>
+    ({
+        type,
+        onChartClick,
+        datasets,
+        xAxisLabels,
+        setTooltipVisible,
+    }: ChartProps & Pick<GetDefaultOptionsParams, 'setTooltipVisible'>) =>
     (_, elements: ActiveElement[]) => {
         if (!elements || elements.length === 0 || !datasets || (Array.isArray(datasets) && datasets.length === 0)) {
             return
@@ -116,6 +122,7 @@ const handleChartClick =
 
             onChartClick?.(datasets[datasetIndex].datasetName, index)
         }
+        setTooltipVisible(false)
     }
 
 const handleChartHover =
@@ -170,6 +177,7 @@ export const getDefaultOptions = ({
     chartProps,
     appTheme,
     externalTooltipHandler,
+    setTooltipVisible,
 }: GetDefaultOptionsParams): ChartOptions => {
     const {
         onChartClick,
@@ -217,7 +225,7 @@ export const getDefaultOptions = ({
         },
         ...(onChartClick
             ? {
-                  onClick: handleChartClick(chartProps),
+                  onClick: handleChartClick({ ...chartProps, setTooltipVisible }),
                   onHover: handleChartHover(chartProps),
               }
             : {}),

@@ -613,3 +613,5 @@ export const REMOTE_CONNECTION_TYPE_LABEL_MAP: Record<RemoteConnectionType, stri
     [RemoteConnectionType.Proxy]: 'Via Proxy',
     [RemoteConnectionType.SSHTunnel]: 'Via SSH Tunnel',
 }
+
+export const TARGET_K8S_VERSION_SEARCH_KEY = 'targetK8sVersion'
