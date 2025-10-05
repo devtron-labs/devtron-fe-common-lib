@@ -278,9 +278,11 @@ const TableContent = <
                                         {...additionalProps}
                                     />
                                 ) : (
-                                    <span key={field} className="dc__inline-block py-12">
-                                        {row.data[field]}
-                                    </span>
+                                    <div className="flex left">
+                                        <span key={field} className="fs-13 fw-4 cn-9 lh-20 dc__truncate">
+                                            {row.data[field]}
+                                        </span>
+                                    </div>
                                 )}
                             </div>
                         )
