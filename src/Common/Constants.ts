@@ -23,13 +23,6 @@ import { InfrastructureManagementAppListType } from './Types'
 export const FALLBACK_REQUEST_TIMEOUT = 60000
 export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
 
-// Service path constants for API routing
-export const SERVICE_PATHS = {
-    ATHENA: 'athena',
-    ORCHESTRATOR: 'orchestrator',
-    // Add other service paths as needed in the future
-} as const
-
 export const DOCUMENTATION_HOME_PAGE = 'https://docs.devtron.ai'
 export const DEVTRON_HOME_PAGE = 'https://devtron.ai/'
 export const DOCUMENTATION_VERSION = '/devtron/v1.7'
