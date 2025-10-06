@@ -1,17 +1,5 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-icon` to update.
-import { ReactComponent as ICBulb } from '@Icons/ic-bulb.svg'
-import { ReactComponent as ICStatusProgress } from '@Icons/ic-circle-progress.svg'
-import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
-import { ReactComponent as ICStatusPending } from '@Icons/ic-dot-circle.svg'
-import { ReactComponent as ICStatusFailed } from '@Icons/ic-failure-color.svg'
-import { ReactComponent as ICPiggybank } from '@Icons/ic-piggybank.svg'
-import { ReactComponent as ICPriorityHighFill } from '@Icons/ic-priority-high-fill.svg'
-import { ReactComponent as ICPriorityLowFill } from '@Icons/ic-priority-low-fill.svg'
-import { ReactComponent as ICPriorityMediumFill } from '@Icons/ic-priority-medium-fill.svg'
-import { ReactComponent as ICPriorityUrgentFill } from '@Icons/ic-priority-urgent-fill.svg'
-import { ReactComponent as ICRedBulb } from '@Icons/ic-red-bulb.svg'
-import { ReactComponent as ICSpider } from '@Icons/ic-spider.svg'
-import { ReactComponent as ICVector } from '@Icons/ic-vector.svg'
+
 import { ReactComponent as IC73strings } from '@IconsV2/ic-73strings.svg'
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
 import { ReactComponent as ICActivity } from '@IconsV2/ic-activity.svg'
@@ -53,6 +41,7 @@ import { ReactComponent as ICBrowser } from '@IconsV2/ic-browser.svg'
 import { ReactComponent as ICBug } from '@IconsV2/ic-bug.svg'
 import { ReactComponent as ICBuildColor } from '@IconsV2/ic-build-color.svg'
 import { ReactComponent as ICBuilding } from '@IconsV2/ic-building.svg'
+import { ReactComponent as ICBulb } from '@IconsV2/ic-bulb.svg'
 import { ReactComponent as ICCalendar } from '@IconsV2/ic-calendar.svg'
 import { ReactComponent as ICCancelled } from '@IconsV2/ic-cancelled.svg'
 import { ReactComponent as ICCardStack } from '@IconsV2/ic-card-stack.svg'
@@ -69,6 +58,7 @@ import { ReactComponent as ICCheckSquare } from '@IconsV2/ic-check-square.svg'
 import { ReactComponent as ICChecks } from '@IconsV2/ic-checks.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
 import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
+import { ReactComponent as ICCircleProgress } from '@IconsV2/ic-circle-progress.svg'
 import { ReactComponent as ICCleanBrush } from '@IconsV2/ic-clean-brush.svg'
 import { ReactComponent as ICClipboard } from '@IconsV2/ic-clipboard.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
@@ -107,6 +97,7 @@ import { ReactComponent as ICDiffUpdated } from '@IconsV2/ic-diff-updated.svg'
 import { ReactComponent as ICDisconnect } from '@IconsV2/ic-disconnect.svg'
 import { ReactComponent as ICDiscordFill } from '@IconsV2/ic-discord-fill.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
+import { ReactComponent as ICDotCircle } from '@IconsV2/ic-dot-circle.svg'
 import { ReactComponent as ICDownload } from '@IconsV2/ic-download.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEdit } from '@IconsV2/ic-edit.svg'
@@ -121,6 +112,7 @@ import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICExpandRightSm } from '@IconsV2/ic-expand-right-sm.svg'
 import { ReactComponent as ICExpandSm } from '@IconsV2/ic-expand-sm.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
+import { ReactComponent as ICFailureColor } from '@IconsV2/ic-failure-color.svg'
 import { ReactComponent as ICFastForward } from '@IconsV2/ic-fast-forward.svg'
 import { ReactComponent as ICFile } from '@IconsV2/ic-file.svg'
 import { ReactComponent as ICFileCode } from '@IconsV2/ic-file-code.svg'
@@ -222,10 +214,16 @@ import { ReactComponent as ICParty } from '@IconsV2/ic-party.svg'
 import { ReactComponent as ICPath } from '@IconsV2/ic-path.svg'
 import { ReactComponent as ICPauseCircle } from '@IconsV2/ic-pause-circle.svg'
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
+import { ReactComponent as ICPiggybank } from '@IconsV2/ic-piggybank.svg'
 import { ReactComponent as ICPlayOutline } from '@IconsV2/ic-play-outline.svg'
+import { ReactComponent as ICPriorityHighFill } from '@IconsV2/ic-priority-high-fill.svg'
+import { ReactComponent as ICPriorityLowFill } from '@IconsV2/ic-priority-low-fill.svg'
+import { ReactComponent as ICPriorityMediumFill } from '@IconsV2/ic-priority-medium-fill.svg'
+import { ReactComponent as ICPriorityUrgentFill } from '@IconsV2/ic-priority-urgent-fill.svg'
 import { ReactComponent as ICPriorityMediumFill } from '@IconsV2/ic-priority-medium-fill.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
+import { ReactComponent as ICRedBulb } from '@IconsV2/ic-red-bulb.svg'
 import { ReactComponent as ICRatings } from '@IconsV2/ic-ratings.svg'
 import { ReactComponent as ICResizeHandle } from '@IconsV2/ic-resize-handle.svg'
 import { ReactComponent as ICRightPanelCollapse } from '@IconsV2/ic-right-panel-collapse.svg'
@@ -241,6 +239,7 @@ import { ReactComponent as ICSortable } from '@IconsV2/ic-sortable.svg'
 import { ReactComponent as ICSparkleAiColor } from '@IconsV2/ic-sparkle-ai-color.svg'
 import { ReactComponent as ICSparkleColor } from '@IconsV2/ic-sparkle-color.svg'
 import { ReactComponent as ICSpeedometer } from '@IconsV2/ic-speedometer.svg'
+import { ReactComponent as ICSpider } from '@IconsV2/ic-spider.svg'
 import { ReactComponent as ICSpinny } from '@IconsV2/ic-spinny.svg'
 import { ReactComponent as ICSprayCan } from '@IconsV2/ic-spray-can.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
@@ -279,6 +278,7 @@ import { ReactComponent as ICUpgradeEnterprise } from '@IconsV2/ic-upgrade-enter
 import { ReactComponent as ICUserCircle } from '@IconsV2/ic-user-circle.svg'
 import { ReactComponent as ICUserKey } from '@IconsV2/ic-user-key.svg'
 import { ReactComponent as ICUsers } from '@IconsV2/ic-users.svg'
+import { ReactComponent as ICVector } from '@IconsV2/ic-vector.svg'
 import { ReactComponent as ICViewVariableToggle } from '@IconsV2/ic-view-variable-toggle.svg'
 import { ReactComponent as ICVisibilityOff } from '@IconsV2/ic-visibility-off.svg'
 import { ReactComponent as ICVisibilityOn } from '@IconsV2/ic-visibility-on.svg'
@@ -335,6 +335,7 @@ export const iconMap = {
     'ic-bug': ICBug,
     'ic-build-color': ICBuildColor,
     'ic-building': ICBuilding,
+    'ic-bulb': ICBulb,
     'ic-calendar': ICCalendar,
     'ic-cancelled': ICCancelled,
     'ic-card-stack': ICCardStack,
@@ -351,6 +352,7 @@ export const iconMap = {
     'ic-checks': ICChecks,
     'ic-ci-linked': ICCiLinked,
     'ic-circle-loader': ICCircleLoader,
+    'ic-circle-progress': ICCircleProgress,
     'ic-clean-brush': ICCleanBrush,
     'ic-clipboard': ICClipboard,
     'ic-clock-counterclockwise': ICClockCounterclockwise,
@@ -389,6 +391,7 @@ export const iconMap = {
     'ic-disconnect': ICDisconnect,
     'ic-discord-fill': ICDiscordFill,
     'ic-dockerhub': ICDockerhub,
+    'ic-dot-circle': ICDotCircle,
     'ic-download': ICDownload,
     'ic-ecr': ICEcr,
     'ic-edit-lines': ICEditLines,
@@ -402,6 +405,7 @@ export const iconMap = {
     'ic-error': ICError,
     'ic-expand-right-sm': ICExpandRightSm,
     'ic-expand-sm': ICExpandSm,
+    'ic-failure-color': ICFailureColor,
     'ic-failure': ICFailure,
     'ic-fast-forward': ICFastForward,
     'ic-file-code': ICFileCode,
@@ -504,10 +508,16 @@ export const iconMap = {
     'ic-path': ICPath,
     'ic-pause-circle': ICPauseCircle,
     'ic-pencil': ICPencil,
+    'ic-piggybank': ICPiggybank,
     'ic-play-outline': ICPlayOutline,
+    'ic-priority-high-fill': ICPriorityHighFill,
+    'ic-priority-low-fill': ICPriorityLowFill,
+    'ic-priority-medium-fill': ICPriorityMediumFill,
+    'ic-priority-urgent-fill': ICPriorityUrgentFill,
     'ic-priority-medium-fill': ICPriorityMediumFill,
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
+    'ic-red-bulb': ICRedBulb,
     'ic-ratings': ICRatings,
     'ic-resize-handle': ICResizeHandle,
     'ic-right-panel-collapse': ICRightPanelCollapse,
@@ -523,6 +533,7 @@ export const iconMap = {
     'ic-sparkle-ai-color': ICSparkleAiColor,
     'ic-sparkle-color': ICSparkleColor,
     'ic-speedometer': ICSpeedometer,
+    'ic-spider': ICSpider,
     'ic-spinny': ICSpinny,
     'ic-spray-can': ICSprayCan,
     'ic-stack': ICStack,
@@ -561,6 +572,7 @@ export const iconMap = {
     'ic-user-circle': ICUserCircle,
     'ic-user-key': ICUserKey,
     'ic-users': ICUsers,
+    'ic-vector': ICVector,
     'ic-view-variable-toggle': ICViewVariableToggle,
     'ic-visibility-off': ICVisibilityOff,
     'ic-visibility-on': ICVisibilityOn,
@@ -570,19 +582,6 @@ export const iconMap = {
     'ic-webhook': ICWebhook,
     'ic-wifi-slash': ICWifiSlash,
     'ic-world-globe': ICWorldGlobe,
-    'ic-bulb': ICRedBulb,
-    'ic-red-bulb': ICBulb,
-    'ic-failure-color': ICStatusFailed,
-    'ic-dot-circle': ICStatusPending,
-    'ic-circle-progress': ICStatusProgress,
-    'ic-piggybank': ICPiggybank,
-    'ic-priority-high-fill': ICPriorityHighFill,
-    'ic-priority-low-fill': ICPriorityLowFill,
-    'ic-priority-medium-fill': ICPriorityMediumFill,
-    'ic-priority-urgent-fill': ICPriorityUrgentFill,
-    'ic-spider': ICSpider,
-    'ic-vector': ICVector,
-    'ic-close': ICClose,
 }
 
 export type IconName = keyof typeof iconMap
