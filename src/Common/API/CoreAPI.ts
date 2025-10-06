@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { API_STATUS_CODES, FALLBACK_REQUEST_TIMEOUT, Host, SERVICE_PATHS } from '@Common/Constants'
+import { API_STATUS_CODES, FALLBACK_REQUEST_TIMEOUT, Host } from '@Common/Constants'
 import { noop } from '@Common/Helper'
 import { ServerErrors } from '@Common/ServerError'
 import { APIOptions, ResponseType } from '@Common/Types'
@@ -69,7 +69,7 @@ class CoreAPI {
         } else {
             currentUrl = `${this.host}/${url}`
         }
-        
+
         return fetch(
             currentUrl,
             !isMultipartRequest
@@ -281,19 +281,32 @@ class CoreAPI {
         options?: APIOptions,
         isMultipartRequest?: boolean,
         isProxyHost?: boolean,
-    ): Promise<ResponseType<T>> => this.fetchInTime<K>({ url, type: 'POST', data, options, isMultipartRequest, isProxyHost })
+    ): Promise<ResponseType<T>> =>
+        this.fetchInTime<K>({ url, type: 'POST', data, options, isMultipartRequest, isProxyHost })
 
-    put = <T = any, K = object>(url: string, data: K, options?: APIOptions, isProxyHost?: boolean): Promise<ResponseType<T>> =>
-        this.fetchInTime<K>({ url, type: 'PUT', data, options, isProxyHost })
+    put = <T = any, K = object>(
+        url: string,
+        data: K,
+        options?: APIOptions,
+        isProxyHost?: boolean,
+    ): Promise<ResponseType<T>> => this.fetchInTime<K>({ url, type: 'PUT', data, options, isProxyHost })
 
-    patch = <T = any, K = object>(url: string, data: K, options?: APIOptions, isProxyHost?: boolean): Promise<ResponseType<T>> =>
-        this.fetchInTime<K>({ url, type: 'PATCH', data, options, isProxyHost })
+    patch = <T = any, K = object>(
+        url: string,
+        data: K,
+        options?: APIOptions,
+        isProxyHost?: boolean,
+    ): Promise<ResponseType<T>> => this.fetchInTime<K>({ url, type: 'PATCH', data, options, isProxyHost })
 
     get = <T = any>(url: string, options?: APIOptions, isProxyHost?: boolean): Promise<ResponseType<T>> =>
         this.fetchInTime({ url, type: 'GET', data: null, options, isProxyHost })
 
-    trash = <T = any, K = object>(url: string, data?: K, options?: APIOptions, isProxyHost?: boolean): Promise<ResponseType<T>> =>
-        this.fetchInTime<K>({ url, type: 'DELETE', data, options, isProxyHost })
+    trash = <T = any, K = object>(
+        url: string,
+        data?: K,
+        options?: APIOptions,
+        isProxyHost?: boolean,
+    ): Promise<ResponseType<T>> => this.fetchInTime<K>({ url, type: 'DELETE', data, options, isProxyHost })
 
     setGlobalAPITimeout = (timeout: number) => {
         this.timeout = timeout || FALLBACK_REQUEST_TIMEOUT
