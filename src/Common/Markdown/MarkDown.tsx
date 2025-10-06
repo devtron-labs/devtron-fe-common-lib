@@ -80,7 +80,6 @@ const MarkDown = ({
         `
 
     renderer.heading = ({ text, depth }: Tokens.Heading) => {
-        // Alternative debugging - add to window object
         const escapedText = disableEscapedText ? '' : text.toLowerCase().replace(/[^\w]+/g, '-')
 
         return `

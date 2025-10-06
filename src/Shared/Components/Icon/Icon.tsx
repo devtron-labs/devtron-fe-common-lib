@@ -235,9 +235,9 @@ import { ReactComponent as ICPriorityHighFill } from '@IconsV2/ic-priority-high-
 import { ReactComponent as ICPriorityLowFill } from '@IconsV2/ic-priority-low-fill.svg'
 import { ReactComponent as ICPriorityMediumFill } from '@IconsV2/ic-priority-medium-fill.svg'
 import { ReactComponent as ICPriorityUrgentFill } from '@IconsV2/ic-priority-urgent-fill.svg'
-import { ReactComponent as ICPriorityMediumFill } from '@IconsV2/ic-priority-medium-fill.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
+import { ReactComponent as ICRatings } from '@IconsV2/ic-ratings.svg'
 import { ReactComponent as ICRedBulb } from '@IconsV2/ic-red-bulb.svg'
 import { ReactComponent as ICRatings } from '@IconsV2/ic-ratings.svg'
 import { ReactComponent as ICReleaseHub } from '@IconsV2/ic-release-hub.svg'
@@ -551,9 +551,9 @@ export const iconMap = {
     'ic-priority-low-fill': ICPriorityLowFill,
     'ic-priority-medium-fill': ICPriorityMediumFill,
     'ic-priority-urgent-fill': ICPriorityUrgentFill,
-    'ic-priority-medium-fill': ICPriorityMediumFill,
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
+    'ic-ratings': ICRatings,
     'ic-red-bulb': ICRedBulb,
     'ic-ratings': ICRatings,
     'ic-release-hub': ICReleaseHub,
