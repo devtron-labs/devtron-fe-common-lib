@@ -216,11 +216,10 @@ import { ReactComponent as ICPriorityHighFill } from '@IconsV2/ic-priority-high-
 import { ReactComponent as ICPriorityLowFill } from '@IconsV2/ic-priority-low-fill.svg'
 import { ReactComponent as ICPriorityMediumFill } from '@IconsV2/ic-priority-medium-fill.svg'
 import { ReactComponent as ICPriorityUrgentFill } from '@IconsV2/ic-priority-urgent-fill.svg'
-import { ReactComponent as ICPriorityMediumFill } from '@IconsV2/ic-priority-medium-fill.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
-import { ReactComponent as ICRedBulb } from '@IconsV2/ic-red-bulb.svg'
 import { ReactComponent as ICRatings } from '@IconsV2/ic-ratings.svg'
+import { ReactComponent as ICRedBulb } from '@IconsV2/ic-red-bulb.svg'
 import { ReactComponent as ICResizeHandle } from '@IconsV2/ic-resize-handle.svg'
 import { ReactComponent as ICRightPanelCollapse } from '@IconsV2/ic-right-panel-collapse.svg'
 import { ReactComponent as ICRocketGear } from '@IconsV2/ic-rocket-gear.svg'
@@ -505,11 +504,10 @@ export const iconMap = {
     'ic-priority-low-fill': ICPriorityLowFill,
     'ic-priority-medium-fill': ICPriorityMediumFill,
     'ic-priority-urgent-fill': ICPriorityUrgentFill,
-    'ic-priority-medium-fill': ICPriorityMediumFill,
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
-    'ic-red-bulb': ICRedBulb,
     'ic-ratings': ICRatings,
+    'ic-red-bulb': ICRedBulb,
     'ic-resize-handle': ICResizeHandle,
     'ic-right-panel-collapse': ICRightPanelCollapse,
     'ic-rocket-gear': ICRocketGear,
