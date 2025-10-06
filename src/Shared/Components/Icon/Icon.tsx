@@ -204,6 +204,7 @@ import { ReactComponent as ICOtcCloud } from '@IconsV2/ic-otc-cloud.svg'
 import { ReactComponent as ICOutOfSync } from '@IconsV2/ic-out-of-sync.svg'
 import { ReactComponent as ICPaperPlane } from '@IconsV2/ic-paper-plane.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
+import { ReactComponent as ICParty } from '@IconsV2/ic-party.svg'
 import { ReactComponent as ICPath } from '@IconsV2/ic-path.svg'
 import { ReactComponent as ICPauseCircle } from '@IconsV2/ic-pause-circle.svg'
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
@@ -483,6 +484,7 @@ export const iconMap = {
     'ic-out-of-sync': ICOutOfSync,
     'ic-paper-plane-color': ICPaperPlaneColor,
     'ic-paper-plane': ICPaperPlane,
+    'ic-party': ICParty,
     'ic-path': ICPath,
     'ic-pause-circle': ICPauseCircle,
     'ic-pencil': ICPencil,
