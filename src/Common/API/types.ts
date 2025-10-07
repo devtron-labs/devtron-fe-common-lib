@@ -40,5 +40,10 @@ export interface FetchInTimeParamsType<Data = object> {
 export interface FetchAPIParamsType<Data = object>
     extends Omit<FetchInTimeParamsType<Data>, 'options'>,
         Pick<APIOptions, 'preventAutoLogout' | 'preventLicenseRedirect' | 'shouldParseServerErrorForUnauthorizedUser'> {
+    /**
+     * @default false
+     * @description - If true, will override the default host (orchestrator or whatever defined initially in CoreAPI constructor) with the `proxy` host
+     */
+    isProxyHost?: boolean
     signal: AbortSignal
 }
