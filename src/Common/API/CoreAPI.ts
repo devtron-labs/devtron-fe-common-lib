@@ -240,6 +240,7 @@ class CoreAPI {
                 preventLicenseRedirect: options?.preventLicenseRedirect || false,
                 shouldParseServerErrorForUnauthorizedUser: options?.shouldParseServerErrorForUnauthorizedUser,
                 isMultipartRequest,
+                isProxyHost: options?.isProxyHost || false,
             }),
             timeoutPromise,
         ]).catch((err) => {
