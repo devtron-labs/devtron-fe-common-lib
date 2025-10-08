@@ -293,7 +293,9 @@ const TableContent = <
                     })}
 
                     {RowOnHoverComponent && (
-                        <div className="dc__position-sticky dc__right-0 dc__zi-1 dc__opacity-hover--child">
+                        <div
+                            className={`dc__position-sticky dc__right-0 dc__zi-1 ${!isRowActive ? 'dc__opacity-hover--child' : ''}`}
+                        >
                             <RowOnHoverComponent row={row} {...additionalProps} />
                         </div>
                     )}
