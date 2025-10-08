@@ -51,12 +51,12 @@ export type NavigationItemID =
     | 'global-configuration-cluster-and-environments'
     | 'global-configuration-container-oci-registry'
     | 'global-configuration-authorization'
-    | 'backup-and-restore-overview'
-    | 'backup-and-restore-backup-and-schedule'
-    | 'backup-and-restore-restores'
-    | 'backup-and-restore-backup-repositories'
-    | 'backup-and-restore-backup-locations'
-    | 'backup-and-restore-history-and-logs'
+    | 'data-protection-overview'
+    | 'data-protection-backup-and-schedule'
+    | 'data-protection-restores'
+    | 'data-protection-backup-repositories'
+    | 'data-protection-backup-locations'
+    | 'data-protection-history-and-logs'
     | 'ai-recommendations-overview'
 
 export type NavigationSubMenuItemID =

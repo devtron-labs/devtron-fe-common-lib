@@ -39,6 +39,9 @@ export interface FetchInTimeParamsType<Data = object> {
 
 export interface FetchAPIParamsType<Data = object>
     extends Omit<FetchInTimeParamsType<Data>, 'options'>,
-        Pick<APIOptions, 'preventAutoLogout' | 'preventLicenseRedirect' | 'shouldParseServerErrorForUnauthorizedUser'> {
+        Pick<
+            APIOptions,
+            'preventAutoLogout' | 'preventLicenseRedirect' | 'shouldParseServerErrorForUnauthorizedUser' | 'isProxyHost'
+        > {
     signal: AbortSignal
 }

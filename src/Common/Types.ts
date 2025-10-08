@@ -79,6 +79,11 @@ export interface APIOptions {
      * @default false
      */
     shouldParseServerErrorForUnauthorizedUser?: boolean
+    /**
+     * @default false
+     * @description - If true, will override the default host (orchestrator or whatever defined initially in CoreAPI constructor) with the `proxy` host
+     */
+    isProxyHost?: boolean
 }
 
 export interface OptionType<T = string, K = string> {

@@ -25,6 +25,10 @@ export const BreadcrumbText = ({ heading, isActive, shouldTruncate = false }: Br
     <span className={`dc__breadcrumb-text cb-5 fs-16 lh-1-5 ${shouldTruncate ? 'dc__truncate' : ''} ${isActive ? 'cn-9 fw-6' : 'cb-5 fw-4 dc__mxw-155 dc__ellipsis-right'}`}>{heading}</span>
 )
 
+export const getBreadCrumbSeparator = (sep: string = '/') => (
+    <span className="dc__devtron-breadcrumb__item__separator">{sep}</span>
+)
+
 const Store = ({ children }) => {
     const [state, setState] = useState(initialState)
     return <BreadcrumbContext.Provider value={{ state, setState }}>{children}</BreadcrumbContext.Provider>
