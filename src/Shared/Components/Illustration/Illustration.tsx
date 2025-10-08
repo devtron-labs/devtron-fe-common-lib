@@ -1,10 +1,10 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-illustration` to update.
 
-import { ReactComponent as IcRestore } from '@Illustrations/ic-restore.svg'
 import ImgCode from '@Illustrations/img-code.webp'
 import ImgDevtronFreemium from '@Illustrations/img-devtron-freemium.webp'
 import ImgManOnRocket from '@Illustrations/img-man-on-rocket.webp'
 import { ReactComponent as ImgMechanicalOperation } from '@Illustrations/img-mechanical-operation.svg'
+import { ReactComponent as ImgNoRestores } from '@Illustrations/img-no-restores.svg'
 import ImgNoResult from '@Illustrations/img-no-result.webp'
 import NoClusterCostEnabled from '@Illustrations/no-cluster-cost-enabled.webp'
 
@@ -13,8 +13,8 @@ import { IllustrationBase } from './IllustrationBase'
 import { IllustrationBaseProps } from './types'
 
 export const illustrationMap = {
-    'ic-restore': IcRestore,
     'img-mechanical-operation': ImgMechanicalOperation,
+    'img-no-restores': ImgNoRestores,
     'img-code': ImgCode,
     'img-devtron-freemium': ImgDevtronFreemium,
     'img-man-on-rocket': ImgManOnRocket,
