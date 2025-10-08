@@ -20,6 +20,7 @@ import { ReactComponent as ICAzureAks } from '@IconsV2/ic-azure-aks.svg'
 import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
 import { ReactComponent as ICBgEnvironment } from '@IconsV2/ic-bg-environment.svg'
 import { ReactComponent as ICBharatpe } from '@IconsV2/ic-bharatpe.svg'
+import { ReactComponent as ICBinoculars } from '@IconsV2/ic-binoculars.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBookOpen } from '@IconsV2/ic-book-open.svg'
 import { ReactComponent as ICBrain } from '@IconsV2/ic-brain.svg'
@@ -262,6 +263,7 @@ export const iconMap = {
     'ic-bg-cluster': ICBgCluster,
     'ic-bg-environment': ICBgEnvironment,
     'ic-bharatpe': ICBharatpe,
+    'ic-binoculars': ICBinoculars,
     'ic-bitbucket': ICBitbucket,
     'ic-book-open': ICBookOpen,
     'ic-brain': ICBrain,

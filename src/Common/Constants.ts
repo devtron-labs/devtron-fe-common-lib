@@ -49,6 +49,7 @@ export const PATTERNS = {
 }
 
 const GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP = '/global-config/templates/devtron-apps'
+const OBSERVABILITY_ROOT = '/observability'
 
 export const URLS = {
     LOGIN: '/login',
@@ -88,6 +89,10 @@ export const URLS = {
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_DETAIL: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/detail/:appId`,
     LICENSE_AUTH: '/license-auth',
     GLOBAL_CONFIG_EDIT_CLUSTER: '/global-config/cluster-env/edit/:clusterId',
+    // OBSERVABILITY
+    OBSERVABILITY: OBSERVABILITY_ROOT,
+    OBSERVABILITY_OVERVIEW: `${OBSERVABILITY_ROOT}/overview`,
+    OBSERVABILITY_CUSTOMER_LIST: `${OBSERVABILITY_ROOT}/customers`,
 } as const
 
 export const ROUTES = {
