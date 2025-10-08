@@ -42,6 +42,7 @@ import {
 } from '.'
 import { IllustrationName, SelectPickerOptionType } from '@Shared/Components'
 import { ClusterStatusType } from '@Pages/ResourceBrowser'
+import { ClusterProviderType } from '@PagesDevtron2.0/CostVisibility'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -1126,7 +1127,9 @@ export type EnvironmentsGroupedByClustersType = {
 export type ClusterCostModuleConfigPayload =
     | {
           enabled: true
-          config?: Record<string, any>
+          config?: Record<string, any> & {
+            detectedProvider: ClusterProviderType
+          }
       }
     | {
           enabled: false
