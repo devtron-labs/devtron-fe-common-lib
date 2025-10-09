@@ -651,17 +651,6 @@ export const getDetailedClusterList = async (
                 ...res
             }) => {
                 const costModuleInstallationStatus = costModuleConfig?.installationStatus || 'NotInstalled'
-                // Need to remove following keys from config if present: openCostServiceName, openCostServicePort, releaseName, namespace
-                const sanitizedCostConfig = costModuleConfig?.config
-                    ? Object.fromEntries(
-                          Object.entries(costModuleConfig.config).filter(
-                              ([key]) =>
-                                  !['openCostServiceName', 'openCostServicePort', 'releaseName', 'namespace'].includes(
-                                      key,
-                                  ),
-                          ),
-                      )
-                    : undefined
 
                 return {
                     ...res,
@@ -678,7 +667,10 @@ export const getDetailedClusterList = async (
                     status: clusterStatus,
                     costModuleConfig: {
                         enabled: costModuleConfig?.enabled || false,
-                        config: sanitizedCostConfig,
+                        config: {
+                            ...(costModuleConfig?.config || {}),
+                            detectedProvider: costModuleConfig?.config?.detectedProvider,
+                        },
                         installationStatus: costModuleInstallationStatus,
                         ...(costModuleInstallationStatus === 'Failed'
                             ? {
