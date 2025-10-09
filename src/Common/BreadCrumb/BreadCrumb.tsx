@@ -16,7 +16,7 @@
 
 import React, { useMemo, useEffect } from 'react'
 import { Link, useRouteMatch, useParams } from 'react-router-dom'
-import { useBreadcrumbContext } from './BreadcrumbStore'
+import { useBreadcrumbContext, getBreadCrumbSeparator } from './BreadcrumbStore'
 import { ConditionalWrap } from '../Helper'
 import { Breadcrumb, Breadcrumbs, UseBreadcrumbOptionalProps, UseBreadcrumbState } from './Types'
 
@@ -115,7 +115,7 @@ export const BreadCrumb: React.FC<Breadcrumbs> = ({
                     </ConditionalWrap>
 
                     {idx + 1 !== filteredCrumbs.length && breadcrumb.name && (
-                        <span className="dc__devtron-breadcrumb__item__separator">{sep}</span>
+                       getBreadCrumbSeparator(sep)
                     )}
                 </React.Fragment>
             ))}
