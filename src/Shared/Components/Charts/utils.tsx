@@ -181,6 +181,7 @@ export const getDefaultOptions = ({
         yAxisMax,
         xScaleTitle,
         yScaleTitle,
+        yScaleTickFormat,
     } = chartProps
     const baseOptions: ChartOptions = {
         responsive: true,
@@ -244,16 +245,28 @@ export const getDefaultOptions = ({
         },
     } satisfies ScaleOptions<'linear'>
 
+    const ticksWithCallback = {
+        ...commonScaleConfig.ticks,
+        callback: (value) => yScaleTickFormat(Number(value)),
+    } satisfies ScaleOptions<'linear'>['ticks']
+
     const commonXScaleConfig = {
         ...commonScaleConfig,
         max: xAxisMax,
         title: getScaleTickTitleConfig(xScaleTitle, appTheme),
+        ...(typeof yScaleTickFormat === 'function' && type === 'stackedBarHorizontal'
+            ? { ticks: ticksWithCallback }
+            : {}),
     } satisfies ScaleOptions<'linear'>
 
     const commonYScaleConfig = {
         ...commonScaleConfig,
         max: yAxisMax,
         title: getScaleTickTitleConfig(yScaleTitle, appTheme),
+        // for stackedBarHorizon
+        ...(typeof yScaleTickFormat === 'function' && type !== 'stackedBarHorizontal'
+            ? { ticks: ticksWithCallback }
+            : {}),
     } satisfies ScaleOptions<'linear'>
 
     switch (type) {
