@@ -16,6 +16,7 @@
 
 import { SelectPickerOptionType } from '@Shared/Components'
 import { CostBreakdownItemViewParamsType, CostBreakdownViewType } from '@PagesDevtron2.0/CostVisibility'
+import { BackupLocationsTypes } from '@PagesDevtron2.0/DataProtectionManagement'
 
 export const FALLBACK_REQUEST_TIMEOUT = 60000
 export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
@@ -129,7 +130,8 @@ export const URLS = {
     DATA_PROTECTION_OVERVIEW: `${DATA_PROTECTION_ROOT}/overview`,
     DATA_PROTECTION_BACKUP_AND_SCHEDULE: `${DATA_PROTECTION_ROOT}/backup-and-schedule`,
     DATA_PROTECTION_RESTORES: `${DATA_PROTECTION_ROOT}/restores`,
-    DATA_PROTECTION_BACKUP_LOCATIONS: `${DATA_PROTECTION_ROOT}/backup-locations`,
+    DATA_PROTECTION_BACKUP_LOCATIONS: `${DATA_PROTECTION_ROOT}/backup-locations/:type(${Object.values(BackupLocationsTypes).join('|')})`,
+    BACKUP_LOCATION_DETAILS: `/:locationId`,
     // GLOBAL CONFIGURATION
     GLOBAL_CONFIG: GLOBAL_CONFIG_ROOT,
     GLOBAL_CONFIG_DOCKER: `${GLOBAL_CONFIG_ROOT}/docker`,
