@@ -262,7 +262,6 @@ export interface AppDetails {
 
 export interface ConfigDriftModalProps extends Required<Pick<AppDetails, 'appId'>> {
     envId: number
-    handleCloseModal?: () => void
 }
 
 export enum RegistryType {
