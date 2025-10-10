@@ -123,7 +123,6 @@ import { ReactComponent as ICFloppyDisk } from '@IconsV2/ic-floppy-disk.svg'
 import { ReactComponent as ICFluxcdApp } from '@IconsV2/ic-fluxcd-app.svg'
 import { ReactComponent as ICFolder } from '@IconsV2/ic-folder.svg'
 import { ReactComponent as ICFolderColor } from '@IconsV2/ic-folder-color.svg'
-import { ReactComponent as ICFolderEmpty } from '@IconsV2/ic-folder-empty.svg'
 import { ReactComponent as ICFolderUser } from '@IconsV2/ic-folder-user.svg'
 import { ReactComponent as ICGavel } from '@IconsV2/ic-gavel.svg'
 import { ReactComponent as ICGear } from '@IconsV2/ic-gear.svg'
@@ -402,7 +401,6 @@ export const iconMap = {
     'ic-floppy-disk': ICFloppyDisk,
     'ic-fluxcd-app': ICFluxcdApp,
     'ic-folder-color': ICFolderColor,
-    'ic-folder-empty': ICFolderEmpty,
     'ic-folder-user': ICFolderUser,
     'ic-folder': ICFolder,
     'ic-gavel': ICGavel,
