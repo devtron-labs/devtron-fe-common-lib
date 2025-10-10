@@ -6,6 +6,7 @@ import ImgCode from '@Illustrations/img-code.webp'
 import ImgDevtronFreemium from '@Illustrations/img-devtron-freemium.webp'
 import ImgManOnRocket from '@Illustrations/img-man-on-rocket.webp'
 import { ReactComponent as ImgMechanicalOperation } from '@Illustrations/img-mechanical-operation.svg'
+import { ReactComponent as ImgNoBackupLocation } from '@Illustrations/img-no-backup-location.svg'
 import { ReactComponent as ImgNoRestores } from '@Illustrations/img-no-restores.svg'
 import ImgNoResult from '@Illustrations/img-no-result.webp'
 import NoClusterCostEnabled from '@Illustrations/no-cluster-cost-enabled.webp'
@@ -16,6 +17,7 @@ import { IllustrationBaseProps } from './types'
 
 export const illustrationMap = {
     'img-mechanical-operation': ImgMechanicalOperation,
+    'img-no-backup-location': ImgNoBackupLocation,
     'img-no-restores': ImgNoRestores,
     'create-backup-schedule': CreateBackupSchedule,
     'create-backup-snapshot': CreateBackupSnapshot,

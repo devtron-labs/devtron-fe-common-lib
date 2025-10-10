@@ -92,7 +92,7 @@ const TableContent = <
     } = resizableConfig ?? {}
 
     const gridTemplateColumns = rowOnHoverComponentWidth
-        ? `${initialGridTemplateColumns} ${rowOnHoverComponentWidth}px`
+        ? `${initialGridTemplateColumns} ${typeof rowOnHoverComponentWidth === 'number' ? `${rowOnHoverComponentWidth}px` : rowOnHoverComponentWidth}`
         : initialGridTemplateColumns
 
     useEffect(() => {

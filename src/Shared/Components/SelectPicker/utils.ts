@@ -373,7 +373,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         }),
         menuPortal: (base) => ({
             ...base,
-            zIndex: 2,
+            zIndex: 3,
         }),
     }
 }
