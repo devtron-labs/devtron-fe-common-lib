@@ -296,7 +296,7 @@ export type InternalTableProps<
      */
     rowActionOnHoverConfig?: {
         Component: FunctionComponent<RowActionsOnHoverComponentProps<RowData, AdditionalProps>>
-        width: number
+        width: string | number
     }
 
     bulkSelectionReturnValue: BulkSelectionReturnValueType | null
