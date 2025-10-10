@@ -53,7 +53,7 @@ const InternalTable = <
     handleClearBulkSelection,
     handleToggleBulkSelectionOnRow,
     paginationVariant,
-    RowActionsOnHoverComponent,
+    rowActionOnHoverConfig,
     pageSizeOptions,
     clearFilters: userGivenUrlClearFilters,
 }: InternalTableProps<RowData, FilterVariant, AdditionalProps>) => {
@@ -236,7 +236,7 @@ const InternalTable = <
                     filterData={filterData}
                     handleClearBulkSelection={handleClearBulkSelection}
                     handleToggleBulkSelectionOnRow={handleToggleBulkSelectionOnRow}
-                    RowActionsOnHoverComponent={RowActionsOnHoverComponent}
+                    rowActionOnHoverConfig={rowActionOnHoverConfig}
                     additionalProps={additionalProps}
                     bulkSelectionConfig={bulkSelectionConfig}
                     loading={loading}
