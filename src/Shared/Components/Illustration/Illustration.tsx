@@ -1,5 +1,7 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-illustration` to update.
 
+import CreateBackupSchedule from '@Illustrations/create-backup-schedule.webp'
+import CreateBackupSnapshot from '@Illustrations/create-backup-snapshot.webp'
 import ImgCode from '@Illustrations/img-code.webp'
 import ImgDevtronFreemium from '@Illustrations/img-devtron-freemium.webp'
 import ImgManOnRocket from '@Illustrations/img-man-on-rocket.webp'
@@ -13,6 +15,8 @@ import { IllustrationBaseProps } from './types'
 
 export const illustrationMap = {
     'img-mechanical-operation': ImgMechanicalOperation,
+    'create-backup-schedule': CreateBackupSchedule,
+    'create-backup-snapshot': CreateBackupSnapshot,
     'img-code': ImgCode,
     'img-devtron-freemium': ImgDevtronFreemium,
     'img-man-on-rocket': ImgManOnRocket,

@@ -16,6 +16,7 @@
 
 import { SelectPickerOptionType } from '@Shared/Components'
 import { CostBreakdownItemViewParamsType, CostBreakdownViewType } from '@PagesDevtron2.0/CostVisibility'
+import { BackupAndScheduleListViewEnum } from '@PagesDevtron2.0/DataProtectionManagement/types'
 
 export const FALLBACK_REQUEST_TIMEOUT = 60000
 export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
@@ -127,7 +128,9 @@ export const URLS = {
     // DATA PROTECTION
     DATA_PROTECTION: DATA_PROTECTION_ROOT,
     DATA_PROTECTION_OVERVIEW: `${DATA_PROTECTION_ROOT}/overview`,
-    DATA_PROTECTION_BACKUP_AND_SCHEDULE: `${DATA_PROTECTION_ROOT}/backup-and-schedule`,
+    DATA_PROTECTION_BACKUP_AND_SCHEDULE: `${DATA_PROTECTION_ROOT}/backup-and-schedule/:view${Object.values(BackupAndScheduleListViewEnum).join('|')}`,
+    DATA_PROTECTION_BACKUP_DETAIL: `${DATA_PROTECTION_ROOT}/backup/:name`,
+    DATA_PROTECTION_BACKUP_SCHEDULE_DETAIL: `${DATA_PROTECTION_ROOT}/schedule/:name`,
     DATA_PROTECTION_RESTORES: `${DATA_PROTECTION_ROOT}/restores`,
     DATA_PROTECTION_BACKUP_LOCATIONS: `${DATA_PROTECTION_ROOT}/backup-locations`,
     // GLOBAL CONFIGURATION
