@@ -69,22 +69,26 @@ export type TypeAndDatasetsType =
            */
           datasets: SimpleDatasetForPie
           onChartClick?: OnChartClickHandler
+          yScaleTickFormat?: never
       } & Never<XYAxisMax>)
     | ({
           type: 'line'
           datasets: SimpleDatasetForLineAndArea[]
           onChartClick?: never
+          yScaleTickFormat?: (value: number) => string
       } & XYAxisMax)
     | ({
           type: 'area'
           datasets: SimpleDatasetForLineAndArea
           /* onChartClick is not applicable for area charts */
           onChartClick?: never
+          yScaleTickFormat?: (value: number) => string
       } & XYAxisMax)
     | ({
           type: Exclude<ChartType, 'pie' | 'line' | 'area'>
           datasets: SimpleDataset[]
           onChartClick?: OnChartClickHandler
+          yScaleTickFormat?: (value: number) => string
       } & XYAxisMax)
 
 export type ChartProps = {

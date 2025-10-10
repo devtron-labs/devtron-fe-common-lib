@@ -314,3 +314,5 @@ export const CHART_CANVAS_BACKGROUND_COLORS: Record<AppThemeType, string> = {
 }
 
 export const LINE_DASH = [6, 6]
+
+export const MAX_BAR_THICKNESS = 96
