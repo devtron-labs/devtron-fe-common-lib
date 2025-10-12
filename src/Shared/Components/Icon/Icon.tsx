@@ -34,6 +34,7 @@ import { ReactComponent as ICBgScan } from '@IconsV2/ic-bg-scan.svg'
 import { ReactComponent as ICBgWebhook } from '@IconsV2/ic-bg-webhook.svg'
 import { ReactComponent as ICBharatpe } from '@IconsV2/ic-bharatpe.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
+import { ReactComponent as ICBookGear } from '@IconsV2/ic-book-gear.svg'
 import { ReactComponent as ICBookOpen } from '@IconsV2/ic-book-open.svg'
 import { ReactComponent as ICBot } from '@IconsV2/ic-bot.svg'
 import { ReactComponent as ICBrain } from '@IconsV2/ic-brain.svg'
@@ -54,6 +55,7 @@ import { ReactComponent as ICChatCircleOnline } from '@IconsV2/ic-chat-circle-on
 import { ReactComponent as ICCheck } from '@IconsV2/ic-check.svg'
 import { ReactComponent as ICCheckAll } from '@IconsV2/ic-check-all.svg'
 import { ReactComponent as ICCheckCircle } from '@IconsV2/ic-check-circle.svg'
+import { ReactComponent as ICCheckGreen } from '@IconsV2/ic-check-green.svg'
 import { ReactComponent as ICCheckSquare } from '@IconsV2/ic-check-square.svg'
 import { ReactComponent as ICChecks } from '@IconsV2/ic-checks.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
@@ -63,6 +65,8 @@ import { ReactComponent as ICCleanBrush } from '@IconsV2/ic-clean-brush.svg'
 import { ReactComponent as ICClipboard } from '@IconsV2/ic-clipboard.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
 import { ReactComponent as ICClockCounterclockwise } from '@IconsV2/ic-clock-counterclockwise.svg'
+import { ReactComponent as ICCloseCircle } from '@IconsV2/ic-close-circle.svg'
+import { ReactComponent as ICCloseCircleRed } from '@IconsV2/ic-close-circle-red.svg'
 import { ReactComponent as ICCloseLarge } from '@IconsV2/ic-close-large.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
 import { ReactComponent as ICCloud } from '@IconsV2/ic-cloud.svg'
@@ -72,6 +76,7 @@ import { ReactComponent as ICClusterIsolated } from '@IconsV2/ic-cluster-isolate
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICCoin } from '@IconsV2/ic-coin.svg'
 import { ReactComponent as ICCoins } from '@IconsV2/ic-coins.svg'
+import { ReactComponent as ICConfirm } from '@IconsV2/ic-confirm.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICContainerRegistry } from '@IconsV2/ic-container-registry.svg'
 import { ReactComponent as ICCookr } from '@IconsV2/ic-cookr.svg'
@@ -161,6 +166,7 @@ import { ReactComponent as ICHibernateCircle } from '@IconsV2/ic-hibernate-circl
 import { ReactComponent as ICInProgress } from '@IconsV2/ic-in-progress.svg'
 import { ReactComponent as ICInfoFilled } from '@IconsV2/ic-info-filled.svg'
 import { ReactComponent as ICInfoFilledColor } from '@IconsV2/ic-info-filled-color.svg'
+import { ReactComponent as ICInfoFilledNew } from '@IconsV2/ic-info-filled-new.svg'
 import { ReactComponent as ICInfoOutline } from '@IconsV2/ic-info-outline.svg'
 import { ReactComponent as ICInput } from '@IconsV2/ic-input.svg'
 import { ReactComponent as ICInstall } from '@IconsV2/ic-install.svg'
@@ -216,6 +222,7 @@ import { ReactComponent as ICParty } from '@IconsV2/ic-party.svg'
 import { ReactComponent as ICPath } from '@IconsV2/ic-path.svg'
 import { ReactComponent as ICPauseCircle } from '@IconsV2/ic-pause-circle.svg'
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
+import { ReactComponent as ICPencilWhite } from '@IconsV2/ic-pencil-white.svg'
 import { ReactComponent as ICPiggybank } from '@IconsV2/ic-piggybank.svg'
 import { ReactComponent as ICPlayOutline } from '@IconsV2/ic-play-outline.svg'
 import { ReactComponent as ICPriorityHighFill } from '@IconsV2/ic-priority-high-fill.svg'
@@ -269,6 +276,8 @@ import { ReactComponent as ICThumbDown } from '@IconsV2/ic-thumb-down.svg'
 import { ReactComponent as ICThumbUp } from '@IconsV2/ic-thumb-up.svg'
 import { ReactComponent as ICTimeoutDash } from '@IconsV2/ic-timeout-dash.svg'
 import { ReactComponent as ICTimer } from '@IconsV2/ic-timer.svg'
+import { ReactComponent as ICTimerGreen } from '@IconsV2/ic-timer-green.svg'
+import { ReactComponent as ICTimerRed } from '@IconsV2/ic-timer-red.svg'
 import { ReactComponent as ICTrafficSignal } from '@IconsV2/ic-traffic-signal.svg'
 import { ReactComponent as ICTravclan } from '@IconsV2/ic-travclan.svg'
 import { ReactComponent as ICTrendUp } from '@IconsV2/ic-trend-up.svg'
@@ -329,6 +338,7 @@ export const iconMap = {
     'ic-bg-webhook': ICBgWebhook,
     'ic-bharatpe': ICBharatpe,
     'ic-bitbucket': ICBitbucket,
+    'ic-book-gear': ICBookGear,
     'ic-book-open': ICBookOpen,
     'ic-bot': ICBot,
     'ic-brain': ICBrain,
@@ -348,6 +358,7 @@ export const iconMap = {
     'ic-chat-circle-online': ICChatCircleOnline,
     'ic-check-all': ICCheckAll,
     'ic-check-circle': ICCheckCircle,
+    'ic-check-green': ICCheckGreen,
     'ic-check-square': ICCheckSquare,
     'ic-check': ICCheck,
     'ic-checks': ICChecks,
@@ -358,6 +369,8 @@ export const iconMap = {
     'ic-clipboard': ICClipboard,
     'ic-clock-counterclockwise': ICClockCounterclockwise,
     'ic-clock': ICClock,
+    'ic-close-circle-red': ICCloseCircleRed,
+    'ic-close-circle': ICCloseCircle,
     'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
     'ic-cloud-vms': ICCloudVms,
@@ -367,6 +380,7 @@ export const iconMap = {
     'ic-code': ICCode,
     'ic-coin': ICCoin,
     'ic-coins': ICCoins,
+    'ic-confirm': ICConfirm,
     'ic-container-registry': ICContainerRegistry,
     'ic-container': ICContainer,
     'ic-cookr': ICCookr,
@@ -455,6 +469,7 @@ export const iconMap = {
     'ic-hibernate': ICHibernate,
     'ic-in-progress': ICInProgress,
     'ic-info-filled-color': ICInfoFilledColor,
+    'ic-info-filled-new': ICInfoFilledNew,
     'ic-info-filled': ICInfoFilled,
     'ic-info-outline': ICInfoOutline,
     'ic-input': ICInput,
@@ -510,6 +525,7 @@ export const iconMap = {
     'ic-party': ICParty,
     'ic-path': ICPath,
     'ic-pause-circle': ICPauseCircle,
+    'ic-pencil-white': ICPencilWhite,
     'ic-pencil': ICPencil,
     'ic-piggybank': ICPiggybank,
     'ic-play-outline': ICPlayOutline,
@@ -563,6 +579,8 @@ export const iconMap = {
     'ic-thumb-down': ICThumbDown,
     'ic-thumb-up': ICThumbUp,
     'ic-timeout-dash': ICTimeoutDash,
+    'ic-timer-green': ICTimerGreen,
+    'ic-timer-red': ICTimerRed,
     'ic-timer': ICTimer,
     'ic-traffic-signal': ICTrafficSignal,
     'ic-travclan': ICTravclan,
