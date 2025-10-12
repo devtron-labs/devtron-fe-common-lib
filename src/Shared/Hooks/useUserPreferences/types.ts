@@ -57,6 +57,8 @@ export type NavigationItemID =
     | 'data-protection-backup-repositories'
     | 'data-protection-backup-locations'
     | 'data-protection-history-and-logs'
+    | 'ai-recommendations-overview'
+    | 'ai-recommendations-runbooks'
     | 'ai-recommendations-notifications'
 
 export type NavigationSubMenuItemID =
@@ -66,6 +68,7 @@ export type NavigationSubMenuItemID =
     | 'application-management-configurations-chart-repository'
     | 'application-management-configurations-deployment-charts'
     | 'application-management-configurations-notifications'
+    | 'application-management-configurations-runbook'
     | 'application-management-configurations-catalog-frameworks'
     | 'application-management-configurations-scoped-variables'
     | 'application-management-configurations-build-infra'
