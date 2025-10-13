@@ -190,6 +190,8 @@ export const getDefaultOptions = ({
         xScaleTitle,
         yScaleTitle,
         yScaleTickFormat,
+        xScaleTickFormat,
+        xAxisLabels,
     } = chartProps
     const baseOptions: ChartOptions = {
         responsive: true,
@@ -253,18 +255,23 @@ export const getDefaultOptions = ({
         },
     } satisfies ScaleOptions<'linear'>
 
-    const ticksWithCallback = {
-        ...commonScaleConfig.ticks,
-        callback: (value) => yScaleTickFormat(Number(value)),
-    } satisfies ScaleOptions<'linear'>['ticks']
-
     const commonXScaleConfig = {
         ...commonScaleConfig,
         max: xAxisMax,
         title: getScaleTickTitleConfig(xScaleTitle, appTheme),
-        ...(typeof yScaleTickFormat === 'function' && type === 'stackedBarHorizontal'
-            ? { ticks: ticksWithCallback }
-            : {}),
+        ticks: {
+            ...commonScaleConfig.ticks,
+            ...((type !== 'stackedBarHorizontal' && typeof xScaleTickFormat === 'function') ||
+            (type === 'stackedBarHorizontal' && typeof yScaleTickFormat === 'function')
+                ? {
+                      callback:
+                          type === 'stackedBarHorizontal'
+                              ? (value, index) => yScaleTickFormat(Number(value), index)
+                              : (_, index) => xScaleTickFormat(xAxisLabels[index], index),
+                  }
+                : {}),
+            autoSkip: false,
+        },
     } satisfies ScaleOptions<'linear'>
 
     const commonYScaleConfig = {
@@ -272,9 +279,18 @@ export const getDefaultOptions = ({
         max: yAxisMax,
         title: getScaleTickTitleConfig(yScaleTitle, appTheme),
         // for stackedBarHorizon
-        ...(typeof yScaleTickFormat === 'function' && type !== 'stackedBarHorizontal'
-            ? { ticks: ticksWithCallback }
-            : {}),
+        ticks: {
+            ...commonScaleConfig.ticks,
+            ...((type === 'stackedBarHorizontal' && typeof xScaleTickFormat === 'function') ||
+            (type !== 'stackedBarHorizontal' && typeof yScaleTickFormat === 'function')
+                ? {
+                      callback:
+                          type !== 'stackedBarHorizontal'
+                              ? (value, index) => yScaleTickFormat(Number(value), index)
+                              : (_, index) => xScaleTickFormat(xAxisLabels[index], index),
+                  }
+                : {}),
+        },
     } satisfies ScaleOptions<'linear'>
 
     switch (type) {
@@ -555,7 +571,7 @@ export const buildChartTooltipFromContext = ({
             <div className="flexbox-col dc__gap-2">
                 {titleLines.map((titleLine, index) => (
                     // eslint-disable-next-line react/no-array-index-key
-                    <h6 key={index} className="m-0 fs-12 fw-6 lh-20 dc__truncate">
+                    <h6 key={index} className="m-0 fs-12 fw-6 lh-20 dc__word-break-all">
                         {titleLine}
                     </h6>
                 ))}
