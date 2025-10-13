@@ -23,8 +23,10 @@ import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICAzureAks } from '@IconsV2/ic-azure-aks.svg'
 import { ReactComponent as ICBgBuild } from '@IconsV2/ic-bg-build.svg'
 import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
+import { ReactComponent as ICBgCpu } from '@IconsV2/ic-bg-cpu.svg'
 import { ReactComponent as ICBgDeploy } from '@IconsV2/ic-bg-deploy.svg'
 import { ReactComponent as ICBgEnvironment } from '@IconsV2/ic-bg-environment.svg'
+import { ReactComponent as ICBgMemory } from '@IconsV2/ic-bg-memory.svg'
 import { ReactComponent as ICBgProductionPipelines } from '@IconsV2/ic-bg-production-pipelines.svg'
 import { ReactComponent as ICBgProject } from '@IconsV2/ic-bg-project.svg'
 import { ReactComponent as ICBgScan } from '@IconsV2/ic-bg-scan.svg'
@@ -49,6 +51,7 @@ import { ReactComponent as ICChatCircleDots } from '@IconsV2/ic-chat-circle-dots
 import { ReactComponent as ICChatCircleOnline } from '@IconsV2/ic-chat-circle-online.svg'
 import { ReactComponent as ICCheck } from '@IconsV2/ic-check.svg'
 import { ReactComponent as ICCheckAll } from '@IconsV2/ic-check-all.svg'
+import { ReactComponent as ICCheckCircle } from '@IconsV2/ic-check-circle.svg'
 import { ReactComponent as ICCheckSquare } from '@IconsV2/ic-check-square.svg'
 import { ReactComponent as ICChecks } from '@IconsV2/ic-checks.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
@@ -200,6 +203,7 @@ import { ReactComponent as ICOtcCloud } from '@IconsV2/ic-otc-cloud.svg'
 import { ReactComponent as ICOutOfSync } from '@IconsV2/ic-out-of-sync.svg'
 import { ReactComponent as ICPaperPlane } from '@IconsV2/ic-paper-plane.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
+import { ReactComponent as ICParty } from '@IconsV2/ic-party.svg'
 import { ReactComponent as ICPath } from '@IconsV2/ic-path.svg'
 import { ReactComponent as ICPauseCircle } from '@IconsV2/ic-pause-circle.svg'
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
@@ -265,6 +269,7 @@ import { ReactComponent as ICVisibilityOff } from '@IconsV2/ic-visibility-off.sv
 import { ReactComponent as ICVisibilityOn } from '@IconsV2/ic-visibility-on.svg'
 import { ReactComponent as ICWarning } from '@IconsV2/ic-warning.svg'
 import { ReactComponent as ICWarningFill } from '@IconsV2/ic-warning-fill.svg'
+import { ReactComponent as ICWarningStroke } from '@IconsV2/ic-warning-stroke.svg'
 import { ReactComponent as ICWebhook } from '@IconsV2/ic-webhook.svg'
 import { ReactComponent as ICWifiSlash } from '@IconsV2/ic-wifi-slash.svg'
 import { ReactComponent as ICWorldGlobe } from '@IconsV2/ic-world-globe.svg'
@@ -297,8 +302,10 @@ export const iconMap = {
     'ic-azure': ICAzure,
     'ic-bg-build': ICBgBuild,
     'ic-bg-cluster': ICBgCluster,
+    'ic-bg-cpu': ICBgCpu,
     'ic-bg-deploy': ICBgDeploy,
     'ic-bg-environment': ICBgEnvironment,
+    'ic-bg-memory': ICBgMemory,
     'ic-bg-production-pipelines': ICBgProductionPipelines,
     'ic-bg-project': ICBgProject,
     'ic-bg-scan': ICBgScan,
@@ -322,6 +329,7 @@ export const iconMap = {
     'ic-chat-circle-dots': ICChatCircleDots,
     'ic-chat-circle-online': ICChatCircleOnline,
     'ic-check-all': ICCheckAll,
+    'ic-check-circle': ICCheckCircle,
     'ic-check-square': ICCheckSquare,
     'ic-check': ICCheck,
     'ic-checks': ICChecks,
@@ -474,6 +482,7 @@ export const iconMap = {
     'ic-out-of-sync': ICOutOfSync,
     'ic-paper-plane-color': ICPaperPlaneColor,
     'ic-paper-plane': ICPaperPlane,
+    'ic-party': ICParty,
     'ic-path': ICPath,
     'ic-pause-circle': ICPauseCircle,
     'ic-pencil': ICPencil,
@@ -538,6 +547,7 @@ export const iconMap = {
     'ic-visibility-off': ICVisibilityOff,
     'ic-visibility-on': ICVisibilityOn,
     'ic-warning-fill': ICWarningFill,
+    'ic-warning-stroke': ICWarningStroke,
     'ic-warning': ICWarning,
     'ic-webhook': ICWebhook,
     'ic-wifi-slash': ICWifiSlash,
