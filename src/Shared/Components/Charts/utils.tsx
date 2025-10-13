@@ -192,7 +192,11 @@ export const getDefaultOptions = ({
         yScaleTickFormat,
         xScaleTickFormat,
         xAxisLabels,
+        tooltipConfig,
     } = chartProps
+
+    const { datasetValueFormatter } = tooltipConfig ?? {}
+
     const baseOptions: ChartOptions = {
         responsive: true,
         devicePixelRatio: 3,
@@ -213,6 +217,16 @@ export const getDefaultOptions = ({
                 enabled: false,
                 position: 'nearest',
                 external: externalTooltipHandler,
+                ...(datasetValueFormatter
+                    ? {
+                          callbacks: {
+                              label({ dataset, raw }) {
+                                  // only number values are expected in raw as input in our types for yAxisValues is number[]
+                                  return `${dataset.label}: ${datasetValueFormatter(raw as number)}`
+                              },
+                          },
+                      }
+                    : {}),
             },
         },
         elements: {

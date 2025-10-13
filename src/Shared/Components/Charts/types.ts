@@ -114,6 +114,7 @@ export type ChartProps = {
          * @default 'top'
          */
         placement?: TooltipProps['placement']
+        datasetValueFormatter?: (value: number) => string | number
     }
     /** A title for x axis */
     xScaleTitle?: string
