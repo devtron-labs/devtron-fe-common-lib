@@ -61,6 +61,11 @@ type XYAxisMax = {
 
 type OnChartClickHandler = (datasetName: string, value: number) => void
 
+type ScaleTickFormatCallbacks = Partial<{
+    xScaleTickFormat: (label: string, index: number) => string | string[] | number | number[]
+    yScaleTickFormat: (value: number, index: number) => string | string[] | number | number[]
+}>
+
 export type TypeAndDatasetsType =
     | ({
           type: 'pie'
@@ -69,27 +74,27 @@ export type TypeAndDatasetsType =
            */
           datasets: SimpleDatasetForPie
           onChartClick?: OnChartClickHandler
-          yScaleTickFormat?: never
-      } & Never<XYAxisMax>)
+      } & Never<XYAxisMax> &
+          Never<ScaleTickFormatCallbacks>)
     | ({
           type: 'line'
           datasets: SimpleDatasetForLineAndArea[]
           onChartClick?: never
-          yScaleTickFormat?: (value: number) => string
-      } & XYAxisMax)
+      } & XYAxisMax &
+          ScaleTickFormatCallbacks)
     | ({
           type: 'area'
           datasets: SimpleDatasetForLineAndArea
           /* onChartClick is not applicable for area charts */
           onChartClick?: never
-          yScaleTickFormat?: (value: number) => string
-      } & XYAxisMax)
+      } & XYAxisMax &
+          ScaleTickFormatCallbacks)
     | ({
           type: Exclude<ChartType, 'pie' | 'line' | 'area'>
           datasets: SimpleDataset[]
           onChartClick?: OnChartClickHandler
-          yScaleTickFormat?: (value: number) => string
-      } & XYAxisMax)
+      } & XYAxisMax &
+          ScaleTickFormatCallbacks)
 
 export type ChartProps = {
     id: string

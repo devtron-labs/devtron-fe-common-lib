@@ -310,7 +310,7 @@ export const CHART_AXIS_LABELS_COLOR: Record<AppThemeType, string> = {
 
 export const CHART_CANVAS_BACKGROUND_COLORS: Record<AppThemeType, string> = {
     [AppThemeType.light]: 'rgb(255, 255, 255)',
-    [AppThemeType.dark]: 'rgb(21, 22, 31)',
+    [AppThemeType.dark]: 'rgb(30, 31, 40)',
 }
 
 export const LINE_DASH = [6, 6]
