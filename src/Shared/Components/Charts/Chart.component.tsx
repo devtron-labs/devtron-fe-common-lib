@@ -277,6 +277,7 @@ const Chart = (props: ChartProps) => {
             chartProps: props,
             appTheme,
             externalTooltipHandler: debouncedExternalTooltipHandler,
+            setTooltipVisible,
         })
 
         chartRef.current = new ChartJS(ctx, {
