@@ -67,4 +67,9 @@ export interface NestedBreadCrumbProps {
      * If not given, would show "Create Profile"
      */
     profileName: string
+    /**
+     * @default Profiles
+     * It is the text of the nested breadcrumb
+     */
+    nestedBreadCrumbsText?: string
 }

@@ -11,8 +11,8 @@ export const ApplicationManagementIcon = () => (
         linkProps={{
             to: URLS.APPLICATION_MANAGEMENT_APP,
         }}
-        ariaLabel="Redirect to Devtron Apps"
-        showAriaLabelInTippy={false}
+        ariaLabel="Application Management"
+        showAriaLabelInTippy
         icon={<Icon name="ic-grid-view" color={null} />}
     />
 )

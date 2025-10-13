@@ -37,6 +37,7 @@ const Descriptor = ({
                         redirectUrl={URLS.APPLICATION_MANAGEMENT_CONFIGURATIONS_BUILD_INFRA_PROFILES}
                         linkText={BUILD_INFRA_TEXT.HEADING}
                         profileName={profileName}
+                        nestedBreadCrumbsText="Profiles"
                     />
                     <InfoIconTippy
                         infoText={tippyInfoText ?? BUILD_INFRA_TEXT.EDIT_DEFAULT_TOOLTIP}
