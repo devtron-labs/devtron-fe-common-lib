@@ -81,6 +81,7 @@ import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICContainerRegistry } from '@IconsV2/ic-container-registry.svg'
 import { ReactComponent as ICCookr } from '@IconsV2/ic-cookr.svg'
 import { ReactComponent as ICCopy } from '@IconsV2/ic-copy.svg'
+import { ReactComponent as ICCostVisibility } from '@IconsV2/ic-cost-visibility.svg'
 import { ReactComponent as ICCpu } from '@IconsV2/ic-cpu.svg'
 import { ReactComponent as ICCrown } from '@IconsV2/ic-crown.svg'
 import { ReactComponent as ICCube } from '@IconsV2/ic-cube.svg'
@@ -384,6 +385,7 @@ export const iconMap = {
     'ic-container': ICContainer,
     'ic-cookr': ICCookr,
     'ic-copy': ICCopy,
+    'ic-cost-visibility': ICCostVisibility,
     'ic-cpu': ICCpu,
     'ic-crown': ICCrown,
     'ic-cube': ICCube,
