@@ -15,8 +15,8 @@ export const getAutomationEnablementBreadcrumbConfig = () => ({
                     to: URLS.AUTOMATION_AND_ENABLEMENT_JOB,
                 }}
                 icon={<Icon name="ic-bot" color={null} />}
-                ariaLabel="Redirect to Automation & Enablement Overview"
-                showAriaLabelInTippy={false}
+                ariaLabel="Automation & Enablement"
+                showAriaLabelInTippy
             />
         ),
         linked: true,

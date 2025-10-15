@@ -4,14 +4,19 @@ import { Link } from 'react-router-dom'
 import { BreadcrumbText, getBreadCrumbSeparator } from './BreadcrumbStore'
 import { NestedBreadCrumbProps } from './Types'
 
-export const NestedBreadCrumb = ({ redirectUrl, linkText, profileName }: NestedBreadCrumbProps) => {
+export const NestedBreadCrumb = ({
+    redirectUrl,
+    linkText,
+    profileName,
+    nestedBreadCrumbsText,
+}: NestedBreadCrumbProps) => {
     const breadcrumbLinkClass = 'active dc__devtron-breadcrumb__item fs-16 fw-4 lh-1-5 dc__ellipsis-right dc__mxw-155'
 
     const breadcrumbs = [
         { type: 'link', label: linkText, to: redirectUrl },
         ...(profileName
             ? [
-                  { type: 'link', label: 'Profiles', to: redirectUrl },
+                  ...(nestedBreadCrumbsText ? [{ type: 'link', label: nestedBreadCrumbsText, to: redirectUrl }] : []),
                   {
                       type: 'text',
                       label: profileName,
