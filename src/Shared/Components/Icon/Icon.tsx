@@ -32,6 +32,7 @@ import { ReactComponent as ICBgProject } from '@IconsV2/ic-bg-project.svg'
 import { ReactComponent as ICBgScan } from '@IconsV2/ic-bg-scan.svg'
 import { ReactComponent as ICBgWebhook } from '@IconsV2/ic-bg-webhook.svg'
 import { ReactComponent as ICBharatpe } from '@IconsV2/ic-bharatpe.svg'
+import { ReactComponent as ICBinoculars } from '@IconsV2/ic-binoculars.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBookOpen } from '@IconsV2/ic-book-open.svg'
 import { ReactComponent as ICBot } from '@IconsV2/ic-bot.svg'
@@ -312,6 +313,7 @@ export const iconMap = {
     'ic-bg-scan': ICBgScan,
     'ic-bg-webhook': ICBgWebhook,
     'ic-bharatpe': ICBharatpe,
+    'ic-binoculars': ICBinoculars,
     'ic-bitbucket': ICBitbucket,
     'ic-book-open': ICBookOpen,
     'ic-bot': ICBot,
