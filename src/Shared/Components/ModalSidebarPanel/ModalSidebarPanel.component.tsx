@@ -25,15 +25,17 @@ const ModalSidebarPanel = ({
     documentationLink,
 }: ModalSidebarPanelProps) => (
     <div className={`flexbox-col w-250 dc__gap-24 dc__modal-gradient ${rootClassName}`}>
-        <div className="flexbox-col dc__gap-12">
-            {(icon || heading) && (
-                <div className="flexbox-col dc__gap-8">
-                    {icon && icon}
-                    {heading && <h3 className="fs-18 fw-6 cn-9 lh-1-5 m-0">{heading}</h3>}
-                </div>
-            )}
-            {children && <div className="fs-13 fw-4 lh-1-5 cn-7">{children}</div>}
-        </div>
+        {(icon || heading || children) && (
+            <div className="flexbox-col dc__gap-12">
+                {(icon || heading) && (
+                    <div className="flexbox-col dc__gap-8">
+                        {icon && icon}
+                        {heading && <h3 className="fs-18 fw-6 cn-9 lh-1-5 m-0">{heading}</h3>}
+                    </div>
+                )}
+                {children && <div className="fs-13 fw-4 lh-1-5 cn-7">{children}</div>}
+            </div>
+        )}
         <div className="flexbox-col dc__gap-4 dc__align-start">
             <span className="fs-13 fw-6 lh-20 cn-9">📙 Need help?</span>
             <DocLink
