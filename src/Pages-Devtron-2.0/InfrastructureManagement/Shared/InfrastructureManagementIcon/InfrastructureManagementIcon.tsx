@@ -11,8 +11,8 @@ export const InfrastructureManagementIcon = () => (
         linkProps={{
             to: URLS.INFRASTRUCTURE_MANAGEMENT_RESOURCE_BROWSER,
         }}
-        ariaLabel="Redirect to Infrastructure Management Overview"
-        showAriaLabelInTippy={false}
+        ariaLabel="Infrastructure Management"
+        showAriaLabelInTippy
         icon={<Icon name="ic-cloud" color={null} />}
     />
 )

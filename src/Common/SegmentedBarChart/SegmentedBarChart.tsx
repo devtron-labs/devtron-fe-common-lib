@@ -35,7 +35,7 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
     swapLegendAndBar = false,
     showAnimationOnBar = false,
     isLoading,
-    size = ComponentSizeType.medium,
+    size = ComponentSizeType.small,
 }) => {
     const entities = isLoading ? [FALLBACK_ENTITY] : userEntities
     const total = entities.reduce((sum, entity) => entity.value + sum, 0)

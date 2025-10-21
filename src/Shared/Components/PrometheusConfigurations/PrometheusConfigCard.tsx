@@ -13,6 +13,7 @@ const PromoetheusConfigCard = ({
     onPrometheusAuthTypeChange,
 }: PromoetheusConfigProps) => {
     const { endpoint, authType, userName, password, prometheusTlsClientCert, prometheusTlsClientKey } = prometheusConfig
+    const isBasicAuthError = authType.value === AuthenticationType.BASIC && (userName.error || password.error)
 
     return (
         <div className="bg__primary p-20 br-8 flexbox-col dc__gap-16 border__secondary">
@@ -22,7 +23,7 @@ const PromoetheusConfigCard = ({
                     Devtron uses prometheus to store and track cluster metrics
                 </span>
             </div>
-            {(userName.error || password.error || endpoint.error) && (
+            {(isBasicAuthError || endpoint.error) && (
                 <InfoBlock
                     variant="error"
                     description="Fill all the required fields OR turn off the above switch to skip configuring prometheus."

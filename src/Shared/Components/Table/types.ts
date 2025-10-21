@@ -294,7 +294,10 @@ export type InternalTableProps<
     /**
      * Use this component to display additional content at the end of a row when it is hovered over.
      */
-    RowActionsOnHoverComponent?: FunctionComponent<RowActionsOnHoverComponentProps<RowData, AdditionalProps>>
+    rowActionOnHoverConfig?: {
+        Component: FunctionComponent<RowActionsOnHoverComponentProps<RowData, AdditionalProps>>
+        width: string | number
+    }
 
     bulkSelectionReturnValue: BulkSelectionReturnValueType | null
 
@@ -381,7 +384,7 @@ export type TableProps<
     | 'paginationVariant'
     | 'stylesConfig'
     | 'id'
-    | 'RowActionsOnHoverComponent'
+    | 'rowActionOnHoverConfig'
     | 'loading'
     | 'ViewWrapper'
     | 'pageSizeOptions'
@@ -433,7 +436,7 @@ export interface TableContentProps<
             | 'handleClearBulkSelection'
             | 'handleToggleBulkSelectionOnRow'
             | 'paginationVariant'
-            | 'RowActionsOnHoverComponent'
+            | 'rowActionOnHoverConfig'
             | 'pageSizeOptions'
             | 'getRows'
         >,
