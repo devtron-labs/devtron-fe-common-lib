@@ -6,11 +6,16 @@ const Card = ({
     onHover,
     isLoading,
     borderConfig,
-    padding,
-    flexDirection,
-    flexGap,
+    padding = 20,
+    flexDirection = 'column',
+    flexGap = 16,
     shimmerVariant,
 }: CardProps) => {
+    const { borderRadius = 8, colorVariant = 'secondary' } = borderConfig ?? {
+        borderRadius: 8,
+        colorVariant: 'secondary',
+    }
+
     const divProps = onClick
         ? { onClick, role: 'button', tabIndex: 0 }
         : {
@@ -71,7 +76,7 @@ const Card = ({
     }
 
     const getBorderClass = () => {
-        switch (borderConfig.colorVariant) {
+        switch (colorVariant) {
             case 'primary':
                 return 'border__primary'
             case 'secondary':
@@ -98,7 +103,7 @@ const Card = ({
 
     const cardStyles = {
         padding: `${padding}px`,
-        borderRadius: `${borderConfig.borderRadius}px`,
+        borderRadius: `${borderRadius}px`,
         gap: `${flexGap}px`,
     }
 

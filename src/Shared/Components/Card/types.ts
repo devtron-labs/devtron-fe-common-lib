@@ -4,28 +4,28 @@ export type CardProps = {
     children: ReactNode
     onClick?: MouseEventHandler<HTMLDivElement>
     onHover?: MouseEventHandler<HTMLDivElement>
-    borderConfig: {
+    borderConfig?: {
         /**
          * @default 'secondary'
          */
-        colorVariant: 'primary' | 'secondary' | 'primary--translucent' | 'secondary--translucent'
+        colorVariant?: 'primary' | 'secondary' | 'primary--translucent' | 'secondary--translucent'
         /**
          * @default 8px
          */
-        borderRadius: number
+        borderRadius?: number
     }
     /**
      * @default 20px
      */
-    padding: number
+    padding?: number
     /**
      * @default 'column'
      */
-    flexDirection: 'row' | 'column'
+    flexDirection?: 'row' | 'column'
     /**
      * @default 16px
      */
-    flexGap: number
+    flexGap?: number
 } & (
     | {
           isLoading: boolean
