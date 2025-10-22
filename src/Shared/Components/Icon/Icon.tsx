@@ -70,7 +70,6 @@ import { ReactComponent as ICCloudVms } from '@IconsV2/ic-cloud-vms.svg'
 import { ReactComponent as ICCluster } from '@IconsV2/ic-cluster.svg'
 import { ReactComponent as ICClusterIsolated } from '@IconsV2/ic-cluster-isolated.svg'
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
-import { ReactComponent as ICCoin } from '@IconsV2/ic-coin.svg'
 import { ReactComponent as ICCoins } from '@IconsV2/ic-coins.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICContainerRegistry } from '@IconsV2/ic-container-registry.svg'
@@ -279,7 +278,6 @@ import { ReactComponent as ICUpgradeEnterprise } from '@IconsV2/ic-upgrade-enter
 import { ReactComponent as ICUserCircle } from '@IconsV2/ic-user-circle.svg'
 import { ReactComponent as ICUserKey } from '@IconsV2/ic-user-key.svg'
 import { ReactComponent as ICUsers } from '@IconsV2/ic-users.svg'
-import { ReactComponent as ICVector } from '@IconsV2/ic-vector.svg'
 import { ReactComponent as ICViewVariableToggle } from '@IconsV2/ic-view-variable-toggle.svg'
 import { ReactComponent as ICVisibilityOff } from '@IconsV2/ic-visibility-off.svg'
 import { ReactComponent as ICVisibilityOn } from '@IconsV2/ic-visibility-on.svg'
@@ -365,7 +363,6 @@ export const iconMap = {
     'ic-cluster-isolated': ICClusterIsolated,
     'ic-cluster': ICCluster,
     'ic-code': ICCode,
-    'ic-coin': ICCoin,
     'ic-coins': ICCoins,
     'ic-container-registry': ICContainerRegistry,
     'ic-container': ICContainer,
@@ -574,7 +571,6 @@ export const iconMap = {
     'ic-user-circle': ICUserCircle,
     'ic-user-key': ICUserKey,
     'ic-users': ICUsers,
-    'ic-vector': ICVector,
     'ic-view-variable-toggle': ICViewVariableToggle,
     'ic-visibility-off': ICVisibilityOff,
     'ic-visibility-on': ICVisibilityOn,
