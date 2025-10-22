@@ -42,6 +42,7 @@ import {
 } from '.'
 import { IllustrationName, SelectPickerOptionType } from '@Shared/Components'
 import { ClusterStatusType } from '@Pages/ResourceBrowser'
+import { ClusterProviderType } from '@PagesDevtron2.0/CostVisibility'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -79,6 +80,11 @@ export interface APIOptions {
      * @default false
      */
     shouldParseServerErrorForUnauthorizedUser?: boolean
+    /**
+     * @default false
+     * @description - If true, will override the default host (orchestrator or whatever defined initially in CoreAPI constructor) with the `proxy` host
+     */
+    isProxyHost?: boolean
 }
 
 export interface OptionType<T = string, K = string> {
@@ -1121,7 +1127,9 @@ export type EnvironmentsGroupedByClustersType = {
 export type ClusterCostModuleConfigPayload =
     | {
           enabled: true
-          config?: Record<string, any>
+          config?: Record<string, any> & {
+            detectedProvider: ClusterProviderType
+          }
       }
     | {
           enabled: false

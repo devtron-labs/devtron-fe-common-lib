@@ -238,7 +238,7 @@ const PageHeader = ({
                             <InfoIconTippy
                                 infoText={tippyMessage}
                                 heading={headerName || tippyHeader}
-                                iconClassName="icon-dim-20 ml-8 fcn-5"
+                                iconClassName="icon-dim-20 ml-8 fcn-7"
                                 documentationLink={tippyRedirectLink}
                                 documentationLinkText="View Documentation"
                                 additionalContent={additionalContent}

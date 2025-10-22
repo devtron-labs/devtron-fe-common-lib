@@ -28,6 +28,7 @@ import {
     ComponentSizeType,
     PROGRESSING_DEPLOYMENT_STATUS_POLLING_INTERVAL,
 } from '@Shared/constants'
+import { useMainContext } from '@Shared/Providers'
 import { AppType } from '@Shared/types'
 
 import { APIResponseHandler } from '../APIResponseHandler'
@@ -57,7 +58,7 @@ const AppStatusModal = ({
     initialTab,
     debugWithAIButton,
 }: AppStatusModalProps) => {
-    const [showConfigDriftModal, setShowConfigDriftModal] = useState(false)
+    const { setTempAppWindowConfig } = useMainContext()
     const [selectedTab, setSelectedTab] = useState<AppStatusModalTabType>(initialTab || null)
 
     const appDetailsAbortControllerRef = useRef<AbortController>(new AbortController())
@@ -241,28 +242,18 @@ const AppStatusModal = ({
 
     const handleShowConfigDriftModal = isConfigDriftEnabled
         ? () => {
-              setShowConfigDriftModal(true)
+              handleClose()
+              setTempAppWindowConfig({
+                  open: true,
+                  title: `${appDetails.appName} / Live and desired manifest comparison`,
+                  component: <ConfigDriftModal appId={appDetails.appId} envId={appDetails.environmentId} />,
+              })
           }
         : null
-
-    const handleCloseConfigDriftModal = () => {
-        handleClose()
-        setShowConfigDriftModal(false)
-    }
 
     const handleSelectTab = async (updatedTab: AppStatusModalTabType) => {
         handleClearDeploymentStatusTimeout()
         setSelectedTab(updatedTab)
-    }
-
-    if (showConfigDriftModal) {
-        return (
-            <ConfigDriftModal
-                appId={appDetails.appId}
-                envId={+appDetails.environmentId}
-                handleCloseModal={handleCloseConfigDriftModal}
-            />
-        )
     }
 
     const filteredTitleSegments = (titleSegments || []).filter((segment) => !!segment)

@@ -47,7 +47,7 @@ const TableContent = <
     handleClearBulkSelection,
     handleToggleBulkSelectionOnRow,
     paginationVariant,
-    RowActionsOnHoverComponent,
+    rowActionOnHoverConfig,
     pageSizeOptions,
     filteredRows,
     areFilteredRowsLoading,
@@ -61,6 +61,8 @@ const TableContent = <
 
     const [bulkActionState, setBulkActionState] = useState<BulkActionStateType>(null)
     const [showBorderRightOnStickyElements, setShowBorderRightOnStickyElements] = useState(false)
+
+    const { width: rowOnHoverComponentWidth, Component: RowOnHoverComponent } = rowActionOnHoverConfig || {}
 
     const {
         BulkActionsComponent,
@@ -84,10 +86,14 @@ const TableContent = <
 
     const {
         handleResize,
-        gridTemplateColumns = visibleColumns
+        gridTemplateColumns: initialGridTemplateColumns = visibleColumns
             .map((column) => (typeof column.size?.fixed === 'number' ? `${column.size.fixed}px` : 'minmax(200px, 1fr)'))
             .join(' '),
     } = resizableConfig ?? {}
+
+    const gridTemplateColumns = rowOnHoverComponentWidth
+        ? `${initialGridTemplateColumns} ${typeof rowOnHoverComponentWidth === 'number' ? `${rowOnHoverComponentWidth}px` : rowOnHoverComponentWidth}`
+        : initialGridTemplateColumns
 
     useEffect(() => {
         const scrollEventHandler = () => {
@@ -227,7 +233,7 @@ const TableContent = <
                         showSeparatorBetweenRows ? 'border__secondary--bottom' : ''
                     } fs-13 fw-4 lh-20 cn-9 generic-table__row dc__gap-16 ${
                         isRowActive ? 'generic-table__row--active checkbox__parent-container--active' : ''
-                    } ${RowActionsOnHoverComponent ? 'dc__position-rel dc__opacity-hover dc__opacity-hover--parent' : ''} ${
+                    } ${rowActionOnHoverConfig ? 'dc__opacity-hover dc__opacity-hover--parent' : ''} ${
                         isRowBulkSelected ? 'generic-table__row--bulk-selected' : ''
                     }`}
                     style={{
@@ -288,9 +294,11 @@ const TableContent = <
                         )
                     })}
 
-                    {RowActionsOnHoverComponent && (
-                        <div className="dc__position-abs dc__right-0 dc__zi-1 dc__opacity-hover--child">
-                            <RowActionsOnHoverComponent row={row} {...additionalProps} />
+                    {RowOnHoverComponent && (
+                        <div
+                            className={`dc__position-sticky dc__right-0 dc__zi-1 ${!isRowActive ? 'dc__opacity-hover--child' : ''}`}
+                        >
+                            <RowOnHoverComponent row={row} {...additionalProps} />
                         </div>
                     )}
                 </div>

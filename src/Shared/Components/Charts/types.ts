@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { Dispatch, ReactNode, SetStateAction } from 'react'
 import { TooltipOptions, TooltipPositionerFunction } from 'chart.js'
 
 import { TooltipProps } from '@Common/Tooltip'
@@ -61,6 +61,11 @@ type XYAxisMax = {
 
 type OnChartClickHandler = (datasetName: string, value: number) => void
 
+type ScaleTickFormatCallbacks = Partial<{
+    xScaleTickFormat: (label: string, index: number) => string | string[] | number | number[]
+    yScaleTickFormat: (value: number, index: number) => string | string[] | number | number[]
+}>
+
 export type TypeAndDatasetsType =
     | ({
           type: 'pie'
@@ -69,23 +74,27 @@ export type TypeAndDatasetsType =
            */
           datasets: SimpleDatasetForPie
           onChartClick?: OnChartClickHandler
-      } & Never<XYAxisMax>)
+      } & Never<XYAxisMax> &
+          Never<ScaleTickFormatCallbacks>)
     | ({
           type: 'line'
           datasets: SimpleDatasetForLineAndArea[]
           onChartClick?: never
-      } & XYAxisMax)
+      } & XYAxisMax &
+          ScaleTickFormatCallbacks)
     | ({
           type: 'area'
           datasets: SimpleDatasetForLineAndArea
           /* onChartClick is not applicable for area charts */
           onChartClick?: never
-      } & XYAxisMax)
+      } & XYAxisMax &
+          ScaleTickFormatCallbacks)
     | ({
           type: Exclude<ChartType, 'pie' | 'line' | 'area'>
           datasets: SimpleDataset[]
           onChartClick?: OnChartClickHandler
-      } & XYAxisMax)
+      } & XYAxisMax &
+          ScaleTickFormatCallbacks)
 
 export type ChartProps = {
     id: string
@@ -105,6 +114,7 @@ export type ChartProps = {
          * @default 'top'
          */
         placement?: TooltipProps['placement']
+        datasetValueFormatter?: (value: number) => string | number
     }
     /** A title for x axis */
     xScaleTitle?: string
@@ -139,6 +149,7 @@ export interface GetDefaultOptionsParams {
     chartProps: ChartProps
     appTheme: AppThemeType
     externalTooltipHandler: TooltipOptions['external']
+    setTooltipVisible: Dispatch<SetStateAction<boolean>>
 }
 
 declare module 'chart.js' {

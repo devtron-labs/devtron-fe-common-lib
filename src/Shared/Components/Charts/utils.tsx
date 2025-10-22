@@ -20,6 +20,7 @@ import {
     CHART_COLORS,
     CHART_GRID_LINES_COLORS,
     LINE_DASH,
+    MAX_BAR_THICKNESS,
 } from './constants'
 import {
     ChartColorKey,
@@ -95,7 +96,13 @@ export const getChartJSType = (type: ChartType): ChartJSChartType => {
 }
 
 const handleChartClick =
-    ({ type, onChartClick, datasets, xAxisLabels }: ChartProps) =>
+    ({
+        type,
+        onChartClick,
+        datasets,
+        xAxisLabels,
+        setTooltipVisible,
+    }: ChartProps & Pick<GetDefaultOptionsParams, 'setTooltipVisible'>) =>
     (_, elements: ActiveElement[]) => {
         if (!elements || elements.length === 0 || !datasets || (Array.isArray(datasets) && datasets.length === 0)) {
             return
@@ -116,6 +123,7 @@ const handleChartClick =
 
             onChartClick?.(datasets[datasetIndex].datasetName, index)
         }
+        setTooltipVisible(false)
     }
 
 const handleChartHover =
@@ -170,6 +178,7 @@ export const getDefaultOptions = ({
     chartProps,
     appTheme,
     externalTooltipHandler,
+    setTooltipVisible,
 }: GetDefaultOptionsParams): ChartOptions => {
     const {
         onChartClick,
@@ -180,7 +189,14 @@ export const getDefaultOptions = ({
         yAxisMax,
         xScaleTitle,
         yScaleTitle,
+        yScaleTickFormat,
+        xScaleTickFormat,
+        xAxisLabels,
+        tooltipConfig,
     } = chartProps
+
+    const { datasetValueFormatter } = tooltipConfig ?? {}
+
     const baseOptions: ChartOptions = {
         responsive: true,
         devicePixelRatio: 3,
@@ -201,6 +217,16 @@ export const getDefaultOptions = ({
                 enabled: false,
                 position: 'nearest',
                 external: externalTooltipHandler,
+                ...(datasetValueFormatter
+                    ? {
+                          callbacks: {
+                              label({ dataset, raw }) {
+                                  // only number values are expected in raw as input in our types for yAxisValues is number[]
+                                  return `${dataset.label}: ${datasetValueFormatter(raw as number)}`
+                              },
+                          },
+                      }
+                    : {}),
             },
         },
         elements: {
@@ -217,7 +243,7 @@ export const getDefaultOptions = ({
         },
         ...(onChartClick
             ? {
-                  onClick: handleChartClick(chartProps),
+                  onClick: handleChartClick({ ...chartProps, setTooltipVisible }),
                   onHover: handleChartHover(chartProps),
               }
             : {}),
@@ -247,12 +273,38 @@ export const getDefaultOptions = ({
         ...commonScaleConfig,
         max: xAxisMax,
         title: getScaleTickTitleConfig(xScaleTitle, appTheme),
+        ticks: {
+            ...commonScaleConfig.ticks,
+            ...((type !== 'stackedBarHorizontal' && typeof xScaleTickFormat === 'function') ||
+            (type === 'stackedBarHorizontal' && typeof yScaleTickFormat === 'function')
+                ? {
+                      callback:
+                          type === 'stackedBarHorizontal'
+                              ? (value, index) => yScaleTickFormat(Number(value), index)
+                              : (_, index) => xScaleTickFormat(xAxisLabels[index], index),
+                  }
+                : {}),
+            autoSkip: false,
+        },
     } satisfies ScaleOptions<'linear'>
 
     const commonYScaleConfig = {
         ...commonScaleConfig,
         max: yAxisMax,
         title: getScaleTickTitleConfig(yScaleTitle, appTheme),
+        // for stackedBarHorizon
+        ticks: {
+            ...commonScaleConfig.ticks,
+            ...((type === 'stackedBarHorizontal' && typeof xScaleTickFormat === 'function') ||
+            (type !== 'stackedBarHorizontal' && typeof yScaleTickFormat === 'function')
+                ? {
+                      callback:
+                          type !== 'stackedBarHorizontal'
+                              ? (value, index) => yScaleTickFormat(Number(value), index)
+                              : (_, index) => xScaleTickFormat(xAxisLabels[index], index),
+                  }
+                : {}),
+        },
     } satisfies ScaleOptions<'linear'>
 
     switch (type) {
@@ -301,6 +353,11 @@ export const getDefaultOptions = ({
                         beginAtZero: true,
                     },
                 },
+                datasets: {
+                    bar: {
+                        maxBarThickness: MAX_BAR_THICKNESS,
+                    },
+                },
             } satisfies ChartOptions<'bar'>
         case 'stackedBarHorizontal':
             return {
@@ -314,6 +371,11 @@ export const getDefaultOptions = ({
                     y: {
                         ...commonYScaleConfig,
                         stacked: true,
+                    },
+                },
+                datasets: {
+                    bar: {
+                        maxBarThickness: MAX_BAR_THICKNESS,
                     },
                 },
             } satisfies ChartOptions<'bar'>
@@ -523,7 +585,7 @@ export const buildChartTooltipFromContext = ({
             <div className="flexbox-col dc__gap-2">
                 {titleLines.map((titleLine, index) => (
                     // eslint-disable-next-line react/no-array-index-key
-                    <h6 key={index} className="m-0 fs-12 fw-6 lh-20 dc__truncate">
+                    <h6 key={index} className="m-0 fs-12 fw-6 lh-20 dc__word-break-all">
                         {titleLine}
                     </h6>
                 ))}
