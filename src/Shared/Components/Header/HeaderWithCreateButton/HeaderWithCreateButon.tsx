@@ -86,9 +86,7 @@ export const HeaderWithCreateButton = ({ viewType }: HeaderWithCreateButtonProps
 
     const { breadcrumbs } = useBreadcrumb(
         {
-            alias: {
-                ...getBreadcrumbs(),
-            },
+            alias: getBreadcrumbs(),
         },
         [location.pathname],
     )

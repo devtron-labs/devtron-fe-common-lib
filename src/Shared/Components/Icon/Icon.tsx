@@ -4,6 +4,7 @@ import { ReactComponent as IC73strings } from '@IconsV2/ic-73strings.svg'
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
 import { ReactComponent as ICActivity } from '@IconsV2/ic-activity.svg'
 import { ReactComponent as ICAdd } from '@IconsV2/ic-add.svg'
+import { ReactComponent as ICAi } from '@IconsV2/ic-ai.svg'
 import { ReactComponent as ICAlibaba } from '@IconsV2/ic-alibaba.svg'
 import { ReactComponent as ICAmazonEks } from '@IconsV2/ic-amazon-eks.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
@@ -11,6 +12,7 @@ import { ReactComponent as ICAppTemplate } from '@IconsV2/ic-app-template.svg'
 import { ReactComponent as ICApplication } from '@IconsV2/ic-application.svg'
 import { ReactComponent as ICApplicationGroup } from '@IconsV2/ic-application-group.svg'
 import { ReactComponent as ICApplicationManagement } from '@IconsV2/ic-application-management.svg'
+import { ReactComponent as ICApplicationTemplate } from '@IconsV2/ic-application-template.svg'
 import { ReactComponent as ICArgocdApp } from '@IconsV2/ic-argocd-app.svg'
 import { ReactComponent as ICArrowClockwise } from '@IconsV2/ic-arrow-clockwise.svg'
 import { ReactComponent as ICArrowLineDown } from '@IconsV2/ic-arrow-line-down.svg'
@@ -24,6 +26,8 @@ import { ReactComponent as ICAws } from '@IconsV2/ic-aws.svg'
 import { ReactComponent as ICAwsCodecommit } from '@IconsV2/ic-aws-codecommit.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICAzureAks } from '@IconsV2/ic-azure-aks.svg'
+import { ReactComponent as ICBackupAndSchedule } from '@IconsV2/ic-backup-and-schedule.svg'
+import { ReactComponent as ICBackupLocation } from '@IconsV2/ic-backup-location.svg'
 import { ReactComponent as ICBgBuild } from '@IconsV2/ic-bg-build.svg'
 import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
 import { ReactComponent as ICBgCpu } from '@IconsV2/ic-bg-cpu.svg'
@@ -50,6 +54,7 @@ import { ReactComponent as ICCaretDownSmall } from '@IconsV2/ic-caret-down-small
 import { ReactComponent as ICCaretLeft } from '@IconsV2/ic-caret-left.svg'
 import { ReactComponent as ICCaretRight } from '@IconsV2/ic-caret-right.svg'
 import { ReactComponent as ICCd } from '@IconsV2/ic-cd.svg'
+import { ReactComponent as ICChartLineUp } from '@IconsV2/ic-chart-line-up.svg'
 import { ReactComponent as ICChatCircleDots } from '@IconsV2/ic-chat-circle-dots.svg'
 import { ReactComponent as ICChatCircleOnline } from '@IconsV2/ic-chat-circle-online.svg'
 import { ReactComponent as ICCheck } from '@IconsV2/ic-check.svg'
@@ -217,10 +222,15 @@ import { ReactComponent as ICPriorityMediumFill } from '@IconsV2/ic-priority-med
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
 import { ReactComponent as ICRatings } from '@IconsV2/ic-ratings.svg'
+import { ReactComponent as ICReleaseHub } from '@IconsV2/ic-release-hub.svg'
 import { ReactComponent as ICResizeHandle } from '@IconsV2/ic-resize-handle.svg'
+import { ReactComponent as ICResourceBrowser } from '@IconsV2/ic-resource-browser.svg'
+import { ReactComponent as ICResourceWatcher } from '@IconsV2/ic-resource-watcher.svg'
 import { ReactComponent as ICRightPanelCollapse } from '@IconsV2/ic-right-panel-collapse.svg'
 import { ReactComponent as ICRocketGear } from '@IconsV2/ic-rocket-gear.svg'
 import { ReactComponent as ICRocketLaunch } from '@IconsV2/ic-rocket-launch.svg'
+import { ReactComponent as ICSecurityPolicy } from '@IconsV2/ic-security-policy.svg'
+import { ReactComponent as ICSecurityScan } from '@IconsV2/ic-security-scan.svg'
 import { ReactComponent as ICSelected } from '@IconsV2/ic-selected.svg'
 import { ReactComponent as ICShapes } from '@IconsV2/ic-shapes.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
@@ -253,6 +263,7 @@ import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICSymbolGreaterThan } from '@IconsV2/ic-symbol-greater-than.svg'
 import { ReactComponent as ICTag } from '@IconsV2/ic-tag.svg'
 import { ReactComponent as ICTata1mg } from '@IconsV2/ic-tata1mg.svg'
+import { ReactComponent as ICTenants } from '@IconsV2/ic-tenants.svg'
 import { ReactComponent as ICTerminal } from '@IconsV2/ic-terminal.svg'
 import { ReactComponent as ICTerminalFill } from '@IconsV2/ic-terminal-fill.svg'
 import { ReactComponent as ICThermometer } from '@IconsV2/ic-thermometer.svg'
@@ -289,12 +300,14 @@ export const iconMap = {
     'ic-aborted': ICAborted,
     'ic-activity': ICActivity,
     'ic-add': ICAdd,
+    'ic-ai': ICAi,
     'ic-alibaba': ICAlibaba,
     'ic-amazon-eks': ICAmazonEks,
     'ic-app-group': ICAppGroup,
     'ic-app-template': ICAppTemplate,
     'ic-application-group': ICApplicationGroup,
     'ic-application-management': ICApplicationManagement,
+    'ic-application-template': ICApplicationTemplate,
     'ic-application': ICApplication,
     'ic-argocd-app': ICArgocdApp,
     'ic-arrow-clockwise': ICArrowClockwise,
@@ -309,6 +322,8 @@ export const iconMap = {
     'ic-aws': ICAws,
     'ic-azure-aks': ICAzureAks,
     'ic-azure': ICAzure,
+    'ic-backup-and-schedule': ICBackupAndSchedule,
+    'ic-backup-location': ICBackupLocation,
     'ic-bg-build': ICBgBuild,
     'ic-bg-cluster': ICBgCluster,
     'ic-bg-cpu': ICBgCpu,
@@ -335,6 +350,7 @@ export const iconMap = {
     'ic-caret-left': ICCaretLeft,
     'ic-caret-right': ICCaretRight,
     'ic-cd': ICCd,
+    'ic-chart-line-up': ICChartLineUp,
     'ic-chat-circle-dots': ICChatCircleDots,
     'ic-chat-circle-online': ICChatCircleOnline,
     'ic-check-all': ICCheckAll,
@@ -502,10 +518,15 @@ export const iconMap = {
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
     'ic-ratings': ICRatings,
+    'ic-release-hub': ICReleaseHub,
     'ic-resize-handle': ICResizeHandle,
+    'ic-resource-browser': ICResourceBrowser,
+    'ic-resource-watcher': ICResourceWatcher,
     'ic-right-panel-collapse': ICRightPanelCollapse,
     'ic-rocket-gear': ICRocketGear,
     'ic-rocket-launch': ICRocketLaunch,
+    'ic-security-policy': ICSecurityPolicy,
+    'ic-security-scan': ICSecurityScan,
     'ic-selected': ICSelected,
     'ic-shapes': ICShapes,
     'ic-shield-check': ICShieldCheck,
@@ -538,6 +559,7 @@ export const iconMap = {
     'ic-symbol-greater-than': ICSymbolGreaterThan,
     'ic-tag': ICTag,
     'ic-tata1mg': ICTata1mg,
+    'ic-tenants': ICTenants,
     'ic-terminal-fill': ICTerminalFill,
     'ic-terminal': ICTerminal,
     'ic-thermometer': ICThermometer,
