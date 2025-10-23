@@ -56,6 +56,7 @@ import { ReactComponent as ICCheckSquare } from '@IconsV2/ic-check-square.svg'
 import { ReactComponent as ICChecks } from '@IconsV2/ic-checks.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
 import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
+import { ReactComponent as ICCircleSmall } from '@IconsV2/ic-circle-small.svg'
 import { ReactComponent as ICCleanBrush } from '@IconsV2/ic-clean-brush.svg'
 import { ReactComponent as ICClipboard } from '@IconsV2/ic-clipboard.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
@@ -336,6 +337,7 @@ export const iconMap = {
     'ic-checks': ICChecks,
     'ic-ci-linked': ICCiLinked,
     'ic-circle-loader': ICCircleLoader,
+    'ic-circle-small': ICCircleSmall,
     'ic-clean-brush': ICCleanBrush,
     'ic-clipboard': ICClipboard,
     'ic-clock-counterclockwise': ICClockCounterclockwise,

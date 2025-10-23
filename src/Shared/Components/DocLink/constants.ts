@@ -121,6 +121,7 @@ export const DOCUMENTATION = {
     SOFTWARE_DISTRIBUTION_HUB: 'usage/software-distribution-hub',
     RELEASE_TRACKS: 'usage/software-distribution-hub/release-hub#creating-release-tracks-and-versions',
     RELEASES: 'usage/software-distribution-hub/release-hub#creating-release-tracks-and-versions',
+    RELEASE_HUB: 'usage/software-distribution-hub/release-hub',
     TENANTS: 'usage/software-distribution-hub/tenants#adding-installation',
     TENANTS_INSTALLATION: 'usage/software-distribution-hub/tenants',
 } as const
