@@ -189,6 +189,7 @@ export interface customEnv {
      * Time interval in seconds to refetch command bar data - Applications List
      */
     COMMAND_BAR_REFETCH_INTERVAL?: number
+    HIDE_AUDIT_LOGS?: boolean
 }
 declare global {
     interface Window {
