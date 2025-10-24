@@ -41,7 +41,7 @@ const Card = ({
                 return (
                     <div className="flexbox-col dc__gap-12 p-16">
                         <div className="shimmer w-100 h-24" />
-                        <div className="shimmer w-100 flex-grow-1 mh-150" />
+                        <div className="shimmer w-100 flex-grow-1 mh-48" />
                     </div>
                 )
             case 'A':
