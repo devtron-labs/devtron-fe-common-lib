@@ -1,31 +1,22 @@
-import { MouseEventHandler, ReactNode } from 'react'
+import { ReactNode } from 'react'
+
+import { ComponentLayoutType } from '@Shared/types'
 
 export type CardProps = {
     children: ReactNode
-    onClick?: MouseEventHandler<HTMLDivElement>
-    onHover?: MouseEventHandler<HTMLDivElement>
-    borderConfig: {
-        /**
-         * @default 'secondary'
-         */
-        colorVariant: 'primary' | 'secondary' | 'primary--translucent' | 'secondary--translucent'
-        /**
-         * @default 8px
-         */
-        borderRadius: number
-    }
+    onClick?: () => void
     /**
-     * @default 20px
+     * @default primary--outlined
      */
-    padding: number
+    variant?: 'primary--outlined' | 'secondary--outlined'
     /**
      * @default 'column'
      */
-    flexDirection: 'row' | 'column'
+    flexDirection?: ComponentLayoutType
     /**
-     * @default 16px
+     * @default 0px
      */
-    flexGap: number
+    flexGap?: 0 | 2 | 4 | 6 | 8 | 12 | 16 | 20 | 24 | 32
 } & (
     | {
           isLoading: boolean
