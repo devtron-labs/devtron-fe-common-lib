@@ -32,6 +32,7 @@ export type NavigationItemID =
     | 'infrastructure-management-resource-browser'
     | 'infrastructure-management-resource-watcher'
     | 'infrastructure-management-catalog-framework'
+    | 'infrastructure-management-audit-logs'
     | 'software-release-management-overview'
     | 'software-release-management-release-hub'
     | 'software-release-management-tenants'
