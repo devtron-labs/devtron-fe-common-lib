@@ -531,3 +531,17 @@ export const validateEmail = (email: string): ValidationResponseType => {
         message: 'Please provide a valid email address',
     }
 }
+
+export const getIsRegexValid = (regexString: string): ValidationResponseType => {
+    try {
+        RegExp(regexString)
+        return {
+            isValid: true,
+        }
+    } catch (error) {
+        return {
+            isValid: false,
+            message: error.message || 'Invalid regex pattern',
+        }
+    }
+}
