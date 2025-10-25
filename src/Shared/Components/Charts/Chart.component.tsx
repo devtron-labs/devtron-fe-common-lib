@@ -158,6 +158,8 @@ ChartJSTooltip.positioners.barElementCenterPositioner = (items, eventPosition) =
  * @param type - Chart type: 'area', 'pie', 'stackedBar', 'stackedBarHorizontal', or 'line'
  * @param xAxisLabels - Array of labels for the x-axis (or categories for pie charts)
  * @param datasets - Chart data: array of datasets for most charts, single dataset object for pie charts
+ * @param xAxisConfig
+ * @param yAxisConfig
  *
  * @performance
  * **Memoization Recommendations:**
@@ -201,6 +203,8 @@ const Chart = (props: ChartProps) => {
         xScaleTitle,
         yAxisMax,
         yScaleTitle,
+        xAxisConfig,
+        yAxisConfig,
     } = props
     const { getTooltipContent, placement } = tooltipConfig || { placement: 'top' }
 
@@ -294,7 +298,20 @@ const Chart = (props: ChartProps) => {
         return () => {
             chartRef.current.destroy()
         }
-    }, [type, datasets, labels, appTheme, hideAxis, referenceLines, xAxisMax, xScaleTitle, yAxisMax, yScaleTitle])
+    }, [
+        type,
+        datasets,
+        labels,
+        appTheme,
+        hideAxis,
+        referenceLines,
+        xAxisMax,
+        xScaleTitle,
+        yAxisMax,
+        yScaleTitle,
+        xAxisConfig,
+        yAxisConfig,
+    ])
 
     return (
         <div className="h-100 w-100 dc__position-rel">

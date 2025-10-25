@@ -23,6 +23,7 @@ import {
     MAX_BAR_THICKNESS,
 } from './constants'
 import {
+    AxisConfig,
     ChartColorKey,
     ChartProps,
     ChartType,
@@ -173,6 +174,66 @@ const getScaleTickTitleConfig = (title: string, appTheme: AppThemeType): ScaleOp
     color: CHART_AXIS_LABELS_COLOR[appTheme],
 })
 
+/**
+ * Formats a value with unit based on axis configuration
+ */
+const formatValueWithUnit = (value: number | string, axisConfig?: AxisConfig): string => {
+    if (!axisConfig?.unit) {
+        return String(value)
+    }
+
+    const { unit, unitPosition = 'suffix' } = axisConfig
+    const valueStr = String(value)
+
+    return unitPosition === 'prefix' ? `${unit}${valueStr}` : `${valueStr}${unit}`
+}
+
+/**
+ * Creates a comprehensive axis configuration with enhanced customization
+ */
+const getEnhancedAxisConfig = (
+    axisConfig: AxisConfig | undefined,
+    legacyTitle: string | undefined,
+    legacyMax: number | undefined,
+    appTheme: AppThemeType,
+    isHidden: boolean,
+    hideLabels: boolean = false,
+): ScaleOptions<'linear'> => {
+    // Merge legacy props with new axis config (new config takes priority)
+    const title = axisConfig?.title || legacyTitle
+    const max = axisConfig?.max !== undefined ? axisConfig.max : legacyMax
+    const hide = axisConfig?.hide !== undefined ? axisConfig.hide : isHidden
+
+    return {
+        display: !hide,
+        min: axisConfig?.min,
+        max,
+        border: {
+            color: CHART_AXIS_COLORS[appTheme],
+        },
+        grid: {
+            color: CHART_GRID_LINES_COLORS[appTheme],
+        },
+        title: getScaleTickTitleConfig(title || '', appTheme),
+        ticks: {
+            display: !hideLabels && !hide,
+            color: CHART_AXIS_LABELS_COLOR[appTheme],
+            font: {
+                family: "'IBM Plex Sans', 'Open Sans', 'Roboto'",
+                size: 12,
+                lineHeight: '150%',
+                weight: 400,
+            },
+            stepSize: axisConfig?.stepSize,
+            callback:
+                axisConfig?.labelFormatter ||
+                ((value) =>
+                    // Apply unit formatting if specified
+                    formatValueWithUnit(value, axisConfig)),
+        },
+    }
+}
+
 // Get default options based on chart type
 export const getDefaultOptions = ({
     chartProps,
@@ -189,6 +250,8 @@ export const getDefaultOptions = ({
         yAxisMax,
         xScaleTitle,
         yScaleTitle,
+        xAxisConfig,
+        yAxisConfig,
         yScaleTickFormat,
         xScaleTickFormat,
         xAxisLabels,
@@ -249,34 +312,27 @@ export const getDefaultOptions = ({
             : {}),
     }
 
-    const commonScaleConfig = {
-        display: !hideAxis,
-        border: {
-            color: CHART_AXIS_COLORS[appTheme],
-        },
-        grid: {
-            color: CHART_GRID_LINES_COLORS[appTheme],
-        },
-        ticks: {
-            display: !hideXAxisLabels,
-            color: CHART_AXIS_LABELS_COLOR[appTheme],
-            font: {
-                family: "'IBM Plex Sans', 'Open Sans', 'Roboto'",
-                size: 12,
-                lineHeight: '150%',
-                weight: 400,
-            },
-        },
-    } satisfies ScaleOptions<'linear'>
+    // Create enhanced axis configurations
+    const enhancedXAxisConfig = getEnhancedAxisConfig(
+        xAxisConfig,
+        xScaleTitle,
+        xAxisMax,
+        appTheme,
+        hideAxis,
+        hideXAxisLabels,
+    )
 
+    const enhancedYAxisConfig = getEnhancedAxisConfig(yAxisConfig, yScaleTitle, yAxisMax, appTheme, hideAxis, false)
+
+    // Apply legacy tick formatters if no custom formatter is provided in axis config
     const commonXScaleConfig = {
-        ...commonScaleConfig,
-        max: xAxisMax,
-        title: getScaleTickTitleConfig(xScaleTitle, appTheme),
+        ...enhancedXAxisConfig,
         ticks: {
-            ...commonScaleConfig.ticks,
-            ...((type !== 'stackedBarHorizontal' && typeof xScaleTickFormat === 'function') ||
-            (type === 'stackedBarHorizontal' && typeof yScaleTickFormat === 'function')
+            ...enhancedXAxisConfig.ticks,
+            autoSkip: false,
+            ...(!xAxisConfig?.labelFormatter &&
+            ((type !== 'stackedBarHorizontal' && typeof xScaleTickFormat === 'function') ||
+                (type === 'stackedBarHorizontal' && typeof yScaleTickFormat === 'function'))
                 ? {
                       callback:
                           type === 'stackedBarHorizontal'
@@ -284,19 +340,16 @@ export const getDefaultOptions = ({
                               : (_, index) => xScaleTickFormat(xAxisLabels[index], index),
                   }
                 : {}),
-            autoSkip: false,
         },
     } satisfies ScaleOptions<'linear'>
 
     const commonYScaleConfig = {
-        ...commonScaleConfig,
-        max: yAxisMax,
-        title: getScaleTickTitleConfig(yScaleTitle, appTheme),
-        // for stackedBarHorizon
+        ...enhancedYAxisConfig,
         ticks: {
-            ...commonScaleConfig.ticks,
-            ...((type === 'stackedBarHorizontal' && typeof xScaleTickFormat === 'function') ||
-            (type !== 'stackedBarHorizontal' && typeof yScaleTickFormat === 'function')
+            ...enhancedYAxisConfig.ticks,
+            ...(!yAxisConfig?.labelFormatter &&
+            ((type === 'stackedBarHorizontal' && typeof xScaleTickFormat === 'function') ||
+                (type !== 'stackedBarHorizontal' && typeof yScaleTickFormat === 'function'))
                 ? {
                       callback:
                           type !== 'stackedBarHorizontal'
