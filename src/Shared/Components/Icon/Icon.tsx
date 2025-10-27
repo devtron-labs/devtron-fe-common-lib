@@ -40,6 +40,7 @@ import { ReactComponent as ICBrowser } from '@IconsV2/ic-browser.svg'
 import { ReactComponent as ICBug } from '@IconsV2/ic-bug.svg'
 import { ReactComponent as ICBuildColor } from '@IconsV2/ic-build-color.svg'
 import { ReactComponent as ICBuilding } from '@IconsV2/ic-building.svg'
+import { ReactComponent as ICBulb } from '@IconsV2/ic-bulb.svg'
 import { ReactComponent as ICCalendar } from '@IconsV2/ic-calendar.svg'
 import { ReactComponent as ICCancelled } from '@IconsV2/ic-cancelled.svg'
 import { ReactComponent as ICCardStack } from '@IconsV2/ic-card-stack.svg'
@@ -96,6 +97,7 @@ import { ReactComponent as ICDiffUpdated } from '@IconsV2/ic-diff-updated.svg'
 import { ReactComponent as ICDisconnect } from '@IconsV2/ic-disconnect.svg'
 import { ReactComponent as ICDiscordFill } from '@IconsV2/ic-discord-fill.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
+import { ReactComponent as ICDotCircle } from '@IconsV2/ic-dot-circle.svg'
 import { ReactComponent as ICDownload } from '@IconsV2/ic-download.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEdit } from '@IconsV2/ic-edit.svg'
@@ -110,6 +112,7 @@ import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICExpandRightSm } from '@IconsV2/ic-expand-right-sm.svg'
 import { ReactComponent as ICExpandSm } from '@IconsV2/ic-expand-sm.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
+import { ReactComponent as ICFailureColor } from '@IconsV2/ic-failure-color.svg'
 import { ReactComponent as ICFastForward } from '@IconsV2/ic-fast-forward.svg'
 import { ReactComponent as ICFile } from '@IconsV2/ic-file.svg'
 import { ReactComponent as ICFileCode } from '@IconsV2/ic-file-code.svg'
@@ -171,6 +174,7 @@ import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
 import { ReactComponent as ICLego } from '@IconsV2/ic-lego.svg'
 import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
 import { ReactComponent as ICLightningFill } from '@IconsV2/ic-lightning-fill.svg'
+import { ReactComponent as ICLine } from '@IconsV2/ic-line.svg'
 import { ReactComponent as ICLink } from '@IconsV2/ic-link.svg'
 import { ReactComponent as ICLinkedBuildColor } from '@IconsV2/ic-linked-build-color.svg'
 import { ReactComponent as ICListBullets } from '@IconsV2/ic-list-bullets.svg'
@@ -194,6 +198,7 @@ import { ReactComponent as ICMonitoring } from '@IconsV2/ic-monitoring.svg'
 import { ReactComponent as ICMoreVertical } from '@IconsV2/ic-more-vertical.svg'
 import { ReactComponent as ICNamespace } from '@IconsV2/ic-namespace.svg'
 import { ReactComponent as ICNew } from '@IconsV2/ic-new.svg'
+import { ReactComponent as ICNewChat } from '@IconsV2/ic-new-chat.svg'
 import { ReactComponent as ICNodeScript } from '@IconsV2/ic-node-script.svg'
 import { ReactComponent as ICOidc } from '@IconsV2/ic-oidc.svg'
 import { ReactComponent as ICOpenBox } from '@IconsV2/ic-open-box.svg'
@@ -209,11 +214,16 @@ import { ReactComponent as ICParty } from '@IconsV2/ic-party.svg'
 import { ReactComponent as ICPath } from '@IconsV2/ic-path.svg'
 import { ReactComponent as ICPauseCircle } from '@IconsV2/ic-pause-circle.svg'
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
+import { ReactComponent as ICPiggybank } from '@IconsV2/ic-piggybank.svg'
 import { ReactComponent as ICPlayOutline } from '@IconsV2/ic-play-outline.svg'
+import { ReactComponent as ICPriorityHighFill } from '@IconsV2/ic-priority-high-fill.svg'
+import { ReactComponent as ICPriorityLowFill } from '@IconsV2/ic-priority-low-fill.svg'
 import { ReactComponent as ICPriorityMediumFill } from '@IconsV2/ic-priority-medium-fill.svg'
+import { ReactComponent as ICPriorityUrgentFill } from '@IconsV2/ic-priority-urgent-fill.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
 import { ReactComponent as ICRatings } from '@IconsV2/ic-ratings.svg'
+import { ReactComponent as ICRedBulb } from '@IconsV2/ic-red-bulb.svg'
 import { ReactComponent as ICResizeHandle } from '@IconsV2/ic-resize-handle.svg'
 import { ReactComponent as ICRightPanelCollapse } from '@IconsV2/ic-right-panel-collapse.svg'
 import { ReactComponent as ICRocketGear } from '@IconsV2/ic-rocket-gear.svg'
@@ -228,6 +238,7 @@ import { ReactComponent as ICSortable } from '@IconsV2/ic-sortable.svg'
 import { ReactComponent as ICSparkleAiColor } from '@IconsV2/ic-sparkle-ai-color.svg'
 import { ReactComponent as ICSparkleColor } from '@IconsV2/ic-sparkle-color.svg'
 import { ReactComponent as ICSpeedometer } from '@IconsV2/ic-speedometer.svg'
+import { ReactComponent as ICSpider } from '@IconsV2/ic-spider.svg'
 import { ReactComponent as ICSpinny } from '@IconsV2/ic-spinny.svg'
 import { ReactComponent as ICSprayCan } from '@IconsV2/ic-spray-can.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
@@ -321,6 +332,7 @@ export const iconMap = {
     'ic-bug': ICBug,
     'ic-build-color': ICBuildColor,
     'ic-building': ICBuilding,
+    'ic-bulb': ICBulb,
     'ic-calendar': ICCalendar,
     'ic-cancelled': ICCancelled,
     'ic-card-stack': ICCardStack,
@@ -377,6 +389,7 @@ export const iconMap = {
     'ic-disconnect': ICDisconnect,
     'ic-discord-fill': ICDiscordFill,
     'ic-dockerhub': ICDockerhub,
+    'ic-dot-circle': ICDotCircle,
     'ic-download': ICDownload,
     'ic-ecr': ICEcr,
     'ic-edit-lines': ICEditLines,
@@ -390,6 +403,7 @@ export const iconMap = {
     'ic-error': ICError,
     'ic-expand-right-sm': ICExpandRightSm,
     'ic-expand-sm': ICExpandSm,
+    'ic-failure-color': ICFailureColor,
     'ic-failure': ICFailure,
     'ic-fast-forward': ICFastForward,
     'ic-file-code': ICFileCode,
@@ -452,6 +466,7 @@ export const iconMap = {
     'ic-lego': ICLego,
     'ic-lightning-fill': ICLightningFill,
     'ic-lightning': ICLightning,
+    'ic-line': ICLine,
     'ic-link': ICLink,
     'ic-linked-build-color': ICLinkedBuildColor,
     'ic-list-bullets': ICListBullets,
@@ -474,6 +489,7 @@ export const iconMap = {
     'ic-monitoring': ICMonitoring,
     'ic-more-vertical': ICMoreVertical,
     'ic-namespace': ICNamespace,
+    'ic-new-chat': ICNewChat,
     'ic-new': ICNew,
     'ic-node-script': ICNodeScript,
     'ic-oidc': ICOidc,
@@ -490,11 +506,16 @@ export const iconMap = {
     'ic-path': ICPath,
     'ic-pause-circle': ICPauseCircle,
     'ic-pencil': ICPencil,
+    'ic-piggybank': ICPiggybank,
     'ic-play-outline': ICPlayOutline,
+    'ic-priority-high-fill': ICPriorityHighFill,
+    'ic-priority-low-fill': ICPriorityLowFill,
     'ic-priority-medium-fill': ICPriorityMediumFill,
+    'ic-priority-urgent-fill': ICPriorityUrgentFill,
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
     'ic-ratings': ICRatings,
+    'ic-red-bulb': ICRedBulb,
     'ic-resize-handle': ICResizeHandle,
     'ic-right-panel-collapse': ICRightPanelCollapse,
     'ic-rocket-gear': ICRocketGear,
@@ -509,6 +530,7 @@ export const iconMap = {
     'ic-sparkle-ai-color': ICSparkleAiColor,
     'ic-sparkle-color': ICSparkleColor,
     'ic-speedometer': ICSpeedometer,
+    'ic-spider': ICSpider,
     'ic-spinny': ICSpinny,
     'ic-spray-can': ICSprayCan,
     'ic-stack': ICStack,
