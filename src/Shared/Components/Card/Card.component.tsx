@@ -11,6 +11,7 @@ const Card = ({
     variant = 'primary--outlined',
     flexGap = DEFAULT_FLEX_GAP,
     flexDirection = 'column',
+    padding = 0,
 }: CardProps) => {
     const divProps: HTMLProps<HTMLDivElement> = onClick
         ? {
@@ -59,6 +60,7 @@ const Card = ({
     const cardStyles = {
         borderRadius: `${DEFAULT_BORDER_RADIUS}px`,
         gap: `${flexGap}px`,
+        padding: `${padding}px`,
     }
 
     const cardClasses = [

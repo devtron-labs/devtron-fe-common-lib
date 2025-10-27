@@ -17,6 +17,7 @@ export type CardProps = {
      * @default 0px
      */
     flexGap?: 0 | 2 | 4 | 6 | 8 | 12 | 16 | 20 | 24 | 32
+    padding?: 0 | 2 | 4 | 6 | 8 | 12 | 16 | 20 | 24 | 32
 } & (
     | {
           isLoading: boolean
