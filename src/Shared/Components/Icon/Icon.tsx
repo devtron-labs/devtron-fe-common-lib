@@ -13,7 +13,6 @@ import { ReactComponent as ICArrowClockwise } from '@IconsV2/ic-arrow-clockwise.
 import { ReactComponent as ICArrowLineDown } from '@IconsV2/ic-arrow-line-down.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICArrowSquareOut } from '@IconsV2/ic-arrow-square-out.svg'
-import { ReactComponent as ICArrowWhite } from '@IconsV2/ic-arrow-white.svg'
 import { ReactComponent as ICArrowsClockwise } from '@IconsV2/ic-arrows-clockwise.svg'
 import { ReactComponent as ICArrowsLeftRight } from '@IconsV2/ic-arrows-left-right.svg'
 import { ReactComponent as ICAsterisk } from '@IconsV2/ic-asterisk.svg'
@@ -306,7 +305,6 @@ export const iconMap = {
     'ic-arrow-line-down': ICArrowLineDown,
     'ic-arrow-right': ICArrowRight,
     'ic-arrow-square-out': ICArrowSquareOut,
-    'ic-arrow-white': ICArrowWhite,
     'ic-arrows-clockwise': ICArrowsClockwise,
     'ic-arrows-left-right': ICArrowsLeftRight,
     'ic-asterisk': ICAsterisk,
