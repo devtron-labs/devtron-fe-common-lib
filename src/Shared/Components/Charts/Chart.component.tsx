@@ -22,7 +22,7 @@ import { noop, useDebounce } from '@Common/Helper'
 import { DEVTRON_BASE_MAIN_ID } from '@Shared/constants'
 import { useTheme } from '@Shared/Providers'
 
-import { drawReferenceLine } from './plugins'
+import { drawCenterText, drawReferenceLine } from './plugins'
 import { ChartProps, GetDefaultOptionsParams, TypeAndDatasetsType } from './types'
 import {
     buildChartTooltipFromContext,
@@ -90,7 +90,7 @@ ChartJSTooltip.positioners.barElementCenterPositioner = (items, eventPosition) =
 
 /**
  * A versatile Chart component that renders different types of charts using Chart.js.
- * Supports area charts, pie charts, stacked bar charts (vertical/horizontal), and line charts.
+ * Supports area charts, pie charts, semi-pie charts, stacked bar charts (vertical/horizontal), and line charts.
  *
  * The component automatically adapts to theme changes and provides consistent styling
  * across all chart types. Colors are provided by the user through the CHART_COLORS constant
@@ -118,7 +118,24 @@ ChartJSTooltip.positioners.barElementCenterPositioner = (items, eventPosition) =
  *   datasets={{
  *     datasetName: 'Adoption Rate (%)',
  *     yAxisValues: [45.2, 28.7, 35.4],
- *     backgroundColor: ['SkyBlue300', 'AquaTeal400', 'LavenderPurple300']
+ *     colors: ['SkyBlue300', 'AquaTeal400', 'LavenderPurple300']
+ *   }}
+ * />
+ *
+ * [Semi-Pie Chart Example with Center Text]
+ * <Chart
+ *   id="performance-metrics"
+ *   type="semiPie"
+ *   xAxisLabels={['Good', 'Average', 'Poor']}
+ *   datasets={{
+ *     datasetName: 'Performance Score (%)',
+ *     yAxisValues: [65, 25, 10],
+ *     colors: ['LimeGreen500', 'GoldenYellow400', 'CoralRed400']
+ *   }}
+ *   centerText={{
+ *     text: '85%',
+ *     fontSize: 24,
+ *     fontWeight: '600'
  *   }}
  * />
  *
@@ -155,9 +172,9 @@ ChartJSTooltip.positioners.barElementCenterPositioner = (items, eventPosition) =
  * ```
  *
  * @param id - Unique identifier for the chart canvas element
- * @param type - Chart type: 'area', 'pie', 'stackedBar', 'stackedBarHorizontal', or 'line'
- * @param xAxisLabels - Array of labels for the x-axis (or categories for pie charts)
- * @param datasets - Chart data: array of datasets for most charts, single dataset object for pie charts
+ * @param type - Chart type: 'area', 'pie', 'semiPie', 'stackedBar', 'stackedBarHorizontal', or 'line'
+ * @param xAxisLabels - Array of labels for the x-axis (or categories for pie/semi-pie charts)
+ * @param datasets - Chart data: array of datasets for most charts, single dataset object for pie/semi-pie charts
  *
  * @performance
  * **Memoization Recommendations:**
@@ -183,7 +200,9 @@ ChartJSTooltip.positioners.barElementCenterPositioner = (items, eventPosition) =
  * @notes
  * - Chart automatically re-renders when theme changes (light/dark mode)
  * - Line charts are rendered as non-stacked and non-filled by default
- * - Pie charts expect a single dataset object instead of an array
+ * - Pie and semi-pie charts expect a single dataset object instead of an array
+ * - Semi-pie charts render as half-circles, ideal for gauges or progress indicators
+ * - Center text can be added to pie and semi-pie charts using the centerText prop
  * - Colors should reference CHART_COLORS tokens for consistency
  * - Component destroys and recreates Chart.js instance on prop changes for optimal performance
  */
@@ -201,6 +220,7 @@ const Chart = (props: ChartProps) => {
         xScaleTitle,
         yAxisMax,
         yScaleTitle,
+        centerText,
     } = props
     const { getTooltipContent, placement } = tooltipConfig || { placement: 'top' }
 
@@ -256,14 +276,14 @@ const Chart = (props: ChartProps) => {
             return noop
         }
 
-        if (type === 'pie') {
+        if (type === 'pie' || type === 'semiPie') {
             /**
              * The doughnut chart overrides the default legend label configuration.
              * Therefore need to set the custom legend label configuration.
              */
             ChartJS.overrides.doughnut.plugins.legend.labels = {
                 ...ChartJS.overrides.doughnut.plugins.legend.labels,
-                ...getLegendsLabelConfig('pie', appTheme),
+                ...getLegendsLabelConfig(type === 'semiPie' ? 'semiPie' : 'pie', appTheme),
             }
         }
 
@@ -288,13 +308,26 @@ const Chart = (props: ChartProps) => {
             },
             plugins: [
                 ...(referenceLines ?? []).map((rl, idx) => drawReferenceLine(rl, `reference-line-${idx}`, appTheme)),
+                ...(centerText && (type === 'pie' || type === 'semiPie') ? [drawCenterText(centerText, appTheme)] : []),
             ],
         })
 
         return () => {
             chartRef.current.destroy()
         }
-    }, [type, datasets, labels, appTheme, hideAxis, referenceLines, xAxisMax, xScaleTitle, yAxisMax, yScaleTitle])
+    }, [
+        type,
+        datasets,
+        labels,
+        appTheme,
+        hideAxis,
+        referenceLines,
+        xAxisMax,
+        xScaleTitle,
+        yAxisMax,
+        yScaleTitle,
+        centerText,
+    ])
 
     return (
         <div className="h-100 w-100 dc__position-rel">

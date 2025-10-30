@@ -29,6 +29,7 @@ import {
     ColorTokensType,
     GetBackgroundAndBorderColorProps,
     GetDefaultOptionsParams,
+    SimpleDatasetForLineAndArea,
     TransformDataForChartProps,
     TransformDatasetProps,
     VariantsType,
@@ -86,6 +87,7 @@ export const getChartJSType = (type: ChartType): ChartJSChartType => {
         case 'line':
             return 'line'
         case 'pie':
+        case 'semiPie':
             return 'doughnut'
         case 'stackedBar':
         case 'stackedBarHorizontal':
@@ -110,7 +112,7 @@ const handleChartClick =
 
         const { datasetIndex, index } = elements[0]
 
-        if (type === 'pie') {
+        if (type === 'pie' || type === 'semiPie') {
             if (!datasets.isClickable?.[index]) {
                 return
             }
@@ -139,7 +141,7 @@ const handleChartHover =
 
         const { datasetIndex, index } = elements[0]
 
-        if (type === 'pie') {
+        if (type === 'pie' || type === 'semiPie') {
             if (!datasets.isClickable?.[index]) {
                 // eslint-disable-next-line no-param-reassign
                 canvas.style.cursor = 'default'
@@ -307,6 +309,20 @@ export const getDefaultOptions = ({
         },
     } satisfies ScaleOptions<'linear'>
 
+    const commonPieConfig = {
+        ...baseOptions,
+        plugins: {
+            ...baseOptions.plugins,
+            legend: {
+                ...baseOptions.plugins.legend,
+                position: 'right',
+                align: 'center',
+            },
+        },
+        cutout: '60%',
+        radius: '80%',
+    }
+
     switch (type) {
         case 'area':
         case 'line':
@@ -380,18 +396,12 @@ export const getDefaultOptions = ({
                 },
             } satisfies ChartOptions<'bar'>
         case 'pie':
+            return commonPieConfig as ChartOptions<'doughnut'>
+        case 'semiPie':
             return {
-                ...baseOptions,
-                plugins: {
-                    ...baseOptions.plugins,
-                    legend: {
-                        ...baseOptions.plugins.legend,
-                        position: 'right',
-                        align: 'center',
-                    },
-                },
-                cutout: '60%',
-                radius: '80%',
+                ...commonPieConfig,
+                rotation: -90,
+                circumference: 180,
             } as ChartOptions<'doughnut'>
         default:
             return baseOptions
@@ -417,7 +427,7 @@ const getDarkerShadeBy = (colorKey: ChartColorKey, appTheme: AppThemeType, delta
 }
 
 const getBackgroundAndBorderColor = ({ type, dataset, appTheme }: GetBackgroundAndBorderColorProps) => {
-    if (type === 'pie') {
+    if (type === 'pie' || type === 'semiPie') {
         return {
             backgroundColor: dataset.colors.map((colorKey) => getColorValue(colorKey, appTheme)),
             hoverBackgroundColor: dataset.colors.map((colorKey) => getDarkerShadeBy(colorKey, appTheme)),
@@ -447,7 +457,9 @@ const getBackgroundAndBorderColor = ({ type, dataset, appTheme }: GetBackgroundA
         >
     }
 
-    const bgColor = getColorValue(dataset.color, appTheme)
+    // At this point, we know it's an area chart (not pie/semiPie)
+    const areaDataset = dataset as SimpleDatasetForLineAndArea
+    const bgColor = getColorValue(areaDataset.color, appTheme)
 
     return {
         backgroundColor(context) {
@@ -464,7 +476,7 @@ const getBackgroundAndBorderColor = ({ type, dataset, appTheme }: GetBackgroundA
 
             return gradient
         },
-        borderColor: getDarkerShadeBy(dataset.color, appTheme),
+        borderColor: getDarkerShadeBy(areaDataset.color, appTheme),
         pointBackgroundColor: bgColor,
         pointBorderColor: bgColor,
     } as Pick<ChartDataset<'line'>, 'backgroundColor' | 'borderColor' | 'pointBackgroundColor' | 'pointBorderColor'>
@@ -516,7 +528,7 @@ export const transformDataForChart = (props: TransformDataForChartProps) => {
         return []
     }
 
-    if (type !== 'pie' && type !== 'area' && !Array.isArray(datasets)) {
+    if (type !== 'pie' && type !== 'semiPie' && type !== 'area' && !Array.isArray(datasets)) {
         // eslint-disable-next-line no-console
         console.error('Invalid datasets format. Expected an array.')
         return []
@@ -525,6 +537,7 @@ export const transformDataForChart = (props: TransformDataForChartProps) => {
     switch (type) {
         /** Not not clubbing it with the default case for better typing */
         case 'pie':
+        case 'semiPie':
             return [transformDataset({ type, dataset: datasets, appTheme })]
         case 'area':
             return [transformDataset({ type, dataset: datasets, appTheme })]
