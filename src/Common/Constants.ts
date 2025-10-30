@@ -61,6 +61,8 @@ const COST_VISIBILITY_ROOT = '/cost-visibility'
 const SECURITY_CENTER_ROOT = '/security-center'
 const AUTOMATION_AND_ENABLEMENT_ROOT = '/automation-and-enablement'
 const DATA_PROTECTION_ROOT = '/data-protection-management'
+const DATA_PROTECTION_BACKUP_AND_SCHEDULE =
+    `${DATA_PROTECTION_ROOT}/backup-and-schedule/:view(${Object.values(BackupAndScheduleListViewEnum).join('|')})` as const
 const GLOBAL_CONFIG_ROOT = '/global-configuration'
 const AI_RECOMMENDATIONS_ROOT = '/ai-recommendations'
 
@@ -134,10 +136,10 @@ export const URLS = {
     // DATA PROTECTION
     DATA_PROTECTION: DATA_PROTECTION_ROOT,
     DATA_PROTECTION_OVERVIEW: `${DATA_PROTECTION_ROOT}/overview`,
-    DATA_PROTECTION_BACKUP_AND_SCHEDULE: `${DATA_PROTECTION_ROOT}/backup-and-schedule/:view(${Object.values(BackupAndScheduleListViewEnum).join('|')})`,
-    DATA_PROTECTION_BACKUP_DETAIL: `${DATA_PROTECTION_ROOT}/backup/:name`,
-    DATA_PROTECTION_BACKUP_SCHEDULE_DETAIL: `${DATA_PROTECTION_ROOT}/schedule/:name`,
+    DATA_PROTECTION_BACKUP_AND_SCHEDULE,
+    DATA_PROTECTION_BACKUP_AND_SCHEDULE_DETAIL: `${DATA_PROTECTION_BACKUP_AND_SCHEDULE}/:name`,
     DATA_PROTECTION_RESTORES: `${DATA_PROTECTION_ROOT}/restores`,
+    DATA_PROTECTION_RESTORES_DETAIL: `${DATA_PROTECTION_ROOT}/restores/:restoreId`,
     DATA_PROTECTION_BACKUP_LOCATIONS: `${DATA_PROTECTION_ROOT}/backup-locations/:type(${Object.values(BackupLocationsTypes).join('|')})`,
     BACKUP_LOCATION_DETAILS: `/:locationId`,
     // GLOBAL CONFIGURATION
