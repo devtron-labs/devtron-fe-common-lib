@@ -61,7 +61,7 @@ export function useBreadcrumb(props?: UseBreadcrumbOptionalProps, deps?: any[]):
     const { res: breadcrumbs } = useMemo(
         () =>
             levels.reduce(
-                (agg, curr, idx) => {
+                (agg, curr) => {
                     const { res, prefix } = agg
                     const { to, name } = curr
                     res.push({
