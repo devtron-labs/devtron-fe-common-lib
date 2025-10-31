@@ -97,6 +97,14 @@ export const SelectPickerTextArea = ({
 
     useThrottledEffect(reInitHeight, 500, [inputValue])
 
+    const handleCreateOption = (newValue: string) => {
+        onChange?.(
+            { label: newValue, value: newValue },
+            { action: 'create-option', option: { label: newValue, value: newValue } },
+        )
+        selectRef.current.blurInput()
+    }
+
     const onInputChange = (newValue: string, { action }: InputActionMeta) => {
         if (action === ReactSelectInputAction.inputChange) {
             setInputValue(newValue)
@@ -108,18 +116,14 @@ export const SelectPickerTextArea = ({
                 })
             }
         } else if (action === ReactSelectInputAction.inputBlur) {
+            if (isCreatable) {
+                handleCreateOption(inputValue)
+                return
+            }
             // Reverting input to previously selected value in case of blur event. (no-selection)
             const selectValue = value as SingleValue<SelectPickerOptionType<string>>
             setInputValue(selectValue?.value || '')
         }
-    }
-
-    const handleCreateOption = (newValue: string) => {
-        onChange?.(
-            { label: newValue, value: newValue },
-            { action: 'create-option', option: { label: newValue, value: newValue } },
-        )
-        selectRef.current.blurInput()
     }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
