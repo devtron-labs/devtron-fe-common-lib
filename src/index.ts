@@ -175,12 +175,6 @@ export interface customEnv {
      */
     FEATURE_INTERNET_CONNECTIVITY_ENABLE?: boolean
     /**
-     * If true, the grouped app list filters will be shown.
-     *
-     * @default false
-     */
-    FEATURE_GROUPED_APP_LIST_FILTERS_ENABLE?: boolean
-    /**
      * Show rollout progress if true, else canary step count in status
      * @default true
      */
