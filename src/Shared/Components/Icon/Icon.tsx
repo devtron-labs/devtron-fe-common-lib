@@ -70,8 +70,8 @@ import { ReactComponent as ICCheckSquare } from '@IconsV2/ic-check-square.svg'
 import { ReactComponent as ICChecks } from '@IconsV2/ic-checks.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
 import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
-import { ReactComponent as ICCircleSmall } from '@IconsV2/ic-circle-small.svg'
 import { ReactComponent as ICCircleProgress } from '@IconsV2/ic-circle-progress.svg'
+import { ReactComponent as ICCircleSmall } from '@IconsV2/ic-circle-small.svg'
 import { ReactComponent as ICCleanBrush } from '@IconsV2/ic-clean-brush.svg'
 import { ReactComponent as ICClipboard } from '@IconsV2/ic-clipboard.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
@@ -246,7 +246,6 @@ import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
 import { ReactComponent as ICRatings } from '@IconsV2/ic-ratings.svg'
 import { ReactComponent as ICRedBulb } from '@IconsV2/ic-red-bulb.svg'
-import { ReactComponent as ICRatings } from '@IconsV2/ic-ratings.svg'
 import { ReactComponent as ICReleaseHub } from '@IconsV2/ic-release-hub.svg'
 import { ReactComponent as ICResizeHandle } from '@IconsV2/ic-resize-handle.svg'
 import { ReactComponent as ICResourceBrowser } from '@IconsV2/ic-resource-browser.svg'
@@ -570,7 +569,6 @@ export const iconMap = {
     'ic-quote': ICQuote,
     'ic-ratings': ICRatings,
     'ic-red-bulb': ICRedBulb,
-    'ic-ratings': ICRatings,
     'ic-release-hub': ICReleaseHub,
     'ic-resize-handle': ICResizeHandle,
     'ic-resource-browser': ICResourceBrowser,
