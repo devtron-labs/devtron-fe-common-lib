@@ -17,7 +17,7 @@
 import { ActionMenuProps } from '@Shared/Components/ActionMenu'
 
 export interface HeaderWithCreateButtonProps {
-    isJobView?: boolean
+    viewType?: 'jobs' | 'apps' | 'infra-apps'
 }
 
 export enum CreateActionMenuItems {
