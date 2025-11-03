@@ -90,7 +90,8 @@ export const DOCUMENTATION = {
     SECURITY: 'usage/security-features',
     SPECIFY_IMAGE_PULL_SECRET: 'getting-started/global-configurations/container-registries#specify-image-pull-secret',
     TENANT_INSTALLATION: 'usage/software-distribution-hub/tenants',
-
+    // Todo: Replace with correct Url
+    SAMPLE_RUNBOOK_LINK: 'https://github.com/devtron-labs/athena-be/wiki/Runbook-Actions',
     // ENTERPRISE
     CEL: 'https://github.com/google/cel-spec/blob/master/doc/langdef.md',
     KUBERNETES_LABELS: 'https://kubernetes.io/docs/concepts/overview/working-with-objects/labels',
