@@ -48,6 +48,7 @@ export interface SidePanelConfig {
     /** URL to documentation that should be displayed in the panel */
     docLink: string | null
     aiSessionId?: string
+    isExpandedView?: boolean
 }
 
 type AIAgentContextType = {
