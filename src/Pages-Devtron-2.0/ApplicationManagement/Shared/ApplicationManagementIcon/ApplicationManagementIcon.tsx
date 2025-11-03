@@ -9,10 +9,10 @@ export const ApplicationManagementIcon = () => (
         size={ComponentSizeType.xs}
         variant={ButtonVariantType.borderLess}
         linkProps={{
-            to: URLS.APPLICATION_MANAGEMENT_APP,
+            to: URLS.APPLICATION_MANAGEMENT_OVERVIEW,
         }}
         ariaLabel="Application Management"
         showAriaLabelInTippy
-        icon={<Icon name="ic-grid-view" color={null} />}
+        icon={<Icon name="ic-application-management" color={null} />}
     />
 )

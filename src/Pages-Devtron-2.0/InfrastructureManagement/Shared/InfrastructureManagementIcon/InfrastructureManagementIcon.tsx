@@ -9,10 +9,10 @@ export const InfrastructureManagementIcon = () => (
         size={ComponentSizeType.xs}
         variant={ButtonVariantType.borderLess}
         linkProps={{
-            to: URLS.INFRASTRUCTURE_MANAGEMENT_RESOURCE_BROWSER,
+            to: URLS.INFRASTRUCTURE_MANAGEMENT_OVERVIEW,
         }}
         ariaLabel="Infrastructure Management"
         showAriaLabelInTippy
-        icon={<Icon name="ic-cloud" color={null} />}
+        icon={<Icon name="ic-infrastructure-management" color={null} />}
     />
 )

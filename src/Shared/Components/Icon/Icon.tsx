@@ -4,10 +4,15 @@ import { ReactComponent as IC73strings } from '@IconsV2/ic-73strings.svg'
 import { ReactComponent as ICAborted } from '@IconsV2/ic-aborted.svg'
 import { ReactComponent as ICActivity } from '@IconsV2/ic-activity.svg'
 import { ReactComponent as ICAdd } from '@IconsV2/ic-add.svg'
+import { ReactComponent as ICAi } from '@IconsV2/ic-ai.svg'
 import { ReactComponent as ICAlibaba } from '@IconsV2/ic-alibaba.svg'
 import { ReactComponent as ICAmazonEks } from '@IconsV2/ic-amazon-eks.svg'
 import { ReactComponent as ICAppGroup } from '@IconsV2/ic-app-group.svg'
 import { ReactComponent as ICAppTemplate } from '@IconsV2/ic-app-template.svg'
+import { ReactComponent as ICApplication } from '@IconsV2/ic-application.svg'
+import { ReactComponent as ICApplicationGroup } from '@IconsV2/ic-application-group.svg'
+import { ReactComponent as ICApplicationManagement } from '@IconsV2/ic-application-management.svg'
+import { ReactComponent as ICApplicationTemplate } from '@IconsV2/ic-application-template.svg'
 import { ReactComponent as ICArgocdApp } from '@IconsV2/ic-argocd-app.svg'
 import { ReactComponent as ICArrowClockwise } from '@IconsV2/ic-arrow-clockwise.svg'
 import { ReactComponent as ICArrowLineDown } from '@IconsV2/ic-arrow-line-down.svg'
@@ -21,6 +26,10 @@ import { ReactComponent as ICAws } from '@IconsV2/ic-aws.svg'
 import { ReactComponent as ICAwsCodecommit } from '@IconsV2/ic-aws-codecommit.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICAzureAks } from '@IconsV2/ic-azure-aks.svg'
+import { ReactComponent as ICBackupAndSchedule } from '@IconsV2/ic-backup-and-schedule.svg'
+import { ReactComponent as ICBackupColor } from '@IconsV2/ic-backup-color.svg'
+import { ReactComponent as ICBackupLocation } from '@IconsV2/ic-backup-location.svg'
+import { ReactComponent as ICBackupScheduleColor } from '@IconsV2/ic-backup-schedule-color.svg'
 import { ReactComponent as ICBgBuild } from '@IconsV2/ic-bg-build.svg'
 import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
 import { ReactComponent as ICBgCpu } from '@IconsV2/ic-bg-cpu.svg'
@@ -48,6 +57,7 @@ import { ReactComponent as ICCaretDownSmall } from '@IconsV2/ic-caret-down-small
 import { ReactComponent as ICCaretLeft } from '@IconsV2/ic-caret-left.svg'
 import { ReactComponent as ICCaretRight } from '@IconsV2/ic-caret-right.svg'
 import { ReactComponent as ICCd } from '@IconsV2/ic-cd.svg'
+import { ReactComponent as ICChartLineUp } from '@IconsV2/ic-chart-line-up.svg'
 import { ReactComponent as ICChatCircleDots } from '@IconsV2/ic-chat-circle-dots.svg'
 import { ReactComponent as ICChatCircleOnline } from '@IconsV2/ic-chat-circle-online.svg'
 import { ReactComponent as ICCheck } from '@IconsV2/ic-check.svg'
@@ -57,13 +67,14 @@ import { ReactComponent as ICCheckSquare } from '@IconsV2/ic-check-square.svg'
 import { ReactComponent as ICChecks } from '@IconsV2/ic-checks.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
 import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
+import { ReactComponent as ICCircleSmall } from '@IconsV2/ic-circle-small.svg'
 import { ReactComponent as ICCleanBrush } from '@IconsV2/ic-clean-brush.svg'
 import { ReactComponent as ICClipboard } from '@IconsV2/ic-clipboard.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
 import { ReactComponent as ICClockCounterclockwise } from '@IconsV2/ic-clock-counterclockwise.svg'
 import { ReactComponent as ICCloseLarge } from '@IconsV2/ic-close-large.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
-import { ReactComponent as ICCloud } from '@IconsV2/ic-cloud.svg'
+import { ReactComponent as ICCloudUpload } from '@IconsV2/ic-cloud-upload.svg'
 import { ReactComponent as ICCloudVms } from '@IconsV2/ic-cloud-vms.svg'
 import { ReactComponent as ICCluster } from '@IconsV2/ic-cluster.svg'
 import { ReactComponent as ICClusterIsolated } from '@IconsV2/ic-cluster-isolated.svg'
@@ -135,6 +146,7 @@ import { ReactComponent as ICGit } from '@IconsV2/ic-git.svg'
 import { ReactComponent as ICGitBranch } from '@IconsV2/ic-git-branch.svg'
 import { ReactComponent as ICGithub } from '@IconsV2/ic-github.svg'
 import { ReactComponent as ICGitlab } from '@IconsV2/ic-gitlab.svg'
+import { ReactComponent as ICGlobalOverview } from '@IconsV2/ic-global-overview.svg'
 import { ReactComponent as ICGoogle } from '@IconsV2/ic-google.svg'
 import { ReactComponent as ICGoogleArtifactRegistry } from '@IconsV2/ic-google-artifact-registry.svg'
 import { ReactComponent as ICGoogleCloud } from '@IconsV2/ic-google-cloud.svg'
@@ -157,6 +169,7 @@ import { ReactComponent as ICInProgress } from '@IconsV2/ic-in-progress.svg'
 import { ReactComponent as ICInfoFilled } from '@IconsV2/ic-info-filled.svg'
 import { ReactComponent as ICInfoFilledColor } from '@IconsV2/ic-info-filled-color.svg'
 import { ReactComponent as ICInfoOutline } from '@IconsV2/ic-info-outline.svg'
+import { ReactComponent as ICInfrastructureManagement } from '@IconsV2/ic-infrastructure-management.svg'
 import { ReactComponent as ICInput } from '@IconsV2/ic-input.svg'
 import { ReactComponent as ICInstall } from '@IconsV2/ic-install.svg'
 import { ReactComponent as ICJobColor } from '@IconsV2/ic-job-color.svg'
@@ -207,6 +220,7 @@ import { ReactComponent as ICPaperPlane } from '@IconsV2/ic-paper-plane.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
 import { ReactComponent as ICParty } from '@IconsV2/ic-party.svg'
 import { ReactComponent as ICPath } from '@IconsV2/ic-path.svg'
+import { ReactComponent as ICPause } from '@IconsV2/ic-pause.svg'
 import { ReactComponent as ICPauseCircle } from '@IconsV2/ic-pause-circle.svg'
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
 import { ReactComponent as ICPlayOutline } from '@IconsV2/ic-play-outline.svg'
@@ -214,14 +228,20 @@ import { ReactComponent as ICPriorityMediumFill } from '@IconsV2/ic-priority-med
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
 import { ReactComponent as ICRatings } from '@IconsV2/ic-ratings.svg'
+import { ReactComponent as ICReleaseHub } from '@IconsV2/ic-release-hub.svg'
 import { ReactComponent as ICResizeHandle } from '@IconsV2/ic-resize-handle.svg'
+import { ReactComponent as ICResourceBrowser } from '@IconsV2/ic-resource-browser.svg'
+import { ReactComponent as ICResourceWatcher } from '@IconsV2/ic-resource-watcher.svg'
 import { ReactComponent as ICRightPanelCollapse } from '@IconsV2/ic-right-panel-collapse.svg'
 import { ReactComponent as ICRocketGear } from '@IconsV2/ic-rocket-gear.svg'
 import { ReactComponent as ICRocketLaunch } from '@IconsV2/ic-rocket-launch.svg'
+import { ReactComponent as ICSecurityPolicy } from '@IconsV2/ic-security-policy.svg'
+import { ReactComponent as ICSecurityScan } from '@IconsV2/ic-security-scan.svg'
 import { ReactComponent as ICSelected } from '@IconsV2/ic-selected.svg'
 import { ReactComponent as ICShapes } from '@IconsV2/ic-shapes.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
 import { ReactComponent as ICSlidersVertical } from '@IconsV2/ic-sliders-vertical.svg'
+import { ReactComponent as ICSoftwareReleaseManagement } from '@IconsV2/ic-software-release-management.svg'
 import { ReactComponent as ICSortAscending } from '@IconsV2/ic-sort-ascending.svg'
 import { ReactComponent as ICSortDescending } from '@IconsV2/ic-sort-descending.svg'
 import { ReactComponent as ICSortable } from '@IconsV2/ic-sortable.svg'
@@ -249,6 +269,7 @@ import { ReactComponent as ICSuspended } from '@IconsV2/ic-suspended.svg'
 import { ReactComponent as ICSymbolGreaterThan } from '@IconsV2/ic-symbol-greater-than.svg'
 import { ReactComponent as ICTag } from '@IconsV2/ic-tag.svg'
 import { ReactComponent as ICTata1mg } from '@IconsV2/ic-tata1mg.svg'
+import { ReactComponent as ICTenants } from '@IconsV2/ic-tenants.svg'
 import { ReactComponent as ICTerminal } from '@IconsV2/ic-terminal.svg'
 import { ReactComponent as ICTerminalFill } from '@IconsV2/ic-terminal-fill.svg'
 import { ReactComponent as ICThermometer } from '@IconsV2/ic-thermometer.svg'
@@ -285,10 +306,15 @@ export const iconMap = {
     'ic-aborted': ICAborted,
     'ic-activity': ICActivity,
     'ic-add': ICAdd,
+    'ic-ai': ICAi,
     'ic-alibaba': ICAlibaba,
     'ic-amazon-eks': ICAmazonEks,
     'ic-app-group': ICAppGroup,
     'ic-app-template': ICAppTemplate,
+    'ic-application-group': ICApplicationGroup,
+    'ic-application-management': ICApplicationManagement,
+    'ic-application-template': ICApplicationTemplate,
+    'ic-application': ICApplication,
     'ic-argocd-app': ICArgocdApp,
     'ic-arrow-clockwise': ICArrowClockwise,
     'ic-arrow-line-down': ICArrowLineDown,
@@ -302,6 +328,10 @@ export const iconMap = {
     'ic-aws': ICAws,
     'ic-azure-aks': ICAzureAks,
     'ic-azure': ICAzure,
+    'ic-backup-and-schedule': ICBackupAndSchedule,
+    'ic-backup-color': ICBackupColor,
+    'ic-backup-location': ICBackupLocation,
+    'ic-backup-schedule-color': ICBackupScheduleColor,
     'ic-bg-build': ICBgBuild,
     'ic-bg-cluster': ICBgCluster,
     'ic-bg-cpu': ICBgCpu,
@@ -329,6 +359,7 @@ export const iconMap = {
     'ic-caret-left': ICCaretLeft,
     'ic-caret-right': ICCaretRight,
     'ic-cd': ICCd,
+    'ic-chart-line-up': ICChartLineUp,
     'ic-chat-circle-dots': ICChatCircleDots,
     'ic-chat-circle-online': ICChatCircleOnline,
     'ic-check-all': ICCheckAll,
@@ -338,14 +369,15 @@ export const iconMap = {
     'ic-checks': ICChecks,
     'ic-ci-linked': ICCiLinked,
     'ic-circle-loader': ICCircleLoader,
+    'ic-circle-small': ICCircleSmall,
     'ic-clean-brush': ICCleanBrush,
     'ic-clipboard': ICClipboard,
     'ic-clock-counterclockwise': ICClockCounterclockwise,
     'ic-clock': ICClock,
     'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
+    'ic-cloud-upload': ICCloudUpload,
     'ic-cloud-vms': ICCloudVms,
-    'ic-cloud': ICCloud,
     'ic-cluster-isolated': ICClusterIsolated,
     'ic-cluster': ICCluster,
     'ic-code': ICCode,
@@ -416,6 +448,7 @@ export const iconMap = {
     'ic-git': ICGit,
     'ic-github': ICGithub,
     'ic-gitlab': ICGitlab,
+    'ic-global-overview': ICGlobalOverview,
     'ic-google-artifact-registry': ICGoogleArtifactRegistry,
     'ic-google-cloud': ICGoogleCloud,
     'ic-google-container-registry': ICGoogleContainerRegistry,
@@ -438,6 +471,7 @@ export const iconMap = {
     'ic-info-filled-color': ICInfoFilledColor,
     'ic-info-filled': ICInfoFilled,
     'ic-info-outline': ICInfoOutline,
+    'ic-infrastructure-management': ICInfrastructureManagement,
     'ic-input': ICInput,
     'ic-install': ICInstall,
     'ic-job-color': ICJobColor,
@@ -489,20 +523,27 @@ export const iconMap = {
     'ic-party': ICParty,
     'ic-path': ICPath,
     'ic-pause-circle': ICPauseCircle,
+    'ic-pause': ICPause,
     'ic-pencil': ICPencil,
     'ic-play-outline': ICPlayOutline,
     'ic-priority-medium-fill': ICPriorityMediumFill,
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
     'ic-ratings': ICRatings,
+    'ic-release-hub': ICReleaseHub,
     'ic-resize-handle': ICResizeHandle,
+    'ic-resource-browser': ICResourceBrowser,
+    'ic-resource-watcher': ICResourceWatcher,
     'ic-right-panel-collapse': ICRightPanelCollapse,
     'ic-rocket-gear': ICRocketGear,
     'ic-rocket-launch': ICRocketLaunch,
+    'ic-security-policy': ICSecurityPolicy,
+    'ic-security-scan': ICSecurityScan,
     'ic-selected': ICSelected,
     'ic-shapes': ICShapes,
     'ic-shield-check': ICShieldCheck,
     'ic-sliders-vertical': ICSlidersVertical,
+    'ic-software-release-management': ICSoftwareReleaseManagement,
     'ic-sort-ascending': ICSortAscending,
     'ic-sort-descending': ICSortDescending,
     'ic-sortable': ICSortable,
@@ -530,6 +571,7 @@ export const iconMap = {
     'ic-symbol-greater-than': ICSymbolGreaterThan,
     'ic-tag': ICTag,
     'ic-tata1mg': ICTata1mg,
+    'ic-tenants': ICTenants,
     'ic-terminal-fill': ICTerminalFill,
     'ic-terminal': ICTerminal,
     'ic-thermometer': ICThermometer,

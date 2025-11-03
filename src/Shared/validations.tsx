@@ -531,3 +531,46 @@ export const validateEmail = (email: string): ValidationResponseType => {
         message: 'Please provide a valid email address',
     }
 }
+
+export const getIsRegexValid = (regexString: string): ValidationResponseType => {
+    try {
+        RegExp(regexString)
+        return {
+            isValid: true,
+        }
+    } catch (error) {
+        return {
+            isValid: false,
+            message: error.message || 'Invalid regex pattern',
+        }
+    }
+}
+
+export const validateCronExpression = (cron: string): ValidationResponseType => {
+    // Basic cron validation - 5 parts separated by spaces
+    const parts = cron.trim().split(/\s+/)
+    if (parts.length !== 5) {
+        return { isValid: false, message: 'Cron expression must have 5 parts separated by spaces' }
+    }
+
+    const isValid = parts.every((part) => {
+        if (part === '*') return true
+        if (/^\d+$/.test(part)) return true
+        if (/^\d+-\d+$/.test(part)) return true
+        if (/^\*\/\d+$/.test(part)) return true
+        if (/^(\d+,)+\d+$/.test(part)) return true
+        return false
+    })
+
+    // Basic validation - each part should be either * or a number or a range
+    if (isValid) {
+        return {
+            isValid,
+        }
+    }
+
+    return {
+        isValid: false,
+        message: 'Invalid cron expression format',
+    }
+}
