@@ -1173,3 +1173,9 @@ export interface ClusterDetailListType
     category: SelectPickerOptionType
     status: ClusterStatusType
 }
+
+export enum InfrastructureManagementAppListType {
+    HELM = 'helm',
+    ARGO_CD = 'argocd',
+    FLUX_CD = 'fluxcd'
+}
