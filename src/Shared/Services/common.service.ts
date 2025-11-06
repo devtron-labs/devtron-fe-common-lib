@@ -65,7 +65,7 @@ export const getClusterOptions = async (): Promise<ClusterType[]> => {
 }
 
 export const getAllClusterListMin = async (signal: AbortSignal) => {
-    const response = await get<AllClusterListMinItemDTO[]>(`${ROUTES.CLUSTER_MIN}`, {
+    const response = await get<AllClusterListMinItemDTO[]>(ROUTES.CLUSTER_MIN, {
         signal,
     })
 
