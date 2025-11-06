@@ -70,6 +70,6 @@ export interface ClusterMinDTO {
     isProd: boolean
 }
 
-export type AllClusterListMinItemDTO = Pick<ClusterDetailDTO, 'id' | 'cluster_name' | 'isVirtualCluster'> & {
+export type AllClusterListMinItemDTO = Pick<ClusterDetailDTO, 'id' | 'cluster_name' | 'isVirtualCluster' | 'isProd'> & {
     costModuleConfig: Pick<ClusterDetailDTO['costModuleConfig'], 'enabled' | 'installationStatus'>
 }
