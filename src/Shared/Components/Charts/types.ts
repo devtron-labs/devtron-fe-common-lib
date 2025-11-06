@@ -158,3 +158,11 @@ declare module 'chart.js' {
         barElementCenterPositioner: TooltipPositionerFunction<'bar'>
     }
 }
+
+export interface HTMLLegendProps {
+    backgroundColor: string
+    label: string
+    onClick: () => void
+    strikeThrough: boolean
+    variant: 'line' | 'square'
+}
