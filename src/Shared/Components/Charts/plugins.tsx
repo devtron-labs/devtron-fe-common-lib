@@ -5,8 +5,8 @@ import { LegendItem, Plugin } from 'chart.js'
 import { Tooltip } from '@Common/Tooltip'
 import { AppThemeType } from '@Shared/Providers'
 
-import { CHART_COLORS } from './constants'
-import { ChartType, HTMLLegendProps, ReferenceLineConfigType } from './types'
+import { CHART_AXIS_LABELS_COLOR, CHART_COLORS } from './constants'
+import { CenterTextConfig, ChartType, HTMLLegendProps, ReferenceLineConfigType } from './types'
 
 export const drawReferenceLine = (config: ReferenceLineConfigType, id: string, appTheme: AppThemeType): Plugin => ({
     id,
@@ -74,5 +74,25 @@ export const htmlLegendPlugin = (id: string, ref: RefObject<HTMLDivElement>, typ
                 )),
             ref.current,
         )
+    },
+})
+
+export const drawCenterText = (config: CenterTextConfig, appTheme: AppThemeType): Plugin => ({
+    id: 'centerText',
+    afterDraw: (chart) => {
+        const { ctx, chartArea } = chart
+        if (!config?.text) {
+            return
+        }
+
+        const centerX = (chartArea.left + chartArea.right) / 2
+
+        ctx.save()
+        ctx.font = `${config.fontWeight || '600'} ${config.fontSize || 16}px ${config.fontFamily || "'IBM Plex Sans', 'Open Sans', 'Roboto'"}`
+        ctx.fillStyle = config.color || CHART_AXIS_LABELS_COLOR[appTheme]
+        ctx.textAlign = 'center'
+        ctx.textBaseline = 'middle'
+        ctx.fillText(config.text, centerX, chartArea.bottom - 20)
+        ctx.restore()
     },
 })

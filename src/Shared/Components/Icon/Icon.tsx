@@ -235,8 +235,11 @@ import { ReactComponent as ICResourceWatcher } from '@IconsV2/ic-resource-watche
 import { ReactComponent as ICRightPanelCollapse } from '@IconsV2/ic-right-panel-collapse.svg'
 import { ReactComponent as ICRocketGear } from '@IconsV2/ic-rocket-gear.svg'
 import { ReactComponent as ICRocketLaunch } from '@IconsV2/ic-rocket-launch.svg'
+import { ReactComponent as ICSecurityFixable } from '@IconsV2/ic-security-fixable.svg'
+import { ReactComponent as ICSecurityNotFixable } from '@IconsV2/ic-security-not-fixable.svg'
 import { ReactComponent as ICSecurityPolicy } from '@IconsV2/ic-security-policy.svg'
 import { ReactComponent as ICSecurityScan } from '@IconsV2/ic-security-scan.svg'
+import { ReactComponent as ICSecurityVulnerability } from '@IconsV2/ic-security-vulnerability.svg'
 import { ReactComponent as ICSelected } from '@IconsV2/ic-selected.svg'
 import { ReactComponent as ICShapes } from '@IconsV2/ic-shapes.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
@@ -537,8 +540,11 @@ export const iconMap = {
     'ic-right-panel-collapse': ICRightPanelCollapse,
     'ic-rocket-gear': ICRocketGear,
     'ic-rocket-launch': ICRocketLaunch,
+    'ic-security-fixable': ICSecurityFixable,
+    'ic-security-not-fixable': ICSecurityNotFixable,
     'ic-security-policy': ICSecurityPolicy,
     'ic-security-scan': ICSecurityScan,
+    'ic-security-vulnerability': ICSecurityVulnerability,
     'ic-selected': ICSelected,
     'ic-shapes': ICShapes,
     'ic-shield-check': ICShieldCheck,
