@@ -16,7 +16,7 @@
 
 import { MainContext } from '@Shared/Providers'
 
-import { getUrlWithSearchParams } from '../../Common'
+import { ClusterDetailDTO, getUrlWithSearchParams } from '../../Common'
 import { PolicyKindType, ResourceKindType, ResourceVersionType } from '../types'
 
 export interface BaseAppMetaData {
@@ -68,4 +68,8 @@ export interface ClusterMinDTO {
     cluster_name: string
     isVirtualCluster: boolean
     isProd: boolean
+}
+
+export type AllClusterListMinItemDTO = Pick<ClusterDetailDTO, 'id' | 'cluster_name' | 'isVirtualCluster'> & {
+    costModuleConfig: Pick<ClusterDetailDTO['costModuleConfig'], 'enabled' | 'installationStatus'>
 }
