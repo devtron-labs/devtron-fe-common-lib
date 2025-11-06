@@ -146,6 +146,19 @@ export const CHART_COLORS: Record<AppThemeType, Record<ChartColorKey, string>> =
         Gray800: '#202124',
         Gray900: '#1a1a1a',
         Gray950: '#0d0d0d',
+
+        // Sunset Orange
+        SunsetOrange50: '#FFF3ED',
+        SunsetOrange100: '#FFE7D4',
+        SunsetOrange200: '#FFCAA8',
+        SunsetOrange300: '#FFAE80',
+        SunsetOrange400: '#FF905A',
+        SunsetOrange500: '#FF7C43',
+        SunsetOrange600: '#F5572A',
+        SunsetOrange700: '#D22E10',
+        SunsetOrange800: '#A81F0D',
+        SunsetOrange900: '#7E1C10',
+        SunsetOrange950: '#411311',
     },
     [AppThemeType.dark]: {
         // Sky Blue - Adjusted for dark theme
@@ -290,6 +303,19 @@ export const CHART_COLORS: Record<AppThemeType, Record<ChartColorKey, string>> =
         Gray800: '#f1f3f4',
         Gray900: '#f7f8f9',
         Gray950: '#f9fafb',
+
+        // Sunset Orange - Adjusted for dark theme
+        SunsetOrange50: '#2F1D1E',
+        SunsetOrange100: '#53301F',
+        SunsetOrange200: '#794421',
+        SunsetOrange300: '#9C5623',
+        SunsetOrange400: '#C36A25',
+        SunsetOrange500: '#E87D27',
+        SunsetOrange600: '#EC9345',
+        SunsetOrange700: '#F1A862',
+        SunsetOrange800: '#F4BD7F',
+        SunsetOrange900: '#F8D29C',
+        SunsetOrange950: '#FDE9BC',
     },
 } as const
 
