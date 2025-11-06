@@ -22,14 +22,13 @@ import { noop, useDebounce } from '@Common/Helper'
 import { DEVTRON_BASE_MAIN_ID } from '@Shared/constants'
 import { useTheme } from '@Shared/Providers'
 
-import { drawReferenceLine } from './plugins'
+import { drawReferenceLine, htmlLegendPlugin } from './plugins'
 import { ChartProps, GetDefaultOptionsParams, TypeAndDatasetsType } from './types'
 import {
     buildChartTooltipFromContext,
     distanceBetweenPoints,
     getChartJSType,
     getDefaultOptions,
-    getLegendsLabelConfig,
     transformDataForChart,
 } from './utils'
 
@@ -207,6 +206,7 @@ const Chart = (props: ChartProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const chartRef = useRef<ChartJS | null>(null)
     const tooltipRef = useRef<HTMLSpanElement>(null)
+    const legendRef = useRef<HTMLDivElement>(null)
 
     const [tooltipVisible, setTooltipVisible] = useState(false)
     const [tooltipContent, setTooltipContent] = useState<ReactNode>(null)
@@ -256,17 +256,6 @@ const Chart = (props: ChartProps) => {
             return noop
         }
 
-        if (type === 'pie') {
-            /**
-             * The doughnut chart overrides the default legend label configuration.
-             * Therefore need to set the custom legend label configuration.
-             */
-            ChartJS.overrides.doughnut.plugins.legend.labels = {
-                ...ChartJS.overrides.doughnut.plugins.legend.labels,
-                ...getLegendsLabelConfig('pie', appTheme),
-            }
-        }
-
         // Get Chart.js type and transform data
         const chartJSType = getChartJSType(type)
         const transformedData = {
@@ -288,6 +277,7 @@ const Chart = (props: ChartProps) => {
             },
             plugins: [
                 ...(referenceLines ?? []).map((rl, idx) => drawReferenceLine(rl, `reference-line-${idx}`, appTheme)),
+                ...(!hideAxis ? [htmlLegendPlugin(id, legendRef, type)] : []),
             ],
         })
 
@@ -297,8 +287,19 @@ const Chart = (props: ChartProps) => {
     }, [type, datasets, labels, appTheme, hideAxis, referenceLines, xAxisMax, xScaleTitle, yAxisMax, yScaleTitle])
 
     return (
-        <div className="h-100 w-100 dc__position-rel">
-            <canvas id={id} ref={canvasRef} />
+        <div
+            className={`h-100 w-100 dc__position-rel dc__gap-16 dc__overflow-hidden flex ${type === 'pie' ? 'left ' : 'column top'}`}
+        >
+            <div className={`flex ${type === 'pie' ? 'w-150 h-150' : 'w-100 flex-grow-1'} dc__overflow-hidden`}>
+                <canvas id={id} ref={canvasRef} />
+            </div>
+
+            {!hideAxis && (
+                <div
+                    className={`flex ${type === 'pie' ? 'left column flex-grow-1' : ''} dc__gap-12 dc__no-shrink`}
+                    ref={legendRef}
+                />
+            )}
 
             <Tippy
                 content={tooltipContent}

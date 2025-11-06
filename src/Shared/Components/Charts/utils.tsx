@@ -1,7 +1,6 @@
 import { ReactNode } from 'react'
 import {
     ActiveElement,
-    Chart,
     ChartDataset,
     ChartOptions,
     ChartType as ChartJSChartType,
@@ -19,6 +18,7 @@ import {
     CHART_CANVAS_BACKGROUND_COLORS,
     CHART_COLORS,
     CHART_GRID_LINES_COLORS,
+    DIS_JOINT_CHART_POINT_RADIUS,
     LINE_DASH,
     MAX_BAR_THICKNESS,
 } from './constants'
@@ -33,51 +33,6 @@ import {
     TransformDatasetProps,
     VariantsType,
 } from './types'
-
-export const getLegendsLabelConfig = (type: ChartType, appTheme: AppThemeType) => {
-    const baseConfig = {
-        color: CHART_AXIS_LABELS_COLOR[appTheme],
-        font: {
-            family: "'IBM Plex Sans', 'Open Sans', 'Roboto'",
-            size: 13,
-            lineHeight: '150%',
-            weight: 400,
-        },
-    } satisfies ChartOptions['plugins']['legend']['labels']
-
-    if (type === 'line') {
-        return {
-            ...baseConfig,
-            ...({
-                usePointStyle: false,
-                boxHeight: 0,
-                generateLabels: (chart: Chart<'line'>) => {
-                    const originalFn = Chart.defaults.plugins.legend.labels.generateLabels
-                    const labels = originalFn(chart)
-                    return labels.map((label) => {
-                        const { borderColor, borderDash } = chart.data.datasets[label.datasetIndex]
-
-                        return {
-                            ...label,
-                            fillStyle: 'transparent',
-                            strokeStyle: borderColor as string,
-                            lineDash: borderDash ? LINE_DASH : undefined,
-                            lineWidth: 2,
-                        }
-                    })
-                },
-            } satisfies ChartOptions<'line'>['plugins']['legend']['labels']),
-        }
-    }
-
-    return {
-        ...baseConfig,
-        usePointStyle: true,
-        boxHeight: 10,
-        boxWidth: 10,
-        pointStyle: 'rectRounded',
-    } satisfies ChartOptions['plugins']['legend']['labels']
-}
 
 // Map our chart types to Chart.js types
 export const getChartJSType = (type: ChartType): ChartJSChartType => {
@@ -203,12 +158,7 @@ export const getDefaultOptions = ({
         maintainAspectRatio: false,
         plugins: {
             legend: {
-                title: {
-                    display: false,
-                },
-                position: 'bottom' as const,
-                labels: getLegendsLabelConfig(type, appTheme),
-                display: !hideAxis,
+                display: false,
             },
             title: {
                 display: false,
@@ -320,7 +270,6 @@ export const getDefaultOptions = ({
                     },
                 },
                 interaction: {
-                    mode: 'nearest',
                     axis: 'x',
                     intersect: false,
                 },
@@ -328,11 +277,13 @@ export const getDefaultOptions = ({
                     y: {
                         ...commonYScaleConfig,
                         stacked: type === 'area',
+                        beginAtZero: true,
                     },
                     x: commonXScaleConfig,
                 },
             } satisfies ChartOptions<'line'>
         case 'stackedBar':
+        case 'stackedBarHorizontal':
             return {
                 ...baseOptions,
                 plugins: {
@@ -350,7 +301,6 @@ export const getDefaultOptions = ({
                     y: {
                         ...commonYScaleConfig,
                         stacked: true,
-                        beginAtZero: true,
                     },
                 },
                 datasets: {
@@ -358,26 +308,7 @@ export const getDefaultOptions = ({
                         maxBarThickness: MAX_BAR_THICKNESS,
                     },
                 },
-            } satisfies ChartOptions<'bar'>
-        case 'stackedBarHorizontal':
-            return {
-                ...baseOptions,
-                indexAxis: 'y' as const,
-                scales: {
-                    x: {
-                        ...commonXScaleConfig,
-                        stacked: true,
-                    },
-                    y: {
-                        ...commonYScaleConfig,
-                        stacked: true,
-                    },
-                },
-                datasets: {
-                    bar: {
-                        maxBarThickness: MAX_BAR_THICKNESS,
-                    },
-                },
+                indexAxis: type === 'stackedBarHorizontal' ? 'y' : 'x',
             } satisfies ChartOptions<'bar'>
         case 'pie':
             return {
@@ -385,13 +316,15 @@ export const getDefaultOptions = ({
                 plugins: {
                     ...baseOptions.plugins,
                     legend: {
-                        ...baseOptions.plugins.legend,
+                        display: false,
+                        labels: {
+                            textAlign: 'left',
+                        },
                         position: 'right',
-                        align: 'center',
                     },
                 },
                 cutout: '60%',
-                radius: '80%',
+                radius: '100%',
             } as ChartOptions<'doughnut'>
         default:
             return baseOptions
@@ -421,8 +354,12 @@ const getBackgroundAndBorderColor = ({ type, dataset, appTheme }: GetBackgroundA
         return {
             backgroundColor: dataset.colors.map((colorKey) => getColorValue(colorKey, appTheme)),
             hoverBackgroundColor: dataset.colors.map((colorKey) => getDarkerShadeBy(colorKey, appTheme)),
-            borderColor: 'transparent',
-        } satisfies Pick<ChartDataset<'doughnut'>, 'hoverBackgroundColor' | 'backgroundColor' | 'borderColor'>
+            borderColor: CHART_CANVAS_BACKGROUND_COLORS[appTheme],
+            borderWidth: 1,
+        } satisfies Pick<
+            ChartDataset<'doughnut'>,
+            'hoverBackgroundColor' | 'backgroundColor' | 'borderColor' | 'borderWidth'
+        >
     }
 
     if (type === 'stackedBar' || type === 'stackedBarHorizontal') {
@@ -484,7 +421,17 @@ const transformDataset = (props: TransformDatasetProps) => {
     const commonLineAndAreaConfig = {
         ...baseDataset,
         fill: type === 'area',
-        pointRadius: 0,
+        pointRadius: ({ dataIndex }) => {
+            if (dataIndex === 0 && Number.isNaN(dataset.yAxisValues[dataIndex + 1])) {
+                return DIS_JOINT_CHART_POINT_RADIUS
+            }
+            if (dataIndex === dataset.yAxisValues.length - 1 && Number.isNaN(dataset.yAxisValues[dataIndex - 1])) {
+                return DIS_JOINT_CHART_POINT_RADIUS
+            }
+            return Number.isNaN(dataset.yAxisValues[dataIndex - 1]) && Number.isNaN(dataset.yAxisValues[dataIndex + 1])
+                ? DIS_JOINT_CHART_POINT_RADIUS
+                : 0
+        },
         pointHoverRadius: 8,
         pointHitRadius: 20,
         pointStyle: 'rectRounded',
