@@ -30,7 +30,7 @@ export const drawReferenceLine = (config: ReferenceLineConfigType, id: string, a
 })
 
 const HTMLLegend = ({ backgroundColor, label, onClick, strikeThrough, variant }: HTMLLegendProps) => (
-    <button className="flex left dc__gap-8 dc__outline-none m-0 p-0 dc__transparent" onClick={onClick} type="button">
+    <button className="flex left dc__gap-6 dc__outline-none m-0 p-0 dc__transparent" onClick={onClick} type="button">
         <div
             className={`${variant === 'square' ? 'w-14 h-14' : 'h-2 w-16'} br-4 dc__no-shrink`}
             style={{ backgroundColor }}

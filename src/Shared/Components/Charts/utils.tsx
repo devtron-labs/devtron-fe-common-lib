@@ -269,7 +269,6 @@ export const getDefaultOptions = ({
                     },
                 },
                 interaction: {
-                    mode: 'nearest',
                     axis: 'x',
                     intersect: false,
                 },
@@ -421,7 +420,17 @@ const transformDataset = (props: TransformDatasetProps) => {
     const commonLineAndAreaConfig = {
         ...baseDataset,
         fill: type === 'area',
-        pointRadius: 0,
+        pointRadius: ({ dataIndex }) => {
+            if (dataIndex === 0 && Number.isNaN(dataset.yAxisValues[dataIndex + 1])) {
+                return 4
+            }
+            if (dataIndex === dataset.yAxisValues.length - 1 && Number.isNaN(dataset.yAxisValues[dataIndex - 1])) {
+                return 4
+            }
+            return Number.isNaN(dataset.yAxisValues[dataIndex - 1]) && Number.isNaN(dataset.yAxisValues[dataIndex + 1])
+                ? 4
+                : 0
+        },
         pointHoverRadius: 8,
         pointHitRadius: 20,
         pointStyle: 'rectRounded',
