@@ -178,6 +178,7 @@ export const ROUTES = {
     PATCH: 'patch',
     ENVIRONMENT_LIST_MIN: 'env/autocomplete',
     CLUSTER: 'cluster',
+    CLUSTER_MIN: 'cluster/min',
     API_RESOURCE: 'k8s/api-resources',
     GVK: 'gvk',
     NAMESPACE: 'env/namespace',
