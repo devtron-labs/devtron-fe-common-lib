@@ -64,6 +64,7 @@ export const htmlLegendPlugin = (id: string, ref: RefObject<HTMLDivElement>, typ
                 .generateLabels(chart)
                 .map((item) => (
                     <HTMLLegend
+                        key={item.text}
                         backgroundColor={item.fillStyle.toString()}
                         label={item.text}
                         strikeThrough={item.hidden}

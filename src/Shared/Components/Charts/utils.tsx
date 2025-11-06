@@ -18,6 +18,7 @@ import {
     CHART_CANVAS_BACKGROUND_COLORS,
     CHART_COLORS,
     CHART_GRID_LINES_COLORS,
+    DIS_JOINT_CHART_POINT_RADIUS,
     LINE_DASH,
     MAX_BAR_THICKNESS,
 } from './constants'
@@ -422,13 +423,13 @@ const transformDataset = (props: TransformDatasetProps) => {
         fill: type === 'area',
         pointRadius: ({ dataIndex }) => {
             if (dataIndex === 0 && Number.isNaN(dataset.yAxisValues[dataIndex + 1])) {
-                return 4
+                return DIS_JOINT_CHART_POINT_RADIUS
             }
             if (dataIndex === dataset.yAxisValues.length - 1 && Number.isNaN(dataset.yAxisValues[dataIndex - 1])) {
-                return 4
+                return DIS_JOINT_CHART_POINT_RADIUS
             }
             return Number.isNaN(dataset.yAxisValues[dataIndex - 1]) && Number.isNaN(dataset.yAxisValues[dataIndex + 1])
-                ? 4
+                ? DIS_JOINT_CHART_POINT_RADIUS
                 : 0
         },
         pointHoverRadius: 8,
