@@ -27,7 +27,9 @@ import { ReactComponent as ICAwsCodecommit } from '@IconsV2/ic-aws-codecommit.sv
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICAzureAks } from '@IconsV2/ic-azure-aks.svg'
 import { ReactComponent as ICBackupAndSchedule } from '@IconsV2/ic-backup-and-schedule.svg'
+import { ReactComponent as ICBackupColor } from '@IconsV2/ic-backup-color.svg'
 import { ReactComponent as ICBackupLocation } from '@IconsV2/ic-backup-location.svg'
+import { ReactComponent as ICBackupScheduleColor } from '@IconsV2/ic-backup-schedule-color.svg'
 import { ReactComponent as ICBgBuild } from '@IconsV2/ic-bg-build.svg'
 import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
 import { ReactComponent as ICBgCpu } from '@IconsV2/ic-bg-cpu.svg'
@@ -71,11 +73,13 @@ import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
 import { ReactComponent as ICClockCounterclockwise } from '@IconsV2/ic-clock-counterclockwise.svg'
 import { ReactComponent as ICCloseLarge } from '@IconsV2/ic-close-large.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
+import { ReactComponent as ICCloudUpload } from '@IconsV2/ic-cloud-upload.svg'
 import { ReactComponent as ICCloudVms } from '@IconsV2/ic-cloud-vms.svg'
 import { ReactComponent as ICCluster } from '@IconsV2/ic-cluster.svg'
 import { ReactComponent as ICClusterIsolated } from '@IconsV2/ic-cluster-isolated.svg'
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICCoins } from '@IconsV2/ic-coins.svg'
+import { ReactComponent as ICCoinsColorAnimated } from '@IconsV2/ic-coins-color-animated.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICContainerRegistry } from '@IconsV2/ic-container-registry.svg'
 import { ReactComponent as ICCookr } from '@IconsV2/ic-cookr.svg'
@@ -216,6 +220,7 @@ import { ReactComponent as ICPaperPlane } from '@IconsV2/ic-paper-plane.svg'
 import { ReactComponent as ICPaperPlaneColor } from '@IconsV2/ic-paper-plane-color.svg'
 import { ReactComponent as ICParty } from '@IconsV2/ic-party.svg'
 import { ReactComponent as ICPath } from '@IconsV2/ic-path.svg'
+import { ReactComponent as ICPause } from '@IconsV2/ic-pause.svg'
 import { ReactComponent as ICPauseCircle } from '@IconsV2/ic-pause-circle.svg'
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
 import { ReactComponent as ICPlayOutline } from '@IconsV2/ic-play-outline.svg'
@@ -327,7 +332,9 @@ export const iconMap = {
     'ic-azure-aks': ICAzureAks,
     'ic-azure': ICAzure,
     'ic-backup-and-schedule': ICBackupAndSchedule,
+    'ic-backup-color': ICBackupColor,
     'ic-backup-location': ICBackupLocation,
+    'ic-backup-schedule-color': ICBackupScheduleColor,
     'ic-bg-build': ICBgBuild,
     'ic-bg-cluster': ICBgCluster,
     'ic-bg-cpu': ICBgCpu,
@@ -371,10 +378,12 @@ export const iconMap = {
     'ic-clock': ICClock,
     'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
+    'ic-cloud-upload': ICCloudUpload,
     'ic-cloud-vms': ICCloudVms,
     'ic-cluster-isolated': ICClusterIsolated,
     'ic-cluster': ICCluster,
     'ic-code': ICCode,
+    'ic-coins-color-animated': ICCoinsColorAnimated,
     'ic-coins': ICCoins,
     'ic-container-registry': ICContainerRegistry,
     'ic-container': ICContainer,
@@ -517,6 +526,7 @@ export const iconMap = {
     'ic-party': ICParty,
     'ic-path': ICPath,
     'ic-pause-circle': ICPauseCircle,
+    'ic-pause': ICPause,
     'ic-pencil': ICPencil,
     'ic-play-outline': ICPlayOutline,
     'ic-priority-medium-fill': ICPriorityMediumFill,

@@ -738,15 +738,17 @@ export const YAMLtoJSON = (yamlString: string) => {
     }
 }
 
-export const formatNumberToCurrency = (value: number, currency: string): string => {
+export const formatNumberToCurrency = (value: number, currency: string, minimumFractionDigits?: number): string => {
+    const precision = minimumFractionDigits ?? 2
     try {
         const data = new Intl.NumberFormat('en-US', {
             style: 'currency',
             currency,
+            minimumFractionDigits: precision,
         }).format(value)
 
         return data
     } catch {
-        return value.toFixed(2)
+        return value.toFixed(precision)
     }
 }

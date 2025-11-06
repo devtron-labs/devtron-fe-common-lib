@@ -19,6 +19,7 @@ export type ColorTokensType =
     | 'GoldenYellow'
     | 'CharcoalGray'
     | 'Gray'
+    | 'SunsetOrange'
 export type VariantsType = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950
 
 export type ChartColorKey = `${ColorTokensType}${VariantsType}`
@@ -169,4 +170,12 @@ declare module 'chart.js' {
     interface TooltipPositionerMap {
         barElementCenterPositioner: TooltipPositionerFunction<'bar'>
     }
+}
+
+export interface HTMLLegendProps {
+    backgroundColor: string
+    label: string
+    onClick: () => void
+    strikeThrough: boolean
+    variant: 'line' | 'square'
 }
