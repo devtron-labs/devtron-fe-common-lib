@@ -96,11 +96,11 @@ const BulkSelection = forwardRef<HTMLLabelElement, BulkSelectionProps>(
                     <Checkbox
                         ref={forwardedRef}
                         isChecked={isChecked}
-                        onChange={noop}
+                        onChange={shouldWrapActionMenu ? noop : onSinglePageSelectAll}
                         rootClassName="icon-dim-20 m-0"
                         value={checkboxValue}
                         disabled={disabled}
-                        onClick={!shouldWrapActionMenu ? onSinglePageSelectAll : null}
+                        onClick={noop}
                         // Ideally should be disabled but was giving issue with cursor
                     />
 

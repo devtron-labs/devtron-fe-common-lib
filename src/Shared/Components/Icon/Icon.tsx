@@ -86,6 +86,7 @@ import { ReactComponent as ICCluster } from '@IconsV2/ic-cluster.svg'
 import { ReactComponent as ICClusterIsolated } from '@IconsV2/ic-cluster-isolated.svg'
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICCoins } from '@IconsV2/ic-coins.svg'
+import { ReactComponent as ICCoinsColorAnimated } from '@IconsV2/ic-coins-color-animated.svg'
 import { ReactComponent as ICConfirm } from '@IconsV2/ic-confirm.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICContainerRegistry } from '@IconsV2/ic-container-registry.svg'
@@ -253,8 +254,11 @@ import { ReactComponent as ICResourceWatcher } from '@IconsV2/ic-resource-watche
 import { ReactComponent as ICRightPanelCollapse } from '@IconsV2/ic-right-panel-collapse.svg'
 import { ReactComponent as ICRocketGear } from '@IconsV2/ic-rocket-gear.svg'
 import { ReactComponent as ICRocketLaunch } from '@IconsV2/ic-rocket-launch.svg'
+import { ReactComponent as ICSecurityFixable } from '@IconsV2/ic-security-fixable.svg'
+import { ReactComponent as ICSecurityNotFixable } from '@IconsV2/ic-security-not-fixable.svg'
 import { ReactComponent as ICSecurityPolicy } from '@IconsV2/ic-security-policy.svg'
 import { ReactComponent as ICSecurityScan } from '@IconsV2/ic-security-scan.svg'
+import { ReactComponent as ICSecurityVulnerability } from '@IconsV2/ic-security-vulnerability.svg'
 import { ReactComponent as ICSelected } from '@IconsV2/ic-selected.svg'
 import { ReactComponent as ICShapes } from '@IconsV2/ic-shapes.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
@@ -408,6 +412,7 @@ export const iconMap = {
     'ic-cluster-isolated': ICClusterIsolated,
     'ic-cluster': ICCluster,
     'ic-code': ICCode,
+    'ic-coins-color-animated': ICCoinsColorAnimated,
     'ic-coins': ICCoins,
     'ic-confirm': ICConfirm,
     'ic-container-registry': ICContainerRegistry,
@@ -576,8 +581,11 @@ export const iconMap = {
     'ic-right-panel-collapse': ICRightPanelCollapse,
     'ic-rocket-gear': ICRocketGear,
     'ic-rocket-launch': ICRocketLaunch,
+    'ic-security-fixable': ICSecurityFixable,
+    'ic-security-not-fixable': ICSecurityNotFixable,
     'ic-security-policy': ICSecurityPolicy,
     'ic-security-scan': ICSecurityScan,
+    'ic-security-vulnerability': ICSecurityVulnerability,
     'ic-selected': ICSelected,
     'ic-shapes': ICShapes,
     'ic-shield-check': ICShieldCheck,

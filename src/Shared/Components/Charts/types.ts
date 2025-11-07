@@ -5,7 +5,7 @@ import { TooltipProps } from '@Common/Tooltip'
 import { AppThemeType } from '@Shared/Providers'
 import { Never } from '@Shared/types'
 
-export type ChartType = 'area' | 'pie' | 'stackedBar' | 'stackedBarHorizontal' | 'line'
+export type ChartType = 'area' | 'pie' | 'semiPie' | 'stackedBar' | 'stackedBarHorizontal' | 'line'
 
 export type ColorTokensType =
     | 'DeepPlum'
@@ -19,11 +19,12 @@ export type ColorTokensType =
     | 'GoldenYellow'
     | 'CharcoalGray'
     | 'Gray'
+    | 'SunsetOrange'
 export type VariantsType = 50 | 100 | 200 | 300 | 400 | 500 | 600 | 700 | 800 | 900 | 950
 
 export type ChartColorKey = `${ColorTokensType}${VariantsType}`
 
-export type ChartTypeWithoutPie = Exclude<ChartType, 'pie'>
+export type ChartTypeWithoutPie = Exclude<ChartType, 'pie' | 'semiPie'>
 
 interface BaseSimpleDataset {
     datasetName: string
@@ -48,6 +49,14 @@ export interface ReferenceLineConfigType {
     strokeWidth?: number
     color?: ChartColorKey
     value: number
+}
+
+export interface CenterTextConfig {
+    text: string
+    fontSize?: number
+    fontWeight?: string | number
+    color?: string
+    fontFamily?: string
 }
 
 export interface AxisConfig {
@@ -81,18 +90,21 @@ type ScaleTickFormatCallbacks = Partial<{
 
 export type TypeAndDatasetsType =
     | ({
-          type: 'pie'
+          type: 'pie' | 'semiPie'
           /**
            * Needs to be memoized
            */
           datasets: SimpleDatasetForPie
           onChartClick?: OnChartClickHandler
+          /** Configuration for center text (only for doughnut/pie charts) */
+          centerText?: CenterTextConfig
       } & Never<XYAxisMax> &
           Never<ScaleTickFormatCallbacks>)
     | ({
           type: 'line'
           datasets: SimpleDatasetForLineAndArea[]
           onChartClick?: never
+          centerText?: never
       } & XYAxisMax &
           ScaleTickFormatCallbacks)
     | ({
@@ -100,12 +112,14 @@ export type TypeAndDatasetsType =
           datasets: SimpleDatasetForLineAndArea
           /* onChartClick is not applicable for area charts */
           onChartClick?: never
+          centerText?: never
       } & XYAxisMax &
           ScaleTickFormatCallbacks)
     | ({
-          type: Exclude<ChartType, 'pie' | 'line' | 'area'>
+          type: Exclude<ChartType, 'pie' | 'semiPie' | 'line' | 'area'>
           datasets: SimpleDataset[]
           onChartClick?: OnChartClickHandler
+          centerText?: never
       } & XYAxisMax &
           ScaleTickFormatCallbacks)
 
@@ -137,7 +151,7 @@ export type TransformDatasetProps = {
     appTheme: AppThemeType
 } & (
     | {
-          type: 'pie'
+          type: 'pie' | 'semiPie'
           dataset: SimpleDatasetForPie
       }
     | {
@@ -145,7 +159,7 @@ export type TransformDatasetProps = {
           dataset: SimpleDatasetForLineAndArea
       }
     | {
-          type: Exclude<ChartType, 'pie' | 'line' | 'area'>
+          type: Exclude<ChartType, 'pie' | 'semiPie' | 'line' | 'area'>
           dataset: SimpleDataset
       }
 )
@@ -167,4 +181,12 @@ declare module 'chart.js' {
     interface TooltipPositionerMap {
         barElementCenterPositioner: TooltipPositionerFunction<'bar'>
     }
+}
+
+export interface HTMLLegendProps {
+    backgroundColor: string
+    label: string
+    onClick: () => void
+    strikeThrough: boolean
+    variant: 'line' | 'square'
 }
