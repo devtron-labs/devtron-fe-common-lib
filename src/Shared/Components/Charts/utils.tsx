@@ -333,6 +333,7 @@ export const getDefaultOptions = ({
         case 'semiPie':
             return {
                 ...commonPieConfig,
+                cutout: '70%',
                 rotation: -90,
                 circumference: 180,
             } as ChartOptions<'doughnut'>
