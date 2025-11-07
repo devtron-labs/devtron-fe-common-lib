@@ -22,14 +22,13 @@ import { noop, useDebounce } from '@Common/Helper'
 import { DEVTRON_BASE_MAIN_ID } from '@Shared/constants'
 import { useTheme } from '@Shared/Providers'
 
-import { drawReferenceLine } from './plugins'
+import { drawCenterText, drawReferenceLine, htmlLegendPlugin } from './plugins'
 import { ChartProps, GetDefaultOptionsParams, TypeAndDatasetsType } from './types'
 import {
     buildChartTooltipFromContext,
     distanceBetweenPoints,
     getChartJSType,
     getDefaultOptions,
-    getLegendsLabelConfig,
     transformDataForChart,
 } from './utils'
 
@@ -90,7 +89,7 @@ ChartJSTooltip.positioners.barElementCenterPositioner = (items, eventPosition) =
 
 /**
  * A versatile Chart component that renders different types of charts using Chart.js.
- * Supports area charts, pie charts, stacked bar charts (vertical/horizontal), and line charts.
+ * Supports area charts, pie charts, semi-pie charts, stacked bar charts (vertical/horizontal), and line charts.
  *
  * The component automatically adapts to theme changes and provides consistent styling
  * across all chart types. Colors are provided by the user through the CHART_COLORS constant
@@ -118,7 +117,24 @@ ChartJSTooltip.positioners.barElementCenterPositioner = (items, eventPosition) =
  *   datasets={{
  *     datasetName: 'Adoption Rate (%)',
  *     yAxisValues: [45.2, 28.7, 35.4],
- *     backgroundColor: ['SkyBlue300', 'AquaTeal400', 'LavenderPurple300']
+ *     colors: ['SkyBlue300', 'AquaTeal400', 'LavenderPurple300']
+ *   }}
+ * />
+ *
+ * [Semi-Pie Chart Example with Center Text]
+ * <Chart
+ *   id="performance-metrics"
+ *   type="semiPie"
+ *   xAxisLabels={['Good', 'Average', 'Poor']}
+ *   datasets={{
+ *     datasetName: 'Performance Score (%)',
+ *     yAxisValues: [65, 25, 10],
+ *     colors: ['LimeGreen500', 'GoldenYellow400', 'CoralRed400']
+ *   }}
+ *   centerText={{
+ *     text: '85%',
+ *     fontSize: 24,
+ *     fontWeight: '600'
  *   }}
  * />
  *
@@ -155,9 +171,9 @@ ChartJSTooltip.positioners.barElementCenterPositioner = (items, eventPosition) =
  * ```
  *
  * @param id - Unique identifier for the chart canvas element
- * @param type - Chart type: 'area', 'pie', 'stackedBar', 'stackedBarHorizontal', or 'line'
- * @param xAxisLabels - Array of labels for the x-axis (or categories for pie charts)
- * @param datasets - Chart data: array of datasets for most charts, single dataset object for pie charts
+ * @param type - Chart type: 'area', 'pie', 'semiPie', 'stackedBar', 'stackedBarHorizontal', or 'line'
+ * @param xAxisLabels - Array of labels for the x-axis (or categories for pie/semi-pie charts)
+ * @param datasets - Chart data: array of datasets for most charts, single dataset object for pie/semi-pie charts
  * @param xAxisConfig
  * @param yAxisConfig
  *
@@ -185,7 +201,9 @@ ChartJSTooltip.positioners.barElementCenterPositioner = (items, eventPosition) =
  * @notes
  * - Chart automatically re-renders when theme changes (light/dark mode)
  * - Line charts are rendered as non-stacked and non-filled by default
- * - Pie charts expect a single dataset object instead of an array
+ * - Pie and semi-pie charts expect a single dataset object instead of an array
+ * - Semi-pie charts render as half-circles, ideal for gauges or progress indicators
+ * - Center text can be added to pie and semi-pie charts using the centerText prop
  * - Colors should reference CHART_COLORS tokens for consistency
  * - Component destroys and recreates Chart.js instance on prop changes for optimal performance
  */
@@ -203,6 +221,7 @@ const Chart = (props: ChartProps) => {
         xScaleTitle,
         yAxisMax,
         yScaleTitle,
+        centerText,
         xAxisConfig,
         yAxisConfig,
     } = props
@@ -211,6 +230,7 @@ const Chart = (props: ChartProps) => {
     const canvasRef = useRef<HTMLCanvasElement>(null)
     const chartRef = useRef<ChartJS | null>(null)
     const tooltipRef = useRef<HTMLSpanElement>(null)
+    const legendRef = useRef<HTMLDivElement>(null)
 
     const [tooltipVisible, setTooltipVisible] = useState(false)
     const [tooltipContent, setTooltipContent] = useState<ReactNode>(null)
@@ -260,17 +280,6 @@ const Chart = (props: ChartProps) => {
             return noop
         }
 
-        if (type === 'pie') {
-            /**
-             * The doughnut chart overrides the default legend label configuration.
-             * Therefore need to set the custom legend label configuration.
-             */
-            ChartJS.overrides.doughnut.plugins.legend.labels = {
-                ...ChartJS.overrides.doughnut.plugins.legend.labels,
-                ...getLegendsLabelConfig('pie', appTheme),
-            }
-        }
-
         // Get Chart.js type and transform data
         const chartJSType = getChartJSType(type)
         const transformedData = {
@@ -292,6 +301,8 @@ const Chart = (props: ChartProps) => {
             },
             plugins: [
                 ...(referenceLines ?? []).map((rl, idx) => drawReferenceLine(rl, `reference-line-${idx}`, appTheme)),
+                ...(centerText && (type === 'pie' || type === 'semiPie') ? [drawCenterText(centerText, appTheme)] : []),
+                ...(!hideAxis ? [htmlLegendPlugin(id, legendRef, type)] : []),
             ],
         })
 
@@ -309,13 +320,25 @@ const Chart = (props: ChartProps) => {
         xScaleTitle,
         yAxisMax,
         yScaleTitle,
+        centerText,
         xAxisConfig,
         yAxisConfig,
     ])
 
     return (
-        <div className="h-100 w-100 dc__position-rel">
-            <canvas id={id} ref={canvasRef} />
+        <div
+            className={`h-100 w-100 dc__position-rel dc__gap-16 dc__overflow-hidden flex ${type === 'pie' ? 'left ' : 'column top'}`}
+        >
+            <div className={`flex ${type === 'pie' ? 'w-150 h-150' : 'w-100 flex-grow-1'} dc__overflow-hidden`}>
+                <canvas id={id} ref={canvasRef} />
+            </div>
+
+            {!hideAxis && (
+                <div
+                    className={`flex ${type === 'pie' ? 'left column flex-grow-1' : ''} dc__gap-12 dc__no-shrink`}
+                    ref={legendRef}
+                />
+            )}
 
             <Tippy
                 content={tooltipContent}

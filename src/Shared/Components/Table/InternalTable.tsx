@@ -19,7 +19,7 @@ import { Fragment, useEffect, useMemo, useRef } from 'react'
 import { useQuery } from '@Common/API'
 import { GenericEmptyState, GenericFilterEmptyState } from '@Common/EmptyState'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
-import { noop } from '@Common/Helper'
+import { noop, useAsync } from '@Common/Helper'
 import { UseRegisterShortcutProvider } from '@Common/Hooks'
 
 import { NO_ROWS_OR_GET_ROWS_ERROR } from './constants'
@@ -117,36 +117,32 @@ const InternalTable = <
         handleClearBulkSelection()
     }, [rows])
 
+    const handleFiltering = async () => {
+        let totalRows = rows.length
+        const filteredRows = await getFilteringPromise({
+            searchSortTimeoutRef,
+            callback: () => {
+                const { rows: filteredAndSortedRows, totalRows: total } = searchAndSortRows(
+                    rows,
+                    filter,
+                    filterData,
+                    visibleColumns.find(({ field }) => field === sortBy)?.comparator,
+                )
+
+                totalRows = total
+
+                return filteredAndSortedRows
+            },
+        })
+        return { filteredRows, totalRows }
+    }
+
     // useAsync hook for 'rows' scenario
-    const {
-        isFetching: _areRowsLoading,
-        data: rowsResult,
-        error: rowsError,
-        refetch: reloadRows,
-    } = useQuery<unknown, RowsResultType<RowData>, unknown[], false>({
-        queryFn: async () => {
-            let totalRows = rows.length
-            const filteredRows = await getFilteringPromise({
-                searchSortTimeoutRef,
-                callback: () => {
-                    const { rows: filteredAndSortedRows, totalRows: total } = searchAndSortRows(
-                        rows,
-                        filter,
-                        filterData,
-                        visibleColumns.find(({ field }) => field === sortBy)?.comparator,
-                    )
-
-                    totalRows = total
-
-                    return filteredAndSortedRows
-                },
-            })
-            return { filteredRows, totalRows }
-        },
-        // eslint-disable-next-line @tanstack/query/exhaustive-deps
-        queryKey: [searchKey, sortBy, sortOrder, rows, JSON.stringify(otherFilters), visibleColumns],
-        enabled: !!rows,
-    })
+    const [_areRowsLoading, rowsResult, rowsError, reloadRows] = useAsync(
+        handleFiltering,
+        [searchKey, sortBy, sortOrder, rows, JSON.stringify(otherFilters), visibleColumns],
+        !!rows,
+    )
 
     // useAsync hook for 'getRows' scenario
     const {

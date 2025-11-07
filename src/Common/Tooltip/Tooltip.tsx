@@ -16,6 +16,8 @@
 
 import { cloneElement } from 'react'
 import TippyJS from '@tippyjs/react'
+// eslint-disable-next-line import/no-extraneous-dependencies
+import { followCursor } from 'tippy.js'
 
 import { useIsTextTruncated } from '@Common/Hooks'
 
@@ -31,6 +33,7 @@ const Tooltip = ({
     showOnTruncate = alwaysShowTippyOnHover === undefined && shortcutKeyCombo === undefined,
     wordBreak = true,
     children: child,
+    plugins = [],
     ...rest
 }: TooltipProps) => {
     const { isTextTruncated, handleMouseEnterEvent } = useIsTextTruncated()
@@ -48,6 +51,7 @@ const Tooltip = ({
             {...rest}
             {...(shortcutKeyCombo ? { content: <ShortcutKeyComboTooltipContent {...shortcutKeyCombo} /> } : {})}
             className={`${shortcutKeyCombo ? 'shortcut-keys__tippy' : 'default-tt'} ${wordBreak ? 'dc__word-break' : ''} dc__mxw-200 ${rest.className ?? ''}`}
+            plugins={[...plugins, followCursor]}
         >
             {cloneElement(child, { ...child.props, onMouseEnter: handleMouseEnterEvent })}
         </TippyJS>

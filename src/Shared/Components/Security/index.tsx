@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+export { SEVERITY_LABEL_MAP } from './constants'
 export * from './SecurityDetailsCards'
 export * from './SecurityModal'
 export * from './utils'
