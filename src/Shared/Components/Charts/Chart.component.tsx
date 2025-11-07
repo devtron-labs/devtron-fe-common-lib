@@ -171,9 +171,9 @@ ChartJSTooltip.positioners.barElementCenterPositioner = (items, eventPosition) =
  * ```
  *
  * @param id - Unique identifier for the chart canvas element
- * @param type - Chart type: 'area', 'pie', 'stackedBar', 'stackedBarHorizontal', or 'line'
- * @param xAxisLabels - Array of labels for the x-axis (or categories for pie charts)
- * @param datasets - Chart data: array of datasets for most charts, single dataset object for pie charts
+ * @param type - Chart type: 'area', 'pie', 'semiPie', 'stackedBar', 'stackedBarHorizontal', or 'line'
+ * @param xAxisLabels - Array of labels for the x-axis (or categories for pie/semi-pie charts)
+ * @param datasets - Chart data: array of datasets for most charts, single dataset object for pie/semi-pie charts
  * @param xAxisConfig
  * @param yAxisConfig
  *
@@ -221,6 +221,7 @@ const Chart = (props: ChartProps) => {
         xScaleTitle,
         yAxisMax,
         yScaleTitle,
+        centerText,
         xAxisConfig,
         yAxisConfig,
     } = props
@@ -319,6 +320,7 @@ const Chart = (props: ChartProps) => {
         xScaleTitle,
         yAxisMax,
         yScaleTitle,
+        centerText,
         xAxisConfig,
         yAxisConfig,
     ])
