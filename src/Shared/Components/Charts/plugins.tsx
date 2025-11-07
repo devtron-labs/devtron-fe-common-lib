@@ -88,7 +88,7 @@ export const drawCenterText = (config: CenterTextConfig, appTheme: AppThemeType)
         const centerX = (chartArea.left + chartArea.right) / 2
 
         ctx.save()
-        ctx.font = `${config.fontWeight || '600'} ${config.fontSize || 16}px ${config.fontFamily || "'IBM Plex Sans', 'Open Sans', 'Roboto'"}`
+        ctx.font = `${config.fontWeight || '600'} ${config.fontSize || 24}px ${config.fontFamily || "'IBM Plex Sans', 'Open Sans', 'Roboto'"}`
         ctx.fillStyle = config.color || CHART_AXIS_LABELS_COLOR[appTheme]
         ctx.textAlign = 'center'
         ctx.textBaseline = 'middle'
