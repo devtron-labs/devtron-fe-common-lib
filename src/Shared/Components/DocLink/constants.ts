@@ -117,7 +117,7 @@ export const DOCUMENTATION = {
     GLOBAL_CONFIG_PULL_IMAGE_DIGEST: 'global-configurations/pull-image-digest',
     GLOBAL_CONFIG_TAGS: 'getting-started/global-configurations/tags-policy',
     // TODO: Replace with correct Url
-    SAMPLE_RUNBOOK_LINK: 'https://github.com/devtron-labs/athena-be/wiki/Runbook-Actions',
+    SAMPLE_RUNBOOK_LINK: 'https://docs.devtron.ai/user-guide/ai-recommendations/runbook#add-runbook-spec',
     // Software Release Management
     SOFTWARE_DISTRIBUTION_HUB: 'usage/software-distribution-hub',
     RELEASE_TRACKS: 'usage/software-distribution-hub/release-hub#creating-release-tracks-and-versions',
