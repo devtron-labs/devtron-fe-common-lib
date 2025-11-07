@@ -17,7 +17,13 @@
 import { AppConfigProps, GetTemplateAPIRouteType } from '@Pages/index'
 
 import { get, getUrlWithSearchParams, post, ROUTES } from '../../Common'
-import { ClusterMinDTO, ClusterType, getTemplateAPIRoute, stringComparatorBySortOrder } from '..'
+import {
+    AllClusterListMinItemDTO,
+    ClusterMinDTO,
+    ClusterType,
+    getTemplateAPIRoute,
+    stringComparatorBySortOrder,
+} from '..'
 import { EnvironmentDataValuesDTO, GetPolicyApiUrlProps, GetResourceApiUrlProps } from './types'
 
 export const getResourceApiUrl = <T>({ baseUrl, kind, version, suffix, queryParams }: GetResourceApiUrlProps<T>) =>
@@ -56,4 +62,12 @@ export const getClusterOptions = async (signal?: AbortSignal): Promise<ClusterTy
             isProd: isProd ?? false,
         }))
         .sort((a, b) => stringComparatorBySortOrder(a.name, b.name))
+}
+
+export const getAllClusterListMin = async (signal: AbortSignal) => {
+    const response = await get<AllClusterListMinItemDTO[]>(ROUTES.CLUSTER_MIN, {
+        signal,
+    })
+
+    return response
 }
