@@ -124,4 +124,10 @@ export const DOCUMENTATION = {
     RELEASE_HUB: 'usage/software-distribution-hub/release-hub',
     TENANTS: 'usage/software-distribution-hub/tenants#adding-installation',
     TENANTS_INSTALLATION: 'usage/software-distribution-hub/tenants',
+
+    // Infrastructure Management
+    AUTOSCALER_DETECTION: 'user-guide/infra-management/infrastructure-overview#troubleshooting-autoscaler-detection',
+
+    // Cost Visibility
+    COST_CALCULATION: 'user-guide/finops/overview-cost-visibility#how-is-the-cost-calculated',
 } as const
