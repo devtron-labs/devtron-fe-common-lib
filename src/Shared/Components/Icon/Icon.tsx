@@ -31,6 +31,7 @@ import { ReactComponent as ICBackupAndSchedule } from '@IconsV2/ic-backup-and-sc
 import { ReactComponent as ICBackupColor } from '@IconsV2/ic-backup-color.svg'
 import { ReactComponent as ICBackupLocation } from '@IconsV2/ic-backup-location.svg'
 import { ReactComponent as ICBackupScheduleColor } from '@IconsV2/ic-backup-schedule-color.svg'
+import { ReactComponent as ICBell } from '@IconsV2/ic-bell.svg'
 import { ReactComponent as ICBgBuild } from '@IconsV2/ic-bg-build.svg'
 import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
 import { ReactComponent as ICBgCpu } from '@IconsV2/ic-bg-cpu.svg'
@@ -358,6 +359,7 @@ export const iconMap = {
     'ic-backup-color': ICBackupColor,
     'ic-backup-location': ICBackupLocation,
     'ic-backup-schedule-color': ICBackupScheduleColor,
+    'ic-bell': ICBell,
     'ic-bg-build': ICBgBuild,
     'ic-bg-cluster': ICBgCluster,
     'ic-bg-cpu': ICBgCpu,

@@ -29,6 +29,7 @@ import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import { ImageWithFallback } from '../ImageWithFallback'
 import { InfoIconTippy } from '../InfoIconTippy'
+import { NOTIFICATIONS_TEMP_WINDOW_TITLE } from './constants'
 import { HelpButton } from './HelpButton'
 import { IframePromoButton } from './IframePromoButton'
 import { ProfileMenu } from './ProfileMenu'
@@ -51,8 +52,16 @@ const PageHeader = ({
     tippyProps,
     closeIcon,
 }: PageHeaderType) => {
-    const { setLoginCount, setShowGettingStartedCard, setSidePanelConfig, sidePanelConfig, tempAppWindowConfig } =
-        useMainContext()
+    const {
+        setLoginCount,
+        setShowGettingStartedCard,
+        setSidePanelConfig,
+        sidePanelConfig,
+        tempAppWindowConfig,
+        AIRecommendations,
+        setTempAppWindowConfig,
+        isSuperAdmin,
+    } = useMainContext()
     const { showSwitchThemeLocationTippy, handleShowSwitchThemeLocationTippyChange } = useTheme()
 
     const {
@@ -137,6 +146,19 @@ const PageHeader = ({
         setSidePanelConfig((prev) => ({ ...prev, state: SidePanelTab.ASK_DEVTRON }))
     }
 
+    const handleNotificationsButtonClick = () => {
+        handleAnalyticsEvent({
+            category: 'AI',
+            action: `NOTIFICATIONS_AI_RECOMMENDATIONS`,
+        })
+
+        setTempAppWindowConfig({
+            open: true,
+            title: NOTIFICATIONS_TEMP_WINDOW_TITLE,
+            component: <AIRecommendations />,
+        })
+    }
+
     const renderLogoutHelpSection = () => (
         <>
             {window._env_?.FEATURE_ASK_DEVTRON_EXPERT &&
@@ -153,6 +175,20 @@ const PageHeader = ({
                         </button>
                     </Tooltip>
                 )}
+
+            {AIRecommendations && isSuperAdmin && tempAppWindowConfig.title !== NOTIFICATIONS_TEMP_WINDOW_TITLE && (
+                <Button
+                    dataTestId="recommendations-notifications-button"
+                    style={ButtonStyleType.neutral}
+                    variant={ButtonVariantType.borderLess}
+                    icon={<Icon name="ic-bell" color={null} />}
+                    ariaLabel="Open AI Recommendations Notifications"
+                    size={ComponentSizeType.medium}
+                    onClick={handleNotificationsButtonClick}
+                    showAriaLabelInTippy={false}
+                />
+            )}
+
             <HelpButton
                 serverInfo={currentServerInfo.serverInfo}
                 fetchingServerInfo={currentServerInfo.fetchingServerInfo}
