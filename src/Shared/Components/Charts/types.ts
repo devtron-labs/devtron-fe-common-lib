@@ -59,17 +59,6 @@ export interface CenterTextConfig {
     fontFamily?: string
 }
 
-export interface AxisConfig {
-    title?: string
-    unit?: string
-    unitPosition?: 'prefix' | 'suffix'
-    labelFormatter?: (value: number | string, index: number) => string | string[] | number | number[]
-    hide?: boolean
-    max?: number
-    min?: number
-    stepSize?: number
-}
-
 type XYAxisMax = {
     xAxisMax?: number
     yAxisMax?: number
@@ -77,8 +66,6 @@ type XYAxisMax = {
      * Optional reference lines to draw across the chart
      */
     referenceLines?: ReferenceLineConfigType[]
-    xAxisConfig?: AxisConfig
-    yAxisConfig?: AxisConfig
 }
 
 type OnChartClickHandler = (datasetName: string, value: number) => void
