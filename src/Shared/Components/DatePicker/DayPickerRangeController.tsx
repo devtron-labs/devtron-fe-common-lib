@@ -53,15 +53,15 @@ export const DatePickerRangeController = ({
         <div
             className="flex left top"
             style={{
-                ...styles.PresetDateRangePicker_panel,
+                ...styles.PresetDateRangePickerPanel,
                 ...DayPickerCalendarInfoHorizontal,
                 ...{
-                    PresetDateRangePicker_panel: {
+                    PresetDateRangePickerPanel: {
                         padding: '0px',
                         width: '200px',
                         height: '100%',
                     },
-                    ...styles.DayPicker__horizontal,
+                    ...styles.DayPickerHorizontal,
                 },
             }}
         >
@@ -103,12 +103,12 @@ export const DatePickerRangeController = ({
                         startDate.isSame(calendar.startDate, 'day') &&
                         endDate.isSame(calendar.endDate, 'day')
                     let buttonStyles = {
-                        ...styles.PresetDateRangePicker_button,
+                        ...styles.PresetDateRangePickerButton,
                     }
                     if (isSelected) {
                         buttonStyles = {
                             ...buttonStyles,
-                            ...styles.PresetDateRangePicker_button__selected,
+                            ...styles.PresetDateRangePickerButtonSelected,
                         }
                     }
                     return (
