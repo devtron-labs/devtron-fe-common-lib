@@ -89,7 +89,6 @@ import { ReactComponent as ICClusterIsolated } from '@IconsV2/ic-cluster-isolate
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICCoins } from '@IconsV2/ic-coins.svg'
 import { ReactComponent as ICCoinsColorAnimated } from '@IconsV2/ic-coins-color-animated.svg'
-import { ReactComponent as ICConfirm } from '@IconsV2/ic-confirm.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICContainerRegistry } from '@IconsV2/ic-container-registry.svg'
 import { ReactComponent as ICCookr } from '@IconsV2/ic-cookr.svg'
@@ -132,7 +131,6 @@ import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICExpandRightSm } from '@IconsV2/ic-expand-right-sm.svg'
 import { ReactComponent as ICExpandSm } from '@IconsV2/ic-expand-sm.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
-import { ReactComponent as ICFailureColor } from '@IconsV2/ic-failure-color.svg'
 import { ReactComponent as ICFastForward } from '@IconsV2/ic-fast-forward.svg'
 import { ReactComponent as ICFile } from '@IconsV2/ic-file.svg'
 import { ReactComponent as ICFileCode } from '@IconsV2/ic-file-code.svg'
@@ -414,7 +412,6 @@ export const iconMap = {
     'ic-code': ICCode,
     'ic-coins-color-animated': ICCoinsColorAnimated,
     'ic-coins': ICCoins,
-    'ic-confirm': ICConfirm,
     'ic-container-registry': ICContainerRegistry,
     'ic-container': ICContainer,
     'ic-cookr': ICCookr,
@@ -456,7 +453,6 @@ export const iconMap = {
     'ic-error': ICError,
     'ic-expand-right-sm': ICExpandRightSm,
     'ic-expand-sm': ICExpandSm,
-    'ic-failure-color': ICFailureColor,
     'ic-failure': ICFailure,
     'ic-fast-forward': ICFastForward,
     'ic-file-code': ICFileCode,
