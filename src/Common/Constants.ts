@@ -25,7 +25,7 @@ export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
 
 export const DOCUMENTATION_HOME_PAGE = 'https://docs.devtron.ai'
 export const DEVTRON_HOME_PAGE = 'https://devtron.ai/'
-export const DOCUMENTATION_VERSION = '/devtron/v1.7'
+export const DOCUMENTATION_VERSION = '/devtron/v2.0'
 export const DISCORD_LINK = 'https://discord.devtron.ai/'
 export const DEFAULT_JSON_SCHEMA_URI = 'https://json-schema.org/draft/2020-12/schema'
 export const LICENSE_DASHBOARD_HOME_PAGE = 'https://license.devtron.ai/dashboard'
