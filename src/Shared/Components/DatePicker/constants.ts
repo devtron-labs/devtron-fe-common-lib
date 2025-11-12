@@ -149,12 +149,12 @@ export const DATE_PICKER_IDS = {
 }
 
 export const styles = {
-    PresetDateRangePickerPanel: {
+    PresetDateRangePicker_panel: {
         padding: '0px',
         width: '200px',
         height: '100%',
     },
-    PresetDateRangePickerButton: {
+    PresetDateRangePicker_button: {
         width: '188px',
         background: 'var(--transparent)',
         border: 'none',
@@ -169,10 +169,10 @@ export const styles = {
             outline: 0,
         },
     },
-    DayPickerHorizontal: {
+    DayPicker__horizontal: {
         borderRadius: '4px',
     },
-    PresetDateRangePickerButtonSelected: {
+    PresetDateRangePicker_button__selected: {
         color: 'var(--B500)',
         fontWeight: 600,
         background: 'var(--B100)',
