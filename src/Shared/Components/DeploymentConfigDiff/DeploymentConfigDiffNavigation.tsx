@@ -14,14 +14,16 @@
  * limitations under the License.
  */
 
-import { ChangeEvent, useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import Tippy from '@tippyjs/react'
 
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { ReactComponent as ICError } from '@Icons/ic-error.svg'
 import { ReactComponent as ICInfoOutlined } from '@Icons/ic-info-outlined.svg'
-import { StyledRadioGroup } from '@Common/index'
+import { SegmentedControl } from '@Common/index'
+import { SegmentType } from '@Common/SegmentedControl/types'
+import { ComponentSizeType } from '@Shared/constants'
 
 import { CollapsibleList, CollapsibleListConfig } from '../CollapsibleList'
 import { diffStateIconMap, diffStateTooltipTextMap } from './DeploymentConfigDiff.constants'
@@ -87,11 +89,8 @@ export const DeploymentConfigDiffNavigation = ({
     }
 
     /** Handles tab click. */
-    const onTabClick = (e: ChangeEvent<HTMLInputElement>) => {
-        const { value } = e.target
-        if (tabConfig?.activeTab !== value) {
-            tabConfig?.onClick?.(value)
-        }
+    const onTabClick = (segment: SegmentType) => {
+        tabConfig?.onClick?.(segment.value as string)
     }
 
     // RENDERERS
@@ -113,19 +112,13 @@ export const DeploymentConfigDiffNavigation = ({
 
         return (
             <div className="p-12">
-                <StyledRadioGroup
-                    name="deployment-config-diff-tab-list"
-                    initialTab={activeTab}
+                <SegmentedControl
+                    segments={tabs.map((tab) => ({ label: tab, value: tab }))}
+                    value={activeTab}
                     onChange={onTabClick}
-                    disabled={isLoading}
-                    className="gui-yaml-switch deployment-config-diff__tab-list"
-                >
-                    {tabs.map((tab) => (
-                        <StyledRadioGroup.Radio key={tab} value={tab} className="fs-12 lh-20 cn-7 fw-6">
-                            {tab}
-                        </StyledRadioGroup.Radio>
-                    ))}
-                </StyledRadioGroup>
+                    name="deployment-config-diff-tab-list"
+                    size={ComponentSizeType.xs}
+                />
             </div>
         )
     }
