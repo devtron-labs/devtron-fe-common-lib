@@ -14,7 +14,9 @@
  * limitations under the License.
  */
 
-const selectedStyles = {
+import moment from 'moment'
+
+export const selectedStyles = {
     background: 'var(--B100)',
     color: 'var(--B500)',
 
@@ -24,7 +26,7 @@ const selectedStyles = {
     },
 }
 
-const selectedSpanStyles = {
+export const selectedSpanStyles = {
     background: 'var(--B100)',
     color: 'var(--B500)',
     hover: {
@@ -33,7 +35,7 @@ const selectedSpanStyles = {
     },
 }
 
-const hoveredSpanStyles = {
+export const hoveredSpanStyles = {
     background: 'var(--B100)',
     color: 'var(--B500)',
 }
@@ -144,4 +146,75 @@ export const DATE_PICKER_IDS = {
     DATE: 'date_picker',
     MONTH: 'month_picker',
     TIME: 'time_picker',
+}
+
+export const styles = {
+    PresetDateRangePicker_panel: {
+        padding: '0px',
+        width: '200px',
+        height: '100%',
+    },
+    PresetDateRangePicker_button: {
+        width: '188px',
+        background: 'var(--transparent)',
+        border: 'none',
+        color: 'var(--N900)',
+        padding: '8px',
+        font: 'inherit',
+        fontWeight: 500,
+        lineHeight: 'normal',
+        overflow: 'visible',
+        cursor: 'pointer',
+        ':active': {
+            outline: 0,
+        },
+    },
+    DayPicker__horizontal: {
+        borderRadius: '4px',
+    },
+    PresetDateRangePicker_button__selected: {
+        color: 'var(--B500)',
+        fontWeight: 600,
+        background: 'var(--B100)',
+        outline: 'none',
+    },
+}
+
+export const DayPickerCalendarInfoHorizontal = {
+    width: '532px',
+    boxShadow: 'none',
+}
+
+export const DayPickerRangeControllerPresets = [
+    { text: 'Last 5 minutes', endDate: moment(), startDate: moment().subtract(5, 'minutes'), endStr: 'now-5m' },
+    { text: 'Last 30 minutes', endDate: moment(), startDate: moment().subtract(30, 'minutes'), endStr: 'now-30m' },
+    { text: 'Last 1 hour', endDate: moment(), startDate: moment().subtract(1, 'hours'), endStr: 'now-1h' },
+    { text: 'Last 24 hours', endDate: moment(), startDate: moment().subtract(24, 'hours'), endStr: 'now-24h' },
+    { text: 'Last 7 days', endDate: moment(), startDate: moment().subtract(7, 'days'), endStr: 'now-7d' },
+    { text: 'Last 1 month', endDate: moment(), startDate: moment().subtract(1, 'months'), endStr: 'now-1M' },
+    { text: 'Last 6 months', endDate: moment(), startDate: moment().subtract(6, 'months'), endStr: 'now-6M' },
+]
+
+/**
+ * Returns a string representing the range of dates
+ * given by the start and end dates. If the end date
+ * is 'now' and the start date includes 'now',
+ * it will return the corresponding range from the
+ * DayPickerRangeControllerPresets array.
+ * @param startDateStr - the start date string
+ * @param endDateStr - the end date string
+ * @returns - a string representing the range of dates
+ */
+
+export function getCalendarValue(startDateStr: string, endDateStr: string): string {
+    let str: string = `${startDateStr} - ${endDateStr}`
+    if (endDateStr === 'now' && startDateStr.includes('now')) {
+        const range = DayPickerRangeControllerPresets.find((d) => d.endStr === startDateStr)
+        if (range) {
+            str = range.text
+        } else {
+            str = `${startDateStr} - ${endDateStr}`
+        }
+    }
+    return str
 }
