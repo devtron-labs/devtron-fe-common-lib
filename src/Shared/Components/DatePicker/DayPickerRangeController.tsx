@@ -16,7 +16,7 @@
 
 import { useState } from 'react'
 import { DayPickerRangeController, isInclusivelyBeforeDay } from 'react-dates'
-import CustomizableCalendarDay from 'react-dates/esm/components/CustomizableCalendarDay.js'
+import CustomizableCalendarDay from 'react-dates/esm/components/CustomizableCalendarDay'
 import moment, { Moment } from 'moment'
 
 import { ComponentSizeType } from '@Shared/constants'
