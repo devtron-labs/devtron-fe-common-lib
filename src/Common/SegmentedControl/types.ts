@@ -74,7 +74,10 @@ export type SegmentedControlProps = {
      * Please make sure this is unique
      */
     name: string
-    size?: Extract<ComponentSizeType, ComponentSizeType.xs | ComponentSizeType.small | ComponentSizeType.medium>
+    size?: Extract<
+        ComponentSizeType,
+        ComponentSizeType.xs | ComponentSizeType.small | ComponentSizeType.medium | ComponentSizeType.large
+    >
     fullWidth?: boolean
     disabled?: boolean
 } & (
