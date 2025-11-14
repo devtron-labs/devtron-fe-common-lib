@@ -17,8 +17,10 @@
 /* eslint-disable no-param-reassign */
 import { ReactElement, useEffect, useRef, useState } from 'react'
 import { PromptProps } from 'react-router-dom'
+import { parse as parseCronExpression } from '@datasert/cronjs-parser'
 import { StrictRJSFSchema } from '@rjsf/utils'
 import Tippy from '@tippyjs/react'
+import cronstrue from 'cronstrue'
 import { animate } from 'framer-motion'
 import moment from 'moment'
 import { nanoid } from 'nanoid'
@@ -751,4 +753,17 @@ export const formatNumberToCurrency = (value: number, currency: string, minimumF
     } catch {
         return value.toFixed(precision)
     }
+}
+
+/**
+ * Returns the human readable explanation of the expression
+ * NOTE: expectation is that the expression is valid
+ *
+ * @throws Error - if given expression is incorrect
+ * @param expression
+ * @returns string - helper text explaining the expression in a human readable format
+ */
+export const explainCronExpression = (expression: string): string => {
+    parseCronExpression(expression, { hasSeconds: expression.trim().split(' ').length > 5 })
+    return cronstrue.toString(expression)
 }
