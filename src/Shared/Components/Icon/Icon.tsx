@@ -30,15 +30,21 @@ import { ReactComponent as ICBackupAndSchedule } from '@IconsV2/ic-backup-and-sc
 import { ReactComponent as ICBackupColor } from '@IconsV2/ic-backup-color.svg'
 import { ReactComponent as ICBackupLocation } from '@IconsV2/ic-backup-location.svg'
 import { ReactComponent as ICBackupScheduleColor } from '@IconsV2/ic-backup-schedule-color.svg'
+import { ReactComponent as ICBgBackupSchedule } from '@IconsV2/ic-bg-backup-schedule.svg'
+import { ReactComponent as ICBgBackups } from '@IconsV2/ic-bg-backups.svg'
 import { ReactComponent as ICBgBuild } from '@IconsV2/ic-bg-build.svg'
 import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
 import { ReactComponent as ICBgCpu } from '@IconsV2/ic-bg-cpu.svg'
 import { ReactComponent as ICBgDeploy } from '@IconsV2/ic-bg-deploy.svg'
 import { ReactComponent as ICBgEnvironment } from '@IconsV2/ic-bg-environment.svg'
 import { ReactComponent as ICBgMemory } from '@IconsV2/ic-bg-memory.svg'
+import { ReactComponent as ICBgPauseSchedule } from '@IconsV2/ic-bg-pause-schedule.svg'
 import { ReactComponent as ICBgProductionPipelines } from '@IconsV2/ic-bg-production-pipelines.svg'
 import { ReactComponent as ICBgProject } from '@IconsV2/ic-bg-project.svg'
+import { ReactComponent as ICBgRansomwareVulnerableCluster } from '@IconsV2/ic-bg-ransomware-vulnerable-cluster.svg'
+import { ReactComponent as ICBgRestore } from '@IconsV2/ic-bg-restore.svg'
 import { ReactComponent as ICBgScan } from '@IconsV2/ic-bg-scan.svg'
+import { ReactComponent as ICBgStorageLocations } from '@IconsV2/ic-bg-storage-locations.svg'
 import { ReactComponent as ICBgWebhook } from '@IconsV2/ic-bg-webhook.svg'
 import { ReactComponent as ICBharatpe } from '@IconsV2/ic-bharatpe.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
@@ -335,15 +341,21 @@ export const iconMap = {
     'ic-backup-color': ICBackupColor,
     'ic-backup-location': ICBackupLocation,
     'ic-backup-schedule-color': ICBackupScheduleColor,
+    'ic-bg-backup-schedule': ICBgBackupSchedule,
+    'ic-bg-backups': ICBgBackups,
     'ic-bg-build': ICBgBuild,
     'ic-bg-cluster': ICBgCluster,
     'ic-bg-cpu': ICBgCpu,
     'ic-bg-deploy': ICBgDeploy,
     'ic-bg-environment': ICBgEnvironment,
     'ic-bg-memory': ICBgMemory,
+    'ic-bg-pause-schedule': ICBgPauseSchedule,
     'ic-bg-production-pipelines': ICBgProductionPipelines,
     'ic-bg-project': ICBgProject,
+    'ic-bg-ransomware-vulnerable-cluster': ICBgRansomwareVulnerableCluster,
+    'ic-bg-restore': ICBgRestore,
     'ic-bg-scan': ICBgScan,
+    'ic-bg-storage-locations': ICBgStorageLocations,
     'ic-bg-webhook': ICBgWebhook,
     'ic-bharatpe': ICBharatpe,
     'ic-bitbucket': ICBitbucket,
