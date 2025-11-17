@@ -17,5 +17,6 @@
 export { SEVERITY_LABEL_MAP } from './constants'
 export * from './SecurityDetailsCards'
 export * from './SecurityModal'
+export { default as SeverityChip } from './SeverityChip'
 export * from './utils'
 export * from './Vulnerabilities'
