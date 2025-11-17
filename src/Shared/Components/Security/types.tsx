@@ -42,3 +42,9 @@ export interface GetSidebarDataParamsType extends Record<ScanCategoriesWithLicen
     selectedId: string
     scanResult: ScanResultDTO
 }
+
+export enum ScanTypeOptions {
+    SCANNED = 'scanned',
+    NOT_SCANNED = 'not-scanned',
+    ALL = 'all',
+}
