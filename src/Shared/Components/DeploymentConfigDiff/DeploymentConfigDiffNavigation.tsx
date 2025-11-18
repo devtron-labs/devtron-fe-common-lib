@@ -90,7 +90,7 @@ export const DeploymentConfigDiffNavigation = ({
 
     /** Handles tab click. */
     const onTabClick = (segment: SegmentType<string>) => {
-        tabConfig?.onClick?.(String(segment.value))
+        tabConfig?.onClick?.(segment.value)
     }
 
     // RENDERERS

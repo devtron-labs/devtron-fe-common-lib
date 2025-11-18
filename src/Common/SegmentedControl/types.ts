@@ -23,7 +23,7 @@ type SegmentTooltipProps = Omit<
     'alwaysShowTippyOnHover' | 'showOnTruncate' | 'shortcutKeyCombo' | 'placement'
 >
 
-export type SegmentType<T = string | number> = Pick<SelectPickerOptionType, 'value'> & {
+export type SegmentType<T = string | number> = {
     /**
      * If true, the segment will be in error state with error icon
      */
@@ -32,38 +32,42 @@ export type SegmentType<T = string | number> = Pick<SelectPickerOptionType, 'val
      * If true, the segment will be in disabled state
      */
     isDisabled?: boolean
+    /**
+     * Value for the segment
+     */
+    value: T
 } & (
-        | ({
-              /**
-               * Label for the segment
-               *
-               * Note: Either of label or icon is required
-               */
-              label: SelectPickerOptionType['label'] | T
-              /**
-               * Icon for the segment
-               *
-               * Note: Either of label or icon is required
-               */
-              icon?: IconsProps['name']
-              /**
-               * Tooltip props for the segment
-               *
-               * Note: Required if only icon is provided
-               */
-              tooltipProps?: SegmentTooltipProps
-              ariaLabel?: never
-          } & Pick<SelectPickerOptionType, 'label'>)
-        | {
-              label?: never
-              tooltipProps: SegmentTooltipProps
-              icon: IconsProps['name']
-              /**
-               * Aria label for the segment
-               */
-              ariaLabel: string
-          }
-    )
+    | ({
+          /**
+           * Label for the segment
+           *
+           * Note: Either of label or icon is required
+           */
+          label: SelectPickerOptionType['label']
+          /**
+           * Icon for the segment
+           *
+           * Note: Either of label or icon is required
+           */
+          icon?: IconsProps['name']
+          /**
+           * Tooltip props for the segment
+           *
+           * Note: Required if only icon is provided
+           */
+          tooltipProps?: SegmentTooltipProps
+          ariaLabel?: never
+      } & Pick<SelectPickerOptionType, 'label'>)
+    | {
+          label?: never
+          tooltipProps: SegmentTooltipProps
+          icon: IconsProps['name']
+          /**
+           * Aria label for the segment
+           */
+          ariaLabel: string
+      }
+)
 
 export type SegmentedControlProps<T = string | number> = {
     /**
