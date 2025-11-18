@@ -435,3 +435,8 @@ export const getSelectPickerOptionByValue = <OptionValue>(
         }) ?? defaultOption
     )
 }
+
+export const getSelectPickerOptionsByValue = <OptionValue>(
+    optionsList: SelectPickerOptionType<OptionValue>[],
+    values: OptionValue[],
+): SelectPickerOptionType<OptionValue>[] => (optionsList ?? []).filter((option) => values.includes(option.value))
