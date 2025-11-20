@@ -18,6 +18,7 @@ import { Dispatch, ReactElement, SetStateAction } from 'react'
 
 import { TabProps } from '@Shared/Components'
 import { InstallationClusterType } from '@Shared/types'
+import { SelectedResourceType } from '@Pages/Applications/DevtronApps/Details/CDPipeline/types'
 
 import { NodeActionRequest } from './ResourceBrowser.Types'
 
@@ -169,4 +170,9 @@ export enum ResourceBrowserActionMenuEnum {
     terminal = 'terminal',
     delete = 'delete',
     vulnerability = 'vulnerability',
+}
+
+export interface GetResourceManifestProps {
+    selectedResource: SelectedResourceType
+    signal: AbortSignal
 }
