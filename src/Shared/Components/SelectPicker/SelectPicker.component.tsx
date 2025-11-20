@@ -199,6 +199,7 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
     menuPosition = 'fixed',
     variant = SelectPickerVariantType.DEFAULT,
     disableDescriptionEllipsis = false,
+    isUserIdentifier = false,
     multiSelectProps = {},
     isMulti,
     name,
@@ -302,9 +303,13 @@ const SelectPicker = <OptionValue, IsMulti extends boolean>({
 
     const renderOption = useCallback(
         (optionProps: OptionProps<SelectPickerOptionType<OptionValue>>) => (
-            <SelectPickerOption {...optionProps} disableDescriptionEllipsis={disableDescriptionEllipsis} />
+            <SelectPickerOption
+                {...optionProps}
+                isUserIdentifier={isUserIdentifier}
+                disableDescriptionEllipsis={disableDescriptionEllipsis}
+            />
         ),
-        [disableDescriptionEllipsis],
+        [disableDescriptionEllipsis, isUserIdentifier],
     )
 
     const renderMultiValue = (multiValueProps: MultiValueProps<SelectPickerOptionType<OptionValue>, true>) => (

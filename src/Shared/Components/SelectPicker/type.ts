@@ -310,6 +310,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     } & (IsMulti extends true
         ? {
               isMulti: IsMulti | boolean
+              isUserIdentifier?: boolean
               multiSelectProps?: Partial<Pick<SelectProps<OptionValue, IsMulti>, 'customDisplayText'>> & {
                   /**
                    * If true, the group heading can be selected
@@ -328,6 +329,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
         : {
               isMulti?: never
               multiSelectProps?: never
+              isUserIdentifier?: never
           })
 
 // Doing like this, because of global export error GroupHeadingPropsDefinedProps
@@ -353,6 +355,7 @@ export interface FilterSelectPickerProps
             | 'onMenuClose'
             | 'menuIsOpen'
             | 'onKeyDown'
+            | 'isUserIdentifier'
         > {
     appliedFilterOptions: SelectPickerOptionType[]
     handleApplyFilter: (filtersToApply: SelectPickerOptionType<number | string>[]) => void
