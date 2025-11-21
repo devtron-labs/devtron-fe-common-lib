@@ -143,3 +143,16 @@ export interface DateTimePickerProps
      */
     onChange: (date: Date) => void
 }
+
+export interface DatePickerRangeControllerProps {
+    calendar
+    calendarInputs
+    focusedInput
+    handleFocusChange
+    handleDatesChange
+    handleCalendarInputs?
+    calendarValue: string
+    handlePredefinedRange: (start: Moment, end: Moment, endStr: string) => void
+    handleDateInput: (key: 'startDate' | 'endDate', value: string) => void
+    handleApply: (...args) => void
+}

@@ -168,4 +168,5 @@ export enum ResourceBrowserActionMenuEnum {
     terminal = 'terminal',
     delete = 'delete',
     vulnerability = 'vulnerability',
+    restart = 'restart',
 }
