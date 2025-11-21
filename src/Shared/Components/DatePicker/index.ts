@@ -16,6 +16,7 @@
 
 export * from './constants'
 export { default as DateTimePicker } from './DateTimePicker'
+export { DatePickerRangeController } from './DayPickerRangeController'
 export * from './MonthlySelect'
 export { default as SingleDatePickerComponent } from './SingleDatePickerComponent'
 export * from './TimeSelect'

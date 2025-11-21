@@ -20,6 +20,7 @@ import { ReactComponent as ICAzureAks } from '@IconsV2/ic-azure-aks.svg'
 import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
 import { ReactComponent as ICBgEnvironment } from '@IconsV2/ic-bg-environment.svg'
 import { ReactComponent as ICBharatpe } from '@IconsV2/ic-bharatpe.svg'
+import { ReactComponent as ICBinoculars } from '@IconsV2/ic-binoculars.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
 import { ReactComponent as ICBookOpen } from '@IconsV2/ic-book-open.svg'
 import { ReactComponent as ICBrain } from '@IconsV2/ic-brain.svg'
@@ -77,12 +78,14 @@ import { ReactComponent as ICDownload } from '@IconsV2/ic-download.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEdit } from '@IconsV2/ic-edit.svg'
 import { ReactComponent as ICEmail } from '@IconsV2/ic-email.svg'
+import { ReactComponent as ICEnterFullscreen } from '@IconsV2/ic-enter-fullscreen.svg'
 import { ReactComponent as ICEnterpriseFeat } from '@IconsV2/ic-enterprise-feat.svg'
 import { ReactComponent as ICEnterpriseTag } from '@IconsV2/ic-enterprise-tag.svg'
 import { ReactComponent as ICEnv } from '@IconsV2/ic-env.svg'
 import { ReactComponent as ICEnvironment } from '@IconsV2/ic-environment.svg'
 import { ReactComponent as ICEnvironmentIsolated } from '@IconsV2/ic-environment-isolated.svg'
 import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
+import { ReactComponent as ICExitFullscreen } from '@IconsV2/ic-exit-fullscreen.svg'
 import { ReactComponent as ICExpandRightSm } from '@IconsV2/ic-expand-right-sm.svg'
 import { ReactComponent as ICExpandSm } from '@IconsV2/ic-expand-sm.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
@@ -262,6 +265,7 @@ export const iconMap = {
     'ic-bg-cluster': ICBgCluster,
     'ic-bg-environment': ICBgEnvironment,
     'ic-bharatpe': ICBharatpe,
+    'ic-binoculars': ICBinoculars,
     'ic-bitbucket': ICBitbucket,
     'ic-book-open': ICBookOpen,
     'ic-brain': ICBrain,
@@ -319,12 +323,14 @@ export const iconMap = {
     'ic-ecr': ICEcr,
     'ic-edit': ICEdit,
     'ic-email': ICEmail,
+    'ic-enter-fullscreen': ICEnterFullscreen,
     'ic-enterprise-feat': ICEnterpriseFeat,
     'ic-enterprise-tag': ICEnterpriseTag,
     'ic-env': ICEnv,
     'ic-environment-isolated': ICEnvironmentIsolated,
     'ic-environment': ICEnvironment,
     'ic-error': ICError,
+    'ic-exit-fullscreen': ICExitFullscreen,
     'ic-expand-right-sm': ICExpandRightSm,
     'ic-expand-sm': ICExpandSm,
     'ic-failure': ICFailure,
