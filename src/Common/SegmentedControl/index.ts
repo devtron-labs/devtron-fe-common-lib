@@ -15,4 +15,4 @@
  */
 
 export { default as SegmentedControl } from './SegmentedControl.component'
-export { type SegmentedControlProps } from './types'
+export { type SegmentedControlProps, type SegmentType } from './types'

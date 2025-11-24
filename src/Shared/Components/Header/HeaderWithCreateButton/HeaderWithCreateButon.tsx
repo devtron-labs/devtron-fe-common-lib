@@ -79,7 +79,8 @@ export const HeaderWithCreateButton = ({ viewType }: HeaderWithCreateButtonProps
             default:
                 return {
                     ...getApplicationManagementBreadcrumb(),
-                    'devtron-apps': { component: <BreadcrumbText isActive heading="Devtron Applications" /> },
+                    'devtron-app': { component: <BreadcrumbText isActive heading="Devtron Applications" /> },
+                    list: null,
                 }
         }
     }
