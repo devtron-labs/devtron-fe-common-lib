@@ -437,6 +437,16 @@ export const getSelectPickerOptionByValue = <OptionValue>(
 }
 
 export const getSelectPickerOptionsByValue = <OptionValue>(
-    optionsList: SelectPickerOptionType<OptionValue>[],
+    optionsList: OptionsOrGroups<SelectPickerOptionType<OptionValue>, GroupBase<SelectPickerOptionType<OptionValue>>>,
     values: OptionValue[],
-): SelectPickerOptionType<OptionValue>[] => (optionsList ?? []).filter((option) => values.includes(option.value))
+): SelectPickerOptionType<OptionValue>[] => {
+    if (!Array.isArray(optionsList)) {
+        return []
+    }
+
+    const flatOptionsList = optionsList.flatMap<SelectPickerOptionType<OptionValue>>((groupOrBaseOption) =>
+        'options' in groupOrBaseOption ? groupOrBaseOption.options : [groupOrBaseOption],
+    )
+
+    return flatOptionsList.filter((option) => values.includes(option.value))
+}
