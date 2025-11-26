@@ -92,7 +92,7 @@ const TableContent = <
     } = resizableConfig ?? {}
 
     const gridTemplateColumns = rowOnHoverComponentWidth
-        ? `${initialGridTemplateColumns} ${typeof rowOnHoverComponentWidth === 'number' ? `${rowOnHoverComponentWidth}px` : rowOnHoverComponentWidth}`
+        ? `${initialGridTemplateColumns} ${typeof rowOnHoverComponentWidth === 'number' ? `minmax(${rowOnHoverComponentWidth}px, 1fr)` : rowOnHoverComponentWidth}`
         : initialGridTemplateColumns
 
     useEffect(() => {
@@ -110,7 +110,7 @@ const TableContent = <
         rowsContainerRef.current.addEventListener('keydown', preventScrollByKeyboard)
     }, [])
 
-    const bulkSelectionCount = isBulkSelectionApplied && rows ? rows.length : (getSelectedIdentifiersCount?.() ?? 0)
+    const bulkSelectionCount = isBulkSelectionApplied ? totalRows : (getSelectedIdentifiersCount?.() ?? 0)
 
     const visibleRows = useMemo(() => {
         const normalizedFilteredRows = filteredRows ?? []
