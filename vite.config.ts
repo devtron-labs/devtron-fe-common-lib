@@ -64,10 +64,6 @@ export default defineConfig({
                 assetFileNames: 'assets/[name][extname]',
                 entryFileNames: '[name].js',
                 manualChunks(id: string) {
-                    if (id.includes('/node_modules/react-dates')) {
-                        return '@react-dates'
-                    }
-
                     if (id.includes('/node_modules/framer-motion')) {
                         return '@framer-motion'
                     }

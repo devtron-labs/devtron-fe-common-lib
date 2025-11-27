@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { SingleDatePickerShape } from 'react-dates'
 import { SelectInstance } from 'react-select'
 import { Moment } from 'moment'
 
@@ -103,9 +102,18 @@ export interface TimeSelectProps {
     selectedTimeOption: DateSelectPickerType
 }
 
-export interface DateTimePickerProps
-    extends Pick<TimeSelectProps, 'date' | 'timePickerProps' | 'error' | 'disabled' | 'dataTestIdForTime'>,
-        Pick<SingleDatePickerShape, 'openDirection'> {
+interface DateRangeType {
+    from: Date
+    to?: Date
+}
+
+export type UpdateDateRangeType = (dateRange: DateRangeType) => void
+export type UpdateSingleDateType = (date: Date) => void
+
+export type DateTimePickerProps = Pick<
+    TimeSelectProps,
+    'timePickerProps' | 'error' | 'disabled' | 'dataTestIdForTime'
+> & {
     /**
      * Props for the date picker
      */
@@ -123,10 +131,6 @@ export interface DateTimePickerProps
      */
     required?: boolean
     /**
-     * To hide time selector
-     */
-    hideTimeSelect?: boolean
-    /**
      * To make the field read only
      */
     readOnly?: boolean
@@ -134,12 +138,23 @@ export interface DateTimePickerProps
      * To block today's date
      */
     isTodayBlocked?: boolean
-    /**
-     * Data test id for date picker
-     */
-    dataTestidForDate?: string
-    /**
-     * Function to handle date change
-     */
-    onChange: (date: Date) => void
-}
+    blockPreviousDates?: boolean
+} & (
+        | {
+              isRangePicker: true
+              hideTimeSelect: true
+              dateRange: DateRangeType
+              onChange: UpdateDateRangeType
+              date?: never
+          }
+        | {
+              isRangePicker?: false
+              date: TimeSelectProps['date']
+              onChange: UpdateSingleDateType
+              /**
+               * To hide time selector
+               */
+              hideTimeSelect?: boolean
+              dateRange?: never
+          }
+    )

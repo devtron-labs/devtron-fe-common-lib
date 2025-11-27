@@ -14,38 +14,14 @@
  * limitations under the License.
  */
 
-const selectedStyles = {
-    background: 'var(--B100)',
-    color: 'var(--B500)',
+import { ButtonHTMLAttributes } from 'react'
+import { CustomComponents } from 'react-day-picker'
 
-    hover: {
-        background: 'var(--B500)',
-        color: 'var(--N0)',
-    },
-}
+import { noop } from '@Common/Helper'
+import { ComponentSizeType } from '@Shared/constants'
 
-const selectedSpanStyles = {
-    background: 'var(--B100)',
-    color: 'var(--B500)',
-    hover: {
-        background: 'var(--B500)',
-        color: 'var(--N0)',
-    },
-}
-
-const hoveredSpanStyles = {
-    background: 'var(--B100)',
-    color: 'var(--B500)',
-}
-
-export const customDayStyles = {
-    selectedStartStyles: selectedStyles,
-    selectedEndStyles: selectedStyles,
-    hoveredSpanStyles,
-    selectedSpanStyles,
-    selectedStyles,
-    border: 'none',
-}
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
+import { Icon } from '../Icon'
 
 export const MONTHLY_DATES_CONFIG = {
     'Day 1': '1',
@@ -144,4 +120,35 @@ export const DATE_PICKER_IDS = {
     DATE: 'date_picker',
     MONTH: 'month_picker',
     TIME: 'time_picker',
+}
+
+export const DATE_PICKER_CUSTOM_COMPONENTS: Partial<CustomComponents> = {
+    NextMonthButton: ({ onClick, className }: ButtonHTMLAttributes<HTMLButtonElement>) => (
+        <div className={className}>
+            <Button
+                dataTestId="date-picker-next-month-button"
+                icon={<Icon name="ic-arrow-right" color={null} />}
+                size={ComponentSizeType.small}
+                variant={ButtonVariantType.secondary}
+                style={ButtonStyleType.neutral}
+                ariaLabel="Next Month"
+                showAriaLabelInTippy={false}
+                onClick={onClick || noop}
+            />
+        </div>
+    ),
+    PreviousMonthButton: ({ onClick, className }: ButtonHTMLAttributes<HTMLButtonElement>) => (
+        <div className={className}>
+            <Button
+                dataTestId="date-picker-previous-month-button"
+                icon={<Icon name="ic-arrow-right" rotateBy={180} color={null} />}
+                size={ComponentSizeType.small}
+                variant={ButtonVariantType.secondary}
+                style={ButtonStyleType.neutral}
+                ariaLabel="Previous Month"
+                showAriaLabelInTippy={false}
+                onClick={onClick || noop}
+            />
+        </div>
+    ),
 }
