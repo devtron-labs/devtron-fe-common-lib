@@ -40,11 +40,16 @@ const isDateUpdateRange = (
     handler: DateTimePickerProps['onChange'],
 ): handler is UpdateDateRangeType => isRange
 
+const getTodayDate = (): Date => {
+    const today = dayjs()
+    return today.toDate()
+}
+
 const DateTimePicker = ({
-    date: dateObject = new Date(),
+    date: dateObject = getTodayDate(),
     dateRange = {
-        from: new Date(),
-        to: new Date(),
+        from: getTodayDate(),
+        to: getTodayDate(),
     },
     onChange,
     timePickerProps = {} as SelectInstance,
@@ -54,12 +59,15 @@ const DateTimePicker = ({
     required,
     hideTimeSelect = false,
     readOnly = false,
-    isTodayBlocked = false,
     dataTestIdForTime = DATE_PICKER_IDS.TIME,
     error = '',
     isRangePicker = false,
+    isTodayBlocked = false,
     blockPreviousDates = true,
+    isOutsideRange,
+    rangeShortcutOptions,
 }: DateTimePickerProps) => {
+    const today = getTodayDate()
     const calendarPopoverId = useRef<string>(getUniqueId())
 
     const { open, overlayProps, popoverProps, triggerProps, scrollableRef } = usePopover({
@@ -97,7 +105,7 @@ const DateTimePicker = ({
         onChange(updateTime(dateObject, option.value).value)
     }
 
-    const handleRangeSelect: OnSelectHandler<DateRange> = (range) => {
+    const handleDateRangeChange = (range: DateRange) => {
         if (isDateUpdateRange(isRangePicker, onChange)) {
             const fromDate = range.from ? range.from : new Date()
             const toDate = range.to ? range.to : undefined
@@ -107,6 +115,14 @@ const DateTimePicker = ({
                 to: toDate,
             })
         }
+    }
+
+    const handleRangeSelect: OnSelectHandler<DateRange> = (range) => {
+        handleDateRangeChange(range)
+    }
+
+    const getRangeUpdateHandler = (range: DateRange) => () => {
+        handleDateRangeChange(range)
     }
 
     const handleSingleDateSelect: OnSelectHandler<Date> = (date) => {
@@ -121,33 +137,50 @@ const DateTimePicker = ({
             return true
         }
 
+        const isOutsideRangeFn = isOutsideRange || (() => false)
+
         if (isTodayBlocked) {
-            const today = new Date()
             return (date: Date) => date <= today
         }
 
         if (blockPreviousDates) {
-            const today = new Date()
-            return (date: Date) => date < today
+            return (date: Date) => date < today || isOutsideRangeFn(date)
         }
 
-        return false
+        return isOutsideRangeFn
     }
 
     const renderDatePicker = () => {
         if (isRangePicker) {
             return (
-                <DayPicker
-                    mode="range"
-                    navLayout="around"
-                    selected={{
-                        from: dateRange[0],
-                        to: dateRange[1],
-                    }}
-                    onSelect={handleRangeSelect}
-                    disabled={getDisabledState()}
-                    components={DATE_PICKER_CUSTOM_COMPONENTS}
-                />
+                <div className="flexbox">
+                    {!!rangeShortcutOptions?.length && (
+                        <div className="flexbox-col py-20 px-16 w-200">
+                            {rangeShortcutOptions.map(({ label: optionLabel, value, onClick }) => (
+                                <button
+                                    type="button"
+                                    key={optionLabel}
+                                    className="bg__hover cn-9 dc__tab-focus dc__align-left dc__transparent p-8 br-4"
+                                    onClick={onClick || getRangeUpdateHandler(value)}
+                                >
+                                    {optionLabel}
+                                </button>
+                            ))}
+                        </div>
+                    )}
+
+                    <DayPicker
+                        mode="range"
+                        navLayout="around"
+                        selected={{
+                            from: dateRange.from,
+                            to: dateRange.to,
+                        }}
+                        onSelect={handleRangeSelect}
+                        disabled={getDisabledState()}
+                        components={DATE_PICKER_CUSTOM_COMPONENTS}
+                    />
+                </div>
             )
         }
 
@@ -185,6 +218,7 @@ const DateTimePicker = ({
                 value: '',
                 startIcon: <Icon name="ic-calendar" color={null} />,
             }}
+            size={ComponentSizeType.large}
         />
     )
 

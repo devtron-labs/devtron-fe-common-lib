@@ -52,6 +52,13 @@
         }
     }
 
+    .rdp-day.rdp-disabled {
+        .rdp-day_button {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+
     .rdp-caption_label {
         color: var(--N900);
         font-size: 16px;

@@ -115,10 +115,6 @@ export type DateTimePickerProps = Pick<
     'timePickerProps' | 'error' | 'disabled' | 'dataTestIdForTime'
 > & {
     /**
-     * Props for the date picker
-     */
-    datePickerProps?: any
-    /**
      * Id for the component
      */
     id: string
@@ -139,12 +135,25 @@ export type DateTimePickerProps = Pick<
      */
     isTodayBlocked?: boolean
     blockPreviousDates?: boolean
+    isOutsideRange?: (day: Date) => boolean
 } & (
         | {
               isRangePicker: true
               hideTimeSelect: true
               dateRange: DateRangeType
               onChange: UpdateDateRangeType
+              rangeShortcutOptions?: (
+                  | {
+                        label: string
+                        onClick: () => void
+                        value?: never
+                    }
+                  | {
+                        label: string
+                        onClick?: never
+                        value: DateRangeType
+                    }
+              )[]
               date?: never
           }
         | {
@@ -156,5 +165,6 @@ export type DateTimePickerProps = Pick<
                */
               hideTimeSelect?: boolean
               dateRange?: never
+              rangeShortcutOptions?: never
           }
     )
