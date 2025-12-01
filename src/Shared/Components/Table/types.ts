@@ -169,6 +169,7 @@ export interface BulkOperationModalProps<
 type BulkSelectionConfigType = Pick<UseBulkSelectionProps<unknown>, 'getSelectAllDialogStatus'> & {
     BulkActionsComponent: FunctionComponent<BulkActionsComponentProps>
     BulkOperationModal: FunctionComponent<BulkOperationModalProps>
+    disableSelectAllAcrossEvenIfPaginated?: boolean
 } & Pick<BulkActionsComponentProps, 'bulkActionsData'> &
     Pick<BulkOperationModalProps, 'bulkOperationModalData'>
 
