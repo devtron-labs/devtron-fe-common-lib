@@ -67,7 +67,6 @@ const DateTimePicker = ({
     isOutsideRange,
     rangeShortcutOptions,
 }: DateTimePickerProps) => {
-    const today = getTodayDate()
     const calendarPopoverId = useRef<string>(getUniqueId())
 
     const { open, overlayProps, popoverProps, triggerProps, scrollableRef } = usePopover({
@@ -137,10 +136,13 @@ const DateTimePicker = ({
             return true
         }
 
+        const today = getTodayDate()
+        today.setHours(0, 0, 0, 0)
+
         const isOutsideRangeFn = isOutsideRange || (() => false)
 
         if (isTodayBlocked) {
-            return (date: Date) => date <= today
+            return (date: Date) => date <= today || isOutsideRangeFn(date)
         }
 
         if (blockPreviousDates) {
