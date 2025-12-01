@@ -69,6 +69,7 @@ const TableContent = <
         bulkActionsData = null,
         BulkOperationModal,
         bulkOperationModalData = null,
+        disableSelectAllAcrossEvenIfPaginated = false,
     } = bulkSelectionConfig ?? {}
 
     const { showSeparatorBetweenRows = true } = stylesConfig ?? {}
@@ -364,7 +365,11 @@ const TableContent = <
                                                     <BulkSelection
                                                         ref={bulkSelectionButtonRef}
                                                         key={field}
-                                                        showPagination={showPagination}
+                                                        showPagination={
+                                                            disableSelectAllAcrossEvenIfPaginated
+                                                                ? false
+                                                                : showPagination
+                                                        }
                                                         showChevronDownIcon={false}
                                                         selectAllIfNotPaginated
                                                     />
