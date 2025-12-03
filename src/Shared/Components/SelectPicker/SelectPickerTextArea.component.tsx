@@ -116,12 +116,12 @@ export const SelectPickerTextArea = ({
                 })
             }
         } else if (action === ReactSelectInputAction.inputBlur) {
-            if (isCreatable) {
+            const selectValue = value as SingleValue<SelectPickerOptionType<string>>
+            if (isCreatable && (!selectValue?.value || selectValue.value !== inputValue)) {
                 handleCreateOption(inputValue)
                 return
             }
             // Reverting input to previously selected value in case of blur event. (no-selection)
-            const selectValue = value as SingleValue<SelectPickerOptionType<string>>
             setInputValue(selectValue?.value || '')
         }
     }
