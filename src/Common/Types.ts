@@ -1116,6 +1116,7 @@ export type AppsGroupedByProjectsType = {
     projectName: string
     appList: {
         name: string
+        id: number
     }[]
 }[]
 

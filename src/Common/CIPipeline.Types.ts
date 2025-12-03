@@ -338,6 +338,7 @@ export interface TaskErrorObj {
     name: ErrorObj
     inlineStepDetail?: StepDetailTaskErrorObj
     pluginRefStepDetail?: StepDetailTaskErrorObj
+    outputDirectoryPath?: ErrorObj[]
 }
 export interface FormErrorObjectType {
     name: ErrorObj
