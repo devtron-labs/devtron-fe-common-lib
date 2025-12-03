@@ -32,13 +32,23 @@ type EntityPropType =
           entities: NonNullable<Omit<Entity, 'label'> & { label?: never }>[]
       }
 
+type ProportionalType =
+    | {
+          isProportional?: true
+          hideTotal?: boolean
+      }
+    | {
+          isProportional?: false | never
+          hideTotal?: never
+      }
+
 export type SegmentedBarChartProps = {
     rootClassName?: string
     countClassName?: string
     labelClassName?: string
-    isProportional?: boolean
     swapLegendAndBar?: boolean
     showAnimationOnBar?: boolean
     isLoading?: boolean
     size?: ComponentSizeType
-} & EntityPropType
+} & EntityPropType &
+    ProportionalType
