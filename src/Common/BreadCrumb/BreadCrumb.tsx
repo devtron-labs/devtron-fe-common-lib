@@ -114,9 +114,7 @@ export const BreadCrumb: React.FC<Breadcrumbs> = ({
                         {breadcrumb.name}
                     </ConditionalWrap>
 
-                    {idx + 1 !== filteredCrumbs.length && breadcrumb.name && (
-                       getBreadCrumbSeparator(sep)
-                    )}
+                    {idx + 1 !== filteredCrumbs.length && breadcrumb.name && getBreadCrumbSeparator(sep)}
                 </React.Fragment>
             ))}
         </>

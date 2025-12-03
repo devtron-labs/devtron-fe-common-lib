@@ -65,6 +65,7 @@ const DATA_PROTECTION_BACKUP_AND_SCHEDULE =
     `${DATA_PROTECTION_ROOT}/backup-and-schedule/:view(${Object.values(BackupAndScheduleListViewEnum).join('|')})` as const
 const GLOBAL_CONFIG_ROOT = '/global-configuration'
 const AI_RECOMMENDATIONS_ROOT = '/ai-recommendations'
+const OBSERVABILITY_ROOT = '/observability'
 
 export const URLS = {
     LOGIN: '/login',
@@ -157,6 +158,10 @@ export const URLS = {
     AI_RECOMMENDATIONS: AI_RECOMMENDATIONS_ROOT,
     AI_RECOMMENDATIONS_OVERVIEW: `${AI_RECOMMENDATIONS_ROOT}/overview`,
     EXTERNAL_APPS: 'ea',
+    // OBSERVABILITY
+    OBSERVABILITY: OBSERVABILITY_ROOT,
+    OBSERVABILITY_OVERVIEW: `${OBSERVABILITY_ROOT}/overview`,
+    OBSERVABILITY_CUSTOMER_LIST: `${OBSERVABILITY_ROOT}/tenants`,
 } as const
 
 export const ROUTES = {
