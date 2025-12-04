@@ -28,6 +28,7 @@ import {
     DeploymentStatusDetailsResponse,
     FetchIdDataStatus,
     ModuleConfigResponse,
+    ResourceConflictDeployDialogURLParamsType,
     TriggerDetailsResponseType,
     TriggerHistoryParamsType,
 } from './types'
@@ -292,3 +293,10 @@ export const getTriggerHistory = async ({
 
 export const getModuleConfigured = (moduleName: string): Promise<ModuleConfigResponse> =>
     get(`${ROUTES.MODULE_CONFIGURED}?name=${moduleName}`)
+
+export const resourceConflictRedeploy = async ({
+    pipelineId,
+    triggerId,
+}: Pick<ResourceConflictDeployDialogURLParamsType, 'pipelineId' | 'triggerId'>) =>
+    // TODO: Fix the route
+    get(`cd-pipeline/re-deploy/${pipelineId}/${triggerId}`)
