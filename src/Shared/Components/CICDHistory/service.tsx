@@ -19,7 +19,7 @@ import moment from 'moment'
 
 import { get, getUrlWithSearchParams, ResponseType, ROUTES, sanitizeUserApprovalMetadata, trash } from '../../../Common'
 import { DATE_TIME_FORMAT_STRING, DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP, EXTERNAL_TYPES } from '../../constants'
-import { decode, isNullOrUndefined } from '../../Helpers'
+import { decode, getUniqueId, isNullOrUndefined } from '../../Helpers'
 import { ResourceKindType, ResourceVersionType } from '../../types'
 import {
     DeploymentHistoryDetail,
@@ -29,6 +29,7 @@ import {
     FetchIdDataStatus,
     ModuleConfigResponse,
     ResourceConflictDeployDialogURLParamsType,
+    ResourceConflictItemType,
     TriggerDetailsResponseType,
     TriggerHistoryParamsType,
 } from './types'
@@ -300,3 +301,58 @@ export const resourceConflictRedeploy = async ({
 }: Pick<ResourceConflictDeployDialogURLParamsType, 'pipelineId' | 'triggerId'>) =>
     // TODO: Fix the route
     get(`cd-pipeline/re-deploy/${pipelineId}/${triggerId}`)
+
+export const getResourceConflictDetails = async (): Promise<ResponseType<ResourceConflictItemType[]>> => ({
+    code: 200,
+    result: [
+        {
+            name: 'resource-1',
+            namespace: 'default',
+            gvk: {
+                Group: 'apps',
+                Version: 'v1',
+                Kind: 'Deployment',
+            },
+            gvkTitle: 'Deployment',
+            clusterId: 1,
+            id: getUniqueId(),
+        },
+        {
+            name: 'resource-2',
+            namespace: 'default',
+            gvk: {
+                Group: '',
+                Version: 'v1',
+                Kind: 'Service',
+            },
+            gvkTitle: 'Service',
+            clusterId: 1,
+            id: getUniqueId(),
+        },
+        {
+            name: 'resource-3',
+            namespace: 'default',
+            gvk: {
+                Group: 'apps',
+                Version: 'v1',
+                Kind: 'StatefulSet',
+            },
+            gvkTitle: 'StatefulSet',
+            clusterId: 1,
+            id: getUniqueId(),
+        },
+        {
+            name: 'resource-4',
+            namespace: 'default',
+            gvk: {
+                Group: 'batch',
+                Version: 'v1',
+                Kind: 'Job',
+            },
+            gvkTitle: 'Job',
+            clusterId: 1,
+            id: getUniqueId(),
+        },
+    ],
+    status: 'OK',
+})

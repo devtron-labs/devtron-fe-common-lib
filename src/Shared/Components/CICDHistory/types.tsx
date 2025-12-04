@@ -17,6 +17,7 @@
 import { CSSProperties, MutableRefObject, ReactElement, ReactNode } from 'react'
 
 import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
+import { GVKType } from '@Pages/ResourceBrowser'
 
 import {
     DeploymentAppTypes,
@@ -342,9 +343,33 @@ export interface TriggerDetailsType
     appName?: string
 }
 
-export interface ResourceConflictDeployDialogProps
-    extends Required<Pick<TriggerDetailsType, 'appName' | 'environmentName'>> {
+export enum ResourceConflictModalType {
+    DEPLOY_DIALOG = 'DEPLOY_DIALOG',
+    RESOURCE_DETAIL_MODAL = 'RESOURCE_DETAIL_MODAL',
+}
+
+interface ResourceConflictDialogBaseProps extends Required<Pick<TriggerDetailsType, 'appName' | 'environmentName'>> {
     handleClose: () => void
+}
+
+export interface ResourceConflictDeployDialogProps extends ResourceConflictDialogBaseProps {}
+
+export interface ResourceConflictDetailsModalProps extends ResourceConflictDialogBaseProps {}
+
+export interface ResourceConflictItemType {
+    name: string
+    namespace: string
+    gvk: GVKType
+    gvkTitle: string
+    clusterId: number
+    /**
+     * Generated at ui
+     */
+    id: string
+}
+
+export interface ConflictedResourcesTableProps {
+    resourceConflictDetails: ResourceConflictItemType[]
 }
 
 export interface TriggerOutputURLParamsType extends Pick<BaseURLParams, 'appId' | 'envId'> {

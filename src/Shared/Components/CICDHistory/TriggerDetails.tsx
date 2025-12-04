@@ -46,6 +46,7 @@ import {
     TERMINAL_STATUS_COLOR_CLASS_MAP,
 } from './constants'
 import ResourceConflictDeployDialog from './ResourceConflictDeployDialog'
+import ResourceConflictDetailsModal from './ResourceConflictDetailsModal'
 import { cancelCiTrigger, cancelPrePostCdTrigger } from './service'
 import {
     CurrentStatusIconProps,
@@ -53,6 +54,7 @@ import {
     FinishedType,
     HistoryComponentType,
     ProgressingStatusType,
+    ResourceConflictModalType,
     StartDetailsType,
     TriggerDetailsType,
     WorkflowStageStatusType,
@@ -451,7 +453,7 @@ const TriggerDetails = memo(
         isLatest,
         appName,
     }: TriggerDetailsType) => {
-        const [showRedeployModal, setShowRedeployModal] = useState(false)
+        const [resourceConflictModal, setResourceConflictModal] = useState<ResourceConflictModalType>(null)
 
         const executionInfo = useMemo(
             () => sanitizeWorkflowExecutionStages(workflowExecutionStages),
@@ -467,11 +469,50 @@ const TriggerDetails = memo(
             errorMessage?.includes(RESOURCE_CONFLICT_DEPLOY_ERROR)
 
         const handleShowRedeployModal = () => {
-            setShowRedeployModal(true)
+            setResourceConflictModal(ResourceConflictModalType.DEPLOY_DIALOG)
         }
 
         const handleCloseRedeployModal = () => {
-            setShowRedeployModal(false)
+            setResourceConflictModal(null)
+        }
+
+        const renderInfoBlockDescription = () => (
+            <div className="flexbox">
+                <Button
+                    dataTestId="resource-conflicts-resource-info"
+                    text="Some Resources"
+                    variant={ButtonVariantType.text}
+                    size={ComponentSizeType.medium}
+                />
+
+                <span className="cn-9 fw-4 fs-13 lh-20 dc__word-break">
+                    have ownership conflict. Take resource ownership and re-deploy
+                </span>
+            </div>
+        )
+
+        const renderDialogs = () => {
+            if (resourceConflictModal === ResourceConflictModalType.DEPLOY_DIALOG) {
+                return (
+                    <ResourceConflictDeployDialog
+                        appName={appName}
+                        environmentName={environmentName}
+                        handleClose={handleCloseRedeployModal}
+                    />
+                )
+            }
+
+            if (resourceConflictModal === ResourceConflictModalType.RESOURCE_DETAIL_MODAL) {
+                return (
+                    <ResourceConflictDetailsModal
+                        appName={appName}
+                        environmentName={environmentName}
+                        handleClose={handleCloseRedeployModal}
+                    />
+                )
+            }
+
+            return null
         }
 
         return (
@@ -593,7 +634,7 @@ const TriggerDetails = memo(
                         {showResourceConflictInfoBlock && (
                             <div className="display-grid trigger-details__grid py-4">
                                 <InfoBlock
-                                    description={errorMessage}
+                                    description={renderInfoBlockDescription()}
                                     buttonProps={{
                                         dataTestId: 'resource-conflict-re-deploy',
                                         text: 'Re-deploy',
@@ -606,13 +647,7 @@ const TriggerDetails = memo(
                     </div>
                 </div>
 
-                {showRedeployModal && (
-                    <ResourceConflictDeployDialog
-                        appName={appName}
-                        environmentName={environmentName}
-                        handleClose={handleCloseRedeployModal}
-                    />
-                )}
+                {renderDialogs()}
             </>
         )
     },

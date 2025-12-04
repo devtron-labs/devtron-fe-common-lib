@@ -17,7 +17,8 @@
 import { WorkflowStatusEnum } from '@Shared/types'
 
 import { multiSelectStyles } from '../../../Common/MultiSelectCustomization'
-import { WorkflowStageStatusType } from './types'
+import { FiltersTypeEnum, TableProps } from '../Table'
+import { ResourceConflictItemType, WorkflowStageStatusType } from './types'
 
 export const HISTORY_LABEL = {
     APPLICATION: 'Application',
@@ -172,3 +173,43 @@ export const FAILED_WORKFLOW_STAGE_STATUS_MAP: Record<
 export const APP_HEALTH_DROP_DOWN_LIST = ['inprogress', 'failed', 'disconnect', 'timed_out']
 
 export const RESOURCE_CONFLICT_DEPLOY_ERROR = 'cannot be imported into the current release: invalid ownership metadata;'
+
+export const CONFLICTED_RESOURCES_COLUMNS: TableProps<ResourceConflictItemType, FiltersTypeEnum.STATE>['columns'] = [
+    {
+        field: 'name' satisfies keyof ResourceConflictItemType,
+        label: 'Name',
+        size: {
+            range: {
+                startWidth: 250,
+                maxWidth: 400,
+                minWidth: 120,
+            },
+        },
+        isSortable: true,
+        horizontallySticky: true,
+    },
+    {
+        field: 'namespace' satisfies keyof ResourceConflictItemType,
+        label: 'Namespace',
+        size: {
+            range: {
+                startWidth: 150,
+                maxWidth: 400,
+                minWidth: 100,
+            },
+        },
+        isSortable: true,
+    },
+    {
+        field: 'gvkTitle' satisfies keyof ResourceConflictItemType,
+        label: 'GVK',
+        size: {
+            range: {
+                startWidth: 250,
+                maxWidth: 400,
+                minWidth: 100,
+            },
+        },
+        isSortable: true,
+    },
+]

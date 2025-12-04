@@ -1,0 +1,47 @@
+import { useMemo } from 'react'
+
+import { noop } from '@Common/Helper'
+
+import { FiltersTypeEnum, PaginationEnum, Table, TableViewWrapperProps } from '../Table'
+import { RowsType } from '../Table/types'
+import { CONFLICTED_RESOURCES_COLUMNS } from './constants'
+import { ConflictedResourcesTableProps, ResourceConflictItemType } from './types'
+
+const Wrapper = ({ children }: TableViewWrapperProps<unknown, FiltersTypeEnum.STATE>) => <div>{children}</div>
+
+const ConflictedResourcesTable = ({ resourceConflictDetails }: ConflictedResourcesTableProps) => {
+    const rows: RowsType<ResourceConflictItemType> = useMemo(
+        () =>
+            (resourceConflictDetails || []).map<RowsType<ResourceConflictItemType>[number]>((resource) => ({
+                data: resource,
+                id: resource.id,
+            })),
+        [resourceConflictDetails],
+    )
+
+    return (
+        <Table<ResourceConflictItemType, FiltersTypeEnum.STATE>
+            id="table__resource-conflict-details"
+            columns={CONFLICTED_RESOURCES_COLUMNS}
+            rows={rows}
+            emptyStateConfig={{
+                noRowsConfig: {
+                    title: 'No resource found',
+                },
+                noRowsForFilterConfig: {
+                    title: 'No results',
+                    subTitle: "We couldn't find any matching results",
+                },
+            }}
+            paginationVariant={PaginationEnum.NOT_PAGINATED}
+            additionalFilterProps={{
+                initialSortKey: 'name' satisfies keyof ResourceConflictItemType,
+            }}
+            filtersVariant={FiltersTypeEnum.STATE}
+            ViewWrapper={Wrapper}
+            filter={noop}
+        />
+    )
+}
+
+export default ConflictedResourcesTable
