@@ -35,6 +35,7 @@ import { DeploymentStageType } from '../../constants'
 import {
     AggregationKeys,
     AppDetails,
+    BaseURLParams,
     DeploymentStatusDetailsBreakdownDataType,
     DeploymentStatusDetailsType,
     DeploymentStatusTimelineType,
@@ -331,7 +332,28 @@ export interface TriggerDetailsType
     workerPodName?: string
     triggerMetadata?: string
     renderDeploymentHistoryTriggerMetaText: (triggerMetaData: string, onlyRenderIcon?: boolean) => JSX.Element
+    /**
+     * Only present in case of CD trigger details as of now
+     */
+    isLatest?: boolean
+    /**
+     * Only present in case of CD trigger details as of now
+     */
+    appName?: string
 }
+
+export interface ResourceConflictDeployDialogProps
+    extends Required<Pick<TriggerDetailsType, 'appName' | 'environmentName'>> {
+    handleClose: () => void
+}
+
+export interface TriggerOutputURLParamsType extends Pick<BaseURLParams, 'appId' | 'envId'> {
+    triggerId: string
+    pipelineId: string
+}
+
+export interface ResourceConflictDeployDialogURLParamsType
+    extends Pick<TriggerOutputURLParamsType, 'appId' | 'envId' | 'pipelineId' | 'triggerId'> {}
 
 export type ProgressingStatusType = {
     stage: DeploymentStageType

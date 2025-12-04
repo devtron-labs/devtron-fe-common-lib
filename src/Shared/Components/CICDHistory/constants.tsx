@@ -170,3 +170,5 @@ export const FAILED_WORKFLOW_STAGE_STATUS_MAP: Record<
 }
 
 export const APP_HEALTH_DROP_DOWN_LIST = ['inprogress', 'failed', 'disconnect', 'timed_out']
+
+export const RESOURCE_CONFLICT_DEPLOY_ERROR = 'cannot be imported into the current release: invalid ownership metadata;'

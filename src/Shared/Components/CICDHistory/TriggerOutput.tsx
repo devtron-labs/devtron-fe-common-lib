@@ -47,8 +47,9 @@ import {
     statusSet,
     terminalStatus,
     TriggerOutputProps,
+    TriggerOutputURLParamsType,
 } from './types'
-import { getTriggerOutputTabs } from './utils'
+import { getSortedTriggerHistory, getTriggerOutputTabs } from './utils'
 
 import './cicdHistory.scss'
 
@@ -250,12 +251,7 @@ const TriggerOutput = ({
     renderTargetConfigInfo,
     appName,
 }: TriggerOutputProps) => {
-    const { appId, triggerId, envId, pipelineId } = useParams<{
-        appId: string
-        triggerId: string
-        envId: string
-        pipelineId: string
-    }>()
+    const { appId, triggerId, envId, pipelineId } = useParams<TriggerOutputURLParamsType>()
     const triggerDetails = triggerHistory.get(+triggerId)
     const [triggerDetailsLoading, triggerDetailsResult, triggerDetailsError, reloadTriggerDetails] = useAsync(
         () => getTriggerDetails({ appId, envId, pipelineId, triggerId, fetchIdData }),
@@ -265,6 +261,7 @@ const TriggerOutput = ({
     )
 
     const targetPlatforms = sanitizeTargetPlatforms(triggerDetails?.targetPlatforms)
+    const artifactId = triggerDetailsResult?.result?.artifactId || triggerDetails?.artifactId
 
     // Function to sync the trigger details as trigger details is also fetched with another api
     const syncState = (syncTriggerId: number, syncTriggerDetail: History, syncTriggerDetailsError: ServerError) => {
@@ -311,12 +308,10 @@ const TriggerOutput = ({
         () =>
             getTagDetails({
                 pipelineId,
-                artifactId: triggerDetailsResult?.result?.artifactId || triggerDetails?.artifactId,
+                artifactId,
             }),
         [pipelineId, triggerId],
-        areTagDetailsRequired &&
-            !!pipelineId &&
-            (!!triggerDetailsResult?.result?.artifactId || !!triggerDetails?.artifactId),
+        areTagDetailsRequired && !!pipelineId && !!artifactId,
     )
 
     useEffect(() => {
@@ -362,6 +357,8 @@ const TriggerOutput = ({
     }, [triggerDetails])
 
     useInterval(reloadTriggerDetails, timeout)
+
+    const latestTriggerHistoryId = useMemo(() => getSortedTriggerHistory(triggerHistory)?.[0]?.[0], [triggerHistory])
 
     if (
         (!areTagDetailsRequired && triggerDetailsLoading && !triggerDetails) ||
@@ -411,6 +408,8 @@ const TriggerOutput = ({
                         renderTargetConfigInfo={renderTargetConfigInfo}
                         workflowExecutionStages={triggerDetails.workflowExecutionStages}
                         namespace={triggerDetails.namespace}
+                        isLatest={latestTriggerHistoryId === triggerDetails.id}
+                        appName={appName}
                     />
                     <div className="pl-50 pr-20 pt-8 dc__border-bottom dc__position-sticky dc__top-0 bg__primary dc__zi-3">
                         <TabGroup tabs={getTriggerOutputTabs(triggerDetails, deploymentAppType)} />
@@ -430,7 +429,7 @@ const TriggerOutput = ({
                 setFullScreenView={setFullScreenView}
                 deploymentAppType={deploymentAppType}
                 isBlobStorageConfigured={isBlobStorageConfigured}
-                artifactId={triggerDetailsResult?.result?.artifactId}
+                artifactId={artifactId}
                 ciPipelineId={triggerDetailsResult?.result?.ciPipelineId}
                 appReleaseTags={appReleaseTags}
                 tagsEditable={tagsEditable}
