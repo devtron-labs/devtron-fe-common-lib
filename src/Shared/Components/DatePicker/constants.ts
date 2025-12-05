@@ -194,27 +194,3 @@ export const DayPickerRangeControllerPresets = [
     { text: 'Last 1 month', endDate: moment(), startDate: moment().subtract(1, 'months'), endStr: 'now-1M' },
     { text: 'Last 6 months', endDate: moment(), startDate: moment().subtract(6, 'months'), endStr: 'now-6M' },
 ]
-
-/**
- * Returns a string representing the range of dates
- * given by the start and end dates. If the end date
- * is 'now' and the start date includes 'now',
- * it will return the corresponding range from the
- * DayPickerRangeControllerPresets array.
- * @param startDateStr - the start date string
- * @param endDateStr - the end date string
- * @returns - a string representing the range of dates
- */
-
-export function getCalendarValue(startDateStr: string, endDateStr: string): string {
-    let str: string = `${startDateStr} - ${endDateStr}`
-    if (endDateStr === 'now' && startDateStr.includes('now')) {
-        const range = DayPickerRangeControllerPresets.find((d) => d.endStr === startDateStr)
-        if (range) {
-            str = range.text
-        } else {
-            str = `${startDateStr} - ${endDateStr}`
-        }
-    }
-    return str
-}
