@@ -16,6 +16,9 @@
 
 import {
     QueryKey,
+    useInfiniteQuery as rqUseInfiniteQuery,
+    UseInfiniteQueryOptions,
+    UseInfiniteQueryResult,
     useMutation as rqUseMutation,
     UseMutationOptions,
     UseMutationResult,
@@ -45,5 +48,20 @@ export const useQuery = <
 export const useMutation = <TData = unknown, TVariables = void, TContext = unknown>(
     options: UseMutationOptions<ResponseType<TData>, ServerErrors, TVariables, TContext>,
 ): UseMutationResult<ResponseType<TData>, ServerErrors, TVariables, TContext> => rqUseMutation(options)
+
+export const useInfiniteQuery = <
+    TQueryFnData = unknown,
+    TData = TQueryFnData,
+    TQueryKey extends QueryKey = QueryKey,
+    WrapWithResponseType extends boolean = true,
+>(
+    options: UseInfiniteQueryOptions<
+        WrapWithResponseType extends true ? ResponseType<TQueryFnData> : TQueryFnData,
+        ServerErrors,
+        TData,
+        WrapWithResponseType extends true ? ResponseType<TQueryFnData> : TQueryFnData,
+        TQueryKey
+    >,
+): UseInfiniteQueryResult<TData, ServerErrors> => rqUseInfiniteQuery(options)
 
 export { useQueryClient }
