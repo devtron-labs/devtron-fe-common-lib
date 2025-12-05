@@ -18,7 +18,6 @@ import { ReactComponent as ICArrowClockwise } from '@IconsV2/ic-arrow-clockwise.
 import { ReactComponent as ICArrowLineDown } from '@IconsV2/ic-arrow-line-down.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICArrowSquareOut } from '@IconsV2/ic-arrow-square-out.svg'
-import { ReactComponent as ICArrowWhite } from '@IconsV2/ic-arrow-white.svg'
 import { ReactComponent as ICArrowsClockwise } from '@IconsV2/ic-arrows-clockwise.svg'
 import { ReactComponent as ICArrowsLeftRight } from '@IconsV2/ic-arrows-left-right.svg'
 import { ReactComponent as ICAsterisk } from '@IconsV2/ic-asterisk.svg'
@@ -50,7 +49,6 @@ import { ReactComponent as ICBgStorageLocations } from '@IconsV2/ic-bg-storage-l
 import { ReactComponent as ICBgWebhook } from '@IconsV2/ic-bg-webhook.svg'
 import { ReactComponent as ICBharatpe } from '@IconsV2/ic-bharatpe.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
-import { ReactComponent as ICBookGear } from '@IconsV2/ic-book-gear.svg'
 import { ReactComponent as ICBookOpen } from '@IconsV2/ic-book-open.svg'
 import { ReactComponent as ICBot } from '@IconsV2/ic-bot.svg'
 import { ReactComponent as ICBrain } from '@IconsV2/ic-brain.svg'
@@ -72,19 +70,16 @@ import { ReactComponent as ICChatCircleOnline } from '@IconsV2/ic-chat-circle-on
 import { ReactComponent as ICCheck } from '@IconsV2/ic-check.svg'
 import { ReactComponent as ICCheckAll } from '@IconsV2/ic-check-all.svg'
 import { ReactComponent as ICCheckCircle } from '@IconsV2/ic-check-circle.svg'
-import { ReactComponent as ICCheckGreen } from '@IconsV2/ic-check-green.svg'
 import { ReactComponent as ICCheckSquare } from '@IconsV2/ic-check-square.svg'
 import { ReactComponent as ICChecks } from '@IconsV2/ic-checks.svg'
 import { ReactComponent as ICCiLinked } from '@IconsV2/ic-ci-linked.svg'
 import { ReactComponent as ICCircleLoader } from '@IconsV2/ic-circle-loader.svg'
-import { ReactComponent as ICCircleProgress } from '@IconsV2/ic-circle-progress.svg'
 import { ReactComponent as ICCircleSmall } from '@IconsV2/ic-circle-small.svg'
 import { ReactComponent as ICCleanBrush } from '@IconsV2/ic-clean-brush.svg'
 import { ReactComponent as ICClipboard } from '@IconsV2/ic-clipboard.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
 import { ReactComponent as ICClockCounterclockwise } from '@IconsV2/ic-clock-counterclockwise.svg'
 import { ReactComponent as ICCloseCircle } from '@IconsV2/ic-close-circle.svg'
-import { ReactComponent as ICCloseCircleRed } from '@IconsV2/ic-close-circle-red.svg'
 import { ReactComponent as ICCloseLarge } from '@IconsV2/ic-close-large.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
 import { ReactComponent as ICCloudUpload } from '@IconsV2/ic-cloud-upload.svg'
@@ -94,7 +89,7 @@ import { ReactComponent as ICClusterIsolated } from '@IconsV2/ic-cluster-isolate
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICCoins } from '@IconsV2/ic-coins.svg'
 import { ReactComponent as ICCoinsColorAnimated } from '@IconsV2/ic-coins-color-animated.svg'
-import { ReactComponent as ICConfirm } from '@IconsV2/ic-confirm.svg'
+import { ReactComponent as ICComment } from '@IconsV2/ic-comment.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICContainerRegistry } from '@IconsV2/ic-container-registry.svg'
 import { ReactComponent as ICCookr } from '@IconsV2/ic-cookr.svg'
@@ -137,7 +132,6 @@ import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICExpandRightSm } from '@IconsV2/ic-expand-right-sm.svg'
 import { ReactComponent as ICExpandSm } from '@IconsV2/ic-expand-sm.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
-import { ReactComponent as ICFailureColor } from '@IconsV2/ic-failure-color.svg'
 import { ReactComponent as ICFastForward } from '@IconsV2/ic-fast-forward.svg'
 import { ReactComponent as ICFile } from '@IconsV2/ic-file.svg'
 import { ReactComponent as ICFileCode } from '@IconsV2/ic-file-code.svg'
@@ -185,7 +179,6 @@ import { ReactComponent as ICHibernateCircle } from '@IconsV2/ic-hibernate-circl
 import { ReactComponent as ICInProgress } from '@IconsV2/ic-in-progress.svg'
 import { ReactComponent as ICInfoFilled } from '@IconsV2/ic-info-filled.svg'
 import { ReactComponent as ICInfoFilledColor } from '@IconsV2/ic-info-filled-color.svg'
-import { ReactComponent as ICInfoFilledNew } from '@IconsV2/ic-info-filled-new.svg'
 import { ReactComponent as ICInfoOutline } from '@IconsV2/ic-info-outline.svg'
 import { ReactComponent as ICInfrastructureManagement } from '@IconsV2/ic-infrastructure-management.svg'
 import { ReactComponent as ICInput } from '@IconsV2/ic-input.svg'
@@ -243,7 +236,6 @@ import { ReactComponent as ICPath } from '@IconsV2/ic-path.svg'
 import { ReactComponent as ICPause } from '@IconsV2/ic-pause.svg'
 import { ReactComponent as ICPauseCircle } from '@IconsV2/ic-pause-circle.svg'
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
-import { ReactComponent as ICPencilWhite } from '@IconsV2/ic-pencil-white.svg'
 import { ReactComponent as ICPiggybank } from '@IconsV2/ic-piggybank.svg'
 import { ReactComponent as ICPlayOutline } from '@IconsV2/ic-play-outline.svg'
 import { ReactComponent as ICPriorityHighFill } from '@IconsV2/ic-priority-high-fill.svg'
@@ -261,6 +253,7 @@ import { ReactComponent as ICResourceWatcher } from '@IconsV2/ic-resource-watche
 import { ReactComponent as ICRightPanelCollapse } from '@IconsV2/ic-right-panel-collapse.svg'
 import { ReactComponent as ICRocketGear } from '@IconsV2/ic-rocket-gear.svg'
 import { ReactComponent as ICRocketLaunch } from '@IconsV2/ic-rocket-launch.svg'
+import { ReactComponent as ICRunbookColor } from '@IconsV2/ic-runbook-color.svg'
 import { ReactComponent as ICSecurityFixable } from '@IconsV2/ic-security-fixable.svg'
 import { ReactComponent as ICSecurityNotFixable } from '@IconsV2/ic-security-not-fixable.svg'
 import { ReactComponent as ICSecurityPolicy } from '@IconsV2/ic-security-policy.svg'
@@ -277,7 +270,6 @@ import { ReactComponent as ICSortable } from '@IconsV2/ic-sortable.svg'
 import { ReactComponent as ICSparkleAiColor } from '@IconsV2/ic-sparkle-ai-color.svg'
 import { ReactComponent as ICSparkleColor } from '@IconsV2/ic-sparkle-color.svg'
 import { ReactComponent as ICSpeedometer } from '@IconsV2/ic-speedometer.svg'
-import { ReactComponent as ICSpider } from '@IconsV2/ic-spider.svg'
 import { ReactComponent as ICSpinny } from '@IconsV2/ic-spinny.svg'
 import { ReactComponent as ICSprayCan } from '@IconsV2/ic-spray-can.svg'
 import { ReactComponent as ICStack } from '@IconsV2/ic-stack.svg'
@@ -307,8 +299,6 @@ import { ReactComponent as ICThumbDown } from '@IconsV2/ic-thumb-down.svg'
 import { ReactComponent as ICThumbUp } from '@IconsV2/ic-thumb-up.svg'
 import { ReactComponent as ICTimeoutDash } from '@IconsV2/ic-timeout-dash.svg'
 import { ReactComponent as ICTimer } from '@IconsV2/ic-timer.svg'
-import { ReactComponent as ICTimerGreen } from '@IconsV2/ic-timer-green.svg'
-import { ReactComponent as ICTimerRed } from '@IconsV2/ic-timer-red.svg'
 import { ReactComponent as ICTrafficSignal } from '@IconsV2/ic-traffic-signal.svg'
 import { ReactComponent as ICTravclan } from '@IconsV2/ic-travclan.svg'
 import { ReactComponent as ICTrendUp } from '@IconsV2/ic-trend-up.svg'
@@ -352,7 +342,6 @@ export const iconMap = {
     'ic-arrow-line-down': ICArrowLineDown,
     'ic-arrow-right': ICArrowRight,
     'ic-arrow-square-out': ICArrowSquareOut,
-    'ic-arrow-white': ICArrowWhite,
     'ic-arrows-clockwise': ICArrowsClockwise,
     'ic-arrows-left-right': ICArrowsLeftRight,
     'ic-asterisk': ICAsterisk,
@@ -384,7 +373,6 @@ export const iconMap = {
     'ic-bg-webhook': ICBgWebhook,
     'ic-bharatpe': ICBharatpe,
     'ic-bitbucket': ICBitbucket,
-    'ic-book-gear': ICBookGear,
     'ic-book-open': ICBookOpen,
     'ic-bot': ICBot,
     'ic-brain': ICBrain,
@@ -405,19 +393,16 @@ export const iconMap = {
     'ic-chat-circle-online': ICChatCircleOnline,
     'ic-check-all': ICCheckAll,
     'ic-check-circle': ICCheckCircle,
-    'ic-check-green': ICCheckGreen,
     'ic-check-square': ICCheckSquare,
     'ic-check': ICCheck,
     'ic-checks': ICChecks,
     'ic-ci-linked': ICCiLinked,
     'ic-circle-loader': ICCircleLoader,
-    'ic-circle-progress': ICCircleProgress,
     'ic-circle-small': ICCircleSmall,
     'ic-clean-brush': ICCleanBrush,
     'ic-clipboard': ICClipboard,
     'ic-clock-counterclockwise': ICClockCounterclockwise,
     'ic-clock': ICClock,
-    'ic-close-circle-red': ICCloseCircleRed,
     'ic-close-circle': ICCloseCircle,
     'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
@@ -428,7 +413,7 @@ export const iconMap = {
     'ic-code': ICCode,
     'ic-coins-color-animated': ICCoinsColorAnimated,
     'ic-coins': ICCoins,
-    'ic-confirm': ICConfirm,
+    'ic-comment': ICComment,
     'ic-container-registry': ICContainerRegistry,
     'ic-container': ICContainer,
     'ic-cookr': ICCookr,
@@ -470,7 +455,6 @@ export const iconMap = {
     'ic-error': ICError,
     'ic-expand-right-sm': ICExpandRightSm,
     'ic-expand-sm': ICExpandSm,
-    'ic-failure-color': ICFailureColor,
     'ic-failure': ICFailure,
     'ic-fast-forward': ICFastForward,
     'ic-file-code': ICFileCode,
@@ -518,7 +502,6 @@ export const iconMap = {
     'ic-hibernate': ICHibernate,
     'ic-in-progress': ICInProgress,
     'ic-info-filled-color': ICInfoFilledColor,
-    'ic-info-filled-new': ICInfoFilledNew,
     'ic-info-filled': ICInfoFilled,
     'ic-info-outline': ICInfoOutline,
     'ic-infrastructure-management': ICInfrastructureManagement,
@@ -576,7 +559,6 @@ export const iconMap = {
     'ic-path': ICPath,
     'ic-pause-circle': ICPauseCircle,
     'ic-pause': ICPause,
-    'ic-pencil-white': ICPencilWhite,
     'ic-pencil': ICPencil,
     'ic-piggybank': ICPiggybank,
     'ic-play-outline': ICPlayOutline,
@@ -595,6 +577,7 @@ export const iconMap = {
     'ic-right-panel-collapse': ICRightPanelCollapse,
     'ic-rocket-gear': ICRocketGear,
     'ic-rocket-launch': ICRocketLaunch,
+    'ic-runbook-color': ICRunbookColor,
     'ic-security-fixable': ICSecurityFixable,
     'ic-security-not-fixable': ICSecurityNotFixable,
     'ic-security-policy': ICSecurityPolicy,
@@ -611,7 +594,6 @@ export const iconMap = {
     'ic-sparkle-ai-color': ICSparkleAiColor,
     'ic-sparkle-color': ICSparkleColor,
     'ic-speedometer': ICSpeedometer,
-    'ic-spider': ICSpider,
     'ic-spinny': ICSpinny,
     'ic-spray-can': ICSprayCan,
     'ic-stack': ICStack,
@@ -640,8 +622,6 @@ export const iconMap = {
     'ic-thumb-down': ICThumbDown,
     'ic-thumb-up': ICThumbUp,
     'ic-timeout-dash': ICTimeoutDash,
-    'ic-timer-green': ICTimerGreen,
-    'ic-timer-red': ICTimerRed,
     'ic-timer': ICTimer,
     'ic-traffic-signal': ICTrafficSignal,
     'ic-travclan': ICTravclan,
