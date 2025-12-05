@@ -105,6 +105,21 @@ export const SelectPickerTextArea = ({
         selectRef.current.blurInput()
     }
 
+    /**
+     * Create an option if no option preselectec & input is dirty
+     * @returns boolean - true if option was created
+     */
+    const updateValueIfOnlyDirty = (): boolean => {
+        const selectValue = value as SingleValue<SelectPickerOptionType<string>>
+
+        if (isCreatable && (!selectValue?.value || selectValue.value !== inputValue)) {
+            handleCreateOption(inputValue)
+            return true
+        }
+
+        return false
+    }
+
     const onInputChange = (newValue: string, { action }: InputActionMeta) => {
         if (action === ReactSelectInputAction.inputChange) {
             setInputValue(newValue)
@@ -116,11 +131,10 @@ export const SelectPickerTextArea = ({
                 })
             }
         } else if (action === ReactSelectInputAction.inputBlur) {
-            const selectValue = value as SingleValue<SelectPickerOptionType<string>>
-            if (isCreatable && (!selectValue?.value || selectValue.value !== inputValue)) {
-                handleCreateOption(inputValue)
+            if (updateValueIfOnlyDirty()) {
                 return
             }
+            const selectValue = value as SingleValue<SelectPickerOptionType<string>>
             // Reverting input to previously selected value in case of blur event. (no-selection)
             setInputValue(selectValue?.value || '')
         }
@@ -172,9 +186,7 @@ export const SelectPickerTextArea = ({
             return
         }
 
-        if (isCreatable && event.key === 'Enter') {
-            handleCreateOption(inputValue)
-        }
+        updateValueIfOnlyDirty()
     }
 
     return (

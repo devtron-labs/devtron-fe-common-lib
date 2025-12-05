@@ -47,8 +47,8 @@ export const saveCDPipeline = (request, { isTemplateView }: Required<Pick<AppCon
 
 export const getEnvironmentData = () => get<EnvironmentDataValuesDTO>(ROUTES.ENVIRONMENT_DATA)
 
-export const getClusterOptions = async (): Promise<ClusterType[]> => {
-    const { result } = await get<ClusterMinDTO[]>(ROUTES.CLUSTER_LIST_MIN)
+export const getClusterOptions = async (signal?: AbortSignal): Promise<ClusterType[]> => {
+    const { result } = await get<ClusterMinDTO[]>(ROUTES.CLUSTER_LIST_MIN, { signal })
 
     if (!result) {
         return []
