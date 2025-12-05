@@ -103,7 +103,7 @@ const useStateFilters = <T = string,>({
             sortBy: initialSortKey,
         })
         setPagination({
-            pageSize: DEFAULT_BASE_PAGE_SIZE,
+            pageSize: defaultPageSize,
             pageNumber: DEFAULT_PAGE_NUMBER,
         })
     }

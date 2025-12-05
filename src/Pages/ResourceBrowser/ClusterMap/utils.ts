@@ -103,7 +103,7 @@ export const getEntities = (filteredList: ClusterStatusAndType[]): ClusterEntiti
         {
             value: filteredList.length - prodCount,
             label: 'Non-Production',
-            color: 'var(--N300',
+            color: 'var(--N300)',
             proportionalValue: `${filteredList.length - prodCount}/${filteredList.length}`,
         },
     ]

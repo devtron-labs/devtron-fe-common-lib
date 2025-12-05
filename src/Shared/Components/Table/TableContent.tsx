@@ -47,7 +47,7 @@ const TableContent = <
     handleClearBulkSelection,
     handleToggleBulkSelectionOnRow,
     paginationVariant,
-    RowActionsOnHoverComponent,
+    rowActionOnHoverConfig,
     pageSizeOptions,
     filteredRows,
     areFilteredRowsLoading,
@@ -62,11 +62,14 @@ const TableContent = <
     const [bulkActionState, setBulkActionState] = useState<BulkActionStateType>(null)
     const [showBorderRightOnStickyElements, setShowBorderRightOnStickyElements] = useState(false)
 
+    const { width: rowOnHoverComponentWidth, Component: RowOnHoverComponent } = rowActionOnHoverConfig || {}
+
     const {
         BulkActionsComponent,
         bulkActionsData = null,
         BulkOperationModal,
         bulkOperationModalData = null,
+        disableSelectAllAcrossEvenIfPaginated = false,
     } = bulkSelectionConfig ?? {}
 
     const { showSeparatorBetweenRows = true } = stylesConfig ?? {}
@@ -84,10 +87,14 @@ const TableContent = <
 
     const {
         handleResize,
-        gridTemplateColumns = visibleColumns
+        gridTemplateColumns: initialGridTemplateColumns = visibleColumns
             .map((column) => (typeof column.size?.fixed === 'number' ? `${column.size.fixed}px` : 'minmax(200px, 1fr)'))
             .join(' '),
     } = resizableConfig ?? {}
+
+    const gridTemplateColumns = rowOnHoverComponentWidth
+        ? `${initialGridTemplateColumns} ${typeof rowOnHoverComponentWidth === 'number' ? `minmax(${rowOnHoverComponentWidth}px, 1fr)` : rowOnHoverComponentWidth}`
+        : initialGridTemplateColumns
 
     useEffect(() => {
         const scrollEventHandler = () => {
@@ -104,7 +111,7 @@ const TableContent = <
         rowsContainerRef.current.addEventListener('keydown', preventScrollByKeyboard)
     }, [])
 
-    const bulkSelectionCount = isBulkSelectionApplied && rows ? rows.length : (getSelectedIdentifiersCount?.() ?? 0)
+    const bulkSelectionCount = isBulkSelectionApplied ? totalRows : (getSelectedIdentifiersCount?.() ?? 0)
 
     const visibleRows = useMemo(() => {
         const normalizedFilteredRows = filteredRows ?? []
@@ -227,7 +234,7 @@ const TableContent = <
                         showSeparatorBetweenRows ? 'border__secondary--bottom' : ''
                     } fs-13 fw-4 lh-20 cn-9 generic-table__row dc__gap-16 ${
                         isRowActive ? 'generic-table__row--active checkbox__parent-container--active' : ''
-                    } ${RowActionsOnHoverComponent ? 'dc__position-rel dc__opacity-hover dc__opacity-hover--parent' : ''} ${
+                    } ${rowActionOnHoverConfig ? 'dc__opacity-hover dc__opacity-hover--parent' : ''} ${
                         isRowBulkSelected ? 'generic-table__row--bulk-selected' : ''
                     }`}
                     style={{
@@ -278,17 +285,21 @@ const TableContent = <
                                         {...additionalProps}
                                     />
                                 ) : (
-                                    <span key={field} className="dc__inline-block py-12">
-                                        {row.data[field]}
-                                    </span>
+                                    <div className="flex left">
+                                        <span key={field} className="fs-13 fw-4 cn-9 lh-20 dc__truncate">
+                                            {row.data[field]}
+                                        </span>
+                                    </div>
                                 )}
                             </div>
                         )
                     })}
 
-                    {RowActionsOnHoverComponent && (
-                        <div className="dc__position-abs dc__right-0 dc__zi-1 dc__opacity-hover--child">
-                            <RowActionsOnHoverComponent row={row} {...additionalProps} />
+                    {RowOnHoverComponent && (
+                        <div
+                            className={`dc__position-sticky dc__right-0 dc__zi-1 ${!isRowActive ? 'dc__opacity-hover--child' : ''}`}
+                        >
+                            <RowOnHoverComponent row={row} {...additionalProps} />
                         </div>
                     )}
                 </div>
@@ -354,7 +365,11 @@ const TableContent = <
                                                     <BulkSelection
                                                         ref={bulkSelectionButtonRef}
                                                         key={field}
-                                                        showPagination={showPagination}
+                                                        showPagination={
+                                                            disableSelectAllAcrossEvenIfPaginated
+                                                                ? false
+                                                                : showPagination
+                                                        }
                                                         showChevronDownIcon={false}
                                                         selectAllIfNotPaginated
                                                     />

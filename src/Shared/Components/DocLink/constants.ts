@@ -117,10 +117,17 @@ export const DOCUMENTATION = {
     GLOBAL_CONFIG_PULL_IMAGE_DIGEST: 'global-configurations/pull-image-digest',
     GLOBAL_CONFIG_TAGS: 'getting-started/global-configurations/tags-policy',
 
-    // Software distribution hub
+    // Software Release Management
     SOFTWARE_DISTRIBUTION_HUB: 'usage/software-distribution-hub',
     RELEASE_TRACKS: 'usage/software-distribution-hub/release-hub#creating-release-tracks-and-versions',
     RELEASES: 'usage/software-distribution-hub/release-hub#creating-release-tracks-and-versions',
+    RELEASE_HUB: 'usage/software-distribution-hub/release-hub',
     TENANTS: 'usage/software-distribution-hub/tenants#adding-installation',
     TENANTS_INSTALLATION: 'usage/software-distribution-hub/tenants',
+
+    // Infrastructure Management
+    AUTOSCALER_DETECTION: 'user-guide/infra-management/infrastructure-overview#troubleshooting-autoscaler-detection',
+
+    // Cost Visibility
+    COST_CALCULATION: 'user-guide/finops/overview-cost-visibility#how-is-the-cost-calculated',
 } as const
