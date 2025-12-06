@@ -17,8 +17,12 @@ import { ReactComponent as ICAther } from '@IconsV2/ic-ather.svg'
 import { ReactComponent as ICAwsCodecommit } from '@IconsV2/ic-aws-codecommit.svg'
 import { ReactComponent as ICAzure } from '@IconsV2/ic-azure.svg'
 import { ReactComponent as ICAzureAks } from '@IconsV2/ic-azure-aks.svg'
+import { ReactComponent as ICBgCloudVms } from '@IconsV2/ic-bg-cloud-vms.svg'
 import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
 import { ReactComponent as ICBgEnvironment } from '@IconsV2/ic-bg-environment.svg'
+import { ReactComponent as ICBgHealthyVms } from '@IconsV2/ic-bg-healthy-vms.svg'
+import { ReactComponent as ICBgRunningVms } from '@IconsV2/ic-bg-running-vms.svg'
+import { ReactComponent as ICBgTenants } from '@IconsV2/ic-bg-tenants.svg'
 import { ReactComponent as ICBharatpe } from '@IconsV2/ic-bharatpe.svg'
 import { ReactComponent as ICBinoculars } from '@IconsV2/ic-binoculars.svg'
 import { ReactComponent as ICBitbucket } from '@IconsV2/ic-bitbucket.svg'
@@ -262,8 +266,12 @@ export const iconMap = {
     'ic-aws-codecommit': ICAwsCodecommit,
     'ic-azure-aks': ICAzureAks,
     'ic-azure': ICAzure,
+    'ic-bg-cloud-vms': ICBgCloudVms,
     'ic-bg-cluster': ICBgCluster,
     'ic-bg-environment': ICBgEnvironment,
+    'ic-bg-healthy-vms': ICBgHealthyVms,
+    'ic-bg-running-vms': ICBgRunningVms,
+    'ic-bg-tenants': ICBgTenants,
     'ic-bharatpe': ICBharatpe,
     'ic-binoculars': ICBinoculars,
     'ic-bitbucket': ICBitbucket,

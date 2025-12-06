@@ -24,7 +24,7 @@ import { ComponentSizeType } from '@Shared/constants'
 
 import 'react-dates/initialize'
 
-import { Button } from '../Button'
+import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import { customDayStyles, DayPickerCalendarInfoHorizontal, DayPickerRangeControllerPresets, styles } from './constants'
 import { DatePickerRangeControllerProps } from './types'
@@ -141,15 +141,19 @@ export const DatePickerRangeController = ({
 
     return (
         <>
-            <div
-                data-testid="app-metrics-range-picker-box"
-                className="flex h-36"
-                style={{ borderRadius: '4px', border: 'solid 1px var(--N200)' }}
+            <Button
+                dataTestId="app-metrics-range-picker-box"
                 onClick={toggleCalender}
-            >
-                <p className="cursor mb-0 h-32 p-6">{calendarValue}</p>
-                <Icon name="ic-caret-down-small" color="N600" />
-            </div>
+                {...(calendarValue
+                    ? { text: calendarValue, endIcon: <Icon name="ic-caret-down-small" color="N600" /> }
+                    : {
+                          icon: <Icon name="ic-caret-down-small" color="N600" />,
+                          ariaLabel: 'Show calendar',
+                          showAriaLabelInTippy: false,
+                      })}
+                variant={ButtonVariantType.secondary}
+                style={ButtonStyleType.neutral}
+            />
             {showCalendar && (
                 <DayPickerRangeController
                     startDate={calendar.startDate}

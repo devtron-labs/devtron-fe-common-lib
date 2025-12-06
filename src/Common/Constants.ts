@@ -89,10 +89,15 @@ export const URLS = {
     GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_DETAIL: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/detail/:appId`,
     LICENSE_AUTH: '/license-auth',
     GLOBAL_CONFIG_EDIT_CLUSTER: '/global-config/cluster-env/edit/:clusterId',
+
     // OBSERVABILITY
     OBSERVABILITY: OBSERVABILITY_ROOT,
     OBSERVABILITY_OVERVIEW: `${OBSERVABILITY_ROOT}/overview`,
-    OBSERVABILITY_CUSTOMER_LIST: `${OBSERVABILITY_ROOT}/tenants`,
+    OBSERVABILITY_TENANTS: `${OBSERVABILITY_ROOT}/tenants`,
+    OBSERVABILITY_TENANT_DETAILS: `${OBSERVABILITY_ROOT}/tenants/:tenantName`,
+    OBSERVABILITY_TENANT_OVERVIEW: `${OBSERVABILITY_ROOT}/tenants/:tenantName/overview`,
+    OBSERVABILITY_TENANT_VMS: `${OBSERVABILITY_ROOT}/tenants/:tenantName/vms`,
+    OBSERVABILITY_TENANT_VM_DETAILS: `${OBSERVABILITY_ROOT}/tenants/:tenantName/vms/:vmName`,
 } as const
 
 export const ROUTES = {
@@ -424,6 +429,7 @@ export const DATE_TIME_FORMATS = {
     DD_MMM_YYYY_HH_MM: 'DD MMM YYYY, hh:mm',
     DD_MMM_YYYY: 'DD MMM YYYY',
     'DD/MM/YYYY': 'DD/MM/YYYY',
+    FULL_DATE_WITH_TIME: 'DD-MM-YYYY hh:mm:ss',
 }
 
 export const SEMANTIC_VERSION_DOCUMENTATION_LINK = 'https://semver.org/'

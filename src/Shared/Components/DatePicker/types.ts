@@ -144,6 +144,8 @@ export interface DateTimePickerProps
     onChange: (date: Date) => void
 }
 
+export type CalendarFocusInputType = 'startDate' | 'endDate'
+
 export interface DatePickerRangeControllerProps {
     calendar
     calendarInputs
