@@ -39,6 +39,7 @@ const ResourceConflictDetailsModal = ({ appName, environmentName, handleClose }:
             await resourceConflictRedeploy({
                 pipelineId,
                 triggerId,
+                appId,
             })
             ToastManager.showToast({
                 variant: ToastVariantType.success,
@@ -46,7 +47,7 @@ const ResourceConflictDetailsModal = ({ appName, environmentName, handleClose }:
                 description: `Redeployment for application '${appName}' in environment '${environmentName}' has been initiated successfully.`,
             })
             handleClose()
-            history.push(`${URLS.APP}/${appId}/details/${envId}`)
+            history.push(`${URLS.APPLICATION_MANAGEMENT_APP}/${appId}/details/${envId}`)
         } catch (error) {
             showError(error)
         } finally {

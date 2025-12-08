@@ -17,7 +17,15 @@
 /* eslint-disable dot-notation */
 import moment from 'moment'
 
-import { get, getUrlWithSearchParams, ResponseType, ROUTES, sanitizeUserApprovalMetadata, trash } from '../../../Common'
+import {
+    get,
+    getUrlWithSearchParams,
+    post,
+    ResponseType,
+    ROUTES,
+    sanitizeUserApprovalMetadata,
+    trash,
+} from '../../../Common'
 import { DATE_TIME_FORMAT_STRING, DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP, EXTERNAL_TYPES } from '../../constants'
 import { decode, getUniqueId, isNullOrUndefined } from '../../Helpers'
 import { ResourceKindType, ResourceVersionType } from '../../types'
@@ -28,8 +36,9 @@ import {
     DeploymentStatusDetailsResponse,
     FetchIdDataStatus,
     ModuleConfigResponse,
-    ResourceConflictDeployDialogURLParamsType,
     ResourceConflictItemType,
+    ResourceConflictRedeployParamsType,
+    ResourceConflictRedeployPayloadType,
     TriggerDetailsResponseType,
     TriggerHistoryParamsType,
 } from './types'
@@ -295,12 +304,13 @@ export const getTriggerHistory = async ({
 export const getModuleConfigured = (moduleName: string): Promise<ModuleConfigResponse> =>
     get(`${ROUTES.MODULE_CONFIGURED}?name=${moduleName}`)
 
-export const resourceConflictRedeploy = async ({
-    pipelineId,
-    triggerId,
-}: Pick<ResourceConflictDeployDialogURLParamsType, 'pipelineId' | 'triggerId'>) =>
-    // TODO: Fix the route
-    get(`cd-pipeline/re-deploy/${pipelineId}/${triggerId}`)
+export const resourceConflictRedeploy = async ({ pipelineId, triggerId, appId }: ResourceConflictRedeployParamsType) =>
+    post<never, ResourceConflictRedeployPayloadType>(ROUTES.CD_TRIGGER_POST, {
+        pipelineId: +pipelineId,
+        wfrId: +triggerId,
+        appId: +appId,
+        redeployHelmReleaseWithTakeOwnership: true,
+    })
 
 export const getResourceConflictDetails = async (): Promise<ResponseType<ResourceConflictItemType[]>> => ({
     code: 200,
