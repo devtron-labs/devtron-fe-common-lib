@@ -119,7 +119,11 @@ const ResourceConflictDetailsModal = ({ appName, environmentName, handleClose }:
                             text="Re-deploy"
                             startIcon={<Icon name="ic-rocket-launch" color={null} />}
                             isLoading={isDeploying}
-                            disabled={!!resourceConflictDetailsError || isLoadingResourceData}
+                            disabled={
+                                !!resourceConflictDetailsError ||
+                                isLoadingResourceData ||
+                                resourceConflictDetails?.length === 0
+                            }
                             onClick={handleDeploy}
                         />
                     </div>
