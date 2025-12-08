@@ -7,7 +7,9 @@ import { ConflictedResourcesTableProps, ResourceConflictItemType } from './types
 
 import './ConflictedResourcesTable.scss'
 
-const Wrapper = ({ children }: TableViewWrapperProps<unknown, FiltersTypeEnum.STATE>) => <div>{children}</div>
+const Wrapper = ({ children }: TableViewWrapperProps<unknown, FiltersTypeEnum.STATE>) => (
+    <div className="dc__overflow-hidden flexbox-col flex-grow-1">{children}</div>
+)
 const filter = () => true
 
 const ConflictedResourcesTable = ({ resourceConflictDetails }: ConflictedResourcesTableProps) => {
