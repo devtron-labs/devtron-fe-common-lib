@@ -97,7 +97,7 @@ const ResourceConflictDetailsModal = ({ appName, environmentName, handleClose }:
                     </div>
                 </div>
 
-                <div className="flexbox dc__content-space dc__gap-20 py-16 px-20 border__primary--top dc__no-shrink">
+                <div className="flexbox dc__align-items-center dc__content-space dc__gap-20 py-16 px-20 border__primary--top dc__no-shrink">
                     <div className="flexbox dc__gap-8">
                         <Icon name="ic-warning" size={20} color={null} />
                         <div className="flexbox-col">
