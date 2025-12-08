@@ -6,7 +6,6 @@ import { URLS } from '@Common/Constants'
 import { Drawer } from '@Common/Drawer'
 import { showError, stopPropagation } from '@Common/Helper'
 import { ComponentSizeType } from '@Shared/constants'
-import { ToastManager, ToastVariantType } from '@Shared/Services'
 
 import { APIResponseHandler } from '../APIResponseHandler'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
@@ -43,12 +42,6 @@ const ResourceConflictDetailsModal = ({ appName, environmentName, handleClose }:
                 triggerId,
                 appId,
             })
-            ToastManager.showToast({
-                variant: ToastVariantType.success,
-                title: 'Redeploy initiated',
-                description: `Redeployment for application '${appName}' in environment '${environmentName}' has been initiated successfully.`,
-            })
-            handleClose()
             history.push(`${URLS.APP}/${appId}/details/${envId}`)
         } catch (error) {
             showError(error)
@@ -119,11 +112,7 @@ const ResourceConflictDetailsModal = ({ appName, environmentName, handleClose }:
                             text="Re-deploy"
                             startIcon={<Icon name="ic-rocket-launch" color={null} />}
                             isLoading={isDeploying}
-                            disabled={
-                                !!resourceConflictDetailsError ||
-                                isLoadingResourceData ||
-                                resourceConflictDetails?.length === 0
-                            }
+                            disabled={!resourceConflictDetails?.length}
                             onClick={handleDeploy}
                         />
                     </div>

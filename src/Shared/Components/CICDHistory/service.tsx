@@ -17,6 +17,7 @@
 /* eslint-disable dot-notation */
 import moment from 'moment'
 
+import { ToastManager, ToastVariantType } from '@Shared/Services'
 import { GVKType, K8S_EMPTY_GROUP } from '@Pages/ResourceBrowser'
 
 import {
@@ -309,13 +310,24 @@ export const getTriggerHistory = async ({
 export const getModuleConfigured = (moduleName: string): Promise<ModuleConfigResponse> =>
     get(`${ROUTES.MODULE_CONFIGURED}?name=${moduleName}`)
 
-export const resourceConflictRedeploy = async ({ pipelineId, triggerId, appId }: ResourceConflictRedeployParamsType) =>
-    post<never, ResourceConflictRedeployPayloadType>(ROUTES.CD_TRIGGER_POST, {
+export const resourceConflictRedeploy = async ({
+    pipelineId,
+    triggerId,
+    appId,
+}: ResourceConflictRedeployParamsType) => {
+    await post<never, ResourceConflictRedeployPayloadType>(ROUTES.CD_TRIGGER_POST, {
         pipelineId: +pipelineId,
         wfrIdForDeploymentWithSpecificTrigger: +triggerId,
         appId: +appId,
         redeployHelmReleaseWithTakeOwnership: true,
     })
+
+    ToastManager.showToast({
+        variant: ToastVariantType.success,
+        title: 'Redeployment initiated',
+        description: 'Redeployment for application has been successfully initiated.',
+    })
+}
 
 export const getResourceConflictDetails = async ({
     appId,

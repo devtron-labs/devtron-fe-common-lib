@@ -3,7 +3,6 @@ import { useHistory, useParams } from 'react-router-dom'
 
 import { URLS } from '@Common/Constants'
 import { showError } from '@Common/Helper'
-import { ToastManager, ToastVariantType } from '@Shared/Services'
 
 import { ButtonStyleType } from '../Button'
 import { ConfirmationModal, ConfirmationModalVariantType } from '../ConfirmationModal'
@@ -24,12 +23,6 @@ const ResourceConflictDeployDialog = ({ appName, environmentName, handleClose }:
                 triggerId,
                 appId,
             })
-            ToastManager.showToast({
-                variant: ToastVariantType.success,
-                title: 'Redeploy initiated',
-                description: `Redeployment for application '${appName}' in environment '${environmentName}' has been initiated successfully.`,
-            })
-            handleClose()
             history.push(`${URLS.APP}/${appId}/details/${envId}`)
         } catch (error) {
             showError(error)

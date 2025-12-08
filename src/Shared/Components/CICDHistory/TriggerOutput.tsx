@@ -261,7 +261,6 @@ const TriggerOutput = ({
     )
 
     const targetPlatforms = sanitizeTargetPlatforms(triggerDetails?.targetPlatforms)
-    const artifactId = triggerDetailsResult?.result?.artifactId || triggerDetails?.artifactId
 
     // Function to sync the trigger details as trigger details is also fetched with another api
     const syncState = (syncTriggerId: number, syncTriggerDetail: History, syncTriggerDetailsError: ServerError) => {
@@ -308,10 +307,12 @@ const TriggerOutput = ({
         () =>
             getTagDetails({
                 pipelineId,
-                artifactId,
+                artifactId: triggerDetailsResult?.result?.artifactId || triggerDetails?.artifactId,
             }),
         [pipelineId, triggerId],
-        areTagDetailsRequired && !!pipelineId && !!artifactId,
+        areTagDetailsRequired &&
+            !!pipelineId &&
+            (!!triggerDetailsResult?.result?.artifactId || !!triggerDetails?.artifactId),
     )
 
     useEffect(() => {
@@ -429,7 +430,7 @@ const TriggerOutput = ({
                 setFullScreenView={setFullScreenView}
                 deploymentAppType={deploymentAppType}
                 isBlobStorageConfigured={isBlobStorageConfigured}
-                artifactId={artifactId}
+                artifactId={triggerDetailsResult?.result?.artifactId}
                 ciPipelineId={triggerDetailsResult?.result?.ciPipelineId}
                 appReleaseTags={appReleaseTags}
                 tagsEditable={tagsEditable}

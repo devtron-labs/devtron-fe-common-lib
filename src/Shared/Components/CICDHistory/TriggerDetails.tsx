@@ -468,7 +468,7 @@ const TriggerDetails = memo(
             stage === DeploymentStageType.DEPLOY &&
             errorMessage?.includes(RESOURCE_CONFLICT_DEPLOY_ERROR)
 
-        const handleShowRedeployModal = () => {
+        const handleShowRedeployDialog = () => {
             setResourceConflictModal(ResourceConflictModalType.DEPLOY_DIALOG)
         }
 
@@ -643,7 +643,7 @@ const TriggerDetails = memo(
                                                 dataTestId: 'resource-conflict-re-deploy',
                                                 text: 'Re-deploy',
                                                 startIcon: <Icon name="ic-rocket-launch" color={null} />,
-                                                onClick: handleShowRedeployModal,
+                                                onClick: handleShowRedeployDialog,
                                                 variant: ButtonVariantType.text,
                                                 size: ComponentSizeType.medium,
                                             }}
