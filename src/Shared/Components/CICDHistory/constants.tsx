@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { stringComparatorBySortOrder } from '@Shared/Helpers'
 import { WorkflowStatusEnum } from '@Shared/types'
 
 import { multiSelectStyles } from '../../../Common/MultiSelectCustomization'
@@ -186,6 +187,7 @@ export const CONFLICTED_RESOURCES_COLUMNS: TableProps<ResourceConflictItemType, 
             },
         },
         isSortable: true,
+        comparator: stringComparatorBySortOrder,
         horizontallySticky: true,
     },
     {
@@ -198,6 +200,7 @@ export const CONFLICTED_RESOURCES_COLUMNS: TableProps<ResourceConflictItemType, 
                 minWidth: 100,
             },
         },
+        comparator: stringComparatorBySortOrder,
         isSortable: true,
     },
     {
@@ -211,5 +214,6 @@ export const CONFLICTED_RESOURCES_COLUMNS: TableProps<ResourceConflictItemType, 
             },
         },
         isSortable: true,
+        comparator: stringComparatorBySortOrder,
     },
 ]

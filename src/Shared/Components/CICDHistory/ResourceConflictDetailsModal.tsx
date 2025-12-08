@@ -13,7 +13,11 @@ import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import ConflictedResourcesTable from './ConflictedResourcesTable'
 import { getResourceConflictDetails, resourceConflictRedeploy } from './service'
-import { ResourceConflictDeployDialogURLParamsType, ResourceConflictDetailsModalProps } from './types'
+import {
+    ResourceConflictDeployDialogURLParamsType,
+    ResourceConflictDetailsModalProps,
+    ResourceConflictItemType,
+} from './types'
 
 const ResourceConflictDetailsModal = ({ appName, environmentName, handleClose }: ResourceConflictDetailsModalProps) => {
     const { appId, envId, pipelineId, triggerId } = useParams<ResourceConflictDeployDialogURLParamsType>()
@@ -24,11 +28,9 @@ const ResourceConflictDetailsModal = ({ appName, environmentName, handleClose }:
         data: resourceConflictDetails,
         refetch: refetchResourceConflictDetails,
         error: resourceConflictDetailsError,
-    } = useQuery({
-        queryKey: ['getResourceConflictDetails'],
-        // TODO: Signal
-        queryFn: () => getResourceConflictDetails(),
-        select: (data) => data.result,
+    } = useQuery<ResourceConflictItemType[], ResourceConflictItemType[], [string, string, string, string], false>({
+        queryKey: ['getResourceConflictDetails', pipelineId, triggerId, appId],
+        queryFn: ({ signal }) => getResourceConflictDetails({ pipelineId, triggerId, appId, signal }),
     })
 
     const [isDeploying, setIsDeploying] = useState(false)
@@ -77,7 +79,7 @@ const ResourceConflictDetailsModal = ({ appName, environmentName, handleClose }:
                         />
                     </div>
 
-                    <div className="flexbox flex-grow-1 dc__overflow-auto w-100">
+                    <div className="flexbox-col flex-grow-1 dc__overflow-auto w-100">
                         <APIResponseHandler
                             isLoading={isLoadingResourceData}
                             progressingProps={{
@@ -95,24 +97,32 @@ const ResourceConflictDetailsModal = ({ appName, environmentName, handleClose }:
                     </div>
                 </div>
 
-                <div className="flexbox dc__content-end dc__gap-12 py-16 px-20 border__primary--top dc__no-shrink">
-                    <Button
-                        dataTestId="footer-cancel-button"
-                        variant={ButtonVariantType.secondary}
-                        text="Cancel"
-                        style={ButtonStyleType.neutral}
-                        size={ComponentSizeType.large}
-                        onClick={handleClose}
-                    />
-
-                    <Button
-                        dataTestId="footer-redeploy-button"
-                        variant={ButtonVariantType.primary}
-                        size={ComponentSizeType.large}
-                        text="Re-deploy"
-                        isLoading={isDeploying}
-                        onClick={handleDeploy}
-                    />
+                <div className="flexbox dc__content-space dc__gap-20 py-16 px-20 border__primary--top dc__no-shrink">
+                    <div className="flexbox dc__gap-8">
+                        <Icon name="ic-warning" size={20} color={null} />
+                        <div className="flexbox-col">
+                            <span className="cn-9 fs-13 fw-6 lh-1-5">Take resource ownership and redeploy</span>
+                            <span>
+                                Ensure all resources strictly belong to the {appName} application and the&nbsp;
+                                {environmentName}
+                                environment. Any resource outside this Helm release may cause incorrect associations and
+                                potentially destructive changes.
+                            </span>
+                        </div>
+                    </div>
+                    <div className="dc__no-shrink">
+                        <Button
+                            dataTestId="footer-redeploy-button"
+                            variant={ButtonVariantType.primary}
+                            style={ButtonStyleType.warning}
+                            size={ComponentSizeType.large}
+                            text="Re-deploy"
+                            startIcon={<Icon name="ic-rocket-launch" color={null} />}
+                            isLoading={isDeploying}
+                            disabled={!!resourceConflictDetailsError || isLoadingResourceData}
+                            onClick={handleDeploy}
+                        />
+                    </div>
                 </div>
             </div>
         </Drawer>
