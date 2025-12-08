@@ -14,29 +14,32 @@
  * limitations under the License.
  */
 
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
 import { SERVER_MODE, URLS } from '@Common/Constants'
 import { noop } from '@Common/Helper'
+import { BreadCrumb, BreadcrumbText, useBreadcrumb } from '@Common/index'
 import { ActionMenu } from '@Shared/Components/ActionMenu'
 import { ButtonComponentType } from '@Shared/Components/Button'
 import Button from '@Shared/Components/Button/Button.component'
 import { Icon } from '@Shared/Components/Icon'
-import { AppListConstants, ComponentSizeType } from '@Shared/constants'
+import { ComponentSizeType } from '@Shared/constants'
 import { useMainContext } from '@Shared/Providers'
+import { getApplicationManagementBreadcrumb } from '@PagesDevtron2.0/ApplicationManagement'
+import { getInfrastructureManagementBreadcrumb } from '@PagesDevtron2.0/InfrastructureManagement'
+import { getAutomationEnablementBreadcrumbConfig } from '@PagesDevtron2.0/InfrastructureManagement/utils'
 
 import PageHeader from '../PageHeader'
 import { HeaderWithCreateButtonProps } from './types'
 import { getCreateActionMenuOptions } from './utils'
 
-export const HeaderWithCreateButton = ({ headerName, additionalHeaderInfo }: HeaderWithCreateButtonProps) => {
+export const HeaderWithCreateButton = ({ viewType }: HeaderWithCreateButtonProps) => {
     // HOOKS
-    const { serverMode } = useMainContext()
-    const params = useParams<{ appType: string }>()
     const location = useLocation()
+    const { serverMode } = useMainContext()
 
     // CONSTANTS
-    const createCustomAppURL = `${URLS.APP}/${URLS.APP_LIST}/${params.appType ?? AppListConstants.AppType.DEVTRON_APPS}/${AppListConstants.CREATE_DEVTRON_APP_URL}${location.search}`
+    const createCustomAppURL = `${URLS.APPLICATION_MANAGEMENT_CREATE_DEVTRON_APP}${location.search}`
 
     const renderActionButtons = () =>
         serverMode === SERVER_MODE.FULL ? (
@@ -56,18 +59,57 @@ export const HeaderWithCreateButton = ({ headerName, additionalHeaderInfo }: Hea
             <Button
                 text="Deploy helm charts"
                 component={ButtonComponentType.link}
-                linkProps={{ to: URLS.CHARTS_DISCOVER }}
+                linkProps={{ to: URLS.INFRASTRUCTURE_MANAGEMENT_CHART_STORE_DISCOVER }}
                 dataTestId="deploy-helm-chart-on-header"
                 size={ComponentSizeType.small}
             />
         )
 
+    const getBreadcrumbs = () => {
+        switch (viewType) {
+            case 'jobs':
+                return getAutomationEnablementBreadcrumbConfig()
+            case 'infra-apps':
+                return {
+                    ...getInfrastructureManagementBreadcrumb(),
+                    apps: { component: <BreadcrumbText isActive heading="Applications" /> },
+                    ':appType(helm|argocd|fluxcd)': null,
+                }
+            case 'apps':
+            default:
+                return {
+                    ...getApplicationManagementBreadcrumb(),
+                    'devtron-app': { component: <BreadcrumbText isActive heading="Devtron Applications" /> },
+                    list: null,
+                }
+        }
+    }
+
+    const { breadcrumbs } = useBreadcrumb(
+        {
+            alias: getBreadcrumbs(),
+        },
+        [location.pathname],
+    )
+    const renderBreadcrumbs = () => <BreadCrumb breadcrumbs={breadcrumbs} />
+
     return (
         <div className="create-button-container dc__position-sticky dc__top-0 bg__primary dc__zi-4">
             <PageHeader
-                headerName={headerName}
+                isBreadcrumbs
+                breadCrumbs={renderBreadcrumbs}
                 renderActionButtons={renderActionButtons}
-                additionalHeaderInfo={additionalHeaderInfo}
+                {...(viewType === 'jobs'
+                    ? {
+                          tippyProps: {
+                              isTippyCustomized: true,
+                              tippyRedirectLink: 'JOBS',
+                              tippyMessage:
+                                  'Job allows execution of repetitive tasks in a manual or automated manner. Execute custom tasks or choose from a library of preset plugins in your job pipeline.',
+                              tippyHeader: 'Job',
+                          },
+                      }
+                    : {})}
             />
         </div>
     )

@@ -23,7 +23,7 @@ import {
     UseUrlFiltersProps,
     UseUrlFiltersReturnType,
 } from '@Common/Hooks'
-import { APIOptions, GenericEmptyStateType } from '@Common/index'
+import { GenericEmptyStateType } from '@Common/index'
 import { PageSizeOption } from '@Common/Pagination/types'
 import { SortableTableHeaderCellProps, useResizableTableConfig } from '@Common/SortableTableHeaderCell'
 
@@ -169,6 +169,7 @@ export interface BulkOperationModalProps<
 type BulkSelectionConfigType = Pick<UseBulkSelectionProps<unknown>, 'getSelectAllDialogStatus'> & {
     BulkActionsComponent: FunctionComponent<BulkActionsComponentProps>
     BulkOperationModal: FunctionComponent<BulkOperationModalProps>
+    disableSelectAllAcrossEvenIfPaginated?: boolean
 } & Pick<BulkActionsComponentProps, 'bulkActionsData'> &
     Pick<BulkOperationModalProps, 'bulkOperationModalData'>
 
@@ -294,7 +295,10 @@ export type InternalTableProps<
     /**
      * Use this component to display additional content at the end of a row when it is hovered over.
      */
-    RowActionsOnHoverComponent?: FunctionComponent<RowActionsOnHoverComponentProps<RowData, AdditionalProps>>
+    rowActionOnHoverConfig?: {
+        Component: FunctionComponent<RowActionsOnHoverComponentProps<RowData, AdditionalProps>>
+        width: string | number
+    }
 
     bulkSelectionReturnValue: BulkSelectionReturnValueType | null
 
@@ -319,7 +323,7 @@ export type InternalTableProps<
               /** NOTE: Sorting on frontend is only handled if rows is provided instead of getRows */
               getRows: (
                   props: GetRowsProps,
-                  abortControllerRef: APIOptions['abortControllerRef'],
+                  signal: AbortSignal,
               ) => Promise<{ rows: RowsType<RowData>; totalRows: number }>
           }
     ) &
@@ -381,7 +385,7 @@ export type TableProps<
     | 'paginationVariant'
     | 'stylesConfig'
     | 'id'
-    | 'RowActionsOnHoverComponent'
+    | 'rowActionOnHoverConfig'
     | 'loading'
     | 'ViewWrapper'
     | 'pageSizeOptions'
@@ -410,29 +414,33 @@ export interface GetFilteringPromiseProps<RowData extends unknown> {
     callback: () => Promise<RowsType<RowData>> | RowsType<RowData>
 }
 
+export interface RowsResultType<RowData extends unknown> {
+    filteredRows: RowsType<RowData>
+    totalRows: number
+}
+
 export interface TableContentProps<
     RowData extends unknown,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
 > extends Pick<
-        InternalTableProps<RowData, FilterVariant, AdditionalProps>,
-        | 'filterData'
-        | 'rows'
-        | 'resizableConfig'
-        | 'additionalProps'
-        | 'visibleColumns'
-        | 'stylesConfig'
-        | 'loading'
-        | 'bulkSelectionConfig'
-        | 'bulkSelectionReturnValue'
-        | 'handleClearBulkSelection'
-        | 'handleToggleBulkSelectionOnRow'
-        | 'paginationVariant'
-        | 'RowActionsOnHoverComponent'
-        | 'pageSizeOptions'
-        | 'getRows'
-    > {
-    filteredRows: RowsType<RowData>
+            InternalTableProps<RowData, FilterVariant, AdditionalProps>,
+            | 'filterData'
+            | 'rows'
+            | 'resizableConfig'
+            | 'additionalProps'
+            | 'visibleColumns'
+            | 'stylesConfig'
+            | 'loading'
+            | 'bulkSelectionConfig'
+            | 'bulkSelectionReturnValue'
+            | 'handleClearBulkSelection'
+            | 'handleToggleBulkSelectionOnRow'
+            | 'paginationVariant'
+            | 'rowActionOnHoverConfig'
+            | 'pageSizeOptions'
+            | 'getRows'
+        >,
+        RowsResultType<RowData> {
     areFilteredRowsLoading: boolean
-    totalRows: number
 }

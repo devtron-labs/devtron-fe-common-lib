@@ -35,8 +35,10 @@ export interface PageHeaderType {
         TippyIcon?: React.FunctionComponent<any>
         tippyMessage?: string
         onClickTippyButton?: () => void
+        tippyHeader?: string
     }
     onClose?: () => void
+    closeIcon?: JSX.Element
 }
 
 export interface ServerInfo {

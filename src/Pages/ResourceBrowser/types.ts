@@ -25,6 +25,7 @@ export enum ClusterFiltersType {
     ALL_CLUSTERS = 'all',
     HEALTHY = 'healthy',
     UNHEALTHY = 'unhealthy',
+    CONNECTION_FAILED = 'connectionFailed',
 }
 
 export enum InstallationClusterStatus {

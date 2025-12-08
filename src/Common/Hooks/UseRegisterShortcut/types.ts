@@ -47,6 +47,7 @@ export const KEYBOARD_KEYS_MAP = {
     Delete: '⌦',
     '.': '.',
     Space: 'Space',
+    '>': '>',
 } as const
 
 export type SupportedKeyboardKeysType = keyof typeof KEYBOARD_KEYS_MAP

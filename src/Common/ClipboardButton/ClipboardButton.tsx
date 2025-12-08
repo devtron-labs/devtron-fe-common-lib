@@ -17,11 +17,12 @@
 import { useEffect, useRef, useState } from 'react'
 
 import Tooltip from '@Common/Tooltip/Tooltip'
+import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components/Button'
 
 import { ReactComponent as Check } from '../../Assets/Icon/ic-check.svg'
 import { ReactComponent as ICCopy } from '../../Assets/Icon/ic-copy.svg'
 import { copyToClipboard, noop, stopPropagation } from '../Helper'
-import ClipboardProps from './types'
+import { ClipboardProps } from './types'
 
 /**
  * @param content - Content to be copied
@@ -40,6 +41,8 @@ export const ClipboardButton = ({
     rootClassName = '',
     iconSize = 16,
     handleSuccess,
+    variant = 'default',
+    size,
 }: ClipboardProps) => {
     const [copied, setCopied] = useState<boolean>(false)
     const setCopiedFalseTimeoutRef = useRef<ReturnType<typeof setTimeout>>(-1)
@@ -96,18 +99,44 @@ export const ClipboardButton = ({
 
     const iconClassName = `icon-dim-${iconSize} dc__no-shrink`
 
+    const ariaLabel = `Copy ${content}`
+
+    const renderIcon = () => (
+        <div className="flex">
+            {copied ? <Check className={iconClassName} /> : <ICCopy className={iconClassName} />}
+        </div>
+    )
+
+    const tooltipContent = copied ? copiedTippyText : initialTippyText
+
+    if (variant === 'button--secondary') {
+        return (
+            <Button
+                variant={ButtonVariantType.secondary}
+                dataTestId="clippy-button"
+                icon={renderIcon()}
+                size={size}
+                onClick={handleCopyContent}
+                tooltipProps={{
+                    content: tooltipContent,
+                }}
+                showTooltip
+                ariaLabel={ariaLabel}
+                style={ButtonStyleType.neutral}
+            />
+        )
+    }
+
     return (
-        <Tooltip content={copied ? copiedTippyText : initialTippyText} alwaysShowTippyOnHover>
+        <Tooltip content={tooltipContent} alwaysShowTippyOnHover>
             {/* TODO: semantically buttons should not be nested; fix later */}
             <button
                 type="button"
                 className={`dc__outline-none-imp p-0 flex dc__transparent--unstyled dc__no-border ${rootClassName}`}
-                aria-label={`Copy ${content}`}
+                aria-label={ariaLabel}
                 onClick={handleCopyContent}
             >
-                <div className="flex">
-                    {copied ? <Check className={iconClassName} /> : <ICCopy className={iconClassName} />}
-                </div>
+                {renderIcon()}
             </button>
         </Tooltip>
     )

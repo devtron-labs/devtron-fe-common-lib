@@ -16,6 +16,7 @@
 
 import { ComponentSizeType } from '@Shared/constants'
 
+import { ActionMenu } from '../ActionMenu'
 import { Button, ButtonProps, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import { NumbersCount } from '../NumbersCount'
@@ -69,6 +70,10 @@ const TrailingItem = ({ type, config, variant = 'neutral' }: TrailingItemProps) 
                     size={ComponentSizeType.xxs}
                 />
             )
+
+        case 'action-menu':
+            return <ActionMenu {...config} />
+
         default:
             return null
     }

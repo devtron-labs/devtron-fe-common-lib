@@ -138,13 +138,13 @@ const DeploymentDetailSteps = ({
     const redirectToDeploymentStatus = () => {
         if (isHelmApps) {
             getHandleOpenURL(
-                `${window.__BASE_URL__}${URLS.APP}/${URLS.DEVTRON_CHARTS}/${URLS.APP_DEPLOYMNENT_HISTORY}/${appId}/env/${envId}/${URLS.DETAILS}/${URLS.APP_DETAILS_K8}?${DEPLOYMENT_STATUS_QUERY_PARAM}`,
+                `${window.__BASE_URL__}${URLS.INFRASTRUCTURE_MANAGEMENT_APP}/${URLS.DEVTRON_CHARTS}/${URLS.APP_DEPLOYMNENT_HISTORY}/${appId}/env/${envId}/${URLS.DETAILS}/${URLS.APP_DETAILS_K8}?${DEPLOYMENT_STATUS_QUERY_PARAM}`,
             )()
             return
         }
 
         getHandleOpenURL(
-            `${window.__BASE_URL__}${URLS.APP}/${appId}/${URLS.APP_DETAILS}/${envId}/${URLS.APP_DETAILS_K8}?${DEPLOYMENT_STATUS_QUERY_PARAM}`,
+            `${window.__BASE_URL__}${URLS.APPLICATION_MANAGEMENT_APP}/${appId}/${URLS.APP_DETAILS}/${envId}/${URLS.APP_DETAILS_K8}?${DEPLOYMENT_STATUS_QUERY_PARAM}`,
         )()
     }
 
