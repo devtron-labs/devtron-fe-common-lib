@@ -38,7 +38,6 @@ import {
     DeploymentStatusDetailsResponse,
     FetchIdDataStatus,
     GetResourceConflictDetailsParamsType,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     GetResourceListItemPayloadType,
     ModuleConfigResponse,
     ResourceConflictItemType,
@@ -319,68 +318,22 @@ export const resourceConflictRedeploy = async ({ pipelineId, triggerId, appId }:
     })
 
 export const getResourceConflictDetails = async ({
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     appId,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     pipelineId,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     triggerId,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     signal,
 }: GetResourceConflictDetailsParamsType): Promise<ResourceConflictItemType[]> => {
-    // const { result } = await post<ResourceConflictListItemDTO, GetResourceListItemPayloadType>(
-    //     ROUTES.RESOURCE_CONFLICTS_LIST,
-    //     {
-    //         appId: +appId,
-    //         pipelineId: +pipelineId,
-    //         wfrId: +triggerId,
-    //     },
-    //     { signal },
-    // )
+    const { result } = await post<ResourceConflictListItemDTO, GetResourceListItemPayloadType>(
+        ROUTES.RESOURCE_CONFLICTS_LIST,
+        {
+            appId: +appId,
+            pipelineId: +pipelineId,
+            wfrId: +triggerId,
+        },
+        { signal },
+    )
 
-    const MOCK_RESULT: ResourceConflictListItemDTO = {
-        clusterId: 1,
-        conflictingResources: [
-            {
-                name: 'resource-1',
-                namespace: 'default',
-                groupVersionKind: {
-                    Group: 'apps',
-                    Version: 'v1',
-                    Kind: 'Deployment',
-                },
-            },
-            {
-                name: 'resource-2',
-                namespace: 'default',
-                groupVersionKind: {
-                    Group: '',
-                    Version: 'v1',
-                    Kind: 'Service',
-                },
-            },
-            {
-                name: 'resource-3',
-                namespace: 'default',
-                groupVersionKind: {
-                    Group: 'apps',
-                    Version: 'v1',
-                    Kind: 'StatefulSet',
-                },
-            },
-            {
-                name: 'resource-4',
-                namespace: 'default',
-                groupVersionKind: {
-                    Group: 'batch',
-                    Version: 'v1',
-                    Kind: 'Job',
-                },
-            },
-        ],
-    }
-
-    return (MOCK_RESULT?.conflictingResources || []).map<ResourceConflictItemType>((resource) => ({
+    return (result?.conflictingResources || []).map<ResourceConflictItemType>((resource) => ({
         name: resource.name || '',
         namespace: resource.namespace || '',
         gvk: {
@@ -389,7 +342,7 @@ export const getResourceConflictDetails = async ({
             Kind: resource.groupVersionKind.Kind || ('' as GVKType['Kind']),
         },
         gvkTitle: getGVKTitle(resource.groupVersionKind),
-        clusterId: MOCK_RESULT.clusterId,
+        clusterId: result.clusterId,
         id: getUniqueId(),
     }))
 }
