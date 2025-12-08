@@ -356,29 +356,10 @@ export interface ResourceConflictDeployDialogProps extends ResourceConflictDialo
 
 export interface ResourceConflictDetailsModalProps extends ResourceConflictDialogBaseProps {}
 
-export interface ResourceConflictItemType {
-    name: string
-    namespace: string
-    gvk: GVKType
-    gvkTitle: string
-    clusterId: number
-    /**
-     * Generated at ui
-     */
-    id: string
-}
-
-export interface ConflictedResourcesTableProps {
-    resourceConflictDetails: ResourceConflictItemType[]
-}
-
 export interface TriggerOutputURLParamsType extends Pick<BaseURLParams, 'appId' | 'envId'> {
     triggerId: string
     pipelineId: string
 }
-
-export interface ResourceConflictDeployDialogURLParamsType
-    extends Pick<TriggerOutputURLParamsType, 'appId' | 'envId' | 'pipelineId' | 'triggerId'> {}
 
 export type ProgressingStatusType = {
     stage: DeploymentStageType
@@ -905,6 +886,25 @@ export interface CIPipelineSourceConfigInterface {
     rootClassName?: string
 }
 
+export interface ResourceConflictItemType {
+    name: string
+    namespace: string
+    gvk: GVKType
+    gvkTitle: string
+    clusterId: number
+    /**
+     * Generated at ui
+     */
+    id: string
+}
+
+export interface ConflictedResourcesTableProps {
+    resourceConflictDetails: ResourceConflictItemType[]
+}
+
+export interface ResourceConflictDeployDialogURLParamsType
+    extends Pick<TriggerOutputURLParamsType, 'appId' | 'envId' | 'pipelineId' | 'triggerId'> {}
+
 export interface ResourceConflictRedeployParamsType
     extends Pick<ResourceConflictDeployDialogURLParamsType, 'pipelineId' | 'triggerId' | 'appId'> {}
 
@@ -913,4 +913,28 @@ export interface ResourceConflictRedeployPayloadType {
     appId: number
     wfrId: number
     redeployHelmReleaseWithTakeOwnership: true
+}
+
+export interface GetResourceConflictDetailsParamsType
+    extends Pick<ResourceConflictDeployDialogURLParamsType, 'pipelineId' | 'triggerId' | 'appId'> {
+    signal: AbortSignal
+}
+
+export interface GetResourceListItemPayloadType {
+    pipelineId: number
+    appId: number
+    wfrId: number
+}
+
+export interface ResourceConflictListItemDTO {
+    clusterId: number
+    conflictingResources: {
+        name: string
+        namespace: string
+        groupVersionKind: {
+            Group: string
+            Version: string
+            Kind: NodeType
+        }
+    }[]
 }

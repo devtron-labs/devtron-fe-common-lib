@@ -30,7 +30,7 @@ const ResourceConflictDeployDialog = ({ appName, environmentName, handleClose }:
                 description: `Redeployment for application '${appName}' in environment '${environmentName}' has been initiated successfully.`,
             })
             handleClose()
-            history.push(`${URLS.APPLICATION_MANAGEMENT_APP}/${appId}/details/${envId}`)
+            history.push(`${URLS.APP}/${appId}/details/${envId}`)
         } catch (error) {
             showError(error)
         } finally {

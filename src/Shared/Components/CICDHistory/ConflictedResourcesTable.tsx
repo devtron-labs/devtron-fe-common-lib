@@ -1,13 +1,14 @@
 import { useMemo } from 'react'
 
-import { noop } from '@Common/Helper'
-
 import { FiltersTypeEnum, PaginationEnum, Table, TableViewWrapperProps } from '../Table'
 import { RowsType } from '../Table/types'
 import { CONFLICTED_RESOURCES_COLUMNS } from './constants'
 import { ConflictedResourcesTableProps, ResourceConflictItemType } from './types'
 
+import './ConflictedResourcesTable.scss'
+
 const Wrapper = ({ children }: TableViewWrapperProps<unknown, FiltersTypeEnum.STATE>) => <div>{children}</div>
+const filter = () => true
 
 const ConflictedResourcesTable = ({ resourceConflictDetails }: ConflictedResourcesTableProps) => {
     const rows: RowsType<ResourceConflictItemType> = useMemo(
@@ -39,7 +40,7 @@ const ConflictedResourcesTable = ({ resourceConflictDetails }: ConflictedResourc
             }}
             filtersVariant={FiltersTypeEnum.STATE}
             ViewWrapper={Wrapper}
-            filter={noop}
+            filter={filter}
         />
     )
 }

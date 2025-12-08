@@ -491,7 +491,7 @@ const TriggerDetails = memo(
                 />
                 &nbsp;
                 <span className="cn-9 fw-4 fs-13 lh-20 dc__word-break">
-                    have ownership conflict. Take resource ownership and re-deploy
+                    have ownership conflicts. Resolve by taking ownership and redeploying.
                 </span>
             </div>
         )
@@ -635,8 +635,9 @@ const TriggerDetails = memo(
                                 namespace={namespace}
                             >
                                 {showResourceConflictInfoBlock && (
-                                    <div className="py-12 pr-12">
+                                    <div className="pt-12 pr-12">
                                         <InfoBlock
+                                            variant="warning"
                                             description={renderInfoBlockDescription()}
                                             buttonProps={{
                                                 dataTestId: 'resource-conflict-re-deploy',
