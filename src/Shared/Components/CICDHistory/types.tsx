@@ -911,7 +911,7 @@ export interface ResourceConflictRedeployParamsType
 export interface ResourceConflictRedeployPayloadType {
     pipelineId: number
     appId: number
-    wfrId: number
+    wfrIdForDeploymentWithSpecificTrigger: number
     redeployHelmReleaseWithTakeOwnership: true
 }
 

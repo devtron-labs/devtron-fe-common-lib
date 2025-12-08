@@ -312,7 +312,7 @@ export const getModuleConfigured = (moduleName: string): Promise<ModuleConfigRes
 export const resourceConflictRedeploy = async ({ pipelineId, triggerId, appId }: ResourceConflictRedeployParamsType) =>
     post<never, ResourceConflictRedeployPayloadType>(ROUTES.CD_TRIGGER_POST, {
         pipelineId: +pipelineId,
-        wfrId: +triggerId,
+        wfrIdForDeploymentWithSpecificTrigger: +triggerId,
         appId: +appId,
         redeployHelmReleaseWithTakeOwnership: true,
     })
