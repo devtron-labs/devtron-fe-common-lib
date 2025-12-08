@@ -409,6 +409,7 @@ export interface WorkerStatusType
      * @default false
      */
     hideShowMoreMessageButton?: boolean
+    children?: ReactNode
 }
 
 export type FinishedType = { artifact: string; type: HistoryComponentType } & (
@@ -902,4 +903,14 @@ export interface CIPipelineSourceConfigInterface {
     isRegex?: boolean
     primaryBranchAfterRegex?: string
     rootClassName?: string
+}
+
+export interface ResourceConflictRedeployParamsType
+    extends Pick<ResourceConflictDeployDialogURLParamsType, 'pipelineId' | 'triggerId' | 'appId'> {}
+
+export interface ResourceConflictRedeployPayloadType {
+    pipelineId: number
+    appId: number
+    wfrId: number
+    redeployHelmReleaseWithTakeOwnership: true
 }

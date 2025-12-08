@@ -472,6 +472,10 @@ const TriggerDetails = memo(
             setResourceConflictModal(ResourceConflictModalType.DEPLOY_DIALOG)
         }
 
+        const handleShowResourceConflictDetailsModal = () => {
+            setResourceConflictModal(ResourceConflictModalType.RESOURCE_DETAIL_MODAL)
+        }
+
         const handleCloseRedeployModal = () => {
             setResourceConflictModal(null)
         }
@@ -483,8 +487,9 @@ const TriggerDetails = memo(
                     text="Some Resources"
                     variant={ButtonVariantType.text}
                     size={ComponentSizeType.medium}
+                    onClick={handleShowResourceConflictDetailsModal}
                 />
-
+                &nbsp;
                 <span className="cn-9 fw-4 fs-13 lh-20 dc__word-break">
                     have ownership conflict. Take resource ownership and re-deploy
                 </span>
@@ -628,22 +633,24 @@ const TriggerDetails = memo(
                                 clusterId={executionInfo?.workerDetails.clusterId || DEFAULT_CLUSTER_ID}
                                 workerPodName={workerPodName}
                                 namespace={namespace}
-                            />
+                            >
+                                {showResourceConflictInfoBlock && (
+                                    <div className="py-12 pr-12">
+                                        <InfoBlock
+                                            description={renderInfoBlockDescription()}
+                                            buttonProps={{
+                                                dataTestId: 'resource-conflict-re-deploy',
+                                                text: 'Re-deploy',
+                                                startIcon: <Icon name="ic-rocket-launch" color={null} />,
+                                                onClick: handleShowRedeployModal,
+                                                variant: ButtonVariantType.text,
+                                                size: ComponentSizeType.medium,
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                            </WorkerStatus>
                         </div>
-
-                        {showResourceConflictInfoBlock && (
-                            <div className="display-grid trigger-details__grid py-4">
-                                <InfoBlock
-                                    description={renderInfoBlockDescription()}
-                                    buttonProps={{
-                                        dataTestId: 'resource-conflict-re-deploy',
-                                        text: 'Re-deploy',
-                                        startIcon: <Icon name="ic-rocket-launch" color={null} />,
-                                        onClick: handleShowRedeployModal,
-                                    }}
-                                />
-                            </div>
-                        )}
                     </div>
                 </div>
 
