@@ -96,7 +96,7 @@ export const GroupedFilterSelectPicker = <T extends string | number>({
             >
                 <Icon name={isFilterApplied ? 'ic-filter-applied' : 'ic-filter'} color="N700" />
                 <span className="fs-12 lh-20 fw-6 cn-9">Filter</span>
-                <kbd className="icon-dim-20 flex bg__primary border__primary br-2 shadow__key fs-12 lh-20 cn-7">F</kbd>
+                <kbd className="icon-dim-20 flex bg__primary border__primary br-2 shadow__key fs-12 lh-20 cn-7">f</kbd>
             </button>
         </ActionMenu>
     )
