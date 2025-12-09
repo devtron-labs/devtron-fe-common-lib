@@ -59,7 +59,6 @@ export type NavigationItemID =
     | 'data-protection-backup-repositories'
     | 'data-protection-backup-locations'
     | 'data-protection-history-and-logs'
-    | 'ai-recommendations-overview'
 
 export type NavigationSubMenuItemID =
     | 'application-management-configurations-gitops'
