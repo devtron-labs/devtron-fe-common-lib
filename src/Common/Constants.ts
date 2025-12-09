@@ -232,6 +232,12 @@ export const ROUTES = {
     LICENSE_DATA: 'license/data',
     ENV: 'env',
     APP_METADATA: 'app-metadata',
+    APPS_OVERVIEW: 'overview/apps-overview',
+    WORKFLOW_OVERVIEW: 'overview/workflow-overview',
+    DORA_METRICS: 'overview/dora-metrics',
+    BUILD_DEPLOYMENT_ACTIVITY: 'overview/build-deployment-activity',
+    BUILD_DEPLOYMENT_ACTIVITY_DETAILED: 'overview/build-deployment-activity/detailed',
+    PIPELINE_INSIGHTS: 'overview/pipeline-insights',
 } as const
 
 export enum KEY_VALUE {
