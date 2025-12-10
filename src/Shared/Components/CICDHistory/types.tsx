@@ -912,18 +912,12 @@ export interface ResourceConflictRedeployPayloadType {
     pipelineId: number
     appId: number
     wfrIdForDeploymentWithSpecificTrigger: number
-    redeployHelmReleaseWithTakeOwnership: true
+    helmRedeploymentRequest: true
 }
 
 export interface GetResourceConflictDetailsParamsType
     extends Pick<ResourceConflictDeployDialogURLParamsType, 'pipelineId' | 'triggerId' | 'appId'> {
     signal: AbortSignal
-}
-
-export interface GetResourceListItemPayloadType {
-    pipelineId: number
-    appId: number
-    wfrId: number
 }
 
 export interface ResourceConflictListItemDTO {

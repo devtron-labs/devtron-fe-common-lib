@@ -15,6 +15,7 @@
  */
 
 /* eslint-disable dot-notation */
+import { generatePath } from 'react-router-dom'
 import moment from 'moment'
 
 import { ToastManager, ToastVariantType } from '@Shared/Services'
@@ -39,7 +40,6 @@ import {
     DeploymentStatusDetailsResponse,
     FetchIdDataStatus,
     GetResourceConflictDetailsParamsType,
-    GetResourceListItemPayloadType,
     ModuleConfigResponse,
     ResourceConflictItemType,
     ResourceConflictListItemDTO,
@@ -319,7 +319,7 @@ export const resourceConflictRedeploy = async ({
         pipelineId: +pipelineId,
         wfrIdForDeploymentWithSpecificTrigger: +triggerId,
         appId: +appId,
-        redeployHelmReleaseWithTakeOwnership: true,
+        helmRedeploymentRequest: true,
     })
 
     ToastManager.showToast({
@@ -335,13 +335,12 @@ export const getResourceConflictDetails = async ({
     triggerId,
     signal,
 }: GetResourceConflictDetailsParamsType): Promise<ResourceConflictItemType[]> => {
-    const { result } = await post<ResourceConflictListItemDTO, GetResourceListItemPayloadType>(
-        ROUTES.RESOURCE_CONFLICTS_LIST,
-        {
-            appId: +appId,
-            pipelineId: +pipelineId,
-            wfrId: +triggerId,
-        },
+    const { result } = await get<ResourceConflictListItemDTO>(
+        generatePath(ROUTES.RESOURCE_CONFLICTS_LIST, {
+            appId,
+            pipelineId,
+            wfrId: triggerId,
+        }),
         { signal },
     )
 
