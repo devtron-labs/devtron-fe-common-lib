@@ -34,6 +34,8 @@ export type NavigationItemID =
     | 'automation-and-enablement-runbook-automation'
     | 'global-configuration-sso-login-services'
     | 'global-configuration-host-urls'
+    | 'global-configuration-external-links'
+    | 'global-configuration-chart-repository'
     | 'global-configuration-cluster-and-environments'
     | 'global-configuration-container-oci-registry'
     | 'global-configuration-authorization'
