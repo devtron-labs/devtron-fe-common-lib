@@ -47,8 +47,6 @@ export type NavigationItemID =
 export type NavigationSubMenuItemID =
     | 'application-management-configurations-gitops'
     | 'application-management-configurations-git-accounts'
-    | 'application-management-configurations-external-links'
-    | 'application-management-configurations-chart-repository'
     | 'application-management-configurations-deployment-charts'
     | 'application-management-configurations-notifications'
     | 'application-management-configurations-catalog-frameworks'
