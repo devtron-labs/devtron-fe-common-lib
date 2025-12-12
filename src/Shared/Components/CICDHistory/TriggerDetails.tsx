@@ -26,6 +26,7 @@ import { ZERO_TIME_STRING } from '@Common/Constants'
 import { CommitChipCell } from '@Shared/Components/CommitChipCell'
 import { ImageChipCell } from '@Shared/Components/ImageChipCell'
 import { getHandleOpenURL } from '@Shared/Helpers'
+import { useMainContext } from '@Shared/Providers'
 import { ToastManager, ToastVariantType } from '@Shared/Services'
 import { getDeploymentStageTitle } from '@Pages/Applications'
 
@@ -453,6 +454,8 @@ const TriggerDetails = memo(
         isLatest,
         appName,
     }: TriggerDetailsType) => {
+        const { isFELibAvailable } = useMainContext()
+
         const [resourceConflictModal, setResourceConflictModal] = useState<ResourceConflictModalType>(null)
 
         const executionInfo = useMemo(
@@ -463,6 +466,7 @@ const TriggerDetails = memo(
         const errorMessage = executionInfo?.workerDetails.message || message
 
         const showResourceConflictInfoBlock =
+            isFELibAvailable &&
             isLatest &&
             (type === HistoryComponentType.CD || type === HistoryComponentType.GROUP_CD) &&
             stage === DeploymentStageType.DEPLOY &&
