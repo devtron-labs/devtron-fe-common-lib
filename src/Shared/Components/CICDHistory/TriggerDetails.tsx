@@ -491,6 +491,7 @@ const TriggerDetails = memo(
                     text="Some Resources"
                     variant={ButtonVariantType.text}
                     size={ComponentSizeType.medium}
+                    style={ButtonStyleType.warning}
                     onClick={handleShowResourceConflictDetailsModal}
                 />
                 &nbsp;
@@ -649,6 +650,7 @@ const TriggerDetails = memo(
                                                 startIcon: <Icon name="ic-rocket-launch" color={null} />,
                                                 onClick: handleShowRedeployDialog,
                                                 variant: ButtonVariantType.text,
+                                                style: ButtonStyleType.warning,
                                                 size: ComponentSizeType.medium,
                                             }}
                                         />
