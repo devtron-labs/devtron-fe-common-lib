@@ -64,7 +64,6 @@ const DATA_PROTECTION_ROOT = '/data-protection-management'
 const DATA_PROTECTION_BACKUP_AND_SCHEDULE =
     `${DATA_PROTECTION_ROOT}/backup-and-schedule/:view(${Object.values(BackupAndScheduleListViewEnum).join('|')})` as const
 const GLOBAL_CONFIG_ROOT = '/global-configuration'
-const OBSERVABILITY_ROOT = '/observability'
 
 export const URLS = {
     LOGIN: '/login',
@@ -156,10 +155,6 @@ export const URLS = {
     GLOBAL_CONFIG_EDIT_CLUSTER: `${GLOBAL_CONFIG_ROOT}/cluster-env/edit/:clusterId`,
     PERMISSION_GROUPS: `${GLOBAL_CONFIG_ROOT}/auth/groups`,
     EXTERNAL_APPS: 'ea',
-    // OBSERVABILITY
-    OBSERVABILITY: OBSERVABILITY_ROOT,
-    OBSERVABILITY_OVERVIEW: `${OBSERVABILITY_ROOT}/overview`,
-    OBSERVABILITY_CUSTOMER_LIST: `${OBSERVABILITY_ROOT}/tenants`,
 } as const
 
 export const ROUTES = {
