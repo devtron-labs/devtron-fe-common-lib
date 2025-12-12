@@ -1141,9 +1141,14 @@ export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = Devt
               showLicenseData?: never
               licenseStatusError?: never
               moduleLimits?: never
+              instanceData: {
+                  devtronUrl: string
+                  devtronPassword: string
+              }
           }
         : {
               claimedByUserDetails?: never
+              instanceData?: never
               showLicenseData: boolean
               licenseStatusError?: LicenseErrorStruct
               moduleLimits: {
