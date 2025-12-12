@@ -42,10 +42,10 @@ const ResourceConflictDetailsModal = ({ appName, environmentName, handleClose }:
                 triggerId,
                 appId,
             })
+            setIsDeploying(false)
             history.push(`${URLS.APP}/${appId}/details/${envId}`)
         } catch (error) {
             showError(error)
-        } finally {
             setIsDeploying(false)
         }
     }

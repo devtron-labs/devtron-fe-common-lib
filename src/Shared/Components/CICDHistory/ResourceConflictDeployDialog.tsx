@@ -23,10 +23,10 @@ const ResourceConflictDeployDialog = ({ appName, environmentName, handleClose }:
                 triggerId,
                 appId,
             })
+            setIsLoading(false)
             history.push(`${URLS.APP}/${appId}/details/${envId}`)
         } catch (error) {
             showError(error)
-        } finally {
             setIsLoading(false)
         }
     }
