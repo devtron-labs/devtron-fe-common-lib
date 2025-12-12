@@ -104,7 +104,7 @@ export type NavigationItemType = Pick<
           })
         | (Never<Pick<CommonNavigationItemType, 'icon' | 'href'>> & {
               hasSubMenu: true
-              subItems: (Omit<CommonNavigationItemType, 'icon' | 'isAvailableInEA'> & { id: NavigationSubMenuItemID })[]
+              subItems: (Omit<CommonNavigationItemType, 'icon'> & { id: NavigationSubMenuItemID })[]
           })
     )
 
