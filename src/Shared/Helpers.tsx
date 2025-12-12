@@ -51,7 +51,7 @@ import {
     UserApprovalInfo,
     ZERO_TIME_STRING,
 } from '../Common'
-import { getAggregator } from '../Pages'
+import { getAggregator, GVKType } from '../Pages'
 import { AggregatedNodes, PodMetadatum } from './Components'
 import { CUBIC_BEZIER_CURVE, UNSAVED_CHANGES_PROMPT_MESSAGE } from './constants'
 import {
@@ -726,4 +726,25 @@ export const getGroupVersionFromApiVersion = (apiVersion: string): Pick<Node, 'g
 
     // If the apiVersion has more than two parts, we consider the first part as group and the rest as version
     return { group: parts[0], version: parts.slice(1).join('/') }
+}
+
+export const getGVKTitle = (gvk: GVKType): string => {
+    if (!gvk) {
+        return ''
+    }
+
+    let title: string = ''
+    if (gvk.Group) {
+        title += gvk.Group
+    }
+
+    if (gvk.Version) {
+        title += title ? ` / ${gvk.Version}` : gvk.Version
+    }
+
+    if (gvk.Kind) {
+        title += title ? ` / ${gvk.Kind}` : gvk.Kind
+    }
+
+    return title
 }
