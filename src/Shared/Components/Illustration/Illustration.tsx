@@ -2,6 +2,8 @@
 
 import ImgCode from '@Illustrations/img-code.webp'
 import ImgDevtronFreemium from '@Illustrations/img-devtron-freemium.webp'
+import { ReactComponent as ImgInstallFreemiumSaas } from '@Illustrations/img-install-freemium-saas.svg'
+import { ReactComponent as ImgInstallViaAwsMarketplace } from '@Illustrations/img-install-via-aws-marketplace.svg'
 import ImgManOnRocket from '@Illustrations/img-man-on-rocket.webp'
 import { ReactComponent as ImgMechanicalOperation } from '@Illustrations/img-mechanical-operation.svg'
 import ImgNoResult from '@Illustrations/img-no-result.webp'
@@ -11,6 +13,8 @@ import { IllustrationBase } from './IllustrationBase'
 import { IllustrationBaseProps } from './types'
 
 export const illustrationMap = {
+    'img-install-freemium-saas': ImgInstallFreemiumSaas,
+    'img-install-via-aws-marketplace': ImgInstallViaAwsMarketplace,
     'img-mechanical-operation': ImgMechanicalOperation,
     'img-code': ImgCode,
     'img-devtron-freemium': ImgDevtronFreemium,
