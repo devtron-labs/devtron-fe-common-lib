@@ -36,11 +36,13 @@ export type DevtronLicenseCardProps = {
     | {
           licenseKey: string
           handleCopySuccess?: () => void
+          isSaasInstance: boolean
           licenseSuffix?: never
       }
     | {
           licenseKey?: never
           handleCopySuccess?: never
+          isSaasInstance?: never
           licenseSuffix: string
       }
 )

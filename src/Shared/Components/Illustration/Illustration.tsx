@@ -7,6 +7,7 @@ import { ReactComponent as ImgInstallViaAwsMarketplace } from '@Illustrations/im
 import ImgManOnRocket from '@Illustrations/img-man-on-rocket.webp'
 import { ReactComponent as ImgMechanicalOperation } from '@Illustrations/img-mechanical-operation.svg'
 import ImgNoResult from '@Illustrations/img-no-result.webp'
+import { ReactComponent as ImgPageNotFound } from '@Illustrations/img-page-not-found.svg'
 
 // eslint-disable-next-line no-restricted-imports
 import { IllustrationBase } from './IllustrationBase'
@@ -16,6 +17,7 @@ export const illustrationMap = {
     'img-install-freemium-saas': ImgInstallFreemiumSaas,
     'img-install-via-aws-marketplace': ImgInstallViaAwsMarketplace,
     'img-mechanical-operation': ImgMechanicalOperation,
+    'img-page-not-found': ImgPageNotFound,
     'img-code': ImgCode,
     'img-devtron-freemium': ImgDevtronFreemium,
     'img-man-on-rocket': ImgManOnRocket,

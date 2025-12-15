@@ -130,10 +130,9 @@ export const DevtronLicenseCard = ({
     appTheme,
     handleCopySuccess,
     licenseStatusError,
+    isSaasInstance,
 }: DevtronLicenseCardProps) => {
     const { bgColor, textColor } = getLicenseColorsAccordingToStatus({ isFreemium, licenseStatus, licenseStatusError })
-    const remainingTime = getTTLInHumanReadableFormat(ttl)
-    const remainingTimeString = ttl < 0 ? `Expired ${remainingTime} ago` : `${remainingTime} remaining`
     const isThemeDark = appTheme === AppThemeType.dark
 
     const cardRef = useRef<HTMLDivElement>(null)
@@ -178,6 +177,15 @@ export const DevtronLicenseCard = ({
         ? useMotionTemplate`linear-gradient(55deg, transparent, rgba(122, 127, 131, ${sheenOpacity}) ${sheenPosition}%, transparent)`
         : useMotionTemplate`linear-gradient(55deg, transparent, rgba(255, 255, 255, ${sheenOpacity}) ${sheenPosition}%, transparent)`
 
+    const getRemainingTimeString = () => {
+        if (isFreemium) {
+            return null
+        }
+
+        const remainingTime = getTTLInHumanReadableFormat(ttl)
+        return ttl < 0 ? `Expired ${remainingTime} ago` : `${remainingTime} remaining`
+    }
+
     return (
         <div className="license-card-wrapper flexbox-col p-8 br-16" style={{ backgroundColor: bgColor }}>
             <div style={{ perspective: '1000px' }}>
@@ -216,13 +224,16 @@ export const DevtronLicenseCard = ({
                                 )}
                             </div>
                             <div className="flexbox dc__align-items-center dc__gap-4 flex-wrap fs-12">
-                                <span className="font-ibm-plex-mono cn-9">
-                                    {isFreemium ? 'VALID FOREVER' : expiryDate}
-                                </span>
+                                {/* FIXME: How to hide this in dashboard */}
+                                {!isSaasInstance && (
+                                    <span className="font-ibm-plex-mono cn-9">
+                                        {isFreemium ? 'VALID FOREVER' : expiryDate}
+                                    </span>
+                                )}
                                 {!isFreemium && (
                                     <>
                                         <span className="cn-9">·</span>
-                                        <span style={{ color: textColor }}>{remainingTimeString}</span>
+                                        <span style={{ color: textColor }}>{getRemainingTimeString()}</span>
                                     </>
                                 )}
                             </div>
