@@ -32,17 +32,16 @@ export type DevtronLicenseCardProps = {
     isFreemium: boolean
     appTheme: AppThemeType
     licenseStatusError: LicenseErrorStruct
+    isSaasInstance: boolean
 } & (
     | {
           licenseKey: string
           handleCopySuccess?: () => void
-          isSaasInstance: boolean
           licenseSuffix?: never
       }
     | {
           licenseKey?: never
           handleCopySuccess?: never
-          isSaasInstance?: never
           licenseSuffix: string
       }
 )
