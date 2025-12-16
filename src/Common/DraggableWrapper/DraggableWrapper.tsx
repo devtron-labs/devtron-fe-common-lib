@@ -38,11 +38,9 @@ export default function DraggableWrapper({
 }: DraggableWrapperProps) {
     const windowSize = useWindowSize()
     const nodeRef = useRef<HTMLDivElement>(null)
-
-    const [position, setPosition] = useState<ControlPosition>({
-        x: 0,
-        y: 0,
-    })
+    
+    // letting the dom render the element without displaying it so that we know it's dimensions
+    const [initialRenderDone, setInitialRenderDone] = useState(false)
 
     const getDefaultPosition = (positionVariant: DraggablePositionVariant): ControlPosition => {
         // if this return x: 0, y: 0 then it will be top left corner of parentDiv
@@ -60,73 +58,55 @@ export default function DraggableWrapper({
 
         switch (positionVariant) {
             case DraggablePositionVariant.PARENT_BOTTOM_CENTER: {
-                // currently at parentRect.x and need to start to the center of its width and half of node should lie on left of center and other half on right
-                const x = (parentRect.width - nodeRefWidth) / 2
+                // center div to middle of the parent rect and then add the left offset of the parent rect
+                const x = (parentRect.width - nodeRefWidth) / 2 + parentRect.left
                 // TODO (v3): Temp fix. Revisit
                 const parentRectTop = parentRect.top > 0 ? parentRect.top : layoutFixDelta
                 // currently at parentRect.y now parent height can be greater than windowSize.height so taking min
                 // subtracting parentRect.top since window height already contains that
-                const baseY =
-                    parentRect.height > windowSize.height ? windowSize.height - parentRectTop : parentRect.height
-                const y = baseY - nodeRefHeight - boundaryGap
+                if (parentRect.height > windowSize.height) {
+                    return { x, y: windowSize.height - boundaryGap - nodeRefHeight }
+                }
+                const y = parentRect.bottom - nodeRefHeight - boundaryGap
                 return { x, y }
             }
             case DraggablePositionVariant.SCREEN_BOTTOM_RIGHT: {
-                const x = windowSize.width - parentRect.left - nodeRefWidth - boundaryGap
-                const y = windowSize.height - parentRect.top - nodeRefHeight - boundaryGap
+                const x = windowSize.width - nodeRefWidth - boundaryGap
+                const y = windowSize.height - nodeRefHeight - boundaryGap
 
                 return { x, y }
             }
             // Add more cases for other variants if needed
             default: {
                 // Since need node to be in center of screen so subtracting width/2 by left of parentRect it will start the node from center but want node's midpoint at center so subtracting node's width from it.
-                const x = windowSize.width / 2 - parentRect.left - nodeRefWidth / 2
+                const x = (windowSize.width - nodeRefWidth) / 2
                 // subtracting top since windowSize already contains that
-                const y = windowSize.height - parentRect.top - nodeRefHeight - boundaryGap
+                const y = windowSize.height - nodeRefHeight - boundaryGap
 
                 return { x, y }
             }
         }
     }
 
-    // On change of windowSize we will reset the position to default
     useEffect(() => {
-        const defaultPosition = getDefaultPosition(positionVariant)
-        setPosition(defaultPosition)
-    }, [nodeRef, positionVariant, windowSize])
-
-    // Would be called on drag and will not update the state if the new position is out of window screen
-    function handlePositionChange(e, data: DraggableData) {
-        const offsetX = parentRef?.current?.getBoundingClientRect().left ?? 0
-        const offsetY = parentRef?.current?.getBoundingClientRect().top ?? 0
-
-        const nodeRefHeight = nodeRef.current?.getBoundingClientRect().height ?? 0
-        const nodeRefWidth = nodeRef.current?.getBoundingClientRect().width ?? 0
-
-        if (
-            offsetX + data.x + nodeRefWidth + boundaryGap > windowSize.width ||
-            offsetY + data.y + nodeRefHeight + boundaryGap > windowSize.height ||
-            offsetX + data.x < 0 ||
-            offsetY + data.y < 0
-        ) {
-            return
-        }
-
-        setPosition({
-            x: data.x,
-            y: data.y,
-        })
-    }
+        // make the element visible after the initial render
+        setInitialRenderDone(true)
+    }, [])
 
     return (
         // Since we are using position fixed so we need to disable click on the div so that it does not interfere with the click of other elements
         <div
-            className="dc__position-fixed dc__disable-click"
+            className={`dc__position-fixed dc__disable-click dc__top-0 dc__left-0 ${initialRenderDone ? '' : 'dc__visibility-hidden'}`}
             style={{
                 zIndex,
             }}
         >
-            <Draggable handle={dragSelector} nodeRef={nodeRef} position={position} onDrag={handlePositionChange}>
+            <Draggable
+                key={`${JSON.stringify(windowSize)} ${initialRenderDone}`}
+                handle={dragSelector}
+                defaultPosition={getDefaultPosition(positionVariant)}
+                bounds="#devtron-base-main-identifier"
+                nodeRef={nodeRef}>
                 <div
                     ref={nodeRef}
                     {...childDivProps}
