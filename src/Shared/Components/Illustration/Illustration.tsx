@@ -1,5 +1,6 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-illustration` to update.
 
+import { ReactComponent as ImgCelebration } from '@Illustrations/img-celebration.svg'
 import ImgCode from '@Illustrations/img-code.webp'
 import ImgDevtronFreemium from '@Illustrations/img-devtron-freemium.webp'
 import { ReactComponent as ImgInstallFreemiumSaas } from '@Illustrations/img-install-freemium-saas.svg'
@@ -14,6 +15,7 @@ import { IllustrationBase } from './IllustrationBase'
 import { IllustrationBaseProps } from './types'
 
 export const illustrationMap = {
+    'img-celebration': ImgCelebration,
     'img-install-freemium-saas': ImgInstallFreemiumSaas,
     'img-install-via-aws-marketplace': ImgInstallViaAwsMarketplace,
     'img-mechanical-operation': ImgMechanicalOperation,
