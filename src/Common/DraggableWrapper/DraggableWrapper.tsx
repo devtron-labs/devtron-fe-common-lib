@@ -15,10 +15,11 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import Draggable, { ControlPosition, DraggableData } from 'react-draggable'
-import { DraggableWrapperProps, DraggablePositionVariant } from './types'
-import { useWindowSize } from '../Hooks'
+import Draggable, { ControlPosition } from 'react-draggable'
+
 import { MAX_Z_INDEX } from '../Constants'
+import { useWindowSize } from '../Hooks'
+import { DraggablePositionVariant, DraggableWrapperProps } from './types'
 
 /**
  * TODO: import it as lazy, after it is supported in common
@@ -26,7 +27,7 @@ import { MAX_Z_INDEX } from '../Constants'
  * 2. dragSelector will be used to identify the grabbable button that will grab the div to drag
  * 3. parentRef is the reference point from which we will derive the base top:0 ,left: 0 position
  */
-export default function DraggableWrapper({
+const DraggableWrapper = ({
     children,
     zIndex = MAX_Z_INDEX,
     positionVariant,
@@ -34,15 +35,14 @@ export default function DraggableWrapper({
     parentRef,
     boundaryGap = 16,
     childDivProps = {},
-    layoutFixDelta = 0,
-}: DraggableWrapperProps) {
+}: DraggableWrapperProps) => {
     const windowSize = useWindowSize()
     const nodeRef = useRef<HTMLDivElement>(null)
-    
+
     // letting the dom render the element without displaying it so that we know it's dimensions
     const [initialRenderDone, setInitialRenderDone] = useState(false)
 
-    const getDefaultPosition = (positionVariant: DraggablePositionVariant): ControlPosition => {
+    const getDefaultPosition = (): ControlPosition => {
         // if this return x: 0, y: 0 then it will be top left corner of parentDiv
         const parentRect =
             parentRef?.current?.getBoundingClientRect() ??
@@ -60,10 +60,6 @@ export default function DraggableWrapper({
             case DraggablePositionVariant.PARENT_BOTTOM_CENTER: {
                 // center div to middle of the parent rect and then add the left offset of the parent rect
                 const x = (parentRect.width - nodeRefWidth) / 2 + parentRect.left
-                // TODO (v3): Temp fix. Revisit
-                const parentRectTop = parentRect.top > 0 ? parentRect.top : layoutFixDelta
-                // currently at parentRect.y now parent height can be greater than windowSize.height so taking min
-                // subtracting parentRect.top since window height already contains that
                 if (parentRect.height > windowSize.height) {
                     return { x, y: windowSize.height - boundaryGap - nodeRefHeight }
                 }
@@ -104,9 +100,10 @@ export default function DraggableWrapper({
             <Draggable
                 key={`${JSON.stringify(windowSize)} ${initialRenderDone}`}
                 handle={dragSelector}
-                defaultPosition={getDefaultPosition(positionVariant)}
+                defaultPosition={getDefaultPosition()}
                 bounds="#devtron-base-main-identifier"
-                nodeRef={nodeRef}>
+                nodeRef={nodeRef}
+            >
                 <div
                     ref={nodeRef}
                     {...childDivProps}
@@ -121,3 +118,5 @@ export default function DraggableWrapper({
         </div>
     )
 }
+
+export default DraggableWrapper
