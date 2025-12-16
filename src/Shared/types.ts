@@ -1144,7 +1144,7 @@ export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = Devt
               instanceData: {
                   devtronUrl: string
                   devtronPassword: string
-              }
+              } | null
           }
         : {
               claimedByUserDetails?: never
