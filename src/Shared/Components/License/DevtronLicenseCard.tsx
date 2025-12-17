@@ -224,7 +224,6 @@ export const DevtronLicenseCard = ({
                                 )}
                             </div>
                             <div className="flexbox dc__align-items-center dc__gap-4 flex-wrap fs-12">
-                                {/* FIXME: How to hide this in dashboard */}
                                 {!isSaasInstance && (
                                     <span className="font-ibm-plex-mono cn-9">
                                         {isFreemium ? 'VALID FOREVER' : expiryDate}
