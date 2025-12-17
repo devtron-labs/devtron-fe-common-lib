@@ -76,7 +76,7 @@ export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard ext
         claimedByUserDetails,
         isFreemium,
         licenseStatusError,
-        instanceData,
+        isSaasInstance,
     } = licenseDTO || {}
 
     return {
@@ -87,8 +87,7 @@ export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard ext
         isTrial,
         isFreemium,
         licenseStatusError,
-        // TODO: Move this check to key later
-        isSaasInstance: !!instanceData?.devtronUrl,
+        isSaasInstance: !!isSaasInstance,
         ...(currentUserEmail && currentUserEmail === claimedByUserDetails?.email
             ? { licenseKey: license }
             : { licenseSuffix: license }),

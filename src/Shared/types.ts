@@ -1128,6 +1128,7 @@ export interface DevtronLicenseBaseDTO {
         domain: string | null
     } | null
     license: string | null
+    isSaasInstance?: boolean
 }
 
 export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = DevtronLicenseBaseDTO &
