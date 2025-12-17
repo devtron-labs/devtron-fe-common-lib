@@ -55,7 +55,13 @@ const CheckForUpdates = ({
     </div>
 )
 
-export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick, hideGettingStartedCard }: HelpButtonProps) => {
+export const HelpButton = ({
+    serverInfo,
+    fetchingServerInfo,
+    onClick,
+    hideGettingStartedCard,
+    docPath,
+}: HelpButtonProps) => {
     // STATES
     const [isActionMenuOpen, setIsActionMenuOpen] = useState(false)
     const [expiryDate, setExpiryDate] = useState(0)
@@ -150,6 +156,7 @@ export const HelpButton = ({ serverInfo, fetchingServerInfo, onClick, hideGettin
                 options={getHelpActionMenuOptions({
                     isTrialOrFreemium: (licenseData?.isTrial || licenseData?.isFreemium) ?? false,
                     isEnterprise,
+                    docPath,
                 })}
                 onClick={handleActionMenuClick}
                 onOpen={setIsActionMenuOpen}

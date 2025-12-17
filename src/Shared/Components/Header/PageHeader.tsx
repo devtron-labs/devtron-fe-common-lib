@@ -50,6 +50,7 @@ const PageHeader = ({
     onClose,
     tippyProps,
     closeIcon,
+    docPath,
 }: PageHeaderType) => {
     const { setLoginCount, setShowGettingStartedCard, setSidePanelConfig, sidePanelConfig, tempAppWindowConfig } =
         useMainContext()
@@ -158,6 +159,7 @@ const PageHeader = ({
                 fetchingServerInfo={currentServerInfo.fetchingServerInfo}
                 onClick={handleHelpButtonClick}
                 hideGettingStartedCard={hideGettingStartedCard}
+                docPath={docPath}
             />
             {!window._env_.K8S_CLIENT && (
                 <TippyCustomized
