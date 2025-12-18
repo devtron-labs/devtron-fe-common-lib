@@ -137,7 +137,7 @@ export const DOCUMENTATION = {
     // Cost Visibility
     COST_BREAKDOWN: 'docs/user-guide/finops',
     COST_CALCULATION: 'docs/user-guide/finops/overview-cost-visibility#how-is-the-cost-calculated',
-    COST_VISIBILITY_OVERVIEW: 'user-guide/finops/overview-cost-visibility',
+    COST_VISIBILITY_OVERVIEW: 'docs/user-guide/finops/overview-cost-visibility',
 
     // Security Center
     SECURITY_CENTER: 'docs/user-guide/security-features',
