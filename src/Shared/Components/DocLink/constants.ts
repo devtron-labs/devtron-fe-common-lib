@@ -18,7 +18,6 @@ import { DOCUMENTATION_HOME_PAGE } from '@Common/Constants'
 
 export const DOCUMENTATION = {
     ADMIN_PASSWORD: 'install/install-devtron#devtron-admin-credentials',
-    AI_RECOMMENDATIONS: 'usage/ai-recommendations',
     APPLICATIONS: 'usage/applications',
     APP_CONFIGURATION: 'docs/user-guide/app-configurations',
     APP_CI_CONFIG_BUILD_WITHOUT_DOCKER:
@@ -124,6 +123,9 @@ export const DOCUMENTATION = {
     GLOBAL_CONFIG_PULL_IMAGE_DIGEST: 'global-configurations/pull-image-digest',
     GLOBAL_CONFIG_TAGS: 'getting-started/global-configurations/tags-policy',
 
+    // Application Management
+    APP_MANAGEMENT: 'docs/user-guide/app-management',
+
     // Software Release Management
     SOFTWARE_DISTRIBUTION_HUB: 'usage/software-distribution-hub',
     RELEASE_TRACKS: 'usage/software-distribution-hub/release-hub#creating-release-tracks-and-versions',
@@ -135,10 +137,19 @@ export const DOCUMENTATION = {
     // Infrastructure Management
     AUTOSCALER_DETECTION: 'user-guide/infra-management/infrastructure-overview#troubleshooting-autoscaler-detection',
     HELM_APPS: 'user-guide/infra-management/other-applications',
-    INFRA_OVERVIEW: 'user-guide/infra-management/overview',
+    INFRA_MANAGEMENT: 'docs/user-guide/infra-management',
 
     // Cost Visibility
-    COST_BREAKDOWN: 'user-guide/finops/cost-breakdown',
+    COST_BREAKDOWN: 'user-guide/finops',
     COST_CALCULATION: 'user-guide/finops/overview-cost-visibility#how-is-the-cost-calculated',
     COST_VISIBILITY_OVERVIEW: 'user-guide/finops/overview-cost-visibility',
+
+    // Security Center
+    SECURITY_CENTER: 'docs/user-guide/security-features',
+
+    // AI Recommendations
+    AI_RECOMMENDATIONS: 'usage/ai-recommendations',
+
+    // Automation & Enablement
+    AUTOMATION_AND_ENABLEMENT: 'docs/user-guide/automation',
 } as const

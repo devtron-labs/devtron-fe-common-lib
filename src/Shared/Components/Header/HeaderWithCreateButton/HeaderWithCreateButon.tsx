@@ -22,6 +22,7 @@ import { BreadCrumb, BreadcrumbText, useBreadcrumb } from '@Common/index'
 import { ActionMenu } from '@Shared/Components/ActionMenu'
 import { ButtonComponentType } from '@Shared/Components/Button'
 import Button from '@Shared/Components/Button/Button.component'
+import { DOCUMENTATION } from '@Shared/Components/DocLink'
 import { Icon } from '@Shared/Components/Icon'
 import { ComponentSizeType } from '@Shared/constants'
 import { useMainContext } from '@Shared/Providers'
@@ -93,6 +94,17 @@ export const HeaderWithCreateButton = ({ viewType }: HeaderWithCreateButtonProps
     )
     const renderBreadcrumbs = () => <BreadCrumb breadcrumbs={breadcrumbs} />
 
+    const getDocPath = () => {
+        let docPath: string = DOCUMENTATION.APP_MANAGEMENT
+
+        if (viewType === 'jobs') {
+            docPath = DOCUMENTATION.AUTOMATION_AND_ENABLEMENT
+        } else if (viewType === 'infra-apps') {
+            docPath = DOCUMENTATION.INFRA_MANAGEMENT
+        }
+        return docPath
+    }
+
     return (
         <div className="create-button-container dc__position-sticky dc__top-0 bg__primary dc__zi-4">
             <PageHeader
@@ -110,6 +122,7 @@ export const HeaderWithCreateButton = ({ viewType }: HeaderWithCreateButtonProps
                           },
                       }
                     : {})}
+                docPath={getDocPath()}
             />
         </div>
     )
