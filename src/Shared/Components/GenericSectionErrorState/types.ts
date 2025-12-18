@@ -16,13 +16,10 @@
 
 import { ReactNode } from 'react'
 
+import { ButtonComponentType, ButtonProps } from '../Button'
 import { IconsProps } from '../Icon'
 
-export type GenericSectionErrorStateProps = {
-    /**
-     * Handler for reloading the section
-     */
-    reload?: () => void
+export type GenericSectionErrorStateProps<ButtonType extends ButtonComponentType = ButtonComponentType.button> = {
     /**
      * If true, border is added to the section
      *
@@ -56,6 +53,7 @@ export type GenericSectionErrorStateProps = {
            */
           progressingProps: Omit<IconsProps, 'name'>
           useInfoIcon?: false
+          customIcon?: never
       }
     | {
           progressingProps?: never
@@ -65,9 +63,33 @@ export type GenericSectionErrorStateProps = {
            * @default false
            */
           useInfoIcon: true
+          customIcon?: never
       }
     | {
           progressingProps?: never
           useInfoIcon?: never
+          customIcon?: never
       }
-)
+    | {
+          customIcon: JSX.Element
+          progressingProps?: never
+          useInfoIcon?: never
+      }
+) &
+    (
+        | {
+              /**
+               * Handler for reloading the section
+               */
+              reload: () => void
+              buttonProps?: never
+          }
+        | {
+              reload?: never
+              buttonProps: ButtonProps<ButtonType>
+          }
+        | {
+              reload?: never
+              buttonProps?: never
+          }
+    )

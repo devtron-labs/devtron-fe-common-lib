@@ -23,7 +23,7 @@ import {
     sanitizeUserApprovalList,
     stringComparatorBySortOrder,
 } from '@Shared/Helpers'
-import { PolicyBlockInfo, RuntimeParamsAPIResponseType, RuntimePluginVariables } from '@Shared/types'
+import { EnvListMinDTO, PolicyBlockInfo, RuntimeParamsAPIResponseType, RuntimePluginVariables } from '@Shared/types'
 import { GitProviderType, ROUTES } from './Constants'
 import { getUrlWithSearchParams, sortCallback } from './Helper'
 import {
@@ -51,11 +51,16 @@ import {
     GetAppsInfoForEnvProps,
     AppMeta,
     ApprovalRuntimeStateType,
+    EnvironmentsGroupedByClustersType,
+    AppsGroupedByProjectsType,
+    ClusterDetailListType,
+    ClusterDetailDTO,
 } from './Types'
 import { ApiResourceType, STAGE_MAP } from '../Pages'
 import { RefVariableType, VariableTypeFormat } from './CIPipeline.Types'
 import { get, post } from './API'
 import { StatusType } from '@Shared/Components'
+import { EnvironmentTypeEnum } from '@Shared/constants'
 
 export const getTeamListMin = (): Promise<TeamList> => {
     // ignore active field
@@ -136,9 +141,10 @@ const cdMaterialListModal = ({
         }
 
         const isConsumedNonApprovedImage =
-            !isExceptionUser && isApprovalConfigured &&
+            !isExceptionUser &&
+            isApprovalConfigured &&
             (!material.userApprovalMetadata ||
-            material.userApprovalMetadata.approvalRuntimeState !== ApprovalRuntimeStateType.approved)
+                material.userApprovalMetadata.approvalRuntimeState !== ApprovalRuntimeStateType.approved)
 
         const selectImage =
             !isImageMarked && markFirstSelected && filterState === FilterStates.ALLOWED && !isConsumedNonApprovedImage
@@ -344,9 +350,7 @@ export const processCDMaterialServiceResponse = (
         cdMaterialsResult,
     )
 
-    const isApprovalConfigured = getIsApprovalPolicyConfigured(
-        approvalInfo?.deploymentApprovalInfo?.approvalConfigData,
-    )
+    const isApprovalConfigured = getIsApprovalPolicyConfigured(approvalInfo?.deploymentApprovalInfo?.approvalConfigData)
 
     const isExceptionUser = approvalInfo?.deploymentApprovalInfo?.approvalConfigData?.isExceptionUser ?? false
 
@@ -563,4 +567,119 @@ export const getAppsInfoForEnv = async ({ envId, appIds }: GetAppsInfoForEnvProp
             return agg
         }, []),
     }
+}
+
+export const getAppOptionsGroupedByProjects = async (): Promise<AppsGroupedByProjectsType> => {
+    const { result } = await get<AppsGroupedByProjectsType>(ROUTES.APP_LIST_MIN)
+
+    if (!result) {
+        return []
+    }
+
+    return result
+        .map((project) => ({
+            ...project,
+            appList: project.appList.sort((a, b) => stringComparatorBySortOrder(a.name, b.name)),
+        }))
+        .sort((a, b) => stringComparatorBySortOrder(a.projectName, b.projectName))
+}
+
+export const getEnvironmentOptionsGroupedByClusters = async (): Promise<EnvironmentsGroupedByClustersType> => {
+    const { result } = (await get(ROUTES.ENVIRONMENT_LIST_MIN)) as ResponseType<EnvListMinDTO[]>
+
+    if (!result) {
+        return []
+    }
+
+    const sortedEnvList = result
+        .map(
+            ({
+                id,
+                environment_name: name,
+                isVirtualEnvironment,
+                cluster_name: cluster,
+                default: isDefault,
+                namespace,
+            }) => ({
+                id,
+                name,
+                isVirtual: isVirtualEnvironment ?? false,
+                cluster,
+                environmentType: isDefault ? EnvironmentTypeEnum.production : EnvironmentTypeEnum.nonProduction,
+                namespace,
+            }),
+        )
+        .sort((a, b) => stringComparatorBySortOrder(a.name, b.name))
+
+    const envGroupedByCluster = Object.values(
+        sortedEnvList.reduce<
+            Record<EnvironmentsGroupedByClustersType[number]['clusterName'], EnvironmentsGroupedByClustersType[number]>
+        >((acc, env) => {
+            if (!acc[env.cluster]) {
+                acc[env.cluster] = {
+                    clusterName: env.cluster,
+                    envList: [],
+                }
+            }
+
+            acc[env.cluster].envList.push(env)
+
+            return acc
+        }, {}),
+    ).sort((a, b) => stringComparatorBySortOrder(a.clusterName, b.clusterName))
+
+    return envGroupedByCluster
+}
+
+export const getDetailedClusterList = async (
+    clusterIds?: number[],
+    signal?: AbortSignal,
+): Promise<ClusterDetailListType[]> => {
+    const url = getUrlWithSearchParams(ROUTES.CLUSTER, { clusterId: clusterIds?.join() })
+    const { result } = await get<ClusterDetailDTO[]>(url, { signal })
+
+    return (result ?? [])
+        .map(
+            ({
+                id,
+                server_url: serverUrl,
+                cluster_name: clusterName,
+                prometheus_url: prometheusUrl,
+                category,
+                clusterStatus,
+                costModuleConfig,
+                ...res
+            }) => {
+                const costModuleInstallationStatus = costModuleConfig?.installationStatus || 'NotInstalled'
+
+                return {
+                    ...res,
+                    clusterId: id,
+                    serverUrl,
+                    clusterName,
+                    prometheusUrl,
+                    category: category?.name
+                        ? {
+                              label: category.name,
+                              value: category.id,
+                          }
+                        : null,
+                    status: clusterStatus,
+                    costModuleConfig: {
+                        enabled: costModuleConfig?.enabled || false,
+                        config: {
+                            ...(costModuleConfig?.config || {}),
+                            detectedProvider: costModuleConfig?.config?.detectedProvider,
+                        },
+                        installationStatus: costModuleInstallationStatus,
+                        ...(costModuleInstallationStatus === 'Failed'
+                            ? {
+                                  installationError: costModuleConfig?.installationError || 'Some error occurred',
+                              }
+                            : {}),
+                    } satisfies ClusterDetailListType['costModuleConfig'],
+                }
+            },
+        )
+        .sort((a, b) => stringComparatorBySortOrder(a.clusterName, b.clusterName))
 }

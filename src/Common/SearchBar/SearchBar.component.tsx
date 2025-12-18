@@ -16,10 +16,8 @@
 
 import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react'
 
-import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
-import { ReactComponent as Search } from '@Icons/ic-search.svg'
 import { useRegisterShortcut } from '@Common/Hooks'
-import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components'
+import { Button, ButtonStyleType, ButtonVariantType, Icon } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { debounce, noop } from '../Helper'
@@ -74,6 +72,8 @@ const SearchBar = ({
     noBackgroundAndBorder = false,
     size = ComponentSizeType.medium,
     keyboardShortcut,
+    variant = 'default',
+    isLoading = false,
 }: SearchBarProps) => {
     const [showClearButton, setShowClearButton] = useState(!!initialSearchText)
     const inputRef = useRef<HTMLInputElement>()
@@ -157,11 +157,22 @@ const SearchBar = ({
     return (
         <div className={`search-bar-container ${containerClassName || ''}`}>
             <div
-                className={`search-bar ${noBackgroundAndBorder ? 'dc__no-border dc__no-background dc__hover-n50' : 'bg__secondary en-2 dc__hover-border-n300'} focus-within-border-b5 dc__block w-100 min-w-200 dc__position-rel br-4 bw-1 ${getSearchBarHeightFromSize(size)}`}
+                className={`search-bar search-bar--${variant} ${noBackgroundAndBorder ? 'dc__no-border dc__no-background dc__hover-n50' : 'bg__secondary en-2 dc__hover-border-n300'} focus-within-border-b5 dc__block w-100 min-w-200 dc__position-rel br-4 bw-1 ${getSearchBarHeightFromSize(size)}`}
             >
-                <Search className="search-bar__icon dc__position-abs icon-color-n6 icon-dim-16" />
+                <span
+                    className="search-bar__icon dc__position-abs icon-dim-16"
+                    style={
+                        variant === 'sidenav' ? { ['--overrideIconColor' as string]: 'var(--sidenav-input-icon)' } : {}
+                    }
+                >
+                    <Icon
+                        name={isLoading ? 'ic-circle-loader' : 'ic-magnifying-glass'}
+                        color={isLoading ? 'O500' : 'N600'}
+                    />
+                </span>
                 <input
                     placeholder="Search"
+                    data-variant={variant}
                     data-testid={dataTestId}
                     type="text"
                     {...inputProps}
@@ -176,9 +187,11 @@ const SearchBar = ({
                 />
                 {/* TODO: Sync with product since it should have ic-enter in case of not applied */}
                 {showClearButton ? (
-                    <div className="flex search-bar__clear-button dc__position-abs dc__transparent">
+                    <div
+                        className={`flex search-bar__clear-btn search-bar__clear-btn--${variant} dc__position-abs dc__transparent`}
+                    >
                         <Button
-                            icon={<ICCross />}
+                            icon={<Icon name="ic-close-small" color={null} />}
                             size={ComponentSizeType.xs}
                             variant={ButtonVariantType.borderLess}
                             style={ButtonStyleType.negativeGrey}

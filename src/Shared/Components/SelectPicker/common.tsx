@@ -32,11 +32,11 @@ import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
 import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
 import { Checkbox } from '@Common/Checkbox'
 import { ReactSelectInputAction } from '@Common/Constants'
-import { noop } from '@Common/Helper'
+import { getAlphabetIcon, noop } from '@Common/Helper'
 import { Progressing } from '@Common/Progressing'
 import { Tooltip, TooltipProps } from '@Common/Tooltip'
 import { CHECKBOX_VALUE } from '@Common/Types'
-import { ComponentSizeType } from '@Shared/constants'
+import { API_TOKEN_PREFIX, ComponentSizeType } from '@Shared/constants'
 import { isNullOrUndefined } from '@Shared/Helpers'
 
 import { Button, ButtonProps, ButtonVariantType } from '../Button'
@@ -191,9 +191,10 @@ export const SelectPickerValueContainer = <OptionValue, IsMulti extends boolean>
 
 export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
     disableDescriptionEllipsis,
+    isUserIdentifier,
     ...props
 }: OptionProps<SelectPickerOptionType<OptionValue>> &
-    Pick<SelectPickerProps<OptionValue, IsMulti>, 'disableDescriptionEllipsis'>) => {
+    Pick<SelectPickerProps<OptionValue, IsMulti>, 'disableDescriptionEllipsis' | 'isUserIdentifier'>) => {
     const {
         label,
         data,
@@ -215,17 +216,47 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
 
     const iconBaseClass = 'dc__no-shrink icon-dim-16 flex dc__fill-available-space'
 
+    const showUserAvatar = isUserIdentifier && !isSelected && typeof label === 'string'
+
+    const renderLabelText = () => {
+        if (showUserAvatar && label.startsWith(API_TOKEN_PREFIX)) {
+            return label.split(':')?.[1] || '-'
+        }
+
+        return label
+    }
+
+    const renderAvatar = () => {
+        if (!showUserAvatar) {
+            return null
+        }
+
+        return (
+            <div className="flex dc__no-shrink dc__visible-hover--hide-child icon-dim-20">
+                {label.startsWith(API_TOKEN_PREFIX) ? (
+                    <Icon name="ic-key" color="N700" size={20} />
+                ) : (
+                    getAlphabetIcon(label, 'dc__no-shrink m-0-imp')
+                )}
+            </div>
+        )
+    }
+
     return (
-        <components.Option {...props}>
+        <components.Option
+            {...props}
+            className={`${props.className || ''} ${showUserAvatar ? 'dc__visible-hover dc__visible-hover--parent' : ''}`}
+        >
             <Tooltip {...getTooltipProps(tooltipProps)}>
                 <div className="flexbox dc__align-items-center dc__gap-8">
+                    {showUserAvatar && renderAvatar()}
                     {isMulti && showCheckboxForMultiSelect && !isCreatableOption && (
                         <Checkbox
                             onChange={noop}
                             onClick={handleChange}
                             isChecked={isSelected || false}
                             value={CHECKBOX_VALUE.CHECKED}
-                            rootClassName="mb-0 w-20 p-2 dc__align-self-start dc__no-shrink"
+                            rootClassName={`mb-0 w-20 p-2 dc__align-self-start dc__no-shrink ${showUserAvatar ? 'dc__visible-hover--child' : ''}`}
                             disabled={isDisabled}
                         />
                     )}
@@ -243,7 +274,7 @@ export const SelectPickerOption = <OptionValue, IsMulti extends boolean>({
                                 <h4
                                     className={`m-0 fs-13 ${isCreatableOption ? 'cb-5' : 'cn-9'} fw-4 lh-20 dc__truncate`}
                                 >
-                                    {label}
+                                    {renderLabelText()}
                                 </h4>
                             </Tooltip>
                             {/* Add support for custom ellipsis if required */}

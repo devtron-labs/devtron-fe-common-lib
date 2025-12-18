@@ -16,7 +16,7 @@
 
 import { MainContext } from '@Shared/Providers'
 
-import { getUrlWithSearchParams } from '../../Common'
+import { ClusterDetailDTO, getUrlWithSearchParams } from '../../Common'
 import { PolicyKindType, ResourceKindType, ResourceVersionType } from '../types'
 
 export interface BaseAppMetaData {
@@ -61,4 +61,15 @@ export interface EnvironmentDataValuesDTO extends Pick<MainContext, 'featureGitO
     canOnlyViewPermittedEnvOrgLevel: boolean
     devtronManagedLicensingEnabled: boolean
     isResourceRecommendationEnabled?: boolean
+}
+
+export interface ClusterMinDTO {
+    id: number
+    cluster_name: string
+    isVirtualCluster: boolean
+    isProd: boolean
+}
+
+export type AllClusterListMinItemDTO = Pick<ClusterDetailDTO, 'id' | 'cluster_name' | 'isVirtualCluster' | 'isProd'> & {
+    costModuleConfig: Pick<ClusterDetailDTO['costModuleConfig'], 'enabled' | 'installationStatus'>
 }

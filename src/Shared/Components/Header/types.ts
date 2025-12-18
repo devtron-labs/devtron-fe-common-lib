@@ -35,8 +35,11 @@ export interface PageHeaderType {
         TippyIcon?: React.FunctionComponent<any>
         tippyMessage?: string
         onClickTippyButton?: () => void
+        tippyHeader?: string
     }
     onClose?: () => void
+    closeIcon?: JSX.Element
+    docPath?: string
 }
 
 export interface ServerInfo {
@@ -50,7 +53,7 @@ export interface ServerInfoResponse extends ResponseType {
     result?: ServerInfo
 }
 
-export interface HelpButtonProps {
+export interface HelpButtonProps extends Pick<PageHeaderType, 'docPath'> {
     serverInfo: ServerInfo
     fetchingServerInfo: boolean
     onClick: () => void
@@ -76,4 +79,9 @@ export type HelpButtonActionMenuProps = ActionMenuProps<HelpMenuItems>
 export interface ProfileMenuProps {
     user: string
     onClick?: () => void
+}
+
+export interface HelpActionOptionTypes extends Pick<PageHeaderType, 'docPath'> {
+    isEnterprise: boolean
+    isTrialOrFreemium: boolean
 }

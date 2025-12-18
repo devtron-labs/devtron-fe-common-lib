@@ -17,13 +17,13 @@
 import { LOGIN_COUNT } from '@Common/Constants'
 
 import {
-    COMMON_HELP_ACTION_MENU_ITEMS,
     ENTERPRISE_HELP_ACTION_MENU_ITEMS,
     ENTERPRISE_TRIAL_HELP_ACTION_MENU_ITEMS,
+    getCommonHelpActionMenuItems,
     OSS_HELP_ACTION_MENU_ITEMS,
 } from './constants'
 import { updatePostHogEvent } from './service'
-import { HelpButtonActionMenuProps } from './types'
+import { HelpActionOptionTypes, HelpButtonActionMenuProps } from './types'
 
 const millisecondsInDay = 86400000
 export const getDateInMilliseconds = (days) => 1 + new Date().valueOf() + (days ?? 0) * millisecondsInDay
@@ -45,12 +45,10 @@ export const setActionWithExpiry = (key: string, days: number): void => {
 export const getHelpActionMenuOptions = ({
     isEnterprise,
     isTrialOrFreemium,
-}: {
-    isEnterprise: boolean
-    isTrialOrFreemium: boolean
-}): HelpButtonActionMenuProps['options'] => [
+    docPath,
+}: HelpActionOptionTypes): HelpButtonActionMenuProps['options'] => [
     {
-        items: COMMON_HELP_ACTION_MENU_ITEMS,
+        items: getCommonHelpActionMenuItems({ docPath }),
     },
     ...(isEnterprise
         ? [

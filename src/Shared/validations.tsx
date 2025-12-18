@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { parse as parseCronExpression } from '@datasert/cronjs-parser'
 import { customizeValidator } from '@rjsf/validator-ajv8'
 import { parse } from 'yaml'
 
@@ -529,5 +530,34 @@ export const validateEmail = (email: string): ValidationResponseType => {
     return {
         isValid: false,
         message: 'Please provide a valid email address',
+    }
+}
+
+export const getIsRegexValid = (regexString: string): ValidationResponseType => {
+    try {
+        RegExp(regexString)
+        return {
+            isValid: true,
+        }
+    } catch (error) {
+        return {
+            isValid: false,
+            message: error.message || 'Invalid regex pattern',
+        }
+    }
+}
+
+export const validateCronExpression = (expression: string): ValidationResponseType => {
+    try {
+        parseCronExpression(expression, { hasSeconds: expression.trim().split(' ').length > 5 })
+
+        return {
+            isValid: true,
+        }
+    } catch (err) {
+        return {
+            isValid: false,
+            message: (err as Error).message,
+        }
     }
 }
