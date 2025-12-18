@@ -46,6 +46,11 @@ export type DevtronLicenseCardProps = {
       }
 )
 
+export interface LicenseCardSubTextProps
+    extends Pick<DevtronLicenseCardProps, 'isFreemium' | 'licenseStatus' | 'licenseStatusError'> {
+    isFreeForever: boolean
+}
+
 export type DevtronLicenseInfo = Omit<DevtronLicenseCardProps, 'appTheme'> &
     Pick<DevtronLicenseDTO, 'fingerprint' | 'showLicenseData' | 'licenseStatusError' | 'moduleLimits'>
 

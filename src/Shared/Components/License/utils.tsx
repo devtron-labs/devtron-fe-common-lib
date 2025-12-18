@@ -27,16 +27,22 @@ export const getLicenseColorsAccordingToStatus = ({
     isFreemium,
     licenseStatus,
     licenseStatusError,
-}: Pick<DevtronLicenseCardProps, 'licenseStatus' | 'isFreemium' | 'licenseStatusError'>): {
+    isSaasInstance,
+}: Pick<DevtronLicenseCardProps, 'licenseStatus' | 'isFreemium' | 'licenseStatusError' | 'isSaasInstance'>): {
     bgColor: string
     textColor: string
 } => {
     if (isFreemium) {
         const freemiumLimitReached = licenseStatusError?.code === LicensingErrorCodes.ClusterLimitExceeded
-        return freemiumLimitReached
-            ? { bgColor: 'var(--R100)', textColor: 'var(--R500)' }
-            : { bgColor: 'var(--G100)', textColor: 'var(--G500)' }
+        if (freemiumLimitReached) {
+            return { bgColor: 'var(--R100)', textColor: 'var(--R500)' }
+        }
+
+        if (!isSaasInstance) {
+            return { bgColor: 'var(--G100)', textColor: 'var(--G500)' }
+        }
     }
+
     switch (licenseStatus) {
         case LicenseStatus.ACTIVE:
             return { bgColor: 'var(--G100)', textColor: 'var(--G500)' }
@@ -68,8 +74,8 @@ export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard ext
 ): Omit<DevtronLicenseCardProps, 'appTheme'> => {
     const {
         isTrial,
-        expiry,
-        ttl,
+        expiry: onPremExpiry,
+        ttl: onPremTTL,
         reminderThreshold,
         organisationMetadata,
         license,
@@ -77,7 +83,14 @@ export const parseDevtronLicenseDTOIntoLicenseCardData = <isCentralDashboard ext
         isFreemium,
         licenseStatusError,
         isSaasInstance,
+        timeElapsedSinceCreation,
+        creationTime,
     } = licenseDTO || {}
+
+    // In case of Saas expiry date is 30 days from creation time
+    const expiry = isSaasInstance && creationTime ? moment(creationTime).add(30, 'days').toISOString() : onPremExpiry
+    // For TTL will use timeElapsedSinceCreation to calculate remaining time for Saas license with 30 days validity, since browser time may differ from server time
+    const ttl = isSaasInstance && timeElapsedSinceCreation ? 30 * 24 * 60 * 60 - timeElapsedSinceCreation : onPremTTL
 
     return {
         enterpriseName: organisationMetadata?.name || 'Devtron Enterprise',
