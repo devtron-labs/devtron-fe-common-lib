@@ -130,20 +130,20 @@ export const DOCUMENTATION = {
     TENANTS_INSTALLATION: 'usage/software-distribution-hub/tenants',
 
     // Infrastructure Management
-    AUTOSCALER_DETECTION: 'user-guide/infra-management/infrastructure-overview#troubleshooting-autoscaler-detection',
-    HELM_APPS: 'user-guide/infra-management/other-applications',
+    AUTOSCALER_DETECTION:
+        'docs/user-guide/infra-management/infrastructure-overview#troubleshooting-autoscaler-detection',
     INFRA_MANAGEMENT: 'docs/user-guide/infra-management',
 
     // Cost Visibility
-    COST_BREAKDOWN: 'user-guide/finops',
-    COST_CALCULATION: 'user-guide/finops/overview-cost-visibility#how-is-the-cost-calculated',
+    COST_BREAKDOWN: 'docs/user-guide/finops',
+    COST_CALCULATION: 'docs/user-guide/finops/overview-cost-visibility#how-is-the-cost-calculated',
     COST_VISIBILITY_OVERVIEW: 'user-guide/finops/overview-cost-visibility',
 
     // Security Center
     SECURITY_CENTER: 'docs/user-guide/security-features',
 
     // AI Recommendations
-    AI_RECOMMENDATIONS: 'usage/ai-recommendations',
+    AI_RECOMMENDATIONS: 'docs/usage/ai-recommendations',
 
     // Automation & Enablement
     AUTOMATION_AND_ENABLEMENT: 'docs/user-guide/automation',
