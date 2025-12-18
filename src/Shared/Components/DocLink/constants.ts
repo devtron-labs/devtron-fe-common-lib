@@ -143,7 +143,7 @@ export const DOCUMENTATION = {
     SECURITY_CENTER: 'docs/user-guide/security-features',
 
     // AI Recommendations
-    AI_RECOMMENDATIONS: 'docs/usage/ai-recommendations',
+    AI_RECOMMENDATIONS: 'docs/user-guide/ai-recommendations',
 
     // Automation & Enablement
     AUTOMATION_AND_ENABLEMENT: 'docs/user-guide/automation',
