@@ -18,6 +18,9 @@ import { DOCUMENTATION_HOME_PAGE } from '@Common/Constants'
 
 export const DOCUMENTATION = {
     ADMIN_PASSWORD: 'install/install-devtron#devtron-admin-credentials',
+    AI_RECOMMENDATIONS: 'usage/ai-recommendations',
+    APPLICATIONS: 'usage/applications',
+    APP_CONFIGURATION: 'docs/user-guide/app-configurations',
     APP_CI_CONFIG_BUILD_WITHOUT_DOCKER:
         'usage/applications/creating-application/docker-build-configuration#build-docker-image-without-dockerfile',
     APP_CREATE: 'usage/applications/create-application',
@@ -31,10 +34,13 @@ export const DOCUMENTATION = {
     APP_EPHEMERAL_CONTAINER: 'usage/applications/app-details/ephemeral-containers',
     APP_GROUP: 'usage/application-groups',
     APP_METRICS: 'usage/applications/app-details/app-metrics',
+    APP_OVERVIEW: 'usage/overview',
     APP_OVERVIEW_TAGS: 'usage/applications/overview#manage-tags',
+    APP_POLICIES: 'usage/policies',
     APP_ROLLOUT_DEPLOYMENT_TEMPLATE: 'usage/applications/creating-application/deployment-template/rollout-deployment',
     BUILD_STAGE: 'usage/applications/creating-application/workflow/ci-pipeline#build-stage',
     APP_TAGS: 'usage/applications/create-application#tags',
+    APP_TEMPLATE: 'docs/user-guide/app-management/application-template',
     BLOB_STORAGE: 'configurations-overview/installation-configuration#configuration-of-blob-storage',
     BULK_UPDATE: 'usage/bulk-update',
     CHART_GROUP: 'usage/deploy-chart/chart-group',
@@ -42,23 +48,24 @@ export const DOCUMENTATION = {
     CHART_STORE: 'usage/deploy-chart',
     CHART_STORE_METRICS_SERVER: 'dashboard//chart-store/discover?appStoreName=metrics-server',
     CUSTOM_VALUES: 'usage/deploy-chart/overview-of-charts#custom-values',
+    CONFIGURING_WEBHOOK: 'usage/applications/creating-application/workflow/ci-pipeline#configuring-webhook',
     DEPLOYMENT: 'usage/applications/creating-application/deployment-template/deployment',
     DEPLOYMENT_TEMPLATE: 'usage/applications/creating-application/deployment-template',
     DEVTRON_UPGRADE: 'getting-started/upgrade',
-    CONFIGURING_WEBHOOK: 'usage/applications/creating-application/workflow/ci-pipeline#configuring-webhook',
+    DOC_HOME_PAGE: DOCUMENTATION_HOME_PAGE,
     ENTERPRISE_LICENSE: 'enterprise-license',
     EXECUTE_CUSTOM_SCRIPT:
         'usage/applications/creating-application/workflow/ci-pipeline/ci-build-pre-post-plugins#execute-custom-script',
     EXTERNAL_LINKS: 'getting-started/global-configurations/external-links',
     EXTERNAL_SECRET: 'usage/applications/creating-application/secrets#external-secrets',
     HOME_PAGE: 'https://devtron.ai',
-    DOC_HOME_PAGE: DOCUMENTATION_HOME_PAGE,
-    KUBE_CONFIG: 'usage/resource-browser#running-kubectl-commands-locally',
     JOBS: 'usage/jobs',
-    TAINT: 'usage/resource-browser#taint-a-node',
+    KUBE_CONFIG: 'usage/resource-browser#running-kubectl-commands-locally',
     RESOURCE_BROWSER: 'usage/resource-browser',
+    TAINT: 'usage/resource-browser#taint-a-node',
 
     // Global Configurations
+    GLOBAL_CONFIGUDATIONS: 'getting-started/global-configurations',
     GLOBAL_CONFIG_API_TOKEN: 'getting-started/global-configurations/authorization/api-tokens',
     GLOBAL_CONFIG_BUILD_INFRA: 'global-configurations/build-infra',
     GLOBAL_CONFIG_CHART: 'getting-started/global-configurations/chart-repo',
@@ -127,7 +134,11 @@ export const DOCUMENTATION = {
 
     // Infrastructure Management
     AUTOSCALER_DETECTION: 'user-guide/infra-management/infrastructure-overview#troubleshooting-autoscaler-detection',
+    HELM_APPS: 'user-guide/infra-management/other-applications',
+    INFRA_OVERVIEW: 'user-guide/infra-management/overview',
 
     // Cost Visibility
+    COST_BREAKDOWN: 'user-guide/finops/cost-breakdown',
     COST_CALCULATION: 'user-guide/finops/overview-cost-visibility#how-is-the-cost-calculated',
+    COST_VISIBILITY_OVERVIEW: 'user-guide/finops/overview-cost-visibility',
 } as const
