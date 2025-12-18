@@ -95,14 +95,13 @@ export const HeaderWithCreateButton = ({ viewType }: HeaderWithCreateButtonProps
     const renderBreadcrumbs = () => <BreadCrumb breadcrumbs={breadcrumbs} />
 
     const getDocPath = () => {
-        let docPath: string = DOCUMENTATION.APP_MANAGEMENT
-
         if (viewType === 'jobs') {
-            docPath = DOCUMENTATION.AUTOMATION_AND_ENABLEMENT
-        } else if (viewType === 'infra-apps') {
-            docPath = DOCUMENTATION.INFRA_MANAGEMENT
+            return DOCUMENTATION.AUTOMATION_AND_ENABLEMENT
         }
-        return docPath
+        if (viewType === 'infra-apps') {
+            return DOCUMENTATION.INFRA_MANAGEMENT
+        }
+        return DOCUMENTATION.APP_MANAGEMENT
     }
 
     return (
