@@ -17,9 +17,11 @@
 import { DEVTRON_GPT_LINK, DISCORD_LINK, DOCUMENTATION_HOME_PAGE, URLS } from '@Common/Constants'
 import { CONTACT_SUPPORT_LINK, OPEN_NEW_TICKET, RAISE_ISSUE, VIEW_ALL_TICKETS } from '@Shared/constants'
 
-import { HelpButtonActionMenuProps, HelpMenuItems } from './types'
+import { HelpButtonActionMenuProps, HelpMenuItems, PageHeaderType } from './types'
 
-export const COMMON_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options'][number]['items'] = [
+export const getCommonHelpActionMenuItems = ({
+    docPath,
+}: Pick<PageHeaderType, 'docPath'>): HelpButtonActionMenuProps['options'][number]['items'] => [
     ...((!window._env_?.K8S_CLIENT
         ? [
               {
@@ -36,7 +38,7 @@ export const COMMON_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options']
         label: 'View documentation',
         startIcon: { name: 'ic-book-open' },
         componentType: 'anchor',
-        href: DOCUMENTATION_HOME_PAGE,
+        href: `${DOCUMENTATION_HOME_PAGE}${docPath ? `/${docPath}` : ''}`,
     },
     {
         id: HelpMenuItems.DEVTRON_GPT,
