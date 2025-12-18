@@ -1127,7 +1127,7 @@ export type DevtronLicenseBaseDTO = {
            * In seconds
            */
           timeElapsedSinceCreation: number
-          creationTime: number
+          creationTime: string
           ttl?: never
           expiry?: never
       }
