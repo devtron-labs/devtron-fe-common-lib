@@ -18,8 +18,6 @@ import { DOCUMENTATION_HOME_PAGE } from '@Common/Constants'
 
 export const DOCUMENTATION = {
     ADMIN_PASSWORD: 'install/install-devtron#devtron-admin-credentials',
-    APPLICATIONS: 'usage/applications',
-    APP_CONFIGURATION: 'docs/user-guide/app-configurations',
     APP_CI_CONFIG_BUILD_WITHOUT_DOCKER:
         'usage/applications/creating-application/docker-build-configuration#build-docker-image-without-dockerfile',
     APP_CREATE: 'usage/applications/create-application',
@@ -33,13 +31,10 @@ export const DOCUMENTATION = {
     APP_EPHEMERAL_CONTAINER: 'usage/applications/app-details/ephemeral-containers',
     APP_GROUP: 'usage/application-groups',
     APP_METRICS: 'usage/applications/app-details/app-metrics',
-    APP_OVERVIEW: 'usage/overview',
     APP_OVERVIEW_TAGS: 'usage/applications/overview#manage-tags',
-    APP_POLICIES: 'usage/policies',
     APP_ROLLOUT_DEPLOYMENT_TEMPLATE: 'usage/applications/creating-application/deployment-template/rollout-deployment',
     BUILD_STAGE: 'usage/applications/creating-application/workflow/ci-pipeline#build-stage',
     APP_TAGS: 'usage/applications/create-application#tags',
-    APP_TEMPLATE: 'docs/user-guide/app-management/application-template',
     BLOB_STORAGE: 'configurations-overview/installation-configuration#configuration-of-blob-storage',
     BULK_UPDATE: 'usage/bulk-update',
     CHART_GROUP: 'usage/deploy-chart/chart-group',
