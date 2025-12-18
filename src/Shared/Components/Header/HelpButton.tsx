@@ -18,7 +18,7 @@ import { useEffect, useRef, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { SliderButton } from '@typeform/embed-react'
 
-import { MAX_LOGIN_COUNT, URLS } from '@Common/Constants'
+import { DOCUMENTATION_HOME_PAGE, MAX_LOGIN_COUNT, URLS } from '@Common/Constants'
 import { handleAnalyticsEvent } from '@Shared/Analytics'
 import { ComponentSizeType } from '@Shared/constants'
 import { useIsSecureConnection } from '@Shared/Hooks'
@@ -102,7 +102,7 @@ export const HelpButton = ({
             setSidePanelConfig((prev) => ({
                 ...prev,
                 state: SidePanelTab.DOCUMENTATION,
-                docLink: docPath,
+                docLink: `${DOCUMENTATION_HOME_PAGE}${docPath ? `/${docPath}` : ''}`,
                 reinitialize: true,
             }))
         }
