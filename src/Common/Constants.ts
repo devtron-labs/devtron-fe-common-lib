@@ -69,7 +69,6 @@ export const URLS = {
     LOGIN: '/login',
     LOGIN_SSO: '/login/sso',
     APP_LIST: 'list',
-    APP: '/app',
     CREATE_JOB: 'create-job',
     GETTING_STARTED: 'getting-started',
     STACK_MANAGER_ABOUT: '/stack-manager/about',
