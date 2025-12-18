@@ -69,6 +69,7 @@ export const URLS = {
     LOGIN: '/login',
     LOGIN_SSO: '/login/sso',
     APP_LIST: 'list',
+    APP: '/app',
     CREATE_JOB: 'create-job',
     GETTING_STARTED: 'getting-started',
     STACK_MANAGER_ABOUT: '/stack-manager/about',
@@ -223,6 +224,7 @@ export const ROUTES = {
     LICENSE_DATA: 'license/data',
     ENV: 'env',
     APP_METADATA: 'app-metadata',
+    RESOURCE_CONFLICTS_LIST: 'app/:appId/cd-pipeline/:pipelineId/history/:wfrId/helm-ownership-conflicts',
 } as const
 
 export enum KEY_VALUE {
