@@ -52,3 +52,24 @@ export interface BreadcrumbTextProps {
      */
     shouldTruncate?: boolean
 }
+
+export interface NestedBreadCrumbProps {
+    /**
+     * It is the url to which the link should redirect
+     */
+    redirectUrl: string
+    /**
+     * It is the text of the link
+     */
+    linkText: string
+    /**
+     * It is the name of the profile
+     * If not given, would show "Create Profile"
+     */
+    profileName: string
+    /**
+     * @default Profiles
+     * It is the text of the nested breadcrumb
+     */
+    nestedBreadCrumbsText?: string
+}

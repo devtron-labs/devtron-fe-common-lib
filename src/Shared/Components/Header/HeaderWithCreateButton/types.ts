@@ -16,11 +16,8 @@
 
 import { ActionMenuProps } from '@Shared/Components/ActionMenu'
 
-import { PageHeaderType } from '../types'
-
 export interface HeaderWithCreateButtonProps {
-    headerName: string
-    additionalHeaderInfo: PageHeaderType['additionalHeaderInfo']
+    viewType?: 'jobs' | 'apps' | 'infra-apps'
 }
 
 export enum CreateActionMenuItems {

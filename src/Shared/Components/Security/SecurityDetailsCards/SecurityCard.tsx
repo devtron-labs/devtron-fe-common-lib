@@ -21,7 +21,7 @@ import { ReactComponent as ICShieldWarning } from '@Icons/ic-shield-warning-outl
 import { SegmentedBarChart } from '@Common/SegmentedBarChart'
 
 import { SECURITY_CONFIG } from '../constants'
-import { SEVERITIES } from '../SecurityModal/constants'
+import { SEVERITIES_LABEL_COLOR_MAP } from '../SecurityModal/constants'
 import { SUB_CATEGORIES } from '../SecurityModal/types'
 import { getTotalSeverities } from '../utils'
 import { SecurityCardProps } from './types'
@@ -39,7 +39,7 @@ const SecurityCard = ({
 
     const hasThreats: boolean = !!totalCount
 
-    const entities = Object.entries(SEVERITIES)
+    const entities = Object.entries(SEVERITIES_LABEL_COLOR_MAP)
         .map(([key, severity]) => ({
             ...severity,
             value: severities[key],

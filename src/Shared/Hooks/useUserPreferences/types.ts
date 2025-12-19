@@ -17,6 +17,7 @@
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from '@Shared/Hooks/useUserPreferences/constants'
 import { AppThemeType, ThemeConfigType, ThemePreferenceType } from '@Shared/Providers/ThemeProvider/types'
 import { ResourceKindType } from '@Shared/types'
+import { NavigationItemID, NavigationSubMenuItemID } from '@PagesDevtron2.0/Navigation'
 
 export interface GetUserPreferencesQueryParamsType {
     key: typeof USER_PREFERENCES_ATTRIBUTE_KEY
@@ -48,6 +49,21 @@ export interface UserResourceKindActionType {
     [UserPreferenceResourceActions.RECENTLY_VISITED]: BaseRecentlyVisitedEntitiesTypes[]
 }
 export type UserPreferenceResourceType = Partial<Record<PreferredResourceKindType, UserResourceKindActionType>>
+
+export type CommandBarAdditionalItemsId =
+    | 'app-management-devtron-app-list'
+    | 'app-management-helm-app-list'
+    | 'app-management-flux-app-list'
+    | 'app-management-argo-app-list'
+    | `app-management-devtron-app-list-${number}`
+    | 'search-app-list-view'
+    | `chart-list-${number}`
+    | 'search-chart-list-view'
+    | `helm-app-list-${number}`
+    | 'search-helm-app-list-view'
+    | `cluster-list-${number}`
+    | 'search-cluster-list-view'
+
 export interface GetUserPreferencesParsedDTO {
     viewPermittedEnvOnly?: boolean
     /**
@@ -61,12 +77,16 @@ export interface GetUserPreferencesParsedDTO {
      *
      */
     resources?: UserPreferenceResourceType
+    commandBar: {
+        recentNavigationActions: { id: NavigationItemID | NavigationSubMenuItemID | CommandBarAdditionalItemsId }[]
+    }
 }
 export interface UserPreferencesPayloadValueType extends GetUserPreferencesParsedDTO {}
 export interface UpdateUserPreferencesPayloadType extends Pick<GetUserPreferencesQueryParamsType, 'key'> {
     value: string
 }
-export interface UserPreferencesType {
+
+export interface UserPreferencesType extends Pick<GetUserPreferencesParsedDTO, 'commandBar'> {
     /**
      * Preferred theme for the user
      * If null, would forcibly show user theme switcher dialog for user to select
@@ -96,7 +116,7 @@ export interface UseUserPreferencesProps {
     recentlyVisitedFetchConfig?: RecentlyVisitedFetchConfigType
 }
 
-export type UserPathValueMapType =
+type UserPathValueMapType =
     | {
           path: 'themePreference'
           value: Required<Pick<UpdatedUserPreferencesType, 'themePreference' | 'appTheme'>>
@@ -115,6 +135,34 @@ export type UserPathValueMapType =
           resourceKind: PreferredResourceKindType
           userPreferencesResponse?: UserPreferencesType
       }
+    | {
+          path: 'commandBar.recentNavigationActions'
+          value: UserPreferencesType['commandBar']['recentNavigationActions']
+          resourceKind?: never
+          userPreferencesResponse?: never
+      }
+
+export type GetUserPreferencePayloadParams = {
+    userPreferencesResponse: UserPreferencesType
+    resourceKind?: PreferredResourceKindType
+} & (
+    | {
+          path: 'themePreference'
+          value: Required<Pick<UpdatedUserPreferencesType, 'themePreference' | 'appTheme'>>
+      }
+    | {
+          path: 'pipelineRBACViewSelectedTab'
+          value: Required<Pick<UserPreferencesType, 'pipelineRBACViewSelectedTab'>>
+      }
+    | {
+          path: 'resources'
+          value: Required<BaseRecentlyVisitedEntitiesTypes[]>
+      }
+    | {
+          path: 'commandBar.recentNavigationActions'
+          value: UserPreferencesType['commandBar']['recentNavigationActions']
+      }
+)
 
 export type UserPreferenceResourceProps = UserPathValueMapType & {
     shouldThrowError?: boolean

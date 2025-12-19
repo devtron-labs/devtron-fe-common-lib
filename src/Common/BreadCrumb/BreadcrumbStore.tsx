@@ -29,7 +29,6 @@ export const getBreadCrumbSeparator = (sep: string = '/') => (
     <span className="dc__devtron-breadcrumb__item__separator">{sep}</span>
 )
 
-
 const Store = ({ children }) => {
     const [state, setState] = useState(initialState)
     return <BreadcrumbContext.Provider value={{ state, setState }}>{children}</BreadcrumbContext.Provider>

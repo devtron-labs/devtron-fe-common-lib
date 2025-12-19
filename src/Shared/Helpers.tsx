@@ -17,12 +17,14 @@
 /* eslint-disable no-param-reassign */
 import { ReactElement, useEffect, useRef, useState } from 'react'
 import { PromptProps } from 'react-router-dom'
+import { parse as parseCronExpression } from '@datasert/cronjs-parser'
 import { StrictRJSFSchema } from '@rjsf/utils'
 import Tippy from '@tippyjs/react'
+import cronstrue from 'cronstrue'
 import { animate } from 'framer-motion'
 import moment from 'moment'
 import { nanoid } from 'nanoid'
-import { Pair } from 'yaml'
+import { Pair, parse } from 'yaml'
 
 import { ReactComponent as ICAWSCodeCommit } from '@Icons/ic-aws-codecommit.svg'
 import { ReactComponent as ICBitbucket } from '@Icons/ic-bitbucket.svg'
@@ -689,7 +691,7 @@ export const clearCookieOnLogout = () => {
 }
 
 export const getAppDetailsURL = (appId: number | string, envId?: number | string): string => {
-    const baseURL = `${URLS.APP}/${appId}/${URLS.APP_DETAILS}`
+    const baseURL = `${URLS.APPLICATION_MANAGEMENT_APP}/${appId}/${URLS.APP_DETAILS}`
     if (envId) {
         return `${baseURL}/${envId}`
     }
@@ -726,6 +728,44 @@ export const getGroupVersionFromApiVersion = (apiVersion: string): Pick<Node, 'g
 
     // If the apiVersion has more than two parts, we consider the first part as group and the rest as version
     return { group: parts[0], version: parts.slice(1).join('/') }
+}
+
+export const YAMLtoJSON = (yamlString: string) => {
+    try {
+        const obj = parse(yamlString)
+        const jsonStr = JSON.stringify(obj)
+        return jsonStr
+    } catch {
+        return ''
+    }
+}
+
+export const formatNumberToCurrency = (value: number, currency: string, minimumFractionDigits?: number): string => {
+    const precision = minimumFractionDigits ?? 2
+    try {
+        const data = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency,
+            minimumFractionDigits: precision,
+        }).format(value)
+
+        return data
+    } catch {
+        return value.toFixed(precision)
+    }
+}
+
+/**
+ * Returns the human readable explanation of the expression
+ * NOTE: expectation is that the expression is valid
+ *
+ * @throws Error - if given expression is incorrect
+ * @param expression
+ * @returns string - helper text explaining the expression in a human readable format
+ */
+export const explainCronExpression = (expression: string): string => {
+    parseCronExpression(expression, { hasSeconds: expression.trim().split(' ').length > 5 })
+    return cronstrue.toString(expression)
 }
 
 export const getGVKTitle = (gvk: GVKType): string => {
