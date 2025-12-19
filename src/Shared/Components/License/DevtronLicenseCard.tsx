@@ -52,8 +52,10 @@ const LicenseCardSubText = ({
     isFreeForever,
 }: LicenseCardSubTextProps) => {
     const freemiumLimitReached = isFreemium && licenseStatusError?.code === LicensingErrorCodes.ClusterLimitExceeded
+    const showFreemiumMessage =
+        isFreeForever || freemiumLimitReached || (isFreemium && licenseStatus === LicenseStatus.ACTIVE)
 
-    if (isFreeForever || freemiumLimitReached) {
+    if (showFreemiumMessage) {
         return (
             <div className="p-16 fs-13 lh-1-5 flexbox-col dc__gap-8">
                 <div className="flexbox dc__gap-8 dc__content-space fs-13 fw-4 lh-20 cn-9">
