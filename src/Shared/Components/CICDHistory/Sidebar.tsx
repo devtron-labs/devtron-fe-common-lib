@@ -41,7 +41,12 @@ import {
     HistorySummaryCardType,
     SidebarType,
 } from './types'
-import { getHistoryItemStatusIconFromWorkflowStages, getTriggerStatusIcon, getWorkflowNodeStatusTitle } from './utils'
+import {
+    getHistoryItemStatusIconFromWorkflowStages,
+    getSortedTriggerHistory,
+    getTriggerStatusIcon,
+    getWorkflowNodeStatusTitle,
+} from './utils'
 
 /**
  * @description To be shown on deployment history or when we don't have workflowExecutionStages
@@ -378,30 +383,28 @@ const Sidebar = React.memo(
                     {fetchIdData === FetchIdDataStatus.SUCCESS && (
                         <ViewAllCardsTile handleViewAllHistory={handleViewAllHistory} />
                     )}
-                    {Array.from(triggerHistory)
-                        .sort(([a], [b]) => b - a)
-                        .map(([triggerId, triggerDetails], index) => (
-                            <HistorySummaryCard
-                                dataTestId={`deployment-history-${index}`}
-                                key={triggerId}
-                                id={triggerId}
-                                status={triggerDetails.status}
-                                startedOn={triggerDetails.startedOn}
-                                triggeredBy={triggerDetails.triggeredBy}
-                                triggeredByEmail={triggerDetails.triggeredByEmail}
-                                ciMaterials={triggerDetails.ciMaterials}
-                                gitTriggers={triggerDetails.gitTriggers}
-                                artifact={triggerDetails.artifact}
-                                stage={triggerDetails.stage}
-                                type={type}
-                                runSource={triggerDetails.runSource}
-                                renderRunSource={renderRunSource}
-                                resourceId={resourceId}
-                                workflowExecutionStages={triggerDetails.workflowExecutionStages}
-                                podName={triggerDetails.podName}
-                                namespace={triggerDetails.namespace}
-                            />
-                        ))}
+                    {getSortedTriggerHistory(triggerHistory).map(([triggerId, triggerDetails], index) => (
+                        <HistorySummaryCard
+                            dataTestId={`deployment-history-${index}`}
+                            key={triggerId}
+                            id={triggerId}
+                            status={triggerDetails.status}
+                            startedOn={triggerDetails.startedOn}
+                            triggeredBy={triggerDetails.triggeredBy}
+                            triggeredByEmail={triggerDetails.triggeredByEmail}
+                            ciMaterials={triggerDetails.ciMaterials}
+                            gitTriggers={triggerDetails.gitTriggers}
+                            artifact={triggerDetails.artifact}
+                            stage={triggerDetails.stage}
+                            type={type}
+                            runSource={triggerDetails.runSource}
+                            renderRunSource={renderRunSource}
+                            resourceId={resourceId}
+                            workflowExecutionStages={triggerDetails.workflowExecutionStages}
+                            podName={triggerDetails.podName}
+                            namespace={triggerDetails.namespace}
+                        />
+                    ))}
                     {hasMore && (fetchIdData === FetchIdDataStatus.SUSPEND || !fetchIdData) && (
                         <DetectBottom callback={reloadNextAfterBottom} />
                     )}
