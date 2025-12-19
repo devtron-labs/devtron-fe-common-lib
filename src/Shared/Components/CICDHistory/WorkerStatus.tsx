@@ -41,6 +41,7 @@ const WorkerStatus = memo(
         titleClassName = 'cn-9 fs-13 fw-4 lh-20',
         viewWorkerPodClassName = 'fs-13',
         hideShowMoreMessageButton = false,
+        children,
     }: WorkerStatusType): JSX.Element | null => {
         if (!message && !podStatus) {
             return null
@@ -98,6 +99,8 @@ const WorkerStatus = memo(
                             hideShowMore={hideShowMoreMessageButton}
                         />
                     )}
+
+                    {children}
                 </div>
             </>
         )
