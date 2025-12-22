@@ -17,6 +17,8 @@
 import { useEffect, useRef, useState } from 'react'
 import Draggable, { ControlPosition } from 'react-draggable'
 
+import { DEVTRON_BASE_MAIN_ID } from '@Shared/constants'
+
 import { MAX_Z_INDEX } from '../Constants'
 import { useWindowSize } from '../Hooks'
 import { DraggablePositionVariant, DraggableWrapperProps } from './types'
@@ -25,7 +27,8 @@ import { DraggablePositionVariant, DraggableWrapperProps } from './types'
  * TODO: import it as lazy, after it is supported in common
  * 1. If using react select please use menuPlacement='auto'
  * 2. dragSelector will be used to identify the grabbable button that will grab the div to drag
- * 3. parentRef is the reference point from which we will derive the base top:0 ,left: 0 position
+ * 3. The wrapper is positioned at the viewport's top-left (top: 0, left: 0) using fixed positioning; parentRef is an optional
+ *    reference that may be used for position calculations but is not the base origin for the coordinate system.
  */
 const DraggableWrapper = ({
     children,
@@ -74,9 +77,7 @@ const DraggableWrapper = ({
             }
             // Add more cases for other variants if needed
             default: {
-                // Since need node to be in center of screen so subtracting width/2 by left of parentRect it will start the node from center but want node's midpoint at center so subtracting node's width from it.
                 const x = (windowSize.width - nodeRefWidth) / 2
-                // subtracting top since windowSize already contains that
                 const y = windowSize.height - nodeRefHeight - boundaryGap
 
                 return { x, y }
@@ -98,10 +99,10 @@ const DraggableWrapper = ({
             }}
         >
             <Draggable
-                key={`${JSON.stringify(windowSize)} ${initialRenderDone}`}
+                key={`${windowSize.height}-${windowSize.width}-${initialRenderDone}`}
                 handle={dragSelector}
                 defaultPosition={getDefaultPosition()}
-                bounds="#devtron-base-main-identifier"
+                bounds={`#${DEVTRON_BASE_MAIN_ID}`}
                 nodeRef={nodeRef}
             >
                 <div
