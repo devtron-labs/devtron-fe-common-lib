@@ -183,10 +183,8 @@ export const SelectPickerTextArea = ({
                 selectRef.current.inputRef.selectionEnd = selectionStart + 1
             })
 
-            return
+            updateValueIfOnlyDirty()
         }
-
-        updateValueIfOnlyDirty()
     }
 
     return (

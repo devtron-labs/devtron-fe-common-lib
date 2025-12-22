@@ -15,11 +15,23 @@
  */
 
 /* eslint-disable dot-notation */
+import { generatePath } from 'react-router-dom'
 import moment from 'moment'
 
-import { get, getUrlWithSearchParams, ResponseType, ROUTES, sanitizeUserApprovalMetadata, trash } from '../../../Common'
+import { ToastManager, ToastVariantType } from '@Shared/Services'
+import { GVKType, K8S_EMPTY_GROUP } from '@Pages/ResourceBrowser'
+
+import {
+    get,
+    getUrlWithSearchParams,
+    post,
+    ResponseType,
+    ROUTES,
+    sanitizeUserApprovalMetadata,
+    trash,
+} from '../../../Common'
 import { DATE_TIME_FORMAT_STRING, DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP, EXTERNAL_TYPES } from '../../constants'
-import { decode, isNullOrUndefined } from '../../Helpers'
+import { decode, getGVKTitle, getUniqueId, isNullOrUndefined } from '../../Helpers'
 import { ResourceKindType, ResourceVersionType } from '../../types'
 import {
     DeploymentHistoryDetail,
@@ -27,7 +39,12 @@ import {
     DeploymentHistorySingleValue,
     DeploymentStatusDetailsResponse,
     FetchIdDataStatus,
+    GetResourceConflictDetailsParamsType,
     ModuleConfigResponse,
+    ResourceConflictItemType,
+    ResourceConflictListItemDTO,
+    ResourceConflictRedeployParamsType,
+    ResourceConflictRedeployPayloadType,
     TriggerDetailsResponseType,
     TriggerHistoryParamsType,
 } from './types'
@@ -292,3 +309,51 @@ export const getTriggerHistory = async ({
 
 export const getModuleConfigured = (moduleName: string): Promise<ModuleConfigResponse> =>
     get(`${ROUTES.MODULE_CONFIGURED}?name=${moduleName}`)
+
+export const resourceConflictRedeploy = async ({
+    pipelineId,
+    triggerId,
+    appId,
+}: ResourceConflictRedeployParamsType) => {
+    await post<never, ResourceConflictRedeployPayloadType>(ROUTES.CD_TRIGGER_POST, {
+        pipelineId: +pipelineId,
+        wfrIdForDeploymentWithSpecificTrigger: +triggerId,
+        appId: +appId,
+        helmRedeploymentRequest: true,
+    })
+
+    ToastManager.showToast({
+        variant: ToastVariantType.success,
+        title: 'Redeployment initiated',
+        description: 'Redeployment for application has been successfully initiated.',
+    })
+}
+
+export const getResourceConflictDetails = async ({
+    appId,
+    pipelineId,
+    triggerId,
+    signal,
+}: GetResourceConflictDetailsParamsType): Promise<ResourceConflictItemType[]> => {
+    const { result } = await get<ResourceConflictListItemDTO>(
+        generatePath(ROUTES.RESOURCE_CONFLICTS_LIST, {
+            appId,
+            pipelineId,
+            wfrId: triggerId,
+        }),
+        { signal },
+    )
+
+    return (result?.conflictingResources || []).map<ResourceConflictItemType>((resource) => ({
+        name: resource.name || '',
+        namespace: resource.namespace || '',
+        gvk: {
+            Group: resource.groupVersionKind.Group || K8S_EMPTY_GROUP,
+            Version: resource.groupVersionKind.Version || '',
+            Kind: resource.groupVersionKind.Kind || ('' as GVKType['Kind']),
+        },
+        gvkTitle: getGVKTitle(resource.groupVersionKind),
+        clusterId: result.clusterId,
+        id: getUniqueId(),
+    }))
+}
