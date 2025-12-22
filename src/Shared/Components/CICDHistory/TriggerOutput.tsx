@@ -47,8 +47,9 @@ import {
     statusSet,
     terminalStatus,
     TriggerOutputProps,
+    TriggerOutputURLParamsType,
 } from './types'
-import { getTriggerOutputTabs } from './utils'
+import { getSortedTriggerHistory, getTriggerOutputTabs } from './utils'
 
 import './cicdHistory.scss'
 
@@ -250,12 +251,7 @@ const TriggerOutput = ({
     renderTargetConfigInfo,
     appName,
 }: TriggerOutputProps) => {
-    const { appId, triggerId, envId, pipelineId } = useParams<{
-        appId: string
-        triggerId: string
-        envId: string
-        pipelineId: string
-    }>()
+    const { appId, triggerId, envId, pipelineId } = useParams<TriggerOutputURLParamsType>()
     const triggerDetails = triggerHistory.get(+triggerId)
     const [triggerDetailsLoading, triggerDetailsResult, triggerDetailsError, reloadTriggerDetails] = useAsync(
         () => getTriggerDetails({ appId, envId, pipelineId, triggerId, fetchIdData }),
@@ -363,6 +359,8 @@ const TriggerOutput = ({
 
     useInterval(reloadTriggerDetails, timeout)
 
+    const latestTriggerHistoryId = useMemo(() => getSortedTriggerHistory(triggerHistory)?.[0]?.[0], [triggerHistory])
+
     if (
         (!areTagDetailsRequired && triggerDetailsLoading && !triggerDetails) ||
         !triggerId ||
@@ -411,6 +409,8 @@ const TriggerOutput = ({
                         renderTargetConfigInfo={renderTargetConfigInfo}
                         workflowExecutionStages={triggerDetails.workflowExecutionStages}
                         namespace={triggerDetails.namespace}
+                        isLatest={latestTriggerHistoryId === triggerDetails.id}
+                        appName={appName}
                     />
                     <div className="pl-50 pr-20 pt-8 dc__border-bottom dc__position-sticky dc__top-0 bg__primary dc__zi-3">
                         <TabGroup tabs={getTriggerOutputTabs(triggerDetails, deploymentAppType)} />

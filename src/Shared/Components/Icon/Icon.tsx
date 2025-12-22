@@ -66,6 +66,7 @@ import { ReactComponent as ICCaretLeft } from '@IconsV2/ic-caret-left.svg'
 import { ReactComponent as ICCaretRight } from '@IconsV2/ic-caret-right.svg'
 import { ReactComponent as ICCd } from '@IconsV2/ic-cd.svg'
 import { ReactComponent as ICChartLineUp } from '@IconsV2/ic-chart-line-up.svg'
+import { ReactComponent as ICChartRepo } from '@IconsV2/ic-chart-repo.svg'
 import { ReactComponent as ICChatCircleDots } from '@IconsV2/ic-chat-circle-dots.svg'
 import { ReactComponent as ICChatCircleOnline } from '@IconsV2/ic-chat-circle-online.svg'
 import { ReactComponent as ICCheck } from '@IconsV2/ic-check.svg'
@@ -134,6 +135,7 @@ import { ReactComponent as ICError } from '@IconsV2/ic-error.svg'
 import { ReactComponent as ICExitFullscreen } from '@IconsV2/ic-exit-fullscreen.svg'
 import { ReactComponent as ICExpandRightSm } from '@IconsV2/ic-expand-right-sm.svg'
 import { ReactComponent as ICExpandSm } from '@IconsV2/ic-expand-sm.svg'
+import { ReactComponent as ICExternalLink } from '@IconsV2/ic-external-link.svg'
 import { ReactComponent as ICFailure } from '@IconsV2/ic-failure.svg'
 import { ReactComponent as ICFastForward } from '@IconsV2/ic-fast-forward.svg'
 import { ReactComponent as ICFile } from '@IconsV2/ic-file.svg'
@@ -393,6 +395,7 @@ export const iconMap = {
     'ic-caret-right': ICCaretRight,
     'ic-cd': ICCd,
     'ic-chart-line-up': ICChartLineUp,
+    'ic-chart-repo': ICChartRepo,
     'ic-chat-circle-dots': ICChatCircleDots,
     'ic-chat-circle-online': ICChatCircleOnline,
     'ic-check-all': ICCheckAll,
@@ -461,6 +464,7 @@ export const iconMap = {
     'ic-exit-fullscreen': ICExitFullscreen,
     'ic-expand-right-sm': ICExpandRightSm,
     'ic-expand-sm': ICExpandSm,
+    'ic-external-link': ICExternalLink,
     'ic-failure': ICFailure,
     'ic-fast-forward': ICFastForward,
     'ic-file-code': ICFileCode,
