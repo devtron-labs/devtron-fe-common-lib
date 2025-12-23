@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { DraggableWrapperProps } from '@Common/DraggableWrapper'
 import { AppConfigProps } from '@Pages/index'
 
 export interface ScopedVariableType {
@@ -25,7 +26,9 @@ export interface ScopedVariableType {
     isRedacted: boolean
 }
 
-export interface FloatingVariablesSuggestionsProps extends Required<Pick<AppConfigProps, 'isTemplateView'>> {
+export interface FloatingVariablesSuggestionsProps
+    extends Required<Pick<AppConfigProps, 'isTemplateView'>>,
+        Pick<DraggableWrapperProps, 'boundaryGap'> {
     zIndex: number
     appId?: string
     envId?: string

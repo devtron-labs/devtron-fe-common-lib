@@ -44,6 +44,7 @@ const FloatingVariablesSuggestions = ({
     hideObjectVariables = true,
     showValueOnHover = true,
     isTemplateView,
+    boundaryGap,
 }: FloatingVariablesSuggestionsProps) => {
     const [isActive, setIsActive] = useState<boolean>(false)
 
@@ -61,8 +62,6 @@ const FloatingVariablesSuggestions = ({
         e.stopPropagation()
         setIsActive(false)
     }, [])
-
-    const boundaryGap = { x: 32, y: 90 }
 
     return (
         <>
