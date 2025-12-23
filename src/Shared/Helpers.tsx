@@ -52,7 +52,7 @@ import {
     ZERO_TIME_STRING,
 } from '../Common'
 import { getAggregator, GVKType } from '../Pages'
-import { AggregatedNodes, PodMetadatum } from './Components'
+import { AggregatedNodes } from './Components'
 import { CUBIC_BEZIER_CURVE, UNSAVED_CHANGES_PROMPT_MESSAGE } from './constants'
 import {
     AggregationKeys,
@@ -63,6 +63,7 @@ import {
     IntersectionOptions,
     Node,
     Nodes,
+    PodMetaData,
     TargetPlatformItemDTO,
     TargetPlatformsDTO,
     WebhookEventNameType,
@@ -296,7 +297,7 @@ export const renderValidInputButtonTippy = (children: ReactElement) => (
     </Tippy>
 )
 
-export function aggregateNodes(nodes: any[], podMetadata: PodMetadatum[]): AggregatedNodes {
+export function aggregateNodes(nodes: any[], podMetadata: PodMetaData[]): AggregatedNodes {
     const podMetadataMap = mapByKey(podMetadata, 'name')
     // group nodes
     const nodesGroup = nodes.reduce((agg, curr) => {
