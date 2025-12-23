@@ -64,20 +64,32 @@ const DraggableWrapper = ({
                 // center div to middle of the parent rect and then add the left offset of the parent rect
                 const x = (parentRect.width - nodeRefWidth) / 2 + parentRect.left
                 if (parentRect.height > windowSize.height) {
+                    // since the parent itself overflows, we use windowSize for calculations
                     return { x, y: windowSize.height - boundaryGap.y - nodeRefHeight }
                 }
+                // y = parentRect.bottom will place the widget at the extreme bottom of the parent,
+                // therefore need to offset it to the top by boundary and its own height
                 const y = parentRect.bottom - nodeRefHeight - boundaryGap.y
                 return { x, y }
             }
             case DraggablePositionVariant.SCREEN_BOTTOM_RIGHT: {
+                // x = windowSize.width will place the widget at the extreme right,
+                // therefore need to offset it to the left by boundary and its own width
                 const x = windowSize.width - nodeRefWidth - boundaryGap.x
+                // y = windowSize.height will place the widget at the extreme bottom,
+                // therefore need to offset it to the top by boundary and its own height
                 const y = windowSize.height - nodeRefHeight - boundaryGap.y
 
                 return { x, y }
             }
             // Add more cases for other variants if needed
             default: {
+                // we need to first place the start of the widget at (windowSize.width / 2)
+                // followed by moving it half of its own width to the left such that center of widget
+                // aligns with the central axis of the screen
                 const x = (windowSize.width - nodeRefWidth) / 2
+                // y = windowSize.height will place the widget at the extreme bottom,
+                // therefore need to offset it to the top by boundary and its own height
                 const y = windowSize.height - nodeRefHeight - boundaryGap.y
 
                 return { x, y }
