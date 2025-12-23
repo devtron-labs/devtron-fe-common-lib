@@ -38,7 +38,6 @@ import { FloatingVariablesSuggestionsProps } from './types'
  * @returns
  */
 const FloatingVariablesSuggestions = ({
-    zIndex,
     appId,
     envId,
     clusterId,
@@ -69,7 +68,6 @@ const FloatingVariablesSuggestions = ({
             <div className={`${isActive ? 'dc__visibility-hidden dc__disable-click' : ''} `}>
                 <DraggableWrapper
                     key="collapsed"
-                    zIndex={zIndex}
                     positionVariant={DraggablePositionVariant.SCREEN_BOTTOM_RIGHT}
                     dragSelector={`.${DRAG_SELECTOR}`}
                     boundaryGap={boundaryGap}
@@ -77,7 +75,7 @@ const FloatingVariablesSuggestions = ({
                 >
                     <div
                         className="bcn-7 dc__outline-none-imp dc__border-n0 br-48 flex h-40 pt-8 pb-8 pl-12 pr-12 dc__gap-8 dc__no-shrink"
-                        style={{ zIndex, boxShadow: '0px 4px 8px 0px rgba(0, 0, 0, 0.20)' }}
+                        style={{ boxShadow: '0px 4px 8px 0px rgba(0, 0, 0, 0.20)' }}
                         data-testid="collapsed-state"
                     >
                         <button type="button" className="dc__outline-none-imp dc__no-border p-0 bcn-7 h-24">
@@ -102,7 +100,6 @@ const FloatingVariablesSuggestions = ({
             <div className={`${!isActive ? 'dc__visibility-hidden dc__disable-click' : ''}`}>
                 <DraggableWrapper
                     key={`expanded-${loadingScopedVariables}`}
-                    zIndex={zIndex}
                     positionVariant={DraggablePositionVariant.SCREEN_BOTTOM_RIGHT}
                     dragSelector={`.${DRAG_SELECTOR}`}
                     boundaryGap={boundaryGap}
@@ -111,7 +108,6 @@ const FloatingVariablesSuggestions = ({
                     <div
                         className={`flex column dc__no-shrink w-356 dc__content-space dc__border-radius-8-imp dc__border dc__overflow-hidden mxh-504 bg__overlay--primary ${ALLOW_ACTION_OUTSIDE_FOCUS_TRAP}`}
                         style={{
-                            zIndex,
                             boxShadow: '0px 4px 8px 0px rgba(0, 0, 0, 0.25)',
                         }}
                     >

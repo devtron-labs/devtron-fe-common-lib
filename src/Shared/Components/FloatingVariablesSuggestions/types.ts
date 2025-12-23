@@ -29,7 +29,6 @@ export interface ScopedVariableType {
 export interface FloatingVariablesSuggestionsProps
     extends Required<Pick<AppConfigProps, 'isTemplateView'>>,
         Pick<DraggableWrapperProps, 'boundaryGap'> {
-    zIndex: number
     appId?: string
     envId?: string
     clusterId?: string
