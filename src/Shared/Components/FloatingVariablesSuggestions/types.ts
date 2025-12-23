@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import { DraggableBounds } from 'react-draggable'
-
 import { AppConfigProps } from '@Pages/index'
 
 export interface ScopedVariableType {
@@ -32,7 +30,6 @@ export interface FloatingVariablesSuggestionsProps extends Required<Pick<AppConf
     appId?: string
     envId?: string
     clusterId?: string
-    bounds?: DraggableBounds | string | false
     /**
      * This will hide the variables with object/array values if set to true
      * @default true

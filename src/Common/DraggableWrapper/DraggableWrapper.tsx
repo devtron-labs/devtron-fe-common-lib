@@ -36,7 +36,7 @@ const DraggableWrapper = ({
     positionVariant,
     dragSelector,
     parentRef,
-    boundaryGap = 16,
+    boundaryGap = { x: 16, y: 16 },
     childDivProps = {},
 }: DraggableWrapperProps) => {
     const windowSize = useWindowSize()
@@ -64,21 +64,21 @@ const DraggableWrapper = ({
                 // center div to middle of the parent rect and then add the left offset of the parent rect
                 const x = (parentRect.width - nodeRefWidth) / 2 + parentRect.left
                 if (parentRect.height > windowSize.height) {
-                    return { x, y: windowSize.height - boundaryGap - nodeRefHeight }
+                    return { x, y: windowSize.height - boundaryGap.y - nodeRefHeight }
                 }
-                const y = parentRect.bottom - nodeRefHeight - boundaryGap
+                const y = parentRect.bottom - nodeRefHeight - boundaryGap.y
                 return { x, y }
             }
             case DraggablePositionVariant.SCREEN_BOTTOM_RIGHT: {
-                const x = windowSize.width - nodeRefWidth - boundaryGap
-                const y = windowSize.height - nodeRefHeight - boundaryGap
+                const x = windowSize.width - nodeRefWidth - boundaryGap.x
+                const y = windowSize.height - nodeRefHeight - boundaryGap.y
 
                 return { x, y }
             }
             // Add more cases for other variants if needed
             default: {
                 const x = (windowSize.width - nodeRefWidth) / 2
-                const y = windowSize.height - nodeRefHeight - boundaryGap
+                const y = windowSize.height - nodeRefHeight - boundaryGap.y
 
                 return { x, y }
             }

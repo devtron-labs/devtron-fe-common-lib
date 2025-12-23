@@ -18,6 +18,7 @@ import { HTMLAttributes, ReactNode, RefObject } from 'react'
 
 export enum DraggablePositionVariant {
     PARENT_BOTTOM_CENTER = 'PARENT_BOTTOM_CENTER',
+    PARENT_BOTTOM_RIGHT = 'PARENT_BOTTOM_RIGHT',
     SCREEN_BOTTOM_CENTER = 'SCREEN_BOTTOM_CENTER',
     SCREEN_BOTTOM_RIGHT = 'SCREEN_BOTTOM_RIGHT',
     // Can add more based on requirement
@@ -35,7 +36,7 @@ export interface DraggableWrapperProps {
      */
     dragSelector: string
     parentRef?: RefObject<HTMLDivElement>
-    boundaryGap?: number
+    boundaryGap?: Record<'x' | 'y', number>
     childDivProps?: HTMLAttributes<HTMLDivElement>
 }
 

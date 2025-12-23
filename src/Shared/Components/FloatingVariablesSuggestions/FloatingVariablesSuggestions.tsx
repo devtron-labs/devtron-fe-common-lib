@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-import React, { memo, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import Draggable from 'react-draggable'
+import React, { memo, useCallback, useState } from 'react'
 import Tippy from '@tippyjs/react'
 
 import { ReactComponent as ICDrag } from '@Icons/ic-drag.svg'
+import { DraggablePositionVariant, DraggableWrapper } from '@Common/DraggableWrapper'
 import { useAsync } from '@Common/Helper'
-import { useWindowSize } from '@Common/Hooks'
 import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP } from '@Shared/constants'
 
 import { Icon } from '../Icon'
-import { SUGGESTIONS_SIZE } from './constants'
 import { getScopedVariables } from './service'
 import Suggestions from './Suggestions'
 import { FloatingVariablesSuggestionsProps } from './types'
@@ -35,7 +33,6 @@ import { FloatingVariablesSuggestionsProps } from './types'
  * @param appId -  To fetch the scoped variables
  * @param envId - (Optional)
  * @param clusterId - (Optional)
- * @param bounds - (Optional) To set the bounds of the suggestions
  * @param hideObjectVariables - (Optional) To hide the object/array variables, default is true
  * @returns
  */
@@ -44,89 +41,18 @@ const FloatingVariablesSuggestions = ({
     appId,
     envId,
     clusterId,
-    bounds,
     hideObjectVariables = true,
     showValueOnHover = true,
     isTemplateView,
 }: FloatingVariablesSuggestionsProps) => {
     const [isActive, setIsActive] = useState<boolean>(false)
-    const [collapsedPosition, setCollapsedPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 })
-    const [expandedPosition, setExpandedPosition] = useState<{ x: number; y: number }>({ x: 0, y: 0 })
 
     const [loadingScopedVariables, variablesData, error, reloadScopedVariables] = useAsync(
         () => getScopedVariables(appId, envId, clusterId, { hideObjectVariables, isTemplateView }),
         [appId, envId, clusterId],
     )
 
-    const windowSize = useWindowSize()
-    // In case of StrictMode, we get error findDOMNode is deprecated in StrictMode
-    // So we use useRef to get the DOM node
-    const nodeRef = useRef(null)
-
-    // nodeRef.current is dependency even though its a ref as initially its null and we need to get the
-    // first value that it gets and after that is not going to trigger again
-    const initialPosition = useMemo(() => {
-        const initialPositionData = nodeRef.current?.getBoundingClientRect() || {
-            x: 0,
-            y: 0,
-        }
-        return { x: initialPositionData.x, y: initialPositionData.y }
-    }, [nodeRef.current])
-
-    // The size of the active state can expand say in case user expands SuggestionsInfo and the widget is at bottom of screen
-    useEffect(() => {
-        const resizeObserver = new ResizeObserver((entries) => {
-            if (entries?.length > 0 && isActive) {
-                const { height } = entries[0].contentRect
-                if (initialPosition.y + expandedPosition.y + height > windowSize.height) {
-                    setExpandedPosition({
-                        x: expandedPosition.x,
-                        y: windowSize.height - height - initialPosition.y,
-                    })
-                }
-            }
-        })
-        resizeObserver.observe(nodeRef.current)
-        return () => {
-            resizeObserver.disconnect()
-        }
-    }, [isActive, expandedPosition, windowSize, initialPosition])
-
     const handleActivation = () => {
-        const currentPosInScreen = {
-            x: initialPosition.x + collapsedPosition.x,
-            y: initialPosition.y + collapsedPosition.y,
-        }
-
-        setExpandedPosition({
-            x: collapsedPosition.x,
-            y: collapsedPosition.y,
-        })
-
-        if (currentPosInScreen.y > windowSize.height - SUGGESTIONS_SIZE.height) {
-            setExpandedPosition({
-                x: collapsedPosition.x,
-                y: windowSize.height - SUGGESTIONS_SIZE.height - initialPosition.y,
-            })
-        }
-
-        if (currentPosInScreen.x > windowSize.width - SUGGESTIONS_SIZE.width) {
-            setExpandedPosition({
-                x: windowSize.width - SUGGESTIONS_SIZE.width - initialPosition.x,
-                y: collapsedPosition.y,
-            })
-        }
-
-        if (
-            currentPosInScreen.x > windowSize.width - SUGGESTIONS_SIZE.width &&
-            currentPosInScreen.y > windowSize.height - SUGGESTIONS_SIZE.height
-        ) {
-            setExpandedPosition({
-                x: windowSize.width - SUGGESTIONS_SIZE.width - initialPosition.x,
-                y: windowSize.height - SUGGESTIONS_SIZE.height - initialPosition.y,
-            })
-        }
-
         setIsActive(true)
     }
 
@@ -136,103 +62,71 @@ const FloatingVariablesSuggestions = ({
         setIsActive(false)
     }, [])
 
-    // e will be unused, but we need to pass it as a parameter since Draggable expects it
-    const handleCollapsedDrag = (e, data: { x: number; y: number }) => {
-        const currentPosInScreen = {
-            x: initialPosition.x + data.x,
-            y: initialPosition.y + data.y,
-        }
-        if (
-            currentPosInScreen.y < 0 ||
-            currentPosInScreen.x < 0 ||
-            currentPosInScreen.x + (nodeRef.current?.getBoundingClientRect().width || 0) > windowSize.width ||
-            currentPosInScreen.y + (nodeRef.current?.getBoundingClientRect().height || 0) > windowSize.height
-        ) {
-            return
-        }
-
-        setCollapsedPosition(data)
-    }
-
-    const handleExpandedDrag = (e, data: { x: number; y: number }) => {
-        const currentPosInScreen = {
-            x: initialPosition.x + data.x,
-            y: initialPosition.y + data.y,
-        }
-        if (
-            currentPosInScreen.y < 0 ||
-            currentPosInScreen.x < 0 ||
-            currentPosInScreen.x + (nodeRef.current?.getBoundingClientRect().width || 0) > windowSize.width ||
-            currentPosInScreen.y + (nodeRef.current?.getBoundingClientRect().height || 0) > windowSize.height
-        ) {
-            return
-        }
-        setExpandedPosition(data)
-        // Only Need to retain the collapsed position if the user has not dragged the suggestions, so need to update
-        setCollapsedPosition(data)
-    }
-
-    if (!isActive) {
-        return (
-            <Draggable
-                bounds={bounds}
-                handle=".handle-drag"
-                nodeRef={nodeRef}
-                position={collapsedPosition}
-                onDrag={handleCollapsedDrag}
-            >
-                <div
-                    className="bcn-7 dc__outline-none-imp dc__border-n0 br-48 flex h-40 pt-8 pb-8 pl-12 pr-12 dc__gap-8 dc__no-shrink dc__position-abs"
-                    style={{ zIndex, boxShadow: '0px 4px 8px 0px rgba(0, 0, 0, 0.20)' }}
-                    ref={nodeRef}
-                    data-testid="collapsed-state"
-                >
-                    <button type="button" className="dc__outline-none-imp dc__no-border p-0 bcn-7 h-24">
-                        <ICDrag className="handle-drag dc__grabbable icon-dim-24 fcn-2" />
-                    </button>
-
-                    <Tippy content="Scoped variables" placement="top" className="default-tt" arrow={false}>
-                        <button
-                            className={`dc__outline-none-imp dc__no-border p-0 bcn-7 h-20 ${ALLOW_ACTION_OUTSIDE_FOCUS_TRAP}`}
-                            type="button"
-                            onClick={handleActivation}
-                            data-testid="activate-suggestions"
-                            aria-label="Activate suggestions"
-                        >
-                            <Icon name="ic-view-variable-toggle" color="N0" size={20} />
-                        </button>
-                    </Tippy>
-                </div>
-            </Draggable>
-        )
-    }
+    const boundaryGap = { x: 32, y: 90 }
 
     return (
-        <Draggable
-            bounds={bounds}
-            handle=".handle-drag"
-            nodeRef={nodeRef}
-            position={expandedPosition}
-            onDrag={handleExpandedDrag}
-        >
-            <div
-                className={`flex column dc__no-shrink w-356 dc__content-space dc__border-radius-8-imp dc__border dc__overflow-hidden dc__position-abs mxh-504 bg__overlay--primary ${ALLOW_ACTION_OUTSIDE_FOCUS_TRAP}`}
-                style={{
-                    zIndex,
-                    boxShadow: '0px 4px 8px 0px rgba(0, 0, 0, 0.25)',
-                }}
-                ref={nodeRef}
-            >
-                <Suggestions
-                    handleDeActivation={handleDeActivation}
-                    loading={loadingScopedVariables}
-                    variables={variablesData ?? []}
-                    reloadVariables={reloadScopedVariables}
-                    error={error}
-                    showValueOnHover={showValueOnHover}
-                />
+        <>
+            <div className={`${isActive ? 'dc__visibility-hidden dc__disable-click' : ''} `}>
+                <DraggableWrapper
+                    key="collapsed"
+                    zIndex={zIndex}
+                    positionVariant={DraggablePositionVariant.SCREEN_BOTTOM_RIGHT}
+                    dragSelector=".handle-drag"
+                    boundaryGap={boundaryGap}
+                    parentRef={null}
+                >
+                    <div
+                        className="bcn-7 dc__outline-none-imp dc__border-n0 br-48 flex h-40 pt-8 pb-8 pl-12 pr-12 dc__gap-8 dc__no-shrink"
+                        style={{ zIndex, boxShadow: '0px 4px 8px 0px rgba(0, 0, 0, 0.20)' }}
+                        data-testid="collapsed-state"
+                    >
+                        <button type="button" className="dc__outline-none-imp dc__no-border p-0 bcn-7 h-24">
+                            <ICDrag className="handle-drag dc__grabbable icon-dim-24 fcn-2" />
+                        </button>
+
+                        <Tippy content="Scoped variables" placement="top" className="default-tt" arrow={false}>
+                            <button
+                                className={`dc__outline-none-imp dc__no-border p-0 bcn-7 h-20 ${ALLOW_ACTION_OUTSIDE_FOCUS_TRAP}`}
+                                type="button"
+                                onClick={handleActivation}
+                                data-testid="activate-suggestions"
+                                aria-label="Activate suggestions"
+                            >
+                                <Icon name="ic-view-variable-toggle" color="N0" size={20} />
+                            </button>
+                        </Tippy>
+                    </div>
+                </DraggableWrapper>
             </div>
-        </Draggable>
+
+            <div className={`${!isActive ? 'dc__visibility-hidden dc__disable-click' : ''}`}>
+                <DraggableWrapper
+                    key={`expanded-${loadingScopedVariables}`}
+                    zIndex={zIndex}
+                    positionVariant={DraggablePositionVariant.SCREEN_BOTTOM_RIGHT}
+                    dragSelector=".handle-drag"
+                    boundaryGap={boundaryGap}
+                    parentRef={null}
+                >
+                    <div
+                        className={`flex column dc__no-shrink w-356 dc__content-space dc__border-radius-8-imp dc__border dc__overflow-hidden mxh-504 bg__overlay--primary ${ALLOW_ACTION_OUTSIDE_FOCUS_TRAP}`}
+                        style={{
+                            zIndex,
+                            boxShadow: '0px 4px 8px 0px rgba(0, 0, 0, 0.25)',
+                        }}
+                    >
+                        <Suggestions
+                            handleDeActivation={handleDeActivation}
+                            loading={loadingScopedVariables}
+                            variables={variablesData ?? []}
+                            reloadVariables={reloadScopedVariables}
+                            error={error}
+                            showValueOnHover={showValueOnHover}
+                        />
+                    </div>
+                </DraggableWrapper>
+            </div>
+        </>
     )
 }
 
