@@ -23,6 +23,7 @@ import { useAsync } from '@Common/Helper'
 import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP } from '@Shared/constants'
 
 import { Icon } from '../Icon'
+import { DRAG_SELECTOR } from './constants'
 import { getScopedVariables } from './service'
 import Suggestions from './Suggestions'
 import { FloatingVariablesSuggestionsProps } from './types'
@@ -70,7 +71,7 @@ const FloatingVariablesSuggestions = ({
                     key="collapsed"
                     zIndex={zIndex}
                     positionVariant={DraggablePositionVariant.SCREEN_BOTTOM_RIGHT}
-                    dragSelector=".handle-drag"
+                    dragSelector={`.${DRAG_SELECTOR}`}
                     boundaryGap={boundaryGap}
                     parentRef={null}
                 >
@@ -80,7 +81,7 @@ const FloatingVariablesSuggestions = ({
                         data-testid="collapsed-state"
                     >
                         <button type="button" className="dc__outline-none-imp dc__no-border p-0 bcn-7 h-24">
-                            <ICDrag className="handle-drag dc__grabbable icon-dim-24 fcn-2" />
+                            <ICDrag className={`${DRAG_SELECTOR} dc__grabbable icon-dim-24 fcn-2`} />
                         </button>
 
                         <Tippy content="Scoped variables" placement="top" className="default-tt" arrow={false}>
@@ -103,7 +104,7 @@ const FloatingVariablesSuggestions = ({
                     key={`expanded-${loadingScopedVariables}`}
                     zIndex={zIndex}
                     positionVariant={DraggablePositionVariant.SCREEN_BOTTOM_RIGHT}
-                    dragSelector=".handle-drag"
+                    dragSelector={`.${DRAG_SELECTOR}`}
                     boundaryGap={boundaryGap}
                     parentRef={null}
                 >
