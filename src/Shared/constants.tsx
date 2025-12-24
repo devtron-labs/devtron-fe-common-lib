@@ -23,6 +23,7 @@ import {
     ConfigurationType,
     DeploymentStrategyTypeWithDefault,
     IconBaseColorType,
+    RemoteConnectionType,
 } from './types'
 
 export const ARTIFACT_STATUS = {
@@ -388,26 +389,11 @@ export const MATERIAL_EXCLUDE_TIPPY_TEXT =
 
 export const AppListConstants = {
     SAMPLE_NODE_REPO_URL: 'https://github.com/devtron-labs/getting-started-nodejs',
-    CREATE_DEVTRON_APP_URL: 'create-d-app',
     AppTabs: {
         DEVTRON_APPS: 'Devtron Apps',
         HELM_APPS: 'Helm Apps',
         ARGO_APPS: 'ArgoCD Apps',
         FLUX_APPS: 'FluxCD Apps',
-    },
-    AppType: {
-        DEVTRON_APPS: 'd',
-        HELM_APPS: 'h',
-        ARGO_APPS: 'a',
-        FLUX_APPS: 'f',
-    },
-    FilterType: {
-        PROJECT: 'team',
-        CLUTSER: 'cluster',
-        NAMESPACE: 'namespace',
-        ENVIRONMENT: 'environment',
-        APP_STATUS: 'appStatus',
-        TEMPLATE_TYPE: 'templateType',
     },
 }
 
@@ -606,3 +592,12 @@ export const CUBIC_BEZIER_CURVE: [number, number, number, number] = [0.33, 1, 0.
 
 // Use this class on an element to allow clicking on it outside focus trap
 export const ALLOW_ACTION_OUTSIDE_FOCUS_TRAP = 'allow-action-outside-focus-trap'
+export const LICENSE_KEY_QUERY_PARAM = 'licenseKey'
+
+export const REMOTE_CONNECTION_TYPE_LABEL_MAP: Record<RemoteConnectionType, string> = {
+    [RemoteConnectionType.Direct]: 'Direct Connection',
+    [RemoteConnectionType.Proxy]: 'Via Proxy',
+    [RemoteConnectionType.SSHTunnel]: 'Via SSH Tunnel',
+}
+
+export const TARGET_K8S_VERSION_SEARCH_KEY = 'targetK8sVersion'

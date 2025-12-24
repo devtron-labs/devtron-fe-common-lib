@@ -16,7 +16,7 @@
 
 import React, { useMemo, useEffect } from 'react'
 import { Link, useRouteMatch, useParams } from 'react-router-dom'
-import { getBreadCrumbSeparator, useBreadcrumbContext } from './BreadcrumbStore'
+import { useBreadcrumbContext, getBreadCrumbSeparator } from './BreadcrumbStore'
 import { ConditionalWrap } from '../Helper'
 import { Breadcrumb, Breadcrumbs, UseBreadcrumbOptionalProps, UseBreadcrumbState } from './Types'
 
@@ -61,7 +61,7 @@ export function useBreadcrumb(props?: UseBreadcrumbOptionalProps, deps?: any[]):
     const { res: breadcrumbs } = useMemo(
         () =>
             levels.reduce(
-                (agg, curr, idx) => {
+                (agg, curr) => {
                     const { res, prefix } = agg
                     const { to, name } = curr
                     res.push({
@@ -102,7 +102,7 @@ export const BreadCrumb: React.FC<Breadcrumbs> = ({
                         condition={!!breadcrumb.to}
                         wrap={(children) => (
                             <Link
-                                className={`${url === breadcrumb.to ? 'active' : ''} ${className} ${
+                                className={`${url === breadcrumb.to ? 'active' : ''} ${className}  ${
                                     breadcrumb.className || ''
                                 }`}
                                 to={breadcrumb.to}
@@ -114,7 +114,7 @@ export const BreadCrumb: React.FC<Breadcrumbs> = ({
                         {breadcrumb.name}
                     </ConditionalWrap>
 
-                    {idx + 1 !== filteredCrumbs.length && breadcrumb.name && getBreadCrumbSeparator()}
+                    {idx + 1 !== filteredCrumbs.length && breadcrumb.name && getBreadCrumbSeparator(sep)}
                 </React.Fragment>
             ))}
         </>

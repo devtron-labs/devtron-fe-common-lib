@@ -17,6 +17,7 @@
 import React, { SyntheticEvent } from 'react'
 import { Backdrop } from '@Shared/Components'
 import { DTFocusTrapType } from '@Shared/Components/DTFocusTrap'
+import { noop } from '@Common/Helper'
 
 export class VisibleModal2 extends React.Component<{
     className?: string
@@ -35,7 +36,7 @@ export class VisibleModal2 extends React.Component<{
     render() {
         return (
             <Backdrop
-                onEscape={this.props.close}
+                onEscape={this.props.close ?? noop}
                 onClick={this.handleBodyClick}
                 initialFocus={this.props.initialFocus ?? undefined}
             >

@@ -47,6 +47,7 @@ export interface SidePanelConfig {
     reinitialize?: boolean
     /** URL to documentation that should be displayed in the panel */
     docLink: string | null
+    aiSessionId?: string
 }
 
 type AIAgentContextType = {
@@ -67,6 +68,14 @@ export interface TempAppWindowConfig {
     showOpenInNewTab?: boolean
     /** React component to render in the window */
     component?: JSX.Element
+    customCloseConfig?: {
+        /**
+         * Provide this method if you want to do something before temp window closes
+         * Provide noop if not relevant
+         * */
+        beforeClose: () => void
+        icon: JSX.Element
+    }
 }
 
 type CommonMainContextProps = {

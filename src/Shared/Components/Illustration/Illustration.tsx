@@ -1,21 +1,41 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-illustration` to update.
 
+import CreateBackupSchedule from '@Illustrations/create-backup-schedule.webp'
+import CreateBackupSnapshot from '@Illustrations/create-backup-snapshot.webp'
+import { ReactComponent as ImgCelebration } from '@Illustrations/img-celebration.svg'
 import ImgCode from '@Illustrations/img-code.webp'
 import ImgDevtronFreemium from '@Illustrations/img-devtron-freemium.webp'
+import { ReactComponent as ImgFolderEmpty } from '@Illustrations/img-folder-empty.svg'
+import { ReactComponent as ImgInstallFreemiumSaas } from '@Illustrations/img-install-freemium-saas.svg'
+import { ReactComponent as ImgInstallViaAwsMarketplace } from '@Illustrations/img-install-via-aws-marketplace.svg'
 import ImgManOnRocket from '@Illustrations/img-man-on-rocket.webp'
 import { ReactComponent as ImgMechanicalOperation } from '@Illustrations/img-mechanical-operation.svg'
+import { ReactComponent as ImgNoBackupLocation } from '@Illustrations/img-no-backup-location.svg'
+import { ReactComponent as ImgNoRestores } from '@Illustrations/img-no-restores.svg'
 import ImgNoResult from '@Illustrations/img-no-result.webp'
+import { ReactComponent as ImgPageNotFound } from '@Illustrations/img-page-not-found.svg'
+import NoClusterCostEnabled from '@Illustrations/no-cluster-cost-enabled.webp'
 
 // eslint-disable-next-line no-restricted-imports
 import { IllustrationBase } from './IllustrationBase'
 import { IllustrationBaseProps } from './types'
 
 export const illustrationMap = {
+    'img-celebration': ImgCelebration,
+    'img-folder-empty': ImgFolderEmpty,
+    'img-install-freemium-saas': ImgInstallFreemiumSaas,
+    'img-install-via-aws-marketplace': ImgInstallViaAwsMarketplace,
     'img-mechanical-operation': ImgMechanicalOperation,
+    'img-no-backup-location': ImgNoBackupLocation,
+    'img-no-restores': ImgNoRestores,
+    'img-page-not-found': ImgPageNotFound,
+    'create-backup-schedule': CreateBackupSchedule,
+    'create-backup-snapshot': CreateBackupSnapshot,
     'img-code': ImgCode,
     'img-devtron-freemium': ImgDevtronFreemium,
     'img-man-on-rocket': ImgManOnRocket,
     'img-no-result': ImgNoResult,
+    'no-cluster-cost-enabled': NoClusterCostEnabled,
 }
 
 export type IllustrationName = keyof typeof illustrationMap

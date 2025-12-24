@@ -51,7 +51,7 @@ type FeatureDescriptionModalWithTabsConfig = {
 }
 
 export type FeatureDescriptionModalProps = {
-    title: string
+    title: React.ReactNode
     closeModalText?: string
     closeModal?: () => void
 } & (

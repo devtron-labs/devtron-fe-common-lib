@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { ComponentSizeType } from '@Shared/constants'
+
 export type Entity = {
     color: string
     label: string
@@ -30,12 +32,23 @@ type EntityPropType =
           entities: NonNullable<Omit<Entity, 'label'> & { label?: never }>[]
       }
 
+type ProportionalType =
+    | {
+          isProportional?: true
+          hideTotal?: boolean
+      }
+    | {
+          isProportional?: false | never
+          hideTotal?: never
+      }
+
 export type SegmentedBarChartProps = {
     rootClassName?: string
     countClassName?: string
     labelClassName?: string
-    isProportional?: boolean
     swapLegendAndBar?: boolean
     showAnimationOnBar?: boolean
     isLoading?: boolean
-} & EntityPropType
+    size?: ComponentSizeType
+} & EntityPropType &
+    ProportionalType

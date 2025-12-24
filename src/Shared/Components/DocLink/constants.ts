@@ -42,23 +42,24 @@ export const DOCUMENTATION = {
     CHART_STORE: 'usage/deploy-chart',
     CHART_STORE_METRICS_SERVER: 'dashboard//chart-store/discover?appStoreName=metrics-server',
     CUSTOM_VALUES: 'usage/deploy-chart/overview-of-charts#custom-values',
+    CONFIGURING_WEBHOOK: 'usage/applications/creating-application/workflow/ci-pipeline#configuring-webhook',
     DEPLOYMENT: 'usage/applications/creating-application/deployment-template/deployment',
     DEPLOYMENT_TEMPLATE: 'usage/applications/creating-application/deployment-template',
     DEVTRON_UPGRADE: 'getting-started/upgrade',
-    CONFIGURING_WEBHOOK: 'usage/applications/creating-application/workflow/ci-pipeline#configuring-webhook',
+    DOC_HOME_PAGE: DOCUMENTATION_HOME_PAGE,
     ENTERPRISE_LICENSE: 'enterprise-license',
     EXECUTE_CUSTOM_SCRIPT:
         'usage/applications/creating-application/workflow/ci-pipeline/ci-build-pre-post-plugins#execute-custom-script',
     EXTERNAL_LINKS: 'getting-started/global-configurations/external-links',
     EXTERNAL_SECRET: 'usage/applications/creating-application/secrets#external-secrets',
     HOME_PAGE: 'https://devtron.ai',
-    DOC_HOME_PAGE: DOCUMENTATION_HOME_PAGE,
-    KUBE_CONFIG: 'usage/resource-browser#running-kubectl-commands-locally',
     JOBS: 'usage/jobs',
-    TAINT: 'usage/resource-browser#taint-a-node',
+    KUBE_CONFIG: 'usage/resource-browser#running-kubectl-commands-locally',
     RESOURCE_BROWSER: 'usage/resource-browser',
+    TAINT: 'usage/resource-browser#taint-a-node',
 
     // Global Configurations
+    GLOBAL_CONFIGUDATIONS: 'getting-started/global-configurations',
     GLOBAL_CONFIG_API_TOKEN: 'getting-started/global-configurations/authorization/api-tokens',
     GLOBAL_CONFIG_BUILD_INFRA: 'global-configurations/build-infra',
     GLOBAL_CONFIG_CHART: 'getting-started/global-configurations/chart-repo',
@@ -117,10 +118,33 @@ export const DOCUMENTATION = {
     GLOBAL_CONFIG_PULL_IMAGE_DIGEST: 'global-configurations/pull-image-digest',
     GLOBAL_CONFIG_TAGS: 'getting-started/global-configurations/tags-policy',
 
-    // Software distribution hub
+    // Application Management
+    APP_MANAGEMENT: 'docs/user-guide/app-management',
+
+    // Software Release Management
     SOFTWARE_DISTRIBUTION_HUB: 'usage/software-distribution-hub',
     RELEASE_TRACKS: 'usage/software-distribution-hub/release-hub#creating-release-tracks-and-versions',
     RELEASES: 'usage/software-distribution-hub/release-hub#creating-release-tracks-and-versions',
+    RELEASE_HUB: 'usage/software-distribution-hub/release-hub',
     TENANTS: 'usage/software-distribution-hub/tenants#adding-installation',
     TENANTS_INSTALLATION: 'usage/software-distribution-hub/tenants',
+
+    // Infrastructure Management
+    AUTOSCALER_DETECTION:
+        'docs/user-guide/infra-management/infrastructure-overview#troubleshooting-autoscaler-detection',
+    INFRA_MANAGEMENT: 'docs/user-guide/infra-management',
+
+    // Cost Visibility
+    COST_BREAKDOWN: 'docs/user-guide/finops',
+    COST_CALCULATION: 'docs/user-guide/finops/overview-cost-visibility#how-is-the-cost-calculated',
+    COST_VISIBILITY_OVERVIEW: 'docs/user-guide/finops/overview-cost-visibility',
+
+    // Security Center
+    SECURITY_CENTER: 'docs/user-guide/security-features',
+
+    // AI Recommendations
+    AI_RECOMMENDATIONS: 'docs/user-guide/ai-recommendations',
+
+    // Automation & Enablement
+    AUTOMATION_AND_ENABLEMENT: 'docs/user-guide/automation',
 } as const
