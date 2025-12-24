@@ -17,6 +17,7 @@
 import { MutableRefObject } from 'react'
 
 import { URLS } from '@Common/Constants'
+import { getUrlWithSearchParams } from '@Common/Helper'
 import { ServerErrors } from '@Common/ServerError'
 
 import { RESPONSE_MESSAGES } from './constants'
@@ -62,7 +63,9 @@ export const getIsRequestAborted = (error) =>
 
 export const handleDashboardLogout = () => {
     const continueParam = `${window.location.pathname.replace(window.__BASE_URL__, '')}${window.location.search}`
-    window.location.href = `${window.location.origin}${window.__BASE_URL__}${URLS.LOGIN_SSO}?continue=${continueParam}`
+    window.location.href = getUrlWithSearchParams(`${window.location.origin}${window.__BASE_URL__}${URLS.LOGIN_SSO}`, {
+        continue: continueParam,
+    })
 }
 
 export const handleRedirectToLicenseActivation = () => {
