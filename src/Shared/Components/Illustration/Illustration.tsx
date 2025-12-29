@@ -8,6 +8,7 @@ import ImgDevtronFreemium from '@Illustrations/img-devtron-freemium.webp'
 import { ReactComponent as ImgFolderEmpty } from '@Illustrations/img-folder-empty.svg'
 import { ReactComponent as ImgInstallFreemiumSaas } from '@Illustrations/img-install-freemium-saas.svg'
 import { ReactComponent as ImgInstallViaAwsMarketplace } from '@Illustrations/img-install-via-aws-marketplace.svg'
+import { ReactComponent as ImgInstallingDevtron } from '@Illustrations/img-installing-devtron.svg'
 import ImgManOnRocket from '@Illustrations/img-man-on-rocket.webp'
 import { ReactComponent as ImgMechanicalOperation } from '@Illustrations/img-mechanical-operation.svg'
 import { ReactComponent as ImgNoBackupLocation } from '@Illustrations/img-no-backup-location.svg'
@@ -25,6 +26,7 @@ export const illustrationMap = {
     'img-folder-empty': ImgFolderEmpty,
     'img-install-freemium-saas': ImgInstallFreemiumSaas,
     'img-install-via-aws-marketplace': ImgInstallViaAwsMarketplace,
+    'img-installing-devtron': ImgInstallingDevtron,
     'img-mechanical-operation': ImgMechanicalOperation,
     'img-no-backup-location': ImgNoBackupLocation,
     'img-no-restores': ImgNoRestores,
