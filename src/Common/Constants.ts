@@ -159,6 +159,7 @@ export const URLS = {
 
 export const ROUTES = {
     APP: 'app',
+    ATHENA: 'athena',
     APP_ARTIFACT_PROMOTE_MATERIAL: 'app/artifact/promotion-request/material',
     APP_TEMPLATE_DATA: 'app/template/data',
     ENVIRONMENT_CATEGORIES: 'env/categories',
