@@ -460,3 +460,6 @@ export const getTriggerOutputTabs = (
           ]
         : []),
 ]
+
+export const getSortedTriggerHistory = (triggerHistory: Map<number, History>) =>
+    Array.from(triggerHistory).sort(([a], [b]) => b - a)

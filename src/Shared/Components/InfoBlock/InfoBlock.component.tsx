@@ -98,7 +98,7 @@ const InfoBlock = ({
     if (layout === 'row') {
         return (
             <div className={`${baseContainerClass} flexbox dc__gap-16`}>
-                <div className="flex left dc__gap-8 flex-grow-1">
+                <div className="flexbox dc__gap-8 flex-grow-1">
                     {renderIcon()}
                     {renderContent()}
                 </div>

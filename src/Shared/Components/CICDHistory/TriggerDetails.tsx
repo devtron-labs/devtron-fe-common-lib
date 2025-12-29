@@ -26,6 +26,7 @@ import { ZERO_TIME_STRING } from '@Common/Constants'
 import { CommitChipCell } from '@Shared/Components/CommitChipCell'
 import { ImageChipCell } from '@Shared/Components/ImageChipCell'
 import { getHandleOpenURL } from '@Shared/Helpers'
+import { useMainContext } from '@Shared/Providers'
 import { ToastManager, ToastVariantType } from '@Shared/Services'
 import { getDeploymentStageTitle } from '@Pages/Applications'
 
@@ -34,15 +35,19 @@ import { GitTriggers } from '../../types'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { ConfirmationModal, ConfirmationModalVariantType } from '../ConfirmationModal'
 import { Icon } from '../Icon'
+import { InfoBlock } from '../InfoBlock'
 import {
     DEFAULT_CLUSTER_ID,
     DEFAULT_ENV,
     EXECUTION_FINISHED_TEXT_MAP,
     PROGRESSING_STATUS,
     PULSATING_STATUS_MAP,
+    RESOURCE_CONFLICT_DEPLOY_ERROR,
     statusColor as colorMap,
     TERMINAL_STATUS_COLOR_CLASS_MAP,
 } from './constants'
+import ResourceConflictDeployDialog from './ResourceConflictDeployDialog'
+import ResourceConflictDetailsModal from './ResourceConflictDetailsModal'
 import { cancelCiTrigger, cancelPrePostCdTrigger } from './service'
 import {
     CurrentStatusIconProps,
@@ -50,6 +55,7 @@ import {
     FinishedType,
     HistoryComponentType,
     ProgressingStatusType,
+    ResourceConflictModalType,
     StartDetailsType,
     TriggerDetailsType,
     WorkflowStageStatusType,
@@ -445,128 +451,218 @@ const TriggerDetails = memo(
         renderTargetConfigInfo,
         workflowExecutionStages,
         namespace,
+        isLatest,
+        appName,
     }: TriggerDetailsType) => {
+        const { isFELibAvailable } = useMainContext()
+
+        const [resourceConflictModal, setResourceConflictModal] = useState<ResourceConflictModalType>(null)
+
         const executionInfo = useMemo(
             () => sanitizeWorkflowExecutionStages(workflowExecutionStages),
             [workflowExecutionStages],
         )
 
+        const errorMessage = executionInfo?.workerDetails.message || message
+
+        const showResourceConflictInfoBlock =
+            isFELibAvailable &&
+            isLatest &&
+            (type === HistoryComponentType.CD || type === HistoryComponentType.GROUP_CD) &&
+            stage === DeploymentStageType.DEPLOY &&
+            errorMessage?.includes(RESOURCE_CONFLICT_DEPLOY_ERROR)
+
+        const handleShowRedeployDialog = () => {
+            setResourceConflictModal(ResourceConflictModalType.DEPLOY_DIALOG)
+        }
+
+        const handleShowResourceConflictDetailsModal = () => {
+            setResourceConflictModal(ResourceConflictModalType.RESOURCE_DETAIL_MODAL)
+        }
+
+        const handleCloseRedeployModal = () => {
+            setResourceConflictModal(null)
+        }
+
+        const renderInfoBlockDescription = () => (
+            <div className="flexbox">
+                <Button
+                    dataTestId="resource-conflicts-resource-info"
+                    text="Some Resources"
+                    variant={ButtonVariantType.text}
+                    size={ComponentSizeType.medium}
+                    style={ButtonStyleType.warning}
+                    onClick={handleShowResourceConflictDetailsModal}
+                />
+                &nbsp;
+                <span className="cn-9 fw-4 fs-13 lh-20 dc__word-break">
+                    have ownership conflicts. Resolve by taking ownership and redeploying.
+                </span>
+            </div>
+        )
+
+        const renderDialogs = () => {
+            if (resourceConflictModal === ResourceConflictModalType.DEPLOY_DIALOG) {
+                return (
+                    <ResourceConflictDeployDialog
+                        appName={appName}
+                        environmentName={environmentName}
+                        handleClose={handleCloseRedeployModal}
+                    />
+                )
+            }
+
+            if (resourceConflictModal === ResourceConflictModalType.RESOURCE_DETAIL_MODAL) {
+                return (
+                    <ResourceConflictDetailsModal
+                        appName={appName}
+                        environmentName={environmentName}
+                        handleClose={handleCloseRedeployModal}
+                    />
+                )
+            }
+
+            return null
+        }
+
         return (
-            <div className="trigger-details flexbox-col">
-                <div className="flexbox-col py-8 trigger-details__summary lh-20">
-                    <div className="display-grid trigger-details__grid">
-                        <div className="flexbox dc__content-center">
-                            <div className="flexbox-col dc__gap-4">
-                                <div className="flex flex-grow-1" />
-                                {renderDetailsSuccessIconBlock()}
-                            </div>
-                        </div>
-
-                        <div className="flexbox-col flex-grow-1">
-                            <StartDetails
-                                startedOn={executionInfo?.triggeredOn || startedOn}
-                                triggeredBy={triggeredBy}
-                                triggeredByEmail={triggeredByEmail}
-                                ciMaterials={ciMaterials}
-                                gitTriggers={gitTriggers}
-                                artifact={artifact}
-                                type={type}
-                                environmentName={environmentName}
-                                renderTargetConfigInfo={renderTargetConfigInfo}
-                                stage={stage}
-                            />
-                        </div>
-                    </div>
-
-                    {!!triggerMetadata && !!renderDeploymentHistoryTriggerMetaText && (
+            <>
+                <div className="trigger-details flexbox-col">
+                    <div className="flexbox-col py-8 trigger-details__summary lh-20">
                         <div className="display-grid trigger-details__grid">
                             <div className="flexbox dc__content-center">
                                 <div className="flexbox-col dc__gap-4">
-                                    {renderBlockWithBorder()}
-                                    {renderDeploymentHistoryTriggerMetaText(triggerMetadata, true)}
-                                    {renderBlockWithBorder()}
-                                </div>
-                            </div>
-
-                            {renderDeploymentHistoryTriggerMetaText(triggerMetadata)}
-                        </div>
-                    )}
-
-                    {isJobView && (
-                        <div className="display-grid trigger-details__grid">
-                            <div className="flexbox dc__content-center">
-                                <div className="flexbox-col dc__gap-4">
-                                    {renderBlockWithBorder()}
-                                    <ICEnvironment className="icon-dim-20 dc__no-shrink scn-9" />
-                                    {renderBlockWithBorder()}
-                                </div>
-                            </div>
-
-                            <div className="flexbox dc__align-items-center dc__gap-8 py-8">
-                                <span className="cn-9 fs-13 fw-6 lh-20">Env</span>
-                                <span className="fs-12 lh-20">
-                                    {environmentName !== '' ? environmentName : DEFAULT_ENV}
-                                </span>
-                                {environmentName === '' && <i className="fw-4 fs-12 lh-20">(Default)</i>}
-                            </div>
-                        </div>
-                    )}
-
-                    {!!executionInfo?.executionStartedOn && (
-                        <div className="display-grid trigger-details__grid">
-                            <div className="flexbox dc__content-center">
-                                <div className="flexbox-col dc__gap-4">
-                                    {renderBlockWithBorder()}
+                                    <div className="flex flex-grow-1" />
                                     {renderDetailsSuccessIconBlock()}
                                 </div>
                             </div>
 
-                            <div className="w-100 pr-20 flexbox dc__gap-8 py-8">
-                                <h3 className="m-0 cn-9 fs-13 fw-6 lh-20">Execution started</h3>
-                                <time className="cn-7 fs-13">
-                                    {getFormattedTriggerTime(executionInfo.executionStartedOn)}
-                                </time>
-                            </div>
-                        </div>
-                    )}
-
-                    <div className="display-grid trigger-details__grid">
-                        <div className="flexbox dc__content-center">
-                            <div className="flexbox-col dc__gap-4">
-                                {renderBlockWithBorder()}
-
-                                <CurrentStatusIcon
-                                    status={status}
-                                    executionInfoCurrentStatus={executionInfo?.currentStatus}
+                            <div className="flexbox-col flex-grow-1">
+                                <StartDetails
+                                    startedOn={executionInfo?.triggeredOn || startedOn}
+                                    triggeredBy={triggeredBy}
+                                    triggeredByEmail={triggeredByEmail}
+                                    ciMaterials={ciMaterials}
+                                    gitTriggers={gitTriggers}
+                                    artifact={artifact}
+                                    type={type}
+                                    environmentName={environmentName}
+                                    renderTargetConfigInfo={renderTargetConfigInfo}
+                                    stage={stage}
                                 />
-
-                                <div className="flex flex-grow-1" />
                             </div>
                         </div>
 
-                        <CurrentStatus
-                            executionInfo={executionInfo}
-                            status={status}
-                            finishedOn={finishedOn}
-                            artifact={artifact}
-                            stage={stage}
-                            type={type}
-                        />
-                    </div>
+                        {!!triggerMetadata && !!renderDeploymentHistoryTriggerMetaText && (
+                            <div className="display-grid trigger-details__grid">
+                                <div className="flexbox dc__content-center">
+                                    <div className="flexbox-col dc__gap-4">
+                                        {renderBlockWithBorder()}
+                                        {renderDeploymentHistoryTriggerMetaText(triggerMetadata, true)}
+                                        {renderBlockWithBorder()}
+                                    </div>
+                                </div>
 
-                    <div className="display-grid trigger-details__grid py-4">
-                        <WorkerStatus
-                            message={executionInfo?.workerDetails.message || message}
-                            podStatus={executionInfo?.workerDetails.status || podStatus}
-                            stage={stage}
-                            finishedOn={executionInfo?.workerDetails.endTime || finishedOn}
-                            clusterId={executionInfo?.workerDetails.clusterId || DEFAULT_CLUSTER_ID}
-                            workerPodName={workerPodName}
-                            namespace={namespace}
-                        />
+                                {renderDeploymentHistoryTriggerMetaText(triggerMetadata)}
+                            </div>
+                        )}
+
+                        {isJobView && (
+                            <div className="display-grid trigger-details__grid">
+                                <div className="flexbox dc__content-center">
+                                    <div className="flexbox-col dc__gap-4">
+                                        {renderBlockWithBorder()}
+                                        <ICEnvironment className="icon-dim-20 dc__no-shrink scn-9" />
+                                        {renderBlockWithBorder()}
+                                    </div>
+                                </div>
+
+                                <div className="flexbox dc__align-items-center dc__gap-8 py-8">
+                                    <span className="cn-9 fs-13 fw-6 lh-20">Env</span>
+                                    <span className="fs-12 lh-20">
+                                        {environmentName !== '' ? environmentName : DEFAULT_ENV}
+                                    </span>
+                                    {environmentName === '' && <i className="fw-4 fs-12 lh-20">(Default)</i>}
+                                </div>
+                            </div>
+                        )}
+
+                        {!!executionInfo?.executionStartedOn && (
+                            <div className="display-grid trigger-details__grid">
+                                <div className="flexbox dc__content-center">
+                                    <div className="flexbox-col dc__gap-4">
+                                        {renderBlockWithBorder()}
+                                        {renderDetailsSuccessIconBlock()}
+                                    </div>
+                                </div>
+
+                                <div className="w-100 pr-20 flexbox dc__gap-8 py-8">
+                                    <h3 className="m-0 cn-9 fs-13 fw-6 lh-20">Execution started</h3>
+                                    <time className="cn-7 fs-13">
+                                        {getFormattedTriggerTime(executionInfo.executionStartedOn)}
+                                    </time>
+                                </div>
+                            </div>
+                        )}
+
+                        <div className="display-grid trigger-details__grid">
+                            <div className="flexbox dc__content-center">
+                                <div className="flexbox-col dc__gap-4">
+                                    {renderBlockWithBorder()}
+
+                                    <CurrentStatusIcon
+                                        status={status}
+                                        executionInfoCurrentStatus={executionInfo?.currentStatus}
+                                    />
+
+                                    <div className="flex flex-grow-1" />
+                                </div>
+                            </div>
+
+                            <CurrentStatus
+                                executionInfo={executionInfo}
+                                status={status}
+                                finishedOn={finishedOn}
+                                artifact={artifact}
+                                stage={stage}
+                                type={type}
+                            />
+                        </div>
+
+                        <div className="display-grid trigger-details__grid py-4">
+                            <WorkerStatus
+                                message={executionInfo?.workerDetails.message || message}
+                                podStatus={executionInfo?.workerDetails.status || podStatus}
+                                stage={stage}
+                                finishedOn={executionInfo?.workerDetails.endTime || finishedOn}
+                                clusterId={executionInfo?.workerDetails.clusterId || DEFAULT_CLUSTER_ID}
+                                workerPodName={workerPodName}
+                                namespace={namespace}
+                            >
+                                {showResourceConflictInfoBlock && (
+                                    <div className="pt-12 pr-12">
+                                        <InfoBlock
+                                            variant="warning"
+                                            description={renderInfoBlockDescription()}
+                                            buttonProps={{
+                                                dataTestId: 'resource-conflict-re-deploy',
+                                                text: 'Re-deploy',
+                                                startIcon: <Icon name="ic-rocket-launch" color={null} />,
+                                                onClick: handleShowRedeployDialog,
+                                                variant: ButtonVariantType.text,
+                                                style: ButtonStyleType.warning,
+                                                size: ComponentSizeType.medium,
+                                            }}
+                                        />
+                                    </div>
+                                )}
+                            </WorkerStatus>
+                        </div>
                     </div>
                 </div>
-            </div>
+
+                {renderDialogs()}
+            </>
         )
     },
 )

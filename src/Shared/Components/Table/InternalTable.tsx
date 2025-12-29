@@ -24,7 +24,7 @@ import { UseRegisterShortcutProvider } from '@Common/Hooks'
 
 import { NO_ROWS_OR_GET_ROWS_ERROR } from './constants'
 import TableContent from './TableContent'
-import { FiltersTypeEnum, InternalTableProps, PaginationEnum, RowsResultType } from './types'
+import { FiltersTypeEnum, InternalTableProps, RowsResultType } from './types'
 import { getFilteringPromise, searchAndSortRows } from './utils'
 
 const InternalTable = <
@@ -78,8 +78,6 @@ const InternalTable = <
     } = filterData ?? {}
 
     const wrapperDivRef = useRef<HTMLDivElement>(null)
-
-    const { setIdentifiers } = bulkSelectionReturnValue ?? {}
 
     const searchSortTimeoutRef = useRef<number>(-1)
 
@@ -181,26 +179,6 @@ const InternalTable = <
     )
 
     const areFilteredRowsLoading = _areFilteredRowsLoading || filteredRowsError === NO_ROWS_OR_GET_ROWS_ERROR
-
-    const visibleRows = useMemo(() => {
-        const normalizedFilteredRows = filteredRows ?? []
-
-        const paginatedRows =
-            paginationVariant !== PaginationEnum.PAGINATED
-                ? normalizedFilteredRows
-                : normalizedFilteredRows.slice(offset, offset + pageSize)
-
-        return paginatedRows
-    }, [paginationVariant, offset, pageSize, filteredRows])
-
-    useEffect(() => {
-        setIdentifiers?.(
-            visibleRows.reduce((acc, row) => {
-                acc[row.id] = row
-                return acc
-            }, {}),
-        )
-    }, [visibleRows])
 
     const Wrapper = ViewWrapper ?? Fragment
 

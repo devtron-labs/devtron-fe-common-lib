@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Dispatch, MutableRefObject, ReactNode, SetStateAction } from 'react'
+import { Dispatch, FunctionComponent, MutableRefObject, ReactNode, SetStateAction } from 'react'
 
 import { SERVER_MODE } from '../../../Common'
 import {
@@ -48,6 +48,7 @@ export interface SidePanelConfig {
     /** URL to documentation that should be displayed in the panel */
     docLink: string | null
     aiSessionId?: string
+    isExpandedView?: boolean
 }
 
 type AIAgentContextType = {
@@ -152,6 +153,8 @@ export type MainContext = CommonMainContextProps &
               aiAgentContext: AIAgentContextType
               tempAppWindowConfig: TempAppWindowConfig
               setTempAppWindowConfig: Dispatch<SetStateAction<TempAppWindowConfig>>
+              AIRecommendations?: FunctionComponent
+              featureAskDevtronExpert: EnvironmentDataValuesDTO['featureAskDevtronExpert']
           }
         | {
               isLicenseDashboard: true
@@ -170,6 +173,8 @@ export type MainContext = CommonMainContextProps &
               aiAgentContext: null
               tempAppWindowConfig: null
               setTempAppWindowConfig: null
+              AIRecommendations?: null
+              featureAskDevtronExpert?: null
           }
     )
 

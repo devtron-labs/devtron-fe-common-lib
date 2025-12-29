@@ -53,7 +53,7 @@ import {
     UserApprovalInfo,
     ZERO_TIME_STRING,
 } from '../Common'
-import { getAggregator } from '../Pages'
+import { getAggregator, GVKType } from '../Pages'
 import { AggregatedNodes, PodMetadatum } from './Components'
 import { CUBIC_BEZIER_CURVE, UNSAVED_CHANGES_PROMPT_MESSAGE } from './constants'
 import {
@@ -766,4 +766,25 @@ export const formatNumberToCurrency = (value: number, currency: string, minimumF
 export const explainCronExpression = (expression: string): string => {
     parseCronExpression(expression, { hasSeconds: expression.trim().split(' ').length > 5 })
     return cronstrue.toString(expression)
+}
+
+export const getGVKTitle = (gvk: GVKType): string => {
+    if (!gvk) {
+        return ''
+    }
+
+    let title: string = ''
+    if (gvk.Group) {
+        title += gvk.Group
+    }
+
+    if (gvk.Version) {
+        title += title ? ` / ${gvk.Version}` : gvk.Version
+    }
+
+    if (gvk.Kind) {
+        title += title ? ` / ${gvk.Kind}` : gvk.Kind
+    }
+
+    return title
 }

@@ -29,6 +29,7 @@ import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import { ImageWithFallback } from '../ImageWithFallback'
 import { InfoIconTippy } from '../InfoIconTippy'
+import { NOTIFICATIONS_TEMP_WINDOW_TITLE } from './constants'
 import { HelpButton } from './HelpButton'
 import { IframePromoButton } from './IframePromoButton'
 import { ProfileMenu } from './ProfileMenu'
@@ -50,9 +51,19 @@ const PageHeader = ({
     onClose,
     tippyProps,
     closeIcon,
+    docPath,
 }: PageHeaderType) => {
-    const { setLoginCount, setShowGettingStartedCard, setSidePanelConfig, sidePanelConfig, tempAppWindowConfig } =
-        useMainContext()
+    const {
+        setLoginCount,
+        setShowGettingStartedCard,
+        setSidePanelConfig,
+        sidePanelConfig,
+        tempAppWindowConfig,
+        AIRecommendations,
+        setTempAppWindowConfig,
+        isSuperAdmin,
+        featureAskDevtronExpert,
+    } = useMainContext()
     const { showSwitchThemeLocationTippy, handleShowSwitchThemeLocationTippyChange } = useTheme()
 
     const {
@@ -137,27 +148,53 @@ const PageHeader = ({
         setSidePanelConfig((prev) => ({ ...prev, state: SidePanelTab.ASK_DEVTRON }))
     }
 
+    const handleNotificationsButtonClick = () => {
+        handleAnalyticsEvent({
+            category: 'AI',
+            action: 'NOTIFICATIONS_AI_RECOMMENDATIONS',
+        })
+
+        setTempAppWindowConfig({
+            open: true,
+            title: NOTIFICATIONS_TEMP_WINDOW_TITLE,
+            component: <AIRecommendations />,
+        })
+    }
+
     const renderLogoutHelpSection = () => (
         <>
-            {window._env_?.FEATURE_ASK_DEVTRON_EXPERT &&
-                sidePanelConfig.state === 'closed' &&
-                !tempAppWindowConfig.open && (
-                    <Tooltip content="Ask Devtron AI" placement="bottom" alwaysShowTippyOnHover delay={[500, null]}>
-                        <button
-                            className="enable-svg-animation--hover flex dc__no-background p-2 dc__outline-none-imp dc__no-border"
-                            onClick={onAskButtonClick}
-                            type="button"
-                            aria-label="Ask Devtron Expert"
-                        >
-                            <Icon name="ic-devtron-ai" color={null} size={28} />
-                        </button>
-                    </Tooltip>
-                )}
+            {featureAskDevtronExpert && sidePanelConfig.state === 'closed' && !tempAppWindowConfig.open && (
+                <Tooltip content="Ask Devtron AI" placement="bottom" alwaysShowTippyOnHover delay={[500, null]}>
+                    <button
+                        className="enable-svg-animation--hover flex dc__no-background p-2 dc__outline-none-imp dc__no-border"
+                        onClick={onAskButtonClick}
+                        type="button"
+                        aria-label="Ask Devtron Expert"
+                    >
+                        <Icon name="ic-devtron-ai" color={null} size={28} />
+                    </button>
+                </Tooltip>
+            )}
+
+            {AIRecommendations && isSuperAdmin && tempAppWindowConfig.title !== NOTIFICATIONS_TEMP_WINDOW_TITLE && (
+                <Button
+                    dataTestId="recommendations-notifications-button"
+                    style={ButtonStyleType.neutral}
+                    variant={ButtonVariantType.borderLess}
+                    icon={<Icon name="ic-bell" color={null} />}
+                    ariaLabel="Open AI Recommendations Notifications"
+                    size={ComponentSizeType.medium}
+                    onClick={handleNotificationsButtonClick}
+                    showAriaLabelInTippy={false}
+                />
+            )}
+
             <HelpButton
                 serverInfo={currentServerInfo.serverInfo}
                 fetchingServerInfo={currentServerInfo.fetchingServerInfo}
                 onClick={handleHelpButtonClick}
                 hideGettingStartedCard={hideGettingStartedCard}
+                docPath={docPath}
             />
             {!window._env_.K8S_CLIENT && (
                 <TippyCustomized
