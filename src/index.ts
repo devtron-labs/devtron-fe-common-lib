@@ -155,7 +155,6 @@ export interface customEnv {
     GATEKEEPER_URL?: string
     FEATURE_AI_INTEGRATION_ENABLE?: boolean
     LOGIN_PAGE_IMAGE?: string
-    FEATURE_ASK_DEVTRON_EXPERT?: boolean
     /**
      * If true, the manage traffic feature is enabled in apps & app groups.
      *
