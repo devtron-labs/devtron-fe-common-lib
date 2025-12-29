@@ -110,5 +110,3 @@ export const ENTERPRISE_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['optio
         startIcon: { name: 'ic-megaphone-right' },
     },
 ]
-
-export const NOTIFICATIONS_TEMP_WINDOW_TITLE = 'Notifications'
