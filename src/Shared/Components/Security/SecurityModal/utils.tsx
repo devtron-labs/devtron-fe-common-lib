@@ -20,7 +20,7 @@ import { VulnerabilityType } from '@Common/Types'
 import { ScannedByToolModal } from '@Shared/Components/ScannedByToolModal'
 import { Severity } from '@Shared/types'
 
-import { ORDERED_SEVERITY_KEYS, SEVERITIES, TRIVY_ICON_URL } from './constants'
+import { ORDERED_SEVERITY_KEYS, SEVERITIES_LABEL_COLOR_MAP, TRIVY_ICON_URL } from './constants'
 import {
     CATEGORIES,
     GetResourceScanDetailsResponseType,
@@ -34,27 +34,30 @@ import {
 } from './types'
 
 export const mapSeveritiesToSegmentedBarChartEntities = (
-    severities: Partial<Record<keyof typeof SEVERITIES, number>>,
+    severities: Partial<Record<keyof typeof SEVERITIES_LABEL_COLOR_MAP, number>>,
 ) =>
     /* for all the SEVERITY keys in @severities create @Entity */
     severities &&
     ORDERED_SEVERITY_KEYS.map(
-        (key: keyof typeof SEVERITIES) =>
+        (key: keyof typeof SEVERITIES_LABEL_COLOR_MAP) =>
             severities[key] && {
-                color: SEVERITIES[key].color,
-                label: SEVERITIES[key].label,
+                color: SEVERITIES_LABEL_COLOR_MAP[key].color,
+                label: SEVERITIES_LABEL_COLOR_MAP[key].label,
                 value: severities[key],
             },
     ).filter((entity: SegmentedBarChartProps['entities'][number]) => !!entity)
 
-export const stringifySeverities = (severities: Partial<Record<keyof typeof SEVERITIES, number>>) =>
+export const stringifySeverities = (severities: Partial<Record<keyof typeof SEVERITIES_LABEL_COLOR_MAP, number>>) =>
     severities &&
     Object.keys(severities)
         .sort(
-            (a: keyof typeof SEVERITIES, b: keyof typeof SEVERITIES) =>
+            (a: keyof typeof SEVERITIES_LABEL_COLOR_MAP, b: keyof typeof SEVERITIES_LABEL_COLOR_MAP) =>
                 ORDERED_SEVERITY_KEYS.indexOf(a) - ORDERED_SEVERITY_KEYS.indexOf(b),
         )
-        .map((key: keyof typeof SEVERITIES) => `${severities[key]} ${SEVERITIES[key].label}`)
+        .map(
+            (key: keyof typeof SEVERITIES_LABEL_COLOR_MAP) =>
+                `${severities[key]} ${SEVERITIES_LABEL_COLOR_MAP[key].label}`,
+        )
         .join(', ')
 
 export const getSeverityWeight = (severity: SeveritiesDTO): number =>

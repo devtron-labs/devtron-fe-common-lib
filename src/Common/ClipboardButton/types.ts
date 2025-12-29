@@ -14,7 +14,21 @@
  * limitations under the License.
  */
 
-export default interface ClipboardProps {
+import { ComponentSizeType } from '@Shared/constants'
+
+export type ClipboardProps = (
+    | {
+          /**
+           * @default 'default'
+           */
+          variant?: 'default'
+          size?: never
+      }
+    | {
+          variant: 'button--secondary'
+          size: ComponentSizeType
+      }
+) & {
     content: string
     /**
      * tippy text before copying

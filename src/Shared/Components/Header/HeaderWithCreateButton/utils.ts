@@ -35,7 +35,7 @@ export const getCreateActionMenuOptions = (createCustomAppURL: string): CreateAc
                 description: 'Deploy apps using third party helm charts (eg. prometheus, redis etc.)',
                 startIcon: { name: 'ic-helm' },
                 componentType: 'link',
-                to: URLS.CHARTS_DISCOVER,
+                to: URLS.INFRASTRUCTURE_MANAGEMENT_CHART_STORE_DISCOVER,
             },
             {
                 id: CreateActionMenuItems.JOB,
@@ -43,7 +43,7 @@ export const getCreateActionMenuOptions = (createCustomAppURL: string): CreateAc
                 description: 'Jobs allow manual and automated execution of developer actions.',
                 startIcon: { name: 'ic-k8s-job' },
                 componentType: 'link',
-                to: `${URLS.JOB}/${URLS.APP_LIST}/${URLS.CREATE_JOB}`,
+                to: `${URLS.AUTOMATION_AND_ENABLEMENT_JOB}/${URLS.APP_LIST}/${URLS.CREATE_JOB}`,
             },
         ],
     },

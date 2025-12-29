@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { Severity } from '@Shared/types'
+
 import { CATEGORIES, SUB_CATEGORIES } from './SecurityModal/types'
 import { CATEGORY_LABELS } from './SecurityModal'
 import { SecurityConfigType } from './types'
@@ -36,4 +38,12 @@ export const SECURITY_CONFIG: SecurityConfigType = {
         label: CATEGORY_LABELS.KUBERNETES_MANIFEST,
         subCategories: [SUB_CATEGORIES.MISCONFIGURATIONS, SUB_CATEGORIES.EXPOSED_SECRETS],
     },
+}
+
+export const SEVERITY_LABEL_MAP: Record<Severity, string> = {
+    [Severity.CRITICAL]: 'Critical',
+    [Severity.HIGH]: 'High',
+    [Severity.MEDIUM]: 'Medium',
+    [Severity.LOW]: 'Low',
+    [Severity.UNKNOWN]: 'Unknown',
 }

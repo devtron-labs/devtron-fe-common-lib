@@ -23,7 +23,7 @@ import { SegmentedControlProps, SegmentType } from './types'
 
 import './segmentedControl.scss'
 
-const SegmentedControl = ({
+const SegmentedControl = <T extends string | number>({
     segments,
     onChange,
     name,
@@ -31,12 +31,12 @@ const SegmentedControl = ({
     value: controlledValue,
     fullWidth = false,
     disabled,
-}: SegmentedControlProps) => {
+}: SegmentedControlProps<T>) => {
     const isUnControlledComponent = controlledValue === undefined
-    const [selectedSegmentValue, setSelectedSegmentValue] = useState<SegmentType['value'] | null>(segments[0].value)
+    const [selectedSegmentValue, setSelectedSegmentValue] = useState<SegmentType<T>['value'] | null>(segments[0].value)
     const segmentValue = isUnControlledComponent ? selectedSegmentValue : controlledValue
 
-    const handleSegmentChange = (updatedSegment: SegmentType) => {
+    const handleSegmentChange = (updatedSegment: SegmentType<T>) => {
         if (isUnControlledComponent) {
             setSelectedSegmentValue(updatedSegment.value)
         }

@@ -20,12 +20,14 @@ import { ReactComponent as ErrorIcon } from '@Icons/ic-error-exclamation.svg'
 import { ReactComponent as ICInfoOutline } from '@Icons/ic-info-outline.svg'
 import { ComponentSizeType } from '@Shared/constants'
 
-import { Button, ButtonVariantType } from '../Button'
+import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import { GenericSectionErrorStateProps } from './types'
 
-const GenericSectionErrorState = ({
+const GenericSectionErrorState = <T extends ButtonComponentType = ButtonComponentType.button>({
     reload,
+    buttonProps,
+    customIcon,
     withBorder = false,
     title = 'Failed to load',
     subTitle = 'We could not load the information on this page.',
@@ -34,8 +36,12 @@ const GenericSectionErrorState = ({
     rootClassName,
     useInfoIcon = false,
     progressingProps,
-}: GenericSectionErrorStateProps) => {
+}: GenericSectionErrorStateProps<T>) => {
     const renderMarker = () => {
+        if (customIcon) {
+            return customIcon
+        }
+
         if (progressingProps) {
             return <Icon name="ic-circle-loader" {...progressingProps} />
         }
@@ -82,6 +88,8 @@ const GenericSectionErrorState = ({
                     dataTestId="generic-section-reload-button"
                 />
             )}
+
+            {buttonProps && <Button {...buttonProps} />}
         </div>
     )
 }

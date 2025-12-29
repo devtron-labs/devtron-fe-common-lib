@@ -29,6 +29,7 @@ import {
     StatusType,
     DocLinkProps,
     DeploymentStrategyType,
+    EnvironmentType,
 } from '../Shared'
 import {
     ACTION_STATE,
@@ -39,7 +40,9 @@ import {
     TaskErrorObj,
     VariableTypeFormat,
 } from '.'
-import { IllustrationName } from '@Shared/Components'
+import { IllustrationName, SelectPickerOptionType } from '@Shared/Components'
+import { ClusterStatusType } from '@Pages/ResourceBrowser'
+import { ClusterProviderType } from '@PagesDevtron2.0/CostVisibility'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -63,9 +66,6 @@ export interface ResponseType<T = any> {
 
 export interface APIOptions {
     timeout?: number
-    /**
-     * @deprecated Use abortController instead
-     */
     signal?: AbortSignal
     abortControllerRef?: MutableRefObject<AbortController>
     /**
@@ -80,6 +80,11 @@ export interface APIOptions {
      * @default false
      */
     shouldParseServerErrorForUnauthorizedUser?: boolean
+    /**
+     * @default false
+     * @description - If true, will override the default host (orchestrator or whatever defined initially in CoreAPI constructor) with the `proxy` host
+     */
+    isProxyHost?: boolean
 }
 
 export interface OptionType<T = string, K = string> {
@@ -218,19 +223,21 @@ export type ErrorScreenManagerProps = {
     reloadClass?: string
 } & (
     | {
-        /**
-         * Would be used to redirect URL in case of 404
-         * @default - APP_LIST
-         */
-        redirectURL?: string
-        on404Redirect?: never
-    } | {
-        redirectURL?: never
-        on404Redirect: () => void
-    } | {
-        redirectURL?: never
-        on404Redirect?: never
-    }
+          /**
+           * Would be used to redirect URL in case of 404
+           * @default - APP_LIST
+           */
+          redirectURL?: string
+          on404Redirect?: never
+      }
+    | {
+          redirectURL?: never
+          on404Redirect: () => void
+      }
+    | {
+          redirectURL?: never
+          on404Redirect?: never
+      }
 )
 
 export interface ErrorScreenNotAuthorizedProps {
@@ -1103,3 +1110,73 @@ export interface ClusterEnvironmentCategoryDTO {
 }
 
 export interface ClusterEnvironmentCategoryType extends ClusterEnvironmentCategoryDTO {}
+
+export type AppsGroupedByProjectsType = {
+    projectId: number
+    projectName: string
+    appList: {
+        name: string
+        id: number
+    }[]
+}[]
+
+export type EnvironmentsGroupedByClustersType = {
+    clusterName: EnvironmentType['cluster']
+    envList: EnvironmentType[]
+}[]
+
+export type ClusterCostModuleConfigPayload =
+    | {
+          enabled: true
+          config?: Record<string, any> & {
+            detectedProvider: ClusterProviderType
+          }
+      }
+    | {
+          enabled: false
+          config?: never
+      }
+
+interface ClusterCostModuleDetailsDTO extends Pick<ClusterCostModuleConfigPayload, 'enabled' | 'config'> {
+    // Note that these status are independent of `enabled` flag
+    // e.g. cost module can be disabled but still in `Success` state
+    installationStatus: 'Success' | 'Installing' | 'Upgrading' | 'NotInstalled' | 'Failed'
+    installationError?: string
+}
+
+export interface ClusterDetailDTO {
+    category: ClusterEnvironmentCategoryType
+    cluster_name: string
+    description: string
+    id: number
+    insecureSkipTlsVerify: boolean
+    installationId: number
+    isProd: boolean
+    isVirtualCluster: boolean
+    server_url: string
+    sshTunnelConfig: any
+    prometheus_url: string
+    proxyUrl: string
+    toConnectWithSSHTunnel: boolean
+    clusterStatus: ClusterStatusType
+    costModuleConfig: ClusterCostModuleDetailsDTO
+}
+
+export interface ClusterDetailListType
+    extends Omit<
+        ClusterDetailDTO,
+        'server_url' | 'cluster_name' | 'prometheus_url' | 'id' | 'category' | 'clusterStatus'
+    > {
+    serverUrl: ClusterDetailDTO['server_url']
+    clusterName: ClusterDetailDTO['cluster_name']
+    prometheusUrl: ClusterDetailDTO['prometheus_url']
+    clusterId: ClusterDetailDTO['id']
+    category: SelectPickerOptionType
+    status: ClusterStatusType
+}
+
+export enum InfrastructureManagementAppListType {
+    HELM = 'helm',
+    ARGO_CD = 'argocd',
+    FLUX_CD = 'fluxcd'
+}

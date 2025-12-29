@@ -111,17 +111,17 @@ export interface customEnv {
      */
     FEATURE_SCOPED_VARIABLE_ENVIRONMENT_LIST_ENABLE?: boolean
     /**
-     * If false, Enable release feature
+     * If true, Enable SDH feature
      *
-     * @default true
+     * @default false
      */
-    HIDE_RELEASES?: boolean
+    FEATURE_SOFTWARE_DISTRIBUTION_HUB_ENABLE?: boolean
     /**
      * Enable resource watcher
      *
-     * @default true
+     * @default false
      */
-    HIDE_RESOURCE_WATCHER?: boolean
+    FEATURE_RESOURCE_WATCHER_ENABLE?: boolean
     /**
      * Enable config drift
      *
@@ -175,16 +175,19 @@ export interface customEnv {
      */
     FEATURE_INTERNET_CONNECTIVITY_ENABLE?: boolean
     /**
-     * If true, the grouped app list filters will be shown.
-     *
-     * @default false
-     */
-    FEATURE_GROUPED_APP_LIST_FILTERS_ENABLE?: boolean
-    /**
      * Show rollout progress if true, else canary step count in status
      * @default true
      */
     FEATURE_CANARY_ROLLOUT_PROGRESS_ENABLE?: boolean
+    /**
+     * Time interval in seconds to refetch command bar data - Applications List
+     */
+    COMMAND_BAR_REFETCH_INTERVAL?: number
+    /**
+     * Enable data protection and management
+     * @default false
+     */
+    FEATURE_STORAGE_ENABLE?: boolean
 }
 declare global {
     interface Window {
@@ -213,4 +216,5 @@ declare module '@tanstack/react-query' {
 
 export * from './Common'
 export * from './Pages'
+export * from './Pages-Devtron-2.0'
 export * from './Shared'

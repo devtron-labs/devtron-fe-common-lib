@@ -49,12 +49,22 @@ const PageHeader = ({
     renderActionButtons,
     onClose,
     tippyProps,
+    closeIcon,
+    docPath,
 }: PageHeaderType) => {
-    const { setLoginCount, setShowGettingStartedCard, setSidePanelConfig, sidePanelConfig } = useMainContext()
+    const { setLoginCount, setShowGettingStartedCard, setSidePanelConfig, sidePanelConfig, tempAppWindowConfig } =
+        useMainContext()
     const { showSwitchThemeLocationTippy, handleShowSwitchThemeLocationTippyChange } = useTheme()
 
-    const { isTippyCustomized, tippyRedirectLink, TippyIcon, tippyMessage, onClickTippyButton, additionalContent } =
-        tippyProps || {}
+    const {
+        isTippyCustomized,
+        tippyRedirectLink,
+        TippyIcon,
+        tippyMessage,
+        onClickTippyButton,
+        additionalContent,
+        tippyHeader,
+    } = tippyProps || {}
     const { email } = useUserEmail()
     const [currentServerInfo, setCurrentServerInfo] = useState<{ serverInfo: ServerInfo; fetchingServerInfo: boolean }>(
         {
@@ -130,23 +140,26 @@ const PageHeader = ({
 
     const renderLogoutHelpSection = () => (
         <>
-            {window._env_?.FEATURE_ASK_DEVTRON_EXPERT && sidePanelConfig.state === 'closed' && (
-                <Tooltip content="Ask Devtron AI" placement="bottom" alwaysShowTippyOnHover delay={[500, null]}>
-                    <button
-                        className="enable-svg-animation--hover flex dc__no-background p-2 dc__outline-none-imp dc__no-border"
-                        onClick={onAskButtonClick}
-                        type="button"
-                        aria-label="Ask Devtron Expert"
-                    >
-                        <Icon name="ic-devtron-ai" color={null} size={28} />
-                    </button>
-                </Tooltip>
-            )}
+            {window._env_?.FEATURE_ASK_DEVTRON_EXPERT &&
+                sidePanelConfig.state === 'closed' &&
+                !tempAppWindowConfig.open && (
+                    <Tooltip content="Ask Devtron AI" placement="bottom" alwaysShowTippyOnHover delay={[500, null]}>
+                        <button
+                            className="enable-svg-animation--hover flex dc__no-background p-2 dc__outline-none-imp dc__no-border"
+                            onClick={onAskButtonClick}
+                            type="button"
+                            aria-label="Ask Devtron Expert"
+                        >
+                            <Icon name="ic-devtron-ai" color={null} size={28} />
+                        </button>
+                    </Tooltip>
+                )}
             <HelpButton
                 serverInfo={currentServerInfo.serverInfo}
                 fetchingServerInfo={currentServerInfo.fetchingServerInfo}
                 onClick={handleHelpButtonClick}
                 hideGettingStartedCard={hideGettingStartedCard}
+                docPath={docPath}
             />
             {!window._env_.K8S_CLIENT && (
                 <TippyCustomized
@@ -189,7 +202,7 @@ const PageHeader = ({
                                 <Button
                                     dataTestId="page-header-close-button"
                                     ariaLabel="page-header-close-button"
-                                    icon={<Icon name="ic-close-large" color={null} />}
+                                    icon={closeIcon ?? <Icon name="ic-close-large" color={null} />}
                                     variant={ButtonVariantType.secondary}
                                     style={ButtonStyleType.negativeGrey}
                                     size={ComponentSizeType.xs}
@@ -226,8 +239,8 @@ const PageHeader = ({
                         (isTippyCustomized ? (
                             <InfoIconTippy
                                 infoText={tippyMessage}
-                                heading={headerName}
-                                iconClassName="icon-dim-20 ml-8 fcn-5"
+                                heading={headerName || tippyHeader}
+                                iconClassName="icon-dim-20 ml-8 fcn-7"
                                 documentationLink={tippyRedirectLink}
                                 documentationLinkText="View Documentation"
                                 additionalContent={additionalContent}

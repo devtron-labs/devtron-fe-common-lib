@@ -97,6 +97,29 @@ export const SelectPickerTextArea = ({
 
     useThrottledEffect(reInitHeight, 500, [inputValue])
 
+    const handleCreateOption = (newValue: string) => {
+        onChange?.(
+            { label: newValue, value: newValue },
+            { action: 'create-option', option: { label: newValue, value: newValue } },
+        )
+        selectRef.current.blurInput()
+    }
+
+    /**
+     * Create an option if no option preselectec & input is dirty
+     * @returns boolean - true if option was created
+     */
+    const updateValueIfOnlyDirty = (): boolean => {
+        const selectValue = value as SingleValue<SelectPickerOptionType<string>>
+
+        if (isCreatable && (!selectValue?.value || selectValue.value !== inputValue)) {
+            handleCreateOption(inputValue)
+            return true
+        }
+
+        return false
+    }
+
     const onInputChange = (newValue: string, { action }: InputActionMeta) => {
         if (action === ReactSelectInputAction.inputChange) {
             setInputValue(newValue)
@@ -108,18 +131,13 @@ export const SelectPickerTextArea = ({
                 })
             }
         } else if (action === ReactSelectInputAction.inputBlur) {
-            // Reverting input to previously selected value in case of blur event. (no-selection)
+            if (updateValueIfOnlyDirty()) {
+                return
+            }
             const selectValue = value as SingleValue<SelectPickerOptionType<string>>
+            // Reverting input to previously selected value in case of blur event. (no-selection)
             setInputValue(selectValue?.value || '')
         }
-    }
-
-    const handleCreateOption = (newValue: string) => {
-        onChange?.(
-            { label: newValue, value: newValue },
-            { action: 'create-option', option: { label: newValue, value: newValue } },
-        )
-        selectRef.current.blurInput()
     }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -165,11 +183,7 @@ export const SelectPickerTextArea = ({
                 selectRef.current.inputRef.selectionEnd = selectionStart + 1
             })
 
-            return
-        }
-
-        if (isCreatable && event.key === 'Enter') {
-            handleCreateOption(inputValue)
+            updateValueIfOnlyDirty()
         }
     }
 

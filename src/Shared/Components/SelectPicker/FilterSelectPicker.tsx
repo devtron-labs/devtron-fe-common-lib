@@ -34,6 +34,7 @@ const FilterSelectPicker = ({
     options,
     menuIsOpen = false,
     onMenuClose,
+    isUserIdentifier,
     ...props
 }: FilterSelectPickerProps) => {
     const selectRef = useRef<SelectPickerProps<string | number, true>['selectRef']['current']>()
@@ -110,6 +111,7 @@ const FilterSelectPicker = ({
         <div className="dc__mxw-250">
             <SelectPicker<string | number, true>
                 {...props}
+                isUserIdentifier={isUserIdentifier}
                 selectRef={selectRef}
                 options={options}
                 value={selectedOptions}
