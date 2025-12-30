@@ -17,6 +17,7 @@
 import { CSSProperties, MutableRefObject, ReactElement, ReactNode } from 'react'
 
 import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
+import { GVKType } from '@Pages/ResourceBrowser'
 
 import {
     DeploymentAppTypes,
@@ -35,6 +36,7 @@ import { DeploymentStageType } from '../../constants'
 import {
     AggregationKeys,
     AppDetails,
+    BaseURLParams,
     DeploymentStatusDetailsBreakdownDataType,
     DeploymentStatusDetailsType,
     DeploymentStatusTimelineType,
@@ -331,6 +333,32 @@ export interface TriggerDetailsType
     workerPodName?: string
     triggerMetadata?: string
     renderDeploymentHistoryTriggerMetaText: (triggerMetaData: string, onlyRenderIcon?: boolean) => JSX.Element
+    /**
+     * Only present in case of CD trigger details as of now
+     */
+    isLatest?: boolean
+    /**
+     * Only present in case of CD trigger details as of now
+     */
+    appName?: string
+}
+
+export enum ResourceConflictModalType {
+    DEPLOY_DIALOG = 'DEPLOY_DIALOG',
+    RESOURCE_DETAIL_MODAL = 'RESOURCE_DETAIL_MODAL',
+}
+
+interface ResourceConflictDialogBaseProps extends Required<Pick<TriggerDetailsType, 'appName' | 'environmentName'>> {
+    handleClose: () => void
+}
+
+export interface ResourceConflictDeployDialogProps extends ResourceConflictDialogBaseProps {}
+
+export interface ResourceConflictDetailsModalProps extends ResourceConflictDialogBaseProps {}
+
+export interface TriggerOutputURLParamsType extends Pick<BaseURLParams, 'appId' | 'envId'> {
+    triggerId: string
+    pipelineId: string
 }
 
 export type ProgressingStatusType = {
@@ -362,6 +390,7 @@ export interface WorkerStatusType
      * @default false
      */
     hideShowMoreMessageButton?: boolean
+    children?: ReactNode
 }
 
 export type FinishedType = { artifact: string; type: HistoryComponentType } & (
@@ -855,4 +884,51 @@ export interface CIPipelineSourceConfigInterface {
     isRegex?: boolean
     primaryBranchAfterRegex?: string
     rootClassName?: string
+}
+
+export interface ResourceConflictItemType {
+    name: string
+    namespace: string
+    gvk: GVKType
+    gvkTitle: string
+    clusterId: number
+    /**
+     * Generated at ui
+     */
+    id: string
+}
+
+export interface ConflictedResourcesTableProps {
+    resourceConflictDetails: ResourceConflictItemType[]
+}
+
+export interface ResourceConflictDeployDialogURLParamsType
+    extends Pick<TriggerOutputURLParamsType, 'appId' | 'envId' | 'pipelineId' | 'triggerId'> {}
+
+export interface ResourceConflictRedeployParamsType
+    extends Pick<ResourceConflictDeployDialogURLParamsType, 'pipelineId' | 'triggerId' | 'appId'> {}
+
+export interface ResourceConflictRedeployPayloadType {
+    pipelineId: number
+    appId: number
+    wfrIdForDeploymentWithSpecificTrigger: number
+    helmRedeploymentRequest: true
+}
+
+export interface GetResourceConflictDetailsParamsType
+    extends Pick<ResourceConflictDeployDialogURLParamsType, 'pipelineId' | 'triggerId' | 'appId'> {
+    signal: AbortSignal
+}
+
+export interface ResourceConflictListItemDTO {
+    clusterId: number
+    conflictingResources: {
+        name: string
+        namespace: string
+        groupVersionKind: {
+            Group: string
+            Version: string
+            Kind: NodeType
+        }
+    }[]
 }

@@ -23,7 +23,6 @@ src/Common/DebouncedSearch/__tests__/DebouncedSearch.test.tsx
 src/Common/DevtronProgressing/DevtronProgressing.tsx
 src/Common/Dialogs/DialogForm.tsx
 src/Common/DraggableWrapper/DraggableButton.tsx
-src/Common/DraggableWrapper/DraggableWrapper.tsx
 src/Common/Drawer/Drawer.tsx
 src/Common/Grid/Grid.tsx
 src/Common/Helper.tsx

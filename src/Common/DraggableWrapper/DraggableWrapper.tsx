@@ -15,36 +15,37 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import Draggable, { ControlPosition, DraggableData } from 'react-draggable'
-import { DraggableWrapperProps, DraggablePositionVariant } from './types'
-import { useWindowSize } from '../Hooks'
+import Draggable, { ControlPosition } from 'react-draggable'
+
+import { DEVTRON_BASE_MAIN_ID } from '@Shared/constants'
+
 import { MAX_Z_INDEX } from '../Constants'
+import { useWindowSize } from '../Hooks'
+import { DraggablePositionVariant, DraggableWrapperProps } from './types'
 
 /**
  * TODO: import it as lazy, after it is supported in common
  * 1. If using react select please use menuPlacement='auto'
  * 2. dragSelector will be used to identify the grabbable button that will grab the div to drag
- * 3. parentRef is the reference point from which we will derive the base top:0 ,left: 0 position
+ * 3. The wrapper is positioned at the viewport's top-left (top: 0, left: 0) using fixed positioning; parentRef is an optional
+ *    reference that may be used for position calculations but is not the base origin for the coordinate system.
  */
-export default function DraggableWrapper({
+const DraggableWrapper = ({
     children,
     zIndex = MAX_Z_INDEX,
     positionVariant,
     dragSelector,
     parentRef,
-    boundaryGap = 16,
+    boundaryGap = { x: 16, y: 16 },
     childDivProps = {},
-    layoutFixDelta = 0,
-}: DraggableWrapperProps) {
+}: DraggableWrapperProps) => {
     const windowSize = useWindowSize()
     const nodeRef = useRef<HTMLDivElement>(null)
 
-    const [position, setPosition] = useState<ControlPosition>({
-        x: 0,
-        y: 0,
-    })
+    // letting the dom render the element without displaying it so that we know it's dimensions
+    const [initialRenderDone, setInitialRenderDone] = useState(false)
 
-    const getDefaultPosition = (positionVariant: DraggablePositionVariant): ControlPosition => {
+    const getDefaultPosition = (): ControlPosition => {
         // if this return x: 0, y: 0 then it will be top left corner of parentDiv
         const parentRect =
             parentRef?.current?.getBoundingClientRect() ??
@@ -60,73 +61,62 @@ export default function DraggableWrapper({
 
         switch (positionVariant) {
             case DraggablePositionVariant.PARENT_BOTTOM_CENTER: {
-                // currently at parentRect.x and need to start to the center of its width and half of node should lie on left of center and other half on right
-                const x = (parentRect.width - nodeRefWidth) / 2
-                // TODO (v3): Temp fix. Revisit
-                const parentRectTop = parentRect.top > 0 ? parentRect.top : layoutFixDelta
-                // currently at parentRect.y now parent height can be greater than windowSize.height so taking min
-                // subtracting parentRect.top since window height already contains that
-                const baseY =
-                    parentRect.height > windowSize.height ? windowSize.height - parentRectTop : parentRect.height
-                const y = baseY - nodeRefHeight - boundaryGap
+                // center div to middle of the parent rect and then add the left offset of the parent rect
+                const x = (parentRect.width - nodeRefWidth) / 2 + parentRect.left
+                if (parentRect.height > windowSize.height) {
+                    // since the parent itself overflows, we use windowSize for calculations
+                    return { x, y: windowSize.height - boundaryGap.y - nodeRefHeight }
+                }
+                // y = parentRect.bottom will place the widget at the extreme bottom of the parent,
+                // therefore need to offset it to the top by boundary and its own height
+                const y = parentRect.bottom - nodeRefHeight - boundaryGap.y
                 return { x, y }
             }
             case DraggablePositionVariant.SCREEN_BOTTOM_RIGHT: {
-                const x = windowSize.width - parentRect.left - nodeRefWidth - boundaryGap
-                const y = windowSize.height - parentRect.top - nodeRefHeight - boundaryGap
+                // x = windowSize.width will place the widget at the extreme right,
+                // therefore need to offset it to the left by boundary and its own width
+                const x = windowSize.width - nodeRefWidth - boundaryGap.x
+                // y = windowSize.height will place the widget at the extreme bottom,
+                // therefore need to offset it to the top by boundary and its own height
+                const y = windowSize.height - nodeRefHeight - boundaryGap.y
 
                 return { x, y }
             }
             // Add more cases for other variants if needed
             default: {
-                // Since need node to be in center of screen so subtracting width/2 by left of parentRect it will start the node from center but want node's midpoint at center so subtracting node's width from it.
-                const x = windowSize.width / 2 - parentRect.left - nodeRefWidth / 2
-                // subtracting top since windowSize already contains that
-                const y = windowSize.height - parentRect.top - nodeRefHeight - boundaryGap
+                // we need to first place the start of the widget at (windowSize.width / 2)
+                // followed by moving it half of its own width to the left such that center of widget
+                // aligns with the central axis of the screen
+                const x = (windowSize.width - nodeRefWidth) / 2
+                // y = windowSize.height will place the widget at the extreme bottom,
+                // therefore need to offset it to the top by boundary and its own height
+                const y = windowSize.height - nodeRefHeight - boundaryGap.y
 
                 return { x, y }
             }
         }
     }
 
-    // On change of windowSize we will reset the position to default
     useEffect(() => {
-        const defaultPosition = getDefaultPosition(positionVariant)
-        setPosition(defaultPosition)
-    }, [nodeRef, positionVariant, windowSize])
-
-    // Would be called on drag and will not update the state if the new position is out of window screen
-    function handlePositionChange(e, data: DraggableData) {
-        const offsetX = parentRef?.current?.getBoundingClientRect().left ?? 0
-        const offsetY = parentRef?.current?.getBoundingClientRect().top ?? 0
-
-        const nodeRefHeight = nodeRef.current?.getBoundingClientRect().height ?? 0
-        const nodeRefWidth = nodeRef.current?.getBoundingClientRect().width ?? 0
-
-        if (
-            offsetX + data.x + nodeRefWidth + boundaryGap > windowSize.width ||
-            offsetY + data.y + nodeRefHeight + boundaryGap > windowSize.height ||
-            offsetX + data.x < 0 ||
-            offsetY + data.y < 0
-        ) {
-            return
-        }
-
-        setPosition({
-            x: data.x,
-            y: data.y,
-        })
-    }
+        // make the element visible after the initial render
+        setInitialRenderDone(true)
+    }, [])
 
     return (
         // Since we are using position fixed so we need to disable click on the div so that it does not interfere with the click of other elements
         <div
-            className="dc__position-fixed dc__disable-click"
+            className={`dc__position-fixed dc__disable-click dc__top-0 dc__left-0 ${initialRenderDone ? '' : 'dc__visibility-hidden'}`}
             style={{
                 zIndex,
             }}
         >
-            <Draggable handle={dragSelector} nodeRef={nodeRef} position={position} onDrag={handlePositionChange}>
+            <Draggable
+                key={`${windowSize.height}-${windowSize.width}-${initialRenderDone}`}
+                handle={dragSelector}
+                defaultPosition={getDefaultPosition()}
+                bounds={`#${DEVTRON_BASE_MAIN_ID}`}
+                nodeRef={nodeRef}
+            >
                 <div
                     ref={nodeRef}
                     {...childDivProps}
@@ -141,3 +131,5 @@ export default function DraggableWrapper({
         </div>
     )
 }
+
+export default DraggableWrapper
