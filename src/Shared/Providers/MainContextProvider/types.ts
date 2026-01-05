@@ -64,6 +64,7 @@ export type AIAgentContextType =
               envId: number
               appName: string
               envName: string
+              clusterId: number
               appType: 'devtronApp' | 'devtronHelmChart'
           }
       }
