@@ -22,11 +22,14 @@ import { useEffectAfterMount } from '@Common/Helper'
 import { Pagination } from '@Common/Pagination'
 import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
 import { CHECKBOX_VALUE } from '@Common/Types'
+import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components/Button'
+import { Icon } from '@Shared/Components/Icon'
+import { ComponentSizeType } from '@Shared/constants'
 
 import { BulkSelection } from '../BulkSelection'
 import BulkSelectionActionWidget from './BulkSelectionActionWidget'
 import { BULK_ACTION_GUTTER_LABEL, EVENT_TARGET, SHIMMER_DUMMY_ARRAY } from './constants'
-import { BulkActionStateType, FiltersTypeEnum, PaginationEnum, SignalsType, TableContentProps } from './types'
+import { BulkActionStateType, FiltersTypeEnum, PaginationEnum, RowType, SignalsType, TableContentProps } from './types'
 import useTableWithKeyboardShortcuts from './useTableWithKeyboardShortcuts'
 import { getStickyColumnConfig, scrollToShowActiveElementIfNeeded } from './utils'
 
@@ -61,6 +64,7 @@ const TableContent = <
 
     const [bulkActionState, setBulkActionState] = useState<BulkActionStateType>(null)
     const [showBorderRightOnStickyElements, setShowBorderRightOnStickyElements] = useState(false)
+    const [expandState, setExpandState] = useState<Record<string, boolean>>({})
 
     const { width: rowOnHoverComponentWidth, Component: RowOnHoverComponent } = rowActionOnHoverConfig || {}
 
@@ -92,9 +96,49 @@ const TableContent = <
             .join(' '),
     } = resizableConfig ?? {}
 
-    const gridTemplateColumns = rowOnHoverComponentWidth
+    const { visibleRows, areAllRowsExpanded, isAnyRowExpandable } = useMemo(() => {
+        const normalizedFilteredRows = filteredRows ?? []
+
+        const paginatedRows =
+            paginationVariant !== PaginationEnum.PAGINATED ||
+            (paginationVariant === PaginationEnum.PAGINATED && getRows)
+                ? normalizedFilteredRows
+                : normalizedFilteredRows.slice(offset, offset + pageSize)
+
+        const _isAnyRowExpandable = paginatedRows.some((row) => !!row.expandableRows)
+
+        const _areAllRowsExpanded =
+            _isAnyRowExpandable &&
+            paginatedRows.reduce((acc, row) => {
+                if (row.expandableRows) {
+                    return acc && !!expandState[row.id]
+                }
+
+                return acc
+            }, true)
+
+        const paginatedRowsWithExpandedRows = paginatedRows.flatMap((row) => {
+            if (row.expandableRows && expandState[row.id]) {
+                return [row, ...row.expandableRows]
+            }
+
+            return [row]
+        })
+
+        return {
+            visibleRows: paginatedRowsWithExpandedRows,
+            areAllRowsExpanded: _areAllRowsExpanded,
+            isAnyRowExpandable: _isAnyRowExpandable,
+        }
+    }, [paginationVariant, offset, pageSize, filteredRows, expandState])
+
+    const gridTemplateColumnsWithoutExpandButton = rowOnHoverComponentWidth
         ? `${initialGridTemplateColumns} ${typeof rowOnHoverComponentWidth === 'number' ? `minmax(${rowOnHoverComponentWidth}px, 1fr)` : rowOnHoverComponentWidth}`
         : initialGridTemplateColumns
+
+    const gridTemplateColumns = isAnyRowExpandable
+        ? `16px ${gridTemplateColumnsWithoutExpandButton}`
+        : gridTemplateColumnsWithoutExpandButton
 
     useEffect(() => {
         const scrollEventHandler = () => {
@@ -112,18 +156,6 @@ const TableContent = <
     }, [])
 
     const bulkSelectionCount = isBulkSelectionApplied ? totalRows : (getSelectedIdentifiersCount?.() ?? 0)
-
-    const visibleRows = useMemo(() => {
-        const normalizedFilteredRows = filteredRows ?? []
-
-        const paginatedRows =
-            paginationVariant !== PaginationEnum.PAGINATED ||
-            (paginationVariant === PaginationEnum.PAGINATED && getRows)
-                ? normalizedFilteredRows
-                : normalizedFilteredRows.slice(offset, offset + pageSize)
-
-        return paginatedRows
-    }, [paginationVariant, offset, pageSize, filteredRows])
 
     const isBEPagination = !!getRows
 
@@ -153,6 +185,18 @@ const TableContent = <
 
     const getTriggerSortingHandler = (newSortBy: string) => () => {
         handleSorting(newSortBy)
+    }
+
+    const toggleExpandAll = () => {
+        setExpandState(
+            visibleRows.reduce((acc, row) => {
+                if ((row as RowType<RowData>).expandableRows) {
+                    acc[row.id] = !areAllRowsExpanded
+                }
+
+                return acc
+            }, {}),
+        )
     }
 
     const focusActiveRow = (node: HTMLDivElement) => {
@@ -216,6 +260,7 @@ const TableContent = <
         return visibleRows.map((row, visibleRowIndex) => {
             const isRowActive = activeRowIndex === visibleRowIndex
             const isRowBulkSelected = !!bulkSelectionState[row.id] || isBulkSelectionApplied
+            const isExpandedRow = row.id.startsWith('expanded-row')
 
             const handleChangeActiveRowIndex = () => {
                 setActiveRowIndex(visibleRowIndex)
@@ -223,6 +268,13 @@ const TableContent = <
 
             const handleToggleBulkSelectionForRow = () => {
                 handleToggleBulkSelectionOnRow(row)
+            }
+
+            const toggleExpandRow = () => {
+                setExpandState({
+                    ...expandState,
+                    [row.id]: !expandState[row.id],
+                })
             }
 
             return (
@@ -236,7 +288,7 @@ const TableContent = <
                         isRowActive ? 'generic-table__row--active checkbox__parent-container--active' : ''
                     } ${rowActionOnHoverConfig ? 'dc__opacity-hover dc__opacity-hover--parent' : ''} ${
                         isRowBulkSelected ? 'generic-table__row--bulk-selected' : ''
-                    }`}
+                    } ${isExpandedRow ? 'generic-table__row--expanded-row' : ''}`}
                     style={{
                         gridTemplateColumns,
                     }}
@@ -244,6 +296,21 @@ const TableContent = <
                     // NOTE: by giving it a negative tabIndex we can programmatically focus it through .focus()
                     tabIndex={-1}
                 >
+                    {!isExpandedRow && !!(row as RowType<RowData>).expandableRows ? (
+                        <Button
+                            dataTestId={`expand-row-${row.id}`}
+                            icon={<Icon name="ic-expand-right-sm" color={null} />}
+                            ariaLabel="Expand row"
+                            showAriaLabelInTippy={false}
+                            variant={ButtonVariantType.borderLess}
+                            size={ComponentSizeType.xs}
+                            style={ButtonStyleType.neutral}
+                            onClick={toggleExpandRow}
+                        />
+                    ) : null}
+
+                    {isAnyRowExpandable && (isExpandedRow || !(row as RowType<RowData>).expandableRows) && <div />}
+
                     {visibleColumns.map(({ field, horizontallySticky: isStickyColumn, CellComponent }, index) => {
                         const isBulkActionGutter = field === BULK_ACTION_GUTTER_LABEL
                         const horizontallySticky = isStickyColumn || isBulkActionGutter
@@ -251,7 +318,7 @@ const TableContent = <
                             ? getStickyColumnConfig(gridTemplateColumns, index)
                             : {}
 
-                        if (isBulkActionGutter) {
+                        if (isBulkActionGutter && !isExpandedRow) {
                             return (
                                 <div
                                     className={`flexbox dc__align-items-center ${stickyClassName}`}
@@ -282,6 +349,8 @@ const TableContent = <
                                         row={row}
                                         filterData={filterData as any}
                                         isRowActive={isRowActive}
+                                        isExpandedRow={isExpandedRow}
+                                        isRowInExpandState={expandState[row.id]}
                                         {...additionalProps}
                                     />
                                 ) : (
@@ -295,7 +364,7 @@ const TableContent = <
                         )
                     })}
 
-                    {RowOnHoverComponent && (
+                    {!isExpandedRow && RowOnHoverComponent && (
                         <div
                             className={`dc__position-sticky dc__right-0 dc__zi-1 ${!isRowActive ? 'dc__opacity-hover--child' : ''}`}
                         >
@@ -337,6 +406,19 @@ const TableContent = <
                                     gridTemplateColumns,
                                 }}
                             >
+                                {isAnyRowExpandable ? (
+                                    <Button
+                                        dataTestId="expand-all-rows"
+                                        icon={<Icon name="ic-expand-right-sm" color={null} />}
+                                        ariaLabel="Expand row"
+                                        showAriaLabelInTippy={false}
+                                        variant={ButtonVariantType.borderLess}
+                                        size={ComponentSizeType.xs}
+                                        style={ButtonStyleType.neutral}
+                                        onClick={toggleExpandAll}
+                                    />
+                                ) : null}
+
                                 {visibleColumns.map(
                                     (
                                         {

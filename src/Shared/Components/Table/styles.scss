@@ -69,6 +69,11 @@
             outline: none;
         }
 
+        &--expanded-row,
+        &--expanded-row > * {
+            background-color: var(--N100);
+        }
+
         &:hover,
         &:hover > *,
         &--active,
@@ -104,5 +109,9 @@
             height: 16px !important;
             transform: scaleY(var(--resize-btn-scale-multiplier));
         }
+    }
+
+    &__expanse {
+        background-color: var(--bg-hover-opaque);
     }
 }

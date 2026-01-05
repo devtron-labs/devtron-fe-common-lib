@@ -89,9 +89,17 @@ type BaseColumnType = {
     horizontallySticky?: boolean
 }
 
-export type RowType<Data extends unknown> = {
+type CommonRowType<Data extends unknown> = {
     id: string
     data: Data
+}
+
+export type ExpandedRowType<Data extends unknown> = CommonRowType<Data> & {
+    id: `expanded-row-${string}`
+}
+
+export type RowType<Data extends unknown> = CommonRowType<Data> & {
+    expandableRows?: Array<ExpandedRowType<Data>>
 }
 
 export type RowsType<Data extends unknown> = RowType<Data>[]
@@ -117,6 +125,8 @@ export type CellComponentProps<
               ? UseFiltersReturnType
               : UseUrlFiltersReturnType<string>
         isRowActive: boolean
+        isExpandedRow: boolean
+        isRowInExpandState: boolean
     }
 
 export type RowActionsOnHoverComponentProps<
