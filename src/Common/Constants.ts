@@ -80,6 +80,8 @@ export const URLS = {
     APP_DEPLOYMNENT_HISTORY: 'deployments',
     APP_DETAILS: 'details',
     APP_DETAILS_K8: 'k8s-resources', // for V2
+    EXTERNAL_ARGO_APP: 'eaa',
+    EXTERNAL_FLUX_APP: 'external-flux',
     DETAILS: '/details',
     CD_DETAILS: 'cd-details',
     APP_TRIGGER: 'trigger',
