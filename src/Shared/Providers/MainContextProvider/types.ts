@@ -66,15 +66,19 @@ export type AIAgentContextType =
               envName: string
               clusterId: number
               appType: 'devtronApp' | 'devtronHelmChart'
-          }
+          } & Record<string, unknown>
       }
     | {
           source: AIAgentContextSourceType.RESOURCE_BROWSER_CLUSTER
           data: {
               clusterId: number
               clusterName: string
-          }
+          } & Record<string, unknown>
       }
+
+export type DebugAgentContextType = AIAgentContextType & {
+    prompt?: string
+}
 
 export interface TempAppWindowConfig {
     /** Whether the temporary window is open */
@@ -139,6 +143,8 @@ type CommonMainContextProps = {
     setLicenseData: Dispatch<SetStateAction<DevtronLicenseInfo>>
     canFetchHelmAppStatus: boolean
     setIntelligenceConfig: Dispatch<SetStateAction<IntelligenceConfig>>
+    debugAgentContext: DebugAgentContextType | null
+    setDebugAgentContext: (aiAgentContext: DebugAgentContextType | null) => void
     setAIAgentContext: (aiAgentContext: AIAgentContextType) => void
     setSidePanelConfig: Dispatch<SetStateAction<SidePanelConfig>>
 } & Pick<EnvironmentDataValuesDTO, 'isResourceRecommendationEnabled'>

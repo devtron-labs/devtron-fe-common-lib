@@ -187,6 +187,7 @@ export interface customEnv {
      * @default false
      */
     FEATURE_STORAGE_ENABLE?: boolean
+    FEATURE_ATHENA_DEBUG_MODE_ENABLE?: boolean
 }
 declare global {
     interface Window {
