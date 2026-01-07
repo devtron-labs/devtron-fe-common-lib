@@ -99,6 +99,33 @@
                 display: inherit;
             }
         }
+
+        &.with-start-icon-and-bulk-or-expand-action {
+            .bulk-action-checkbox {
+                display: none;
+            }
+
+            .expand-row-btn {
+                display: none;
+            }
+
+            &:hover,
+            &--active,
+            &--bulk-selected,
+            &--is-expanded {
+                .row-start-icon {
+                    display: none;
+                }
+
+                .bulk-action-checkbox {
+                    display: flex;
+                }
+
+                .expand-row-btn {
+                    display: flex;
+                }
+            }
+        }
     }
 
     .sortable-table-header__resize-btn:hover,

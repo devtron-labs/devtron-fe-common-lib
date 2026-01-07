@@ -56,6 +56,7 @@ const InternalTable = <
     rowActionOnHoverConfig,
     pageSizeOptions,
     clearFilters: userGivenUrlClearFilters,
+    rowStartIconConfig,
 }: InternalTableProps<RowData, FilterVariant, AdditionalProps>) => {
     const {
         sortBy,
@@ -219,6 +220,7 @@ const InternalTable = <
                     stylesConfig={stylesConfig}
                     getRows={getRows}
                     totalRows={totalRows}
+                    rowStartIconConfig={rowStartIconConfig}
                 />
             </UseRegisterShortcutProvider>
         )

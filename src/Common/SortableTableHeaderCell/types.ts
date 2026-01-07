@@ -26,6 +26,10 @@ export type SortableTableHeaderCellProps = {
      * @default false
      */
     showTippyOnTruncate?: boolean
+    /**
+     * If provided, shown in a tooltip on info-icon-outline beside the label
+     */
+    infoTooltipText?: string
 } & (
     | {
           /**

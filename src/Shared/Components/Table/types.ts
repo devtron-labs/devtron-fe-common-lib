@@ -26,6 +26,7 @@ import {
 import { GenericEmptyStateType } from '@Common/index'
 import { PageSizeOption } from '@Common/Pagination/types'
 import { SortableTableHeaderCellProps, useResizableTableConfig } from '@Common/SortableTableHeaderCell'
+import { IconsProps } from '@Shared/Components/Icon'
 
 import { useBulkSelection, UseBulkSelectionProps } from '../BulkSelection'
 
@@ -87,7 +88,7 @@ type BaseColumnType = {
     size: SizeType
 
     horizontallySticky?: boolean
-}
+} & Pick<SortableTableHeaderCellProps, 'infoTooltipText'>
 
 type CommonRowType<Data extends unknown> = {
     id: string
@@ -317,6 +318,12 @@ export type InternalTableProps<
     handleToggleBulkSelectionOnRow: (row: RowType<RowData>) => void
 
     ViewWrapper?: FunctionComponent<ViewWrapperProps<RowData, FilterVariant, AdditionalProps>>
+
+    /**
+     * An icon as the first element of the row, that hides actions like expand or bulk select icons
+     * until user hovers over the row or the row has focus from keyboard navigation
+     */
+    rowStartIconConfig?: Omit<IconsProps, 'dataTestId'>
 } & (
         | {
               /**
@@ -400,6 +407,7 @@ export type TableProps<
     | 'ViewWrapper'
     | 'pageSizeOptions'
     | 'clearFilters'
+    | 'rowStartIconConfig'
 >
 
 export type BulkActionStateType = string | null
@@ -450,6 +458,7 @@ export interface TableContentProps<
             | 'rowActionOnHoverConfig'
             | 'pageSizeOptions'
             | 'getRows'
+            | 'rowStartIconConfig'
         >,
         RowsResultType<RowData> {
     areFilteredRowsLoading: boolean
