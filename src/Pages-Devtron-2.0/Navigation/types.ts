@@ -31,7 +31,6 @@ export type NavigationItemID =
     | 'automation-and-enablement-alerting'
     | 'automation-and-enablement-incident-response'
     | 'automation-and-enablement-api-portal'
-    | 'automation-and-enablement-runbook-automation'
     | 'global-configuration-sso-login-services'
     | 'global-configuration-host-urls'
     | 'global-configuration-external-links'

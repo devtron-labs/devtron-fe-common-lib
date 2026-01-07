@@ -117,7 +117,6 @@ export const DOCUMENTATION = {
     GLOBAL_CONFIG_SSO_LOGIN_MICROSOFT: 'global-configurations/authorization/sso-login/microsoft',
     GLOBAL_CONFIG_PULL_IMAGE_DIGEST: 'global-configurations/pull-image-digest',
     GLOBAL_CONFIG_TAGS: 'getting-started/global-configurations/tags-policy',
-    SAMPLE_RUNBOOK_LINK: 'https://docs.devtron.ai/user-guide/ai-recommendations/runbook#add-runbook-spec',
 
     // Application Management
     APP_MANAGEMENT: 'docs/user-guide/app-management',
@@ -142,9 +141,6 @@ export const DOCUMENTATION = {
 
     // Security Center
     SECURITY_CENTER: 'docs/user-guide/security-features',
-
-    // AI Recommendations
-    AI_RECOMMENDATIONS: 'docs/user-guide/ai-recommendations',
 
     // Automation & Enablement
     AUTOMATION_AND_ENABLEMENT: 'docs/user-guide/automation',
