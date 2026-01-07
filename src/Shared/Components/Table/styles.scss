@@ -110,9 +110,9 @@
             }
 
             &:hover,
-            &--active,
-            &--bulk-selected,
-            &--is-expanded {
+            &.generic-table__row--active,
+            &.generic-table__row--bulk-selected,
+            &.generic-table__row--is-expanded {
                 .row-start-icon {
                     display: none;
                 }
