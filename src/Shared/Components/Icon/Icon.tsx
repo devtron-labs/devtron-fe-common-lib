@@ -200,7 +200,6 @@ import { ReactComponent as ICLdap } from '@IconsV2/ic-ldap.svg'
 import { ReactComponent as ICLego } from '@IconsV2/ic-lego.svg'
 import { ReactComponent as ICLightning } from '@IconsV2/ic-lightning.svg'
 import { ReactComponent as ICLightningFill } from '@IconsV2/ic-lightning-fill.svg'
-import { ReactComponent as ICLine } from '@IconsV2/ic-line.svg'
 import { ReactComponent as ICLink } from '@IconsV2/ic-link.svg'
 import { ReactComponent as ICLinkedBuildColor } from '@IconsV2/ic-linked-build-color.svg'
 import { ReactComponent as ICListBullets } from '@IconsV2/ic-list-bullets.svg'
@@ -258,7 +257,6 @@ import { ReactComponent as ICResourceWatcher } from '@IconsV2/ic-resource-watche
 import { ReactComponent as ICRightPanelCollapse } from '@IconsV2/ic-right-panel-collapse.svg'
 import { ReactComponent as ICRocketGear } from '@IconsV2/ic-rocket-gear.svg'
 import { ReactComponent as ICRocketLaunch } from '@IconsV2/ic-rocket-launch.svg'
-import { ReactComponent as ICRunbookColor } from '@IconsV2/ic-runbook-color.svg'
 import { ReactComponent as ICSecurityFixable } from '@IconsV2/ic-security-fixable.svg'
 import { ReactComponent as ICSecurityNotFixable } from '@IconsV2/ic-security-not-fixable.svg'
 import { ReactComponent as ICSecurityPolicy } from '@IconsV2/ic-security-policy.svg'
@@ -529,7 +527,6 @@ export const iconMap = {
     'ic-lego': ICLego,
     'ic-lightning-fill': ICLightningFill,
     'ic-lightning': ICLightning,
-    'ic-line': ICLine,
     'ic-link': ICLink,
     'ic-linked-build-color': ICLinkedBuildColor,
     'ic-list-bullets': ICListBullets,
@@ -587,7 +584,6 @@ export const iconMap = {
     'ic-right-panel-collapse': ICRightPanelCollapse,
     'ic-rocket-gear': ICRocketGear,
     'ic-rocket-launch': ICRocketLaunch,
-    'ic-runbook-color': ICRunbookColor,
     'ic-security-fixable': ICSecurityFixable,
     'ic-security-not-fixable': ICSecurityNotFixable,
     'ic-security-policy': ICSecurityPolicy,
