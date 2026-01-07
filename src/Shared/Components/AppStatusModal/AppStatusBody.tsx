@@ -116,17 +116,20 @@ export const AppStatusBody = ({
             analyticsCategory: getAIAnalyticsEvents('APP_STATUS', appDetails.appType),
         }
 
-        const debugAgentContext = {
-            ...aiAgentContext,
-            prompt: `Why is application '${appDetails.appName}' of '${appDetails.environmentName}' env ${appStatus}?`,
-            data: {
-                ...aiAgentContext.data,
-                ...(debugNode ? { debugNodeKind: debugNode.kind, debugNodeName: debugNode.name } : {}),
-                ...(message ? { debugError: message } : {}),
-                namespace: appDetails.namespace,
-                status: debugNode?.health?.status ?? appStatus,
-            },
-        } as MainContext['debugAgentContext']
+        // Have to add this to handle case of devtron-stack manager and software distribution hub.
+        const debugAgentContext = aiAgentContext
+            ? ({
+                  ...aiAgentContext,
+                  prompt: `Why is application '${appDetails.appName}' of '${appDetails.environmentName}' env ${appStatus}?`,
+                  data: {
+                      ...aiAgentContext.data,
+                      ...(debugNode ? { debugNodeKind: debugNode.kind, debugNodeName: debugNode.name } : {}),
+                      ...(message ? { debugError: message } : {}),
+                      namespace: appDetails.namespace,
+                      status: debugNode?.health?.status ?? appStatus,
+                  },
+              } as MainContext['debugAgentContext'])
+            : null
 
         return [
             {
@@ -139,6 +142,7 @@ export const AppStatusBody = ({
                         envId={appDetails.environmentId}
                         actionItem={
                             ExplainWithAIButton &&
+                            debugAgentContext &&
                             appStatus?.toLowerCase() !== StatusType.HEALTHY.toLowerCase() &&
                             (debugNode || message) ? (
                                 <ExplainWithAIButton
