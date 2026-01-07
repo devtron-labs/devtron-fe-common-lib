@@ -159,7 +159,8 @@ const InternalTable = <
             searchKey,
             sortBy,
             sortOrder,
-            getRows,
+            // !TODO: functions in queryKey cannot trigger refetch
+            // getRows,
             offset,
             pageSize,
             JSON.stringify(otherFilters),
