@@ -14,13 +14,24 @@
  * limitations under the License.
  */
 
-import { useEffect, useRef, useState } from 'react'
-import ReactMde from 'react-mde'
+import { useState } from 'react'
+import MDEditor, { commands } from '@uiw/react-md-editor'
 
+import { ReactComponent as BoldIcon } from '@Icons/ic-bold.svg'
+import { ReactComponent as CheckedListIcon } from '@Icons/ic-checked-list.svg'
+import { ReactComponent as CodeIcon } from '@Icons/ic-code.svg'
+import { ReactComponent as HeaderIcon } from '@Icons/ic-header.svg'
+import { ReactComponent as ImageIcon } from '@Icons/ic-image.svg'
+import { ReactComponent as ItalicIcon } from '@Icons/ic-italic.svg'
+import { ReactComponent as LinkIcon } from '@Icons/ic-link.svg'
+import { ReactComponent as OrderedListIcon } from '@Icons/ic-ordered-list.svg'
 import { ReactComponent as Edit } from '@Icons/ic-pencil.svg'
+import { ReactComponent as QuoteIcon } from '@Icons/ic-quote.svg'
+import { ReactComponent as StrikethroughIcon } from '@Icons/ic-strikethrough.svg'
 import { ReactComponent as UnorderedListIcon } from '@Icons/ic-unordered-list.svg'
 
 import {
+    AppThemeType,
     Button,
     ButtonStyleType,
     ButtonVariantType,
@@ -28,94 +39,138 @@ import {
     Icon,
     ToastManager,
     ToastVariantType,
+    useTheme,
 } from '../../Shared'
-import { DEFAULT_MARKDOWN_EDITOR_PREVIEW_MESSAGE, MARKDOWN_EDITOR_COMMANDS } from '../Markdown/constant'
 import Markdown from '../Markdown/MarkDown'
-import { deepEqual, showError } from '..'
+import { showError } from '..'
 import { DESCRIPTION_EMPTY_ERROR_MSG, DESCRIPTION_UNSAVED_CHANGES_MSG } from './constant'
-import { GenericDescriptionProps, MDEditorSelectedTabType } from './types'
-import { getEditorCustomIcon, getParsedUpdatedOnDate } from './utils'
+import { GenericDescriptionProps } from './types'
+import { getParsedUpdatedOnDate } from './utils'
 
-import 'react-mde/lib/styles/css/react-mde-all.css'
 import './genericDescription.scss'
+
+const myCommands = [
+    {
+        ...commands.codeEdit,
+        icon: <span className="fs-13 fw-6 lh-20">Write</span>,
+    },
+    {
+        ...commands.codePreview,
+        icon: <span className="fs-13 fw-6 lh-20">Preview</span>,
+    },
+]
+
+const extraCommands = [
+    {
+        ...commands.bold,
+        icon: <BoldIcon className="icon-dim-16 flex" />,
+    },
+    {
+        ...commands.italic,
+        icon: <ItalicIcon className="icon-dim-16 flex" />,
+    },
+    {
+        ...commands.strikethrough,
+        icon: <StrikethroughIcon className="icon-dim-16 flex" />,
+    },
+    {
+        ...commands.heading,
+        icon: <HeaderIcon className="icon-dim-16 flex" />,
+    },
+    {
+        ...commands.quote,
+        icon: <QuoteIcon className="icon-dim-16 flex" />,
+    },
+    {
+        ...commands.code,
+        icon: <CodeIcon className="icon-dim-16 flex" />,
+    },
+    {
+        ...commands.link,
+        icon: <LinkIcon className="icon-dim-16 flex" />,
+    },
+    {
+        ...commands.image,
+        icon: <ImageIcon className="icon-dim-16 flex" />,
+    },
+    {
+        ...commands.orderedListCommand,
+        icon: <OrderedListIcon className="icon-dim-16 flex" />,
+    },
+    {
+        ...commands.unorderedListCommand,
+        icon: <UnorderedListIcon className="icon-dim-16 flex" />,
+    },
+    {
+        ...commands.checkedListCommand,
+        icon: <CheckedListIcon className="icon-dim-16 flex" />,
+    },
+    {
+        ...commands.help,
+        icon: (
+            <div className="flex dc__no-shrink">
+                <Icon name="ic-help-outline" color="N700" size={12} />
+            </div>
+        ),
+    },
+]
 
 const GenericDescription = ({
     text,
     updatedBy,
     updatedOn,
-    tabIndex,
     updateDescription,
     title,
-    minEditorHeight = 300,
     emptyStateConfig,
 }: GenericDescriptionProps) => {
     const [isLoading, setIsLoading] = useState(false)
-    const [editorView, setEditorView] = useState<
-        MDEditorSelectedTabType.PREVIEW | MDEditorSelectedTabType.WRITE | 'previewSaved' | 'empty'
-    >(text ? 'previewSaved' : 'empty')
-    const [modifiedDescriptionText, setModifiedDescriptionText] = useState<string>(text)
-    const isDescriptionModified = !deepEqual(text, modifiedDescriptionText)
-    const mdeRef = useRef(null)
+    const [modifiedValue, setModifiedValue] = useState(text || '')
+    const [isEditView, setIsEditView] = useState(false)
 
-    useEffect(() => {
-        setModifiedDescriptionText(text)
-    }, [text])
+    const { appTheme } = useTheme()
 
     const _date = getParsedUpdatedOnDate(updatedOn)
 
-    const validateDescriptionText = (description: string): boolean => {
-        const descriptionLength = description.length
-        if (!descriptionLength) {
-            ToastManager.showToast({
-                variant: ToastVariantType.error,
-                description: DESCRIPTION_EMPTY_ERROR_MSG,
-            })
-        }
-        return !!descriptionLength
-    }
-
     const handleCancel = () => {
-        let isConfirmed: boolean = true
+        const isDescriptionModified = modifiedValue.trim() !== (text || '').trim()
+        let isConfirmed = true
+
         if (isDescriptionModified) {
             // eslint-disable-next-line no-alert
             isConfirmed = window.confirm(DESCRIPTION_UNSAVED_CHANGES_MSG)
         }
+
         if (isConfirmed) {
-            setModifiedDescriptionText(text)
-            setEditorView(text ? 'previewSaved' : 'empty')
+            setModifiedValue(text)
+            setIsEditView(false)
         }
     }
 
     const handleSave = async () => {
-        const trimmedDescription = modifiedDescriptionText.trim()
-        const isValidate = validateDescriptionText(trimmedDescription)
-        if (!isValidate) {
+        const trimmedDescription = modifiedValue.trim()
+        if (!trimmedDescription) {
+            ToastManager.showToast({
+                variant: ToastVariantType.error,
+                description: DESCRIPTION_EMPTY_ERROR_MSG,
+            })
             return
         }
         try {
             setIsLoading(true)
             await updateDescription(trimmedDescription)
-            // Explicitly updating the state, since the modified state gets corrupted
-            setModifiedDescriptionText(trimmedDescription)
-            setEditorView('previewSaved')
         } catch (error) {
             showError(error)
-            setEditorView(MDEditorSelectedTabType.WRITE)
-            setModifiedDescriptionText(text)
         } finally {
             setIsLoading(false)
+            setIsEditView(false)
         }
     }
 
     const handleWriteDescription = () => {
-        setEditorView(MDEditorSelectedTabType.WRITE)
+        setIsEditView(true)
     }
 
-    const handleTabChange = (tab: MDEditorSelectedTabType) => {
-        setEditorView(tab)
-    }
-
-    if (editorView === 'empty') {
+    if (!text && !isEditView) {
         const { img, subtitle } = emptyStateConfig || {}
         return (
             <div className="flexbox w-100 bg__primary br-8 dc__border-dashed--n3">
@@ -139,110 +194,75 @@ const GenericDescription = ({
     }
 
     return (
-        <div className="cluster__body-details">
-            <div data-testid="generic-description-wrapper" className="dc__overflow-hidden">
-                {editorView === 'previewSaved' ? (
-                    <div className="min-w-500 bg__primary br-4 dc__border-top dc__border-left dc__border-right w-100 dc__border-bottom">
-                        <div className="pt-8 pb-8 pl-16 pr-16 dc__top-radius-4 flex bg__secondary dc__border-bottom h-36">
-                            <div className="flexbox dc__gap-6 dc__align-items-center">
-                                <UnorderedListIcon className="icon-dim-16" />
-                                <div className="fw-6 lh-20 cn-9 fs-13">{title}</div>
-                            </div>
-                            {updatedBy && _date && (
-                                <div className="flex left fw-4 cn-7 ml-8 fs-12 h-20">
-                                    Last updated by &nbsp;
-                                    <span className="dc__ellipsis-right dc__mxw-200">{updatedBy}</span>&nbsp;on {_date}
-                                </div>
-                            )}
-                            <div
-                                data-testid="description-edit-button"
-                                className="dc__align-right pencil-icon cursor flex fw-6 cn-7"
-                                onClick={handleWriteDescription}
-                            >
-                                <Edit className="icon-dim-16 mr-4 scn-7" /> Edit
-                            </div>
+        <div
+            data-testid="generic-description-wrapper"
+            className={`flexbox-col markdown-editor__wrapper bg__primary ${isEditView ? 'br-4 border__primary' : ''}`}
+        >
+            {!isEditView ? (
+                <div className="min-w-500 bg__primary br-4 dc__border-top dc__border-left dc__border-right w-100 dc__border-bottom">
+                    <div className="pt-8 pb-8 pl-16 pr-16 dc__top-radius-4 flex bg__secondary dc__border-bottom h-36">
+                        <div className="flexbox dc__gap-6 dc__align-items-center">
+                            <UnorderedListIcon className="icon-dim-16" />
+                            <div className="fw-6 lh-20 cn-9 fs-13">{title}</div>
                         </div>
-                        <ReactMde
-                            classes={{
-                                reactMde:
-                                    'mark-down-editor-container dc__word-break pb-16 pt-8 mark-down-editor__no-border',
-                                toolbar: 'mark-down-editor__hidden',
-                                preview: 'mark-down-editor-preview dc__bottom-radius-4',
-                                textArea: 'mark-down-editor__hidden',
-                            }}
-                            value={text}
-                            selectedTab="preview"
-                            minPreviewHeight={150}
-                            generateMarkdownPreview={(markdown) =>
-                                Promise.resolve(<Markdown markdown={markdown} breaks disableEscapedText />)
-                            }
-                        />
-                    </div>
-                ) : (
-                    <div className="min-w-500">
-                        <ReactMde
-                            ref={mdeRef}
-                            classes={{
-                                reactMde: 'mark-down-editor-container dc__word-break',
-                                toolbar: 'mark-down-editor-toolbar tab-description',
-                                preview: 'mark-down-editor-preview pt-8',
-                                textArea: 'mark-down-editor-textarea-wrapper',
-                            }}
-                            getIcon={(commandName: string) => getEditorCustomIcon(commandName)}
-                            toolbarCommands={MARKDOWN_EDITOR_COMMANDS}
-                            value={modifiedDescriptionText}
-                            onChange={setModifiedDescriptionText}
-                            minEditorHeight={minEditorHeight}
-                            minPreviewHeight={150}
-                            selectedTab={editorView}
-                            onTabChange={handleTabChange}
-                            generateMarkdownPreview={(markdown: string) =>
-                                Promise.resolve(
-                                    <Markdown markdown={markdown || DEFAULT_MARKDOWN_EDITOR_PREVIEW_MESSAGE} breaks />,
-                                )
-                            }
-                            childProps={{
-                                writeButton: {
-                                    className: `tab-list__tab pointer fs-13 ${
-                                        editorView === MDEditorSelectedTabType.WRITE && 'cb-5 fw-6 active active-tab'
-                                    }`,
-                                },
-                                previewButton: {
-                                    className: `tab-list__tab pointer fs-13 ${
-                                        editorView === MDEditorSelectedTabType.PREVIEW && 'cb-5 fw-6 active active-tab'
-                                    }`,
-                                },
-                                textArea: {
-                                    tabIndex,
-                                },
-                            }}
-                        />
-                        {editorView === MDEditorSelectedTabType.WRITE && (
-                            <div className="form cluster__description-footer pt-12 pb-12">
-                                <div className="form__buttons dc__gap-16 px-16">
-                                    <Button
-                                        dataTestId="description-edit-cancel-button"
-                                        text="Cancel"
-                                        disabled={isLoading}
-                                        onClick={handleCancel}
-                                        variant={ButtonVariantType.secondary}
-                                        style={ButtonStyleType.neutral}
-                                    />
-                                    <Button
-                                        dataTestId="description-edit-save-button"
-                                        text="Save"
-                                        isLoading={isLoading}
-                                        onClick={handleSave}
-                                        buttonProps={{
-                                            type: 'submit',
-                                        }}
-                                    />
-                                </div>
+                        {updatedBy && _date && (
+                            <div className="flex left fw-4 cn-7 ml-8 fs-12 h-20">
+                                Last updated by &nbsp;
+                                <span className="dc__ellipsis-right dc__mxw-200">{updatedBy}</span>&nbsp;on {_date}
                             </div>
                         )}
+                        <button
+                            data-testid="description-edit-button"
+                            type="button"
+                            className="dc__align-right pencil-icon dc__transparent cursor flex fw-6 cn-7"
+                            aria-label="Edit"
+                            onClick={handleWriteDescription}
+                        >
+                            <Edit className="icon-dim-16 mr-4 scn-7" /> Edit
+                        </button>
                     </div>
-                )}
-            </div>
+
+                    <Markdown markdown={text} breaks disableEscapedText />
+                </div>
+            ) : (
+                <>
+                    <MDEditor
+                        value={modifiedValue}
+                        onChange={setModifiedValue}
+                        data-color-mode={appTheme === AppThemeType.dark ? 'dark' : 'light'}
+                        commands={myCommands}
+                        extraCommands={extraCommands}
+                        // commandsFilter={(cmd, isExtra) => {
+                        //     if (/(live|edit)/.test(cmd.name) && !isExtra) {
+                        //         return false
+                        //     }
+                        //     return cmd
+                        // }}
+                    />
+
+                    <div className="flexbox dc__content-end pt-12 pb-12 dc__contain--paint">
+                        <div className="form__buttons dc__gap-16 px-16">
+                            <Button
+                                dataTestId="description-edit-cancel-button"
+                                text="Cancel"
+                                disabled={isLoading}
+                                onClick={handleCancel}
+                                variant={ButtonVariantType.secondary}
+                                style={ButtonStyleType.neutral}
+                            />
+                            <Button
+                                dataTestId="description-edit-save-button"
+                                text="Save"
+                                isLoading={isLoading}
+                                onClick={handleSave}
+                                buttonProps={{
+                                    type: 'submit',
+                                }}
+                            />
+                        </div>
+                    </div>
+                </>
+            )}
         </div>
     )
 }
