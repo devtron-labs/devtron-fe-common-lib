@@ -329,7 +329,7 @@ export type InternalTableProps<
      */
     rowStartIconConfig?: Omit<IconsProps, 'dataTestId'>
 
-    onRowClick?: (row: RowType<RowData>) => void
+    onRowClick?: (row: RowType<RowData>, isExpandedRow: boolean) => void
 } & (
         | {
               /**

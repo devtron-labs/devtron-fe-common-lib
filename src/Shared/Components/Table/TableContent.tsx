@@ -290,7 +290,7 @@ const TableContent = <
 
                 setActiveRowIndex(visibleRowIndex)
 
-                onRowClick?.(row)
+                onRowClick?.(row, isExpandedRow)
             }
 
             const handleToggleBulkSelectionForRow = () => {
@@ -311,6 +311,8 @@ const TableContent = <
             const hasBulkOrExpandAction =
                 (isAnyRowExpandable && !isExpandedRow && !!(row as RowType<RowData>).expandableRows) ||
                 !!bulkSelectionReturnValue
+
+            const expandBtnOrRowStartIconGutterStickyConfig = getStickyColumnConfig(gridTemplateColumns, 0)
 
             return (
                 <div
@@ -336,13 +338,19 @@ const TableContent = <
                     tabIndex={-1}
                 >
                     {rowStartIconConfig && !isExpandedRow && (
-                        <div className="flex row-start-icon">
+                        <div
+                            className={`flex row-start-icon ${expandBtnOrRowStartIconGutterStickyConfig.className}`}
+                            style={{ left: expandBtnOrRowStartIconGutterStickyConfig.left }}
+                        >
                             <Icon {...rowStartIconConfig} />
                         </div>
                     )}
 
                     {!isExpandedRow && !!(row as RowType<RowData>).expandableRows ? (
-                        <div className="flex expand-row-btn">
+                        <div
+                            className={`flex expand-row-btn ${expandBtnOrRowStartIconGutterStickyConfig.className}`}
+                            style={{ left: expandBtnOrRowStartIconGutterStickyConfig.left }}
+                        >
                             <Button
                                 // NOTE: this dataTestId is being used in styles.scss
                                 dataTestId={`expand-row-${row.id}`}
@@ -366,14 +374,20 @@ const TableContent = <
                     {/* empty div needed for alignment; therefore hide if rowStartIconConfig (only applies to parent rows) is present */}
                     {isAnyRowExpandable &&
                         (isExpandedRow || (!(row as RowType<RowData>).expandableRows && !rowStartIconConfig)) && (
-                            <div className="dc__position-rel expanded-tree-line" />
+                            <div
+                                className={`dc__position-rel expanded-tree-line ${expandBtnOrRowStartIconGutterStickyConfig.className}`}
+                                style={{ left: expandBtnOrRowStartIconGutterStickyConfig.left }}
+                            />
                         )}
 
                     {visibleColumns.map(({ field, horizontallySticky: isStickyColumn, CellComponent }, index) => {
                         const isBulkActionGutter = field === BULK_ACTION_GUTTER_LABEL
                         const horizontallySticky = isStickyColumn || isBulkActionGutter
                         const { className: stickyClassName = '', left: stickyLeftValue = '' } = horizontallySticky
-                            ? getStickyColumnConfig(gridTemplateColumns, index)
+                            ? getStickyColumnConfig(
+                                  gridTemplateColumns,
+                                  index + (isAnyRowExpandable || rowStartIconConfig ? 1 : 0),
+                              )
                             : {}
 
                         if (isBulkActionGutter && !isExpandedRow) {
@@ -435,6 +449,8 @@ const TableContent = <
         })
     }
 
+    const expandAllBtnStickyConfig = getStickyColumnConfig(gridTemplateColumns, 0)
+
     return (
         <div
             {...shortcutContainerProps}
@@ -466,22 +482,27 @@ const TableContent = <
                                 }}
                             >
                                 {isAnyRowExpandable ? (
-                                    <Button
-                                        dataTestId="expand-all-rows"
-                                        icon={
-                                            <Icon
-                                                name="ic-expand-right-sm"
-                                                color={null}
-                                                rotateBy={areAllRowsExpanded ? 90 : 0}
-                                            />
-                                        }
-                                        ariaLabel="Expand/Collapse all rows"
-                                        showAriaLabelInTippy={false}
-                                        variant={ButtonVariantType.borderLess}
-                                        size={ComponentSizeType.xs}
-                                        style={ButtonStyleType.neutral}
-                                        onClick={toggleExpandAll}
-                                    />
+                                    <div
+                                        className={`flex ${expandAllBtnStickyConfig.className}`}
+                                        style={{ left: expandAllBtnStickyConfig.left }}
+                                    >
+                                        <Button
+                                            dataTestId="expand-all-rows"
+                                            icon={
+                                                <Icon
+                                                    name="ic-expand-right-sm"
+                                                    color={null}
+                                                    rotateBy={areAllRowsExpanded ? 90 : 0}
+                                                />
+                                            }
+                                            ariaLabel="Expand/Collapse all rows"
+                                            showAriaLabelInTippy={false}
+                                            variant={ButtonVariantType.borderLess}
+                                            size={ComponentSizeType.xs}
+                                            style={ButtonStyleType.neutral}
+                                            onClick={toggleExpandAll}
+                                        />
+                                    </div>
                                 ) : null}
 
                                 {visibleColumns.map(
@@ -501,7 +522,12 @@ const TableContent = <
                                         const isBulkActionGutter = field === BULK_ACTION_GUTTER_LABEL
                                         const horizontallySticky = isStickyColumn || isBulkActionGutter
                                         const { className: stickyClassName = '', left: stickyLeftValue = '' } =
-                                            horizontallySticky ? getStickyColumnConfig(gridTemplateColumns, index) : {}
+                                            horizontallySticky
+                                                ? getStickyColumnConfig(
+                                                      gridTemplateColumns,
+                                                      index + (isAnyRowExpandable ? 1 : 0),
+                                                  )
+                                                : {}
 
                                         if (field === BULK_ACTION_GUTTER_LABEL) {
                                             return (
