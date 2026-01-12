@@ -56,6 +56,8 @@ const InternalTable = <
     rowActionOnHoverConfig,
     pageSizeOptions,
     clearFilters: userGivenUrlClearFilters,
+    rowStartIconConfig,
+    onRowClick,
 }: InternalTableProps<RowData, FilterVariant, AdditionalProps>) => {
     const {
         sortBy,
@@ -158,7 +160,8 @@ const InternalTable = <
             searchKey,
             sortBy,
             sortOrder,
-            getRows,
+            // !TODO: functions in queryKey cannot trigger refetch
+            // getRows,
             offset,
             pageSize,
             JSON.stringify(otherFilters),
@@ -219,6 +222,8 @@ const InternalTable = <
                     stylesConfig={stylesConfig}
                     getRows={getRows}
                     totalRows={totalRows}
+                    rowStartIconConfig={rowStartIconConfig}
+                    onRowClick={onRowClick}
                 />
             </UseRegisterShortcutProvider>
         )

@@ -252,9 +252,12 @@ import { ReactComponent as ICSecurityPolicy } from '@IconsV2/ic-security-policy.
 import { ReactComponent as ICSecurityScan } from '@IconsV2/ic-security-scan.svg'
 import { ReactComponent as ICSecurityVulnerability } from '@IconsV2/ic-security-vulnerability.svg'
 import { ReactComponent as ICSelected } from '@IconsV2/ic-selected.svg'
+import { ReactComponent as ICSes } from '@IconsV2/ic-ses.svg'
 import { ReactComponent as ICShapes } from '@IconsV2/ic-shapes.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
+import { ReactComponent as ICSlack } from '@IconsV2/ic-slack.svg'
 import { ReactComponent as ICSlidersVertical } from '@IconsV2/ic-sliders-vertical.svg'
+import { ReactComponent as ICSmtp } from '@IconsV2/ic-smtp.svg'
 import { ReactComponent as ICSoftwareReleaseManagement } from '@IconsV2/ic-software-release-management.svg'
 import { ReactComponent as ICSortAscending } from '@IconsV2/ic-sort-ascending.svg'
 import { ReactComponent as ICSortDescending } from '@IconsV2/ic-sort-descending.svg'
@@ -308,6 +311,7 @@ import { ReactComponent as ICWarning } from '@IconsV2/ic-warning.svg'
 import { ReactComponent as ICWarningFill } from '@IconsV2/ic-warning-fill.svg'
 import { ReactComponent as ICWarningStroke } from '@IconsV2/ic-warning-stroke.svg'
 import { ReactComponent as ICWebhook } from '@IconsV2/ic-webhook.svg'
+import { ReactComponent as ICWebhookConfig } from '@IconsV2/ic-webhook-config.svg'
 import { ReactComponent as ICWifiSlash } from '@IconsV2/ic-wifi-slash.svg'
 import { ReactComponent as ICWorldGlobe } from '@IconsV2/ic-world-globe.svg'
 
@@ -568,9 +572,12 @@ export const iconMap = {
     'ic-security-scan': ICSecurityScan,
     'ic-security-vulnerability': ICSecurityVulnerability,
     'ic-selected': ICSelected,
+    'ic-ses': ICSes,
     'ic-shapes': ICShapes,
     'ic-shield-check': ICShieldCheck,
+    'ic-slack': ICSlack,
     'ic-sliders-vertical': ICSlidersVertical,
+    'ic-smtp': ICSmtp,
     'ic-software-release-management': ICSoftwareReleaseManagement,
     'ic-sort-ascending': ICSortAscending,
     'ic-sort-descending': ICSortDescending,
@@ -623,6 +630,7 @@ export const iconMap = {
     'ic-warning-fill': ICWarningFill,
     'ic-warning-stroke': ICWarningStroke,
     'ic-warning': ICWarning,
+    'ic-webhook-config': ICWebhookConfig,
     'ic-webhook': ICWebhook,
     'ic-wifi-slash': ICWifiSlash,
     'ic-world-globe': ICWorldGlobe,
