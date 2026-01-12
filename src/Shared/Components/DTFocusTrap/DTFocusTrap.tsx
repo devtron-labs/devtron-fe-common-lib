@@ -38,11 +38,24 @@ const DTFocusTrap = ({
         [onEscape, deactivateFocusOnEscape],
     )
 
+    // Focus escape key bind when focus trap is avoided
+    const handleEscapeKeyBind = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+            onEscape(e)
+        }
+    }
+
     useEffect(() => {
+        if (avoidFocusTrap) {
+            document.addEventListener('keydown', handleEscapeKeyBind)
+        }
         preventBodyScroll(true)
 
         return () => {
             preventBodyScroll(false)
+            if (avoidFocusTrap) {
+                document.removeEventListener('keydown', handleEscapeKeyBind)
+            }
         }
     }, [])
 
