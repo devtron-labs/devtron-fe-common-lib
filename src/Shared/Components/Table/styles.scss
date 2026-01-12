@@ -69,11 +69,6 @@
             outline: none;
         }
 
-        &--expanded-row,
-        &--expanded-row > * {
-            background-color: var(--N100);
-        }
-
         &:hover,
         &:hover > *,
         &--active,
@@ -138,7 +133,13 @@
         }
     }
 
-    &__expanse {
-        background-color: var(--bg-hover-opaque);
+    .expanded-tree-line::after {
+        content: '';
+        width: 1px;
+        height: 100%;
+        background: var(--N100);
+        left: calc(50% - 1px); // offset to left by width for perfect centering
+        top: 0;
+        position: absolute;
     }
 }

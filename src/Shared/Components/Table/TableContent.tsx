@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { MouseEvent, useEffect, useMemo, useRef, useState } from 'react'
 
 import { Checkbox } from '@Common/Checkbox'
 import { DEFAULT_BASE_PAGE_SIZE } from '@Common/Constants'
@@ -29,7 +29,15 @@ import { ComponentSizeType } from '@Shared/constants'
 import { BulkSelection } from '../BulkSelection'
 import BulkSelectionActionWidget from './BulkSelectionActionWidget'
 import { ACTION_GUTTER_SIZE, BULK_ACTION_GUTTER_LABEL, EVENT_TARGET, SHIMMER_DUMMY_ARRAY } from './constants'
-import { BulkActionStateType, FiltersTypeEnum, PaginationEnum, RowType, SignalsType, TableContentProps } from './types'
+import {
+    BulkActionStateType,
+    ExpandedRowPrefixType,
+    FiltersTypeEnum,
+    PaginationEnum,
+    RowType,
+    SignalsType,
+    TableContentProps,
+} from './types'
 import useTableWithKeyboardShortcuts from './useTableWithKeyboardShortcuts'
 import { getStickyColumnConfig, scrollToShowActiveElementIfNeeded } from './utils'
 
@@ -57,6 +65,7 @@ const TableContent = <
     getRows,
     totalRows,
     rowStartIconConfig,
+    onRowClick,
 }: TableContentProps<RowData, FilterVariant, AdditionalProps>) => {
     const rowsContainerRef = useRef<HTMLDivElement>(null)
     const parentRef = useRef<HTMLDivElement>(null)
@@ -194,7 +203,9 @@ const TableContent = <
         handleSorting(newSortBy)
     }
 
-    const toggleExpandAll = () => {
+    const toggleExpandAll = (e: MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation()
+
         setExpandState(
             visibleRows.reduce((acc, row) => {
                 if ((row as RowType<RowData>).expandableRows) {
@@ -272,21 +283,29 @@ const TableContent = <
         return visibleRows.map((row, visibleRowIndex) => {
             const isRowActive = activeRowIndex === visibleRowIndex
             const isRowBulkSelected = !!bulkSelectionState[row.id] || isBulkSelectionApplied
-            const isExpandedRow = row.id.startsWith('expanded-row')
+            const isExpandedRow = row.id.startsWith('expanded-row-' satisfies ExpandedRowPrefixType)
 
-            const handleChangeActiveRowIndex = () => {
+            const handleChangeActiveRowIndex = (e: MouseEvent<HTMLDivElement>) => {
+                e.stopPropagation()
+
                 setActiveRowIndex(visibleRowIndex)
+
+                onRowClick?.(row)
             }
 
             const handleToggleBulkSelectionForRow = () => {
                 handleToggleBulkSelectionOnRow(row)
             }
 
-            const toggleExpandRow = () => {
-                setExpandState({
-                    ...expandState,
-                    [row.id]: !expandState[row.id],
-                })
+            const toggleExpandRow = (e: MouseEvent<HTMLButtonElement>) => {
+                e.stopPropagation()
+
+                if ((row as RowType<RowData>).expandableRows) {
+                    setExpandState({
+                        ...expandState,
+                        [row.id]: !expandState[row.id],
+                    })
+                }
             }
 
             const hasBulkOrExpandAction =
@@ -306,7 +325,9 @@ const TableContent = <
                         isRowBulkSelected ? 'generic-table__row--bulk-selected' : ''
                     } ${isExpandedRow ? 'generic-table__row--expanded-row' : ''} ${
                         rowStartIconConfig && hasBulkOrExpandAction ? 'with-start-icon-and-bulk-or-expand-action' : ''
-                    } ${!isExpandedRow && expandState[row.id] ? 'generic-table__row--is-expanded' : ''}`}
+                    } ${!isExpandedRow && expandState[row.id] ? 'generic-table__row--is-expanded' : ''} ${
+                        onRowClick ? 'pointer' : ''
+                    }`}
                     style={{
                         gridTemplateColumns,
                     }}
@@ -332,7 +353,7 @@ const TableContent = <
                                         rotateBy={expandState[row.id] ? 90 : 0}
                                     />
                                 }
-                                ariaLabel="Expand row"
+                                ariaLabel="Expand/Collapse row"
                                 showAriaLabelInTippy={false}
                                 variant={ButtonVariantType.borderLess}
                                 size={ComponentSizeType.xs}
@@ -345,7 +366,7 @@ const TableContent = <
                     {/* empty div needed for alignment; therefore hide if rowStartIconConfig (only applies to parent rows) is present */}
                     {isAnyRowExpandable &&
                         (isExpandedRow || (!(row as RowType<RowData>).expandableRows && !rowStartIconConfig)) && (
-                            <div />
+                            <div className="dc__position-rel expanded-tree-line" />
                         )}
 
                     {visibleColumns.map(({ field, horizontallySticky: isStickyColumn, CellComponent }, index) => {
@@ -388,6 +409,7 @@ const TableContent = <
                                         isRowActive={isRowActive}
                                         isExpandedRow={isExpandedRow}
                                         isRowInExpandState={expandState[row.id]}
+                                        expandRowCallback={toggleExpandRow}
                                         {...additionalProps}
                                     />
                                 ) : (
@@ -453,7 +475,7 @@ const TableContent = <
                                                 rotateBy={areAllRowsExpanded ? 90 : 0}
                                             />
                                         }
-                                        ariaLabel="Expand row"
+                                        ariaLabel="Expand/Collapse all rows"
                                         showAriaLabelInTippy={false}
                                         variant={ButtonVariantType.borderLess}
                                         size={ComponentSizeType.xs}

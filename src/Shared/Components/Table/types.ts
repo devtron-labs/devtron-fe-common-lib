@@ -95,8 +95,10 @@ type CommonRowType<Data extends unknown> = {
     data: Data
 }
 
+export type ExpandedRowPrefixType = 'expanded-row-'
+
 export type ExpandedRowType<Data extends unknown> = CommonRowType<Data> & {
-    id: `expanded-row-${string}`
+    id: `${ExpandedRowPrefixType}${string}`
 }
 
 export type RowType<Data extends unknown> = CommonRowType<Data> & {
@@ -128,6 +130,8 @@ export type CellComponentProps<
         isRowActive: boolean
         isExpandedRow: boolean
         isRowInExpandState: boolean
+        // NOTE: no action if the row is not expandable
+        expandRowCallback: (e: MouseEvent<HTMLButtonElement>) => void
     }
 
 export type RowActionsOnHoverComponentProps<
@@ -324,6 +328,8 @@ export type InternalTableProps<
      * until user hovers over the row or the row has focus from keyboard navigation
      */
     rowStartIconConfig?: Omit<IconsProps, 'dataTestId'>
+
+    onRowClick?: (row: RowType<RowData>) => void
 } & (
         | {
               /**
@@ -408,6 +414,7 @@ export type TableProps<
     | 'pageSizeOptions'
     | 'clearFilters'
     | 'rowStartIconConfig'
+    | 'onRowClick'
 >
 
 export type BulkActionStateType = string | null
@@ -459,6 +466,7 @@ export interface TableContentProps<
             | 'pageSizeOptions'
             | 'getRows'
             | 'rowStartIconConfig'
+            | 'onRowClick'
         >,
         RowsResultType<RowData> {
     areFilteredRowsLoading: boolean
