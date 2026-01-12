@@ -51,10 +51,30 @@ export interface SidePanelConfig {
     isExpandedView?: boolean
 }
 
-type AIAgentContextType = {
-    path: string
-    context: Record<string, string>
+export enum AIAgentContextSourceType {
+    APP_DETAILS = 'app-details',
+    RESOURCE_BROWSER_CLUSTER = 'resource-browser-cluster',
 }
+
+export type AIAgentContextType =
+    | {
+          source: AIAgentContextSourceType.APP_DETAILS
+          data: {
+              appId: number
+              envId: number
+              appName: string
+              envName: string
+              clusterId: number
+              appType: 'devtronApp' | 'devtronHelmChart'
+          }
+      }
+    | {
+          source: AIAgentContextSourceType.RESOURCE_BROWSER_CLUSTER
+          data: {
+              clusterId: number
+              clusterName: string
+          }
+      }
 
 export interface TempAppWindowConfig {
     /** Whether the temporary window is open */
