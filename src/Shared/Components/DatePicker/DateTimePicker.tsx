@@ -173,7 +173,8 @@ const DateTimePicker = ({
 
                     <DayPicker
                         mode="range"
-                        navLayout="around"
+                        // TODO: Abhishek - Verify if navLayout is needed here
+                        // navLayout="around"
                         selected={{
                             from: dateRange.from,
                             to: dateRange.to,
@@ -189,7 +190,8 @@ const DateTimePicker = ({
         return (
             <DayPicker
                 mode="single"
-                navLayout="around"
+                // TODO: Abhishek - Verify if navLayout is needed here
+                // navLayout="around"
                 selected={dateObject}
                 onSelect={handleSingleDateSelect}
                 disabled={getDisabledState()}
