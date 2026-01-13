@@ -120,7 +120,7 @@ export const AppStatusBody = ({
         const debugAgentContext = aiAgentContext
             ? ({
                   ...aiAgentContext,
-                  prompt: `Why is application '${appDetails.appName}' of '${appDetails.environmentName}' env ${appStatus}?`,
+                  prompt: `Why is application '${appDetails.appName}' of '${appDetails.environmentName}' env in ${appStatus} state?`,
                   data: {
                       ...aiAgentContext.data,
                       ...(debugNode ? { debugNodeKind: debugNode.kind, debugNodeName: debugNode.name } : {}),
