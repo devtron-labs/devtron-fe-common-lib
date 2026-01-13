@@ -20,6 +20,7 @@ import { getAIAnalyticsEvents } from '@Common/Helper'
 import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 import { getAppDetailsURL } from '@Shared/Helpers'
+import { MainContext, useMainContext } from '@Shared/Providers'
 
 import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
 import { DeploymentStatusDetailBreakdown } from '../CICDHistory'
@@ -86,7 +87,10 @@ export const AppStatusBody = ({
     deploymentStatusDetailsBreakdownData,
     selectedTab,
     debugWithAIButton: ExplainWithAIButton,
+    handleClose,
 }: AppStatusBodyProps) => {
+    const { aiAgentContext } = useMainContext()
+
     const appStatus = appDetails.resourceTree?.status?.toUpperCase() || appDetails.appStatus
 
     const getAppStatusInfoCardItems = (): (Omit<ComponentProps<typeof InfoCardItem>, 'isLast'> & { id: string })[] => {
@@ -101,6 +105,32 @@ export const AppStatusBody = ({
         )
         const debugObject = `${debugNode?.kind}/${debugNode?.name}`
 
+        const intelligenceConfig: MainContext['intelligenceConfig'] = {
+            clusterId: appDetails.clusterId,
+            metadata: {
+                ...(debugNode ? { object: debugObject } : { message }),
+                namespace: appDetails.namespace,
+                status: debugNode?.health?.status ?? appStatus,
+            },
+            prompt: `Debug ${message || 'error'} ${debugNode ? `of ${debugObject}` : ''} in ${appDetails.namespace}`,
+            analyticsCategory: getAIAnalyticsEvents('APP_STATUS', appDetails.appType),
+        }
+
+        // Have to add this to handle case of devtron-stack manager and software distribution hub.
+        const debugAgentContext = aiAgentContext
+            ? ({
+                  ...aiAgentContext,
+                  prompt: `Why is application '${appDetails.appName}' of '${appDetails.environmentName}' env ${appStatus}?`,
+                  data: {
+                      ...aiAgentContext.data,
+                      ...(debugNode ? { debugNodeKind: debugNode.kind, debugNodeName: debugNode.name } : {}),
+                      ...(message ? { debugError: message } : {}),
+                      namespace: appDetails.namespace,
+                      status: debugNode?.health?.status ?? appStatus,
+                  },
+              } as MainContext['debugAgentContext'])
+            : null
+
         return [
             {
                 id: 'app-status-row',
@@ -112,19 +142,13 @@ export const AppStatusBody = ({
                         envId={appDetails.environmentId}
                         actionItem={
                             ExplainWithAIButton &&
+                            debugAgentContext &&
                             appStatus?.toLowerCase() !== StatusType.HEALTHY.toLowerCase() &&
                             (debugNode || message) ? (
                                 <ExplainWithAIButton
-                                    intelligenceConfig={{
-                                        clusterId: appDetails.clusterId,
-                                        metadata: {
-                                            ...(debugNode ? { object: debugObject } : { message }),
-                                            namespace: appDetails.namespace,
-                                            status: debugNode?.health?.status ?? appStatus,
-                                        },
-                                        prompt: `Debug ${message || 'error'} ${debugNode ? `of ${debugObject}` : ''} in ${appDetails.namespace}`,
-                                        analyticsCategory: getAIAnalyticsEvents('APP_STATUS', appDetails.appType),
-                                    }}
+                                    intelligenceConfig={intelligenceConfig}
+                                    debugAgentContext={debugAgentContext}
+                                    onClick={handleClose}
                                 />
                             ) : null
                         }

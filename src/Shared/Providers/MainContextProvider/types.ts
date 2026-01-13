@@ -56,25 +56,60 @@ export enum AIAgentContextSourceType {
     RESOURCE_BROWSER_CLUSTER = 'resource-browser-cluster',
 }
 
+export type AIAgentAppType =
+    | 'devtronApp'
+    | 'devtronHelmChart'
+    | 'externalHelmChart'
+    | 'externalArgoApp'
+    | 'externalFluxApp'
+
+type AIAgentAppDataMasterType = {
+    appId: number | string
+    appName: string
+    envId: number
+    envName: string
+    clusterId: number
+    namespace: string
+    appType: AIAgentAppType
+    fluxAppDeploymentType: string
+}
+
+type AIAgentAppDataType<TAppType extends AIAgentAppType, TRequiredFields extends keyof AIAgentAppDataMasterType> = Pick<
+    AIAgentAppDataMasterType,
+    TRequiredFields
+> & {
+    [K in Exclude<keyof AIAgentAppDataMasterType, TRequiredFields | 'appType'>]?: never
+} & {
+    appType: TAppType
+}
+
 export type AIAgentContextType =
     | {
           source: AIAgentContextSourceType.APP_DETAILS
-          data: {
-              appId: number
-              envId: number
-              appName: string
-              envName: string
-              clusterId: number
-              appType: 'devtronApp' | 'devtronHelmChart'
-          }
+          data:
+              | AIAgentAppDataType<
+                    'devtronApp' | 'devtronHelmChart',
+                    'appId' | 'appName' | 'envId' | 'envName' | 'clusterId'
+                >
+              | AIAgentAppDataType<'externalHelmChart', 'appId' | 'appName' | 'clusterId' | 'namespace'>
+              | AIAgentAppDataType<'externalArgoApp', 'appName' | 'clusterId' | 'namespace'>
+              | (AIAgentAppDataType<
+                    'externalFluxApp',
+                    'appName' | 'clusterId' | 'namespace' | 'fluxAppDeploymentType'
+                > &
+                    Record<string, unknown>)
       }
     | {
           source: AIAgentContextSourceType.RESOURCE_BROWSER_CLUSTER
           data: {
               clusterId: number
               clusterName: string
-          }
+          } & Record<string, unknown>
       }
+
+export type DebugAgentContextType = AIAgentContextType & {
+    prompt?: string
+}
 
 export interface TempAppWindowConfig {
     /** Whether the temporary window is open */
@@ -139,6 +174,8 @@ type CommonMainContextProps = {
     setLicenseData: Dispatch<SetStateAction<DevtronLicenseInfo>>
     canFetchHelmAppStatus: boolean
     setIntelligenceConfig: Dispatch<SetStateAction<IntelligenceConfig>>
+    debugAgentContext: DebugAgentContextType | null
+    setDebugAgentContext: (aiAgentContext: DebugAgentContextType | null) => void
     setAIAgentContext: (aiAgentContext: AIAgentContextType) => void
     setSidePanelConfig: Dispatch<SetStateAction<SidePanelConfig>>
 } & Pick<EnvironmentDataValuesDTO, 'isResourceRecommendationEnabled'>
