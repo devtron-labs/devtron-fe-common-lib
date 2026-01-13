@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useState } from 'react'
+import { useMemo, useState } from 'react'
 import MDEditor, { commands } from '@uiw/react-md-editor'
 
 import { ReactComponent as BoldIcon } from '@Icons/ic-bold.svg'
@@ -48,17 +48,6 @@ import { GenericDescriptionProps } from './types'
 import { getParsedUpdatedOnDate } from './utils'
 
 import './genericDescription.scss'
-
-const myCommands = [
-    {
-        ...commands.codeEdit,
-        icon: <span className="fs-13 fw-6 lh-20">Write</span>,
-    },
-    {
-        ...commands.codePreview,
-        icon: <span className="fs-13 fw-6 lh-20">Preview</span>,
-    },
-]
 
 const extraCommands = [
     {
@@ -109,7 +98,7 @@ const extraCommands = [
         ...commands.help,
         icon: (
             <div className="flex dc__no-shrink">
-                <Icon name="ic-help-outline" color="N700" size={12} />
+                <Icon name="ic-help-outline" color="N700" size={16} />
             </div>
         ),
     },
@@ -127,9 +116,33 @@ const GenericDescription = ({
     const [modifiedValue, setModifiedValue] = useState(text || '')
     const [isEditView, setIsEditView] = useState(false)
 
+    const [editorViewState, setEditorViewState] = useState<'write' | 'preview'>('write')
+
     const { appTheme } = useTheme()
 
     const _date = getParsedUpdatedOnDate(updatedOn)
+
+    const myCommands = useMemo(
+        () => [
+            {
+                ...commands.codeEdit,
+                icon: <span className="fs-13 fw-6 lh-20">Write</span>,
+                execute: (...props) => {
+                    setEditorViewState('write')
+                    return commands.codeEdit.execute(...props)
+                },
+            } satisfies typeof commands.codeEdit,
+            {
+                ...commands.codePreview,
+                icon: <span className="fs-13 fw-6 lh-20">Preview</span>,
+                execute: (...props) => {
+                    setEditorViewState('preview')
+                    return commands.codePreview.execute(...props)
+                },
+            } satisfies typeof commands.codePreview,
+        ],
+        [],
+    )
 
     const handleCancel = () => {
         const isDescriptionModified = modifiedValue.trim() !== (text || '').trim()
@@ -193,6 +206,10 @@ const GenericDescription = ({
         )
     }
 
+    const renderMarkdown = (source: string) => (
+        <Markdown markdown={source} breaks disableEscapedText className="mh-150 pt-8" />
+    )
+
     return (
         <div
             data-testid="generic-description-wrapper"
@@ -222,7 +239,7 @@ const GenericDescription = ({
                         </button>
                     </div>
 
-                    <Markdown markdown={text} breaks disableEscapedText />
+                    {renderMarkdown(text)}
                 </div>
             ) : (
                 <>
@@ -232,12 +249,10 @@ const GenericDescription = ({
                         data-color-mode={appTheme === AppThemeType.dark ? 'dark' : 'light'}
                         commands={myCommands}
                         extraCommands={extraCommands}
-                        // commandsFilter={(cmd, isExtra) => {
-                        //     if (/(live|edit)/.test(cmd.name) && !isExtra) {
-                        //         return false
-                        //     }
-                        //     return cmd
-                        // }}
+                        preview={editorViewState === 'preview' ? 'preview' : 'edit'}
+                        components={{
+                            preview: renderMarkdown,
+                        }}
                     />
 
                     <div className="flexbox dc__content-end pt-12 pb-12 dc__contain--paint">
