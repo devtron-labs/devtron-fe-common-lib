@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { createContext, useContext, useMemo, useState } from 'react'
+import React, { createContext, PropsWithChildren, useContext, useMemo, useState } from 'react'
 
 import { UseUserEmailContextType } from './types'
 
@@ -22,7 +22,7 @@ const context = createContext<UseUserEmailContextType>(null)
 
 export const useUserEmail = () => useContext(context)
 
-export const UserEmailProvider: React.FC<{}> = ({ children }) => {
+export const UserEmailProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     const [email, setEmail] = useState<string>('')
 
     const providerValue = useMemo(

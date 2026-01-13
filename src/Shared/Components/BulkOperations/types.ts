@@ -53,7 +53,7 @@ export type OtherStatusOperationType = {
 
 export type BulkOperationResultType = {
     message?: string
-    renderContentAtResultRowEnd?: () => void
+    renderContentAtResultRowEnd?: () => ReactNode
 } & (FailedOperationType | OtherStatusOperationType) &
     Pick<BulkOperation, 'name' | 'additionalKeys'>
 
@@ -98,7 +98,8 @@ export type BulkOperationModalProps = {
     Pick<DrawerProps, 'disableTransition'>
 
 export interface BulkOperationsResultModalProps
-    extends Pick<BulkOperationModalProps, 'handleModalClose' | 'getResultsChartSummaryText' | 'disableTransition'>,
+    extends
+        Pick<BulkOperationModalProps, 'handleModalClose' | 'getResultsChartSummaryText' | 'disableTransition'>,
         Pick<BulkOperationModalProps['textConfig'], 'resultsHeader'> {
     resultsStore: OperationResultStoreType
     apiCallInProgress: boolean

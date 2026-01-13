@@ -120,15 +120,19 @@ const Table: React.FC<TablePropsType> = ({ headers, rows, defaultSortIndex, hasE
                             </button>
                         )}
                         <div className="flexbox dc__content-space w-100">
-                            {row.cells.map((cell, index) => (
-                                <div
-                                    className="flexbox dc__align-start dc__content-start fs-13 lh-20 fw-4 dc__word-break"
-                                    style={{ width: `${headers[index].width}px` }}
-                                    data-testid={`security-table-cell-${rowIndex}:${index}`}
-                                >
-                                    {cell.component || cell.cellContent}
-                                </div>
-                            ))}
+                            {row.cells.map((cell, index) => {
+                                const CellComponent =
+                                    cell.component ?? (typeof cell.cellContent === 'string' ? cell.cellContent : null)
+                                return CellComponent ? (
+                                    <div
+                                        className="flexbox dc__align-start dc__content-start fs-13 lh-20 fw-4 dc__word-break"
+                                        style={{ width: `${headers[index].width}px` }}
+                                        data-testid={`security-table-cell-${rowIndex}:${index}`}
+                                    >
+                                        {CellComponent}
+                                    </div>
+                                ) : null
+                            })}
                         </div>
                     </div>
                     {hasExpandableRows && rowExpandedStateArray[rowIndex] && row.expandableComponent}
