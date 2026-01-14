@@ -20,15 +20,8 @@ export interface GenericDescriptionProps {
     updatedOn?: string
     updateDescription: (string) => Promise<void>
     title: string
-    tabIndex?: number
-    minEditorHeight?: number
     emptyStateConfig?: {
         img: string
         subtitle: JSX.Element
     }
-}
-
-export enum MDEditorSelectedTabType {
-    WRITE = 'write',
-    PREVIEW = 'preview',
 }
