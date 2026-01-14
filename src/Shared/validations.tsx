@@ -15,7 +15,8 @@
  */
 
 import { parse as parseCronExpression } from '@datasert/cronjs-parser'
-import { customizeValidator } from '@rjsf/validator-ajv8'
+import { customizeValidator, CustomValidatorOptionsType } from '@rjsf/validator-ajv8'
+import type AjvInstance from 'ajv'
 import { parse } from 'yaml'
 
 import { PATTERNS } from '@Common/Constants'
@@ -383,7 +384,12 @@ export const validateSemanticVersioning = (version: string): ValidationResponseT
 export const validateDisplayName = (name: string): ValidationResponseType =>
     validateStringLength(name, DISPLAY_NAME_CONSTRAINTS.MAX_LIMIT, DISPLAY_NAME_CONSTRAINTS.MIN_LIMIT)
 
-export const SCHEMA_07_VALIDATOR_STRICT = customizeValidator({
+type AjvEnabledValidator = ReturnType<typeof customizeValidator> & { ajv: AjvInstance }
+
+const createAjvValidator = (options?: CustomValidatorOptionsType): AjvEnabledValidator =>
+    customizeValidator(options) as AjvEnabledValidator
+
+export const SCHEMA_07_VALIDATOR_STRICT = createAjvValidator({
     ajvOptionsOverrides: {
         strict: true,
         allowUnionTypes: true,
@@ -400,7 +406,7 @@ SCHEMA_07_VALIDATOR_STRICT.ajv.addKeyword('updatePath')
 SCHEMA_07_VALIDATOR_STRICT.ajv.addFormat('memory', /^\d+(\.\d+)?(Ki|Mi|Gi|Ti|Pi|Ei|KiB|MiB|GiB|TiB|PiB|EiB)?$/)
 SCHEMA_07_VALIDATOR_STRICT.ajv.addFormat('cpu', /^(?:\d+(\.\d+)?|(\d+)(m))$/)
 
-export const SCHEMA_07_VALIDATOR = customizeValidator({ ajvOptionsOverrides: { strict: false } })
+export const SCHEMA_07_VALIDATOR = createAjvValidator({ ajvOptionsOverrides: { strict: false } })
 SCHEMA_07_VALIDATOR.ajv.addKeyword('hidden')
 SCHEMA_07_VALIDATOR.ajv.addKeyword({
     keyword: 'placeholder',
