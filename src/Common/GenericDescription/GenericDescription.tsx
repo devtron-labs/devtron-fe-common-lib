@@ -15,7 +15,7 @@
  */
 
 import { useMemo, useState } from 'react'
-import MDEditor, { commands } from '@uiw/react-md-editor'
+import MDEditor, { commands, MDEditorProps } from '@uiw/react-md-editor'
 
 import { ReactComponent as BoldIcon } from '@Icons/ic-bold.svg'
 import { ReactComponent as CheckedListIcon } from '@Icons/ic-checked-list.svg'
@@ -31,7 +31,6 @@ import { ReactComponent as StrikethroughIcon } from '@Icons/ic-strikethrough.svg
 import { ReactComponent as UnorderedListIcon } from '@Icons/ic-unordered-list.svg'
 
 import {
-    AppThemeType,
     Button,
     ButtonStyleType,
     ButtonVariantType,
@@ -39,10 +38,9 @@ import {
     Icon,
     ToastManager,
     ToastVariantType,
-    useTheme,
 } from '../../Shared'
 import Markdown from '../Markdown/MarkDown'
-import { showError } from '..'
+import { showError, Tooltip } from '..'
 import { DESCRIPTION_EMPTY_ERROR_MSG, DESCRIPTION_UNSAVED_CHANGES_MSG } from './constant'
 import { GenericDescriptionProps } from './types'
 import { getParsedUpdatedOnDate } from './utils'
@@ -94,14 +92,6 @@ const extraCommands = [
         ...commands.checkedListCommand,
         icon: <CheckedListIcon className="icon-dim-16 flex" />,
     },
-    {
-        ...commands.help,
-        icon: (
-            <div className="flex dc__no-shrink">
-                <Icon name="ic-help-outline" color="N700" size={16} />
-            </div>
-        ),
-    },
 ]
 
 const GenericDescription = ({
@@ -118,15 +108,13 @@ const GenericDescription = ({
 
     const [editorViewState, setEditorViewState] = useState<'write' | 'preview'>('write')
 
-    const { appTheme } = useTheme()
-
     const _date = getParsedUpdatedOnDate(updatedOn)
 
     const myCommands = useMemo(
         () => [
             {
                 ...commands.codeEdit,
-                icon: <span className="fs-13 fw-6 lh-20">Write</span>,
+                icon: <span className="fs-13 fw-4 lh-20">Write</span>,
                 execute: (...props) => {
                     setEditorViewState('write')
                     return commands.codeEdit.execute(...props)
@@ -134,7 +122,7 @@ const GenericDescription = ({
             } satisfies typeof commands.codeEdit,
             {
                 ...commands.codePreview,
-                icon: <span className="fs-13 fw-6 lh-20">Preview</span>,
+                icon: <span className="fs-13 fw-4 lh-20">Preview</span>,
                 execute: (...props) => {
                     setEditorViewState('preview')
                     return commands.codePreview.execute(...props)
@@ -207,8 +195,46 @@ const GenericDescription = ({
     }
 
     const renderMarkdown = (source: string) => (
-        <Markdown markdown={source} breaks disableEscapedText className="mh-150 pt-8" />
+        <Markdown markdown={source} breaks disableEscapedText className="mh-150 pt-8 fs-14 fw-4 cn-9" />
     )
+
+    const renderToolbar: MDEditorProps['components']['toolbar'] = (
+        command,
+        disabled,
+        executeCommand: (command, name) => void,
+        index: number,
+    ) => {
+        if (command.name === 'edit' || command.name === 'preview') {
+            return (
+                <button
+                    key={index}
+                    type="button"
+                    className="markdown-editor__tab-button flex dc__transparent p-4"
+                    onClick={() => executeCommand(command, command.name)}
+                    disabled={disabled}
+                >
+                    {command.icon}
+                </button>
+            )
+        }
+        return (
+            <Tooltip
+                key={index}
+                alwaysShowTippyOnHover={!!command.buttonProps?.title}
+                content={command.buttonProps?.title}
+                placement="top"
+            >
+                <button
+                    type="button"
+                    className="flex dc__transparent p-4 mr-4"
+                    onClick={() => executeCommand(command, command.name)}
+                    disabled={disabled}
+                >
+                    {command.icon}
+                </button>
+            </Tooltip>
+        )
+    }
 
     return (
         <div
@@ -246,16 +272,16 @@ const GenericDescription = ({
                     <MDEditor
                         value={modifiedValue}
                         onChange={setModifiedValue}
-                        data-color-mode={appTheme === AppThemeType.dark ? 'dark' : 'light'}
                         commands={myCommands}
                         extraCommands={extraCommands}
                         preview={editorViewState === 'preview' ? 'preview' : 'edit'}
                         components={{
                             preview: renderMarkdown,
+                            toolbar: renderToolbar,
                         }}
                     />
 
-                    <div className="flexbox dc__content-end pt-12 pb-12 dc__contain--paint">
+                    <div className="flexbox dc__content-end pt-12 pb-12 dc__contain--paint border__primary--top">
                         <div className="form__buttons dc__gap-16 px-16">
                             <Button
                                 dataTestId="description-edit-cancel-button"
