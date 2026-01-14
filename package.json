@@ -81,9 +81,9 @@
         "vite-tsconfig-paths": "5.0.1"
     },
     "peerDependencies": {
-        "@rjsf/core": "^5.13.3",
-        "@rjsf/utils": "^5.13.3",
-        "@rjsf/validator-ajv8": "^5.13.3",
+        "@rjsf/core": "^6.2.4",
+        "@rjsf/utils": "^6.2.4",
+        "@rjsf/validator-ajv8": "^6.2.4",
         "@typeform/embed-react": "2.20.0",
         "dompurify": "^3.2.4",
         "patch-package": "^8.0.0",
