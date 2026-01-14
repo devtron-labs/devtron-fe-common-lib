@@ -33,6 +33,8 @@ import { useBulkSelection, UseBulkSelectionProps } from '../BulkSelection'
 export interface UseFiltersReturnType extends UseStateFiltersReturnType<string> {}
 
 export enum SignalEnum {
+    COLLAPSE_ROW = 'collapse-row',
+    EXPAND_ROW = 'expand-row',
     ENTER_PRESSED = 'enter-pressed',
     DELETE_PRESSED = 'delete-pressed',
     ESCAPE_PRESSED = 'escape-pressed',

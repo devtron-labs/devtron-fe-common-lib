@@ -76,6 +76,10 @@
             outline: none;
         }
 
+        &--expanded-row:has(+ .generic-table__row--expanded-row) {
+            border-bottom: 0px;
+        }
+
         &:hover,
         &:hover > *,
         &--active,

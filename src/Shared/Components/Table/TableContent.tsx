@@ -35,6 +35,7 @@ import {
     FiltersTypeEnum,
     PaginationEnum,
     RowType,
+    SignalEnum,
     SignalsType,
     TableContentProps,
 } from './types'
@@ -189,7 +190,7 @@ const TableContent = <
 
     useEffectAfterMount(() => {
         setActiveRowIndex(0)
-    }, [offset, visibleRows])
+    }, [offset])
 
     useEffect(() => {
         setIdentifiers?.(
@@ -203,6 +204,36 @@ const TableContent = <
     const getTriggerSortingHandler = (newSortBy: string) => () => {
         handleSorting(newSortBy)
     }
+
+    useEffect(() => {
+        if (!isAnyRowExpandable) {
+            return () => {}
+        }
+
+        const getExpandCollapseRowHandler =
+            (state: boolean) =>
+            ({ detail: { activeRowData } }) => {
+                if ((activeRowData as RowType<RowData>).expandableRows) {
+                    setExpandState({
+                        ...expandState,
+                        [activeRowData.id]: state,
+                    })
+                }
+            }
+
+        const handleExpandRow = getExpandCollapseRowHandler(true)
+        const handleCollapseRow = getExpandCollapseRowHandler(false)
+
+        const signals = EVENT_TARGET as SignalsType
+
+        signals.addEventListener(SignalEnum.EXPAND_ROW, handleExpandRow)
+        signals.addEventListener(SignalEnum.COLLAPSE_ROW, handleCollapseRow)
+
+        return () => {
+            signals.removeEventListener(SignalEnum.EXPAND_ROW, handleExpandRow)
+            signals.removeEventListener(SignalEnum.COLLAPSE_ROW, handleCollapseRow)
+        }
+    }, [isAnyRowExpandable])
 
     const toggleExpandAll = (e: MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation()
