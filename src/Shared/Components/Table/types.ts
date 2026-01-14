@@ -237,7 +237,11 @@ export type ViewWrapperProps<
             : {})
 >
 
-type FilterConfig<FilterVariant extends FiltersTypeEnum, RowData extends unknown> = {
+type FilterConfig<
+    FilterVariant extends FiltersTypeEnum,
+    RowData extends unknown,
+    AdditionalProps extends Record<string, any>,
+> = {
     filtersVariant: FilterVariant
     /**
      * Props for useUrlFilters/useStateFilters hooks
@@ -251,12 +255,14 @@ type FilterConfig<FilterVariant extends FiltersTypeEnum, RowData extends unknown
      */
     filter: FilterVariant extends FiltersTypeEnum.NONE
         ? null
-        : (row: RowType<RowData>, filterData: UseFiltersReturnType) => boolean
+        : (row: RowType<RowData>, filterData: UseFiltersReturnType, additionalProps: AdditionalProps) => boolean
     clearFilters?: FilterVariant extends FiltersTypeEnum.URL
         ? () => void
         : FilterVariant extends FiltersTypeEnum.STATE
           ? never
           : never
+
+    areFiltersApplied?: FilterVariant extends FiltersTypeEnum.NONE ? never : boolean
 }
 
 export type InternalTableProps<
@@ -360,7 +366,7 @@ export type InternalTableProps<
               pageSizeOptions?: never
           }
     ) &
-    FilterConfig<FilterVariant, RowData>
+    FilterConfig<FilterVariant, RowData, AdditionalProps>
 
 export type UseResizableTableConfigWrapperProps<
     RowData extends unknown,
