@@ -14,20 +14,10 @@
  * limitations under the License.
  */
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import MDEditor, { commands, MDEditorProps } from '@uiw/react-md-editor'
 
-import { ReactComponent as BoldIcon } from '@Icons/ic-bold.svg'
-import { ReactComponent as CheckedListIcon } from '@Icons/ic-checked-list.svg'
-import { ReactComponent as CodeIcon } from '@Icons/ic-code.svg'
-import { ReactComponent as HeaderIcon } from '@Icons/ic-header.svg'
-import { ReactComponent as ImageIcon } from '@Icons/ic-image.svg'
-import { ReactComponent as ItalicIcon } from '@Icons/ic-italic.svg'
-import { ReactComponent as LinkIcon } from '@Icons/ic-link.svg'
-import { ReactComponent as OrderedListIcon } from '@Icons/ic-ordered-list.svg'
 import { ReactComponent as Edit } from '@Icons/ic-pencil.svg'
-import { ReactComponent as QuoteIcon } from '@Icons/ic-quote.svg'
-import { ReactComponent as StrikethroughIcon } from '@Icons/ic-strikethrough.svg'
 import { ReactComponent as UnorderedListIcon } from '@Icons/ic-unordered-list.svg'
 
 import {
@@ -41,58 +31,11 @@ import {
 } from '../../Shared'
 import Markdown from '../Markdown/MarkDown'
 import { showError, Tooltip } from '..'
-import { DESCRIPTION_EMPTY_ERROR_MSG, DESCRIPTION_UNSAVED_CHANGES_MSG } from './constant'
+import { DESCRIPTION_EMPTY_ERROR_MSG, DESCRIPTION_UNSAVED_CHANGES_MSG, TOOLBAR_SECONDARY_COMMANDS } from './constant'
 import { GenericDescriptionProps } from './types'
 import { getParsedUpdatedOnDate } from './utils'
 
 import './genericDescription.scss'
-
-const extraCommands = [
-    {
-        ...commands.bold,
-        icon: <BoldIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.italic,
-        icon: <ItalicIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.strikethrough,
-        icon: <StrikethroughIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.heading,
-        icon: <HeaderIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.quote,
-        icon: <QuoteIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.code,
-        icon: <CodeIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.link,
-        icon: <LinkIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.image,
-        icon: <ImageIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.orderedListCommand,
-        icon: <OrderedListIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.unorderedListCommand,
-        icon: <UnorderedListIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.checkedListCommand,
-        icon: <CheckedListIcon className="icon-dim-16 flex" />,
-    },
-]
 
 const GenericDescription = ({
     text,
@@ -102,15 +45,22 @@ const GenericDescription = ({
     title,
     emptyStateConfig,
 }: GenericDescriptionProps) => {
+    const parsedText = text || ''
+
     const [isLoading, setIsLoading] = useState(false)
-    const [modifiedValue, setModifiedValue] = useState(text || '')
+    const [modifiedValue, setModifiedValue] = useState(parsedText)
     const [isEditView, setIsEditView] = useState(false)
 
     const [editorViewState, setEditorViewState] = useState<'write' | 'preview'>('write')
 
     const _date = getParsedUpdatedOnDate(updatedOn)
 
-    const myCommands = useMemo(
+    useEffect(() => {
+        setModifiedValue(parsedText)
+        setIsEditView(false)
+    }, [parsedText])
+
+    const toolbarPrimaryCommands = useMemo(
         () => [
             {
                 ...commands.codeEdit,
@@ -133,7 +83,7 @@ const GenericDescription = ({
     )
 
     const handleCancel = () => {
-        const isDescriptionModified = modifiedValue.trim() !== (text || '').trim()
+        const isDescriptionModified = modifiedValue.trim() !== parsedText.trim()
         let isConfirmed = true
 
         if (isDescriptionModified) {
@@ -142,7 +92,7 @@ const GenericDescription = ({
         }
 
         if (isConfirmed) {
-            setModifiedValue(text)
+            setModifiedValue(parsedText)
             setIsEditView(false)
         }
     }
@@ -171,7 +121,7 @@ const GenericDescription = ({
         setIsEditView(true)
     }
 
-    if (!text && !isEditView) {
+    if (!parsedText && !isEditView) {
         const { img, subtitle } = emptyStateConfig || {}
         return (
             <div className="flexbox w-100 bg__primary br-8 dc__border-dashed--n3">
@@ -265,15 +215,15 @@ const GenericDescription = ({
                         </button>
                     </div>
 
-                    {renderMarkdown(text)}
+                    {renderMarkdown(parsedText)}
                 </div>
             ) : (
                 <>
                     <MDEditor
                         value={modifiedValue}
                         onChange={setModifiedValue}
-                        commands={myCommands}
-                        extraCommands={extraCommands}
+                        commands={toolbarPrimaryCommands}
+                        extraCommands={TOOLBAR_SECONDARY_COMMANDS}
                         preview={editorViewState === 'preview' ? 'preview' : 'edit'}
                         components={{
                             preview: renderMarkdown,
