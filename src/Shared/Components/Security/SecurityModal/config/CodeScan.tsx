@@ -43,7 +43,7 @@ import {
     stringifySeverities,
 } from '../utils'
 
-export const getCodeScanVulnerabilities = (data: CodeScan['vulnerability'], hidePolicy: boolean) => ({
+export const getCodeScanVulnerabilities = (data: CodeScan['vulnerability'], hidePolicy: boolean): TablePropsType => ({
     headers: [
         { headerText: 'cve id', isSortable: false, width: 150 },
         {
@@ -107,7 +107,7 @@ export const getCodeScanVulnerabilities = (data: CodeScan['vulnerability'], hide
     defaultSortIndex: 1,
 })
 
-export const getCodeScanLicense = (data: CodeScan['license']) => ({
+export const getCodeScanLicense = (data: CodeScan['license']): TablePropsType => ({
     headers: [
         { headerText: 'classification', isSortable: false, width: 150 },
         {
@@ -242,7 +242,7 @@ export const getCodeScanMisconfigurations = (
     status: StatusType['status'],
     scanToolName: StatusType['scanToolName'],
     scanToolUrl: StatusType['scanToolUrl'],
-) => ({
+): TablePropsType => ({
     headers: [
         { headerText: 'file path (relative)', isSortable: true, width: 289 },
         { headerText: 'scan summary', isSortable: true, width: 289, compareFunc: compareSeverities },
@@ -347,7 +347,7 @@ export const getCodeScanExposedSecrets = (
     status: StatusType['status'],
     scanToolName: StatusType['scanToolName'],
     scanToolUrl: StatusType['scanToolUrl'],
-) => ({
+): TablePropsType => ({
     headers: [
         { headerText: 'file path (relative)', isSortable: true, width: 372 },
         { headerText: 'scan summary', isSortable: true, width: 372, compareFunc: compareSeverities },
