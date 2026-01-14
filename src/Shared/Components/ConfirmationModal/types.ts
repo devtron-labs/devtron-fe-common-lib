@@ -104,6 +104,7 @@ export type ConfirmationModalProps<isConfig extends boolean = false> = PropsWith
      * @default false
      */
     showConfetti?: boolean
+    avoidFocusTrap?: boolean
 }> &
     ButtonConfigAndVariantType<isConfig> &
     (isConfig extends false

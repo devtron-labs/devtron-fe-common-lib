@@ -1106,18 +1106,10 @@ export interface LicenseErrorStruct {
     userMessage: string
 }
 
-export interface DevtronLicenseBaseDTO {
+export type DevtronLicenseBaseDTO = {
     fingerprint: string | null
     isTrial: boolean | null
     isFreemium: boolean | null
-    /**
-     * In timestamp format
-     */
-    expiry: string | null
-    /**
-     * Can be negative, depicts time left in seconds for license to expire
-     */
-    ttl: number | null
     /**
      * Show a reminder after these many DAYS left for license to expire, i.e,
      * Show if `ttl` is less than `reminderThreshold` [converted to seconds]
@@ -1128,7 +1120,31 @@ export interface DevtronLicenseBaseDTO {
         domain: string | null
     } | null
     license: string | null
-}
+} & (
+    | {
+          isSaasInstance: true
+          /**
+           * In seconds
+           */
+          timeElapsedSinceCreation: number
+          creationTime: string
+          ttl?: never
+          expiry?: never
+      }
+    | {
+          isSaasInstance?: false
+          timeElapsedSinceCreation?: never
+          creationTime?: never
+          /**
+           * Can be negative, depicts time left in seconds for license to expire
+           */
+          ttl: number | null
+          /**
+           * In timestamp format
+           */
+          expiry: string | null
+      }
+)
 
 export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = DevtronLicenseBaseDTO &
     (isCentralDashboard extends true
@@ -1141,9 +1157,14 @@ export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = Devt
               showLicenseData?: never
               licenseStatusError?: never
               moduleLimits?: never
+              instanceData: {
+                  devtronUrl: string
+                  devtronPassword: string
+              } | null
           }
         : {
               claimedByUserDetails?: never
+              instanceData?: never
               showLicenseData: boolean
               licenseStatusError?: LicenseErrorStruct
               moduleLimits: {

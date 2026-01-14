@@ -14,30 +14,13 @@
  * limitations under the License.
  */
 
-import { createContext, useCallback, useContext, useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect } from 'react'
 import FocusTrap from 'focus-trap-react'
 
-import { noop } from '@Common/Helper'
 import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP } from '@Shared/constants'
 import { preventBodyScroll } from '@Shared/Helpers'
 
 import { DTFocusTrapType } from './types'
-
-const FocusTrapControlContext = createContext<{
-    disableFocusTrap: () => void
-    resumeFocusTrap: () => void
-}>(null)
-
-export const useFocusTrapControl = () => {
-    const context = useContext(FocusTrapControlContext)
-    if (!context) {
-        return {
-            disableFocusTrap: noop,
-            resumeFocusTrap: noop,
-        }
-    }
-    return context
-}
 
 const DTFocusTrap = ({
     onEscape,
@@ -45,9 +28,8 @@ const DTFocusTrap = ({
     children,
     initialFocus = undefined,
     returnFocusOnDeactivate = true,
+    avoidFocusTrap = false,
 }: DTFocusTrapType) => {
-    const [isFocusEnabled, setIsFocusEnabled] = useState(true)
-
     const handleEscape = useCallback(
         (e?: KeyboardEvent | MouseEvent) => {
             onEscape(e)
@@ -56,48 +38,51 @@ const DTFocusTrap = ({
         [onEscape, deactivateFocusOnEscape],
     )
 
+    // Focus escape key bind when focus trap is avoided
+    const handleEscapeKeyBind = (e: KeyboardEvent) => {
+        if (e.key === 'Escape') {
+            onEscape(e)
+        }
+    }
+
     useEffect(() => {
+        if (avoidFocusTrap) {
+            document.addEventListener('keydown', handleEscapeKeyBind)
+        }
         preventBodyScroll(true)
 
         return () => {
             preventBodyScroll(false)
+            if (avoidFocusTrap) {
+                document.removeEventListener('keydown', handleEscapeKeyBind)
+            }
         }
     }, [])
 
-    const focusContextValue = useMemo(
-        () => ({
-            disableFocusTrap: () => setIsFocusEnabled(false),
-            resumeFocusTrap: () => setIsFocusEnabled(true),
-        }),
-        [],
-    )
-
     return (
-        <FocusTrapControlContext.Provider value={focusContextValue}>
-            <FocusTrap
-                active={isFocusEnabled}
-                focusTrapOptions={{
-                    escapeDeactivates: handleEscape,
-                    initialFocus,
-                    allowOutsideClick: (event) => {
-                        // Allow up to 3 parent levels to check for the allowed class
-                        let el = event.target as Element | null
-                        let depth = 0
-                        while (el && depth < 4) {
-                            if (el.classList && el.classList.contains(ALLOW_ACTION_OUTSIDE_FOCUS_TRAP)) {
-                                return true
-                            }
-                            el = el.parentElement
-                            depth += 1
+        <FocusTrap
+            active={!avoidFocusTrap}
+            focusTrapOptions={{
+                escapeDeactivates: handleEscape,
+                initialFocus,
+                allowOutsideClick: (event) => {
+                    // Allow up to 3 parent levels to check for the allowed class
+                    let el = event.target as Element | null
+                    let depth = 0
+                    while (el && depth < 4) {
+                        if (el.classList && el.classList.contains(ALLOW_ACTION_OUTSIDE_FOCUS_TRAP)) {
+                            return true
                         }
-                        return false
-                    },
-                    returnFocusOnDeactivate,
-                }}
-            >
-                {children}
-            </FocusTrap>
-        </FocusTrapControlContext.Provider>
+                        el = el.parentElement
+                        depth += 1
+                    }
+                    return false
+                },
+                returnFocusOnDeactivate,
+            }}
+        >
+            {children}
+        </FocusTrap>
     )
 }
 

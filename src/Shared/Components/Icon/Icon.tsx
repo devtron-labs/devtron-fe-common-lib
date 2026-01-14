@@ -100,6 +100,7 @@ import { ReactComponent as ICCostVisibility } from '@IconsV2/ic-cost-visibility.
 import { ReactComponent as ICCpu } from '@IconsV2/ic-cpu.svg'
 import { ReactComponent as ICCrown } from '@IconsV2/ic-crown.svg'
 import { ReactComponent as ICCube } from '@IconsV2/ic-cube.svg'
+import { ReactComponent as ICCurvedArrow } from '@IconsV2/ic-curved-arrow.svg'
 import { ReactComponent as ICDatabaseBackup } from '@IconsV2/ic-database-backup.svg'
 import { ReactComponent as ICDelete } from '@IconsV2/ic-delete.svg'
 import { ReactComponent as ICDeleteDots } from '@IconsV2/ic-delete-dots.svg'
@@ -222,6 +223,7 @@ import { ReactComponent as ICMobile } from '@IconsV2/ic-mobile.svg'
 import { ReactComponent as ICMonitoring } from '@IconsV2/ic-monitoring.svg'
 import { ReactComponent as ICMoreVertical } from '@IconsV2/ic-more-vertical.svg'
 import { ReactComponent as ICNamespace } from '@IconsV2/ic-namespace.svg'
+import { ReactComponent as ICNavCursor } from '@IconsV2/ic-nav-cursor.svg'
 import { ReactComponent as ICNew } from '@IconsV2/ic-new.svg'
 import { ReactComponent as ICNewChat } from '@IconsV2/ic-new-chat.svg'
 import { ReactComponent as ICNodeScript } from '@IconsV2/ic-node-script.svg'
@@ -427,6 +429,7 @@ export const iconMap = {
     'ic-cpu': ICCpu,
     'ic-crown': ICCrown,
     'ic-cube': ICCube,
+    'ic-curved-arrow': ICCurvedArrow,
     'ic-database-backup': ICDatabaseBackup,
     'ic-delete-dots': ICDeleteDots,
     'ic-delete-lightning': ICDeleteLightning,
@@ -549,6 +552,7 @@ export const iconMap = {
     'ic-monitoring': ICMonitoring,
     'ic-more-vertical': ICMoreVertical,
     'ic-namespace': ICNamespace,
+    'ic-nav-cursor': ICNavCursor,
     'ic-new-chat': ICNewChat,
     'ic-new': ICNew,
     'ic-node-script': ICNodeScript,
