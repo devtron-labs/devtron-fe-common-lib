@@ -423,6 +423,7 @@ export type TableProps<
     | 'clearFilters'
     | 'rowStartIconConfig'
     | 'onRowClick'
+    | 'areFiltersApplied'
 >
 
 export type BulkActionStateType = string | null

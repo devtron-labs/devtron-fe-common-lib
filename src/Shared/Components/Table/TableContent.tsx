@@ -235,6 +235,24 @@ const TableContent = <
         }
     }, [isAnyRowExpandable])
 
+    useEffect(() => {
+        if (!onRowClick) {
+            return () => {}
+        }
+
+        const handleEnterPress = ({ detail: { activeRowData } }) => {
+            onRowClick(activeRowData, activeRowData.id.startsWith('expanded-row-' satisfies ExpandedRowPrefixType))
+        }
+
+        const signals = EVENT_TARGET as SignalsType
+
+        signals.addEventListener(SignalEnum.ENTER_PRESSED, handleEnterPress)
+
+        return () => {
+            signals.removeEventListener(SignalEnum.ENTER_PRESSED, handleEnterPress)
+        }
+    }, [onRowClick])
+
     const toggleExpandAll = (e: MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation()
 
