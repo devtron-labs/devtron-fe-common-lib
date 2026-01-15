@@ -83,6 +83,10 @@ type AIAgentAppDataType<TAppType extends AIAgentAppType, TRequiredFields extends
     appType: TAppType
 }
 
+type CommonContextDataType = Record<string, unknown> & {
+    uiMarkup?: string
+}
+
 export type AIAgentContextType =
     | {
           source: AIAgentContextSourceType.APP_DETAILS
@@ -97,14 +101,14 @@ export type AIAgentContextType =
                     'externalFluxApp',
                     'appName' | 'clusterId' | 'namespace' | 'fluxAppDeploymentType'
                 > &
-                    Record<string, unknown>)
+                    CommonContextDataType)
       }
     | {
           source: AIAgentContextSourceType.RESOURCE_BROWSER_CLUSTER
           data: {
               clusterId: number
               clusterName: string
-          } & Record<string, unknown>
+          } & CommonContextDataType
       }
 
 export type DebugAgentContextType = AIAgentContextType & {
