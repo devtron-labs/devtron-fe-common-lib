@@ -19,7 +19,7 @@ import { VisibleModal } from '../Modals/VisibleModal'
 import './Drawer.scss'
 import { DTFocusTrapType } from '@Shared/Components/DTFocusTrap'
 
-export interface DrawerProps extends Pick<DTFocusTrapType, 'initialFocus'> {
+export interface DrawerProps extends Pick<DTFocusTrapType, 'initialFocus' | 'avoidFocusTrap' > {
     position: 'left' | 'right' | 'bottom' | 'top'
     children?: any
     backdrop?: boolean
@@ -45,6 +45,7 @@ export const Drawer = ({
     onClose,
     disableTransition,
     initialFocus = undefined,
+    avoidFocusTrap = false,
 }: DrawerProps) => {
     const drawerRef = useRef(null)
     useEffect(() => {
@@ -69,6 +70,7 @@ export const Drawer = ({
             onEscape={onEscape}
             close={onClose}
             initialFocus={initialFocus}
+            avoidFocusTrap={avoidFocusTrap}
         >
             <aside
                 style={style}

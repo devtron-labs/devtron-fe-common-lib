@@ -1,5 +1,6 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-illustration` to update.
 
+import CmdBarVisual from '@Illustrations/cmd-bar-visual.webp'
 import CreateBackupSchedule from '@Illustrations/create-backup-schedule.webp'
 import CreateBackupSnapshot from '@Illustrations/create-backup-snapshot.webp'
 import { ReactComponent as ImgCelebration } from '@Illustrations/img-celebration.svg'
@@ -31,6 +32,7 @@ export const illustrationMap = {
     'img-no-backup-location': ImgNoBackupLocation,
     'img-no-restores': ImgNoRestores,
     'img-page-not-found': ImgPageNotFound,
+    'cmd-bar-visual': CmdBarVisual,
     'create-backup-schedule': CreateBackupSchedule,
     'create-backup-snapshot': CreateBackupSnapshot,
     'img-code': ImgCode,
