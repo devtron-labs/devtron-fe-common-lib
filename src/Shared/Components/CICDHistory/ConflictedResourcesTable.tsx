@@ -10,7 +10,6 @@ import './ConflictedResourcesTable.scss'
 const Wrapper = ({ children }: TableViewWrapperProps<unknown, FiltersTypeEnum.STATE>) => (
     <div className="dc__overflow-hidden flexbox-col flex-grow-1">{children}</div>
 )
-const filter = () => true
 
 const ConflictedResourcesTable = ({ resourceConflictDetails }: ConflictedResourcesTableProps) => {
     const rows: RowsType<ResourceConflictItemType> = useMemo(
@@ -42,7 +41,7 @@ const ConflictedResourcesTable = ({ resourceConflictDetails }: ConflictedResourc
             }}
             filtersVariant={FiltersTypeEnum.STATE}
             ViewWrapper={Wrapper}
-            filter={filter}
+            filter={null}
         />
     )
 }

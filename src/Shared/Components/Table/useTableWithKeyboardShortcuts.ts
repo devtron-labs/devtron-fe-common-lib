@@ -102,6 +102,20 @@ const useTableWithKeyboardShortcuts = <
 
     useEffect(() => {
         registerShortcut({
+            keys: ['ArrowLeft'],
+            callback: () => {
+                dispatchEvent(SignalEnum.COLLAPSE_ROW)
+            },
+        })
+
+        registerShortcut({
+            keys: ['ArrowRight'],
+            callback: () => {
+                dispatchEvent(SignalEnum.EXPAND_ROW)
+            },
+        })
+
+        registerShortcut({
             keys: ['ArrowDown'],
             callback: () => {
                 getMoveFocusToNextRowHandler('arrow-down')
@@ -142,6 +156,8 @@ const useTableWithKeyboardShortcuts = <
             unregisterShortcut(['Enter'])
             unregisterShortcut(['Backspace'])
             unregisterShortcut(['.'])
+            unregisterShortcut(['ArrowLeft'])
+            unregisterShortcut(['ArrowRight'])
         }
     }, [getMoveFocusToNextRowHandler, getMoveFocusToPreviousRowHandler, dispatchEvent])
 
