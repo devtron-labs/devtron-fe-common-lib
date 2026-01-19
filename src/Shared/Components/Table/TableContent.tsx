@@ -67,6 +67,7 @@ const TableContent = <
     totalRows,
     rowStartIconConfig,
     onRowClick,
+    columns: userProvidedColumns,
 }: TableContentProps<RowData, FilterVariant, AdditionalProps>) => {
     const rowsContainerRef = useRef<HTMLDivElement>(null)
     const parentRef = useRef<HTMLDivElement>(null)
@@ -300,7 +301,7 @@ const TableContent = <
     const showIconOrExpandActionGutter = isBulkSelectionConfigured || !!rowStartIconConfig || isAnyRowExpandable
 
     const renderRows = () => {
-        if (loading && !visibleColumns.length) {
+        if (loading && !userProvidedColumns.length) {
             return SHIMMER_DUMMY_ARRAY.map((shimmerRowLabel) => (
                 <div
                     key={shimmerRowLabel}
@@ -323,7 +324,7 @@ const TableContent = <
                         gridTemplateColumns,
                     }}
                 >
-                    {showIconOrExpandActionGutter ? (
+                    {showIconOrExpandActionGutter && !isBulkSelectionConfigured ? (
                         <div className="py-12 flex" aria-label="Loading...">
                             <div className="shimmer h-16 w-20" />
                         </div>
@@ -450,7 +451,7 @@ const TableContent = <
                         if (isBulkActionGutter && !isExpandedRow) {
                             return (
                                 <div
-                                    className={`flexbox dc__align-items-center ${stickyClassName} bulk-action-checkbox`}
+                                    className={`flexbox dc__align-items-center bulk-action-checkbox ${stickyClassName} bulk-action-checkbox`}
                                     style={{ left: stickyLeftValue }}
                                     key={field}
                                 >
@@ -524,7 +525,7 @@ const TableContent = <
                         ref={headerRef}
                         className="bg__primary dc__min-width-fit-content px-20 border__secondary--bottom dc__position-sticky dc__zi-2 dc__top-0 generic-table__header"
                     >
-                        {loading && !visibleColumns.length ? (
+                        {loading && !userProvidedColumns.length ? (
                             <div className="flexbox py-12 dc__gap-16">
                                 {showIconOrExpandActionGutter ? <div className="shimmer w-20" /> : null}
                                 {SHIMMER_DUMMY_ARRAY.map((label) => (

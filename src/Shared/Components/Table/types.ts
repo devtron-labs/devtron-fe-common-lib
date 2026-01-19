@@ -476,6 +476,7 @@ export interface TableContentProps<
             | 'getRows'
             | 'rowStartIconConfig'
             | 'onRowClick'
+            | 'columns'
         >,
         RowsResultType<RowData> {
     areFilteredRowsLoading: boolean

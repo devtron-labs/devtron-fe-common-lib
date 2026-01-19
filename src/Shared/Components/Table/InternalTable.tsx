@@ -199,8 +199,8 @@ const InternalTable = <
             return filtersVariant !== FiltersTypeEnum.NONE &&
                 (userProvidedAreFiltersApplied !== undefined ? userProvidedAreFiltersApplied : areFiltersApplied) ? (
                 <GenericFilterEmptyState
-                    {...emptyStateConfig.noRowsForFilterConfig}
                     handleClearFilters={userGivenUrlClearFilters ?? clearFilters}
+                    {...emptyStateConfig.noRowsForFilterConfig}
                 />
             ) : (
                 <GenericEmptyState {...emptyStateConfig.noRowsConfig} />
@@ -230,6 +230,7 @@ const InternalTable = <
                     totalRows={totalRows}
                     rowStartIconConfig={rowStartIconConfig}
                     onRowClick={onRowClick}
+                    columns={columns}
                 />
             </UseRegisterShortcutProvider>
         )

@@ -8,6 +8,7 @@ import { ReactComponent as ImgFolderEmpty } from '@Illustrations/img-folder-empt
 import ImgManOnRocket from '@Illustrations/img-man-on-rocket.webp'
 import { ReactComponent as ImgMechanicalOperation } from '@Illustrations/img-mechanical-operation.svg'
 import { ReactComponent as ImgNoBackupLocation } from '@Illustrations/img-no-backup-location.svg'
+import ImgNoChartInClusters from '@Illustrations/img-no-chart-in-clusters.webp'
 import { ReactComponent as ImgNoRestores } from '@Illustrations/img-no-restores.svg'
 import ImgNoResult from '@Illustrations/img-no-result.webp'
 import NoClusterCostEnabled from '@Illustrations/no-cluster-cost-enabled.webp'
@@ -26,6 +27,7 @@ export const illustrationMap = {
     'img-code': ImgCode,
     'img-devtron-freemium': ImgDevtronFreemium,
     'img-man-on-rocket': ImgManOnRocket,
+    'img-no-chart-in-clusters': ImgNoChartInClusters,
     'img-no-result': ImgNoResult,
     'no-cluster-cost-enabled': NoClusterCostEnabled,
 }
