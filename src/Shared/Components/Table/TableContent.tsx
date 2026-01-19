@@ -214,10 +214,10 @@ const TableContent = <
             (state: boolean) =>
             ({ detail: { activeRowData } }) => {
                 if ((activeRowData as RowType<RowData>).expandableRows) {
-                    setExpandState({
-                        ...expandState,
+                    setExpandState((prev) => ({
+                        ...prev,
                         [activeRowData.id]: state,
-                    })
+                    }))
                 }
             }
 
@@ -297,6 +297,8 @@ const TableContent = <
         return Object.values(bulkSelectionState)
     }
 
+    const showIconOrExpandActionGutter = isBulkSelectionConfigured || !!rowStartIconConfig || isAnyRowExpandable
+
     const renderRows = () => {
         if (loading && !visibleColumns.length) {
             return SHIMMER_DUMMY_ARRAY.map((shimmerRowLabel) => (
@@ -304,9 +306,7 @@ const TableContent = <
                     key={shimmerRowLabel}
                     className={`px-20 flex left py-12 dc__gap-16 ${showSeparatorBetweenRows ? 'border__secondary--bottom' : ''}`}
                 >
-                    {isBulkSelectionConfigured || rowStartIconConfig || isAnyRowExpandable ? (
-                        <div className="shimmer w-20" />
-                    ) : null}
+                    {showIconOrExpandActionGutter ? <div className="shimmer w-20" /> : null}
                     {SHIMMER_DUMMY_ARRAY.map((shimmerCellLabel) => (
                         <div key={shimmerCellLabel} className="shimmer w-200" />
                     ))}
@@ -323,7 +323,7 @@ const TableContent = <
                         gridTemplateColumns,
                     }}
                 >
-                    {isBulkSelectionConfigured || rowStartIconConfig || isAnyRowExpandable ? (
+                    {showIconOrExpandActionGutter ? (
                         <div className="py-12 flex" aria-label="Loading...">
                             <div className="shimmer h-16 w-20" />
                         </div>
@@ -526,9 +526,7 @@ const TableContent = <
                     >
                         {loading && !visibleColumns.length ? (
                             <div className="flexbox py-12 dc__gap-16">
-                                {isBulkSelectionConfigured || rowStartIconConfig || isAnyRowExpandable ? (
-                                    <div className="shimmer w-20" />
-                                ) : null}
+                                {showIconOrExpandActionGutter ? <div className="shimmer w-20" /> : null}
                                 {SHIMMER_DUMMY_ARRAY.map((label) => (
                                     <div key={label} className="shimmer w-200" />
                                 ))}
