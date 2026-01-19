@@ -58,6 +58,7 @@ const InternalTable = <
     clearFilters: userGivenUrlClearFilters,
     rowStartIconConfig,
     onRowClick,
+    areFiltersApplied: userProvidedAreFiltersApplied,
 }: InternalTableProps<RowData, FilterVariant, AdditionalProps>) => {
     const {
         sortBy,
@@ -126,6 +127,7 @@ const InternalTable = <
                     rows,
                     filter,
                     filterData,
+                    additionalProps,
                     visibleColumns.find(({ field }) => field === sortBy)?.comparator,
                 )
 
@@ -140,9 +142,13 @@ const InternalTable = <
     // useAsync hook for 'rows' scenario
     const [_areRowsLoading, rowsResult, rowsError, reloadRows] = useAsync(
         handleFiltering,
-        [searchKey, sortBy, sortOrder, rows, JSON.stringify(otherFilters), visibleColumns],
+        [searchKey, filter, sortBy, sortOrder, rows, JSON.stringify(otherFilters), visibleColumns],
         !!rows,
     )
+
+    // NOTE: passing getRows to queryKey won't trigger a refetch
+    // since it is a function
+    const lastUpdatedGetRowsInstance = useMemo(() => new Date().toISOString(), [getRows])
 
     // useAsync hook for 'getRows' scenario
     const {
@@ -160,8 +166,7 @@ const InternalTable = <
             searchKey,
             sortBy,
             sortOrder,
-            // !TODO: functions in queryKey cannot trigger refetch
-            // getRows,
+            lastUpdatedGetRowsInstance,
             offset,
             pageSize,
             JSON.stringify(otherFilters),
@@ -191,7 +196,8 @@ const InternalTable = <
         }
 
         if (!areFilteredRowsLoading && !filteredRows?.length && !loading) {
-            return filtersVariant !== FiltersTypeEnum.NONE && areFiltersApplied ? (
+            return filtersVariant !== FiltersTypeEnum.NONE &&
+                (userProvidedAreFiltersApplied !== undefined ? userProvidedAreFiltersApplied : areFiltersApplied) ? (
                 <GenericFilterEmptyState
                     {...emptyStateConfig.noRowsForFilterConfig}
                     handleClearFilters={userGivenUrlClearFilters ?? clearFilters}
