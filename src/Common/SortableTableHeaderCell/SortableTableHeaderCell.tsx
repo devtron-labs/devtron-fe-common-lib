@@ -19,6 +19,7 @@ import Draggable, { DraggableProps } from 'react-draggable'
 import { ReactComponent as SortIcon } from '@Icons/ic-arrow-up-down.svg'
 import { ReactComponent as SortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
 import { Tooltip } from '@Common/Tooltip'
+import { Icon } from '@Shared/Components/Icon'
 
 import { SortingOrder } from '../Constants'
 import { noop } from '../Helper'
@@ -68,6 +69,7 @@ const SortableTableHeaderCell = ({
     id,
     handleResize,
     isResizable,
+    infoTooltipText,
 }: SortableTableHeaderCellProps) => {
     const isCellResizable = !!(isResizable && id && handleResize)
 
@@ -107,7 +109,18 @@ const SortableTableHeaderCell = ({
                 data-testid={title}
             >
                 <Tooltip showOnTruncate={showTippyOnTruncate} content={title}>
-                    <span className="dc__uppercase dc__truncate">{title}</span>
+                    <div className="dc__gap-4 flex left">
+                        <span className="dc__uppercase dc__truncate">{title}</span>
+
+                        {infoTooltipText && (
+                            <Icon
+                                name="ic-help-outline"
+                                color="N600"
+                                size={12}
+                                tooltipProps={{ content: infoTooltipText, alwaysShowTippyOnHover: true }}
+                            />
+                        )}
+                    </div>
                 </Tooltip>
                 {renderSortIcon()}
             </button>
