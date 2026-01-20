@@ -35,6 +35,7 @@ import {
     FiltersTypeEnum,
     PaginationEnum,
     RowType,
+    SignalEnum,
     SignalsType,
     TableContentProps,
 } from './types'
@@ -152,9 +153,10 @@ const TableContent = <
         ? `${initialGridTemplateColumns} ${typeof rowOnHoverComponentWidth === 'number' ? `minmax(${rowOnHoverComponentWidth}px, 1fr)` : rowOnHoverComponentWidth}`
         : initialGridTemplateColumns
 
-    const gridTemplateColumns = isAnyRowExpandable
-        ? `${ACTION_GUTTER_SIZE}px ${gridTemplateColumnsWithoutExpandButton}`
-        : gridTemplateColumnsWithoutExpandButton
+    const gridTemplateColumns =
+        isAnyRowExpandable || rowStartIconConfig
+            ? `${ACTION_GUTTER_SIZE}px ${gridTemplateColumnsWithoutExpandButton}`
+            : gridTemplateColumnsWithoutExpandButton
 
     useEffect(() => {
         const scrollEventHandler = () => {
@@ -188,7 +190,7 @@ const TableContent = <
 
     useEffectAfterMount(() => {
         setActiveRowIndex(0)
-    }, [offset, visibleRows])
+    }, [offset])
 
     useEffect(() => {
         setIdentifiers?.(
@@ -202,6 +204,54 @@ const TableContent = <
     const getTriggerSortingHandler = (newSortBy: string) => () => {
         handleSorting(newSortBy)
     }
+
+    useEffect(() => {
+        if (!isAnyRowExpandable) {
+            return () => {}
+        }
+
+        const getExpandCollapseRowHandler =
+            (state: boolean) =>
+            ({ detail: { activeRowData } }) => {
+                if ((activeRowData as RowType<RowData>).expandableRows) {
+                    setExpandState((prev) => ({
+                        ...prev,
+                        [activeRowData.id]: state,
+                    }))
+                }
+            }
+
+        const handleExpandRow = getExpandCollapseRowHandler(true)
+        const handleCollapseRow = getExpandCollapseRowHandler(false)
+
+        const signals = EVENT_TARGET as SignalsType
+
+        signals.addEventListener(SignalEnum.EXPAND_ROW, handleExpandRow)
+        signals.addEventListener(SignalEnum.COLLAPSE_ROW, handleCollapseRow)
+
+        return () => {
+            signals.removeEventListener(SignalEnum.EXPAND_ROW, handleExpandRow)
+            signals.removeEventListener(SignalEnum.COLLAPSE_ROW, handleCollapseRow)
+        }
+    }, [isAnyRowExpandable])
+
+    useEffect(() => {
+        if (!onRowClick) {
+            return () => {}
+        }
+
+        const handleEnterPress = ({ detail: { activeRowData } }) => {
+            onRowClick(activeRowData, activeRowData.id.startsWith('expanded-row-' satisfies ExpandedRowPrefixType))
+        }
+
+        const signals = EVENT_TARGET as SignalsType
+
+        signals.addEventListener(SignalEnum.ENTER_PRESSED, handleEnterPress)
+
+        return () => {
+            signals.removeEventListener(SignalEnum.ENTER_PRESSED, handleEnterPress)
+        }
+    }, [onRowClick])
 
     const toggleExpandAll = (e: MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation()
@@ -247,14 +297,16 @@ const TableContent = <
         return Object.values(bulkSelectionState)
     }
 
+    const showIconOrExpandActionGutter = isBulkSelectionConfigured || !!rowStartIconConfig || isAnyRowExpandable
+
     const renderRows = () => {
-        if (loading) {
+        if (loading && !visibleColumns.length) {
             return SHIMMER_DUMMY_ARRAY.map((shimmerRowLabel) => (
                 <div
                     key={shimmerRowLabel}
-                    className={`px-20 flexbox py-12 dc__gap-16 ${showSeparatorBetweenRows ? 'border__secondary--bottom' : ''}`}
+                    className={`px-20 flex left py-12 dc__gap-16 ${showSeparatorBetweenRows ? 'border__secondary--bottom' : ''}`}
                 >
-                    {isBulkSelectionConfigured ? <div className="shimmer w-20" /> : null}
+                    {showIconOrExpandActionGutter ? <div className="shimmer w-20" /> : null}
                     {SHIMMER_DUMMY_ARRAY.map((shimmerCellLabel) => (
                         <div key={shimmerCellLabel} className="shimmer w-200" />
                     ))}
@@ -262,7 +314,7 @@ const TableContent = <
             ))
         }
 
-        if (areFilteredRowsLoading) {
+        if (areFilteredRowsLoading || (loading && visibleColumns.length)) {
             return SHIMMER_DUMMY_ARRAY.map((shimmerRowLabel) => (
                 <div
                     key={shimmerRowLabel}
@@ -271,6 +323,11 @@ const TableContent = <
                         gridTemplateColumns,
                     }}
                 >
+                    {showIconOrExpandActionGutter ? (
+                        <div className="py-12 flex" aria-label="Loading...">
+                            <div className="shimmer h-16 w-20" />
+                        </div>
+                    ) : null}
                     {visibleColumns.map(({ label }) => (
                         <div key={label} className="py-12 flex" aria-label="Loading...">
                             <div className="shimmer h-16 w-100" />
@@ -364,7 +421,7 @@ const TableContent = <
                                 ariaLabel="Expand/Collapse row"
                                 showAriaLabelInTippy={false}
                                 variant={ButtonVariantType.borderLess}
-                                size={ComponentSizeType.xs}
+                                size={ComponentSizeType.xxs}
                                 style={ButtonStyleType.neutral}
                                 onClick={toggleExpandRow}
                             />
@@ -467,9 +524,9 @@ const TableContent = <
                         ref={headerRef}
                         className="bg__primary dc__min-width-fit-content px-20 border__secondary--bottom dc__position-sticky dc__zi-2 dc__top-0 generic-table__header"
                     >
-                        {loading ? (
+                        {loading && !visibleColumns.length ? (
                             <div className="flexbox py-12 dc__gap-16">
-                                {isBulkSelectionConfigured ? <div className="shimmer w-20" /> : null}
+                                {showIconOrExpandActionGutter ? <div className="shimmer w-20" /> : null}
                                 {SHIMMER_DUMMY_ARRAY.map((label) => (
                                     <div key={label} className="shimmer w-200" />
                                 ))}
@@ -498,12 +555,14 @@ const TableContent = <
                                             ariaLabel="Expand/Collapse all rows"
                                             showAriaLabelInTippy={false}
                                             variant={ButtonVariantType.borderLess}
-                                            size={ComponentSizeType.xs}
+                                            size={ComponentSizeType.xxs}
                                             style={ButtonStyleType.neutral}
                                             onClick={toggleExpandAll}
                                         />
                                     </div>
                                 ) : null}
+
+                                {!isAnyRowExpandable && rowStartIconConfig && <div />}
 
                                 {visibleColumns.map(
                                     (
