@@ -176,6 +176,7 @@ import { ReactComponent as ICHelpFilled } from '@IconsV2/ic-help-filled.svg'
 import { ReactComponent as ICHelpOutline } from '@IconsV2/ic-help-outline.svg'
 import { ReactComponent as ICHibernate } from '@IconsV2/ic-hibernate.svg'
 import { ReactComponent as ICHibernateCircle } from '@IconsV2/ic-hibernate-circle.svg'
+import { ReactComponent as ICImageApprove } from '@IconsV2/ic-image-approve.svg'
 import { ReactComponent as ICInProgress } from '@IconsV2/ic-in-progress.svg'
 import { ReactComponent as ICInfoFilled } from '@IconsV2/ic-info-filled.svg'
 import { ReactComponent as ICInfoFilledColor } from '@IconsV2/ic-info-filled-color.svg'
@@ -496,6 +497,7 @@ export const iconMap = {
     'ic-help-outline': ICHelpOutline,
     'ic-hibernate-circle': ICHibernateCircle,
     'ic-hibernate': ICHibernate,
+    'ic-image-approve': ICImageApprove,
     'ic-in-progress': ICInProgress,
     'ic-info-filled-color': ICInfoFilledColor,
     'ic-info-filled': ICInfoFilled,
