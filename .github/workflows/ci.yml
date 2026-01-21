@@ -5,10 +5,13 @@ on:
     types:
       - opened
       - synchronize
-      - edited
       - reopened
       - ready_for_review
-
+    branches:    
+      - 'main'
+      - 'develop'
+      - 'release-**'
+      - 'hotfix-**'
 jobs:
   ci:
     runs-on: ubuntu-latest
