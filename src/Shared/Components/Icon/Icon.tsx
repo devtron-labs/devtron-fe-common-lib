@@ -30,6 +30,7 @@ import { ReactComponent as ICBackupAndSchedule } from '@IconsV2/ic-backup-and-sc
 import { ReactComponent as ICBackupColor } from '@IconsV2/ic-backup-color.svg'
 import { ReactComponent as ICBackupLocation } from '@IconsV2/ic-backup-location.svg'
 import { ReactComponent as ICBackupScheduleColor } from '@IconsV2/ic-backup-schedule-color.svg'
+import { ReactComponent as ICBell } from '@IconsV2/ic-bell.svg'
 import { ReactComponent as ICBgBackupSchedule } from '@IconsV2/ic-bg-backup-schedule.svg'
 import { ReactComponent as ICBgBackups } from '@IconsV2/ic-bg-backups.svg'
 import { ReactComponent as ICBgBuild } from '@IconsV2/ic-bg-build.svg'
@@ -176,6 +177,7 @@ import { ReactComponent as ICHelpFilled } from '@IconsV2/ic-help-filled.svg'
 import { ReactComponent as ICHelpOutline } from '@IconsV2/ic-help-outline.svg'
 import { ReactComponent as ICHibernate } from '@IconsV2/ic-hibernate.svg'
 import { ReactComponent as ICHibernateCircle } from '@IconsV2/ic-hibernate-circle.svg'
+import { ReactComponent as ICImageApprove } from '@IconsV2/ic-image-approve.svg'
 import { ReactComponent as ICInProgress } from '@IconsV2/ic-in-progress.svg'
 import { ReactComponent as ICInfoFilled } from '@IconsV2/ic-info-filled.svg'
 import { ReactComponent as ICInfoFilledColor } from '@IconsV2/ic-info-filled-color.svg'
@@ -350,6 +352,7 @@ export const iconMap = {
     'ic-backup-color': ICBackupColor,
     'ic-backup-location': ICBackupLocation,
     'ic-backup-schedule-color': ICBackupScheduleColor,
+    'ic-bell': ICBell,
     'ic-bg-backup-schedule': ICBgBackupSchedule,
     'ic-bg-backups': ICBgBackups,
     'ic-bg-build': ICBgBuild,
@@ -496,6 +499,7 @@ export const iconMap = {
     'ic-help-outline': ICHelpOutline,
     'ic-hibernate-circle': ICHibernateCircle,
     'ic-hibernate': ICHibernate,
+    'ic-image-approve': ICImageApprove,
     'ic-in-progress': ICInProgress,
     'ic-info-filled-color': ICInfoFilledColor,
     'ic-info-filled': ICInfoFilled,
