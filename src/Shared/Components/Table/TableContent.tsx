@@ -179,7 +179,8 @@ const TableContent = <
 
     const showPagination =
         paginationVariant === PaginationEnum.PAGINATED &&
-        (isBEPagination || filteredRows?.length > (pageSizeOptions?.[0]?.value ?? DEFAULT_BASE_PAGE_SIZE))
+        ((isBEPagination && totalRows) || filteredRows?.length) >
+            (pageSizeOptions?.[0]?.value ?? DEFAULT_BASE_PAGE_SIZE)
 
     const { activeRowIndex, setActiveRowIndex, shortcutContainerProps } = useTableWithKeyboardShortcuts(
         { bulkSelectionConfig, bulkSelectionReturnValue, handleToggleBulkSelectionOnRow },
