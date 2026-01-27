@@ -28,6 +28,10 @@ export type ClipboardProps = (
           variant: 'button--secondary'
           size: ComponentSizeType
       }
+    | {
+          variant: 'borderLess'
+          size: ComponentSizeType
+      }
 ) & {
     content: string
     /**

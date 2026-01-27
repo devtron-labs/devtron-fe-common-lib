@@ -211,6 +211,7 @@ import { ReactComponent as ICLogs } from '@IconsV2/ic-logs.svg'
 import { ReactComponent as ICMagicWand } from '@IconsV2/ic-magic-wand.svg'
 import { ReactComponent as ICMagnifyingGlass } from '@IconsV2/ic-magnifying-glass.svg'
 import { ReactComponent as ICMediumDelete } from '@IconsV2/ic-medium-delete.svg'
+import { ReactComponent as ICMediumMegaphone } from '@IconsV2/ic-medium-megaphone.svg'
 import { ReactComponent as ICMediumPaintbucket } from '@IconsV2/ic-medium-paintbucket.svg'
 import { ReactComponent as ICMegaphoneLeft } from '@IconsV2/ic-megaphone-left.svg'
 import { ReactComponent as ICMegaphoneRight } from '@IconsV2/ic-megaphone-right.svg'
@@ -301,7 +302,9 @@ import { ReactComponent as ICTerminal } from '@IconsV2/ic-terminal.svg'
 import { ReactComponent as ICTerminalFill } from '@IconsV2/ic-terminal-fill.svg'
 import { ReactComponent as ICThermometer } from '@IconsV2/ic-thermometer.svg'
 import { ReactComponent as ICThumbDown } from '@IconsV2/ic-thumb-down.svg'
+import { ReactComponent as ICThumbDownFill } from '@IconsV2/ic-thumb-down-fill.svg'
 import { ReactComponent as ICThumbUp } from '@IconsV2/ic-thumb-up.svg'
+import { ReactComponent as ICThumbUpFill } from '@IconsV2/ic-thumb-up-fill.svg'
 import { ReactComponent as ICTimeoutDash } from '@IconsV2/ic-timeout-dash.svg'
 import { ReactComponent as ICTimer } from '@IconsV2/ic-timer.svg'
 import { ReactComponent as ICTrafficSignal } from '@IconsV2/ic-traffic-signal.svg'
@@ -540,6 +543,7 @@ export const iconMap = {
     'ic-magic-wand': ICMagicWand,
     'ic-magnifying-glass': ICMagnifyingGlass,
     'ic-medium-delete': ICMediumDelete,
+    'ic-medium-megaphone': ICMediumMegaphone,
     'ic-medium-paintbucket': ICMediumPaintbucket,
     'ic-megaphone-left': ICMegaphoneLeft,
     'ic-megaphone-right': ICMegaphoneRight,
@@ -629,7 +633,9 @@ export const iconMap = {
     'ic-terminal-fill': ICTerminalFill,
     'ic-terminal': ICTerminal,
     'ic-thermometer': ICThermometer,
+    'ic-thumb-down-fill': ICThumbDownFill,
     'ic-thumb-down': ICThumbDown,
+    'ic-thumb-up-fill': ICThumbUpFill,
     'ic-thumb-up': ICThumbUp,
     'ic-timeout-dash': ICTimeoutDash,
     'ic-timer': ICTimer,
