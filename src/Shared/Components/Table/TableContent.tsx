@@ -175,12 +175,9 @@ const TableContent = <
 
     const bulkSelectionCount = isBulkSelectionApplied ? totalRows : (getSelectedIdentifiersCount?.() ?? 0)
 
-    const isBEPagination = !!getRows
-
     const showPagination =
         paginationVariant === PaginationEnum.PAGINATED &&
-        ((isBEPagination && totalRows) || filteredRows?.length) >
-            (pageSizeOptions?.[0]?.value ?? DEFAULT_BASE_PAGE_SIZE)
+        totalRows > (pageSizeOptions?.[0]?.value ?? DEFAULT_BASE_PAGE_SIZE)
 
     const { activeRowIndex, setActiveRowIndex, shortcutContainerProps } = useTableWithKeyboardShortcuts(
         { bulkSelectionConfig, bulkSelectionReturnValue, handleToggleBulkSelectionOnRow },
@@ -201,6 +198,11 @@ const TableContent = <
             }, {}),
         )
     }, [visibleRows])
+
+    const numberOfColumnsWithoutBulkActionGutter = useMemo(
+        () => visibleColumns.filter(({ field }) => field !== BULK_ACTION_GUTTER_LABEL),
+        [visibleColumns],
+    )
 
     const getTriggerSortingHandler = (newSortBy: string) => () => {
         handleSorting(newSortBy)
@@ -298,16 +300,18 @@ const TableContent = <
         return Object.values(bulkSelectionState)
     }
 
-    const showIconOrExpandActionGutter = isBulkSelectionConfigured || !!rowStartIconConfig || isAnyRowExpandable
+    const showIconOrExpandActionGutter = !!rowStartIconConfig || isAnyRowExpandable
 
     const renderRows = () => {
-        if (loading && !visibleColumns.length) {
+        if (loading && !numberOfColumnsWithoutBulkActionGutter.length) {
             return SHIMMER_DUMMY_ARRAY.map((shimmerRowLabel) => (
                 <div
                     key={shimmerRowLabel}
                     className={`px-20 flex left py-12 dc__gap-16 ${showSeparatorBetweenRows ? 'border__secondary--bottom' : ''}`}
                 >
-                    {showIconOrExpandActionGutter ? <div className="shimmer w-20" /> : null}
+                    {showIconOrExpandActionGutter || isBulkSelectionConfigured ? (
+                        <div className="shimmer w-20" />
+                    ) : null}
                     {SHIMMER_DUMMY_ARRAY.map((shimmerCellLabel) => (
                         <div key={shimmerCellLabel} className="shimmer w-200" />
                     ))}
@@ -315,7 +319,7 @@ const TableContent = <
             ))
         }
 
-        if (areFilteredRowsLoading || (loading && visibleColumns.length)) {
+        if ((loading && numberOfColumnsWithoutBulkActionGutter.length) || areFilteredRowsLoading) {
             return SHIMMER_DUMMY_ARRAY.map((shimmerRowLabel) => (
                 <div
                     key={shimmerRowLabel}
@@ -525,9 +529,11 @@ const TableContent = <
                         ref={headerRef}
                         className="bg__primary dc__min-width-fit-content px-20 border__secondary--bottom dc__position-sticky dc__zi-2 dc__top-0 generic-table__header"
                     >
-                        {loading && !visibleColumns.length ? (
+                        {loading && !numberOfColumnsWithoutBulkActionGutter.length ? (
                             <div className="flexbox py-12 dc__gap-16">
-                                {showIconOrExpandActionGutter ? <div className="shimmer w-20" /> : null}
+                                {showIconOrExpandActionGutter || isBulkSelectionConfigured ? (
+                                    <div className="shimmer w-20" />
+                                ) : null}
                                 {SHIMMER_DUMMY_ARRAY.map((label) => (
                                     <div key={label} className="shimmer w-200" />
                                 ))}
