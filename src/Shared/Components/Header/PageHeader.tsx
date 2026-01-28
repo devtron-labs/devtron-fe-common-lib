@@ -59,6 +59,7 @@ const PageHeader = ({
         sidePanelConfig,
         tempAppWindowConfig,
         featureAskDevtronExpert,
+        isSuperAdmin,
     } = useMainContext()
     const { showSwitchThemeLocationTippy, handleShowSwitchThemeLocationTippyChange } = useTheme()
 
@@ -146,18 +147,21 @@ const PageHeader = ({
 
     const renderLogoutHelpSection = () => (
         <>
-            {featureAskDevtronExpert && sidePanelConfig.state === 'closed' && !tempAppWindowConfig.open && (
-                <Tooltip content="Ask Devtron AI" placement="bottom" alwaysShowTippyOnHover delay={[500, null]}>
-                    <button
-                        className="enable-svg-animation--hover flex dc__no-background p-2 dc__outline-none-imp dc__no-border"
-                        onClick={onAskButtonClick}
-                        type="button"
-                        aria-label="Ask Devtron Expert"
-                    >
-                        <Icon name="ic-devtron-ai" color={null} size={28} />
-                    </button>
-                </Tooltip>
-            )}
+            {isSuperAdmin &&
+                featureAskDevtronExpert &&
+                sidePanelConfig.state === 'closed' &&
+                !tempAppWindowConfig.open && (
+                    <Tooltip content="Ask Devtron AI" placement="bottom" alwaysShowTippyOnHover delay={[500, null]}>
+                        <button
+                            className="enable-svg-animation--hover flex dc__no-background p-2 dc__outline-none-imp dc__no-border"
+                            onClick={onAskButtonClick}
+                            type="button"
+                            aria-label="Ask Devtron Expert"
+                        >
+                            <Icon name="ic-devtron-ai" color={null} size={28} />
+                        </button>
+                    </Tooltip>
+                )}
 
             <HelpButton
                 serverInfo={currentServerInfo.serverInfo}
