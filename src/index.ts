@@ -188,6 +188,8 @@ export interface customEnv {
      * @default false
      */
     FEATURE_STORAGE_ENABLE?: boolean
+    /** Org ID for grafana */
+    GRAFANA_ORG_ID?: number
 }
 declare global {
     interface Window {
