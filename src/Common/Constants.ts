@@ -33,6 +33,7 @@ export const DEVTRON_GPT_LINK = 'https://chatgpt.com/g/g-6826efa4362c8191b23e7bf
 
 export const PATTERNS = {
     STRING: /^[a-zA-Z0-9_]+$/,
+    APP_NAME: '^[a-z][a-z0-9-]*[a-z0-9]$/*',
     DECIMAL_NUMBERS: /^-?\d*\.?\d*$/,
     POSITIVE_DECIMAL_NUMBERS: /^\d*\.?\d*$/,
     NATURAL_NUMBERS: /^[1-9]\d*$/,
