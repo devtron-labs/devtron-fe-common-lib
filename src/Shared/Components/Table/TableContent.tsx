@@ -437,8 +437,12 @@ const TableContent = <
                     {isAnyRowExpandable &&
                         (isExpandedRow || (!(row as RowType<RowData>).expandableRows && !rowStartIconConfig)) && (
                             <div
-                                className={`dc__position-rel expanded-tree-line ${expandBtnOrRowStartIconGutterStickyConfig.className}`}
-                                style={{ left: expandBtnOrRowStartIconGutterStickyConfig.left }}
+                                {...(isExpandedRow
+                                    ? {
+                                          style: { left: expandBtnOrRowStartIconGutterStickyConfig.left },
+                                          className: `dc__position-rel expanded-tree-line ${expandBtnOrRowStartIconGutterStickyConfig.className}`,
+                                      }
+                                    : {})}
                             />
                         )}
 
