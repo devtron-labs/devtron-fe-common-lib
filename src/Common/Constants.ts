@@ -228,6 +228,8 @@ export const ROUTES = {
     ENV: 'env',
     APP_METADATA: 'app-metadata',
     RESOURCE_CONFLICTS_LIST: 'app/:appId/cd-pipeline/:pipelineId/history/:wfrId/helm-ownership-conflicts',
+    GIT_PROVIDER_MIN: 'git/provider/autocomplete',
+    DOCKER_REGISTRY_MIN: 'docker/registry/autocomplete',
 } as const
 
 export enum KEY_VALUE {
