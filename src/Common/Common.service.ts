@@ -686,7 +686,7 @@ export const getDetailedClusterList = async (
 
 export const getDockerRegistriesListMin = async (
     signal: AbortSignal,
-): Promise<ResponseType<{ id: string; registryType: RegistryType }[]>> => get(ROUTES.DOCKER_REGISTRY_MIN, { signal })
+): Promise<ResponseType<{ id: string; registryType: RegistryType; isDefault: boolean }[]>> => get(ROUTES.DOCKER_REGISTRY_MIN, { signal })
 
 export const getGitProvidersListMin = async (
     signal: AbortSignal,
