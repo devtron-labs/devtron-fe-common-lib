@@ -188,6 +188,8 @@ export interface customEnv {
      */
     FEATURE_STORAGE_ENABLE?: boolean
     FEATURE_ATHENA_DEBUG_MODE_ENABLE?: boolean
+    /** Org ID for grafana */
+    GRAFANA_ORG_ID?: number
 }
 declare global {
     interface Window {
