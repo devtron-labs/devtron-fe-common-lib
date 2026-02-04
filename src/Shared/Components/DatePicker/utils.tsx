@@ -29,8 +29,7 @@ export const MONTHLY_DATE_OPTIONS = Object.entries(MONTHLY_DATES_CONFIG).map(([l
  * Return the options for the time in label and value format
  * @type {SelectPickerOptionType[]}
  */
-// eslint-disable-next-line import/prefer-default-export
-export const DEFAULT_TIME_OPTIONS: SelectPickerOptionType[] = Object.entries(TIME_OPTIONS_CONFIG).map(
+export const DEFAULT_TIME_OPTIONS: SelectPickerOptionType<string>[] = Object.entries(TIME_OPTIONS_CONFIG).map(
     ([label, value]) => ({
         label,
         value,

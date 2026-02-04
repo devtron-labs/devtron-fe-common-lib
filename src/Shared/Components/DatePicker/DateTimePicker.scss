@@ -1,0 +1,78 @@
+.date-time-picker {
+    --rdp-accent-color: var(--B500);
+    --rdp-accent-background-color: var(--N700);
+    --rdp-day_button-border-radius: 0;
+    --rdp-day_button-border: 2px solid transparent;
+    --rdp-selected-border: none;
+    --rdp-today-color: var(--rdp-accent-color);
+    --rdp-range_middle-background-color: var(--O500);
+    --rdp-range_middle-color: inherit;
+    --rdp-range_start-color: var(--N100);
+    --rdp-range_start-background: linear-gradient(var(--O200), transparent 50%, var(--rdp-range_middle-background-color) 50%);
+    --rdp-range_start-date-background-color: var(--rdp-accent-color);
+    --rdp-range_end-background: linear-gradient(var(--O200), var(--rdp-range_middle-background-color) 50%, transparent 50%);
+    --rdp-range_end-color: var(--N100);
+    --rdp-range_end-date-background-color: var(--rdp-accent-color);
+    --rdp-week_number-border-radius: 100%;
+    --rdp-week_number-border: 2px solid var(--R100);
+
+    .rdp-day {
+        border: 1px solid var(--border-primary);
+
+        &_button {
+            color: var(--N900);
+            font-size: 14px;
+            font-weight: 400;
+            line-height: 20px;
+            border-radius: 0;
+            width: 100%;
+            height: 100%;
+
+            &:hover {
+                background: var(--bg-hover);
+            }
+        }
+    }
+
+    .rdp-day.rdp-hidden {
+        border: none;
+    }
+
+    .rdp-day.rdp-selected {
+        .rdp-day_button {
+            background: var(--B100);
+            color: var(--B500);
+            font-size: 14px;
+            font-weight: 600;
+            line-height: 20px;
+            border: none;
+            border-radius: 0;
+            width: 100%;
+            height: 100%;
+        }
+    }
+
+    .rdp-day.rdp-disabled {
+        .rdp-day_button {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+    }
+
+    .rdp-caption_label {
+        color: var(--N900);
+        font-size: 16px;
+        font-weight: 600;
+    }
+
+    .rdp-month_grid {
+        margin-top: 12px;
+    }
+
+    .rdp-weekday {
+        color: var(--N700);
+        font-size: 12px;
+        font-weight: 600;
+        line-height: 20px;
+    }
+}

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { SingleDatePickerShape } from 'react-dates'
 import { SelectInstance } from 'react-select'
 import { Moment } from 'moment'
 
@@ -103,13 +102,18 @@ export interface TimeSelectProps {
     selectedTimeOption: DateSelectPickerType
 }
 
-export interface DateTimePickerProps
-    extends Pick<TimeSelectProps, 'date' | 'timePickerProps' | 'error' | 'disabled' | 'dataTestIdForTime'>,
-        Pick<SingleDatePickerShape, 'openDirection'> {
-    /**
-     * Props for the date picker
-     */
-    datePickerProps?: any
+interface DateRangeType {
+    from: Date
+    to?: Date
+}
+
+export type UpdateDateRangeType = (dateRange: DateRangeType) => void
+export type UpdateSingleDateType = (date: Date) => void
+
+export type DateTimePickerProps = Pick<
+    TimeSelectProps,
+    'timePickerProps' | 'error' | 'disabled' | 'dataTestIdForTime'
+> & {
     /**
      * Id for the component
      */
@@ -123,10 +127,6 @@ export interface DateTimePickerProps
      */
     required?: boolean
     /**
-     * To hide time selector
-     */
-    hideTimeSelect?: boolean
-    /**
      * To make the field read only
      */
     readOnly?: boolean
@@ -134,25 +134,37 @@ export interface DateTimePickerProps
      * To block today's date
      */
     isTodayBlocked?: boolean
-    /**
-     * Data test id for date picker
-     */
-    dataTestidForDate?: string
-    /**
-     * Function to handle date change
-     */
-    onChange: (date: Date) => void
-}
-
-export interface DatePickerRangeControllerProps {
-    calendar
-    calendarInputs
-    focusedInput
-    handleFocusChange
-    handleDatesChange
-    handleCalendarInputs?
-    calendarValue: string
-    handlePredefinedRange: (start: Moment, end: Moment, endStr: string) => void
-    handleDateInput: (key: 'startDate' | 'endDate', value: string) => void
-    handleApply: (...args) => void
-}
+    blockPreviousDates?: boolean
+    isOutsideRange?: (day: Date) => boolean
+} & (
+        | {
+              isRangePicker: true
+              hideTimeSelect: true
+              dateRange: DateRangeType
+              onChange: UpdateDateRangeType
+              rangeShortcutOptions?: (
+                  | {
+                        label: string
+                        onClick: () => void
+                        value?: never
+                    }
+                  | {
+                        label: string
+                        onClick?: never
+                        value: DateRangeType
+                    }
+              )[]
+              date?: never
+          }
+        | {
+              isRangePicker?: false
+              date: TimeSelectProps['date']
+              onChange: UpdateSingleDateType
+              /**
+               * To hide time selector
+               */
+              hideTimeSelect?: boolean
+              dateRange?: never
+              rangeShortcutOptions?: never
+          }
+    )
