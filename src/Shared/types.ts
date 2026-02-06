@@ -175,13 +175,24 @@ export interface iNode extends Node {
     status: string
     pNode?: iNode
 }
-export interface ResourceTree {
-    conditions: any
-    newGenerationReplicaSet: string
-    nodes: Array<Node>
-    podMetadata: Array<PodMetaData>
+
+export interface HelmReleaseStatus {
     status: string
+    message: string
+    description: string
+}
+
+export interface ResourceTree {
+    nodes: Node[]
+    newGenerationReplicaSet: string
+    status: string
+    podMetadata: PodMetaData[]
+    conditions?: any
+    releaseStatus?: HelmReleaseStatus
     resourcesSyncResult?: Record<string, string>
+    hasDrift?: boolean
+    // lastSnapshotTime and wfrId are only available for isolated
+    lastSnapshotTime?: string
     wfrId?: number
 }
 
@@ -191,12 +202,6 @@ export enum AppType {
     EXTERNAL_HELM_CHART = 'external_helm_chart',
     EXTERNAL_ARGO_APP = 'external_argo_app',
     EXTERNAL_FLUX_APP = 'external_flux_app',
-}
-
-export interface HelmReleaseStatus {
-    status: string
-    message: string
-    description: string
 }
 
 interface MaterialInfo {
@@ -222,7 +227,7 @@ export interface AppDetails {
     appStoreChartName?: string
     appStoreInstalledAppVersionId?: number
     ciArtifactId?: number
-    deprecated?: false
+    deprecated?: boolean
     environmentId?: number
     environmentName: string
     installedAppId?: number
@@ -258,6 +263,12 @@ export interface AppDetails {
     FluxAppStatusDetail?: FluxAppStatusDetail
     isPipelineTriggered?: boolean
     releaseMode?: ReleaseMode
+    cdPipelineId?: number
+    triggerType?: string
+    parentEnvironmentName?: string
+    ciPipelineId?: number
+    trafficSwitched?: boolean
+    pcoId?: number
 }
 
 export interface ConfigDriftModalProps extends Required<Pick<AppDetails, 'appId'>> {
@@ -1106,18 +1117,10 @@ export interface LicenseErrorStruct {
     userMessage: string
 }
 
-export interface DevtronLicenseBaseDTO {
+export type DevtronLicenseBaseDTO = {
     fingerprint: string | null
     isTrial: boolean | null
     isFreemium: boolean | null
-    /**
-     * In timestamp format
-     */
-    expiry: string | null
-    /**
-     * Can be negative, depicts time left in seconds for license to expire
-     */
-    ttl: number | null
     /**
      * Show a reminder after these many DAYS left for license to expire, i.e,
      * Show if `ttl` is less than `reminderThreshold` [converted to seconds]
@@ -1128,7 +1131,31 @@ export interface DevtronLicenseBaseDTO {
         domain: string | null
     } | null
     license: string | null
-}
+} & (
+    | {
+          isSaasInstance: true
+          /**
+           * In seconds
+           */
+          timeElapsedSinceCreation: number
+          creationTime: string
+          ttl?: never
+          expiry?: never
+      }
+    | {
+          isSaasInstance?: false
+          timeElapsedSinceCreation?: never
+          creationTime?: never
+          /**
+           * Can be negative, depicts time left in seconds for license to expire
+           */
+          ttl: number | null
+          /**
+           * In timestamp format
+           */
+          expiry: string | null
+      }
+)
 
 export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = DevtronLicenseBaseDTO &
     (isCentralDashboard extends true
@@ -1141,9 +1168,14 @@ export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = Devt
               showLicenseData?: never
               licenseStatusError?: never
               moduleLimits?: never
+              instanceData: {
+                  devtronUrl: string
+                  devtronPassword: string
+              } | null
           }
         : {
               claimedByUserDetails?: never
+              instanceData?: never
               showLicenseData: boolean
               licenseStatusError?: LicenseErrorStruct
               moduleLimits: {

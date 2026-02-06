@@ -50,4 +50,5 @@ export interface DTFocusTrapType extends Pick<FocusTrapProps['focusTrapOptions']
      * Setting this option to undefined (or to a function that returns undefined) will result in the first element in the focus trap's tab order receiving focus.
      */
     initialFocus?: FocusTargetOrFalse | undefined | (() => void)
+    avoidFocusTrap?: boolean
 }
