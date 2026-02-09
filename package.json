@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "1.22.8-beta-7",
+    "version": "1.22.8-beta-8",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -42,15 +42,13 @@
         "@sentry/browser": "^7.119.1",
         "@tanstack/eslint-plugin-query": "<5",
         "@tanstack/react-query-devtools": "<5",
-        "@testing-library/jest-dom": "^5.16.2",
-        "@testing-library/react": "^12.1.4",
         "@tippyjs/react": "^4.2.0",
         "@typeform/embed-react": "2.20.0",
         "@types/dompurify": "^3.0.5",
         "@types/json-schema": "^7.0.15",
-        "@types/react": "17.0.39",
+        "@types/react": "^18.3.27",
         "@types/react-csv": "^1.1.10",
-        "@types/react-dom": "17.0.13",
+        "@types/react-dom": "^18.3.7",
         "@types/react-router-dom": "^5.3.3",
         "@typescript-eslint/eslint-plugin": "8.3.0",
         "@typescript-eslint/parser": "8.3.0",
@@ -83,14 +81,11 @@
         "vite-tsconfig-paths": "5.0.1"
     },
     "peerDependencies": {
-        "@rjsf/core": "^5.13.3",
-        "@rjsf/utils": "^5.13.3",
-        "@rjsf/validator-ajv8": "^5.13.3",
         "@typeform/embed-react": "2.20.0",
         "dompurify": "^3.2.4",
         "patch-package": "^8.0.0",
-        "react": "^17.0.2",
-        "react-dom": "^17.0.2",
+        "react": "^18.3.1",
+        "react-dom": "^18.3.1",
         "react-ga4": "^1.4.1",
         "react-router-dom": "^5.3.0",
         "react-select": "5.8.0",
@@ -110,6 +105,9 @@
         "@lezer/highlight": "1.2.1",
         "@replit/codemirror-indentation-markers": "6.5.3",
         "@replit/codemirror-vscode-keymap": "6.0.2",
+        "@rjsf/core": "^6.2.4",
+        "@rjsf/utils": "^6.2.4",
+        "@rjsf/validator-ajv8": "^6.2.4",
         "@tanstack/react-query": "<5",
         "@uiw/codemirror-extensions-hyper-link": "4.23.10",
         "@uiw/codemirror-theme-github": "4.23.7",
@@ -117,7 +115,7 @@
         "@uiw/react-md-editor": "^4.0.11",
         "@xyflow/react": "12.4.2",
         "ansi_up": "^5.2.1",
-        "chart.js": "^4.5.0",
+        "chart.js": "4.5.0",
         "codemirror-json-schema": "0.8.0",
         "cronstrue": "^3.9.0",
         "dayjs": "^1.11.13",
@@ -130,7 +128,7 @@
         "qrcode.react": "^4.2.0",
         "react-canvas-confetti": "^2.0.7",
         "react-csv": "^2.2.2",
-        "react-day-picker": "^9.11.2",
+        "react-day-picker": "9.4.3",
         "react-draggable": "^4.4.5",
         "react-international-phone": "^4.5.0",
         "react-virtualized-sticky-tree": "^3.0.0-beta18",
@@ -143,8 +141,8 @@
             "vite": "6.3.5"
         },
         "react-virtualized-sticky-tree": {
-            "react": "^17.0.2",
-            "react-dom": "^17.0.2"
+            "react": "^18.3.1",
+            "react-dom": "^18.3.1"
         }
     }
 }

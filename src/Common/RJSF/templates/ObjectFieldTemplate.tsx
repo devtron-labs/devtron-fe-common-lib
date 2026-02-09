@@ -28,8 +28,8 @@ import { TitleField } from './TitleField'
 const Field = ({
     disabled,
     formData,
-    idSchema,
-    onAddClick,
+    fieldPathId,
+    onAddProperty,
     properties,
     readonly,
     registry,
@@ -37,7 +37,6 @@ const Field = ({
     schema,
     title,
     uiSchema,
-    formContext,
 }: ObjectFieldTemplateProps<any, RJSFFormSchema, any>) => {
     const hasAdditionalProperties = !!schema.additionalProperties
 
@@ -45,7 +44,7 @@ const Field = ({
         <AddButton
             label={title}
             className="object-property-expand"
-            onClick={onAddClick(schema)}
+            onClick={onAddProperty}
             disabled={disabled || readonly}
             uiSchema={uiSchema}
             registry={registry}
@@ -66,7 +65,7 @@ const Field = ({
                 // NOTE: formContext is the formData passed to RJSFForm
                 const value = JSONPath({
                     path: convertJSONPointerToJSONPath(hiddenSchema.path),
-                    json: formContext,
+                    json: registry.formContext,
                     resultType: 'value',
                     wrap: false,
                 })
@@ -86,7 +85,7 @@ const Field = ({
                         label={title}
                         required={required}
                         showLabel
-                        id={idSchema.$id}
+                        id={fieldPathId.$id}
                         shouldAlignCenter={false}
                     >
                         <div>{Properties}</div>
@@ -96,7 +95,7 @@ const Field = ({
             )
         }
         return (
-            <FieldRowWithLabel label={title} required={required} showLabel id={idSchema.$id}>
+            <FieldRowWithLabel label={title} required={required} showLabel id={fieldPathId.$id}>
                 {ActionButton}
             </FieldRowWithLabel>
         )
@@ -110,15 +109,15 @@ const Field = ({
 }
 
 export const ObjectFieldTemplate = (props: ObjectFieldTemplateProps<any, RJSFFormSchema, any>) => {
-    const { idSchema, registry, required, schema, title, uiSchema, description } = props
+    const { fieldPathId, registry, required, schema, title, uiSchema, description } = props
     const hasAdditionalProperties = !!schema.additionalProperties
     const showTitle = title && !hasAdditionalProperties
 
     return (
-        <fieldset id={idSchema.$id}>
+        <fieldset id={fieldPathId.$id}>
             {showTitle && (
                 <TitleField
-                    id={titleId(idSchema as Parameters<typeof titleId>[0])}
+                    id={titleId(fieldPathId)}
                     title={title}
                     required={required}
                     schema={schema}
@@ -130,10 +129,10 @@ export const ObjectFieldTemplate = (props: ObjectFieldTemplateProps<any, RJSFFor
             {/* Not adding the border and padding for non-objects and root schema */}
             <div
                 className={`${
-                    schema.properties && !hasAdditionalProperties && idSchema.$id !== 'root'
+                    schema.properties && !hasAdditionalProperties && fieldPathId.$id !== 'root'
                         ? 'dc__border-left pl-12'
                         : ''
-                } ${idSchema.$id === 'root' ? 'dc__separated-flexbox dc__separated-flexbox--vertical' : 'flexbox-col dc__gap-8'}`}
+                } ${fieldPathId.$id === 'root' ? 'dc__separated-flexbox dc__separated-flexbox--vertical' : 'flexbox-col dc__gap-8'}`}
             >
                 <Field {...props} />
             </div>

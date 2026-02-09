@@ -14,16 +14,18 @@
  * limitations under the License.
  */
 
-import { TitleFieldProps } from '@rjsf/utils'
+import { ObjectFieldTemplateProps, TitleFieldProps } from '@rjsf/utils'
 
 import { Tooltip } from '@Common/Tooltip'
+
+import { RJSFFormSchema } from '../types'
 
 export const TitleField = ({
     id,
     title,
     required,
     description,
-}: TitleFieldProps & Partial<Record<'description', string>>) => (
+}: TitleFieldProps & Pick<ObjectFieldTemplateProps<any, RJSFFormSchema, any>, 'description'>) => (
     <legend className="fs-13 fw-6 cn-9 lh-20 dc__no-border pb-9 mb-0" id={id}>
         <Tooltip alwaysShowTippyOnHover={!!description} content={description}>
             <span className={`${description ? 'dc__underline-dotted' : ''}`}>{title}</span>

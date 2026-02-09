@@ -14,19 +14,18 @@
  * limitations under the License.
  */
 
-import { ArrayFieldTemplateItemType } from '@rjsf/utils'
+import { ArrayFieldItemButtonsTemplateProps, ArrayFieldItemTemplateProps } from '@rjsf/utils'
 
 export const ArrayFieldItemTemplate = ({
     children,
     disabled,
     hasToolbar,
     hasRemove,
-    index,
-    onDropIndexClick,
+    onRemoveItem,
     readonly,
     registry,
     uiSchema,
-}: ArrayFieldTemplateItemType) => {
+}: ArrayFieldItemTemplateProps & Pick<ArrayFieldItemButtonsTemplateProps, 'hasRemove' | 'onRemoveItem'>) => {
     const { RemoveButton } = registry.templates.ButtonTemplates
 
     return (
@@ -36,7 +35,7 @@ export const ArrayFieldItemTemplate = ({
                 {hasToolbar && hasRemove && (
                     <RemoveButton
                         disabled={disabled || readonly}
-                        onClick={onDropIndexClick(index)}
+                        onClick={onRemoveItem}
                         uiSchema={uiSchema}
                         registry={registry}
                     />

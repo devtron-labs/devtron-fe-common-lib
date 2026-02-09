@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import React from 'react'
-import { getTemplate, getUiOptions, ArrayFieldTemplateProps, ArrayFieldTemplateItemType } from '@rjsf/utils'
+import { ArrayFieldTemplateProps, getUiOptions } from '@rjsf/utils'
+
 import { FieldRowWithLabel } from '../common/FieldRow'
 
 const ActionButton = ({ label, canAdd, onAddClick, disabled, readonly, uiSchema, registry }) => {
@@ -40,7 +40,7 @@ export const ArrayFieldTemplate = ({
     canAdd,
     className,
     disabled,
-    idSchema,
+    fieldPathId,
     uiSchema,
     items,
     onAddClick,
@@ -50,28 +50,14 @@ export const ArrayFieldTemplate = ({
     title,
 }: ArrayFieldTemplateProps) => {
     const uiOptions = getUiOptions(uiSchema)
-    const ArrayFieldItemTemplate = getTemplate<'ArrayFieldItemTemplate'>('ArrayFieldItemTemplate', registry, uiOptions)
     const label = uiOptions.title || title
 
     return (
-        <fieldset className={className} id={idSchema.$id}>
+        <fieldset className={className} id={fieldPathId.$id}>
             {/* Show the label here in case there are no items, otherwise handled by Field Template */}
             {items.length ? (
                 <>
-                    {items.map(({ key, ...itemProps }: ArrayFieldTemplateItemType, index) => {
-                        // Show the title as the label for the first field
-                        const children = {
-                            ...itemProps.children,
-                            props: {
-                                ...itemProps.children.props,
-                            },
-                        }
-                        return (
-                            <ArrayFieldItemTemplate key={key} {...itemProps}>
-                                {children}
-                            </ArrayFieldItemTemplate>
-                        )
-                    })}
+                    {items}
                     <ActionButton
                         label={label}
                         canAdd={canAdd}
@@ -83,7 +69,7 @@ export const ArrayFieldTemplate = ({
                     />
                 </>
             ) : (
-                <FieldRowWithLabel label={label} required={required} showLabel id={idSchema.$id}>
+                <FieldRowWithLabel label={label} required={required} showLabel id={fieldPathId.$id}>
                     <ActionButton
                         label={label}
                         canAdd={canAdd}
