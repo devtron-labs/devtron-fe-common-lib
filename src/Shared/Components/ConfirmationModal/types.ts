@@ -104,6 +104,7 @@ export type ConfirmationModalProps<isConfig extends boolean = false> = PropsWith
      * @default false
      */
     showConfetti?: boolean
+    avoidFocusTrap?: boolean
 }> &
     ButtonConfigAndVariantType<isConfig> &
     (isConfig extends false
@@ -123,8 +124,9 @@ export type ConfirmationModalBodyProps = ConfirmationModalProps
  * This interface extends a subset of `ConfirmationModalProps` to configure
  * the confirmation modal behavior and allows additional customization options.
  */
-export interface DeleteConfirmationModalProps
-    extends Partial<Pick<ConfirmationModalProps, 'title' | 'subtitle' | 'children' | 'confirmationConfig'>> {
+export interface DeleteConfirmationModalProps extends Partial<
+    Pick<ConfirmationModalProps, 'title' | 'subtitle' | 'children' | 'confirmationConfig'>
+> {
     // Required Props
     /**
      * Function to close the confirmation modal.
@@ -178,7 +180,8 @@ export interface DeleteConfirmationModalProps
  * and `ConfirmationModalProps` to configure the "Cannot Delete" modal.
  */
 export interface CannotDeleteModalProps
-    extends Partial<Pick<DeleteConfirmationModalProps, 'component' | 'closeConfirmationModal'>>,
+    extends
+        Partial<Pick<DeleteConfirmationModalProps, 'component' | 'closeConfirmationModal'>>,
         Partial<Pick<ConfirmationModalProps, 'title' | 'subtitle'>> {}
 
 /**
@@ -187,7 +190,8 @@ export interface CannotDeleteModalProps
  * and `ConfirmationModalProps` to configure the force delete confirmation modal.
  */
 export interface ForceDeleteConfirmationProps
-    extends Partial<Pick<DeleteConfirmationModalProps, 'onDelete' | 'closeConfirmationModal' | 'isDeleting'>>,
+    extends
+        Partial<Pick<DeleteConfirmationModalProps, 'onDelete' | 'closeConfirmationModal' | 'isDeleting'>>,
         Partial<Pick<ConfirmationModalProps, 'title' | 'subtitle'>> {}
 
 export interface ConfirmationModalContextType {

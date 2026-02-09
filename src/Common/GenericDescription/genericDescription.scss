@@ -26,59 +26,53 @@
         }
     }
 
-    .mark-down-editor-container {
-        border: 1px solid var(--N200);
-        border-radius: 3px 3px 0 0;
-        font-family: 'Open Sans', Arial, sans-serif !important;
-        font-size: 13px !important;
-        line-height: 1.67;
-
-        .mark-down-editor-preview {
-            background-color: var(--bg-primary) !important;
-        }
-
-        .mark-down-editor-textarea-wrapper {
-            border-radius: 3px !important;
-            border: 1px solid var(--N200) !important;
-            background-color: var(--bg-secondary) !important;
-        }
-
-        .mde-textarea-wrapper {
-            background-color: var(--bg-primary) !important;
-            padding: 10px !important;
-        }
-
-        .mark-down-editor-toolbar {
-            justify-content: space-between !important;
-            padding-left: 16px !important;
-            padding-right: 16px !important;
-            background-color: var(--bg-primary) !important;
-            border-bottom: 1px solid var(--N200);
-        }
-
-        .mark-down-editor__hidden {
-            display: none !important;
-        }
-    }
-
     .mark-down-editor__no-border {
         border: 0px;
     }
 
     .w-md-editor {
+        background-color: transparent;
+        box-shadow: none;
+
         &-toolbar {
             border-bottom: 1px solid var(--border-primary);
             background-color: transparent;
             padding-inline: 16px;
-            height: 36px;
+            padding-block: 0px;
+            height: auto;
 
-            button {
-                color: var(--N700);
-            }
+            li {
+                .markdown-editor__tab-button {
+                    margin-block: 8px;
+                    background-color: var(--bg-primary);
+                    font-size: 13px;
+                    line-height: 20px;
+                    text-align: center;
+                    color: var(--N700);
+                    margin-right: 8px;
+                }
 
-            .active {
-                &:hover,button {
-                    color: var(--B500);
+                &.active {
+                    position: relative;
+
+                    .markdown-editor__tab-button {
+                        font-size: 13px;
+                        line-height: 20px;
+                        text-align: center;
+                        margin-right: 8px;
+                        color: var(--B500);
+                    }
+                }
+
+                &.active::after {
+                    content: '';
+                    position: absolute;
+                    display: block;
+                    width: 100%;
+                    height: 2px;
+                    background-color: var(--B500);
+                    border-radius: 4px;
+                    bottom: 0px;
                 }
             }
         }
@@ -88,6 +82,27 @@
             border-radius: 3px;
             margin: 12px;
             border: 1px solid var(--border-primary);
+
+            &:has(.w-md-editor-preview) {
+                background: var(--bg-primary);
+                border-radius: 0px;
+                margin: 0px;
+                border: none;
+            }
+
+            .w-md-editor-preview {
+                margin: 0px;
+                padding: 8px 0px;
+            }
+
+            .w-md-editor-input {
+                display: flex;
+                flex-direction: column;
+
+                .w-md-editor-text {
+                    flex-grow: 1;
+                }
+            }
         }
     }
 }

@@ -27,6 +27,7 @@ export class VisibleModal extends Component<PropsWithChildren<{
     close?: (e?) => void
     onEscape?: (e?) => void
     initialFocus?: DTFocusTrapType['initialFocus']
+    avoidFocusTrap?: boolean
 }>> {
     constructor(props) {
         super(props)
@@ -56,6 +57,7 @@ export class VisibleModal extends Component<PropsWithChildren<{
                 onEscape={this.escFunction}
                 onClick={this.handleBodyClick}
                 initialFocus={this.props.initialFocus ?? undefined}
+                avoidFocusTrap={this.props.avoidFocusTrap}
             >
                 <div className={this.props.parentClassName}>
                     <div className={`visible-modal__body ${this.props.className || ''}`}>{this.props.children}</div>

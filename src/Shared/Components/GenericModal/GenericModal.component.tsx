@@ -21,7 +21,7 @@ import { noop, stopPropagation } from '@Common/Helper'
 import { Backdrop, Button, ButtonStyleType, ButtonVariantType, Icon } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
 
-import { MODAL_WIDTH_TO_CLASS_NAME_MAP } from './constants'
+import { BORDER_VARIANT_TO_CLASS_NAME_MAP, MODAL_WIDTH_TO_CLASS_NAME_MAP } from './constants'
 import { GenericModalProvider, useGenericModalContext } from './GenericModal.context'
 import { GenericModalFooterProps, GenericModalHeaderProps, GenericModalProps } from './types'
 
@@ -87,13 +87,20 @@ const GenericModal = ({
     onEscape = noop,
     closeOnBackdropClick = false,
     children,
+    avoidFocusTrap = false,
+    borderVariant = 'secondary',
+    alignCenter = false,
 }: PropsWithChildren<GenericModalProps>) => (
     <AnimatePresence>
         {open && (
             <GenericModalProvider value={{ name, onClose }}>
-                <Backdrop onEscape={onEscape} onClick={closeOnBackdropClick ? onClose : noop}>
+                <Backdrop
+                    onEscape={onEscape}
+                    onClick={closeOnBackdropClick ? onClose : noop}
+                    avoidFocusTrap={avoidFocusTrap}
+                >
                     <motion.div
-                        className={`shadow__modal flexbox-col bg__primary border__secondary br-${borderRadius} dc__m-auto mt-40 dc__overflow-hidden ${MODAL_WIDTH_TO_CLASS_NAME_MAP[width]}`}
+                        className={`shadow__modal flexbox-col bg__primary ${BORDER_VARIANT_TO_CLASS_NAME_MAP[borderVariant]} br-${borderRadius} dc__m-auto ${alignCenter ? '' : 'mt-40'} dc__overflow-hidden ${MODAL_WIDTH_TO_CLASS_NAME_MAP[width]}`}
                         exit={{ y: 100, opacity: 0, scale: 0.75, transition: { duration: 0.35 } }}
                         initial={{ y: 100, opacity: 0, scale: 0.75 }}
                         animate={{ y: 0, opacity: 1, scale: 1 }}
