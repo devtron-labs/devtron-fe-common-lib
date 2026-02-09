@@ -19,7 +19,7 @@ import { ParsedCountry } from 'react-international-phone'
 import { Dayjs } from 'dayjs'
 
 import { APIOptions, ApprovalConfigDataType, Strategy } from '@Common/Types'
-import { ReleaseMode } from '@Pages/index'
+import { OverrideMergeStrategyType, ReleaseMode } from '@Pages/index'
 
 import {
     CommonNodeAttr,
@@ -38,6 +38,180 @@ import {
 } from '../Common'
 import { SelectPickerOptionType, WorkflowRunnerStatusDTO } from './Components'
 import { BASE_CONFIGURATION_ENV_ID, DEPLOYMENT_STATUS, EnvironmentTypeEnum, PatchOperationType } from './constants'
+
+export interface customEnv {
+    SENTRY_ENV?: string
+    SENTRY_ERROR_ENABLED?: boolean
+    SENTRY_PERFORMANCE_ENABLED?: boolean
+    SENTRY_DSN?: string
+    /**
+     * Release version for sentry
+     *
+     * @default 'dashboard@${SHORT_GIT_HASH}'
+     */
+    SENTRY_RELEASE_VERSION?: string
+    SENTRY_TRACES_SAMPLE_RATE?: number
+    CLUSTER_NAME?: boolean
+    APPLICATION_METRICS_ENABLED?: boolean
+    GA_ENABLED?: boolean
+    GA_TRACKING_ID?: string
+    GTM_ENABLED?: boolean
+    GTM_ID?: string
+    RECOMMEND_SECURITY_SCANNING?: boolean
+    FORCE_SECURITY_SCANNING?: boolean
+    ENABLE_CI_JOB?: boolean
+    HIDE_DISCORD?: boolean
+    POSTHOG_ENABLED?: boolean
+    POSTHOG_TOKEN?: string
+    DEVTRON_APP_DETAILS_POLLING_INTERVAL?: number
+    HELM_APP_DETAILS_POLLING_INTERVAL?: number
+    EA_APP_DETAILS_POLLING_INTERVAL?: number
+    CENTRAL_API_ENDPOINT?: string
+    HIDE_GITOPS_OR_HELM_OPTION?: boolean
+    CONFIGURABLE_TIMEOUT?: string
+    K8S_CLIENT?: boolean
+    CLUSTER_TERMINAL_CONNECTION_POLLING_INTERVAL?: number
+    CLUSTER_TERMINAL_CONNECTION_RETRY_COUNT?: number
+    ENABLE_CHART_SEARCH_IN_HELM_DEPLOY?: boolean
+    HIDE_EXCLUDE_INCLUDE_GIT_COMMITS?: boolean
+    ENABLE_BUILD_CONTEXT?: boolean
+    CLAIR_TOOL_VERSION?: string
+    ENABLE_RESTART_WORKLOAD?: boolean
+    ENABLE_SCOPED_VARIABLES?: boolean
+    DEFAULT_CI_TRIGGER_TYPE_MANUAL: boolean
+    ANNOUNCEMENT_BANNER_MSG?: string
+    ANNOUNCEMENT_BANNER_TYPE?: string
+    ANNOUNCEMENT_BANNER_BUTTON_TEXT?: string
+    ANNOUNCEMENT_BANNER_BUTTON_LINK?: string
+    HIDE_DEFAULT_CLUSTER?: boolean
+    GLOBAL_API_TIMEOUT?: number
+    TRIGGER_API_TIMEOUT?: number
+    NODE_REACT_APP_GIT_SHA?: string
+    REACT_APP_GIT_SHA?: string
+    NODE_ENV?: string
+    SIDEBAR_DT_LOGO?: string
+    ENABLE_EXTERNAL_ARGO_CD: boolean
+    API_BATCH_SIZE: number
+    SERVICE_WORKER_TIMEOUT?: string
+    /**
+     * @default false
+     */
+    FEATURE_USER_DEFINED_GITOPS_REPO_ENABLE: boolean
+    ORGANIZATION_NAME: string
+    FEATURE_EXTERNAL_FLUX_CD_ENABLE: boolean
+    /**
+     * If true, the direct permissions are hidden for non-super admins in user permissions
+     *
+     * @default false
+     */
+    FEATURE_HIDE_USER_DIRECT_PERMISSIONS_FOR_NON_SUPER_ADMINS?: boolean
+    FEATURE_PROMO_EMBEDDED_BUTTON_TEXT?: string
+    FEATURE_PROMO_EMBEDDED_MODAL_TITLE?: string
+    FEATURE_PROMO_EMBEDDED_IFRAME_URL?: string
+    FEATURE_BULK_RESTART_WORKLOADS_FROM_RB: string
+    FEATURE_RB_SYNC_CLUSTER_ENABLE?: boolean
+    FEATURE_DEFAULT_MERGE_STRATEGY?: OverrideMergeStrategyType
+    FEATURE_DEFAULT_LANDING_RB_ENABLE?: boolean
+    FEATURE_ACTION_AUDIOS_ENABLE?: boolean
+    // ================== Feature flags for the enterprise release ==================
+    /**
+     * If true, only pipelines to which the user has access will be shown across the application
+     * @default false
+     */
+    FEATURE_DEFAULT_AUTHENTICATED_VIEW_ENABLE?: boolean
+    /**
+     * Enable Image promotion feature
+     *
+     * @default false
+     */
+    FEATURE_IMAGE_PROMOTION_ENABLE?: boolean
+    /**
+     * Enable environment list for scoped variables
+     *
+     * @default false
+     */
+    FEATURE_SCOPED_VARIABLE_ENVIRONMENT_LIST_ENABLE?: boolean
+    /**
+     * If true, Enable SDH feature
+     *
+     * @default false
+     */
+    FEATURE_SOFTWARE_DISTRIBUTION_HUB_ENABLE?: boolean
+    /**
+     * Enable resource watcher
+     *
+     * @default false
+     */
+    FEATURE_RESOURCE_WATCHER_ENABLE?: boolean
+    /**
+     * Enable config drift
+     *
+     * @default false
+     */
+    FEATURE_CONFIG_DRIFT_ENABLE: boolean
+    /**
+     * Enable swap traffic (blue green deployment)
+     *
+     * @default false
+     */
+    FEATURE_SWAP_TRAFFIC_ENABLE?: boolean
+    /**
+     * @default true
+     */
+    HIDE_NETWORK_STATUS_INTERFACE?: boolean
+    /**
+     * @default 300000
+     */
+    SYSTEM_CONTROLLER_LISTING_TIMEOUT?: number
+    /**
+     * If true, the application templates feature is enabled
+     *
+     * @default false
+     */
+    FEATURE_APPLICATION_TEMPLATES_ENABLE?: boolean
+    /**
+     * @default false
+     */
+    FEATURE_REDFISH_NODE_ENABLE?: boolean
+    GATEKEEPER_URL?: string
+    FEATURE_AI_INTEGRATION_ENABLE?: boolean
+    LOGIN_PAGE_IMAGE?: string
+    FEATURE_ASK_DEVTRON_EXPERT?: boolean
+    /**
+     * If true, the manage traffic feature is enabled in apps & app groups.
+     *
+     * @default false
+     */
+    FEATURE_MANAGE_TRAFFIC_ENABLE?: boolean
+    FEATURE_INFRA_PROVISION_INFO_BLOCK_HIDE?: boolean
+    /**
+     * If true, will add flux option to deployment types in devtron apps and devtron charts
+     * @default false
+     */
+    FEATURE_FLUX_DEPLOYMENTS_ENABLE?: boolean
+    FEATURE_LINK_EXTERNAL_FLUX_ENABLE?: boolean
+    /**
+     * If true, online/offline connectivity banner is enabled
+     *  @default true
+     */
+    FEATURE_INTERNET_CONNECTIVITY_ENABLE?: boolean
+    /**
+     * Show rollout progress if true, else canary step count in status
+     * @default true
+     */
+    FEATURE_CANARY_ROLLOUT_PROGRESS_ENABLE?: boolean
+    /**
+     * Time interval in seconds to refetch command bar data - Applications List
+     */
+    COMMAND_BAR_REFETCH_INTERVAL?: number
+    /**
+     * Enable data protection and management
+     * @default false
+     */
+    FEATURE_STORAGE_ENABLE?: boolean
+    /** Org ID for grafana */
+    GRAFANA_ORG_ID?: number
+}
 
 export enum InstallationType {
     OSS_KUBECTL = 'oss_kubectl',
@@ -175,13 +349,24 @@ export interface iNode extends Node {
     status: string
     pNode?: iNode
 }
-export interface ResourceTree {
-    conditions: any
-    newGenerationReplicaSet: string
-    nodes: Array<Node>
-    podMetadata: Array<PodMetaData>
+
+export interface HelmReleaseStatus {
     status: string
+    message: string
+    description: string
+}
+
+export interface ResourceTree {
+    nodes: Node[]
+    newGenerationReplicaSet: string
+    status: string
+    podMetadata: PodMetaData[]
+    conditions?: any
+    releaseStatus?: HelmReleaseStatus
     resourcesSyncResult?: Record<string, string>
+    hasDrift?: boolean
+    // lastSnapshotTime and wfrId are only available for isolated
+    lastSnapshotTime?: string
     wfrId?: number
 }
 
@@ -191,12 +376,6 @@ export enum AppType {
     EXTERNAL_HELM_CHART = 'external_helm_chart',
     EXTERNAL_ARGO_APP = 'external_argo_app',
     EXTERNAL_FLUX_APP = 'external_flux_app',
-}
-
-export interface HelmReleaseStatus {
-    status: string
-    message: string
-    description: string
 }
 
 interface MaterialInfo {
@@ -222,7 +401,7 @@ export interface AppDetails {
     appStoreChartName?: string
     appStoreInstalledAppVersionId?: number
     ciArtifactId?: number
-    deprecated?: false
+    deprecated?: boolean
     environmentId?: number
     environmentName: string
     installedAppId?: number
@@ -258,6 +437,12 @@ export interface AppDetails {
     FluxAppStatusDetail?: FluxAppStatusDetail
     isPipelineTriggered?: boolean
     releaseMode?: ReleaseMode
+    cdPipelineId?: number
+    triggerType?: string
+    parentEnvironmentName?: string
+    ciPipelineId?: number
+    trafficSwitched?: boolean
+    pcoId?: number
 }
 
 export interface ConfigDriftModalProps extends Required<Pick<AppDetails, 'appId'>> {
@@ -359,8 +544,10 @@ export interface GitTriggers {
     CiConfigureSourceValue: string
 }
 
-export interface RuntimePluginVariables
-    extends Pick<VariableType, 'name' | 'value' | 'defaultValue' | 'format' | 'fileReferenceId' | 'fileMountDir'> {
+export interface RuntimePluginVariables extends Pick<
+    VariableType,
+    'name' | 'value' | 'defaultValue' | 'format' | 'fileReferenceId' | 'fileMountDir'
+> {
     variableStepScope: string
     valueConstraint: ValueConstraintType & { id: number }
     stepVariableId: number
@@ -932,8 +1119,10 @@ export interface ResourceApprovalPolicyConfigDTO {
     approvalConfigurations: ApprovalConfigDataType[]
 }
 
-export interface ResourceApprovalPolicyConfigType
-    extends Omit<ResourceApprovalPolicyConfigDTO, 'state' | 'approvalConfigurations'> {
+export interface ResourceApprovalPolicyConfigType extends Omit<
+    ResourceApprovalPolicyConfigDTO,
+    'state' | 'approvalConfigurations'
+> {
     isApprovalApplicable: boolean
     approvalConfigurationMap: Record<ApprovalConfigDataType['kind'], ApprovalConfigDataType>
 }
@@ -1106,18 +1295,10 @@ export interface LicenseErrorStruct {
     userMessage: string
 }
 
-export interface DevtronLicenseBaseDTO {
+export type DevtronLicenseBaseDTO = {
     fingerprint: string | null
     isTrial: boolean | null
     isFreemium: boolean | null
-    /**
-     * In timestamp format
-     */
-    expiry: string | null
-    /**
-     * Can be negative, depicts time left in seconds for license to expire
-     */
-    ttl: number | null
     /**
      * Show a reminder after these many DAYS left for license to expire, i.e,
      * Show if `ttl` is less than `reminderThreshold` [converted to seconds]
@@ -1128,7 +1309,31 @@ export interface DevtronLicenseBaseDTO {
         domain: string | null
     } | null
     license: string | null
-}
+} & (
+    | {
+          isSaasInstance: true
+          /**
+           * In seconds
+           */
+          timeElapsedSinceCreation: number
+          creationTime: string
+          ttl?: never
+          expiry?: never
+      }
+    | {
+          isSaasInstance?: false
+          timeElapsedSinceCreation?: never
+          creationTime?: never
+          /**
+           * Can be negative, depicts time left in seconds for license to expire
+           */
+          ttl: number | null
+          /**
+           * In timestamp format
+           */
+          expiry: string | null
+      }
+)
 
 export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = DevtronLicenseBaseDTO &
     (isCentralDashboard extends true
@@ -1141,9 +1346,14 @@ export type DevtronLicenseDTO<isCentralDashboard extends boolean = false> = Devt
               showLicenseData?: never
               licenseStatusError?: never
               moduleLimits?: never
+              instanceData: {
+                  devtronUrl: string
+                  devtronPassword: string
+              } | null
           }
         : {
               claimedByUserDetails?: never
+              instanceData?: never
               showLicenseData: boolean
               licenseStatusError?: LicenseErrorStruct
               moduleLimits: {
@@ -1242,8 +1452,10 @@ export enum TIMELINE_STATUS {
     HELM_MANIFEST_PUSHED_TO_HELM_REPO_FAILED = 'HELM_MANIFEST_PUSHED_TO_HELM_REPO_FAILED',
 }
 
-export interface DeploymentStatusDetailsTimelineType
-    extends Pick<SyncStageResourceDetail, 'id' | 'cdWorkflowRunnerId'> {
+export interface DeploymentStatusDetailsTimelineType extends Pick<
+    SyncStageResourceDetail,
+    'id' | 'cdWorkflowRunnerId'
+> {
     status: TIMELINE_STATUS
     statusDetail: string
     statusTime: string

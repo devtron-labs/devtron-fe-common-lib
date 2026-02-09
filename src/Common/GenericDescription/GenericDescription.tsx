@@ -14,24 +14,13 @@
  * limitations under the License.
  */
 
-import { useState } from 'react'
-import MDEditor, { commands } from '@uiw/react-md-editor'
+import { useEffect, useMemo, useState } from 'react'
+import MDEditor, { commands, MDEditorProps } from '@uiw/react-md-editor'
 
-import { ReactComponent as BoldIcon } from '@Icons/ic-bold.svg'
-import { ReactComponent as CheckedListIcon } from '@Icons/ic-checked-list.svg'
-import { ReactComponent as CodeIcon } from '@Icons/ic-code.svg'
-import { ReactComponent as HeaderIcon } from '@Icons/ic-header.svg'
-import { ReactComponent as ImageIcon } from '@Icons/ic-image.svg'
-import { ReactComponent as ItalicIcon } from '@Icons/ic-italic.svg'
-import { ReactComponent as LinkIcon } from '@Icons/ic-link.svg'
-import { ReactComponent as OrderedListIcon } from '@Icons/ic-ordered-list.svg'
 import { ReactComponent as Edit } from '@Icons/ic-pencil.svg'
-import { ReactComponent as QuoteIcon } from '@Icons/ic-quote.svg'
-import { ReactComponent as StrikethroughIcon } from '@Icons/ic-strikethrough.svg'
 import { ReactComponent as UnorderedListIcon } from '@Icons/ic-unordered-list.svg'
 
 import {
-    AppThemeType,
     Button,
     ButtonStyleType,
     ButtonVariantType,
@@ -39,81 +28,14 @@ import {
     Icon,
     ToastManager,
     ToastVariantType,
-    useTheme,
 } from '../../Shared'
 import Markdown from '../Markdown/MarkDown'
-import { showError } from '..'
-import { DESCRIPTION_EMPTY_ERROR_MSG, DESCRIPTION_UNSAVED_CHANGES_MSG } from './constant'
+import { showError, Tooltip } from '..'
+import { DESCRIPTION_EMPTY_ERROR_MSG, DESCRIPTION_UNSAVED_CHANGES_MSG, TOOLBAR_SECONDARY_COMMANDS } from './constant'
 import { GenericDescriptionProps } from './types'
 import { getParsedUpdatedOnDate } from './utils'
 
 import './genericDescription.scss'
-
-const myCommands = [
-    {
-        ...commands.codeEdit,
-        icon: <span className="fs-13 fw-6 lh-20">Write</span>,
-    },
-    {
-        ...commands.codePreview,
-        icon: <span className="fs-13 fw-6 lh-20">Preview</span>,
-    },
-]
-
-const extraCommands = [
-    {
-        ...commands.bold,
-        icon: <BoldIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.italic,
-        icon: <ItalicIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.strikethrough,
-        icon: <StrikethroughIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.heading,
-        icon: <HeaderIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.quote,
-        icon: <QuoteIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.code,
-        icon: <CodeIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.link,
-        icon: <LinkIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.image,
-        icon: <ImageIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.orderedListCommand,
-        icon: <OrderedListIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.unorderedListCommand,
-        icon: <UnorderedListIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.checkedListCommand,
-        icon: <CheckedListIcon className="icon-dim-16 flex" />,
-    },
-    {
-        ...commands.help,
-        icon: (
-            <div className="flex dc__no-shrink">
-                <Icon name="ic-help-outline" color="N700" size={12} />
-            </div>
-        ),
-    },
-]
 
 const GenericDescription = ({
     text,
@@ -123,16 +45,45 @@ const GenericDescription = ({
     title,
     emptyStateConfig,
 }: GenericDescriptionProps) => {
+    const parsedText = text || ''
+
     const [isLoading, setIsLoading] = useState(false)
-    const [modifiedValue, setModifiedValue] = useState(text || '')
+    const [modifiedValue, setModifiedValue] = useState(parsedText)
     const [isEditView, setIsEditView] = useState(false)
 
-    const { appTheme } = useTheme()
+    const [editorViewState, setEditorViewState] = useState<'write' | 'preview'>('write')
 
     const _date = getParsedUpdatedOnDate(updatedOn)
 
+    useEffect(() => {
+        setModifiedValue(parsedText)
+        setIsEditView(false)
+    }, [parsedText])
+
+    const toolbarPrimaryCommands = useMemo(
+        () => [
+            {
+                ...commands.codeEdit,
+                icon: <span className="fs-13 fw-4 lh-20">Write</span>,
+                execute: (...props) => {
+                    setEditorViewState('write')
+                    return commands.codeEdit.execute(...props)
+                },
+            } satisfies typeof commands.codeEdit,
+            {
+                ...commands.codePreview,
+                icon: <span className="fs-13 fw-4 lh-20">Preview</span>,
+                execute: (...props) => {
+                    setEditorViewState('preview')
+                    return commands.codePreview.execute(...props)
+                },
+            } satisfies typeof commands.codePreview,
+        ],
+        [],
+    )
+
     const handleCancel = () => {
-        const isDescriptionModified = modifiedValue.trim() !== (text || '').trim()
+        const isDescriptionModified = modifiedValue.trim() !== parsedText.trim()
         let isConfirmed = true
 
         if (isDescriptionModified) {
@@ -141,7 +92,7 @@ const GenericDescription = ({
         }
 
         if (isConfirmed) {
-            setModifiedValue(text)
+            setModifiedValue(parsedText)
             setIsEditView(false)
         }
     }
@@ -170,7 +121,7 @@ const GenericDescription = ({
         setIsEditView(true)
     }
 
-    if (!text && !isEditView) {
+    if (!parsedText && !isEditView) {
         const { img, subtitle } = emptyStateConfig || {}
         return (
             <div className="flexbox w-100 bg__primary br-8 dc__border-dashed--n3">
@@ -190,6 +141,48 @@ const GenericDescription = ({
                 </div>
                 {img && <img src={img} width="585px" height="243px" alt="release-note" className="br-8 bg__primary" />}
             </div>
+        )
+    }
+
+    const renderMarkdown = (source: string) => (
+        <Markdown markdown={source} breaks disableEscapedText className="mh-150 pt-8 fs-14 fw-4 cn-9" />
+    )
+
+    const renderToolbar: MDEditorProps['components']['toolbar'] = (
+        command,
+        disabled,
+        executeCommand: (command, name) => void,
+        index: number,
+    ) => {
+        if (command.name === 'edit' || command.name === 'preview') {
+            return (
+                <button
+                    key={index}
+                    type="button"
+                    className="markdown-editor__tab-button flex dc__transparent p-4"
+                    onClick={() => executeCommand(command, command.name)}
+                    disabled={disabled}
+                >
+                    {command.icon}
+                </button>
+            )
+        }
+        return (
+            <Tooltip
+                key={index}
+                alwaysShowTippyOnHover={!!command.buttonProps?.title}
+                content={command.buttonProps?.title}
+                placement="top"
+            >
+                <button
+                    type="button"
+                    className="flex dc__transparent p-4 mr-4"
+                    onClick={() => executeCommand(command, command.name)}
+                    disabled={disabled}
+                >
+                    {command.icon}
+                </button>
+            </Tooltip>
         )
     }
 
@@ -222,25 +215,23 @@ const GenericDescription = ({
                         </button>
                     </div>
 
-                    <Markdown markdown={text} breaks disableEscapedText />
+                    {renderMarkdown(parsedText)}
                 </div>
             ) : (
                 <>
                     <MDEditor
                         value={modifiedValue}
                         onChange={setModifiedValue}
-                        data-color-mode={appTheme === AppThemeType.dark ? 'dark' : 'light'}
-                        commands={myCommands}
-                        extraCommands={extraCommands}
-                        // commandsFilter={(cmd, isExtra) => {
-                        //     if (/(live|edit)/.test(cmd.name) && !isExtra) {
-                        //         return false
-                        //     }
-                        //     return cmd
-                        // }}
+                        commands={toolbarPrimaryCommands}
+                        extraCommands={TOOLBAR_SECONDARY_COMMANDS}
+                        preview={editorViewState === 'preview' ? 'preview' : 'edit'}
+                        components={{
+                            preview: renderMarkdown,
+                            toolbar: renderToolbar,
+                        }}
                     />
 
-                    <div className="flexbox dc__content-end pt-12 pb-12 dc__contain--paint">
+                    <div className="flexbox dc__content-end pt-12 pb-12 dc__contain--paint border__primary--top">
                         <div className="form__buttons dc__gap-16 px-16">
                             <Button
                                 dataTestId="description-edit-cancel-button"

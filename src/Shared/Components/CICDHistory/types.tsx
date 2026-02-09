@@ -249,8 +249,7 @@ export interface SidebarType extends RenderRunSourceType {
 }
 
 export interface HistorySummaryCardType
-    extends RenderRunSourceType,
-        Pick<History, 'workflowExecutionStages' | 'podName' | 'namespace'> {
+    extends RenderRunSourceType, Pick<History, 'workflowExecutionStages' | 'podName' | 'namespace'> {
     id: number
     status: string
     startedOn: string
@@ -279,7 +278,8 @@ export interface DeploymentSummaryTooltipCardType {
 }
 
 export interface BuildAndTaskSummaryTooltipCardProps
-    extends Pick<History, 'workflowExecutionStages' | 'triggeredByEmail' | 'namespace' | 'podName' | 'stage'>,
+    extends
+        Pick<History, 'workflowExecutionStages' | 'triggeredByEmail' | 'namespace' | 'podName' | 'stage'>,
         Pick<HistorySummaryCardType, 'gitTriggers' | 'ciMaterials'> {}
 
 export interface DeploymentTemplateList {
@@ -314,8 +314,7 @@ export interface StartDetailsType {
 }
 
 export interface TriggerDetailsType
-    extends Pick<StartDetailsType, 'renderTargetConfigInfo'>,
-        Pick<History, 'workflowExecutionStages' | 'namespace'> {
+    extends Pick<StartDetailsType, 'renderTargetConfigInfo'>, Pick<History, 'workflowExecutionStages' | 'namespace'> {
     status: string
     startedOn: string
     finishedOn: string
@@ -376,8 +375,7 @@ export interface CurrentStatusIconProps {
 }
 
 export interface WorkerStatusType
-    extends Pick<ExecutionInfoType['workerDetails'], 'clusterId'>,
-        Pick<TriggerDetailsType, 'namespace'> {
+    extends Pick<ExecutionInfoType['workerDetails'], 'clusterId'>, Pick<TriggerDetailsType, 'namespace'> {
     message: string
     podStatus: string
     stage: DeploymentStageType
@@ -510,7 +508,8 @@ export interface TriggerOutputProps extends RenderRunSourceType, Pick<TriggerDet
 }
 
 export interface HistoryLogsProps
-    extends Pick<
+    extends
+        Pick<
             TriggerOutputProps,
             | 'scrollToTop'
             | 'scrollToBottom'
@@ -540,8 +539,10 @@ export interface HistoryLogsProps
     renderRunSource: (runSource: RunSourceType, isDeployedInThisResource: boolean) => JSX.Element
 }
 
-export interface LogsRendererType
-    extends Pick<HistoryLogsProps, 'fullScreenView' | 'triggerDetails' | 'isBlobStorageConfigured'> {
+export interface LogsRendererType extends Pick<
+    HistoryLogsProps,
+    'fullScreenView' | 'triggerDetails' | 'isBlobStorageConfigured'
+> {
     parentType: HistoryComponentType
 }
 
@@ -640,13 +641,6 @@ export interface AggregatedNodes {
             [status: string]: number
         }
     }
-}
-
-export interface PodMetadatum {
-    name: string
-    uid: string
-    containers: string[]
-    isNew: boolean
 }
 
 export const STATUS_SORTING_ORDER = {
@@ -902,11 +896,15 @@ export interface ConflictedResourcesTableProps {
     resourceConflictDetails: ResourceConflictItemType[]
 }
 
-export interface ResourceConflictDeployDialogURLParamsType
-    extends Pick<TriggerOutputURLParamsType, 'appId' | 'envId' | 'pipelineId' | 'triggerId'> {}
+export interface ResourceConflictDeployDialogURLParamsType extends Pick<
+    TriggerOutputURLParamsType,
+    'appId' | 'envId' | 'pipelineId' | 'triggerId'
+> {}
 
-export interface ResourceConflictRedeployParamsType
-    extends Pick<ResourceConflictDeployDialogURLParamsType, 'pipelineId' | 'triggerId' | 'appId'> {}
+export interface ResourceConflictRedeployParamsType extends Pick<
+    ResourceConflictDeployDialogURLParamsType,
+    'pipelineId' | 'triggerId' | 'appId'
+> {}
 
 export interface ResourceConflictRedeployPayloadType {
     pipelineId: number
@@ -915,8 +913,10 @@ export interface ResourceConflictRedeployPayloadType {
     helmRedeploymentRequest: true
 }
 
-export interface GetResourceConflictDetailsParamsType
-    extends Pick<ResourceConflictDeployDialogURLParamsType, 'pipelineId' | 'triggerId' | 'appId'> {
+export interface GetResourceConflictDetailsParamsType extends Pick<
+    ResourceConflictDeployDialogURLParamsType,
+    'pipelineId' | 'triggerId' | 'appId'
+> {
     signal: AbortSignal
 }
 
