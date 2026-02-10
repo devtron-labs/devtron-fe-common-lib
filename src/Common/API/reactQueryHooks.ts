@@ -46,8 +46,8 @@ export const useQuery = <
 ): UseQueryResult<TData, ServerErrors> => rqUseQuery(options)
 
 export const useMutation = <TData = unknown, TVariables = void, TContext = unknown>(
-    options: UseMutationOptions<ResponseType<TData>, ServerErrors, TVariables, TContext>,
-): UseMutationResult<ResponseType<TData>, ServerErrors, TVariables, TContext> => rqUseMutation(options)
+    options: UseMutationOptions<TData, ServerErrors, TVariables, TContext>,
+): UseMutationResult<TData, ServerErrors, TVariables, TContext> => rqUseMutation(options)
 
 export const useInfiniteQuery = <
     TQueryFnData = unknown,
