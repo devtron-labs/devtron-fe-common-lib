@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
-import { useHistory } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
+
+import { ROUTER_URLS } from '@PagesDevtron2.0/Shared'
 
 import GenericEmptyState from './EmptyState/GenericEmptyState'
-import { ERROR_EMPTY_SCREEN, ERROR_STATUS_CODE, ROUTES } from './Constants'
+import { ERROR_EMPTY_SCREEN, ERROR_STATUS_CODE } from './Constants'
 import { noop, refresh, reportIssue } from './Helper'
 import { ErrorPageType } from './Types'
 
 const ErrorPage = ({ code, image, title, subTitle, imageType, redirectURL, reload, on404Redirect }: ErrorPageType) => {
-    const { push } = useHistory()
+    const navigate = useNavigate()
     const redirectToHome = () => {
         if (on404Redirect) {
             on404Redirect()
             return
         }
-        push(redirectURL || `/${ROUTES.APP_LIST}`)
+        navigate(redirectURL || ROUTER_URLS.DEVTRON_APP_LIST)
     }
 
     const getErrorPageProps = (

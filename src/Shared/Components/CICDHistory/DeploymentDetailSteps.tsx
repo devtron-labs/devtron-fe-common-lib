@@ -15,10 +15,11 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import { useHistory, useParams, useRouteMatch } from 'react-router-dom'
+import { generatePath, useLocation, useNavigate, useParams } from 'react-router-dom'
 
 import { IndexStore } from '@Shared/Store'
 import { DeploymentStatusDetailsBreakdownDataType, DeploymentStatusDetailsType, TIMELINE_STATUS } from '@Shared/types'
+import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 import { ReactComponent as Arrow } from '../../../Assets/Icon/ic-arrow-forward.svg'
 import mechanicalOperation from '../../../Assets/Icon/ic-mechanical-operation.svg'
@@ -45,8 +46,8 @@ const DeploymentDetailSteps = ({
     renderDeploymentApprovalInfo,
     isDeploymentWithoutApproval,
 }: DeploymentDetailStepsType) => {
-    const history = useHistory()
-    const { url } = useRouteMatch()
+    const navigate = useNavigate()
+    const { pathname } = useLocation()
     const { appId, envId, triggerId } = useParams<{ appId: string; envId?: string; triggerId?: string }>()
     const [deploymentListLoader, setDeploymentListLoader] = useState<boolean>(
         deploymentStatus?.toUpperCase() !== TIMELINE_STATUS.ABORTED,
@@ -92,7 +93,7 @@ const DeploymentDetailSteps = ({
 
     useEffect(() => {
         if (deploymentAppType === DeploymentAppTypes.HELM) {
-            history.replace(`${url.replace('deployment-steps', 'source-code')}`)
+            navigate(`${pathname.replace('deployment-steps', 'source-code')}`, { replace: true })
         }
         if (isGitops) {
             getDeploymentDetailStepsData()
@@ -136,16 +137,11 @@ const DeploymentDetailSteps = ({
     }
 
     const redirectToDeploymentStatus = () => {
-        if (isHelmApps) {
-            getHandleOpenURL(
-                `${window.__BASE_URL__}${URLS.INFRASTRUCTURE_MANAGEMENT_APP}/${URLS.DEVTRON_CHARTS}/${URLS.APP_DEPLOYMNENT_HISTORY}/${appId}/env/${envId}/${URLS.DETAILS}/${URLS.APP_DETAILS_K8}?${DEPLOYMENT_STATUS_QUERY_PARAM}`,
-            )()
-            return
-        }
+        const url = isHelmApps
+            ? `${generatePath(ROUTER_URLS.INFRASTRUCTURE_MANAGEMENT_APP_DETAIL.DEVTRON_CHART, { appId, envId })}/${URLS.DETAILS}/${URLS.APP_DETAILS_K8}?${DEPLOYMENT_STATUS_QUERY_PARAM}`
+            : `${ROUTER_URLS.DEVTRON_APP}/${appId}/${URLS.APP_DETAILS}/${envId}/${URLS.APP_DETAILS_K8}?${DEPLOYMENT_STATUS_QUERY_PARAM}`
 
-        getHandleOpenURL(
-            `${window.__BASE_URL__}${URLS.APPLICATION_MANAGEMENT_APP}/${appId}/${URLS.APP_DETAILS}/${envId}/${URLS.APP_DETAILS_K8}?${DEPLOYMENT_STATUS_QUERY_PARAM}`,
-        )()
+        getHandleOpenURL(`${window.__BASE_URL__}${url}`)()
     }
 
     const getDeploymentStatusDetails = () =>

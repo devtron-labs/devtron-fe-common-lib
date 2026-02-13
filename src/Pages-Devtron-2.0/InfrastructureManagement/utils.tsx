@@ -1,7 +1,8 @@
-import { URLS } from '@Common/Constants'
 import { BreadcrumbText } from '@Common/index'
 import { Button, ButtonComponentType, ButtonVariantType, Icon } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
+
+import { ROUTER_URLS } from '..'
 
 export const getAutomationEnablementBreadcrumbConfig = () => ({
     'automation-and-enablement': {
@@ -12,7 +13,7 @@ export const getAutomationEnablementBreadcrumbConfig = () => ({
                 size={ComponentSizeType.xs}
                 variant={ButtonVariantType.borderLess}
                 linkProps={{
-                    to: URLS.AUTOMATION_AND_ENABLEMENT_JOB,
+                    to: ROUTER_URLS.JOBS,
                 }}
                 icon={<Icon name="ic-bot" color={null} />}
                 ariaLabel="Automation & Enablement"
@@ -23,5 +24,5 @@ export const getAutomationEnablementBreadcrumbConfig = () => ({
     },
     job: null,
     list: { component: <BreadcrumbText heading="Jobs" isActive /> },
-    'jobId(\\d+)': null,
+    appId: null,
 })

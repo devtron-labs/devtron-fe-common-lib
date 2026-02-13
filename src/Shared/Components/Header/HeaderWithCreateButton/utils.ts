@@ -14,11 +14,14 @@
  * limitations under the License.
  */
 
-import { URLS } from '@Common/Constants'
+import { ROUTER_URLS } from '@PagesDevtron2.0/Shared'
 
 import { CreateActionMenuItems, CreateActionMenuProps } from './types'
 
-export const getCreateActionMenuOptions = (createCustomAppURL: string): CreateActionMenuProps['options'] => [
+export const getCreateActionMenuOptions = (
+    createCustomAppURL: string,
+    createJobURL: string,
+): CreateActionMenuProps['options'] => [
     {
         items: [
             {
@@ -35,7 +38,7 @@ export const getCreateActionMenuOptions = (createCustomAppURL: string): CreateAc
                 description: 'Deploy apps using third party helm charts (eg. prometheus, redis etc.)',
                 startIcon: { name: 'ic-helm' },
                 componentType: 'link',
-                to: URLS.INFRASTRUCTURE_MANAGEMENT_CHART_STORE_DISCOVER,
+                to: ROUTER_URLS.CHART_STORE,
             },
             {
                 id: CreateActionMenuItems.JOB,
@@ -43,7 +46,7 @@ export const getCreateActionMenuOptions = (createCustomAppURL: string): CreateAc
                 description: 'Jobs allow manual and automated execution of developer actions.',
                 startIcon: { name: 'ic-k8s-job' },
                 componentType: 'link',
-                to: `${URLS.AUTOMATION_AND_ENABLEMENT_JOB}/${URLS.APP_LIST}/${URLS.CREATE_JOB}`,
+                to: createJobURL,
             },
         ],
     },

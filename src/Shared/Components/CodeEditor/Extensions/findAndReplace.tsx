@@ -15,7 +15,7 @@
  */
 
 import { ChangeEvent, KeyboardEvent as ReactKeyboardEvent, MouseEvent, useEffect, useState } from 'react'
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import {
     closeSearchPanel,
     findNext,
@@ -457,14 +457,13 @@ export const getCodeEditorFindReplace =
         dom.onkeydown = keydown
 
         const renderFindReplace = () => {
-            render(
+            createRoot(dom).render(
                 <FindReplace
                     view={view}
                     defaultQuery={getSearchQuery(view.state)}
                     defaultShowReplace={getShowReplaceField(view.state)}
                     onSearchBarAction={onSearchBarAction}
                 />,
-                dom,
             )
         }
 

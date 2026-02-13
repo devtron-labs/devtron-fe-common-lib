@@ -1,5 +1,5 @@
 import { RefObject } from 'react'
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { LegendItem, Plugin } from 'chart.js'
 
 import { Tooltip } from '@Common/Tooltip'
@@ -59,7 +59,7 @@ export const htmlLegendPlugin = (id: string, ref: RefObject<HTMLDivElement>, typ
             chart.update()
         }
 
-        render(
+        createRoot(ref.current).render(
             chart.options.plugins.legend.labels
                 .generateLabels(chart)
                 .map((item) => (
@@ -72,7 +72,6 @@ export const htmlLegendPlugin = (id: string, ref: RefObject<HTMLDivElement>, typ
                         variant={type === 'line' ? 'line' : 'square'}
                     />
                 )),
-            ref.current,
         )
     },
 })

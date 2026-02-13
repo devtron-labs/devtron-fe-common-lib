@@ -19,7 +19,7 @@ import { Link } from 'react-router-dom'
 
 import { ReactComponent as ICDown } from '@Icons/ic-chevron-down.svg'
 import { ReactComponent as ICHelp } from '@Icons/ic-help.svg'
-import { URLS } from '@Common/Constants'
+import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 import { SUGGESTIONS_INFO_TITLE } from './constants'
 
@@ -54,7 +54,7 @@ const SuggestionsInfo = () => {
                         Use a scoped variable for dynamic values, which are defined in the&nbsp;
                         <Link
                             className="cb-5 m-0"
-                            to={URLS.APPLICATION_MANAGEMENT_CONFIGURATIONS_SCOPED_VARIABLES}
+                            to={ROUTER_URLS.APPLICATION_MANAGEMENT_CONFIGURATIONS.SCOPED_VARIABLES.ROOT}
                             target="_blank"
                             rel="noopener noreferrer"
                         >

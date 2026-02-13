@@ -21,7 +21,8 @@ import { ComponentSizeType } from '@Shared/constants'
 import { FormFieldWrapperProps } from '../FormFieldWrapper'
 
 export interface TextareaProps
-    extends Omit<FormFieldWrapperProps, 'children' | 'inputId'>,
+    extends
+        Omit<FormFieldWrapperProps, 'children' | 'inputId'>,
         Pick<TextareaHTMLAttributes<HTMLTextAreaElement>, 'onBlur' | 'disabled' | 'autoFocus' | 'onFocus'>,
         Required<Pick<TextareaHTMLAttributes<HTMLTextAreaElement>, 'placeholder' | 'onChange' | 'name'>> {
     /**

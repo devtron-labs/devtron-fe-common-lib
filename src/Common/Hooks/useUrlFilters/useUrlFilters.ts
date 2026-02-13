@@ -15,7 +15,7 @@
  */
 
 import { useMemo, useRef } from 'react'
-import { useHistory, useLocation } from 'react-router-dom'
+import { useLocation, useNavigate } from 'react-router-dom'
 
 import { getUrlWithSearchParams } from '@Common/Helper'
 
@@ -52,7 +52,7 @@ const useUrlFilters = <T = string, K = {}>({
     defaultPageSize = DEFAULT_BASE_PAGE_SIZE,
 }: UseUrlFiltersProps<T, K> = {}): UseUrlFiltersReturnType<T, K> => {
     const location = useLocation()
-    const history = useHistory()
+    const navigate = useNavigate()
 
     const isAlreadyReadFromLocalStorage = useRef<boolean>(false)
 
@@ -68,7 +68,7 @@ const useUrlFilters = <T = string, K = {}>({
                         const localSearchParams = new URLSearchParams(localSearchString.split('?')[1] ?? '')
 
                         // This would remain replace since the initial value is being set from local storage
-                        history.replace({ search: localSearchParams.toString() })
+                        navigate({ search: localSearchParams.toString() }, { replace: true })
                         return localSearchParams
                     } catch {
                         localStorage.removeItem(localStorageKey)
@@ -128,11 +128,7 @@ const useUrlFilters = <T = string, K = {}>({
         const params = { search: updatedSearchString }
         const methodForRedirection = options.redirectionMethod ?? redirectionMethod
 
-        if (methodForRedirection === 'push') {
-            history.push(params)
-        } else {
-            history.replace(params)
-        }
+        navigate(params, { replace: methodForRedirection === 'replace' })
     }
 
     /**

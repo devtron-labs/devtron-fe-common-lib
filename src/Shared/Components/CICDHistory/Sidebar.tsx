@@ -16,7 +16,7 @@
 
 import React, { memo, useEffect, useRef } from 'react'
 import ReactGA from 'react-ga4'
-import { generatePath, NavLink, useHistory, useLocation, useParams, useRouteMatch } from 'react-router-dom'
+import { generatePath, NavLink, useLocation, useNavigate, useParams } from 'react-router-dom'
 import ReactSelect, { components } from 'react-select'
 import TippyHeadless from '@tippyjs/react/headless'
 import moment from 'moment'
@@ -125,8 +125,9 @@ const HistorySummaryCard = memo(
         podName,
         namespace,
         workflowExecutionStages,
+        path,
     }: HistorySummaryCardType): JSX.Element => {
-        const { path, params } = useRouteMatch()
+        const params = useParams()
         const { pathname } = useLocation()
         const currentTab = pathname.split('/').pop()
         const { envId, ...rest } = useParams<{ triggerId: string; envId: string }>()
@@ -137,14 +138,12 @@ const HistorySummaryCard = memo(
 
         const targetCardRef = useRef(null)
 
-        const getPath = (): string => {
-            const _params = {
+        const getPath = (): string =>
+            `${generatePath(path, {
                 ...rest,
                 envId,
                 [idName]: id,
-            }
-            return `${generatePath(path, _params)}/${currentTab}`
-        }
+            })}/${currentTab}`
 
         const scrollToElement = () => {
             if (targetCardRef?.current) {
@@ -204,10 +203,11 @@ const HistorySummaryCard = memo(
                 )}
             >
                 <NavLink
-                    to={getPath}
-                    className="w-100 deployment-history-card-container p-8 br-4"
+                    to={getPath()}
+                    className={({ isActive }) =>
+                        `w-100 deployment-history-card-container p-8 br-4 ${isActive ? 'active' : ''}`
+                    }
                     data-testid={dataTestId}
-                    activeClassName="active"
                     ref={assignTargetCardRef}
                 >
                     <div className="w-100 deployment-history-card">
@@ -270,24 +270,36 @@ const Sidebar = React.memo(
         children,
         renderRunSource,
         resourceId,
+        path,
     }: SidebarType) => {
         const { pipelineId, appId, envId } = useParams<{ appId: string; envId: string; pipelineId: string }>()
-        const { push } = useHistory()
-        const { path } = useRouteMatch()
+        const navigate = useNavigate()
 
         const handleFilterChange = (selectedFilter: CICDSidebarFilterOptionType): void => {
             if (type === HistoryComponentType.CI) {
                 setPagination({ offset: 0, size: 20 })
-                push(generatePath(path, { appId, pipelineId: selectedFilter.value }))
+                navigate(generatePath(path, { appId, pipelineId: selectedFilter.value }))
             } else if (type === HistoryComponentType.GROUP_CI) {
                 setPagination({ offset: 0, size: 20 })
-                push(generatePath(path, { envId, pipelineId: selectedFilter.pipelineId }))
+                navigate(generatePath(path, { envId, pipelineId: String(selectedFilter.pipelineId) }))
             } else if (type === HistoryComponentType.GROUP_CD) {
                 setPagination({ offset: 0, size: 20 })
-                push(generatePath(path, { envId, appId: selectedFilter.value, pipelineId: selectedFilter.pipelineId }))
+                navigate(
+                    generatePath(path, {
+                        envId,
+                        appId: selectedFilter.value,
+                        pipelineId: String(selectedFilter.pipelineId),
+                    }),
+                )
             } else {
                 setPagination({ offset: 0, size: 20 })
-                push(generatePath(path, { appId, envId: selectedFilter.value, pipelineId: selectedFilter.pipelineId }))
+                navigate(
+                    generatePath(path, {
+                        appId,
+                        envId: selectedFilter.value,
+                        pipelineId: String(selectedFilter.pipelineId),
+                    }),
+                )
             }
         }
         const reloadNextAfterBottom = () => {
@@ -403,6 +415,7 @@ const Sidebar = React.memo(
                             workflowExecutionStages={triggerDetails.workflowExecutionStages}
                             podName={triggerDetails.podName}
                             namespace={triggerDetails.namespace}
+                            path={path}
                         />
                     ))}
                     {hasMore && (fetchIdData === FetchIdDataStatus.SUSPEND || !fetchIdData) && (

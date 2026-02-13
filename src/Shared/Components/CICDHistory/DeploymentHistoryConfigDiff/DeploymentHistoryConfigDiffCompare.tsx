@@ -15,7 +15,7 @@
  */
 
 import { useEffect, useState } from 'react'
-import { generatePath, useRouteMatch } from 'react-router-dom'
+import { generatePath, useParams } from 'react-router-dom'
 
 import { DEFAULT_BASE_PAGE_SIZE, SortingOrder } from '@Common/Constants'
 import { Button, ButtonVariantType } from '@Shared/Components/Button'
@@ -47,10 +47,11 @@ export const DeploymentHistoryConfigDiffCompare = ({
     renderRunSource,
     resourceId,
     isCompareDeploymentConfigNotAvailable,
+    pathPattern,
     ...props
 }: DeploymentHistoryDiffDetailedProps) => {
     // HOOKS
-    const { path, params } = useRouteMatch<DeploymentHistoryConfigDiffRouteParams>()
+    const params = useParams<DeploymentHistoryConfigDiffRouteParams>()
     const { resourceType, resourceName, appId, envId } = params
 
     // URL FILTERS
@@ -206,7 +207,7 @@ export const DeploymentHistoryConfigDiffCompare = ({
             scrollIntoViewId={`${resourceType}${resourceName ? `-${resourceName}` : ''}`}
             navHelpText={getNavHelpText()}
             isNavHelpTextShowingError={isCompareDeploymentConfigNotAvailable}
-            goBackURL={generatePath(path.split('/:resourceType')[0], { ...params })}
+            goBackURL={generatePath(pathPattern.split('/:resourceType')[0], { ...params })}
             selectorsConfig={selectorsConfig}
             sortingConfig={sortingConfig}
             scopeVariablesConfig={scopeVariablesConfig}

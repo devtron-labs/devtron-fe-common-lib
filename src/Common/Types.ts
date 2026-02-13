@@ -14,23 +14,29 @@
  * limitations under the License.
  */
 
-import React, { ReactNode, CSSProperties, ReactElement, MutableRefObject } from 'react'
+import React, { CSSProperties, MutableRefObject, ReactElement, ReactNode } from 'react'
+import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { TippyProps } from '@tippyjs/react'
+
+import { IllustrationName, SelectPickerOptionType } from '@Shared/Components'
 import { UserGroupDTO } from '@Pages/GlobalConfigurations'
-import { ImageComment, ReleaseTag } from './ImageTags.Types'
+import { ClusterStatusType } from '@Pages/ResourceBrowser'
+import { ClusterProviderType } from '@PagesDevtron2.0/CostVisibility'
+
 import {
+    ComponentLayoutType,
+    DeploymentStrategyType,
+    DocLinkProps,
+    EnvironmentType,
     MandatoryPluginBaseStateType,
+    PolicyBlockInfo,
     RegistryType,
     RuntimePluginVariables,
     Severity,
-    PolicyBlockInfo,
-    TargetPlatformItemDTO,
-    ComponentLayoutType,
     StatusType,
-    DocLinkProps,
-    DeploymentStrategyType,
-    EnvironmentType,
+    TargetPlatformItemDTO,
 } from '../Shared'
+import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import {
     ACTION_STATE,
     DEPLOYMENT_WINDOW_TYPE,
@@ -40,9 +46,6 @@ import {
     TaskErrorObj,
     VariableTypeFormat,
 } from '.'
-import { IllustrationName, SelectPickerOptionType } from '@Shared/Components'
-import { ClusterStatusType } from '@Pages/ResourceBrowser'
-import { ClusterProviderType } from '@PagesDevtron2.0/CostVisibility'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -96,14 +99,15 @@ export enum TippyTheme {
     black = 'black',
     white = 'white',
 }
-export interface TeamList extends ResponseType {
-    result: Teams[]
-}
 
 export interface Teams {
     id: number
     name: string
     active: boolean
+}
+
+export interface TeamList extends ResponseType {
+    result: Teams[]
 }
 
 export enum CHECKBOX_VALUE {
@@ -127,8 +131,10 @@ export interface CheckboxProps {
     children?: ReactNode
 }
 
-export interface TippyWithBaseDocLinkTypes<T extends boolean>
-    extends Pick<DocLinkProps<T>, 'isExternalLink' | 'openInNewTab'> {
+export interface TippyWithBaseDocLinkTypes<T extends boolean> extends Pick<
+    DocLinkProps<T>,
+    'isExternalLink' | 'openInNewTab'
+> {
     documentationLink?: DocLinkProps<T>['docLinkKey']
 }
 
@@ -163,21 +169,20 @@ export type TippyCustomizedProps<T extends boolean> = Pick<TippyProps, 'appendTo
         disableClose?: boolean
     }
 
-export interface InfoIconTippyProps<T extends boolean = false>
-    extends Pick<
-        TippyCustomizedProps<T>,
-        | 'heading'
-        | 'infoText'
-        | 'iconClass'
-        | 'documentationLinkText'
-        | 'additionalContent'
-        | 'placement'
-        | 'Icon'
-        | 'headingInfo'
-        | 'documentationLink'
-        | 'isExternalLink'
-        | 'openInNewTab'
-    > {
+export interface InfoIconTippyProps<T extends boolean = false> extends Pick<
+    TippyCustomizedProps<T>,
+    | 'heading'
+    | 'infoText'
+    | 'iconClass'
+    | 'documentationLinkText'
+    | 'additionalContent'
+    | 'placement'
+    | 'Icon'
+    | 'headingInfo'
+    | 'documentationLink'
+    | 'isExternalLink'
+    | 'openInNewTab'
+> {
     dataTestid?: string
     children?: TippyCustomizedProps<T>['children']
     iconClassName?: string
@@ -206,13 +211,10 @@ export interface GenericEmptyStateType {
     contentClassName?: string
 }
 
-export interface ErrorPageType
-    extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>,
-        Pick<ErrorScreenManagerProps, 'reload' | 'redirectURL'> {
-    code: number
-    redirectURL?: string
-    on404Redirect?: () => void
-    reload?: () => void
+export enum ImageType {
+    Large = 'large',
+    Medium = 'medium',
+    SMALL = 'small',
 }
 
 export type ErrorScreenManagerProps = {
@@ -240,15 +242,21 @@ export type ErrorScreenManagerProps = {
       }
 )
 
+export interface ErrorPageType
+    extends
+        Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>,
+        Pick<ErrorScreenManagerProps, 'reload' | 'redirectURL'> {
+    code: number
+    redirectURL?: string
+    on404Redirect?: () => void
+    reload?: () => void
+}
+
 export interface ErrorScreenNotAuthorizedProps {
     subtitle?: React.ReactChild
     title?: string
 }
-export enum ImageType {
-    Large = 'large',
-    Medium = 'medium',
-    SMALL = 'small',
-}
+
 export interface ReloadType {
     reload?: (event?: any) => void
     className?: string
@@ -461,12 +469,33 @@ export interface ImagePromotionPolicyApprovalMetadata {
     allowApproverFromDeploy: boolean
 }
 
+export enum FilterConditionType {
+    PASS = 1,
+    FAIL = 0,
+}
+
+export interface FilterConditionsInfo {
+    conditionType: FilterConditionType
+    expression: string
+}
+
 export interface ImagePromotionPolicyInfoType {
     name: string
     id: number
     description: string
     conditions: FilterConditionsInfo[]
     approvalMetadata: ImagePromotionPolicyApprovalMetadata
+}
+
+export enum CDMaterialResourceQuery {
+    PENDING_APPROVAL = 'PENDING_APPROVAL',
+    PROMOTION_APPROVAL_PENDING_NODE = 'PROMOTION_APPROVAL_PENDING_NODE',
+    CI = 'CI',
+    ENVIRONMENT = 'ENVIRONMENT',
+    WEBHOOK = 'WEBHOOK',
+    LINKED_CI = 'LINKED-CI',
+    CI_JOB = 'CI-JOB',
+    LINKED_CD = 'LINKED-CD',
 }
 
 export interface PromotionApprovalMetadataType {
@@ -502,6 +531,36 @@ export interface CDMaterialListModalServiceUtilProps {
     disableDefaultSelection?: boolean
     isExceptionUser: boolean
     isApprovalConfigured: boolean
+}
+
+export interface FilterConditionsListType {
+    id: number
+    name: string
+    description: string
+    conditions: FilterConditionsInfo[]
+}
+
+export interface VulnerabilityType {
+    name: string
+    severity: Severity
+    package: string
+    version: string
+    fixedVersion: string
+    policy: string
+    url?: string
+}
+
+export interface MaterialInfo {
+    revision: string
+    modifiedTime: string | Date
+    author: string
+    message: string
+    commitLink: string
+    tag: string
+    webhookData: string
+    branch: string
+    url?: string
+    type?: string
 }
 
 export interface CDMaterialType {
@@ -569,17 +628,6 @@ export enum CDMaterialServiceEnum {
     IMAGE_PROMOTION = 'image-promotion',
 }
 
-export enum CDMaterialResourceQuery {
-    PENDING_APPROVAL = 'PENDING_APPROVAL',
-    PROMOTION_APPROVAL_PENDING_NODE = 'PROMOTION_APPROVAL_PENDING_NODE',
-    CI = 'CI',
-    ENVIRONMENT = 'ENVIRONMENT',
-    WEBHOOK = 'WEBHOOK',
-    LINKED_CI = 'LINKED-CI',
-    CI_JOB = 'CI-JOB',
-    LINKED_CD = 'LINKED-CD',
-}
-
 export enum CDMaterialFilterQuery {
     RESOURCE = 'ELIGIBLE_RESOURCES',
     ALL = 'ALL_RESOURCES',
@@ -612,6 +660,14 @@ export enum TriggerBlockType {
 export interface TriggerBlockedInfo {
     blockedBy: TriggerBlockType
     blockedReason?: string
+}
+
+export enum DeploymentAppTypes {
+    HELM = 'helm',
+    ARGO = 'argo_cd',
+    MANIFEST_DOWNLOAD = 'manifest_download',
+    MANIFEST_PUSH = 'manifest_push',
+    FLUX = 'flux_cd',
 }
 
 export interface CommonNodeAttr extends Pick<MandatoryPluginBaseStateType, 'isTriggerBlocked' | 'pluginBlockState'> {
@@ -678,54 +734,6 @@ export interface CommonNodeAttr extends Pick<MandatoryPluginBaseStateType, 'isTr
     triggerBlockedInfo?: TriggerBlockedInfo
 }
 
-export enum DeploymentAppTypes {
-    HELM = 'helm',
-    ARGO = 'argo_cd',
-    MANIFEST_DOWNLOAD = 'manifest_download',
-    MANIFEST_PUSH = 'manifest_push',
-    FLUX = 'flux_cd',
-}
-
-export interface VulnerabilityType {
-    name: string
-    severity: Severity
-    package: string
-    version: string
-    fixedVersion: string
-    policy: string
-    url?: string
-}
-
-export interface MaterialInfo {
-    revision: string
-    modifiedTime: string | Date
-    author: string
-    message: string
-    commitLink: string
-    tag: string
-    webhookData: string
-    branch: string
-    url?: string
-    type?: string
-}
-
-export enum FilterConditionType {
-    PASS = 1,
-    FAIL = 0,
-}
-
-export interface FilterConditionsInfo {
-    conditionType: FilterConditionType
-    expression: string
-}
-
-export interface FilterConditionsListType {
-    id: number
-    name: string
-    description: string
-    conditions: FilterConditionsInfo[]
-}
-
 export interface DeploymentApprovalInfoType {
     eligibleApprovers: {
         specificUsers: Pick<UserApprovalInfo, 'approverList'>
@@ -764,9 +772,7 @@ export interface ImagePromotionMaterialInfo {
 }
 
 export interface CDMaterialResponseType
-    extends CDMaterialsMetaInfo,
-        CDMaterialsApprovalInfo,
-        ImagePromotionMaterialInfo {
+    extends CDMaterialsMetaInfo, CDMaterialsApprovalInfo, ImagePromotionMaterialInfo {
     materials: CDMaterialType[]
 }
 
@@ -845,8 +851,7 @@ export interface CDStageConfigMapSecretNames {
 }
 
 export interface PrePostDeployStageType
-    extends MandatoryPluginBaseStateType,
-        Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
+    extends MandatoryPluginBaseStateType, Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
     isValid: boolean
     steps: TaskErrorObj[]
     triggerType: string
@@ -1036,12 +1041,6 @@ export interface DeploymentWindowProfileMetaData {
     warningMessage: string
 }
 
-export interface EnvironmentListHelmResult {
-    clusterId: number
-    clusterName: string
-    environments: EnvironmentHelmResult[]
-}
-
 export interface EnvironmentHelmResult {
     environmentId: number
     environmentName: string
@@ -1049,6 +1048,12 @@ export interface EnvironmentHelmResult {
     environmentIdentifier: string
     isVirtualEnvironment?: boolean // Need to confirm for not full mode
     allowedDeploymentTypes?: DeploymentAppTypes[]
+}
+
+export interface EnvironmentListHelmResult {
+    clusterId: number
+    clusterName: string
+    environments: EnvironmentHelmResult[]
 }
 
 export type EnvironmentListHelmResponse = ResponseType<EnvironmentListHelmResult[]>
@@ -1129,7 +1134,7 @@ export type ClusterCostModuleConfigPayload =
     | {
           enabled: true
           config?: Record<string, any> & {
-            detectedProvider: ClusterProviderType
+              detectedProvider: ClusterProviderType
           }
       }
     | {
@@ -1162,11 +1167,10 @@ export interface ClusterDetailDTO {
     costModuleConfig: ClusterCostModuleDetailsDTO
 }
 
-export interface ClusterDetailListType
-    extends Omit<
-        ClusterDetailDTO,
-        'server_url' | 'cluster_name' | 'prometheus_url' | 'id' | 'category' | 'clusterStatus'
-    > {
+export interface ClusterDetailListType extends Omit<
+    ClusterDetailDTO,
+    'server_url' | 'cluster_name' | 'prometheus_url' | 'id' | 'category' | 'clusterStatus'
+> {
     serverUrl: ClusterDetailDTO['server_url']
     clusterName: ClusterDetailDTO['cluster_name']
     prometheusUrl: ClusterDetailDTO['prometheus_url']
@@ -1178,5 +1182,11 @@ export interface ClusterDetailListType
 export enum InfrastructureManagementAppListType {
     HELM = 'helm',
     ARGO_CD = 'argocd',
-    FLUX_CD = 'fluxcd'
+    FLUX_CD = 'fluxcd',
+}
+
+export interface RouterV5Props<Params extends {}> {
+    navigate: ReturnType<typeof useNavigate>
+    params: ReturnType<typeof useParams<Params>>
+    location: ReturnType<typeof useLocation>
 }

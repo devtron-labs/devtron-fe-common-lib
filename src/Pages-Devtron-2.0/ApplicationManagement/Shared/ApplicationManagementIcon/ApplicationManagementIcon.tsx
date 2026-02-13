@@ -1,6 +1,6 @@
-import { URLS } from '@Common/Constants'
 import { Button, ButtonComponentType, ButtonVariantType, Icon } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
+import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 export const ApplicationManagementIcon = () => (
     <Button
@@ -9,7 +9,7 @@ export const ApplicationManagementIcon = () => (
         size={ComponentSizeType.xs}
         variant={ButtonVariantType.borderLess}
         linkProps={{
-            to: URLS.APPLICATION_MANAGEMENT_OVERVIEW,
+            to: ROUTER_URLS.APPLICATION_MANAGEMENT_OVERVIEW,
         }}
         ariaLabel="Application Management"
         showAriaLabelInTippy

@@ -29,6 +29,6 @@ export enum ScopedVariablesFileViewType {
     ENVIRONMENT_LIST = 'environments',
 }
 
-export interface SavedVariablesViewParamsType {
+export type SavedVariablesViewParamsType = {
     currentView: ScopedVariablesFileViewType
 }
