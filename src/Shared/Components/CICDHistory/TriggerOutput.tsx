@@ -238,11 +238,11 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                                 to={`${
                                     // eslint-disable-next-line no-nested-ternary
                                     triggerDetails.stage === 'DEPLOY'
-                                        ? `deployment-steps`
+                                        ? 'deployment-steps'
                                         : triggerDetails.status.toLowerCase() === 'succeeded' ||
                                             triggerDetails.IsVirtualEnvironment
-                                          ? `artifacts`
-                                          : `logs`
+                                          ? 'artifacts'
+                                          : 'logs'
                                 }`}
                                 replace
                             />

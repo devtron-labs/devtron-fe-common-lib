@@ -27,8 +27,8 @@ import { Icon } from '@Shared/Components/Icon'
 import { ComponentSizeType } from '@Shared/constants'
 import { useMainContext } from '@Shared/Providers'
 import { getApplicationManagementBreadcrumb } from '@PagesDevtron2.0/ApplicationManagement'
+import { getAutomationEnablementBreadcrumb } from '@PagesDevtron2.0/Automation&Enablement'
 import { getInfrastructureManagementBreadcrumb } from '@PagesDevtron2.0/InfrastructureManagement'
-import { getAutomationEnablementBreadcrumbConfig } from '@PagesDevtron2.0/InfrastructureManagement/utils'
 import { ROUTER_URLS } from '@PagesDevtron2.0/Shared'
 
 import PageHeader from '../PageHeader'
@@ -71,7 +71,7 @@ export const HeaderWithCreateButton = ({ viewType }: HeaderWithCreateButtonProps
     const getPathPattern = () => {
         switch (viewType) {
             case 'jobs':
-                return ROUTER_URLS.JOBS
+                return ROUTER_URLS.JOBS_LIST
             case 'infra-apps':
                 return ROUTER_URLS.INFRASTRUCTURE_MANAGEMENT_APP_LIST.ROUTE
             case 'apps':
@@ -85,7 +85,11 @@ export const HeaderWithCreateButton = ({ viewType }: HeaderWithCreateButtonProps
     const getBreadcrumbs = () => {
         switch (viewType) {
             case 'jobs':
-                return getAutomationEnablementBreadcrumbConfig()
+                return {
+                    ...getAutomationEnablementBreadcrumb(),
+                    job: null,
+                    list: { component: <BreadcrumbText isActive heading="Jobs" /> },
+                }
             case 'infra-apps':
                 return {
                     ...getInfrastructureManagementBreadcrumb(),

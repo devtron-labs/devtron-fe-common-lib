@@ -1,5 +1,5 @@
 import { RefObject } from 'react'
-import { createRoot } from 'react-dom/client'
+import { createRoot, Root } from 'react-dom/client'
 import { LegendItem, Plugin } from 'chart.js'
 
 import { Tooltip } from '@Common/Tooltip'
@@ -46,35 +46,43 @@ const HTMLLegend = ({ backgroundColor, label, onClick, strikeThrough, variant }:
     </button>
 )
 
-export const htmlLegendPlugin = (id: string, ref: RefObject<HTMLDivElement>, type: ChartType): Plugin => ({
-    id,
-    afterUpdate(chart) {
-        const getOnClickHandler = (item: LegendItem) => () => {
-            if (type === 'pie') {
-                // Pie and doughnut charts only have a single dataset and visibility is per item
-                chart.toggleDataVisibility(item.index)
-            } else {
-                chart.setDatasetVisibility(item.datasetIndex, !chart.isDatasetVisible(item.datasetIndex))
-            }
-            chart.update()
-        }
+export const htmlLegendPlugin = (id: string, ref: RefObject<HTMLDivElement>, type: ChartType): Plugin => {
+    let root: Root | null = null
 
-        createRoot(ref.current).render(
-            chart.options.plugins.legend.labels
-                .generateLabels(chart)
-                .map((item) => (
-                    <HTMLLegend
-                        key={item.text}
-                        backgroundColor={item.fillStyle.toString()}
-                        label={item.text}
-                        strikeThrough={item.hidden}
-                        onClick={getOnClickHandler(item)}
-                        variant={type === 'line' ? 'line' : 'square'}
-                    />
-                )),
-        )
-    },
-})
+    return {
+        id,
+        afterUpdate(chart) {
+            const getOnClickHandler = (item: LegendItem) => () => {
+                if (type === 'pie') {
+                    // Pie and doughnut charts only have a single dataset and visibility is per item
+                    chart.toggleDataVisibility(item.index)
+                } else {
+                    chart.setDatasetVisibility(item.datasetIndex, !chart.isDatasetVisible(item.datasetIndex))
+                }
+                chart.update()
+            }
+
+            if (!root && ref.current) {
+                root = createRoot(ref.current)
+            }
+
+            root?.render(
+                chart.options.plugins.legend.labels
+                    .generateLabels(chart)
+                    .map((item) => (
+                        <HTMLLegend
+                            key={item.text}
+                            backgroundColor={item.fillStyle.toString()}
+                            label={item.text}
+                            strikeThrough={item.hidden}
+                            onClick={getOnClickHandler(item)}
+                            variant={type === 'line' ? 'line' : 'square'}
+                        />
+                    )),
+            )
+        },
+    }
+}
 
 export const drawCenterText = (config: CenterTextConfig, appTheme: AppThemeType): Plugin => ({
     id: 'centerText',
