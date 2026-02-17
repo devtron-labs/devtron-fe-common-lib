@@ -216,6 +216,7 @@ export type MainContext = CommonMainContextProps &
               setTempAppWindowConfig: Dispatch<SetStateAction<TempAppWindowConfig>>
               AIRecommendations?: FunctionComponent
               featureAskDevtronExpert: EnvironmentDataValuesDTO['featureAskDevtronExpert']
+              AskDevtronButton?: FunctionComponent
           }
         | {
               isLicenseDashboard: true
@@ -236,6 +237,7 @@ export type MainContext = CommonMainContextProps &
               setTempAppWindowConfig: null
               AIRecommendations?: null
               featureAskDevtronExpert?: null
+              AskDevtronButton?: null
           }
     )
 
