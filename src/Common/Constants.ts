@@ -33,6 +33,7 @@ export const DEVTRON_GPT_LINK = 'https://chatgpt.com/g/g-6826efa4362c8191b23e7bf
 
 export const PATTERNS = {
     STRING: /^[a-zA-Z0-9_]+$/,
+    APP_NAME: '^[a-z][a-z0-9-]*[a-z0-9]$/*',
     DECIMAL_NUMBERS: /^-?\d*\.?\d*$/,
     POSITIVE_DECIMAL_NUMBERS: /^\d*\.?\d*$/,
     NATURAL_NUMBERS: /^[1-9]\d*$/,
@@ -80,6 +81,8 @@ export const URLS = {
     APP_DEPLOYMNENT_HISTORY: 'deployments',
     APP_DETAILS: 'details',
     APP_DETAILS_K8: 'k8s-resources', // for V2
+    EXTERNAL_ARGO_APP: 'eaa',
+    EXTERNAL_FLUX_APP: 'external-flux',
     DETAILS: '/details',
     CD_DETAILS: 'cd-details',
     APP_TRIGGER: 'trigger',
@@ -99,7 +102,6 @@ export const URLS = {
     APPLICATION_MANAGEMENT_TEMPLATES_DEVTRON_APP_CREATE: `${APPLICATION_MANAGEMENT_TEMPLATES_DEVTRON_APP}/create`,
     // NOTE: using appId since we are re-using AppConfig component
     APPLICATION_MANAGEMENT_TEMPLATES_DEVTRON_APP_DETAIL: `${APPLICATION_MANAGEMENT_TEMPLATES_DEVTRON_APP}/detail/:appId`,
-    APPLICATION_MANAGEMENT_PROJECTS: `${APPLICATION_MANAGEMENT_ROOT}/projects`,
     APPLICATION_MANAGEMENT_CONFIGURATIONS,
     APPLICATION_MANAGEMENT_CONFIGURATIONS_DEPLOYMENT_CHARTS: `${APPLICATION_MANAGEMENT_CONFIGURATIONS}/deployment-charts`,
     APPLICATION_MANAGEMENT_CONFIGURATIONS_SCOPED_VARIABLES: `${APPLICATION_MANAGEMENT_CONFIGURATIONS}/scoped-variables`,
@@ -151,12 +153,14 @@ export const URLS = {
     GLOBAL_CONFIG: GLOBAL_CONFIG_ROOT,
     GLOBAL_CONFIG_DOCKER: `${GLOBAL_CONFIG_ROOT}/docker`,
     GLOBAL_CONFIG_EDIT_CLUSTER: `${GLOBAL_CONFIG_ROOT}/cluster-env/edit/:clusterId`,
+    GLOBAL_CONFIG_PROJECTS: `${GLOBAL_CONFIG_ROOT}/projects`,
     PERMISSION_GROUPS: `${GLOBAL_CONFIG_ROOT}/auth/groups`,
     EXTERNAL_APPS: 'ea',
 } as const
 
 export const ROUTES = {
     APP: 'app',
+    ATHENA: 'athena',
     APP_ARTIFACT_PROMOTE_MATERIAL: 'app/artifact/promotion-request/material',
     APP_TEMPLATE_DATA: 'app/template/data',
     ENVIRONMENT_CATEGORIES: 'env/categories',
@@ -224,6 +228,8 @@ export const ROUTES = {
     ENV: 'env',
     APP_METADATA: 'app-metadata',
     RESOURCE_CONFLICTS_LIST: 'app/:appId/cd-pipeline/:pipelineId/history/:wfrId/helm-ownership-conflicts',
+    GIT_PROVIDER_MIN: 'git/provider/autocomplete',
+    DOCKER_REGISTRY_MIN: 'docker/registry/autocomplete',
 } as const
 
 export enum KEY_VALUE {

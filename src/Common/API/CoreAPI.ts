@@ -55,6 +55,13 @@ class CoreAPI {
             method: type,
             signal,
             body: data ? JSON.stringify(data) : undefined,
+            ...(data && !isMultipartRequest
+                ? {
+                      headers: {
+                          'Content-Type': 'application/json',
+                      },
+                  }
+                : {}),
         }
         // eslint-disable-next-line dot-notation
         options['credentials'] = 'include' as RequestCredentials
