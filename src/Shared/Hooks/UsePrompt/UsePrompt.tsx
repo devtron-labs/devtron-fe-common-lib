@@ -42,10 +42,15 @@ const usePrompt = ({ shouldPrompt, message = DEFAULT_ROUTE_PROMPT_MESSAGE }: Use
         }
     }, [handlePageLeave])
 
-    const blocker = useBlocker(() => shouldPrompt)
+    const blocker = useBlocker(shouldPrompt)
 
     useEffect(() => {
         if (!blocker || blocker.state !== 'blocked') {
+            return
+        }
+
+        if (!shouldPrompt) {
+            blocker.proceed()
             return
         }
 
@@ -57,7 +62,7 @@ const usePrompt = ({ shouldPrompt, message = DEFAULT_ROUTE_PROMPT_MESSAGE }: Use
         } else {
             blocker.reset()
         }
-    }, [blocker, message])
+    }, [blocker, message, shouldPrompt])
 }
 
 export default usePrompt
