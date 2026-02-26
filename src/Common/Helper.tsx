@@ -213,12 +213,10 @@ export function getCookie(sKey) {
     if (!sKey) {
         return null
     }
-    return (
-        document.cookie.replace(
-            new RegExp(`(?:(?:^|.*;)\\s*${sKey.replace(/[\-\.\+\*]/g, '\\$&')}\\s*\\=\\s*([^;]*).*$)|^.*$`),
-            '$1',
-        ) || null
-    )
+    return (document.cookie.replace(
+        new RegExp(`(?:(?:^|.*;)\\s*${sKey.replace(/[\-\.\+\*]/g, '\\$&')}\\s*\\=\\s*([^;]*).*$)|^.*$`),
+        '$1',
+    ) || null);
 }
 
 export function handleUTCTime(ts: string, isRelativeTime = false) {
@@ -1102,7 +1100,7 @@ export const getTTLInHumanReadableFormat = (ttl: number): string => {
     }
     const humanizedDuration = moment.duration(absoluteTTL, 'seconds').humanize(false)
     // Since moment.js return "a" or "an" for singular values so replacing with 1.
-    return humanizedDuration.replace(/^(a|an) /, '1 ')
+    return humanizedDuration.replace(/^(a|an) /, '1 ');
 }
 
 const getAppTypeCategory = (appType: AppType) => {

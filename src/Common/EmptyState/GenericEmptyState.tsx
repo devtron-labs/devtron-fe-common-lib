@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import type { JSX } from 'react'
+
 import { Illustration } from '@Shared/Components'
 
 import AppNotDeployed from '../../Assets/Img/app-not-deployed.svg'

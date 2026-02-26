@@ -47,8 +47,8 @@ export const GraphVisualizer = ({
     setEdges,
 }: GraphVisualizerProps) => {
     // REFS
-    const reactFlowInstanceRef = useRef<ReactFlowInstance>()
-    const graphVisualizerRef = useRef<HTMLDivElement>()
+    const reactFlowInstanceRef = useRef<ReactFlowInstance>(null)
+    const graphVisualizerRef = useRef<HTMLDivElement>(null)
 
     // STATES
     const [viewport, setViewport] = useState<Viewport>()

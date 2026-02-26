@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { CSSProperties, MutableRefObject, ReactElement, ReactNode } from 'react'
+import { CSSProperties, type JSX, MutableRefObject, ReactElement, ReactNode } from 'react'
 
 import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
 import { GVKType } from '@Pages/ResourceBrowser'

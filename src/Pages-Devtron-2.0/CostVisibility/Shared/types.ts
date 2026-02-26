@@ -1,4 +1,4 @@
-import { ReactNode } from 'react'
+import { type JSX, ReactNode } from 'react'
 
 import { RJSFFormSchema } from '@Common/RJSF'
 import { ClusterDetailListType } from '@Common/Types'

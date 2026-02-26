@@ -28,14 +28,14 @@ import { showError } from '@Common/Helper'
 const queryClient = new QueryClient({
     defaultOptions: {
         queries: {
-            cacheTime: 0,
+            gcTime: 0,
             refetchOnWindowFocus: false,
             refetchOnReconnect: false,
             retry: false,
             meta: { showToastError: true },
         },
         mutations: {
-            cacheTime: 0,
+            gcTime: 0,
             retry: false,
             meta: { showToastError: true },
         },
