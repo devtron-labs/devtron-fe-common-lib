@@ -315,6 +315,7 @@ const AppStatusModal = ({
                     deploymentStatusDetailsBreakdownData={deploymentStatusDetailsBreakdownData}
                     selectedTab={selectedTab}
                     debugWithAIButton={debugWithAIButton}
+                    handleClose={handleClose}
                 />
 
                 {type === 'stack-manager' && (

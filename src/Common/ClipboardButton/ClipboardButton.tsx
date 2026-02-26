@@ -99,8 +99,6 @@ export const ClipboardButton = ({
 
     const iconClassName = `icon-dim-${iconSize} dc__no-shrink`
 
-    const ariaLabel = `Copy ${content}`
-
     const renderIcon = () => (
         <div className="flex">
             {copied ? <Check className={iconClassName} /> : <ICCopy className={iconClassName} />}
@@ -109,10 +107,10 @@ export const ClipboardButton = ({
 
     const tooltipContent = copied ? copiedTippyText : initialTippyText
 
-    if (variant === 'button--secondary') {
+    if (variant === 'button--secondary' || variant === 'borderLess') {
         return (
             <Button
-                variant={ButtonVariantType.secondary}
+                variant={variant === 'button--secondary' ? ButtonVariantType.secondary : ButtonVariantType.borderLess}
                 dataTestId="clippy-button"
                 icon={renderIcon()}
                 size={size}
@@ -121,7 +119,7 @@ export const ClipboardButton = ({
                     content: tooltipContent,
                 }}
                 showTooltip
-                ariaLabel={ariaLabel}
+                ariaLabel="Copy to Clipboard"
                 style={ButtonStyleType.neutral}
             />
         )
@@ -129,11 +127,10 @@ export const ClipboardButton = ({
 
     return (
         <Tooltip content={tooltipContent} alwaysShowTippyOnHover>
-            {/* TODO: semantically buttons should not be nested; fix later */}
             <button
                 type="button"
                 className={`dc__outline-none-imp p-0 flex dc__transparent--unstyled dc__no-border ${rootClassName}`}
-                aria-label={ariaLabel}
+                aria-label="Copy to Clipboard"
                 onClick={handleCopyContent}
             >
                 {renderIcon()}
