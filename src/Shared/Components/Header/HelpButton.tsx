@@ -127,8 +127,8 @@ export const HelpButton = ({
             case HelpMenuItems.VIEW_DOCUMENTATION:
                 handleViewDocumentationClick(item, e)
                 break
-            case HelpMenuItems.UPDGRADE_TO_OSS_PLUS:
-                setShowUpgradeToOSSPlusDialog(true)
+            case HelpMenuItems.UPGRADE_TO_OSS_PLUS:
+                setShowUpgradeToOSSPlusDialog?.(true)
                 break
             default:
         }

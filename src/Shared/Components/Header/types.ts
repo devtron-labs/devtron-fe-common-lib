@@ -71,7 +71,7 @@ export enum HelpMenuItems {
     GIVE_FEEDBACK = 'give-feedback',
     CHAT_WITH_SUPPORT = 'chat-with-support',
     RAISE_ISSUE_REQUEST = 'raise-issue-request',
-    UPDGRADE_TO_OSS_PLUS = 'upgrade-to-oss-plus',
+    UPGRADE_TO_OSS_PLUS = 'upgrade-to-oss-plus',
     DEVTRON_GPT = 'devtron-gpt',
 }
 

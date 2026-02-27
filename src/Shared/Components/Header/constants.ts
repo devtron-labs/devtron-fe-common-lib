@@ -78,7 +78,7 @@ export const OSS_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options'][nu
         href: RAISE_ISSUE,
     },
     {
-        id: HelpMenuItems.UPDGRADE_TO_OSS_PLUS,
+        id: HelpMenuItems.UPGRADE_TO_OSS_PLUS,
         label: 'Upgrade to OSS Plus',
         startIcon: { name: 'ic-arrow-up-circle' },
         componentType: 'button',
