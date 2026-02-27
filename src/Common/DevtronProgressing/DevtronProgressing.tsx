@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { type JSX } from 'react';
+import { type JSX } from 'react'
 import { ReactComponent as ICRotateDevtron } from '../../Assets/Icon/ic-rotate-devtron.svg'
 import { DevtronProgressingProps } from './types'
 

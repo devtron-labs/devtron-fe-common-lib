@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useEffect, useRef, useState, type JSX } from 'react';
+import { useEffect, useRef, useState, type JSX } from 'react'
 import Tippy from '@tippyjs/react'
 import { ReactComponent as Add } from '../Assets/Icon/ic-add.svg'
 import { ReactComponent as Close } from '../Assets/Icon/ic-cross.svg'

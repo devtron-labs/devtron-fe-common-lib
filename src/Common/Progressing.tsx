@@ -16,7 +16,7 @@
 
 import { ProgressingProps } from './Types'
 
-import type { JSX } from "react";
+import type { JSX } from 'react'
 
 export const Progressing = ({ pageLoader, size, theme, styles, fillColor }: ProgressingProps): JSX.Element => {
     const loaderSize = size ? `${size}px` : pageLoader ? '48px' : '20px'

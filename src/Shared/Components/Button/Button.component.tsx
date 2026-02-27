@@ -64,21 +64,24 @@ const ButtonElement = ({
 
     // NOTE: If the ref callback is re-created every render (i.e., not wrapped in useCallback),
     // it will be invoked on every render: first with null, then with the new node.
-    const refCallback = useCallback((el: HTMLButtonElement | HTMLAnchorElement) => {
-        if (!el) {
-            return
-        }
+    const refCallback = useCallback(
+        (el: HTMLButtonElement | HTMLAnchorElement) => {
+            if (!el) {
+                return
+            }
 
-        // eslint-disable-next-line no-param-reassign
-        elementRef.current = el
-
-        if (ref && typeof ref === 'object' && Object.hasOwn(ref, 'current')) {
             // eslint-disable-next-line no-param-reassign
-            ;(ref as MutableRefObject<HTMLButtonElement | HTMLAnchorElement>).current = el
-        } else if (typeof ref === 'function') {
-            ref(el as HTMLButtonElement & HTMLAnchorElement)
-        }
-    }, [])
+            elementRef.current = el
+
+            if (ref && typeof ref === 'object' && Object.hasOwn(ref, 'current')) {
+                // eslint-disable-next-line no-param-reassign
+                ;(ref as MutableRefObject<HTMLButtonElement | HTMLAnchorElement>).current = el
+            } else if (typeof ref === 'function') {
+                ;(ref as (instance: HTMLButtonElement | HTMLAnchorElement | null) => void)(el)
+            }
+        },
+        [elementRef, ref],
+    )
 
     if (component === ButtonComponentType.link) {
         return (
@@ -207,7 +210,7 @@ const Button = ({
     ...props
 }: ButtonProps<ButtonComponentType>) => {
     const [isAutoClickActive, setIsAutoClickActive] = useState(false)
-    const autoClickTimeoutRef = useRef<number>(null)
+    const autoClickTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)
     const elementRef = useRef<HTMLButtonElement | HTMLAnchorElement>(null)
 
     const isDisabled = disabled || isLoading
