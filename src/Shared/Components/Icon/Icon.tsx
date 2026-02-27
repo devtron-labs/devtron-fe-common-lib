@@ -18,6 +18,8 @@ import { ReactComponent as ICArrowClockwise } from '@IconsV2/ic-arrow-clockwise.
 import { ReactComponent as ICArrowLineDown } from '@IconsV2/ic-arrow-line-down.svg'
 import { ReactComponent as ICArrowRight } from '@IconsV2/ic-arrow-right.svg'
 import { ReactComponent as ICArrowSquareOut } from '@IconsV2/ic-arrow-square-out.svg'
+import { ReactComponent as ICArrowUpCircle } from '@IconsV2/ic-arrow-up-circle.svg'
+import { ReactComponent as ICArrowUpCircleWithDot } from '@IconsV2/ic-arrow-up-circle-with-dot.svg'
 import { ReactComponent as ICArrowsClockwise } from '@IconsV2/ic-arrows-clockwise.svg'
 import { ReactComponent as ICArrowsLeftRight } from '@IconsV2/ic-arrows-left-right.svg'
 import { ReactComponent as ICAsterisk } from '@IconsV2/ic-asterisk.svg'
@@ -215,6 +217,7 @@ import { ReactComponent as ICMagnifyingGlass } from '@IconsV2/ic-magnifying-glas
 import { ReactComponent as ICMediumDelete } from '@IconsV2/ic-medium-delete.svg'
 import { ReactComponent as ICMediumMegaphone } from '@IconsV2/ic-medium-megaphone.svg'
 import { ReactComponent as ICMediumPaintbucket } from '@IconsV2/ic-medium-paintbucket.svg'
+import { ReactComponent as ICMediumUpgrade } from '@IconsV2/ic-medium-upgrade.svg'
 import { ReactComponent as ICMegaphoneLeft } from '@IconsV2/ic-megaphone-left.svg'
 import { ReactComponent as ICMegaphoneRight } from '@IconsV2/ic-megaphone-right.svg'
 import { ReactComponent as ICMemory } from '@IconsV2/ic-memory.svg'
@@ -356,6 +359,8 @@ export const iconMap = {
     'ic-arrow-line-down': ICArrowLineDown,
     'ic-arrow-right': ICArrowRight,
     'ic-arrow-square-out': ICArrowSquareOut,
+    'ic-arrow-up-circle-with-dot': ICArrowUpCircleWithDot,
+    'ic-arrow-up-circle': ICArrowUpCircle,
     'ic-arrows-clockwise': ICArrowsClockwise,
     'ic-arrows-left-right': ICArrowsLeftRight,
     'ic-asterisk': ICAsterisk,
@@ -553,6 +558,7 @@ export const iconMap = {
     'ic-medium-delete': ICMediumDelete,
     'ic-medium-megaphone': ICMediumMegaphone,
     'ic-medium-paintbucket': ICMediumPaintbucket,
+    'ic-medium-upgrade': ICMediumUpgrade,
     'ic-megaphone-left': ICMegaphoneLeft,
     'ic-megaphone-right': ICMegaphoneRight,
     'ic-memory': ICMemory,
