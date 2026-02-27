@@ -94,6 +94,7 @@ import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICCoins } from '@IconsV2/ic-coins.svg'
 import { ReactComponent as ICCoinsColorAnimated } from '@IconsV2/ic-coins-color-animated.svg'
 import { ReactComponent as ICComment } from '@IconsV2/ic-comment.svg'
+import { ReactComponent as ICConfigurationFile } from '@IconsV2/ic-configuration-file.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICContainerRegistry } from '@IconsV2/ic-container-registry.svg'
 import { ReactComponent as ICCookr } from '@IconsV2/ic-cookr.svg'
@@ -184,6 +185,7 @@ import { ReactComponent as ICHelpFilled } from '@IconsV2/ic-help-filled.svg'
 import { ReactComponent as ICHelpOutline } from '@IconsV2/ic-help-outline.svg'
 import { ReactComponent as ICHibernate } from '@IconsV2/ic-hibernate.svg'
 import { ReactComponent as ICHibernateCircle } from '@IconsV2/ic-hibernate-circle.svg'
+import { ReactComponent as ICImageApprove } from '@IconsV2/ic-image-approve.svg'
 import { ReactComponent as ICInProgress } from '@IconsV2/ic-in-progress.svg'
 import { ReactComponent as ICInfoFilled } from '@IconsV2/ic-info-filled.svg'
 import { ReactComponent as ICInfoFilledColor } from '@IconsV2/ic-info-filled-color.svg'
@@ -433,6 +435,7 @@ export const iconMap = {
     'ic-coins-color-animated': ICCoinsColorAnimated,
     'ic-coins': ICCoins,
     'ic-comment': ICComment,
+    'ic-configuration-file': ICConfigurationFile,
     'ic-container-registry': ICContainerRegistry,
     'ic-container': ICContainer,
     'ic-cookr': ICCookr,
@@ -523,6 +526,7 @@ export const iconMap = {
     'ic-help-outline': ICHelpOutline,
     'ic-hibernate-circle': ICHibernateCircle,
     'ic-hibernate': ICHibernate,
+    'ic-image-approve': ICImageApprove,
     'ic-in-progress': ICInProgress,
     'ic-info-filled-color': ICInfoFilledColor,
     'ic-info-filled': ICInfoFilled,
