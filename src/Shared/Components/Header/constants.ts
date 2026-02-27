@@ -77,6 +77,13 @@ export const OSS_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options'][nu
         componentType: 'anchor',
         href: RAISE_ISSUE,
     },
+    {
+        id: HelpMenuItems.UPDGRADE_TO_OSS_PLUS,
+        label: 'Upgrade to OSS Plus',
+        startIcon: { name: 'ic-arrow-up-circle' },
+        componentType: 'button',
+        description: 'Run Devtron OSS with Expert Support',
+    },
 ]
 
 export const ENTERPRISE_TRIAL_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options'][number]['items'] = [

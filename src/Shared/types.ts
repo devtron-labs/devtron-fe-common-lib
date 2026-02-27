@@ -1215,6 +1215,7 @@ export type IconBaseSizeType =
     | 42
     | 44
     | 48
+    | 56
     | 64
     | 72
     | 80

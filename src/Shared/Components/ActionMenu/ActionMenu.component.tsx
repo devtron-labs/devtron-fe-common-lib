@@ -81,7 +81,7 @@ export const ActionMenu = <T extends string | number = string | number>({
             buttonProps={buttonProps}
             triggerElement={children}
         >
-            <div className="flexbox-col mxh-300">
+            <div className="flexbox-col mxh-320">
                 {isSearchable && (
                     <div
                         role="search"
