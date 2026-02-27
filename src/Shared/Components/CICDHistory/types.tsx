@@ -642,13 +642,6 @@ export interface AggregatedNodes {
     }
 }
 
-export interface PodMetadatum {
-    name: string
-    uid: string
-    containers: string[]
-    isNew: boolean
-}
-
 export const STATUS_SORTING_ORDER = {
     [NodeStatus.Missing]: 1,
     [NodeStatus.Degraded]: 2,
