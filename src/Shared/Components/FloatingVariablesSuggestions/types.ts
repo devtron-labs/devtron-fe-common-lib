@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-import { DraggableBounds } from 'react-draggable'
-
+import { DraggableWrapperProps } from '@Common/DraggableWrapper'
 import { AppConfigProps } from '@Pages/index'
 
 export interface ScopedVariableType {
@@ -27,12 +26,12 @@ export interface ScopedVariableType {
     isRedacted: boolean
 }
 
-export interface FloatingVariablesSuggestionsProps extends Required<Pick<AppConfigProps, 'isTemplateView'>> {
-    zIndex: number
+export interface FloatingVariablesSuggestionsProps
+    extends Required<Pick<AppConfigProps, 'isTemplateView'>>,
+        Pick<DraggableWrapperProps, 'boundaryGap'> {
     appId?: string
     envId?: string
     clusterId?: string
-    bounds?: DraggableBounds | string | false
     /**
      * This will hide the variables with object/array values if set to true
      * @default true

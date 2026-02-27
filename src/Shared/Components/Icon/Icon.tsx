@@ -30,6 +30,7 @@ import { ReactComponent as ICBackupAndSchedule } from '@IconsV2/ic-backup-and-sc
 import { ReactComponent as ICBackupColor } from '@IconsV2/ic-backup-color.svg'
 import { ReactComponent as ICBackupLocation } from '@IconsV2/ic-backup-location.svg'
 import { ReactComponent as ICBackupScheduleColor } from '@IconsV2/ic-backup-schedule-color.svg'
+import { ReactComponent as ICBell } from '@IconsV2/ic-bell.svg'
 import { ReactComponent as ICBgBackupSchedule } from '@IconsV2/ic-bg-backup-schedule.svg'
 import { ReactComponent as ICBgBackups } from '@IconsV2/ic-bg-backups.svg'
 import { ReactComponent as ICBgBuild } from '@IconsV2/ic-bg-build.svg'
@@ -56,6 +57,7 @@ import { ReactComponent as ICBrowser } from '@IconsV2/ic-browser.svg'
 import { ReactComponent as ICBug } from '@IconsV2/ic-bug.svg'
 import { ReactComponent as ICBuildColor } from '@IconsV2/ic-build-color.svg'
 import { ReactComponent as ICBuilding } from '@IconsV2/ic-building.svg'
+import { ReactComponent as ICBulb } from '@IconsV2/ic-bulb.svg'
 import { ReactComponent as ICCalendar } from '@IconsV2/ic-calendar.svg'
 import { ReactComponent as ICCancelled } from '@IconsV2/ic-cancelled.svg'
 import { ReactComponent as ICCardStack } from '@IconsV2/ic-card-stack.svg'
@@ -79,6 +81,7 @@ import { ReactComponent as ICCleanBrush } from '@IconsV2/ic-clean-brush.svg'
 import { ReactComponent as ICClipboard } from '@IconsV2/ic-clipboard.svg'
 import { ReactComponent as ICClock } from '@IconsV2/ic-clock.svg'
 import { ReactComponent as ICClockCounterclockwise } from '@IconsV2/ic-clock-counterclockwise.svg'
+import { ReactComponent as ICCloseCircle } from '@IconsV2/ic-close-circle.svg'
 import { ReactComponent as ICCloseLarge } from '@IconsV2/ic-close-large.svg'
 import { ReactComponent as ICCloseSmall } from '@IconsV2/ic-close-small.svg'
 import { ReactComponent as ICCloudUpload } from '@IconsV2/ic-cloud-upload.svg'
@@ -88,6 +91,7 @@ import { ReactComponent as ICClusterIsolated } from '@IconsV2/ic-cluster-isolate
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
 import { ReactComponent as ICCoins } from '@IconsV2/ic-coins.svg'
 import { ReactComponent as ICCoinsColorAnimated } from '@IconsV2/ic-coins-color-animated.svg'
+import { ReactComponent as ICComment } from '@IconsV2/ic-comment.svg'
 import { ReactComponent as ICContainer } from '@IconsV2/ic-container.svg'
 import { ReactComponent as ICContainerRegistry } from '@IconsV2/ic-container-registry.svg'
 import { ReactComponent as ICCookr } from '@IconsV2/ic-cookr.svg'
@@ -116,6 +120,7 @@ import { ReactComponent as ICDiffUpdated } from '@IconsV2/ic-diff-updated.svg'
 import { ReactComponent as ICDisconnect } from '@IconsV2/ic-disconnect.svg'
 import { ReactComponent as ICDiscordFill } from '@IconsV2/ic-discord-fill.svg'
 import { ReactComponent as ICDockerhub } from '@IconsV2/ic-dockerhub.svg'
+import { ReactComponent as ICDotCircle } from '@IconsV2/ic-dot-circle.svg'
 import { ReactComponent as ICDownload } from '@IconsV2/ic-download.svg'
 import { ReactComponent as ICEcr } from '@IconsV2/ic-ecr.svg'
 import { ReactComponent as ICEdit } from '@IconsV2/ic-edit.svg'
@@ -206,6 +211,7 @@ import { ReactComponent as ICLogs } from '@IconsV2/ic-logs.svg'
 import { ReactComponent as ICMagicWand } from '@IconsV2/ic-magic-wand.svg'
 import { ReactComponent as ICMagnifyingGlass } from '@IconsV2/ic-magnifying-glass.svg'
 import { ReactComponent as ICMediumDelete } from '@IconsV2/ic-medium-delete.svg'
+import { ReactComponent as ICMediumMegaphone } from '@IconsV2/ic-medium-megaphone.svg'
 import { ReactComponent as ICMediumPaintbucket } from '@IconsV2/ic-medium-paintbucket.svg'
 import { ReactComponent as ICMegaphoneLeft } from '@IconsV2/ic-megaphone-left.svg'
 import { ReactComponent as ICMegaphoneRight } from '@IconsV2/ic-megaphone-right.svg'
@@ -220,6 +226,7 @@ import { ReactComponent as ICMoreVertical } from '@IconsV2/ic-more-vertical.svg'
 import { ReactComponent as ICNamespace } from '@IconsV2/ic-namespace.svg'
 import { ReactComponent as ICNavCursor } from '@IconsV2/ic-nav-cursor.svg'
 import { ReactComponent as ICNew } from '@IconsV2/ic-new.svg'
+import { ReactComponent as ICNewChat } from '@IconsV2/ic-new-chat.svg'
 import { ReactComponent as ICNodeScript } from '@IconsV2/ic-node-script.svg'
 import { ReactComponent as ICOidc } from '@IconsV2/ic-oidc.svg'
 import { ReactComponent as ICOpenBox } from '@IconsV2/ic-open-box.svg'
@@ -236,11 +243,16 @@ import { ReactComponent as ICPath } from '@IconsV2/ic-path.svg'
 import { ReactComponent as ICPause } from '@IconsV2/ic-pause.svg'
 import { ReactComponent as ICPauseCircle } from '@IconsV2/ic-pause-circle.svg'
 import { ReactComponent as ICPencil } from '@IconsV2/ic-pencil.svg'
+import { ReactComponent as ICPiggybank } from '@IconsV2/ic-piggybank.svg'
 import { ReactComponent as ICPlayOutline } from '@IconsV2/ic-play-outline.svg'
+import { ReactComponent as ICPriorityHighFill } from '@IconsV2/ic-priority-high-fill.svg'
+import { ReactComponent as ICPriorityLowFill } from '@IconsV2/ic-priority-low-fill.svg'
 import { ReactComponent as ICPriorityMediumFill } from '@IconsV2/ic-priority-medium-fill.svg'
+import { ReactComponent as ICPriorityUrgentFill } from '@IconsV2/ic-priority-urgent-fill.svg'
 import { ReactComponent as ICQuay } from '@IconsV2/ic-quay.svg'
 import { ReactComponent as ICQuote } from '@IconsV2/ic-quote.svg'
 import { ReactComponent as ICRatings } from '@IconsV2/ic-ratings.svg'
+import { ReactComponent as ICRedBulb } from '@IconsV2/ic-red-bulb.svg'
 import { ReactComponent as ICReleaseHub } from '@IconsV2/ic-release-hub.svg'
 import { ReactComponent as ICResizeHandle } from '@IconsV2/ic-resize-handle.svg'
 import { ReactComponent as ICResourceBrowser } from '@IconsV2/ic-resource-browser.svg'
@@ -254,9 +266,12 @@ import { ReactComponent as ICSecurityPolicy } from '@IconsV2/ic-security-policy.
 import { ReactComponent as ICSecurityScan } from '@IconsV2/ic-security-scan.svg'
 import { ReactComponent as ICSecurityVulnerability } from '@IconsV2/ic-security-vulnerability.svg'
 import { ReactComponent as ICSelected } from '@IconsV2/ic-selected.svg'
+import { ReactComponent as ICSes } from '@IconsV2/ic-ses.svg'
 import { ReactComponent as ICShapes } from '@IconsV2/ic-shapes.svg'
 import { ReactComponent as ICShieldCheck } from '@IconsV2/ic-shield-check.svg'
+import { ReactComponent as ICSlack } from '@IconsV2/ic-slack.svg'
 import { ReactComponent as ICSlidersVertical } from '@IconsV2/ic-sliders-vertical.svg'
+import { ReactComponent as ICSmtp } from '@IconsV2/ic-smtp.svg'
 import { ReactComponent as ICSoftwareReleaseManagement } from '@IconsV2/ic-software-release-management.svg'
 import { ReactComponent as ICSortAscending } from '@IconsV2/ic-sort-ascending.svg'
 import { ReactComponent as ICSortDescending } from '@IconsV2/ic-sort-descending.svg'
@@ -290,7 +305,9 @@ import { ReactComponent as ICTerminal } from '@IconsV2/ic-terminal.svg'
 import { ReactComponent as ICTerminalFill } from '@IconsV2/ic-terminal-fill.svg'
 import { ReactComponent as ICThermometer } from '@IconsV2/ic-thermometer.svg'
 import { ReactComponent as ICThumbDown } from '@IconsV2/ic-thumb-down.svg'
+import { ReactComponent as ICThumbDownFill } from '@IconsV2/ic-thumb-down-fill.svg'
 import { ReactComponent as ICThumbUp } from '@IconsV2/ic-thumb-up.svg'
+import { ReactComponent as ICThumbUpFill } from '@IconsV2/ic-thumb-up-fill.svg'
 import { ReactComponent as ICTimeoutDash } from '@IconsV2/ic-timeout-dash.svg'
 import { ReactComponent as ICTimer } from '@IconsV2/ic-timer.svg'
 import { ReactComponent as ICTrafficSignal } from '@IconsV2/ic-traffic-signal.svg'
@@ -310,6 +327,7 @@ import { ReactComponent as ICWarning } from '@IconsV2/ic-warning.svg'
 import { ReactComponent as ICWarningFill } from '@IconsV2/ic-warning-fill.svg'
 import { ReactComponent as ICWarningStroke } from '@IconsV2/ic-warning-stroke.svg'
 import { ReactComponent as ICWebhook } from '@IconsV2/ic-webhook.svg'
+import { ReactComponent as ICWebhookConfig } from '@IconsV2/ic-webhook-config.svg'
 import { ReactComponent as ICWifiSlash } from '@IconsV2/ic-wifi-slash.svg'
 import { ReactComponent as ICWorldGlobe } from '@IconsV2/ic-world-globe.svg'
 
@@ -348,6 +366,7 @@ export const iconMap = {
     'ic-backup-color': ICBackupColor,
     'ic-backup-location': ICBackupLocation,
     'ic-backup-schedule-color': ICBackupScheduleColor,
+    'ic-bell': ICBell,
     'ic-bg-backup-schedule': ICBgBackupSchedule,
     'ic-bg-backups': ICBgBackups,
     'ic-bg-build': ICBgBuild,
@@ -374,6 +393,7 @@ export const iconMap = {
     'ic-bug': ICBug,
     'ic-build-color': ICBuildColor,
     'ic-building': ICBuilding,
+    'ic-bulb': ICBulb,
     'ic-calendar': ICCalendar,
     'ic-cancelled': ICCancelled,
     'ic-card-stack': ICCardStack,
@@ -397,6 +417,7 @@ export const iconMap = {
     'ic-clipboard': ICClipboard,
     'ic-clock-counterclockwise': ICClockCounterclockwise,
     'ic-clock': ICClock,
+    'ic-close-circle': ICCloseCircle,
     'ic-close-large': ICCloseLarge,
     'ic-close-small': ICCloseSmall,
     'ic-cloud-upload': ICCloudUpload,
@@ -406,6 +427,7 @@ export const iconMap = {
     'ic-code': ICCode,
     'ic-coins-color-animated': ICCoinsColorAnimated,
     'ic-coins': ICCoins,
+    'ic-comment': ICComment,
     'ic-container-registry': ICContainerRegistry,
     'ic-container': ICContainer,
     'ic-cookr': ICCookr,
@@ -434,6 +456,7 @@ export const iconMap = {
     'ic-disconnect': ICDisconnect,
     'ic-discord-fill': ICDiscordFill,
     'ic-dockerhub': ICDockerhub,
+    'ic-dot-circle': ICDotCircle,
     'ic-download': ICDownload,
     'ic-ecr': ICEcr,
     'ic-edit-lines': ICEditLines,
@@ -524,6 +547,7 @@ export const iconMap = {
     'ic-magic-wand': ICMagicWand,
     'ic-magnifying-glass': ICMagnifyingGlass,
     'ic-medium-delete': ICMediumDelete,
+    'ic-medium-megaphone': ICMediumMegaphone,
     'ic-medium-paintbucket': ICMediumPaintbucket,
     'ic-megaphone-left': ICMegaphoneLeft,
     'ic-megaphone-right': ICMegaphoneRight,
@@ -537,6 +561,7 @@ export const iconMap = {
     'ic-more-vertical': ICMoreVertical,
     'ic-namespace': ICNamespace,
     'ic-nav-cursor': ICNavCursor,
+    'ic-new-chat': ICNewChat,
     'ic-new': ICNew,
     'ic-node-script': ICNodeScript,
     'ic-oidc': ICOidc,
@@ -554,11 +579,16 @@ export const iconMap = {
     'ic-pause-circle': ICPauseCircle,
     'ic-pause': ICPause,
     'ic-pencil': ICPencil,
+    'ic-piggybank': ICPiggybank,
     'ic-play-outline': ICPlayOutline,
+    'ic-priority-high-fill': ICPriorityHighFill,
+    'ic-priority-low-fill': ICPriorityLowFill,
     'ic-priority-medium-fill': ICPriorityMediumFill,
+    'ic-priority-urgent-fill': ICPriorityUrgentFill,
     'ic-quay': ICQuay,
     'ic-quote': ICQuote,
     'ic-ratings': ICRatings,
+    'ic-red-bulb': ICRedBulb,
     'ic-release-hub': ICReleaseHub,
     'ic-resize-handle': ICResizeHandle,
     'ic-resource-browser': ICResourceBrowser,
@@ -572,9 +602,12 @@ export const iconMap = {
     'ic-security-scan': ICSecurityScan,
     'ic-security-vulnerability': ICSecurityVulnerability,
     'ic-selected': ICSelected,
+    'ic-ses': ICSes,
     'ic-shapes': ICShapes,
     'ic-shield-check': ICShieldCheck,
+    'ic-slack': ICSlack,
     'ic-sliders-vertical': ICSlidersVertical,
+    'ic-smtp': ICSmtp,
     'ic-software-release-management': ICSoftwareReleaseManagement,
     'ic-sort-ascending': ICSortAscending,
     'ic-sort-descending': ICSortDescending,
@@ -607,7 +640,9 @@ export const iconMap = {
     'ic-terminal-fill': ICTerminalFill,
     'ic-terminal': ICTerminal,
     'ic-thermometer': ICThermometer,
+    'ic-thumb-down-fill': ICThumbDownFill,
     'ic-thumb-down': ICThumbDown,
+    'ic-thumb-up-fill': ICThumbUpFill,
     'ic-thumb-up': ICThumbUp,
     'ic-timeout-dash': ICTimeoutDash,
     'ic-timer': ICTimer,
@@ -627,6 +662,7 @@ export const iconMap = {
     'ic-warning-fill': ICWarningFill,
     'ic-warning-stroke': ICWarningStroke,
     'ic-warning': ICWarning,
+    'ic-webhook-config': ICWebhookConfig,
     'ic-webhook': ICWebhook,
     'ic-wifi-slash': ICWifiSlash,
     'ic-world-globe': ICWorldGlobe,

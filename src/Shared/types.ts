@@ -1359,7 +1359,7 @@ export interface DeploymentStatusDetailsBreakdownDataType {
 
 export interface IntelligenceConfig {
     clusterId: number
-    metadata: Record<string, string>
+    metadata: Record<string, string | number>
     prompt: string
     analyticsCategory: string
 }
