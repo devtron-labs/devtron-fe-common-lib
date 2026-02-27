@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { memo } from 'react'
+import { type JSX, memo } from 'react'
 
 import { ReactComponent as ICBranch } from '@Icons/ic-branch.svg'
 import { createGitCommitUrl, SourceTypeMap } from '@Common/Common.service'

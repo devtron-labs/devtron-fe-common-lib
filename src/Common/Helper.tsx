@@ -213,12 +213,10 @@ export function getCookie(sKey) {
     if (!sKey) {
         return null
     }
-    return (
-        document.cookie.replace(
-            new RegExp(`(?:(?:^|.*;)\\s*${sKey.replace(/[\-\.\+\*]/g, '\\$&')}\\s*\\=\\s*([^;]*).*$)|^.*$`),
-            '$1',
-        ) || null
-    )
+    return (document.cookie.replace(
+        new RegExp(`(?:(?:^|.*;)\\s*${sKey.replace(/[\-\.\+\*]/g, '\\$&')}\\s*\\=\\s*([^;]*).*$)|^.*$`),
+        '$1',
+    ) || null)
 }
 
 export function handleUTCTime(ts: string, isRelativeTime = false) {

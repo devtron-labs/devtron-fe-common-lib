@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Fragment, memo, useMemo, useState } from 'react'
+import { Fragment, type JSX, memo, useMemo, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 
 import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'

@@ -14,12 +14,16 @@
  * limitations under the License.
  */
 
-import { type JSX } from 'react'
-import { ReactComponent as ICRotateDevtron } from '../../Assets/Icon/ic-rotate-devtron.svg'
-import { DevtronProgressingProps } from './types'
+/**
+ * @types/react@^19 removed the global JSX namespace.
+ * Third-party libraries (e.g., react-select@5) still reference JSX.LibraryManagedAttributes
+ * in their type definitions to handle defaultProps on class components.
+ * Without this shim, those types resolve to `any`, breaking SelectPicker type safety.
+ */
+import type React from 'react'
 
-export const DevtronProgressing = ({ classes, parentClasses }: DevtronProgressingProps): JSX.Element => (
-    <div className={parentClasses || ''}>
-        <ICRotateDevtron className={classes || ''} />
-    </div>
-)
+declare global {
+    namespace JSX {
+        type LibraryManagedAttributes<C, P> = React.JSX.LibraryManagedAttributes<C, P>
+    }
+}

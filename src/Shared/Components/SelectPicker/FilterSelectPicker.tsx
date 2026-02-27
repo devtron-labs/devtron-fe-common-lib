@@ -37,7 +37,7 @@ const FilterSelectPicker = ({
     isUserIdentifier,
     ...props
 }: FilterSelectPickerProps) => {
-    const selectRef = useRef<SelectPickerProps<string | number, true>['selectRef']['current']>()
+    const selectRef = useRef<SelectPickerProps<string | number, true>['selectRef']['current']>(null)
 
     const [isMenuOpen, setIsMenuOpen] = useState(menuIsOpen)
     const { triggerAutoClickTimestamp, setTriggerAutoClickTimestampToNow, resetTriggerAutoClickTimestamp } =

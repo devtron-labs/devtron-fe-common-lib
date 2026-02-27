@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import type { JSX } from 'react'
+
 import { InstallationType, ModuleStatus } from '@Shared/types'
 
 import { ResponseType, TippyCustomizedProps } from '../../../Common'

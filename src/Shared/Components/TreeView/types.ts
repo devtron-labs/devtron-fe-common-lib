@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { SyntheticEvent } from 'react'
+import { type JSX, SyntheticEvent } from 'react'
 
 import { TooltipProps } from '@Common/Tooltip'
 import { DataAttributes, Never } from '@Shared/types'

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { CSSProperties, MutableRefObject, ReactElement, ReactNode } from 'react'
+import React, { CSSProperties, type JSX, MutableRefObject, ReactElement, ReactNode, Ref } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
 import { TippyProps } from '@tippyjs/react'
 
@@ -129,6 +129,7 @@ export interface CheckboxProps {
     dataTestId?: string
     error?: boolean
     children?: ReactNode
+    ref?: Ref<HTMLLabelElement>
 }
 
 export interface TippyWithBaseDocLinkTypes<T extends boolean> extends Pick<
@@ -221,7 +222,7 @@ export type ErrorScreenManagerProps = {
     code?: number
     imageType?: ImageType
     reload?: (...args) => any
-    subtitle?: React.ReactChild
+    subtitle?: React.ReactElement | number | string
     reloadClass?: string
 } & (
     | {
@@ -253,7 +254,7 @@ export interface ErrorPageType
 }
 
 export interface ErrorScreenNotAuthorizedProps {
-    subtitle?: React.ReactChild
+    subtitle?: React.ReactElement | number | string
     title?: string
 }
 

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useCallback, useEffect } from 'react'
+import { type JSX, useCallback, useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 
 import { AppThemeType, getComponentSpecificThemeClass } from '@Shared/Providers'
