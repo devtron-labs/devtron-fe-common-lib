@@ -75,6 +75,7 @@ export const HelpButton = ({
         setSidePanelConfig,
         loginCount,
         showGettingStartedCard,
+        setShowUpgradeToOSSPlusDialog,
     } = useMainContext()
     const { appTheme } = useTheme()
     const isSecureConnection = useIsSecureConnection()
@@ -125,6 +126,9 @@ export const HelpButton = ({
                 break
             case HelpMenuItems.VIEW_DOCUMENTATION:
                 handleViewDocumentationClick(item, e)
+                break
+            case HelpMenuItems.UPGRADE_TO_OSS_PLUS:
+                setShowUpgradeToOSSPlusDialog?.(true)
                 break
             default:
         }
