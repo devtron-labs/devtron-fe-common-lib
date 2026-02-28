@@ -15,7 +15,7 @@
  */
 
 import React, { useEffect, useMemo } from 'react'
-import { Redirect, Route, Switch, useParams, useRouteMatch } from 'react-router-dom'
+import { Navigate, Route, Routes, useParams } from 'react-router-dom'
 
 import { sanitizeTargetPlatforms } from '@Shared/Helpers'
 
@@ -79,8 +79,8 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
     appName,
     triggerHistory,
     targetPlatforms,
+    pathPattern,
 }) => {
-    const { path } = useRouteMatch()
     const { appId, pipelineId, triggerId, envId } = useParams<{
         appId: string
         pipelineId: string
@@ -103,123 +103,152 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
             {loading ? (
                 <Progressing pageLoader />
             ) : (
-                <Switch>
+                <Routes>
                     {triggerDetails.stage !== 'DEPLOY' ? (
                         !triggerDetails.IsVirtualEnvironment && (
-                            <Route path={`${path}/logs`}>
-                                <LogsRenderer
-                                    triggerDetails={triggerDetails}
-                                    isBlobStorageConfigured={isBlobStorageConfigured}
-                                    parentType={HistoryComponentType.CD}
-                                    fullScreenView={fullScreenView}
-                                />
+                            <Route
+                                path="logs"
+                                element={
+                                    <>
+                                        <LogsRenderer
+                                            triggerDetails={triggerDetails}
+                                            isBlobStorageConfigured={isBlobStorageConfigured}
+                                            parentType={HistoryComponentType.CD}
+                                            fullScreenView={fullScreenView}
+                                        />
 
-                                {(scrollToTop || scrollToBottom) && (
-                                    <Scroller
-                                        style={{ position: 'absolute', bottom: '52px', right: '12px', zIndex: '4' }}
-                                        {...{ scrollToTop, scrollToBottom }}
-                                    />
-                                )}
-                            </Route>
+                                        {(scrollToTop || scrollToBottom) && (
+                                            <Scroller
+                                                style={{
+                                                    position: 'absolute',
+                                                    bottom: '52px',
+                                                    right: '12px',
+                                                    zIndex: '4',
+                                                }}
+                                                {...{ scrollToTop, scrollToBottom }}
+                                            />
+                                        )}
+                                    </>
+                                }
+                            />
                         )
                     ) : (
-                        <Route path={`${path}/deployment-steps`}>
-                            <DeploymentDetailSteps
-                                deploymentStatus={triggerDetails.status}
-                                deploymentAppType={deploymentAppType}
+                        <Route
+                            path="deployment-steps"
+                            element={
+                                <DeploymentDetailSteps
+                                    deploymentStatus={triggerDetails.status}
+                                    deploymentAppType={deploymentAppType}
+                                    userApprovalMetadata={userApprovalMetadata}
+                                    isGitops={
+                                        deploymentAppType === DeploymentAppTypes.ARGO ||
+                                        deploymentAppType === DeploymentAppTypes.FLUX ||
+                                        deploymentAppType === DeploymentAppTypes.MANIFEST_DOWNLOAD ||
+                                        deploymentAppType === DeploymentAppTypes.MANIFEST_PUSH
+                                    }
+                                    isHelmApps={false}
+                                    isVirtualEnvironment={triggerDetails.IsVirtualEnvironment}
+                                    processVirtualEnvironmentDeploymentData={processVirtualEnvironmentDeploymentData}
+                                    renderDeploymentApprovalInfo={renderDeploymentApprovalInfo}
+                                    isDeploymentWithoutApproval={triggerDetails.isDeploymentWithoutApproval ?? false}
+                                />
+                            }
+                        />
+                    )}
+                    <Route
+                        path="source-code"
+                        element={
+                            <GitChanges
+                                gitTriggers={triggerDetails.gitTriggers}
+                                ciMaterials={triggerDetails.ciMaterials}
+                                artifact={triggerDetails.artifact}
                                 userApprovalMetadata={userApprovalMetadata}
-                                isGitops={
-                                    deploymentAppType === DeploymentAppTypes.ARGO ||
-                                    deploymentAppType === DeploymentAppTypes.FLUX ||
-                                    deploymentAppType === DeploymentAppTypes.MANIFEST_DOWNLOAD ||
-                                    deploymentAppType === DeploymentAppTypes.MANIFEST_PUSH
-                                }
-                                isHelmApps={false}
-                                isVirtualEnvironment={triggerDetails.IsVirtualEnvironment}
-                                processVirtualEnvironmentDeploymentData={processVirtualEnvironmentDeploymentData}
-                                renderDeploymentApprovalInfo={renderDeploymentApprovalInfo}
+                                triggeredByEmail={triggeredByEmail}
+                                artifactId={artifactId}
+                                ciPipelineId={ciPipelineId}
+                                imageComment={triggerDetails?.imageComment}
+                                imageReleaseTags={triggerDetails?.imageReleaseTags}
+                                appReleaseTagNames={appReleaseTags}
+                                tagsEditable={tagsEditable}
+                                hideImageTaggingHardDelete={hideImageTaggingHardDelete}
+                                appliedFilters={triggerDetails.appliedFilters ?? []}
+                                appliedFiltersTimestamp={triggerDetails.appliedFiltersTimestamp}
+                                selectedEnvironmentName={selectedEnvironmentName}
+                                promotionApprovalMetadata={triggerDetails?.promotionApprovalMetadata}
+                                renderCIListHeader={renderCIListHeader}
+                                targetPlatforms={targetPlatforms}
                                 isDeploymentWithoutApproval={triggerDetails.isDeploymentWithoutApproval ?? false}
                             />
-                        </Route>
-                    )}
-                    <Route path={`${path}/source-code`}>
-                        <GitChanges
-                            gitTriggers={triggerDetails.gitTriggers}
-                            ciMaterials={triggerDetails.ciMaterials}
-                            artifact={triggerDetails.artifact}
-                            userApprovalMetadata={userApprovalMetadata}
-                            triggeredByEmail={triggeredByEmail}
-                            artifactId={artifactId}
-                            ciPipelineId={ciPipelineId}
-                            imageComment={triggerDetails?.imageComment}
-                            imageReleaseTags={triggerDetails?.imageReleaseTags}
-                            appReleaseTagNames={appReleaseTags}
-                            tagsEditable={tagsEditable}
-                            hideImageTaggingHardDelete={hideImageTaggingHardDelete}
-                            appliedFilters={triggerDetails.appliedFilters ?? []}
-                            appliedFiltersTimestamp={triggerDetails.appliedFiltersTimestamp}
-                            selectedEnvironmentName={selectedEnvironmentName}
-                            promotionApprovalMetadata={triggerDetails?.promotionApprovalMetadata}
-                            renderCIListHeader={renderCIListHeader}
-                            targetPlatforms={targetPlatforms}
-                            isDeploymentWithoutApproval={triggerDetails.isDeploymentWithoutApproval ?? false}
-                        />
-                    </Route>
+                        }
+                    />
                     {triggerDetails.stage === 'DEPLOY' && (
-                        <Route path={`${path}${URLS.DEPLOYMENT_HISTORY_CONFIGURATIONS}`}>
-                            <DeploymentHistoryConfigDiff
-                                appName={appName}
-                                envName={selectedEnvironmentName}
-                                pipelineId={+pipelineId}
-                                wfrId={+triggerId}
-                                triggerHistory={triggerHistory}
-                                setFullScreenView={setFullScreenView}
-                                resourceId={resourceId}
-                                renderRunSource={renderRunSource}
-                            />
-                        </Route>
+                        <Route
+                            path={`${URLS.DEPLOYMENT_HISTORY_CONFIGURATIONS}/*`}
+                            element={
+                                <DeploymentHistoryConfigDiff
+                                    appName={appName}
+                                    envName={selectedEnvironmentName}
+                                    pipelineId={+pipelineId}
+                                    wfrId={+triggerId}
+                                    triggerHistory={triggerHistory}
+                                    setFullScreenView={setFullScreenView}
+                                    resourceId={resourceId}
+                                    renderRunSource={renderRunSource}
+                                    pathPattern={`${pathPattern}/${URLS.DEPLOYMENT_HISTORY_CONFIGURATIONS}`}
+                                />
+                            }
+                        />
                     )}
                     {(triggerDetails.stage !== 'DEPLOY' || triggerDetails.IsVirtualEnvironment) && (
-                        <Route path={`${path}/artifacts`}>
-                            {triggerDetails.IsVirtualEnvironment && renderVirtualHistoryArtifacts ? (
-                                renderVirtualHistoryArtifacts({
-                                    status: triggerDetails.status,
-                                    title: triggerDetails.helmPackageName,
-                                    params: { ...paramsData, appId: Number(appId), envId: Number(envId) },
-                                })
-                            ) : (
-                                <Artifacts
-                                    status={triggerDetails.status}
-                                    artifact={triggerDetails.artifact}
-                                    blobStorageEnabled={triggerDetails.blobStorageEnabled}
-                                    isArtifactUploaded={triggerDetails.isArtifactUploaded}
-                                    ciPipelineId={triggerDetails.ciPipelineId}
-                                    artifactId={triggerDetails.artifactId}
-                                    imageComment={triggerDetails?.imageComment}
-                                    imageReleaseTags={triggerDetails?.imageReleaseTags}
-                                    tagsEditable={tagsEditable}
-                                    appReleaseTagNames={appReleaseTags}
-                                    hideImageTaggingHardDelete={hideImageTaggingHardDelete}
-                                    downloadArtifactUrl={CDBuildReportUrl}
-                                    renderCIListHeader={renderCIListHeader}
-                                    targetPlatforms={targetPlatforms}
-                                    rootClassName="p-16 flex-grow-1"
-                                />
-                            )}
-                        </Route>
+                        <Route
+                            path="artifacts"
+                            element={
+                                triggerDetails.IsVirtualEnvironment && renderVirtualHistoryArtifacts ? (
+                                    renderVirtualHistoryArtifacts({
+                                        status: triggerDetails.status,
+                                        title: triggerDetails.helmPackageName,
+                                        params: { ...paramsData, appId: Number(appId), envId: Number(envId) },
+                                    })
+                                ) : (
+                                    <Artifacts
+                                        status={triggerDetails.status}
+                                        artifact={triggerDetails.artifact}
+                                        blobStorageEnabled={triggerDetails.blobStorageEnabled}
+                                        isArtifactUploaded={triggerDetails.isArtifactUploaded}
+                                        ciPipelineId={triggerDetails.ciPipelineId}
+                                        artifactId={triggerDetails.artifactId}
+                                        imageComment={triggerDetails?.imageComment}
+                                        imageReleaseTags={triggerDetails?.imageReleaseTags}
+                                        tagsEditable={tagsEditable}
+                                        appReleaseTagNames={appReleaseTags}
+                                        hideImageTaggingHardDelete={hideImageTaggingHardDelete}
+                                        downloadArtifactUrl={CDBuildReportUrl}
+                                        renderCIListHeader={renderCIListHeader}
+                                        targetPlatforms={targetPlatforms}
+                                        rootClassName="p-16 flex-grow-1"
+                                    />
+                                )
+                            }
+                        />
                     )}
-                    <Redirect
-                        to={`${path}/${
-                            // eslint-disable-next-line no-nested-ternary
-                            triggerDetails.stage === 'DEPLOY'
-                                ? `deployment-steps`
-                                : triggerDetails.status.toLowerCase() === 'succeeded' ||
-                                    triggerDetails.IsVirtualEnvironment
-                                  ? `artifacts`
-                                  : `logs`
-                        }`}
+                    <Route
+                        path="*"
+                        element={
+                            <Navigate
+                                to={`${
+                                    // eslint-disable-next-line no-nested-ternary
+                                    triggerDetails.stage === 'DEPLOY'
+                                        ? 'deployment-steps'
+                                        : triggerDetails.status.toLowerCase() === 'succeeded' ||
+                                            triggerDetails.IsVirtualEnvironment
+                                          ? 'artifacts'
+                                          : 'logs'
+                                }`}
+                                replace
+                            />
+                        }
                     />
-                </Switch>
+                </Routes>
             )}
         </div>
     )
@@ -250,6 +279,7 @@ const TriggerOutput = ({
     scrollToBottom,
     renderTargetConfigInfo,
     appName,
+    pathPattern,
 }: TriggerOutputProps) => {
     const { appId, triggerId, envId, pipelineId } = useParams<TriggerOutputURLParamsType>()
     const triggerDetails = triggerHistory.get(+triggerId)
@@ -448,6 +478,7 @@ const TriggerOutput = ({
                 appName={appName}
                 triggerHistory={triggerHistory}
                 targetPlatforms={targetPlatforms}
+                pathPattern={pathPattern}
             />
         </>
     )

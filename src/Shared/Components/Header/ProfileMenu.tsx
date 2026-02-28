@@ -17,10 +17,10 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 
-import { URLS } from '@Common/Constants'
 import { getAlphabetIcon } from '@Common/Helper'
 import { clearCookieOnLogout } from '@Shared/Helpers'
 import { useMainContext } from '@Shared/Providers'
+import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 import { Icon } from '../Icon'
 import { Popover, usePopover } from '../Popover'
@@ -82,7 +82,11 @@ export const ProfileMenu = ({ user, onClick }: ProfileMenuProps) => {
                     {viewIsPipelineRBACConfiguredNode}
                 </div>
                 <div className="p-4">
-                    <Link to={URLS.LOGIN} className="flex dc__gap-8 px-8 py-6 br-4 dc__hover-r50" onClick={onLogout}>
+                    <Link
+                        to={ROUTER_URLS.LOGIN.ROOT}
+                        className="flex dc__gap-8 px-8 py-6 br-4 dc__hover-r50"
+                        onClick={onLogout}
+                    >
                         <span className="flex-grow-1 fs-13 lh-1-5 fw-4 cr-5">Logout</span>
                         <Icon name="ic-logout" color="R500" />
                     </Link>

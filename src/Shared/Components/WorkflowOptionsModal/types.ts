@@ -33,8 +33,7 @@ export interface SourceTypeCardProps {
 }
 
 export interface WorkflowOptionsModalProps
-    extends Required<Pick<AppConfigProps, 'isTemplateView'>>,
-        Pick<GenericModalProps, 'open' | 'onClose'> {
+    extends Required<Pick<AppConfigProps, 'isTemplateView'>>, Pick<GenericModalProps, 'open' | 'onClose'> {
     addCIPipeline: (type: CIPipelineNodeType, workflowId?: number | string) => void
     addWebhookCD: (workflowId?: number | string) => void
     addLinkedCD: (changeCIPayload?: ChangeCIPayloadType) => void

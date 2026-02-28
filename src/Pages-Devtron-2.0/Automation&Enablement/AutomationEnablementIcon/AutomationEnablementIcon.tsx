@@ -2,17 +2,17 @@ import { Button, ButtonComponentType, ButtonVariantType, Icon } from '@Shared/Co
 import { ComponentSizeType } from '@Shared/constants'
 import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
-export const SecurityCenterIcon = () => (
+export const AutomationEnablementIcon = () => (
     <Button
         dataTestId="redirect-to-overview-btn"
         component={ButtonComponentType.link}
         size={ComponentSizeType.xs}
-        icon={<Icon name="ic-shield-check" color={null} />}
         variant={ButtonVariantType.borderLess}
         linkProps={{
-            to: ROUTER_URLS.SECURITY_CENTER_OVERVIEW,
+            to: ROUTER_URLS.JOBS,
         }}
-        ariaLabel="Security Center"
+        icon={<Icon name="ic-bot" color={null} />}
+        ariaLabel="Automation & Enablement"
         showAriaLabelInTippy
     />
 )

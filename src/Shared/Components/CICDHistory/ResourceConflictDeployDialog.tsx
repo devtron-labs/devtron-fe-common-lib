@@ -1,8 +1,8 @@
 import { useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { generatePath, useNavigate, useParams } from 'react-router-dom'
 
-import { URLS } from '@Common/Constants'
 import { showError } from '@Common/Helper'
+import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 import { ButtonStyleType } from '../Button'
 import { ConfirmationModal, ConfirmationModalVariantType } from '../ConfirmationModal'
@@ -11,7 +11,7 @@ import { resourceConflictRedeploy } from './service'
 import { ResourceConflictDeployDialogProps, ResourceConflictDeployDialogURLParamsType } from './types'
 
 const ResourceConflictDeployDialog = ({ appName, environmentName, handleClose }: ResourceConflictDeployDialogProps) => {
-    const history = useHistory()
+    const navigate = useNavigate()
     const { appId, envId, pipelineId, triggerId } = useParams<ResourceConflictDeployDialogURLParamsType>()
     const [isLoading, setIsLoading] = useState(false)
 
@@ -24,7 +24,12 @@ const ResourceConflictDeployDialog = ({ appName, environmentName, handleClose }:
                 appId,
             })
             setIsLoading(false)
-            history.push(`${URLS.APPLICATION_MANAGEMENT_APP}/${appId}/details/${envId}`)
+            navigate(
+                generatePath(ROUTER_URLS.DEVTRON_APP_DETAILS.ENV_DETAILS, {
+                    appId,
+                    envId,
+                }),
+            )
         } catch (error) {
             showError(error)
             setIsLoading(false)

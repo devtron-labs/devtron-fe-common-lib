@@ -30,8 +30,10 @@ import { ActionMenuProps } from '../ActionMenu'
 import { ButtonComponentType, ButtonProps, ButtonVariantType } from '../Button'
 import { FormFieldWrapperProps } from '../FormFieldWrapper/types'
 
-export interface SelectPickerOptionType<OptionValue = string | number, OptionLabel = ReactNode>
-    extends OptionType<OptionValue, OptionLabel> {
+export interface SelectPickerOptionType<OptionValue = string | number, OptionLabel = ReactNode> extends OptionType<
+    OptionValue,
+    OptionLabel
+> {
     /**
      * Description to be displayed for the option
      */
@@ -338,7 +340,8 @@ export type SelectPickerGroupHeadingProps<OptionValue> = GroupHeadingProps<Selec
 }
 
 export interface FilterSelectPickerProps
-    extends Required<
+    extends
+        Required<
             Pick<SelectPickerProps<number | string, true>, 'options' | 'isDisabled' | 'placeholder' | 'isLoading'>
         >,
         Pick<
@@ -373,11 +376,10 @@ export type SelectPickerTextAreaProps = Omit<
 > &
     Pick<ResizableTagTextAreaProps, 'maxHeight' | 'minHeight' | 'refVar' | 'dependentRefs'>
 
-export interface GroupedFilterSelectPickerProps<T extends string | number = string | number>
-    extends Omit<
-        ActionMenuProps<T>,
-        'onClick' | 'disableDescriptionEllipsis' | 'children' | 'buttonProps' | 'isSearchable'
-    > {
+export interface GroupedFilterSelectPickerProps<T extends string | number = string | number> extends Omit<
+    ActionMenuProps<T>,
+    'onClick' | 'disableDescriptionEllipsis' | 'children' | 'buttonProps' | 'isSearchable'
+> {
     isFilterApplied?: boolean
     filterSelectPickerPropsMap: Record<
         T,

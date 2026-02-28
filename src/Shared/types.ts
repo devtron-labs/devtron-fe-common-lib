@@ -930,7 +930,7 @@ export const CONFIGURATION_TYPE_OPTIONS: SegmentedControlProps['segments'] = [
     { label: ConfigurationType.YAML, value: ConfigurationType.YAML },
 ] as const
 
-export interface BaseURLParams {
+export type BaseURLParams = {
     appId: string
     envId: string
     clusterId: string

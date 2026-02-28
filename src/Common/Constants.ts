@@ -15,10 +15,6 @@
  */
 
 import { SelectPickerOptionType } from '@Shared/Components'
-import { CostBreakdownItemViewParamsType, CostBreakdownViewType } from '@PagesDevtron2.0/CostVisibility'
-import { BackupAndScheduleListViewEnum, BackupLocationsTypes } from '@PagesDevtron2.0/DataProtectionManagement'
-
-import { InfrastructureManagementAppListType } from './Types'
 
 export const FALLBACK_REQUEST_TIMEOUT = 60000
 export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
@@ -51,108 +47,17 @@ export const PATTERNS = {
     ALPHANUMERIC_WITH_SPECIAL_CHAR_AND_SLASH: /^[A-Za-z0-9._/-]+$/, // allow alphanumeric,(.) ,(-),(_),(/)
     EMAIL: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 }
-
-const APPLICATION_MANAGEMENT_ROOT = '/application-management'
-const APPLICATION_MANAGEMENT_TEMPLATES_DEVTRON_APP = `${APPLICATION_MANAGEMENT_ROOT}/templates/devtron-app`
-const APPLICATION_MANAGEMENT_CONFIGURATIONS = `${APPLICATION_MANAGEMENT_ROOT}/configurations`
-const INFRASTRUCTURE_MANAGEMENT_ROOT = '/infrastructure-management'
-const SOFTWARE_RELEASE_MANAGEMENT_ROOT = '/software-release-management'
-const COST_VISIBILITY_ROOT = '/cost-visibility'
-const SECURITY_CENTER_ROOT = '/security-center'
-const AUTOMATION_AND_ENABLEMENT_ROOT = '/automation-and-enablement'
-const DATA_PROTECTION_ROOT = '/data-protection-management'
-const DATA_PROTECTION_BACKUP_AND_SCHEDULE =
-    `${DATA_PROTECTION_ROOT}/backup-and-schedule/:view(${Object.values(BackupAndScheduleListViewEnum).join('|')})` as const
-const GLOBAL_CONFIG_ROOT = '/global-configuration'
-
+/** @deprecated */
 export const URLS = {
-    LOGIN: '/login',
-    LOGIN_SSO: '/login/sso',
-    APP_LIST: 'list',
-    CREATE_JOB: 'create-job',
-    GETTING_STARTED: 'getting-started',
-    STACK_MANAGER_ABOUT: '/stack-manager/about',
     APP_CI_DETAILS: 'ci-details',
     LOGS: 'Logs',
-    CREATE: '/create',
-    RELEASES: '/releases',
-    DEVTRON_CHARTS: 'dc',
-    APP_DEPLOYMNENT_HISTORY: 'deployments',
     APP_DETAILS: 'details',
     APP_DETAILS_K8: 'k8s-resources', // for V2
     DETAILS: '/details',
-    CD_DETAILS: 'cd-details',
-    APP_TRIGGER: 'trigger',
-    DEPLOYMENT_HISTORY_CONFIGURATIONS: '/configuration',
-    NETWORK_STATUS_INTERFACE: '/network-status-interface',
-    COMPARE_CLUSTERS: '/compare-clusters',
+    DEPLOYMENT_HISTORY_CONFIGURATIONS: 'configuration',
     APP_CONFIG: 'edit',
-    LICENSE_AUTH: '/license-auth',
-    // APPLICATION MANAGEMENT
-    APPLICATION_MANAGEMENT: APPLICATION_MANAGEMENT_ROOT,
-    APPLICATION_MANAGEMENT_OVERVIEW: `${APPLICATION_MANAGEMENT_ROOT}/overview`,
-    APPLICATION_MANAGEMENT_APP: `${APPLICATION_MANAGEMENT_ROOT}/devtron-app`,
-    APPLICATION_MANAGEMENT_APP_LIST: `${APPLICATION_MANAGEMENT_ROOT}/devtron-app/list`,
-    APPLICATION_MANAGEMENT_CREATE_DEVTRON_APP: `${APPLICATION_MANAGEMENT_ROOT}/devtron-app/list/create-app`,
-    APPLICATION_MANAGEMENT_APPLICATION_GROUP: `${APPLICATION_MANAGEMENT_ROOT}/application-group`,
-    APPLICATION_MANAGEMENT_TEMPLATES_DEVTRON_APP,
-    APPLICATION_MANAGEMENT_TEMPLATES_DEVTRON_APP_CREATE: `${APPLICATION_MANAGEMENT_TEMPLATES_DEVTRON_APP}/create`,
-    // NOTE: using appId since we are re-using AppConfig component
-    APPLICATION_MANAGEMENT_TEMPLATES_DEVTRON_APP_DETAIL: `${APPLICATION_MANAGEMENT_TEMPLATES_DEVTRON_APP}/detail/:appId`,
-    APPLICATION_MANAGEMENT_CONFIGURATIONS,
-    APPLICATION_MANAGEMENT_CONFIGURATIONS_DEPLOYMENT_CHARTS: `${APPLICATION_MANAGEMENT_CONFIGURATIONS}/deployment-charts`,
-    APPLICATION_MANAGEMENT_CONFIGURATIONS_SCOPED_VARIABLES: `${APPLICATION_MANAGEMENT_CONFIGURATIONS}/scoped-variables`,
-    APPLICATION_MANAGEMENT_CONFIGURATIONS_BUILD_INFRA: `${APPLICATION_MANAGEMENT_CONFIGURATIONS}/build-infra`,
-    APPLICATION_MANAGEMENT_CONFIGURATIONS_BUILD_INFRA_PROFILES: `${APPLICATION_MANAGEMENT_CONFIGURATIONS}/build-infra/profiles`,
-    APPLICATION_MANAGEMENT_CONFIGURATIONS_NOTIFICATIONS: `${APPLICATION_MANAGEMENT_CONFIGURATIONS}/notifications`,
-    // INFRASTRUCTURE MANAGEMENT
-    INFRASTRUCTURE_MANAGEMENT: INFRASTRUCTURE_MANAGEMENT_ROOT,
-    INFRASTRUCTURE_MANAGEMENT_OVERVIEW: `${INFRASTRUCTURE_MANAGEMENT_ROOT}/overview`,
-    INFRASTRUCTURE_MANAGEMENT_APP_LIST: `${INFRASTRUCTURE_MANAGEMENT_ROOT}/apps/:appType(${Object.values(InfrastructureManagementAppListType).join('|')})`,
-    INFRASTRUCTURE_MANAGEMENT_APP: `${INFRASTRUCTURE_MANAGEMENT_ROOT}/apps`,
-    INFRASTRUCTURE_MANAGEMENT_CHART_STORE: `${INFRASTRUCTURE_MANAGEMENT_ROOT}/chart-store`,
-    INFRASTRUCTURE_MANAGEMENT_CHART_STORE_DISCOVER: `${INFRASTRUCTURE_MANAGEMENT_ROOT}/chart-store/discover`,
-    INFRASTRUCTURE_MANAGEMENT_RESOURCE_BROWSER: `${INFRASTRUCTURE_MANAGEMENT_ROOT}/resource-browser`,
-    INFRASTRUCTURE_MANAGEMENT_RESOURCE_WATCHER: `${INFRASTRUCTURE_MANAGEMENT_ROOT}/resource-watcher`,
-    // SOFTWARE RELEASE MANAGEMENT
-    SOFTWARE_RELEASE_MANAGEMENT: SOFTWARE_RELEASE_MANAGEMENT_ROOT,
-    // COST VISIBILITY
-    COST_VISIBILITY: COST_VISIBILITY_ROOT,
-    COST_VISIBILITY_OVERVIEW: `${COST_VISIBILITY_ROOT}/overview`,
-    COST_BREAKDOWN_ROUTE: `${COST_VISIBILITY_ROOT}/breakdown/:breakdownViewType`,
-    COST_BREAKDOWN_CLUSTERS: `${COST_VISIBILITY_ROOT}/breakdown/${CostBreakdownViewType.CLUSTERS}`,
-    COST_BREAKDOWN_ENVIRONMENTS: `${COST_VISIBILITY_ROOT}/breakdown/${CostBreakdownViewType.ENVIRONMENTS}`,
-    COST_BREAKDOWN_PROJECTS: `${COST_VISIBILITY_ROOT}/breakdown/${CostBreakdownViewType.PROJECTS}`,
-    COST_BREAKDOWN_APPLICATIONS: `${COST_VISIBILITY_ROOT}/breakdown/${CostBreakdownViewType.APPLICATIONS}`,
-    COST_BREAKDOWN_DETAIL: `:${CostBreakdownItemViewParamsType.ITEM_NAME}/:${CostBreakdownItemViewParamsType.VIEW}/:${CostBreakdownItemViewParamsType.DETAIL}?`,
-    COST_CONFIGURATIONS: `${COST_VISIBILITY_ROOT}/configurations`,
-    // SECURITY CENTER
-    SECURITY_CENTER: SECURITY_CENTER_ROOT,
-    SECURITY_CENTER_OVERVIEW: `${SECURITY_CENTER_ROOT}/overview`,
-    SECURITY_CENTER_VULNERABILITIES: `${SECURITY_CENTER_ROOT}/vulnerabilities`,
-    SECURITY_CENTER_VULNERABILITY_DEPLOYMENTS: `${SECURITY_CENTER_ROOT}/vulnerabilities/deployments`,
-    SECURITY_CENTER_VULNERABILITY_CVES: `${SECURITY_CENTER_ROOT}/vulnerabilities/cves`,
-    SECURITY_CENTER_SECURITY_ENABLEMENT: `${SECURITY_CENTER_ROOT}/security-enablement`,
-    SECURITY_CENTER_POLICIES: `${SECURITY_CENTER_ROOT}/policies`,
-    // AUTOMATION AND ENABLEMENT
-    AUTOMATION_AND_ENABLEMENT: AUTOMATION_AND_ENABLEMENT_ROOT,
-    AUTOMATION_AND_ENABLEMENT_JOB: `${AUTOMATION_AND_ENABLEMENT_ROOT}/job`,
-    // DATA PROTECTION
-    DATA_PROTECTION: DATA_PROTECTION_ROOT,
-    DATA_PROTECTION_OVERVIEW: `${DATA_PROTECTION_ROOT}/overview`,
-    DATA_PROTECTION_BACKUP_AND_SCHEDULE,
-    DATA_PROTECTION_BACKUP_AND_SCHEDULE_DETAIL: `${DATA_PROTECTION_BACKUP_AND_SCHEDULE}/detail/:id`,
-    DATA_PROTECTION_RESTORES: `${DATA_PROTECTION_ROOT}/restores`,
-    DATA_PROTECTION_RESTORES_DETAIL: `${DATA_PROTECTION_ROOT}/restores/:restoreId`,
-    DATA_PROTECTION_BACKUP_LOCATIONS: `${DATA_PROTECTION_ROOT}/backup-locations/:type(${Object.values(BackupLocationsTypes).join('|')})`,
-    BACKUP_LOCATION_DETAILS: `/:locationId`,
-    // GLOBAL CONFIGURATION
-    GLOBAL_CONFIG: GLOBAL_CONFIG_ROOT,
-    GLOBAL_CONFIG_DOCKER: `${GLOBAL_CONFIG_ROOT}/docker`,
-    GLOBAL_CONFIG_EDIT_CLUSTER: `${GLOBAL_CONFIG_ROOT}/cluster-env/edit/:clusterId`,
-    GLOBAL_CONFIG_PROJECTS: `${GLOBAL_CONFIG_ROOT}/projects`,
-    PERMISSION_GROUPS: `${GLOBAL_CONFIG_ROOT}/auth/groups`,
-    EXTERNAL_APPS: 'ea',
+    APPLICATION_MANAGEMENT_APP: '/application-management/devtron-app',
+    GLOBAL_CONFIG_EDIT_CLUSTER: '/global-configuration/cluster-env/edit/:clusterId',
 } as const
 
 export const ROUTES = {
@@ -171,7 +76,6 @@ export const ROUTES = {
     INFRA_CONFIG_PROFILE: 'infra-config/profile',
     SCAN_RESULT: 'scan-result',
     NOTIFIER: 'notification',
-    APP_LIST: 'app/list',
     TELEMETRY_EVENT: 'telemetry/event',
     SERVER_INFO_API: 'server',
     ATTRIBUTES_USER: 'attributes/user',

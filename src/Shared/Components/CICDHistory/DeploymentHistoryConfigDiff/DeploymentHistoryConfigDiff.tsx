@@ -15,7 +15,7 @@
  */
 
 import { useMemo, useState } from 'react'
-import { generatePath, Route, Switch, useLocation, useRouteMatch } from 'react-router-dom'
+import { generatePath, Route, Routes, useLocation, useParams } from 'react-router-dom'
 
 import ErrorScreenManager from '@Common/ErrorScreenManager'
 import { useAsync } from '@Common/Helper'
@@ -48,9 +48,10 @@ export const DeploymentHistoryConfigDiff = ({
     setFullScreenView,
     resourceId,
     renderRunSource,
+    pathPattern,
 }: DeploymentHistoryConfigDiffProps) => {
     // HOOKS
-    const { path, params } = useRouteMatch()
+    const params = useParams()
     const { pathname, search } = useLocation()
     const { isSuperAdmin } = useMainContext()
 
@@ -122,7 +123,7 @@ export const DeploymentHistoryConfigDiff = ({
 
     // METHODS
     const getNavItemHref = (resourceType: EnvResourceType, resourceName: string) =>
-        `${generatePath(path, { ...params })}/${resourceType}${resourceName ? `/${resourceName}` : ''}${search}`
+        `${generatePath(pathPattern, { ...params })}/${resourceType}${resourceName ? `/${resourceName}` : ''}${search}`
 
     // Generate the deployment history config list
     const { deploymentConfigList, sortedDeploymentConfigList } = useMemo(() => {
@@ -216,63 +217,70 @@ export const DeploymentHistoryConfigDiff = ({
     }
 
     return (
-        <Switch>
-            <Route path={`${path}/:resourceType(${Object.values(EnvResourceType).join('|')})/:resourceName?`}>
-                <DeploymentHistoryConfigDiffCompare
-                    {...deploymentConfigList}
-                    isLoading={isLoading}
-                    errorConfig={errorConfig}
-                    envName={envName}
-                    wfrId={wfrId}
-                    urlFilters={urlFilters}
-                    pipelineDeployments={pipelineDeployments}
-                    setFullScreenView={setFullScreenView}
-                    convertVariables={convertVariables}
-                    setConvertVariables={setConvertVariables}
-                    triggerHistory={triggerHistory}
-                    resourceId={resourceId}
-                    renderRunSource={renderRunSource}
-                    hideDiffState={hideDiffState}
-                    isCompareDeploymentConfigNotAvailable={hasPreviousDeploymentConfigNotFoundError}
-                />
-            </Route>
-            <Route>
-                {compareDeploymentConfigErr && !compareDeploymentConfigLoader ? (
-                    <ErrorScreenManager code={errorConfig.code} reload={errorConfig.reload} />
-                ) : (
-                    <div className="p-16 flexbox-col dc__gap-16 bg__primary h-100">
-                        {isLoading ? (
-                            <Progressing fullHeight size={48} />
-                        ) : (
-                            <>
-                                <h3 className="fs-13 lh-20 fw-6 cn-9 m-0">
-                                    {hideDiffState
-                                        ? 'Configurations used for this deployment trigger'
-                                        : 'Showing configuration change with respect to previous deployment'}
-                                </h3>
-                                <div className="flexbox-col dc__gap-16 dc__mxw-800">
-                                    <div className="flexbox-col dc__gap-12">
-                                        {Object.keys(groupedDeploymentConfigList).map((groupHeader) =>
-                                            renderDeploymentHistoryConfig(
-                                                groupedDeploymentConfigList[groupHeader],
-                                                groupHeader !== 'UNGROUPED' ? groupHeader : null,
-                                                pathname,
-                                                hideDiffState,
-                                            ),
+        <Routes>
+            <Route
+                path=":resourceType/:resourceName?"
+                element={
+                    <DeploymentHistoryConfigDiffCompare
+                        {...deploymentConfigList}
+                        isLoading={isLoading}
+                        errorConfig={errorConfig}
+                        envName={envName}
+                        wfrId={wfrId}
+                        urlFilters={urlFilters}
+                        pipelineDeployments={pipelineDeployments}
+                        setFullScreenView={setFullScreenView}
+                        convertVariables={convertVariables}
+                        setConvertVariables={setConvertVariables}
+                        triggerHistory={triggerHistory}
+                        resourceId={resourceId}
+                        renderRunSource={renderRunSource}
+                        hideDiffState={hideDiffState}
+                        isCompareDeploymentConfigNotAvailable={hasPreviousDeploymentConfigNotFoundError}
+                        pathPattern={`${pathPattern}/:resourceType/:resourceName?`}
+                    />
+                }
+            />
+            <Route
+                index
+                element={
+                    compareDeploymentConfigErr && !compareDeploymentConfigLoader ? (
+                        <ErrorScreenManager code={errorConfig.code} reload={errorConfig.reload} />
+                    ) : (
+                        <div className="p-16 flexbox-col dc__gap-16 bg__primary h-100">
+                            {isLoading ? (
+                                <Progressing fullHeight size={48} />
+                            ) : (
+                                <>
+                                    <h3 className="fs-13 lh-20 fw-6 cn-9 m-0">
+                                        {hideDiffState
+                                            ? 'Configurations used for this deployment trigger'
+                                            : 'Showing configuration change with respect to previous deployment'}
+                                    </h3>
+                                    <div className="flexbox-col dc__gap-16 dc__mxw-800">
+                                        <div className="flexbox-col dc__gap-12">
+                                            {Object.keys(groupedDeploymentConfigList).map((groupHeader) =>
+                                                renderDeploymentHistoryConfig(
+                                                    groupedDeploymentConfigList[groupHeader],
+                                                    groupHeader !== 'UNGROUPED' ? groupHeader : null,
+                                                    pathname,
+                                                    hideDiffState,
+                                                ),
+                                            )}
+                                        </div>
+                                        {hasPreviousDeploymentConfigNotFoundError && (
+                                            <InfoBlock
+                                                variant="error"
+                                                description="Diff unavailable: Configurations for previous deployment not found."
+                                            />
                                         )}
                                     </div>
-                                    {hasPreviousDeploymentConfigNotFoundError && (
-                                        <InfoBlock
-                                            variant="error"
-                                            description="Diff unavailable: Configurations for previous deployment not found."
-                                        />
-                                    )}
-                                </div>
-                            </>
-                        )}
-                    </div>
-                )}
-            </Route>
-        </Switch>
+                                </>
+                            )}
+                        </div>
+                    )
+                }
+            />
+        </Routes>
     )
 }

@@ -10,7 +10,7 @@ const NavItem = ({ dataTestId, href, title, tooltipProps }: SideNavigationItemLi
         <NavLink
             to={href}
             data-testid={dataTestId}
-            className={(isActive) =>
+            className={({ isActive }) =>
                 `br-4 py-6 px-8 fs-13 lh-20 ${isActive ? 'fw-6 bcb-1 cb-5' : 'fw-4 cn-9 dc__hover-n50'}`
             }
         >

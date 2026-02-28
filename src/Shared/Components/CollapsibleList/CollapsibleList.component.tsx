@@ -97,7 +97,7 @@ export const CollapsibleList = <TabType extends TabOptions>({
     }
 
     const getNavLinkTabItem = (item: CollapsibleListItem<'navLink'>) => {
-        const { title, href, onClick, isActive, clearQueryParamsOnNavigation = false } = item
+        const { title, href, onClick, clearQueryParamsOnNavigation = false } = item
         return (
             <NavLink
                 key={title}
@@ -110,7 +110,6 @@ export const CollapsibleList = <TabType extends TabOptions>({
                     }
                     onClick?.(e)
                 }}
-                isActive={isActive}
             >
                 {getTabContent(item)}
             </NavLink>

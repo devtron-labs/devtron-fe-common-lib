@@ -246,10 +246,14 @@ export interface SidebarType extends RenderRunSourceType {
     handleViewAllHistory?: () => void
     children?: React.ReactNode
     resourceId?: number
+    path: string
 }
 
 export interface HistorySummaryCardType
-    extends RenderRunSourceType, Pick<History, 'workflowExecutionStages' | 'podName' | 'namespace'> {
+    extends
+        RenderRunSourceType,
+        Pick<History, 'workflowExecutionStages' | 'podName' | 'namespace'>,
+        Pick<SidebarType, 'path'> {
     id: number
     status: string
     startedOn: string
@@ -355,7 +359,7 @@ export interface ResourceConflictDeployDialogProps extends ResourceConflictDialo
 
 export interface ResourceConflictDetailsModalProps extends ResourceConflictDialogBaseProps {}
 
-export interface TriggerOutputURLParamsType extends Pick<BaseURLParams, 'appId' | 'envId'> {
+export type TriggerOutputURLParamsType = Pick<BaseURLParams, 'appId' | 'envId'> & {
     triggerId: string
     pipelineId: string
 }
@@ -505,6 +509,7 @@ export interface TriggerOutputProps extends RenderRunSourceType, Pick<TriggerDet
     setTriggerHistory: React.Dispatch<React.SetStateAction<Map<Number, History>>>
     scrollToTop: ReturnType<typeof useScrollable>[1]
     scrollToBottom: ReturnType<typeof useScrollable>[2]
+    pathPattern: string
 }
 
 export interface HistoryLogsProps
@@ -527,6 +532,7 @@ export interface HistoryLogsProps
             | 'fullScreenView'
             | 'appName'
             | 'triggerHistory'
+            | 'pathPattern'
         >,
         Pick<TargetPlatformBadgeListProps, 'targetPlatforms'> {
     triggerDetails: History
@@ -787,7 +793,7 @@ export interface ModuleConfigResponse extends ResponseType {
     }
 }
 
-export interface DeploymentHistoryBaseParamsType {
+export type DeploymentHistoryBaseParamsType = {
     appId: string
     envId: string
     pipelineId: string

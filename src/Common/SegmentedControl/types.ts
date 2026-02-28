@@ -101,8 +101,9 @@ export type SegmentedControlProps<T = string | number> = {
       }
 )
 
-export interface SegmentProps<T>
-    extends Required<Pick<SegmentedControlProps<T>, 'name' | 'onChange' | 'fullWidth' | 'size' | 'disabled'>> {
+export interface SegmentProps<T> extends Required<
+    Pick<SegmentedControlProps<T>, 'name' | 'onChange' | 'fullWidth' | 'size' | 'disabled'>
+> {
     isSelected: boolean
     segment: SegmentType<T>
 }

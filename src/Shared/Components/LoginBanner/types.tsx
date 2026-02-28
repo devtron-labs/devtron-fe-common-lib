@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { IconsProps } from 'src'
+import { IconsProps } from '../Icon'
 
 export interface TestimonialCardConfig {
     quote: string

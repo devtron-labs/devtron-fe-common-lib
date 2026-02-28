@@ -53,8 +53,7 @@ export type GenericInfoCardProps = { borderVariant: GenericInfoCardBorderVariant
 )
 
 export interface GenericInfoCardListingProps
-    extends Pick<GenericInfoCardProps, 'borderVariant'>,
-        Pick<GenericFilterEmptyStateProps, 'handleClearFilters'> {
+    extends Pick<GenericInfoCardProps, 'borderVariant'>, Pick<GenericFilterEmptyStateProps, 'handleClearFilters'> {
     list: (Pick<GenericInfoCardProps, 'Icon' | 'author' | 'description' | 'linkProps' | 'onClick' | 'title'> &
         Record<'id', string>)[]
     emptyStateConfig: Pick<GenericEmptyStateType, 'title' | 'subTitle' | 'image' | 'renderButton' | 'renderButton'>
