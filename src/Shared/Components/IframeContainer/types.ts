@@ -29,5 +29,6 @@ export interface IframeContainerProps {
 }
 
 export interface IframeElementProps
-    extends Pick<IframeData, 'URL' | 'width' | 'height' | 'title'>,
+    extends
+        Pick<IframeData, 'URL' | 'width' | 'height' | 'title'>,
         Pick<IframeContainerProps, 'maxHeight' | 'maxWidth'> {}

@@ -85,7 +85,8 @@ export interface FormInfoItemProps {
 }
 
 export interface FormFieldWrapperProps
-    extends Pick<
+    extends
+        Pick<
             FormFieldLabelProps,
             'label' | 'required' | 'ariaLabel' | 'layout' | 'labelTippyCustomizedConfig' | 'labelTooltipConfig'
         >,

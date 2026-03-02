@@ -18,12 +18,13 @@ import { useEffect, useRef, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { SliderButton } from '@typeform/embed-react'
 
-import { DOCUMENTATION_HOME_PAGE, MAX_LOGIN_COUNT, URLS } from '@Common/Constants'
+import { DOCUMENTATION_HOME_PAGE, MAX_LOGIN_COUNT } from '@Common/Constants'
 import { handleAnalyticsEvent } from '@Shared/Analytics'
 import { ComponentSizeType } from '@Shared/constants'
 import { useIsSecureConnection } from '@Shared/Hooks'
 import { AppThemeType, SidePanelTab, useMainContext, useTheme } from '@Shared/Providers'
 import { InstallationType } from '@Shared/types'
+import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 import { ActionMenu } from '../ActionMenu'
 import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
@@ -48,7 +49,7 @@ const CheckForUpdates = ({
             variant={ButtonVariantType.text}
             size={ComponentSizeType.medium}
             linkProps={{
-                to: URLS.STACK_MANAGER_ABOUT,
+                to: ROUTER_URLS.STACK_MANAGER.ABOUT,
             }}
             text="Check for updates"
         />

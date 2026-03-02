@@ -162,7 +162,7 @@ const getVulnerabilitiesData = (
     data: ImageScan['vulnerability'],
     setDetailViewData: OpenDetailViewButtonProps['setDetailViewData'],
     hidePolicy: boolean,
-) => ({
+): TablePropsType => ({
     headers: [
         { headerText: 'image', isSortable: false, width: 256 },
         { headerText: 'vulnerability', isSortable: false, width: 256 },
@@ -258,7 +258,7 @@ const getLicenseDetailData = (element: ImageScanLicenseListType) => ({
 const getLicenseData = (
     data: ImageScan['license'],
     setDetailViewData: OpenDetailViewButtonProps['setDetailViewData'],
-) => ({
+): TablePropsType => ({
     headers: [
         { headerText: 'image', isSortable: false, width: 256 },
         { headerText: 'risks detected', isSortable: false, width: 256 },

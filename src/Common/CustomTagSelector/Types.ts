@@ -74,8 +74,10 @@ export interface TagLabelValueSelectorType {
     noBackDrop?: boolean
 }
 
-export interface ResizableTagTextAreaProps
-    extends Omit<DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>, 'value'> {
+export interface ResizableTagTextAreaProps extends Omit<
+    DetailedHTMLProps<TextareaHTMLAttributes<HTMLTextAreaElement>, HTMLTextAreaElement>,
+    'value'
+> {
     minHeight?: number
     maxHeight?: number
     value: string

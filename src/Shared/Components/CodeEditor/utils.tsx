@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { render } from 'react-dom'
+import { createRoot } from 'react-dom/client'
 import { renderToString } from 'react-dom/server'
 import { json, jsonLanguage, jsonParseLinter } from '@codemirror/lang-json'
 import { yaml, yamlLanguage } from '@codemirror/lang-yaml'
@@ -250,13 +250,12 @@ export const getReadOnlyElement = () => {
 export const getRevertControlButton = () => {
     const dom = document.createElement('button')
 
-    render(
+    createRoot(dom).render(
         <Tooltip content="Revert this chunk" alwaysShowTippyOnHover>
             <div className="flex">
                 <Icon name="ic-arrow-right" color="N600" size={20} />
             </div>
         </Tooltip>,
-        dom,
     )
 
     return dom

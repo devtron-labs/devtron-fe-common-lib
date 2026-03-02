@@ -53,5 +53,7 @@ export interface UpdateFormDataFromFormStateProps {
     schemaPathToUpdatePathMap: Record<string, string>
 }
 
-export interface GetFormStateFromFormDataProps
-    extends Pick<UpdateFormDataFromFormStateProps, 'formData' | 'schemaPathToUpdatePathMap'> {}
+export interface GetFormStateFromFormDataProps extends Pick<
+    UpdateFormDataFromFormStateProps,
+    'formData' | 'schemaPathToUpdatePathMap'
+> {}

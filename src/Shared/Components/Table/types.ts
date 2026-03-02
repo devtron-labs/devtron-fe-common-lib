@@ -41,8 +41,10 @@ export enum SignalEnum {
     ROW_CLICKED = 'row-clicked',
 }
 
-export interface SignalsType<T extends string = SignalEnum>
-    extends Pick<EventTarget, 'addEventListener' | 'removeEventListener'> {
+export interface SignalsType<T extends string = SignalEnum> extends Pick<
+    EventTarget,
+    'addEventListener' | 'removeEventListener'
+> {
     addEventListener: (
         type: T,
         callback: (event: CustomEvent) => void,
@@ -189,8 +191,10 @@ export interface ConfigurableColumnsType<
     setVisibleColumns: Dispatch<SetStateAction<Column<RowData, FilterVariant, AdditionalProps>[]>>
 }
 
-interface GetRowsProps
-    extends Pick<UseFiltersReturnType, 'offset' | 'pageSize' | 'searchKey' | 'sortBy' | 'sortOrder'> {}
+interface GetRowsProps extends Pick<
+    UseFiltersReturnType,
+    'offset' | 'pageSize' | 'searchKey' | 'sortBy' | 'sortOrder'
+> {}
 
 type AdditionalFilterPropsType<T extends FiltersTypeEnum> = T extends FiltersTypeEnum.URL
     ? Pick<
@@ -394,8 +398,10 @@ export type TableProps<
 
 export type BulkActionStateType = string | null
 
-export interface BulkSelectionActionWidgetProps
-    extends Pick<BulkSelectionConfigType, 'BulkActionsComponent' | 'bulkActionsData'> {
+export interface BulkSelectionActionWidgetProps extends Pick<
+    BulkSelectionConfigType,
+    'BulkActionsComponent' | 'bulkActionsData'
+> {
     count: number
     handleClearBulkSelection: () => void
     parentRef: React.RefObject<HTMLDivElement>
@@ -423,7 +429,9 @@ export interface TableContentProps<
     RowData extends unknown,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
-> extends Pick<
+>
+    extends
+        Pick<
             InternalTableProps<RowData, FilterVariant, AdditionalProps>,
             | 'filterData'
             | 'rows'

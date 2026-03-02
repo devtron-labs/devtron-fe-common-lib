@@ -38,6 +38,7 @@ export interface UseBreadcrumbProps {
 
 export interface Breadcrumbs {
     breadcrumbs: Breadcrumb[]
+    path: string
     sep?: string
     className?: string
 }

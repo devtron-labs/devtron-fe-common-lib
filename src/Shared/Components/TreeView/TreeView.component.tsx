@@ -236,8 +236,9 @@ const TreeView = <DataAttributeType = null,>({
             return (
                 <NavLink
                     to={node.clearQueryParamsOnNavigation ? { pathname: node.href, search: '' } : node.href}
-                    className={`${baseClass} ${node.isDisabled ? 'dc__disabled' : ''}`}
-                    activeClassName={`tree-view__container__nav-link--active ${node.activeClassName || ''}`}
+                    className={({ isActive }) =>
+                        `${baseClass} ${node.isDisabled ? 'dc__disabled' : ''} ${isActive ? `tree-view__container__nav-link--active ${node.activeClassName || ''}` : ''}`
+                    }
                     onClick={getNodeItemNavLinkClick(node)}
                     tabIndex={isSelected ? 0 : fallbackTabIndex}
                     data-node-id={node.id}

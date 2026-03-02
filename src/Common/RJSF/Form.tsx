@@ -34,7 +34,6 @@ import './rjsfForm.scss'
 // Need to use this way because the default import was not working as expected
 // The default import resolves to an object instead of a function
 const Form = RJSF
-const validator = SCHEMA_07_VALIDATOR
 
 export const RJSFForm = forwardRef((props: FormProps, ref: FormProps['ref']) => {
     const { schemaPathToUpdatePathMap, isUpdatePathKeywordPresent } = useMemo(() => {
@@ -97,7 +96,7 @@ export const RJSFForm = forwardRef((props: FormProps, ref: FormProps['ref']) => 
                       }
                     : {})}
                 className={`rjsf-form-template__container ${props.className || ''}`}
-                validator={validator}
+                validator={SCHEMA_07_VALIDATOR}
                 templates={{
                     ...templates,
                     ...props.templates,
