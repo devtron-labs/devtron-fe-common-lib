@@ -125,6 +125,8 @@ const Table: React.FC<TablePropsType> = ({ headers, rows, defaultSortIndex, hasE
                                     cell.component ?? (typeof cell.cellContent === 'string' ? cell.cellContent : null)
                                 return CellComponent ? (
                                     <div
+                                        // eslint-disable-next-line react/no-array-index-key
+                                        key={index}
                                         className="flexbox dc__align-start dc__content-start fs-13 lh-20 fw-4 dc__word-break"
                                         style={{ width: `${headers[index].width}px` }}
                                         data-testid={`security-table-cell-${rowIndex}:${index}`}

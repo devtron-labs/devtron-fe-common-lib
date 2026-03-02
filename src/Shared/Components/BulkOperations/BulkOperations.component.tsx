@@ -15,7 +15,6 @@
  */
 
 import { useEffect, useRef, useState } from 'react'
-import { Prompt } from 'react-router-dom'
 import { noop } from 'rxjs'
 
 import { getIsRequestAborted } from '@Common/API'
@@ -54,6 +53,7 @@ const BulkOperations = ({
 
     usePrompt({
         shouldPrompt: apiCallInProgress,
+        message: textConfig.prompt,
     })
 
     const handleModalClose = () => {
@@ -224,7 +224,6 @@ const BulkOperations = ({
 
     return (
         <div className="bulk-operations">
-            <Prompt when={apiCallInProgress} message={textConfig.prompt} />
             {!shouldSkipConfirmation && !showResultsDrawer ? renderConfirmationDialog() : renderResultsDrawer()}
         </div>
     )

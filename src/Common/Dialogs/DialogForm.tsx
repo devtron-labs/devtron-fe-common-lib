@@ -57,7 +57,6 @@ export class DialogForm extends Component<PropsWithChildren<DialogFormProps>> {
                         <div className={`modal__header ${this.props.headerClassName || ''}`}>
                             <h1 className="modal__title">{this.props.title}</h1>
                             <button type="button" className="dc__transparent" onClick={this.props.close}>
-                                {' '}
                                 <img src={close} alt="close" />
                             </button>
                         </div>

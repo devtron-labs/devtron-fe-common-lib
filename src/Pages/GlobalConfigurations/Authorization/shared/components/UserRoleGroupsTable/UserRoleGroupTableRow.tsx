@@ -16,10 +16,10 @@
 
 import { Link } from 'react-router-dom'
 
-import { URLS } from '@Common/Constants'
 import { getRandomColor } from '@Common/Helper'
 import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
+import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 import { ReactComponent as TrashIcon } from '../../../../../../Assets/Icon/ic-delete-interactive.svg'
 import { UserRoleGroup } from '../../../types'
@@ -65,7 +65,7 @@ const UserRoleGroupTableRow = ({
             >
                 {name[0]}
             </div>
-            <Link to={`${URLS.PERMISSION_GROUPS}/${id}`} className="dc__ellipsis-right anchor cursor">
+            <Link to={`${ROUTER_URLS.GLOBAL_CONFIG_AUTH.GROUPS}/${id}`} className="dc__ellipsis-right anchor cursor">
                 {name}
             </Link>
             <div className="dc__ellipsis-right">{description || '-'}</div>

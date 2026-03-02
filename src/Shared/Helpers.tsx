@@ -16,7 +16,6 @@
 
 /* eslint-disable no-param-reassign */
 import { ReactElement, useEffect, useRef, useState } from 'react'
-import { PromptProps } from 'react-router-dom'
 import { parse as parseCronExpression } from '@datasert/cronjs-parser'
 import { StrictRJSFSchema } from '@rjsf/utils'
 import Tippy from '@tippyjs/react'
@@ -55,7 +54,7 @@ import {
 } from '../Common'
 import { getAggregator, GVKType } from '../Pages'
 import { AggregatedNodes } from './Components'
-import { CUBIC_BEZIER_CURVE, UNSAVED_CHANGES_PROMPT_MESSAGE } from './constants'
+import { CUBIC_BEZIER_CURVE } from './constants'
 import {
     AggregationKeys,
     BorderConfigType,
@@ -593,19 +592,6 @@ export const getWebhookDate = (materialSourceType: string, history: MaterialHist
 }
 
 export const getUniqueId = (size?: number): string => nanoid(size)
-
-/**
- * Checks if the provided pathname matches the current path.
- * If the paths do not match, returns a custom message or a default unsaved changes prompt.
- *
- * @param currentPathName - The current path to compare against.
- * @param customMessage - Optional custom message to display when the path does not match.
- * @returns A function that takes an object with a `pathname` property and performs the path match check.
- */
-export const checkIfPathIsMatching =
-    (currentPathName: string, customMessage = ''): PromptProps['message'] =>
-    ({ pathname }: { pathname: string }) =>
-        currentPathName === pathname || customMessage || UNSAVED_CHANGES_PROMPT_MESSAGE
 
 export const sanitizeTargetPlatforms = (
     targetPlatforms: TargetPlatformsDTO['targetPlatforms'],

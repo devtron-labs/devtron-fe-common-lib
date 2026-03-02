@@ -15,18 +15,18 @@
  */
 
 import React, { useMemo, useEffect } from 'react'
-import { Link, useRouteMatch, useParams } from 'react-router-dom'
+import { generatePath, Link, useParams } from 'react-router-dom'
 import { useBreadcrumbContext, getBreadCrumbSeparator } from './BreadcrumbStore'
 import { ConditionalWrap } from '../Helper'
 import { Breadcrumb, Breadcrumbs, UseBreadcrumbOptionalProps, UseBreadcrumbState } from './Types'
 
 export const BreadcrumbContext = React.createContext(null)
 
-export function useBreadcrumb(props?: UseBreadcrumbOptionalProps, deps?: any[]): UseBreadcrumbState {
+export function useBreadcrumb(pathPattern: string, props?: UseBreadcrumbOptionalProps, deps?: any[]): UseBreadcrumbState {
     const sep = props?.sep || '/'
     deps = deps || []
-    const { url, path } = useRouteMatch()
     const params = useParams()
+    const url = generatePath(pathPattern, params)
     const { state, setState } = useBreadcrumbContext()
 
     useEffect(() => {
@@ -48,7 +48,7 @@ export function useBreadcrumb(props?: UseBreadcrumbOptionalProps, deps?: any[]):
     }
 
     const levels: Breadcrumb[] = useMemo(() => {
-        const paths = path.split('/').filter(Boolean)
+        const paths = pathPattern.split('/').filter(Boolean)
         const urls = url.split('/').filter(Boolean)
         return paths.map((path, idx) => {
             const crumb: Breadcrumb = { to: urls[idx], name: path }
@@ -57,7 +57,7 @@ export function useBreadcrumb(props?: UseBreadcrumbOptionalProps, deps?: any[]):
             }
             return crumb
         })
-    }, [path, url])
+    }, [pathPattern, url])
     const { res: breadcrumbs } = useMemo(
         () =>
             levels.reduce(
@@ -89,10 +89,12 @@ export function useBreadcrumb(props?: UseBreadcrumbOptionalProps, deps?: any[]):
 
 export const BreadCrumb: React.FC<Breadcrumbs> = ({
     breadcrumbs,
+    path,
     sep = '/',
     className = 'dc__devtron-breadcrumb__item fs-16 fw-4 lh-1-5 dc__ellipsis-right dc__mxw-155',
 }) => {
-    const { url } = useRouteMatch()
+    const params = useParams()
+    const url = generatePath(path, params)
     const filteredCrumbs = breadcrumbs.filter((crumb) => !!crumb.name)
     return (
         <>
