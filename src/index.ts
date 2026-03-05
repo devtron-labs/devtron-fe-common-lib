@@ -55,7 +55,6 @@ export interface customEnv {
     HIDE_EXCLUDE_INCLUDE_GIT_COMMITS?: boolean
     ENABLE_BUILD_CONTEXT?: boolean
     CLAIR_TOOL_VERSION?: string
-    ENABLE_RESTART_WORKLOAD?: boolean
     ENABLE_SCOPED_VARIABLES?: boolean
     DEFAULT_CI_TRIGGER_TYPE_MANUAL: boolean
     ANNOUNCEMENT_BANNER_MSG?: string
