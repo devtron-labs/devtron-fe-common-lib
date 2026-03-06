@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { useRef } from 'react'
 import Draggable, { DraggableProps } from 'react-draggable'
 
 import { ReactComponent as SortIcon } from '@Icons/ic-arrow-up-down.svg'
@@ -69,6 +70,7 @@ const SortableTableHeaderCell = ({
     handleResize,
     isResizable,
 }: SortableTableHeaderCellProps) => {
+    const nodeRef = useRef<HTMLDivElement>(null)
     const isCellResizable = !!(isResizable && id && handleResize)
 
     const renderSortIcon = () => {
@@ -113,6 +115,7 @@ const SortableTableHeaderCell = ({
             </button>
             {isCellResizable && (
                 <Draggable
+                    nodeRef={nodeRef}
                     handle=".sortable-table-header__resize-btn"
                     defaultClassNameDragging="sortable-table-header__resize-btn--dragging"
                     position={{
@@ -126,7 +129,10 @@ const SortableTableHeaderCell = ({
                         bottom: 0,
                     }}
                 >
-                    <div className="sortable-table-header__resize-btn flex h-100 dc__no-shrink px-2 dc__position-abs dc__cursor-col-resize dc__right-3--neg">
+                    <div
+                        ref={nodeRef}
+                        className="sortable-table-header__resize-btn flex h-100 dc__no-shrink px-2 dc__position-abs dc__cursor-col-resize dc__right-3--neg"
+                    >
                         <div className="dc__divider h-16" />
                     </div>
                 </Draggable>
