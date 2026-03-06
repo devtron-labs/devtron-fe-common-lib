@@ -59,7 +59,9 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
             <div className="shimmer w-64 lh-1-5 h-24" />
         ) : (
             <span className={countClassName} data-testid={`segmented-bar-chart-${label}-value`}>
-                {isProportional && !hideTotal ? `${value}/${total}` : value}
+                {isProportional && !hideTotal
+                    ? `${value.toLocaleString()}/${total.toLocaleString()}`
+                    : value.toLocaleString()}
             </span>
         )
 

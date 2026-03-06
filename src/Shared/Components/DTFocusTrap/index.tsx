@@ -14,5 +14,5 @@
  * limitations under the License.
  */
 
-export { default as DTFocusTrap, useFocusTrapControl } from './DTFocusTrap'
+export { default as DTFocusTrap } from './DTFocusTrap'
 export type { DTFocusTrapType } from './types'

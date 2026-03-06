@@ -33,6 +33,7 @@ const Backdrop = ({
     deactivateFocusOnEscape = true,
     initialFocus,
     returnFocusOnDeactivate,
+    avoidFocusTrap,
 }: BackdropProps) => {
     // STATES
     const [portalContainer, setPortalContainer] = useState<HTMLElement | null>(null)
@@ -92,6 +93,7 @@ const Backdrop = ({
             deactivateFocusOnEscape={deactivateFocusOnEscape}
             initialFocus={initialFocus ?? undefined}
             returnFocusOnDeactivate={returnFocusOnDeactivate}
+            avoidFocusTrap={avoidFocusTrap}
         >
             <motion.div
                 initial={{ opacity: 0 }}

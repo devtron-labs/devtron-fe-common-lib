@@ -46,6 +46,7 @@ const ConfirmationModalBody = ({
     shouldCloseOnEscape = true,
     isLandscapeView = false,
     showConfetti = false,
+    avoidFocusTrap = false,
 }: ConfirmationModalBodyProps) => {
     const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
 
@@ -92,6 +93,7 @@ const ConfirmationModalBody = ({
             deactivateFocusOnEscape={shouldCloseOnEscape}
             // Since when custom input is present, we auto focus on input, else focus on primary button
             initialFocus={confirmationConfig ? false : `#${PRIMARY_BUTTON_ID}`}
+            avoidFocusTrap={avoidFocusTrap}
         >
             <motion.div
                 className={`${isLandscapeView ? 'w-500' : 'w-400'} confirmation-modal border__secondary flexbox-col br-8 bg__primary dc__m-auto mt-40`}

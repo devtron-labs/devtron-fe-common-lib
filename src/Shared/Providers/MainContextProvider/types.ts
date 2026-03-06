@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Dispatch, MutableRefObject, ReactNode, SetStateAction } from 'react'
+import { Dispatch, FunctionComponent, MutableRefObject, ReactNode, SetStateAction } from 'react'
 
 import { SERVER_MODE } from '../../../Common'
 import {
@@ -48,11 +48,71 @@ export interface SidePanelConfig {
     /** URL to documentation that should be displayed in the panel */
     docLink: string | null
     aiSessionId?: string
+    isExpandedView?: boolean
 }
 
-type AIAgentContextType = {
-    path: string
-    context: Record<string, string>
+export enum AIAgentContextSourceType {
+    APP_DETAILS = 'app-details',
+    RESOURCE_BROWSER_CLUSTER = 'resource-browser-cluster',
+}
+
+export type AIAgentAppType =
+    | 'devtronApp'
+    | 'devtronHelmChart'
+    | 'externalHelmChart'
+    | 'externalArgoApp'
+    | 'externalFluxApp'
+
+type AIAgentAppDataMasterType = {
+    appId: number | string
+    appName: string
+    envId: number
+    envName: string
+    clusterId: number
+    namespace: string
+    appType: AIAgentAppType
+    fluxAppDeploymentType: string
+}
+
+type AIAgentAppDataType<TAppType extends AIAgentAppType, TRequiredFields extends keyof AIAgentAppDataMasterType> = Pick<
+    AIAgentAppDataMasterType,
+    TRequiredFields
+> & {
+    [K in Exclude<keyof AIAgentAppDataMasterType, TRequiredFields | 'appType'>]?: never
+} & {
+    appType: TAppType
+}
+
+type CommonContextDataType = Record<string, unknown> & {
+    uiMarkup?: string
+}
+
+export type AIAgentContextType =
+    | {
+          source: AIAgentContextSourceType.APP_DETAILS
+          data:
+              | AIAgentAppDataType<
+                    'devtronApp' | 'devtronHelmChart',
+                    'appId' | 'appName' | 'envId' | 'envName' | 'clusterId'
+                >
+              | AIAgentAppDataType<'externalHelmChart', 'appId' | 'appName' | 'clusterId' | 'namespace'>
+              | AIAgentAppDataType<'externalArgoApp', 'appName' | 'clusterId' | 'namespace'>
+              | (AIAgentAppDataType<
+                    'externalFluxApp',
+                    'appName' | 'clusterId' | 'namespace' | 'fluxAppDeploymentType'
+                > &
+                    CommonContextDataType)
+      }
+    | {
+          source: AIAgentContextSourceType.RESOURCE_BROWSER_CLUSTER
+          data: {
+              clusterId: number
+              clusterName: string
+          } & CommonContextDataType
+      }
+
+export type DebugAgentContextType = AIAgentContextType & {
+    prompt?: string
 }
 
 export interface TempAppWindowConfig {
@@ -118,6 +178,8 @@ type CommonMainContextProps = {
     setLicenseData: Dispatch<SetStateAction<DevtronLicenseInfo>>
     canFetchHelmAppStatus: boolean
     setIntelligenceConfig: Dispatch<SetStateAction<IntelligenceConfig>>
+    debugAgentContext: DebugAgentContextType | null
+    setDebugAgentContext: (aiAgentContext: DebugAgentContextType | null) => void
     setAIAgentContext: (aiAgentContext: AIAgentContextType) => void
     setSidePanelConfig: Dispatch<SetStateAction<SidePanelConfig>>
 } & Pick<EnvironmentDataValuesDTO, 'isResourceRecommendationEnabled'>
@@ -152,6 +214,9 @@ export type MainContext = CommonMainContextProps &
               aiAgentContext: AIAgentContextType
               tempAppWindowConfig: TempAppWindowConfig
               setTempAppWindowConfig: Dispatch<SetStateAction<TempAppWindowConfig>>
+              AIRecommendations?: FunctionComponent
+              featureAskDevtronExpert: EnvironmentDataValuesDTO['featureAskDevtronExpert']
+              AskDevtronButton?: FunctionComponent
           }
         | {
               isLicenseDashboard: true
@@ -170,6 +235,9 @@ export type MainContext = CommonMainContextProps &
               aiAgentContext: null
               tempAppWindowConfig: null
               setTempAppWindowConfig: null
+              AIRecommendations?: null
+              featureAskDevtronExpert?: null
+              AskDevtronButton?: null
           }
     )
 

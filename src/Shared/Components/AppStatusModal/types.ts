@@ -17,6 +17,7 @@
 import { FunctionComponent, PropsWithChildren, ReactNode } from 'react'
 
 import { APIOptions, DeploymentAppTypes } from '@Common/Types'
+import { MainContext } from '@Shared/Providers'
 import {
     AppDetails,
     ConfigDriftModalProps,
@@ -38,7 +39,11 @@ export type AppStatusModalProps = {
     processVirtualEnvironmentDeploymentData: (
         data?: DeploymentStatusDetailsType,
     ) => DeploymentStatusDetailsBreakdownDataType
-    debugWithAIButton: FunctionComponent<{ intelligenceConfig: IntelligenceConfig }>
+    debugWithAIButton: FunctionComponent<{
+        intelligenceConfig: IntelligenceConfig
+        debugAgentContext: MainContext['debugAgentContext']
+        onClick?: () => void
+    }>
 } & (
     | {
           type: 'release'
@@ -59,7 +64,7 @@ export type AppStatusModalProps = {
 )
 
 export interface AppStatusBodyProps
-    extends Required<Pick<AppStatusModalProps, 'appDetails' | 'type' | 'debugWithAIButton'>> {
+    extends Required<Pick<AppStatusModalProps, 'appDetails' | 'type' | 'debugWithAIButton' | 'handleClose'>> {
     handleShowConfigDriftModal: () => void
     selectedTab: AppStatusModalTabType
     deploymentStatusDetailsBreakdownData: DeploymentStatusDetailsBreakdownDataType

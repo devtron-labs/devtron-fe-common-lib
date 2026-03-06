@@ -19,7 +19,10 @@ import { MouseEvent, ReactNode } from 'react'
 import { DTFocusTrapType } from '../DTFocusTrap'
 
 export interface BackdropProps
-    extends Pick<DTFocusTrapType, 'deactivateFocusOnEscape' | 'initialFocus' | 'onEscape' | 'returnFocusOnDeactivate'> {
+    extends Pick<
+        DTFocusTrapType,
+        'deactivateFocusOnEscape' | 'initialFocus' | 'onEscape' | 'returnFocusOnDeactivate' | 'avoidFocusTrap'
+    > {
     /**
      * The content to be rendered within the backdrop component.
      */

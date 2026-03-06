@@ -130,9 +130,7 @@ export type ChartProps = {
         placement?: TooltipProps['placement']
         datasetValueFormatter?: (value: number) => string | number
     }
-    /** A title for x axis */
     xScaleTitle?: string
-    /** A title for y axis */
     yScaleTitle?: string
 } & TypeAndDatasetsType
 

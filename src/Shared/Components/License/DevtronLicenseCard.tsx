@@ -27,7 +27,7 @@ import { LicensingErrorCodes } from '@Shared/types'
 
 import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
-import { DevtronLicenseCardProps, LicenseStatus } from './types'
+import { DevtronLicenseCardProps, LicenseCardSubTextProps, LicenseStatus } from './types'
 import { getLicenseColorsAccordingToStatus } from './utils'
 
 import './licenseCard.scss'
@@ -49,10 +49,13 @@ const LicenseCardSubText = ({
     isFreemium,
     licenseStatus,
     licenseStatusError,
-}: Pick<DevtronLicenseCardProps, 'isFreemium' | 'licenseStatus' | 'licenseStatusError'>) => {
-    if (isFreemium) {
-        const freemiumLimitReached = licenseStatusError?.code === LicensingErrorCodes.ClusterLimitExceeded
+    isFreeForever,
+}: LicenseCardSubTextProps) => {
+    const freemiumLimitReached = isFreemium && licenseStatusError?.code === LicensingErrorCodes.ClusterLimitExceeded
+    const showFreemiumMessage =
+        isFreeForever || freemiumLimitReached || (isFreemium && licenseStatus === LicenseStatus.ACTIVE)
 
+    if (showFreemiumMessage) {
         return (
             <div className="p-16 fs-13 lh-1-5 flexbox-col dc__gap-8">
                 <div className="flexbox dc__gap-8 dc__content-space fs-13 fw-4 lh-20 cn-9">
@@ -130,10 +133,17 @@ export const DevtronLicenseCard = ({
     appTheme,
     handleCopySuccess,
     licenseStatusError,
+    isSaasInstance,
 }: DevtronLicenseCardProps) => {
-    const { bgColor, textColor } = getLicenseColorsAccordingToStatus({ isFreemium, licenseStatus, licenseStatusError })
-    const remainingTime = getTTLInHumanReadableFormat(ttl)
-    const remainingTimeString = ttl < 0 ? `Expired ${remainingTime} ago` : `${remainingTime} remaining`
+    const isFreeForever = isFreemium && !isSaasInstance
+
+    const { bgColor, textColor } = getLicenseColorsAccordingToStatus({
+        isFreemium,
+        licenseStatus,
+        licenseStatusError,
+        isSaasInstance,
+    })
+
     const isThemeDark = appTheme === AppThemeType.dark
 
     const cardRef = useRef<HTMLDivElement>(null)
@@ -178,6 +188,15 @@ export const DevtronLicenseCard = ({
         ? useMotionTemplate`linear-gradient(55deg, transparent, rgba(122, 127, 131, ${sheenOpacity}) ${sheenPosition}%, transparent)`
         : useMotionTemplate`linear-gradient(55deg, transparent, rgba(255, 255, 255, ${sheenOpacity}) ${sheenPosition}%, transparent)`
 
+    const getRemainingTimeString = () => {
+        if (isFreeForever) {
+            return null
+        }
+
+        const remainingTime = getTTLInHumanReadableFormat(ttl)
+        return ttl < 0 ? `Expired ${remainingTime} ago` : `${remainingTime} remaining`
+    }
+
     return (
         <div className="license-card-wrapper flexbox-col p-8 br-16" style={{ backgroundColor: bgColor }}>
             <div style={{ perspective: '1000px' }}>
@@ -217,12 +236,12 @@ export const DevtronLicenseCard = ({
                             </div>
                             <div className="flexbox dc__align-items-center dc__gap-4 flex-wrap fs-12">
                                 <span className="font-ibm-plex-mono cn-9">
-                                    {isFreemium ? 'VALID FOREVER' : expiryDate}
+                                    {isFreeForever ? 'VALID FOREVER' : expiryDate}
                                 </span>
-                                {!isFreemium && (
+                                {!isFreeForever && (
                                     <>
                                         <span className="cn-9">·</span>
-                                        <span style={{ color: textColor }}>{remainingTimeString}</span>
+                                        <span style={{ color: textColor }}>{getRemainingTimeString()}</span>
                                     </>
                                 )}
                             </div>
@@ -239,6 +258,7 @@ export const DevtronLicenseCard = ({
                 isFreemium={isFreemium}
                 licenseStatusError={licenseStatusError}
                 licenseStatus={licenseStatus}
+                isFreeForever={isFreeForever}
             />
         </div>
     )

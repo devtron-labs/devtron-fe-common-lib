@@ -155,7 +155,6 @@ export interface customEnv {
     GATEKEEPER_URL?: string
     FEATURE_AI_INTEGRATION_ENABLE?: boolean
     LOGIN_PAGE_IMAGE?: string
-    FEATURE_ASK_DEVTRON_EXPERT?: boolean
     /**
      * If true, the manage traffic feature is enabled in apps & app groups.
      *
@@ -188,6 +187,9 @@ export interface customEnv {
      * @default false
      */
     FEATURE_STORAGE_ENABLE?: boolean
+    FEATURE_ATHENA_DEBUG_MODE_ENABLE?: boolean
+    /** Org ID for grafana */
+    GRAFANA_ORG_ID?: number
 }
 declare global {
     interface Window {
