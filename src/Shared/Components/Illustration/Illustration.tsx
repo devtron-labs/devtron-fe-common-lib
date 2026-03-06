@@ -3,6 +3,7 @@
 import CmdBarVisual from '@Illustrations/cmd-bar-visual.webp'
 import CreateBackupSchedule from '@Illustrations/create-backup-schedule.webp'
 import CreateBackupSnapshot from '@Illustrations/create-backup-snapshot.webp'
+import { ReactComponent as EmptyStateKey } from '@Illustrations/empty-state-key.svg'
 import { ReactComponent as ImgCelebration } from '@Illustrations/img-celebration.svg'
 import ImgCode from '@Illustrations/img-code.webp'
 import ImgDevtronFreemium from '@Illustrations/img-devtron-freemium.webp'
@@ -23,6 +24,7 @@ import { IllustrationBase } from './IllustrationBase'
 import { IllustrationBaseProps } from './types'
 
 export const illustrationMap = {
+    'empty-state-key': EmptyStateKey,
     'img-celebration': ImgCelebration,
     'img-folder-empty': ImgFolderEmpty,
     'img-install-freemium-saas': ImgInstallFreemiumSaas,
