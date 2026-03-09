@@ -200,7 +200,11 @@ const InternalTable = <
                 (userProvidedAreFiltersApplied !== undefined ? userProvidedAreFiltersApplied : areFiltersApplied) ? (
                 <GenericFilterEmptyState
                     {...emptyStateConfig.noRowsForFilterConfig}
-                    handleClearFilters={userGivenUrlClearFilters ?? clearFilters}
+                    handleClearFilters={
+                        emptyStateConfig.noRowsForFilterConfig.handleClearFilters !== undefined
+                            ? emptyStateConfig.noRowsForFilterConfig.handleClearFilters
+                            : (userGivenUrlClearFilters ?? clearFilters)
+                    }
                 />
             ) : (
                 <GenericEmptyState {...emptyStateConfig.noRowsConfig} />
