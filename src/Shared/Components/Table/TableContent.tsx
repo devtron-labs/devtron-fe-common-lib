@@ -154,7 +154,7 @@ const TableContent = <
         : initialGridTemplateColumns
 
     const gridTemplateColumns =
-        isAnyRowExpandable || rowStartIconConfig
+        (isAnyRowExpandable || rowStartIconConfig) && !isBulkSelectionConfigured
             ? `${ACTION_GUTTER_SIZE}px ${gridTemplateColumnsWithoutExpandButton}`
             : gridTemplateColumnsWithoutExpandButton
 
@@ -452,7 +452,10 @@ const TableContent = <
                         const { className: stickyClassName = '', left: stickyLeftValue = '' } = horizontallySticky
                             ? getStickyColumnConfig(
                                   gridTemplateColumns,
-                                  index + (isAnyRowExpandable || rowStartIconConfig ? 1 : 0),
+                                  index +
+                                      ((isAnyRowExpandable || rowStartIconConfig) && !isBulkSelectionConfigured
+                                          ? 1
+                                          : 0),
                               )
                             : {}
 
@@ -573,7 +576,7 @@ const TableContent = <
                                     </div>
                                 ) : null}
 
-                                {!isAnyRowExpandable && rowStartIconConfig && <div />}
+                                {!isAnyRowExpandable && rowStartIconConfig && !isBulkSelectionConfigured && <div />}
 
                                 {visibleColumns.map(
                                     (
