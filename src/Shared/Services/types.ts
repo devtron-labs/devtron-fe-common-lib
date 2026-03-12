@@ -63,6 +63,7 @@ export interface EnvironmentDataValuesDTO extends Pick<MainContext, 'featureGitO
     canOnlyViewPermittedEnvOrgLevel: boolean
     devtronManagedLicensingEnabled: boolean
     isResourceRecommendationEnabled?: boolean
+    featureAskDevtronExpert: boolean
 }
 
 export interface ClusterMinDTO {

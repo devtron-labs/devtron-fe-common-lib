@@ -40,6 +40,13 @@
             left: -20px;
             width: 20px;
         }
+
+        &.expand-row-btn::before,
+        &.row-start-icon::before,
+        &.expanded-tree-line::before {
+            left: -24px;
+            width: 24px;
+        }
     }
 
     &--scrolled {
@@ -69,6 +76,10 @@
             outline: none;
         }
 
+        &--expanded-row:has(+ .generic-table__row--expanded-row) {
+            border-bottom: 0px;
+        }
+
         &:hover,
         &:hover > *,
         &--active,
@@ -94,6 +105,33 @@
                 display: inherit;
             }
         }
+
+        &.with-start-icon-and-bulk-or-expand-action {
+            .bulk-action-checkbox {
+                display: none;
+            }
+
+            .expand-row-btn {
+                display: none;
+            }
+
+            &:hover,
+            &.generic-table__row--active,
+            &.generic-table__row--bulk-selected,
+            &.generic-table__row--is-expanded {
+                .row-start-icon {
+                    display: none;
+                }
+
+                .bulk-action-checkbox {
+                    display: flex;
+                }
+
+                .expand-row-btn {
+                    display: flex;
+                }
+            }
+        }
     }
 
     .sortable-table-header__resize-btn:hover,
@@ -104,5 +142,15 @@
             height: 16px !important;
             transform: scaleY(var(--resize-btn-scale-multiplier));
         }
+    }
+
+    .expanded-tree-line::after {
+        content: '';
+        width: 1px;
+        height: 100%;
+        background: var(--N200);
+        left: calc(50% - 1px); // offset to left by width for perfect centering
+        top: 0;
+        position: absolute;
     }
 }
