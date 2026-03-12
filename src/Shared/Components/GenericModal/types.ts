@@ -17,7 +17,7 @@
 import { BackdropProps } from '../Backdrop'
 import { ButtonProps } from '../Button'
 
-export type BorderVariantType = 'secondary' | 'none' | 'secondary-translucent'
+export type BorderVariantType = 'secondary' | 'none' | 'secondary-translucent' | 'primary'
 
 export interface GenericModalProps extends Partial<Pick<BackdropProps, 'onEscape' | 'avoidFocusTrap'>> {
     /** Unique identifier for the modal */

@@ -27,4 +27,5 @@ export const BORDER_VARIANT_TO_CLASS_NAME_MAP: Record<BorderVariantType, string>
     secondary: 'border__secondary',
     none: '',
     'secondary-translucent': 'border__secondary-translucent',
+    primary: 'border__primary',
 }

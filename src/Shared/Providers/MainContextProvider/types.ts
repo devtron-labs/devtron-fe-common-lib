@@ -217,6 +217,8 @@ export type MainContext = CommonMainContextProps &
               AIRecommendations?: FunctionComponent
               featureAskDevtronExpert: EnvironmentDataValuesDTO['featureAskDevtronExpert']
               AskDevtronButton?: FunctionComponent
+              showUpgradeToOSSPlusDialog: boolean
+              setShowUpgradeToOSSPlusDialog: (show: boolean) => void
           }
         | {
               isLicenseDashboard: true
@@ -238,6 +240,8 @@ export type MainContext = CommonMainContextProps &
               AIRecommendations?: null
               featureAskDevtronExpert?: null
               AskDevtronButton?: null
+              showUpgradeToOSSPlusDialog?: null
+              setShowUpgradeToOSSPlusDialog?: null
           }
     )
 
