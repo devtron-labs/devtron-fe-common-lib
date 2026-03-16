@@ -22,9 +22,9 @@ import { handleAnalyticsEvent } from '@Shared/Analytics'
 import { ComponentSizeType } from '@Shared/constants'
 import { InstallationType } from '@Shared/types'
 
-import { TippyCustomized, TippyTheme, Tooltip } from '../../../Common'
+import { TippyCustomized, TippyTheme } from '../../../Common'
 import { POSTHOG_EVENT_ONBOARDING } from '../../../Common/Constants'
-import { SidePanelTab, useMainContext, useTheme, useUserEmail } from '../../Providers'
+import { useMainContext, useTheme, useUserEmail } from '../../Providers'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import { ImageWithFallback } from '../ImageWithFallback'
@@ -52,8 +52,14 @@ const PageHeader = ({
     closeIcon,
     docPath,
 }: PageHeaderType) => {
-    const { setLoginCount, setShowGettingStartedCard, setSidePanelConfig, sidePanelConfig, tempAppWindowConfig } =
-        useMainContext()
+    const {
+        setLoginCount,
+        setShowGettingStartedCard,
+        sidePanelConfig,
+        tempAppWindowConfig,
+        featureAskDevtronExpert,
+        AskDevtronButton,
+    } = useMainContext()
     const { showSwitchThemeLocationTippy, handleShowSwitchThemeLocationTippyChange } = useTheme()
 
     const {
@@ -130,30 +136,13 @@ const PageHeader = ({
         </div>
     )
 
-    const onAskButtonClick = () => {
-        handleAnalyticsEvent({
-            category: 'AI',
-            action: `HELP_ASK_DEVTRON_AI`,
-        })
-        setSidePanelConfig((prev) => ({ ...prev, state: SidePanelTab.ASK_DEVTRON }))
-    }
-
     const renderLogoutHelpSection = () => (
         <>
-            {window._env_?.FEATURE_ASK_DEVTRON_EXPERT &&
+            {AskDevtronButton &&
+                featureAskDevtronExpert &&
                 sidePanelConfig.state === 'closed' &&
-                !tempAppWindowConfig.open && (
-                    <Tooltip content="Ask Devtron AI" placement="bottom" alwaysShowTippyOnHover delay={[500, null]}>
-                        <button
-                            className="enable-svg-animation--hover flex dc__no-background p-2 dc__outline-none-imp dc__no-border"
-                            onClick={onAskButtonClick}
-                            type="button"
-                            aria-label="Ask Devtron Expert"
-                        >
-                            <Icon name="ic-devtron-ai" color={null} size={28} />
-                        </button>
-                    </Tooltip>
-                )}
+                !tempAppWindowConfig.open && <AskDevtronButton />}
+
             <HelpButton
                 serverInfo={currentServerInfo.serverInfo}
                 fetchingServerInfo={currentServerInfo.fetchingServerInfo}
