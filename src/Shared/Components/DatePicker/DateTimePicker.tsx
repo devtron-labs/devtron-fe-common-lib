@@ -126,7 +126,11 @@ const DateTimePicker = ({
 
     const handleSingleDateSelect: OnSelectHandler<Date> = (date) => {
         if (!isDateUpdateRange(isRangePicker, onChange)) {
-            const updatedDate = date ? updateDate(dateObject, date) : null
+            if (!date) {
+                return
+            }
+
+            const updatedDate = updateDate(dateObject, date)
             onChange(updatedDate)
         }
     }
