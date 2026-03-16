@@ -14,7 +14,16 @@
  * limitations under the License.
  */
 
-import { Dispatch, FunctionComponent, Key, MutableRefObject, ReactNode, SetStateAction, SVGProps } from 'react'
+import {
+    Dispatch,
+    FunctionComponent,
+    type JSX,
+    Key,
+    MutableRefObject,
+    ReactNode,
+    SetStateAction,
+    SVGProps,
+} from 'react'
 import { MergeView } from '@codemirror/merge'
 import { SearchQuery } from '@codemirror/search'
 import { EditorView, Extension, ReactCodeMirrorProps } from '@uiw/react-codemirror'

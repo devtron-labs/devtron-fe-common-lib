@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { memo, useEffect, useRef } from 'react'
+import React, { type JSX, memo, useEffect, useRef } from 'react'
 import ReactGA from 'react-ga4'
 import { generatePath, NavLink, useLocation, useNavigate, useParams } from 'react-router-dom'
 import ReactSelect, { components } from 'react-select'

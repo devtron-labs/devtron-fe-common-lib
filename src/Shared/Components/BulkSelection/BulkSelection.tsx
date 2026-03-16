@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { forwardRef, MouseEvent } from 'react'
+import { MouseEvent } from 'react'
 
 import { ReactComponent as ICChevronDown } from '../../../Assets/Icon/ic-chevron-down.svg'
 import { Checkbox, ConditionalWrap, noop } from '../../../Common'
@@ -23,92 +23,93 @@ import { useBulkSelection } from './BulkSelectionProvider'
 import { BULK_DROPDOWN_TEST_ID, BulkSelectionOptionsLabels } from './constants'
 import { BulkSelectionEvents, BulkSelectionProps } from './types'
 
-const BulkSelection = forwardRef<HTMLLabelElement, BulkSelectionProps>(
-    (
-        { showPagination, disabled = false, showChevronDownIcon = true, selectAllIfNotPaginated = false },
-        forwardedRef,
-    ) => {
-        const { handleBulkSelection, isChecked, checkboxValue, getSelectedIdentifiersCount } = useBulkSelection()
-        const areOptionsSelected = getSelectedIdentifiersCount() > 0
-        const BulkSelectionItems: ActionMenuItemType[] = [
-            {
-                id: BulkSelectionEvents.SELECT_ALL_ON_PAGE,
-                label: BulkSelectionOptionsLabels[BulkSelectionEvents.SELECT_ALL_ON_PAGE],
-                startIcon: { name: 'ic-check-square' },
-            },
-            ...(showPagination
-                ? [
-                      {
-                          id: BulkSelectionEvents.SELECT_ALL_ACROSS_PAGES,
-                          label: BulkSelectionOptionsLabels[BulkSelectionEvents.SELECT_ALL_ACROSS_PAGES],
-                          startIcon: { name: 'ic-check-all' },
-                      } as ActionMenuItemType,
-                  ]
-                : []),
-            ...(areOptionsSelected
-                ? [
-                      {
-                          id: BulkSelectionEvents.CLEAR_ALL_SELECTIONS,
-                          label: BulkSelectionOptionsLabels[BulkSelectionEvents.CLEAR_ALL_SELECTIONS],
-                          startIcon: { name: 'ic-close-small' },
-                          type: 'negative',
-                      } as ActionMenuItemType,
-                  ]
-                : []),
-        ]
+const BulkSelection = ({
+    showPagination,
+    disabled = false,
+    showChevronDownIcon = true,
+    selectAllIfNotPaginated = false,
+    ref,
+}: BulkSelectionProps) => {
+    const { handleBulkSelection, isChecked, checkboxValue, getSelectedIdentifiersCount } = useBulkSelection()
+    const areOptionsSelected = getSelectedIdentifiersCount() > 0
+    const BulkSelectionItems: ActionMenuItemType[] = [
+        {
+            id: BulkSelectionEvents.SELECT_ALL_ON_PAGE,
+            label: BulkSelectionOptionsLabels[BulkSelectionEvents.SELECT_ALL_ON_PAGE],
+            startIcon: { name: 'ic-check-square' },
+        },
+        ...(showPagination
+            ? [
+                  {
+                      id: BulkSelectionEvents.SELECT_ALL_ACROSS_PAGES,
+                      label: BulkSelectionOptionsLabels[BulkSelectionEvents.SELECT_ALL_ACROSS_PAGES],
+                      startIcon: { name: 'ic-check-all' },
+                  } as ActionMenuItemType,
+              ]
+            : []),
+        ...(areOptionsSelected
+            ? [
+                  {
+                      id: BulkSelectionEvents.CLEAR_ALL_SELECTIONS,
+                      label: BulkSelectionOptionsLabels[BulkSelectionEvents.CLEAR_ALL_SELECTIONS],
+                      startIcon: { name: 'ic-close-small' },
+                      type: 'negative',
+                  } as ActionMenuItemType,
+              ]
+            : []),
+    ]
 
-        const onActionMenuClick: ActionMenuProps['onClick'] = (item) => {
-            handleBulkSelection({
-                action: item.id as BulkSelectionEvents,
-            })
-        }
+    const onActionMenuClick: ActionMenuProps['onClick'] = (item) => {
+        handleBulkSelection({
+            action: item.id as BulkSelectionEvents,
+        })
+    }
 
-        const onSinglePageSelectAll = (e: MouseEvent<HTMLButtonElement>) => {
-            e.stopPropagation()
+    const onSinglePageSelectAll = (e: MouseEvent<HTMLButtonElement>) => {
+        e.stopPropagation()
 
-            handleBulkSelection({
-                action: areOptionsSelected
-                    ? BulkSelectionEvents.CLEAR_ALL_SELECTIONS
-                    : BulkSelectionEvents.SELECT_ALL_ON_PAGE,
-            })
-        }
+        handleBulkSelection({
+            action: areOptionsSelected
+                ? BulkSelectionEvents.CLEAR_ALL_SELECTIONS
+                : BulkSelectionEvents.SELECT_ALL_ON_PAGE,
+        })
+    }
 
-        const shouldWrapActionMenu = !selectAllIfNotPaginated || showPagination
+    const shouldWrapActionMenu = !selectAllIfNotPaginated || showPagination
 
-        const wrapWithActionMenu = (children: React.ReactElement) => (
-            <ActionMenu
-                id={BULK_DROPDOWN_TEST_ID}
-                onClick={onActionMenuClick}
-                position="bottom"
-                options={[
-                    {
-                        items: BulkSelectionItems,
-                    },
-                ]}
-            >
-                {children}
-            </ActionMenu>
-        )
+    const wrapWithActionMenu = (children: React.ReactElement) => (
+        <ActionMenu
+            id={BULK_DROPDOWN_TEST_ID}
+            onClick={onActionMenuClick}
+            position="bottom"
+            options={[
+                {
+                    items: BulkSelectionItems,
+                },
+            ]}
+        >
+            {children}
+        </ActionMenu>
+    )
 
-        return (
-            <ConditionalWrap wrap={wrapWithActionMenu} condition={shouldWrapActionMenu}>
-                <div className="flexbox dc__gap-4 dc__align-items-center">
-                    <Checkbox
-                        ref={forwardedRef}
-                        isChecked={isChecked}
-                        onChange={shouldWrapActionMenu ? noop : onSinglePageSelectAll}
-                        rootClassName="icon-dim-20 m-0"
-                        value={checkboxValue}
-                        disabled={disabled}
-                        onClick={noop}
-                        // Ideally should be disabled but was giving issue with cursor
-                    />
+    return (
+        <ConditionalWrap wrap={wrapWithActionMenu} condition={shouldWrapActionMenu}>
+            <div className="flexbox dc__gap-4 dc__align-items-center">
+                <Checkbox
+                    ref={ref}
+                    isChecked={isChecked}
+                    onChange={shouldWrapActionMenu ? noop : onSinglePageSelectAll}
+                    rootClassName="icon-dim-20 m-0"
+                    value={checkboxValue}
+                    disabled={disabled}
+                    onClick={noop}
+                    // Ideally should be disabled but was giving issue with cursor
+                />
 
-                    {showChevronDownIcon && <ICChevronDown className="icon-dim-20 fcn-6 dc__no-shrink" />}
-                </div>
-            </ConditionalWrap>
-        )
-    },
-)
+                {showChevronDownIcon && <ICChevronDown className="icon-dim-20 fcn-6 dc__no-shrink" />}
+            </div>
+        </ConditionalWrap>
+    )
+}
 
 export default BulkSelection

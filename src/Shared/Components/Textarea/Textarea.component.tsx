@@ -82,21 +82,22 @@ const Textarea = ({
     }, [])
 
     const reInitHeight = () => {
-        const currentHeight = parseInt(textareaRef.current.style.height, 10)
-        let nextHeight = textareaRef.current.scrollHeight || 0
-
-        if (nextHeight < currentHeight || currentHeight > AUTO_EXPANSION_MAX_HEIGHT) {
+        const textarea = textareaRef.current
+        if (!textarea) {
             return
         }
 
-        if (nextHeight < MIN_HEIGHT) {
-            nextHeight = MIN_HEIGHT
-        }
+        textarea.style.height = 'auto'
+        let nextHeight = textarea.scrollHeight
 
         if (nextHeight > AUTO_EXPANSION_MAX_HEIGHT) {
             nextHeight = AUTO_EXPANSION_MAX_HEIGHT
+            textarea.style.overflowY = 'auto'
+        } else {
+            textarea.style.overflowY = 'hidden'
         }
 
+        nextHeight = Math.max(MIN_HEIGHT, nextHeight)
         updateRefsHeight(nextHeight)
     }
 

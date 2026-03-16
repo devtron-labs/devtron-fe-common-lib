@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { memo } from 'react'
+import { type JSX, memo } from 'react'
 import { NavLink } from 'react-router-dom'
 import moment from 'moment'
 

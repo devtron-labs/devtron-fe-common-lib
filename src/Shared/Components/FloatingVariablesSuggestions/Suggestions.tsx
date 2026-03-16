@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { memo, useEffect, useState } from 'react'
+import { type JSX, memo, useEffect, useState } from 'react'
 
 import { ReactComponent as ICClose } from '@Icons/ic-cross.svg'
 import { ReactComponent as ICSearch } from '@Icons/ic-search.svg'

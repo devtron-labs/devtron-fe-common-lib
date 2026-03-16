@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ButtonHTMLAttributes, ChangeEvent, cloneElement, useCallback, useEffect, useState } from 'react'
+import { ButtonHTMLAttributes, ChangeEvent, cloneElement, ReactElement, useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
 
 import { noop, stopPropagation, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
@@ -46,7 +46,6 @@ const ConfirmationModalBody = ({
     shouldCloseOnEscape = true,
     isLandscapeView = false,
     showConfetti = false,
-    avoidFocusTrap = false,
 }: ConfirmationModalBodyProps) => {
     const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
 
@@ -93,7 +92,6 @@ const ConfirmationModalBody = ({
             deactivateFocusOnEscape={shouldCloseOnEscape}
             // Since when custom input is present, we auto focus on input, else focus on primary button
             initialFocus={confirmationConfig ? false : `#${PRIMARY_BUTTON_ID}`}
-            avoidFocusTrap={avoidFocusTrap}
         >
             <motion.div
                 className={`${isLandscapeView ? 'w-500' : 'w-400'} confirmation-modal border__secondary flexbox-col br-8 bg__primary dc__m-auto mt-40`}
@@ -105,8 +103,8 @@ const ConfirmationModalBody = ({
                 <div className="flexbox-col dc__gap-16 p-20">
                     {hideIcon
                         ? null
-                        : cloneElement(RenderIcon, {
-                              className: `${RenderIcon.props?.className ?? ''} icon-dim-48 dc__no-shrink`,
+                        : cloneElement(RenderIcon as ReactElement<{ className?: string }>, {
+                              className: `${(RenderIcon as ReactElement<{ className?: string }>).props?.className ?? ''} icon-dim-48 dc__no-shrink`,
                           })}
 
                     <div className={`flexbox-col ${isLandscapeView ? '' : 'dc__gap-8'}`}>

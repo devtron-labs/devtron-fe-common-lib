@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactNode, useEffect, useState } from 'react'
+import { type JSX, ReactNode, useEffect, useState } from 'react'
 
 import { ReactComponent as Info } from '@Icons/ic-info-outlined.svg'
 

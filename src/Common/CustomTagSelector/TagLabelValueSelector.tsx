@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useState, useEffect } from 'react'
+import { useState, useEffect, type JSX } from 'react'
 import Tippy from '@tippyjs/react'
 import PopupMenu from '../PopupMenu'
 import { ReactComponent as ErrorCross } from '../../Assets/Icon/ic-cross.svg'

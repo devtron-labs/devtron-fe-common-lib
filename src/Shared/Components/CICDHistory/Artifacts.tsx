@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import type { JSX } from 'react'
 import { useParams } from 'react-router-dom'
 
 import { ReactComponent as Down } from '@Icons/ic-arrow-forward.svg'

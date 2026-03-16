@@ -15,6 +15,7 @@
  */
 
 /* eslint-disable eqeqeq */
+import type { JSX } from 'react'
 import Tippy from '@tippyjs/react'
 import moment from 'moment'
 
