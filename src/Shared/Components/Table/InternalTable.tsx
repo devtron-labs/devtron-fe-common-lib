@@ -201,9 +201,8 @@ const InternalTable = <
                 <GenericFilterEmptyState
                     {...emptyStateConfig.noRowsForFilterConfig}
                     handleClearFilters={
-                        emptyStateConfig.noRowsForFilterConfig.handleClearFilters !== undefined
-                            ? emptyStateConfig.noRowsForFilterConfig.handleClearFilters
-                            : (userGivenUrlClearFilters ?? clearFilters)
+                        emptyStateConfig.noRowsForFilterConfig?.handleClearFilters ||
+                        (userGivenUrlClearFilters ?? clearFilters)
                     }
                 />
             ) : (
