@@ -6,6 +6,7 @@ import { ReactComponent as EmptyStateKey } from '@Illustrations/empty-state-key.
 import { ReactComponent as ImgCelebration } from '@Illustrations/img-celebration.svg'
 import ImgCode from '@Illustrations/img-code.webp'
 import ImgDevtronFreemium from '@Illustrations/img-devtron-freemium.webp'
+import { ReactComponent as ImgFolderCreate } from '@Illustrations/img-folder-create.svg'
 import { ReactComponent as ImgFolderEmpty } from '@Illustrations/img-folder-empty.svg'
 import { ReactComponent as ImgInstallFreemiumSaas } from '@Illustrations/img-install-freemium-saas.svg'
 import { ReactComponent as ImgInstallViaAwsMarketplace } from '@Illustrations/img-install-via-aws-marketplace.svg'
@@ -16,6 +17,7 @@ import { ReactComponent as ImgNoBackupLocation } from '@Illustrations/img-no-bac
 import { ReactComponent as ImgNoRestores } from '@Illustrations/img-no-restores.svg'
 import ImgNoResult from '@Illustrations/img-no-result.webp'
 import { ReactComponent as ImgPageNotFound } from '@Illustrations/img-page-not-found.svg'
+import { ReactComponent as ImgUserGroups } from '@Illustrations/img-user-groups.svg'
 import NoClusterCostEnabled from '@Illustrations/no-cluster-cost-enabled.webp'
 
 // eslint-disable-next-line no-restricted-imports
@@ -25,6 +27,7 @@ import { IllustrationBaseProps } from './types'
 export const illustrationMap = {
     'empty-state-key': EmptyStateKey,
     'img-celebration': ImgCelebration,
+    'img-folder-create': ImgFolderCreate,
     'img-folder-empty': ImgFolderEmpty,
     'img-install-freemium-saas': ImgInstallFreemiumSaas,
     'img-install-via-aws-marketplace': ImgInstallViaAwsMarketplace,
@@ -33,6 +36,7 @@ export const illustrationMap = {
     'img-no-backup-location': ImgNoBackupLocation,
     'img-no-restores': ImgNoRestores,
     'img-page-not-found': ImgPageNotFound,
+    'img-user-groups': ImgUserGroups,
     'create-backup-schedule': CreateBackupSchedule,
     'create-backup-snapshot': CreateBackupSnapshot,
     'img-code': ImgCode,
