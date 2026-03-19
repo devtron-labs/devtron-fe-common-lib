@@ -65,6 +65,10 @@ export const usePopover = ({
         updateOpenState(!open)
     }
 
+    const openPopover = () => {
+        updateOpenState(true)
+    }
+
     const closePopover = () => {
         if (disableClose) {
             return
@@ -141,7 +145,7 @@ export const usePopover = ({
 
         // eslint-disable-next-line consistent-return
         return () => {
-            scrollableRef.current.removeEventListener('wheel', handleWheel)
+            scrollableRef.current?.removeEventListener('wheel', handleWheel)
             window.removeEventListener('resize', updatePopoverPosition)
         }
     }, [open, position, alignment, isBackdropMounted])
@@ -181,5 +185,6 @@ export const usePopover = ({
         },
         scrollableRef,
         closePopover,
+        openPopover,
     }
 }
