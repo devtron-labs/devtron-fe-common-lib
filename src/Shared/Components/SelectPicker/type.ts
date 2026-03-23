@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { LegacyRef, MutableRefObject, ReactElement, ReactNode } from 'react'
+import { MutableRefObject, ReactElement, ReactNode } from 'react'
 import { GroupBase, GroupHeadingProps, Props as ReactSelectProps, SelectInstance } from 'react-select'
 // This import allows to extend the base interface in react-select module via module augmentation
 import type {} from 'react-select/base'
@@ -29,7 +29,7 @@ import { ComponentSizeType } from '@Shared/constants'
 import { ActionMenuProps } from '../ActionMenu'
 import { ButtonComponentType, ButtonProps, ButtonVariantType } from '../Button'
 import { FormFieldWrapperProps } from '../FormFieldWrapper/types'
-import { UsePopoverProps } from '../Popover'
+import { UsePopoverProps, UsePopoverReturnType } from '../Popover'
 
 export interface SelectPickerOptionType<OptionValue = string | number, OptionLabel = ReactNode>
     extends OptionType<OptionValue, OptionLabel> {
@@ -379,12 +379,12 @@ export type FilterSelectPickerMapSelectPickerVariant = {
 } & Omit<FilterSelectPickerProps, 'autoFocus' | 'menuIsOpen' | 'onMenuClose' | 'onKeyDown' | 'selectRef'>
 
 type FilterSelectPickerMapPopOverVariant = {
-    variant: 'popOver'
+    variant: 'popover'
     /**
      * Component rendered inside the Popover.
      * Receives `closePopover` as a prop to allow programmatic closing.
      */
-    component: (closePopover: () => void, scrollableRef: MutableRefObject<any> | LegacyRef<any>) => ReactElement
+    component: (closePopover: () => void, scrollableRef: UsePopoverReturnType['scrollableRef']) => ReactElement
     /**
      * Optional positioning config forwarded to usePopover
      */

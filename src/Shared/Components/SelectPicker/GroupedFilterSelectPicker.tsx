@@ -43,7 +43,7 @@ export const GroupedFilterSelectPicker = <T extends string | number>({
     const { registerShortcut, unregisterShortcut } = useRegisterShortcut()
 
     const selectedItemConfig = selectedActionMenuItem ? filterSelectPickerPropsMap[selectedActionMenuItem] : null
-    const isPopOverVariant = selectedItemConfig?.variant === 'popOver'
+    const isPopOverVariant = selectedItemConfig?.variant === 'popover'
 
     const {
         open: isFilterPopoverOpen,
@@ -127,7 +127,7 @@ export const GroupedFilterSelectPicker = <T extends string | number>({
             return (
                 <Popover
                     open={isFilterPopoverOpen}
-                    triggerProps={filterPopoverTriggerProps}
+                    triggerProps={{ ...filterPopoverTriggerProps, 'aria-haspopup': 'dialog' }}
                     overlayProps={filterPopoverOverlayProps}
                     popoverProps={{ ...filterPopoverContentProps, role: 'dialog' }}
                     buttonProps={null}
@@ -140,7 +140,7 @@ export const GroupedFilterSelectPicker = <T extends string | number>({
 
         if (selectedActionMenuItem) {
             const config = filterSelectPickerPropsMap[selectedActionMenuItem]
-            if (config.variant !== 'popOver') {
+            if (config.variant !== 'popover') {
                 // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const { variant: _variant, ...filterProps } = config as FilterSelectPickerMapSelectPickerVariant
                 return (
