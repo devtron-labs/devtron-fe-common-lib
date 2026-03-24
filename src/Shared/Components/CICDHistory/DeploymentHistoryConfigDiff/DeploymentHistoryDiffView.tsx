@@ -20,7 +20,7 @@ import { useParams } from 'react-router-dom'
 import { CodeEditor } from '@Shared/Components/CodeEditor'
 import { ToggleResolveScopedVariables } from '@Shared/Components/ToggleResolveScopedVariables'
 
-import { ReactComponent as Info } from '../../../../Assets/Icon/ic-info-filled.svg'
+import Info from '../../../../Assets/Icon/ic-info-filled.svg?react'
 import { MODES, YAMLStringify } from '../../../../Common'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '../../../constants'
 import { DeploymentTemplateHistoryType } from '../types'

@@ -16,8 +16,8 @@
 
 import { getParsedCIMaterialInfo } from '@Shared/Services/utils'
 
-import { ReactComponent as ICArrowDown } from '../../../Assets/Icon/ic-arrow-down.svg'
-import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
+import ICArrowDown from '../../../Assets/Icon/ic-arrow-down.svg?react'
+import ICClose from '../../../Assets/Icon/ic-close.svg?react'
 import { Drawer, GenericEmptyState, useQuery } from '../../../Common'
 import { getArtifactInfo, getCITriggerInfo } from '../../Services/app.service'
 import { APIResponseHandler } from '../APIResponseHandler'

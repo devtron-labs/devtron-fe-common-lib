@@ -19,8 +19,8 @@ import { useEffect, useRef, useState } from 'react'
 import Tooltip from '@Common/Tooltip/Tooltip'
 import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components/Button'
 
-import { ReactComponent as Check } from '../../Assets/Icon/ic-check.svg'
-import { ReactComponent as ICCopy } from '../../Assets/Icon/ic-copy.svg'
+import Check from '../../Assets/Icon/ic-check.svg?react'
+import ICCopy from '../../Assets/Icon/ic-copy.svg?react'
 import { copyToClipboard, noop, stopPropagation } from '../Helper'
 import { ClipboardProps } from './types'
 

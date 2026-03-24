@@ -16,7 +16,7 @@
 
 import Tippy from '@tippyjs/react'
 
-import { ReactComponent as ICAbort } from '../../../Assets/Icon/ic-abort.svg'
+import ICAbort from '../../../Assets/Icon/ic-abort.svg?react'
 import { EXCLUDED_IMAGE_TOOLTIP } from '../../constants'
 import { ExcludedImageNodeProps } from './types'
 

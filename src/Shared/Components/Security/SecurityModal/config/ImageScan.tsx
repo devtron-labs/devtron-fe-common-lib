@@ -16,8 +16,8 @@
 
 import dayjs from 'dayjs'
 
-import { ReactComponent as ICError } from '@Icons/ic-error-cross.svg'
-import { ReactComponent as ICSuccess } from '@Icons/ic-success.svg'
+import ICError from '@Icons/ic-error-cross.svg?react'
+import ICSuccess from '@Icons/ic-success.svg?react'
 import { Progressing } from '@Common/Progressing'
 
 import { DATE_TIME_FORMATS, ZERO_TIME_STRING } from '../../../../../Common/Constants'

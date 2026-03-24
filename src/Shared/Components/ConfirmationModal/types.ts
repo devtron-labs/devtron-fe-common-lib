@@ -100,10 +100,6 @@ export type ConfirmationModalProps<isConfig extends boolean = false> = PropsWith
      * @deprecated Used to extend the width to 500px and remove gap between title and subTitle.
      */
     isLandscapeView?: boolean
-    /**
-     * @default false
-     */
-    showConfetti?: boolean
 }> &
     ButtonConfigAndVariantType<isConfig> &
     (isConfig extends false

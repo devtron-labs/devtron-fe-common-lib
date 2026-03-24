@@ -28,8 +28,8 @@ import {
     ValueContainerProps,
 } from 'react-select'
 
-import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
-import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
+import ICCaretDown from '@Icons/ic-caret-down.svg?react'
+import ICClose from '@Icons/ic-close.svg?react'
 import { Checkbox } from '@Common/Checkbox'
 import { ReactSelectInputAction } from '@Common/Constants'
 import { getAlphabetIcon, noop } from '@Common/Helper'

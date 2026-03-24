@@ -15,24 +15,23 @@
  */
 
 import { defineConfig } from 'vite'
-import { resolve } from 'path'
+import { resolve } from 'node:path'
 import react from '@vitejs/plugin-react'
 import dts from 'vite-plugin-dts'
 import { libInjectCss } from 'vite-plugin-lib-inject-css'
 import libAssetsPlugin from '@laynezh/vite-plugin-lib-assets'
 import svgr from 'vite-plugin-svgr'
 import { NodeGlobalsPolyfillPlugin } from '@esbuild-plugins/node-globals-polyfill'
-import tsconfigPaths from 'vite-tsconfig-paths'
-// import { ViteImageOptimizer } from 'vite-plugin-image-optimizer'
 import * as packageJson from './package.json'
+import { esmExternalRequirePlugin } from 'rolldown/plugins'
 
 // https://vitejs.dev/config/
 export default defineConfig({
     plugins: [
         libAssetsPlugin({
             name: '[name].[contenthash:8].[ext]',
+            exclude: /\.svg(\?.*)?$/,
         }),
-        tsconfigPaths(),
         react(),
         libInjectCss(),
         svgr({
@@ -51,56 +50,82 @@ export default defineConfig({
         // }),
     ],
     build: {
-        target: 'ES2021',
+        target: 'es2021',
         copyPublicDir: false,
         lib: {
-            entry: resolve(__dirname, 'lib/main.ts'),
+            entry: resolve('lib/main.ts'),
             formats: ['es'],
         },
-        rollupOptions: {
-            external: [...Object.keys(packageJson.peerDependencies)],
+        rolldownOptions: {
+            plugins: [
+                esmExternalRequirePlugin({
+                    external: [...Object.keys(packageJson.peerDependencies)],
+                }),
+            ],
             input: './src/index.ts',
             output: {
                 assetFileNames: 'assets/[name][extname]',
                 entryFileNames: '[name].js',
-                manualChunks(id: string) {
-                    if (id.includes('/node_modules/framer-motion')) {
-                        return '@framer-motion'
-                    }
+                codeSplitting: {
+                    groups: [
+                        {
+                            name: (id) => {
+                                if (id.includes('/node_modules/framer-motion')) {
+                                    return '@framer-motion'
+                                }
 
-                    if (id.includes('/node_modules/moment')) {
-                        return '@moment'
-                    }
+                                if (id.includes('/node_modules/moment')) {
+                                    return '@moment'
+                                }
 
-                    if (id.includes('/node_modules/react-select')) {
-                        return '@react-select'
-                    }
+                                if (id.includes('/node_modules/react-select')) {
+                                    return '@react-select'
+                                }
 
-                    if (id.includes('/node_modules/react-virtualized-sticky-tree')) {
-                        return '@react-virtualized-sticky-tree'
-                    }
+                                if (id.includes('/node_modules/react-virtualized-sticky-tree')) {
+                                    return '@react-virtualized-sticky-tree'
+                                }
 
-                    if (id.includes('/node_modules/')) {
-                        return '@vendor'
-                    }
+                                if (id.includes('/node_modules/')) {
+                                    return '@vendor'
+                                }
 
-                    if (id.match('codemirror') || id.includes('src/Shared/Components/CodeEditor')) {
-                        return '@code-editor'
-                    }
+                                if (id.match('codemirror') || id.includes('src/Shared/Components/CodeEditor')) {
+                                    return '@code-editor'
+                                }
 
-                    if (id.includes('src/Common/RJSF')) {
-                        return '@common-rjsf'
-                    }
+                                if (id.includes('src/Common/RJSF')) {
+                                    return '@common-rjsf'
+                                }
 
-                    if (id.includes('src/Assets/Icons')) {
-                        return '@src-assets-icons'
-                    }
+                                if (id.includes('src/Assets/Icons')) {
+                                    return '@src-assets-icons'
+                                }
 
-                    if (id.includes('src/Assets/Img')) {
-                        return '@src-assets-images'
-                    }
+                                if (id.includes('src/Assets/Img')) {
+                                    return '@src-assets-images'
+                                }
+
+                                return null
+                            },
+                        },
+                    ],
                 },
             },
+        },
+    },
+    resolve: {
+        alias: {
+            '@Icons': resolve('./src/Assets/Icon'),
+            '@IconsV2': resolve('./src/Assets/IconV2'),
+            '@Illustrations': resolve('./src/Assets/Illustration'),
+            '@Sounds': resolve('./src/Assets/Sounds'),
+            '@Images': resolve('./src/Assets/Img'),
+            '@Common': resolve('./src/Common'),
+            '@Shared': resolve('./src/Shared'),
+            '@Pages': resolve('./src/Pages'),
+            '@PagesDevtron2.0': resolve('./src/Pages-Devtron-2.0'),
+            'codemirror-json-schema/yaml': resolve('./node_modules/codemirror-json-schema/dist/yaml'),
         },
     },
 })
