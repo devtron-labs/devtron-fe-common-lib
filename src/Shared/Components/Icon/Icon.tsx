@@ -91,6 +91,7 @@ import { ReactComponent as ICCloudVms } from '@IconsV2/ic-cloud-vms.svg'
 import { ReactComponent as ICCluster } from '@IconsV2/ic-cluster.svg'
 import { ReactComponent as ICClusterIsolated } from '@IconsV2/ic-cluster-isolated.svg'
 import { ReactComponent as ICCode } from '@IconsV2/ic-code.svg'
+import { ReactComponent as ICCodeWrapped } from '@IconsV2/ic-code-wrapped.svg'
 import { ReactComponent as ICCoins } from '@IconsV2/ic-coins.svg'
 import { ReactComponent as ICCoinsColorAnimated } from '@IconsV2/ic-coins-color-animated.svg'
 import { ReactComponent as ICComment } from '@IconsV2/ic-comment.svg'
@@ -431,6 +432,7 @@ export const iconMap = {
     'ic-cloud-vms': ICCloudVms,
     'ic-cluster-isolated': ICClusterIsolated,
     'ic-cluster': ICCluster,
+    'ic-code-wrapped': ICCodeWrapped,
     'ic-code': ICCode,
     'ic-coins-color-animated': ICCoinsColorAnimated,
     'ic-coins': ICCoins,
