@@ -38,6 +38,7 @@ export interface customEnv {
     GTM_ID?: string
     RECOMMEND_SECURITY_SCANNING?: boolean
     FORCE_SECURITY_SCANNING?: boolean
+    FORCE_DOCKERFILE_SCAN?: boolean
     ENABLE_CI_JOB?: boolean
     HIDE_DISCORD?: boolean
     POSTHOG_ENABLED?: boolean
