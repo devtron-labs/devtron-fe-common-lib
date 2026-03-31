@@ -26,13 +26,7 @@ import { SecurityModal } from '../SecurityModal'
 import { DEFAULT_SECURITY_MODAL_IMAGE_STATE } from '../SecurityModal/constants'
 import { CATEGORIES, SecurityModalStateType, SUB_CATEGORIES } from '../SecurityModal/types'
 import { ScanCategories, ScanSubCategories } from '../types'
-import {
-    getCompiledSecurityThreats,
-    getSecurityConfig,
-    getSecurityScanStatus,
-    getStatusForScanList,
-    getTotalSeverities,
-} from '../utils'
+import { getCompiledSecurityThreats, getSecurityConfig, getStatusForScanList, getTotalSeverities } from '../utils'
 import { ReportTabEmptyState } from './ReportTabEmptyState'
 import SecurityCard from './SecurityCard'
 import { SecurityCardProps, SecurityDetailsCardsProps } from './types'
@@ -46,7 +40,6 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
 
     const scanThreats = getCompiledSecurityThreats(scanResult)
     const threatCount = getTotalSeverities(scanThreats)
-    const securityScanStatus = getSecurityScanStatus(scanResult)
 
     const getScanToolInfo = (category: string): { scanToolName: string; scanToolUrl: string } => {
         const image = imageScan?.vulnerability?.list?.[0]
@@ -77,9 +70,20 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
         </div>
     )
 
-    console.log('securityScanStatus', securityScanStatus, threatCount)
+    if (!scanResult?.scanned) {
+        return (
+            <div className="flexbox-col dc__gap-12 mw-600 dc__mxw-1000">
+                {renderHeader()}
 
-    if (!threatCount && securityScanStatus === 'Completed') {
+                <ReportTabEmptyState
+                    title={EMPTY_STATE_STATUS.CI_DETAILS_IMAGE_NOT_SCANNED.TITLE}
+                    subtitle={EMPTY_STATE_STATUS.CI_DETAILS_IMAGE_NOT_SCANNED.SUBTITLE}
+                />
+            </div>
+        )
+    }
+
+    if (!threatCount) {
         return (
             <div className="flexbox-col dc__gap-12 mw-600 dc__mxw-1000">
                 {renderHeader()}
@@ -170,14 +174,7 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
                     return (
                         <div className="flexbox-col dc__gap-12" key={category}>
                             {renderHeader(category)}
-                            {!scanResult?.scanned ? (
-                                <ReportTabEmptyState
-                                    title={EMPTY_STATE_STATUS.CI_DETAILS_IMAGE_NOT_SCANNED.TITLE}
-                                    subtitle={EMPTY_STATE_STATUS.CI_DETAILS_IMAGE_NOT_SCANNED.SUBTITLE}
-                                />
-                            ) : (
-                                renderSecurityCards({ category, categoryFailed })
-                            )}
+                            {renderSecurityCards({ category, categoryFailed })}
                         </div>
                     )
                 })}
