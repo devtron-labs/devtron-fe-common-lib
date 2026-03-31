@@ -26,7 +26,13 @@ import { SecurityModal } from '../SecurityModal'
 import { DEFAULT_SECURITY_MODAL_IMAGE_STATE } from '../SecurityModal/constants'
 import { CATEGORIES, SecurityModalStateType, SUB_CATEGORIES } from '../SecurityModal/types'
 import { ScanCategories, ScanSubCategories } from '../types'
-import { getCompiledSecurityThreats, getSecurityConfig, getStatusForScanList, getTotalSeverities } from '../utils'
+import {
+    getCompiledSecurityThreats,
+    getSecurityConfig,
+    getSecurityScanStatus,
+    getStatusForScanList,
+    getTotalSeverities,
+} from '../utils'
 import { ReportTabEmptyState } from './ReportTabEmptyState'
 import SecurityCard from './SecurityCard'
 import { SecurityCardProps, SecurityDetailsCardsProps } from './types'
@@ -40,6 +46,7 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
 
     const scanThreats = getCompiledSecurityThreats(scanResult)
     const threatCount = getTotalSeverities(scanThreats)
+    const securityScanStatus = getSecurityScanStatus(scanResult)
 
     const getScanToolInfo = (category: string): { scanToolName: string; scanToolUrl: string } => {
         const image = imageScan?.vulnerability?.list?.[0]
@@ -56,20 +63,23 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
         }
     }
 
-    const renderScannedToolModal = (category) => {
+    const renderScannedToolModal = (category: ScanCategories) => {
         const { scanToolName, scanToolUrl } = getScanToolInfo(category)
+        console.log(scanToolUrl)
 
         return <ScannedByToolModal scanToolName={scanToolName} scanToolUrl={scanToolUrl} />
     }
 
-    const renderHeader = (category?: string) => (
+    const renderHeader = (category?: ScanCategories) => (
         <div className="flexbox dc__content-space pb-8 dc__border-bottom-n1">
             <span className="fs-13 fw-6 lh-1-5 cn-9">Security Scan</span>
             {category && renderScannedToolModal(category)}
         </div>
     )
 
-    if (!threatCount) {
+    console.log('securityScanStatus', securityScanStatus, threatCount)
+
+    if (!threatCount && securityScanStatus === 'Completed') {
         return (
             <div className="flexbox-col dc__gap-12 mw-600 dc__mxw-1000">
                 {renderHeader()}

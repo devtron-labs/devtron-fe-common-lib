@@ -39,6 +39,7 @@ import { ReactComponent as ICBgBuild } from '@IconsV2/ic-bg-build.svg'
 import { ReactComponent as ICBgCluster } from '@IconsV2/ic-bg-cluster.svg'
 import { ReactComponent as ICBgCpu } from '@IconsV2/ic-bg-cpu.svg'
 import { ReactComponent as ICBgDeploy } from '@IconsV2/ic-bg-deploy.svg'
+import { ReactComponent as ICBgDockerScanner } from '@IconsV2/ic-bg-docker-scanner.svg'
 import { ReactComponent as ICBgEnvironment } from '@IconsV2/ic-bg-environment.svg'
 import { ReactComponent as ICBgMemory } from '@IconsV2/ic-bg-memory.svg'
 import { ReactComponent as ICBgPauseSchedule } from '@IconsV2/ic-bg-pause-schedule.svg'
@@ -176,6 +177,7 @@ import { ReactComponent as ICGoogleGke } from '@IconsV2/ic-google-gke.svg'
 import { ReactComponent as ICGridView } from '@IconsV2/ic-grid-view.svg'
 import { ReactComponent as ICGroupFilter } from '@IconsV2/ic-group-filter.svg'
 import { ReactComponent as ICGroupFilterApplied } from '@IconsV2/ic-group-filter-applied.svg'
+import { ReactComponent as ICHadolint } from '@IconsV2/ic-hadolint.svg'
 import { ReactComponent as ICHandPointing } from '@IconsV2/ic-hand-pointing.svg'
 import { ReactComponent as ICHeartGreen } from '@IconsV2/ic-heart-green.svg'
 import { ReactComponent as ICHeartRed } from '@IconsV2/ic-heart-red.svg'
@@ -381,6 +383,7 @@ export const iconMap = {
     'ic-bg-cluster': ICBgCluster,
     'ic-bg-cpu': ICBgCpu,
     'ic-bg-deploy': ICBgDeploy,
+    'ic-bg-docker-scanner': ICBgDockerScanner,
     'ic-bg-environment': ICBgEnvironment,
     'ic-bg-memory': ICBgMemory,
     'ic-bg-pause-schedule': ICBgPauseSchedule,
@@ -518,6 +521,7 @@ export const iconMap = {
     'ic-grid-view': ICGridView,
     'ic-group-filter-applied': ICGroupFilterApplied,
     'ic-group-filter': ICGroupFilter,
+    'ic-hadolint': ICHadolint,
     'ic-hand-pointing': ICHandPointing,
     'ic-heart-green': ICHeartGreen,
     'ic-heart-red-animated': ICHeartRedAnimated,
