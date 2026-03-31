@@ -9,7 +9,7 @@ export const ReportTabEmptyState = ({
     subtitle: string
     icon?: IconName
 }) => (
-    <div className="flex dc__border br-8 fs-13">
+    <div className="flex dc__border br-8 fs-13 mw-600 dc__mxw-1000">
         <div className="flexbox-col dc__gap-12 dc__align-items-center p-20 w-300">
             <Icon name={icon} size={24} color="R500" />
             <div className="flex column dc__gap-4">

@@ -62,6 +62,7 @@ export interface EnvironmentDataValuesDTO extends Pick<MainContext, 'featureGitO
     devtronManagedLicensingEnabled: boolean
     isResourceRecommendationEnabled?: boolean
     featureAskDevtronExpert: boolean
+    forceDockerfileScan: boolean
 }
 
 export interface ClusterMinDTO {
