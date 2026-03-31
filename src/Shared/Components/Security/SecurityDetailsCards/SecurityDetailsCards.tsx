@@ -41,18 +41,6 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
     const scanThreats = getCompiledSecurityThreats(scanResult)
     const threatCount = getTotalSeverities(scanThreats)
 
-    if (!threatCount) {
-        return (
-            <div className="flexbox-col en-2 bw-1 br-8 dc__gap-16 cn-9 p-16">
-                <GenericEmptyState
-                    SvgImage={NoVulnerability}
-                    title={EMPTY_STATE_STATUS.CI_DEATILS_NO_VULNERABILITY_FOUND.TITLE}
-                    subTitle={EMPTY_STATE_STATUS.CI_DEATILS_NO_VULNERABILITY_FOUND.SUBTITLE}
-                />
-            </div>
-        )
-    }
-
     const SECURITY_CONFIG = getSecurityConfig({
         imageScan: !!imageScan,
         codeScan: !!codeScan,
@@ -133,6 +121,34 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
             </div>
         )
 
+    const renderScannedToolModal = (category) => {
+        const { scanToolName, scanToolUrl } = getScanToolInfo(category)
+
+        return <ScannedByToolModal scanToolName={scanToolName} scanToolUrl={scanToolUrl} />
+    }
+
+    const renderHeader = (category?: string) => (
+        <div className="flexbox dc__content-space pb-8 dc__border-bottom-n1">
+            <span className="fs-13 fw-6 lh-1-5 cn-9">Security Scan</span>
+            {category && renderScannedToolModal(category)}
+        </div>
+    )
+
+    if (!threatCount) {
+        return (
+            <div className="flexbox-col dc__gap-12 mw-600 dc__mxw-1000">
+                {renderHeader()}
+                <div className="flexbox-col en-2 bw-1 br-8 dc__gap-16 cn-9 p-16">
+                    <GenericEmptyState
+                        SvgImage={NoVulnerability}
+                        title={EMPTY_STATE_STATUS.CI_DEATILS_NO_VULNERABILITY_FOUND.TITLE}
+                        subTitle={EMPTY_STATE_STATUS.CI_DEATILS_NO_VULNERABILITY_FOUND.SUBTITLE}
+                    />
+                </div>
+            </div>
+        )
+    }
+
     return (
         <>
             <div className="flexbox-col dc__gap-20 mw-600 dc__mxw-1000">
@@ -141,14 +157,9 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
                         category !== CATEGORIES.IMAGE_SCAN &&
                         (scanResult.codeScan?.status === 'Failed' || scanResult.kubernetesManifest?.status === 'Failed')
 
-                    const { scanToolName, scanToolUrl } = getScanToolInfo(category)
-
                     return (
                         <div className="flexbox-col dc__gap-12" key={category}>
-                            <div className="flexbox dc__content-space pb-8 dc__border-bottom-n1">
-                                <span className="fs-13 fw-6 lh-1-5 cn-9">Security Scan</span>
-                                <ScannedByToolModal scanToolName={scanToolName} scanToolUrl={scanToolUrl} />
-                            </div>
+                            {renderHeader(category)}
                             {!scanResult?.scanned ? (
                                 <ReportTabEmptyState
                                     title={EMPTY_STATE_STATUS.CI_DETAILS_IMAGE_NOT_SCANNED.TITLE}
