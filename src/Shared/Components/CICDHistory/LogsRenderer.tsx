@@ -16,7 +16,7 @@
 
 import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import AnsiUp from 'ansi_up'
+import { AnsiUp } from 'ansi_up'
 import DOMPurify from 'dompurify'
 
 import ICArrow from '@Icons/ic-caret-down.svg?react'

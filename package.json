@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "1.23.4-beta-1",
+    "version": "1.23.4-beta-2",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -113,7 +113,7 @@
         "@uiw/react-codemirror": "4.23.7",
         "@uiw/react-md-editor": "^4.0.11",
         "@xyflow/react": "12.4.2",
-        "ansi_up": "^5.2.1",
+        "ansi_up": "6.0.6",
         "chart.js": "4.5.0",
         "codemirror-json-schema": "0.8.0",
         "cronstrue": "^3.9.0",
