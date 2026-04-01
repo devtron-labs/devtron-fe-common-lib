@@ -291,7 +291,7 @@ export type InternalTableProps<
 
     emptyStateConfig: {
         noRowsConfig: Omit<GenericEmptyStateType, 'children'>
-        noRowsForFilterConfig?: Pick<GenericFilterEmptyStateProps, 'title' | 'subTitle'> & {
+        noRowsForFilterConfig?: Pick<GenericFilterEmptyStateProps, 'title' | 'subTitle' | 'handleClearFilters'> & {
             clearFilters?: () => void
         }
     }
