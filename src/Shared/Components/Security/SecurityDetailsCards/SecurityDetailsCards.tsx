@@ -71,7 +71,6 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
     if (!scanResult?.scanned) {
         return (
             <div className="flexbox-col dc__gap-16 mw-600 dc__mxw-1000">
-                {renderHeader()}
                 <ReportTabEmptyState
                     title={EMPTY_STATE_STATUS.CI_DETAILS_IMAGE_NOT_SCANNED.TITLE}
                     subtitle={EMPTY_STATE_STATUS.CI_DETAILS_IMAGE_NOT_SCANNED.SUBTITLE}
@@ -83,7 +82,6 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
     if (!threatCount) {
         return (
             <div className="flexbox-col dc__gap-16 mw-600 dc__mxw-1000">
-                {renderHeader()}
                 <div className="flexbox-col en-2 bw-1 br-8 dc__gap-16 cn-9 p-16">
                     <GenericEmptyState
                         SvgImage={NoVulnerability}

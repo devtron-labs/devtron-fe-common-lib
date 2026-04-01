@@ -24,6 +24,7 @@ export { CATEGORY_LABELS, SEVERITIES_LABEL_COLOR_MAP } from './constants'
 export { default as SecurityModal } from './SecurityModal'
 export { getSecurityScan, getSecurityScanRecommendations } from './service'
 export type {
+    DockerScanStatusTypes,
     GetResourceScanDetailsPayloadType,
     GetResourceScanDetailsResponseType,
     ScanRecommendationsDTO,

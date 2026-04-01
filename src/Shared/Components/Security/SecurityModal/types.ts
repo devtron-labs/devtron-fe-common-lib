@@ -264,6 +264,14 @@ export type CodeSnippet = {
     after: CodeSnippetLine[]
 }
 
+export enum DockerScanStatusTypes {
+    PENDING = 0,
+    RUNNING = 1,
+    COMPLETED = 2,
+    FAILED = 3,
+    SKIPPED = 4,
+}
+
 export interface ScanRecommendationsDTO {
     severity_summary: {
         error: number
@@ -289,6 +297,7 @@ export interface ScanRecommendationsDTO {
     dockerfileHash: string
     id: number
     pipelineId: number
+    status: DockerScanStatusTypes
 }
 
 export interface SidebarPropsType {
