@@ -58,8 +58,6 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
 
     const renderScannedToolModal = (category: ScanCategories) => {
         const { scanToolName, scanToolUrl } = getScanToolInfo(category)
-        console.log(scanToolUrl)
-
         return <ScannedByToolModal scanToolName={scanToolName} scanToolUrl={scanToolUrl} />
     }
 
@@ -72,9 +70,8 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
 
     if (!scanResult?.scanned) {
         return (
-            <div className="flexbox-col dc__gap-12 mw-600 dc__mxw-1000">
+            <div className="flexbox-col dc__gap-16 mw-600 dc__mxw-1000">
                 {renderHeader()}
-
                 <ReportTabEmptyState
                     title={EMPTY_STATE_STATUS.CI_DETAILS_IMAGE_NOT_SCANNED.TITLE}
                     subtitle={EMPTY_STATE_STATUS.CI_DETAILS_IMAGE_NOT_SCANNED.SUBTITLE}
@@ -85,7 +82,7 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
 
     if (!threatCount) {
         return (
-            <div className="flexbox-col dc__gap-12 mw-600 dc__mxw-1000">
+            <div className="flexbox-col dc__gap-16 mw-600 dc__mxw-1000">
                 {renderHeader()}
                 <div className="flexbox-col en-2 bw-1 br-8 dc__gap-16 cn-9 p-16">
                     <GenericEmptyState
@@ -165,7 +162,7 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
 
     return (
         <>
-            <div className="flexbox-col dc__gap-20 mw-600 dc__mxw-1000">
+            <div className="flexbox-col dc__gap-20">
                 {Object.keys(SECURITY_CONFIG).map((category: ScanCategories) => {
                     const categoryFailed: boolean =
                         category !== CATEGORIES.IMAGE_SCAN &&
