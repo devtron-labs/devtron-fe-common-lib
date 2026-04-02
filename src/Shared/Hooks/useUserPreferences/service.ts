@@ -16,6 +16,7 @@
 
 import { ROUTES } from '@Common/Constants'
 import { get, getUrlWithSearchParams, patch, showError } from '@Common/index'
+import { ResourceKindType } from '@Shared/index'
 import { THEME_PREFERENCE_MAP } from '@Shared/Providers/ThemeProvider/types'
 
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
@@ -182,7 +183,7 @@ export const updateUserPreferences = async ({
  * Can work with provided userPreferences or fetch from server/localStorage
  * Centralizes all resource updating logic
  */
-export const getUpdatedUserPreferences = async ({
+const getUpdatedUserPreferences = async ({
     id,
     name,
     resourceKind,
@@ -197,7 +198,7 @@ export const getUpdatedUserPreferences = async ({
         baseUserPreferences = userPreferencesResponse
     } else {
         try {
-            const localStorageData = localStorage.getItem('userPreferences')
+            const localStorageData = localStorage.getItem(USER_PREFERENCES_ATTRIBUTE_KEY)
             if (localStorageData) {
                 baseUserPreferences = JSON.parse(localStorageData)
             } else {
@@ -230,6 +231,33 @@ export const getUpdatedUserPreferences = async ({
     }
 }
 
+const migrateUserPreferences = async () => {
+    try {
+        const userPreferences: UserPreferencesType = await JSON.parse(
+            localStorage.getItem(USER_PREFERENCES_ATTRIBUTE_KEY),
+        )
+        if (userPreferences && userPreferences.version !== 'v1') {
+            const migratedPreferences: UserPreferencesType = {
+                ...userPreferences,
+                resources: {
+                    ...userPreferences.resources,
+                    [ResourceKindType.devtronApplication]: {
+                        [UserPreferenceResourceActions.RECENTLY_VISITED]: (
+                            userPreferences.resources?.[ResourceKindType.devtronApplication]?.[
+                                UserPreferenceResourceActions.RECENTLY_VISITED
+                            ] || []
+                        ).map(({ id, name }) => ({ id: +id, name })),
+                    },
+                },
+                version: userPreferences.version ?? 'v1',
+            }
+            localStorage.setItem(USER_PREFERENCES_ATTRIBUTE_KEY, JSON.stringify(migratedPreferences))
+        }
+    } catch {
+        // do nothing
+    }
+}
+
 /**
  * Centralized function to update and persist user preferences
  * Handles both local state and server updates automatically
@@ -255,9 +283,11 @@ export const updateAndPersistUserPreferences = async ({
         resourceKind,
     })
 
+    await migrateUserPreferences()
+
     // Update localStorage if requested
     if (updateLocalStorage) {
-        localStorage.setItem('userPreferences', JSON.stringify(updatedPreferences))
+        localStorage.setItem(USER_PREFERENCES_ATTRIBUTE_KEY, JSON.stringify(updatedPreferences))
     }
 
     // Update server with the new resource list if resourceKind is provided
