@@ -16,9 +16,9 @@
 
 import { useRef, useState } from 'react'
 import Tippy from '@tippyjs/react'
-import { ReactComponent as CloseIcon } from '../Assets/Icon/ic-cross.svg'
-import { ReactComponent as Help } from '../Assets/Icon/ic-help.svg'
-import { ReactComponent as ICHelpOutline } from '../Assets/Icon/ic-help-outline.svg'
+import CloseIcon from '../Assets/Icon/ic-cross.svg?react'
+import Help from '../Assets/Icon/ic-help.svg?react'
+import ICHelpOutline from '../Assets/Icon/ic-help-outline.svg?react'
 import 'tippy.js/animations/shift-toward-subtle.css'
 import 'tippy.js/animations/shift-toward.css'
 import { TippyCustomizedProps, TippyTheme } from './Types'

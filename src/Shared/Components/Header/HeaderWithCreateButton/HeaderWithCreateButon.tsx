@@ -16,7 +16,7 @@
 
 import { useLocation } from 'react-router-dom'
 
-import { SERVER_MODE, URLS } from '@Common/Constants'
+import { SERVER_MODE } from '@Common/Constants'
 import { noop } from '@Common/Helper'
 import { BreadCrumb, BreadcrumbText, useBreadcrumb } from '@Common/index'
 import { ActionMenu } from '@Shared/Components/ActionMenu'
@@ -27,8 +27,9 @@ import { Icon } from '@Shared/Components/Icon'
 import { ComponentSizeType } from '@Shared/constants'
 import { useMainContext } from '@Shared/Providers'
 import { getApplicationManagementBreadcrumb } from '@PagesDevtron2.0/ApplicationManagement'
+import { getAutomationEnablementBreadcrumb } from '@PagesDevtron2.0/Automation&Enablement'
 import { getInfrastructureManagementBreadcrumb } from '@PagesDevtron2.0/InfrastructureManagement'
-import { getAutomationEnablementBreadcrumbConfig } from '@PagesDevtron2.0/InfrastructureManagement/utils'
+import { ROUTER_URLS } from '@PagesDevtron2.0/Shared'
 
 import PageHeader from '../PageHeader'
 import { HeaderWithCreateButtonProps } from './types'
@@ -40,7 +41,8 @@ export const HeaderWithCreateButton = ({ viewType }: HeaderWithCreateButtonProps
     const { serverMode } = useMainContext()
 
     // CONSTANTS
-    const createCustomAppURL = `${URLS.APPLICATION_MANAGEMENT_CREATE_DEVTRON_APP}${location.search}`
+    const createCustomAppURL = `${ROUTER_URLS.CREATE_DEVTRON_APP}${location.search}`
+    const createJobURL = `${ROUTER_URLS.CREATE_JOB}${location.search}`
 
     const renderActionButtons = () =>
         serverMode === SERVER_MODE.FULL ? (
@@ -48,7 +50,7 @@ export const HeaderWithCreateButton = ({ viewType }: HeaderWithCreateButtonProps
                 id="page-header-create-app-action-menu"
                 alignment="end"
                 onClick={noop}
-                options={getCreateActionMenuOptions(createCustomAppURL)}
+                options={getCreateActionMenuOptions(createCustomAppURL, createJobURL)}
                 buttonProps={{
                     text: 'Create',
                     dataTestId: 'create-app-button-on-header',
@@ -60,21 +62,39 @@ export const HeaderWithCreateButton = ({ viewType }: HeaderWithCreateButtonProps
             <Button
                 text="Deploy helm charts"
                 component={ButtonComponentType.link}
-                linkProps={{ to: URLS.INFRASTRUCTURE_MANAGEMENT_CHART_STORE_DISCOVER }}
+                linkProps={{ to: ROUTER_URLS.CHART_STORE }}
                 dataTestId="deploy-helm-chart-on-header"
                 size={ComponentSizeType.small}
             />
         )
 
+    const getPathPattern = () => {
+        switch (viewType) {
+            case 'jobs':
+                return ROUTER_URLS.JOBS_LIST
+            case 'infra-apps':
+                return ROUTER_URLS.INFRASTRUCTURE_MANAGEMENT_APP_LIST.ROUTE
+            case 'apps':
+            default:
+                return ROUTER_URLS.DEVTRON_APP_LIST
+        }
+    }
+
+    const pathPattern = getPathPattern()
+
     const getBreadcrumbs = () => {
         switch (viewType) {
             case 'jobs':
-                return getAutomationEnablementBreadcrumbConfig()
+                return {
+                    ...getAutomationEnablementBreadcrumb(),
+                    job: null,
+                    list: { component: <BreadcrumbText isActive heading="Jobs" /> },
+                }
             case 'infra-apps':
                 return {
                     ...getInfrastructureManagementBreadcrumb(),
                     apps: { component: <BreadcrumbText isActive heading="Applications" /> },
-                    ':appType(helm|argocd|fluxcd)': null,
+                    ':appType': null,
                 }
             case 'apps':
             default:
@@ -87,12 +107,13 @@ export const HeaderWithCreateButton = ({ viewType }: HeaderWithCreateButtonProps
     }
 
     const { breadcrumbs } = useBreadcrumb(
+        pathPattern,
         {
             alias: getBreadcrumbs(),
         },
         [location.pathname],
     )
-    const renderBreadcrumbs = () => <BreadCrumb breadcrumbs={breadcrumbs} />
+    const renderBreadcrumbs = () => <BreadCrumb breadcrumbs={breadcrumbs} path={pathPattern} />
 
     const getDocPath = () => {
         if (viewType === 'jobs') {

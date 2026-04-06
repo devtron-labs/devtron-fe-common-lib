@@ -27,7 +27,8 @@ interface ConfigSecretType {
 }
 
 export interface Environment
-    extends Pick<EnvListMinDTO, 'id' | 'active' | 'namespace' | 'isClusterCdActive'>,
+    extends
+        Pick<EnvListMinDTO, 'id' | 'active' | 'namespace' | 'isClusterCdActive'>,
         Partial<
             Pick<
                 EnvListMinDTO,
@@ -141,7 +142,8 @@ export interface TriggerCDNodeServiceProps extends Pick<APIOptions, 'abortContro
 }
 
 export interface TriggerCDPipelinePayloadType
-    extends Pick<
+    extends
+        Pick<
             TriggerCDNodeServiceProps,
             'pipelineId' | 'appId' | 'ciArtifactId' | 'runtimeParamsPayload' | 'deploymentWithConfig'
         >,

@@ -68,7 +68,6 @@ export type DescriptorProps = (
     | (Pick<FeatureDescriptionModalProps, 'title' | 'closeModalText' | 'closeModal'> &
           FeatureDescriptionModalWithTabsConfig)
 ) & {
-    breadCrumbs?: Breadcrumb[]
     additionalContainerClasses?: string
     iconClassName?: string
     children?: React.ReactNode
@@ -82,4 +81,13 @@ export type DescriptorProps = (
      * @default false
      */
     showInfoIcon?: boolean
-}
+} & (
+        | {
+              breadCrumbs: Breadcrumb[]
+              pathPattern: string
+          }
+        | {
+              breadCrumbs?: never
+              pathPattern?: never
+          }
+    )

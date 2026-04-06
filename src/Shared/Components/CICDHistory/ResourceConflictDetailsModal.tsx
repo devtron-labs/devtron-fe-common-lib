@@ -1,11 +1,11 @@
 import { useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { generatePath, useNavigate, useParams } from 'react-router-dom'
 
 import { useQuery } from '@Common/API'
-import { URLS } from '@Common/Constants'
 import { Drawer } from '@Common/Drawer'
 import { showError, stopPropagation } from '@Common/Helper'
 import { ComponentSizeType } from '@Shared/constants'
+import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 import { APIResponseHandler } from '../APIResponseHandler'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
@@ -20,7 +20,7 @@ import {
 
 const ResourceConflictDetailsModal = ({ appName, environmentName, handleClose }: ResourceConflictDetailsModalProps) => {
     const { appId, envId, pipelineId, triggerId } = useParams<ResourceConflictDeployDialogURLParamsType>()
-    const history = useHistory()
+    const navigate = useNavigate()
 
     const {
         isFetching: isLoadingResourceData,
@@ -43,7 +43,12 @@ const ResourceConflictDetailsModal = ({ appName, environmentName, handleClose }:
                 appId,
             })
             setIsDeploying(false)
-            history.push(`${URLS.APPLICATION_MANAGEMENT_APP}/${appId}/details/${envId}`)
+            navigate(
+                generatePath(ROUTER_URLS.DEVTRON_APP_DETAILS.ENV_DETAILS, {
+                    appId,
+                    envId,
+                }),
+            )
         } catch (error) {
             showError(error)
             setIsDeploying(false)

@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import AnsiUp from 'ansi_up'
+import { AnsiUp } from 'ansi_up'
 import DOMPurify from 'dompurify'
 
-import { ReactComponent as ICArrow } from '@Icons/ic-caret-down.svg'
-import { ReactComponent as ICCollapseAll } from '@Icons/ic-collapse-all.svg'
-import { ReactComponent as ICExpandAll } from '@Icons/ic-expand-all.svg'
+import ICArrow from '@Icons/ic-caret-down.svg?react'
+import ICCollapseAll from '@Icons/ic-collapse-all.svg?react'
+import ICExpandAll from '@Icons/ic-expand-all.svg?react'
 import { ANSI_UP_REGEX, ComponentSizeType } from '@Shared/constants'
 import { escapeRegExp, sanitizeTargetPlatforms } from '@Shared/Helpers'
 import { AppThemeType, getComponentSpecificThemeClass } from '@Shared/Providers'
 
-import { ReactComponent as OpenInNew } from '../../../Assets/Icon/ic-arrow-out.svg'
-import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
-import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-filled.svg'
+import OpenInNew from '../../../Assets/Icon/ic-arrow-out.svg?react'
+import HelpIcon from '../../../Assets/Icon/ic-help.svg?react'
+import Info from '../../../Assets/Icon/ic-info-filled.svg?react'
 import {
     Host,
     Progressing,
@@ -101,11 +101,12 @@ const useCIEventSource = (url: string, maxLength?: number): [string[], EventSour
     const [logsNotAvailableError, setLogsNotAvailableError] = useState<boolean>(false)
     const [interval, setInterval] = useState(1000)
     const buffer = useRef([])
-    const eventSourceRef = useRef<EventSource>(null)
+    const eventSourceRef = useRef<EventSource | null>(null)
 
     function populateData() {
-        setDataVal((data) => [...data, ...buffer.current])
+        const bufferedData = buffer.current
         buffer.current = []
+        setDataVal((data) => [...data, ...bufferedData])
     }
 
     useInterval(populateData, interval)
@@ -131,8 +132,9 @@ const useCIEventSource = (url: string, maxLength?: number): [string[], EventSour
 
     function handleStreamEnd() {
         retryCount = LOGS_RETRY_COUNT
-        setDataVal((data) => [...data, ...buffer.current])
+        const bufferedData = buffer.current
         buffer.current = []
+        setDataVal((data) => [...data, ...bufferedData])
         eventSourceRef.current.close()
         setInterval(null)
     }
@@ -173,7 +175,7 @@ const useCIEventSource = (url: string, maxLength?: number): [string[], EventSour
 
 const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, fullScreenView }: LogsRendererType) => {
     const { pipelineId, envId, appId } = useParams<DeploymentHistoryBaseParamsType>()
-    const logsRendererRef = useRef<HTMLDivElement>(null)
+    const logsRendererRef = useRef<HTMLDivElement | null>(null)
 
     const logsURL =
         parentType === HistoryComponentType.CI

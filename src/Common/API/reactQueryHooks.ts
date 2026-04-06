@@ -59,7 +59,6 @@ export const useInfiniteQuery = <
         WrapWithResponseType extends true ? ResponseType<TQueryFnData> : TQueryFnData,
         ServerErrors,
         TData,
-        WrapWithResponseType extends true ? ResponseType<TQueryFnData> : TQueryFnData,
         TQueryKey
     >,
 ): UseInfiniteQueryResult<TData, ServerErrors> => rqUseInfiniteQuery(options)

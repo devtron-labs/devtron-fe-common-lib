@@ -1,4 +1,5 @@
 export * from './ApplicationManagement'
+export * from './Automation&Enablement'
 export * from './CostVisibility'
 export * from './DataProtectionManagement'
 export * from './InfrastructureManagement'

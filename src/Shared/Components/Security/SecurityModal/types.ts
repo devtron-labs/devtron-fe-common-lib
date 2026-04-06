@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from 'react'
+import React, { type JSX } from 'react'
 
 import { Entity } from '@Common/SegmentedBarChart/types'
 import { ServerErrors } from '@Common/ServerError'

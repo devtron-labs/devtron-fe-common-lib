@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { memo, useEffect, useState } from 'react'
+import { type JSX, memo, useEffect, useState } from 'react'
 
-import { ReactComponent as ICClose } from '@Icons/ic-cross.svg'
-import { ReactComponent as ICSearch } from '@Icons/ic-search.svg'
+import ICClose from '@Icons/ic-cross.svg?react'
+import ICSearch from '@Icons/ic-search.svg?react'
 import NoVariables from '@Images/no-artifact.webp'
 import { DebouncedSearch, GenericEmptyState, Progressing, Reload } from '@Common/index'
 import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP, ComponentSizeType } from '@Shared/constants'

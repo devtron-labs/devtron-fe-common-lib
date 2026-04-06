@@ -102,6 +102,10 @@ export interface UserPreferencesType extends Pick<GetUserPreferencesParsedDTO, '
      * @description resources object
      */
     resources?: GetUserPreferencesParsedDTO['resources']
+    /**
+     * @description version of the user preferences, to be used for migration purposes
+     */
+    version?: string
 }
 
 export interface UpdatedUserPreferencesType extends UserPreferencesType, Pick<ThemeConfigType, 'appTheme'> {}

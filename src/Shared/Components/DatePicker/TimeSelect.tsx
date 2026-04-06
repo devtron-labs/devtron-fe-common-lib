@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ClockIcon } from '@Icons/ic-clock.svg'
+import ClockIcon from '@Icons/ic-clock.svg?react'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { SelectPicker } from '../SelectPicker'

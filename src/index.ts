@@ -190,6 +190,7 @@ export interface customEnv {
     /** Org ID for grafana */
     GRAFANA_ORG_ID?: number
 }
+
 declare global {
     interface Window {
         __BASE_URL__: string
@@ -199,19 +200,21 @@ declare global {
 }
 
 declare module '@tanstack/react-query' {
-    export interface QueryMeta {
-        /**
-         * Optional flag indicating whether to display a toast notification for errors.
-         * @default true
-         */
-        showToastError?: boolean
-    }
-    export interface MutationMeta {
-        /**
-         * Optional flag indicating whether to display a toast notification for errors.
-         * @default true
-         */
-        showToastError?: boolean
+    export interface Register {
+        queryMeta: {
+            /**
+             * Optional flag indicating whether to display a toast notification for errors.
+             * @default true
+             */
+            showToastError?: boolean
+        }
+        mutationMeta: {
+            /**
+             * Optional flag indicating whether to display a toast notification for errors.
+             * @default true
+             */
+            showToastError?: boolean
+        }
     }
 }
 

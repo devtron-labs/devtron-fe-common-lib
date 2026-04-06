@@ -16,7 +16,7 @@
 
 import { noop } from '@Common/Helper'
 
-import { ReactComponent as CommitIcon } from '../../../Assets/Icon/ic-code-commit.svg'
+import CommitIcon from '../../../Assets/Icon/ic-code-commit.svg?react'
 import { CommitChipCellProps } from './types'
 
 const CommitChipCell = ({ handleClick = noop, commits }: CommitChipCellProps) =>

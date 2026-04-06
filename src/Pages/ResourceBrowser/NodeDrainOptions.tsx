@@ -16,7 +16,7 @@
 
 import { ChangeEvent, FocusEvent, useEffect } from 'react'
 
-import { ReactComponent as ICTimer } from '@Icons/ic-timer.svg'
+import ICTimer from '@Icons/ic-timer.svg?react'
 import { Checkbox } from '@Common/Checkbox'
 import { Tooltip } from '@Common/Tooltip'
 import { CHECKBOX_VALUE } from '@Common/Types'

@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import type { JSX } from 'react'
 import { LinkProps, NavLinkProps } from 'react-router-dom'
 
 import { TooltipProps } from '@Common/Tooltip'

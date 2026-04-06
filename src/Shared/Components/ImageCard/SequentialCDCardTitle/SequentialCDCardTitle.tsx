@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICStack } from '@Icons/ic-stack.svg'
+import ICStack from '@Icons/ic-stack.svg?react'
 import { TargetPlatformListTooltip } from '@Shared/Components/TargetPlatforms'
 
 import { ImageTagButton } from '../../../../Common'

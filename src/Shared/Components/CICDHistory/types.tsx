@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { CSSProperties, MutableRefObject, ReactElement, ReactNode } from 'react'
+import { CSSProperties, type JSX, MutableRefObject, ReactElement, ReactNode } from 'react'
 
 import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
 import { GVKType } from '@Pages/ResourceBrowser'
@@ -246,11 +246,14 @@ export interface SidebarType extends RenderRunSourceType {
     handleViewAllHistory?: () => void
     children?: React.ReactNode
     resourceId?: number
+    path: string
 }
 
 export interface HistorySummaryCardType
-    extends RenderRunSourceType,
-        Pick<History, 'workflowExecutionStages' | 'podName' | 'namespace'> {
+    extends
+        RenderRunSourceType,
+        Pick<History, 'workflowExecutionStages' | 'podName' | 'namespace'>,
+        Pick<SidebarType, 'path'> {
     id: number
     status: string
     startedOn: string
@@ -279,7 +282,8 @@ export interface DeploymentSummaryTooltipCardType {
 }
 
 export interface BuildAndTaskSummaryTooltipCardProps
-    extends Pick<History, 'workflowExecutionStages' | 'triggeredByEmail' | 'namespace' | 'podName' | 'stage'>,
+    extends
+        Pick<History, 'workflowExecutionStages' | 'triggeredByEmail' | 'namespace' | 'podName' | 'stage'>,
         Pick<HistorySummaryCardType, 'gitTriggers' | 'ciMaterials'> {}
 
 export interface DeploymentTemplateList {
@@ -314,8 +318,7 @@ export interface StartDetailsType {
 }
 
 export interface TriggerDetailsType
-    extends Pick<StartDetailsType, 'renderTargetConfigInfo'>,
-        Pick<History, 'workflowExecutionStages' | 'namespace'> {
+    extends Pick<StartDetailsType, 'renderTargetConfigInfo'>, Pick<History, 'workflowExecutionStages' | 'namespace'> {
     status: string
     startedOn: string
     finishedOn: string
@@ -356,7 +359,7 @@ export interface ResourceConflictDeployDialogProps extends ResourceConflictDialo
 
 export interface ResourceConflictDetailsModalProps extends ResourceConflictDialogBaseProps {}
 
-export interface TriggerOutputURLParamsType extends Pick<BaseURLParams, 'appId' | 'envId'> {
+export type TriggerOutputURLParamsType = Pick<BaseURLParams, 'appId' | 'envId'> & {
     triggerId: string
     pipelineId: string
 }
@@ -376,8 +379,7 @@ export interface CurrentStatusIconProps {
 }
 
 export interface WorkerStatusType
-    extends Pick<ExecutionInfoType['workerDetails'], 'clusterId'>,
-        Pick<TriggerDetailsType, 'namespace'> {
+    extends Pick<ExecutionInfoType['workerDetails'], 'clusterId'>, Pick<TriggerDetailsType, 'namespace'> {
     message: string
     podStatus: string
     stage: DeploymentStageType
@@ -507,10 +509,12 @@ export interface TriggerOutputProps extends RenderRunSourceType, Pick<TriggerDet
     setTriggerHistory: React.Dispatch<React.SetStateAction<Map<Number, History>>>
     scrollToTop: ReturnType<typeof useScrollable>[1]
     scrollToBottom: ReturnType<typeof useScrollable>[2]
+    pathPattern: string
 }
 
 export interface HistoryLogsProps
-    extends Pick<
+    extends
+        Pick<
             TriggerOutputProps,
             | 'scrollToTop'
             | 'scrollToBottom'
@@ -528,6 +532,7 @@ export interface HistoryLogsProps
             | 'fullScreenView'
             | 'appName'
             | 'triggerHistory'
+            | 'pathPattern'
         >,
         Pick<TargetPlatformBadgeListProps, 'targetPlatforms'> {
     triggerDetails: History
@@ -540,8 +545,10 @@ export interface HistoryLogsProps
     renderRunSource: (runSource: RunSourceType, isDeployedInThisResource: boolean) => JSX.Element
 }
 
-export interface LogsRendererType
-    extends Pick<HistoryLogsProps, 'fullScreenView' | 'triggerDetails' | 'isBlobStorageConfigured'> {
+export interface LogsRendererType extends Pick<
+    HistoryLogsProps,
+    'fullScreenView' | 'triggerDetails' | 'isBlobStorageConfigured'
+> {
     parentType: HistoryComponentType
 }
 
@@ -786,7 +793,7 @@ export interface ModuleConfigResponse extends ResponseType {
     }
 }
 
-export interface DeploymentHistoryBaseParamsType {
+export type DeploymentHistoryBaseParamsType = {
     appId: string
     envId: string
     pipelineId: string
@@ -895,11 +902,15 @@ export interface ConflictedResourcesTableProps {
     resourceConflictDetails: ResourceConflictItemType[]
 }
 
-export interface ResourceConflictDeployDialogURLParamsType
-    extends Pick<TriggerOutputURLParamsType, 'appId' | 'envId' | 'pipelineId' | 'triggerId'> {}
+export interface ResourceConflictDeployDialogURLParamsType extends Pick<
+    TriggerOutputURLParamsType,
+    'appId' | 'envId' | 'pipelineId' | 'triggerId'
+> {}
 
-export interface ResourceConflictRedeployParamsType
-    extends Pick<ResourceConflictDeployDialogURLParamsType, 'pipelineId' | 'triggerId' | 'appId'> {}
+export interface ResourceConflictRedeployParamsType extends Pick<
+    ResourceConflictDeployDialogURLParamsType,
+    'pipelineId' | 'triggerId' | 'appId'
+> {}
 
 export interface ResourceConflictRedeployPayloadType {
     pipelineId: number
@@ -908,8 +919,10 @@ export interface ResourceConflictRedeployPayloadType {
     helmRedeploymentRequest: true
 }
 
-export interface GetResourceConflictDetailsParamsType
-    extends Pick<ResourceConflictDeployDialogURLParamsType, 'pipelineId' | 'triggerId' | 'appId'> {
+export interface GetResourceConflictDetailsParamsType extends Pick<
+    ResourceConflictDeployDialogURLParamsType,
+    'pipelineId' | 'triggerId' | 'appId'
+> {
     signal: AbortSignal
 }
 

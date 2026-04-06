@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { memo } from 'react'
+import { type JSX, memo } from 'react'
 import { NavLink } from 'react-router-dom'
 import moment from 'moment'
 
-import { ReactComponent as ICLines } from '@Icons/ic-lines.svg'
+import ICLines from '@Icons/ic-lines.svg?react'
 import { DeploymentStageType } from '@Shared/constants'
 import { isTimeStringAvailable } from '@Shared/Helpers'
 
