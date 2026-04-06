@@ -14,21 +14,21 @@
  * limitations under the License.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import AnsiUp from 'ansi_up'
+import { AnsiUp } from 'ansi_up'
 import DOMPurify from 'dompurify'
 
-import { ReactComponent as ICArrow } from '@Icons/ic-caret-down.svg'
-import { ReactComponent as ICCollapseAll } from '@Icons/ic-collapse-all.svg'
-import { ReactComponent as ICExpandAll } from '@Icons/ic-expand-all.svg'
+import ICArrow from '@Icons/ic-caret-down.svg?react'
+import ICCollapseAll from '@Icons/ic-collapse-all.svg?react'
+import ICExpandAll from '@Icons/ic-expand-all.svg?react'
 import { ANSI_UP_REGEX, ComponentSizeType } from '@Shared/constants'
 import { escapeRegExp, sanitizeTargetPlatforms } from '@Shared/Helpers'
 import { AppThemeType, getComponentSpecificThemeClass } from '@Shared/Providers'
 
-import { ReactComponent as OpenInNew } from '../../../Assets/Icon/ic-arrow-out.svg'
-import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
-import { ReactComponent as Info } from '../../../Assets/Icon/ic-info-filled.svg'
+import OpenInNew from '../../../Assets/Icon/ic-arrow-out.svg?react'
+import HelpIcon from '../../../Assets/Icon/ic-help.svg?react'
+import Info from '../../../Assets/Icon/ic-info-filled.svg?react'
 import {
     Host,
     Progressing,

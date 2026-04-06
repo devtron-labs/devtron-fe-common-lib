@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { ReactComponent as HelpIcon } from '../../../Assets/Icon/ic-help.svg'
-import { ReactComponent as ICHelpOutline } from '../../../Assets/Icon/ic-help-outline.svg'
+import HelpIcon from '../../../Assets/Icon/ic-help.svg?react'
+import ICHelpOutline from '../../../Assets/Icon/ic-help-outline.svg?react'
 import { TippyCustomized } from '../../../Common/TippyCustomized'
 import { InfoIconTippyProps, TippyTheme } from '../../../Common/Types'
 

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
+import type { JSX } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { ReactComponent as Down } from '@Icons/ic-arrow-forward.svg'
-import { ReactComponent as OpenInNew } from '@Icons/ic-arrow-out.svg'
-import { ReactComponent as Download } from '@Icons/ic-download.svg'
-import { ReactComponent as ICHelpOutline } from '@Icons/ic-help.svg'
-import { ReactComponent as MechanicalOperation } from '@Icons/ic-mechanical-operation.svg'
+import Down from '@Icons/ic-arrow-forward.svg?react'
+import OpenInNew from '@Icons/ic-arrow-out.svg?react'
+import Download from '@Icons/ic-download.svg?react'
+import ICHelpOutline from '@Icons/ic-help.svg?react'
 import noartifact from '@Images/no-artifact.webp'
 import { getIsApprovalPolicyConfigured } from '@Shared/Helpers'
 import { useDownload } from '@Shared/Hooks'
@@ -36,7 +36,7 @@ import { ArtifactType, CIListItemType } from './types'
 
 const CIProgressView = (): JSX.Element => (
     <GenericEmptyState
-        SvgImage={MechanicalOperation}
+        imgName="img-mechanical-operation"
         title={EMPTY_STATE_STATUS.CI_PROGRESS_VIEW.TITLE}
         subTitle={EMPTY_STATE_STATUS.CI_PROGRESS_VIEW.SUBTITLE}
     />

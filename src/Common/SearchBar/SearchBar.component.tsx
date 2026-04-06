@@ -76,7 +76,7 @@ const SearchBar = ({
     isLoading = false,
 }: SearchBarProps) => {
     const [showClearButton, setShowClearButton] = useState(!!initialSearchText)
-    const inputRef = useRef<HTMLInputElement>()
+    const inputRef = useRef<HTMLInputElement>(null)
     const debouncedSearchChange = useCallback(debounce(handleSearchChange, debounceTimeout), [
         handleSearchChange,
         debounceTimeout,

@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { forwardRef, useMemo } from 'react'
+import { useMemo } from 'react'
 import RJSF from '@rjsf/core'
 
 import { SCHEMA_07_VALIDATOR } from '@Shared/validations'
@@ -35,7 +35,7 @@ import './rjsfForm.scss'
 // The default import resolves to an object instead of a function
 const Form = RJSF
 
-export const RJSFForm = forwardRef((props: FormProps, ref: FormProps['ref']) => {
+export const RJSFForm = ({ ref, ...props }: FormProps) => {
     const { schemaPathToUpdatePathMap, isUpdatePathKeywordPresent } = useMemo(() => {
         const map = getSchemaPathToUpdatePathMap(props.schema)
 
@@ -110,4 +110,4 @@ export const RJSFForm = forwardRef((props: FormProps, ref: FormProps['ref']) => 
             <div id={RJSF_FORM_SELECT_PORTAL_TARGET_ID} />
         </>
     )
-})
+}

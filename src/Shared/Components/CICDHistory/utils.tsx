@@ -13,12 +13,12 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ComponentProps, ReactElement } from 'react'
+import { ComponentProps, type JSX, ReactElement } from 'react'
 import moment from 'moment'
 
-import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
-import { ReactComponent as Close } from '@Icons/ic-close.svg'
-import { ReactComponent as ICInProgress } from '@Icons/ic-in-progress.svg'
+import ICCheck from '@Icons/ic-check.svg?react'
+import Close from '@Icons/ic-close.svg?react'
+import ICInProgress from '@Icons/ic-in-progress.svg?react'
 import { DATE_TIME_FORMATS } from '@Common/Constants'
 import { DeploymentAppTypes } from '@Common/Types'
 import { ALL_RESOURCE_KIND_FILTER } from '@Shared/constants'

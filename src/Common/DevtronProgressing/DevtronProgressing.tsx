@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import React from 'react'
-import { ReactComponent as ICRotateDevtron } from '../../Assets/Icon/ic-rotate-devtron.svg'
+import { type JSX } from 'react'
+import ICRotateDevtron from '../../Assets/Icon/ic-rotate-devtron.svg?react'
 import { DevtronProgressingProps } from './types'
 
 export const DevtronProgressing = ({ classes, parentClasses }: DevtronProgressingProps): JSX.Element => (

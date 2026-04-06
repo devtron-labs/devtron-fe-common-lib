@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import type { JSX } from 'react'
+
 export interface GenericDescriptionProps {
     text?: string
     updatedBy?: string

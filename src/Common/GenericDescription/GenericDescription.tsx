@@ -17,8 +17,8 @@
 import { useEffect, useMemo, useState } from 'react'
 import MDEditor, { commands, MDEditorProps } from '@uiw/react-md-editor'
 
-import { ReactComponent as Edit } from '@Icons/ic-pencil.svg'
-import { ReactComponent as UnorderedListIcon } from '@Icons/ic-unordered-list.svg'
+import Edit from '@Icons/ic-pencil.svg?react'
+import UnorderedListIcon from '@Icons/ic-unordered-list.svg?react'
 
 import {
     Button,

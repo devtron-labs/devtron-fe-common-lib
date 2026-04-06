@@ -16,7 +16,7 @@
 
 import { useState } from 'react'
 
-import { ReactComponent as NoVulnerability } from '@Icons/ic-vulnerability-not-found.svg'
+import NoVulnerability from '@Icons/ic-vulnerability-not-found.svg?react'
 import { GenericEmptyState } from '@Common/index'
 import { GenericSectionErrorState } from '@Shared/Components/GenericSectionErrorState'
 import { ScannedByToolModal } from '@Shared/Components/ScannedByToolModal'
