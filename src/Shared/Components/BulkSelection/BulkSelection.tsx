@@ -16,7 +16,7 @@
 
 import { MouseEvent } from 'react'
 
-import { ReactComponent as ICChevronDown } from '../../../Assets/Icon/ic-chevron-down.svg'
+import ICChevronDown from '../../../Assets/Icon/ic-chevron-down.svg?react'
 import { Checkbox, ConditionalWrap, noop } from '../../../Common'
 import { ActionMenu, ActionMenuItemType, ActionMenuProps } from '../ActionMenu'
 import { useBulkSelection } from './BulkSelectionProvider'

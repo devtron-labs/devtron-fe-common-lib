@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICArrowRight } from '@Icons/ic-caret-down-small.svg'
-import { ReactComponent as ICError } from '@Icons/ic-error-exclamation.svg'
-import { ReactComponent as ICShieldSecure } from '@Icons/ic-shield-check.svg'
-import { ReactComponent as ICShieldWarning } from '@Icons/ic-shield-warning-outline.svg'
+import ICArrowRight from '@Icons/ic-caret-down-small.svg?react'
+import ICError from '@Icons/ic-error-exclamation.svg?react'
+import ICShieldSecure from '@Icons/ic-shield-check.svg?react'
+import ICShieldWarning from '@Icons/ic-shield-warning-outline.svg?react'
 import { SegmentedBarChart } from '@Common/SegmentedBarChart'
 
 import { SECURITY_CONFIG } from '../constants'

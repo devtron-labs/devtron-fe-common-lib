@@ -19,9 +19,9 @@ import { useLocation } from 'react-router-dom'
 
 import { AppThemeType, getComponentSpecificThemeClass } from '@Shared/Providers'
 
-import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
-import { ReactComponent as ZoomOut } from '../../../Assets/Icon/ic-exit-fullscreen.svg'
-import { ReactComponent as ZoomIn } from '../../../Assets/Icon/ic-fullscreen.svg'
+import DropDownIcon from '../../../Assets/Icon/ic-chevron-down.svg?react'
+import ZoomOut from '../../../Assets/Icon/ic-exit-fullscreen.svg?react'
+import ZoomIn from '../../../Assets/Icon/ic-fullscreen.svg?react'
 import {
     ClipboardButton,
     extractImage,

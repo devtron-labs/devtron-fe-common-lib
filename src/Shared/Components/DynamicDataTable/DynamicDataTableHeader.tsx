@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICAdd } from '@Icons/ic-add.svg'
-import { ReactComponent as ICArrowDown } from '@Icons/ic-sort-arrow-down.svg'
+import ICAdd from '@Icons/ic-add.svg?react'
+import ICArrowDown from '@Icons/ic-sort-arrow-down.svg?react'
 import { SortingOrder } from '@Common/Constants'
 import { ComponentSizeType } from '@Shared/constants'
 

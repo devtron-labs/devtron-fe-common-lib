@@ -16,7 +16,7 @@
 
 import React, { useMemo, useState } from 'react'
 
-import { ReactComponent as ICExpand } from '@Icons/ic-expand.svg'
+import ICExpand from '@Icons/ic-expand.svg?react'
 import { SortingOrder } from '@Common/Constants'
 import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
 

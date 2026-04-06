@@ -21,7 +21,7 @@ import { IndexStore } from '@Shared/Store'
 import { DeploymentStatusDetailsBreakdownDataType, DeploymentStatusDetailsType, TIMELINE_STATUS } from '@Shared/types'
 import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
-import { ReactComponent as Arrow } from '../../../Assets/Icon/ic-arrow-forward.svg'
+import Arrow from '../../../Assets/Icon/ic-arrow-forward.svg?react'
 import mechanicalOperation from '../../../Assets/Icon/ic-mechanical-operation.svg'
 import { DeploymentAppTypes, GenericEmptyState, Progressing, URLS } from '../../../Common'
 import { DEPLOYMENT_STATUS, EMPTY_STATE_STATUS } from '../../constants'

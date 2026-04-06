@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICSprayCan } from '@Icons/ic-spray-can.svg'
-import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
-import { ReactComponent as ICTimer } from '@Icons/ic-timer.svg'
-import { ReactComponent as ICCpu } from '@IconsV2/ic-cpu.svg'
-import { ReactComponent as ICMemory } from '@IconsV2/ic-memory.svg'
+import ICSprayCan from '@Icons/ic-spray-can.svg?react'
+import ICTag from '@Icons/ic-tag.svg?react'
+import ICTimer from '@Icons/ic-timer.svg?react'
+import ICCpu from '@IconsV2/ic-cpu.svg?react'
+import ICMemory from '@IconsV2/ic-memory.svg?react'
 import { CMSecretComponentType } from '@Shared/Services'
 
 import {

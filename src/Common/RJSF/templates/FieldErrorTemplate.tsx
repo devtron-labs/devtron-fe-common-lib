@@ -17,7 +17,7 @@
 import React from 'react'
 import { errorId, FieldErrorProps } from '@rjsf/utils'
 
-import { ReactComponent as Error } from '../../../Assets/Icon/ic-warning.svg'
+import Error from '../../../Assets/Icon/ic-warning.svg?react'
 
 export const FieldErrorTemplate = ({ errors = [], fieldPathId }: FieldErrorProps) => {
     const id = errorId(fieldPathId)

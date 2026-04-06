@@ -16,9 +16,9 @@
 
 import { Component, createContext, PropsWithChildren } from 'react'
 import { VisibleModal } from '../Modals/VisibleModal'
-import close from '../../Assets/Icon/ic-cross.svg'
 import { Progressing } from '../Progressing'
 import { DialogFormProps } from './Types'
+import { Icon } from '@Shared/Components'
 // TODO: may not need context
 const DialogFormContext = createContext({ title: '', isLoading: false, close: (event) => {}, onSave: (event) => {} })
 
@@ -57,7 +57,7 @@ export class DialogForm extends Component<PropsWithChildren<DialogFormProps>> {
                         <div className={`modal__header ${this.props.headerClassName || ''}`}>
                             <h1 className="modal__title">{this.props.title}</h1>
                             <button type="button" className="dc__transparent" onClick={this.props.close}>
-                                <img src={close} alt="close" />
+                                <Icon name="ic-close-small" size={24} color={null} />
                             </button>
                         </div>
                         <DialogFormContext.Consumer>

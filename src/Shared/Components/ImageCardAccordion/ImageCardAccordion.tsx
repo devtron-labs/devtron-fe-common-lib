@@ -16,7 +16,7 @@
 
 import { useState } from 'react'
 
-import { ReactComponent as ICChevronDown } from '../../../Assets/Icon/ic-chevron-down.svg'
+import ICChevronDown from '../../../Assets/Icon/ic-chevron-down.svg?react'
 import { CDModalTab, CDModalTabType } from '../../../Common'
 import { Vulnerabilities } from '../Security/Vulnerabilities'
 import { AccordionItemProps, ImageCardAccordionProps } from './types'

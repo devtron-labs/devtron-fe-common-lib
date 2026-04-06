@@ -35,7 +35,7 @@ import {
 import DOMPurify from 'dompurify'
 import * as YAML from 'yaml'
 
-import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
+import ICCaretDown from '@Icons/ic-caret-down.svg?react'
 import { MODES } from '@Common/Constants'
 import { debounce, noop, YAMLStringify } from '@Common/Helper'
 import { Tooltip } from '@Common/Tooltip'

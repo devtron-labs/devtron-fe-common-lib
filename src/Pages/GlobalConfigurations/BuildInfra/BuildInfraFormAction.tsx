@@ -16,7 +16,7 @@
 
 import { FormEvent, FunctionComponent, useMemo } from 'react'
 
-import { ReactComponent as ErrorIcon } from '@Icons/ic-warning.svg'
+import ErrorIcon from '@Icons/ic-warning.svg?react'
 import { SelectPicker } from '@Shared/Components/SelectPicker'
 import { ComponentSizeType } from '@Shared/constants'
 import { isNullOrUndefined } from '@Shared/Helpers'

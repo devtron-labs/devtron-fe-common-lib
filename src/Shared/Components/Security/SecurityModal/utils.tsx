@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactComponent as NoVulnerability } from '@Icons/ic-vulnerability-not-found.svg'
+import NoVulnerability from '@Icons/ic-vulnerability-not-found.svg?react'
 import { SegmentedBarChartProps } from '@Common/SegmentedBarChart'
 import { VulnerabilityType } from '@Common/Types'
 import { ScannedByToolModal } from '@Shared/Components/ScannedByToolModal'

@@ -16,7 +16,7 @@
 
 import { useState } from 'react'
 
-import { ReactComponent as ICHelpOutline } from '../../../Assets/Icon/ic-help-outline.svg'
+import ICHelpOutline from '../../../Assets/Icon/ic-help-outline.svg?react'
 import { BreadCrumb } from '../../../Common'
 import { InfoIconTippy } from '../InfoIconTippy'
 import { FeatureDescriptionModal } from './FeatureDescriptionModal'

@@ -193,7 +193,7 @@ export interface InfoIconTippyProps<T extends boolean = false> extends Pick<
 export interface GenericEmptyStateType {
     title: ReactNode
     imgName?: IllustrationName
-    image?
+    image?: string
     classname?: string
     subTitle?: ReactNode
     isButtonAvailable?: boolean

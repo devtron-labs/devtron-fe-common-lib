@@ -17,8 +17,8 @@
 import { useEffect, useRef } from 'react'
 import { animate, motion, useMotionTemplate, useMotionValue, useTransform } from 'framer-motion'
 
-import { ReactComponent as ICChatSupport } from '@IconsV2/ic-chat-circle-dots.svg'
-import { ReactComponent as TexturedBG } from '@Images/licenseCardBG.svg'
+import ICChatSupport from '@IconsV2/ic-chat-circle-dots.svg?react'
+import TexturedBG from '@Images/licenseCardBG.svg?react'
 import { ClipboardButton, getTTLInHumanReadableFormat } from '@Common/index'
 import { CONTACT_SUPPORT_LINK, ENTERPRISE_SUPPORT_LINK } from '@Shared/constants'
 import { AppThemeType } from '@Shared/Providers'
