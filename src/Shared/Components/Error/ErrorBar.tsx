@@ -16,7 +16,7 @@
 
 import { NavLink } from 'react-router-dom'
 
-import { URLS } from '@Common/Constants'
+import { ROUTER_URLS } from '@PagesDevtron2.0/Shared'
 
 import { AppType } from '../../types'
 import { Icon } from '../Icon'
@@ -48,7 +48,7 @@ const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
                                 {appDetails.dockerRegistryId}’
                             </div>
                             <NavLink
-                                to={`${URLS.GLOBAL_CONFIG_DOCKER}/${appDetails.dockerRegistryId}`}
+                                to={`${ROUTER_URLS.GLOBAL_CONFIG_DOCKER}/${appDetails.dockerRegistryId}`}
                                 className="cb-5 fs-13 anchor w-auto dc__no-decor flex ml-8"
                             >
                                 Check Permission&nbsp;&nbsp;

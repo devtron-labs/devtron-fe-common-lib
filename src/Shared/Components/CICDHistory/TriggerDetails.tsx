@@ -15,7 +15,7 @@
  */
 
 import { Fragment, memo, useMemo, useState } from 'react'
-import { Link, useLocation, useParams, useRouteMatch } from 'react-router-dom'
+import { Link, useLocation, useParams } from 'react-router-dom'
 
 import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
 import { ReactComponent as ICArrowRight } from '@Icons/ic-arrow-right.svg'
@@ -305,7 +305,6 @@ const StartDetails = ({
     renderTargetConfigInfo,
     stage,
 }: StartDetailsType): JSX.Element => {
-    const { url } = useRouteMatch()
     const { pathname } = useLocation()
 
     return (
@@ -376,7 +375,7 @@ const StartDetails = ({
                 )}
 
                 {!pathname.includes('source-code') && (
-                    <Link to={`${url}/source-code`} className="anchor fs-13" data-testid="commit-details-link">
+                    <Link to="source-code" className="anchor fs-13" data-testid="commit-details-link">
                         Commit details
                     </Link>
                 )}

@@ -173,7 +173,8 @@ const DateTimePicker = ({
 
                     <DayPicker
                         mode="range"
-                        navLayout="around"
+                        // TODO: (Abhishek) Check why navLayout prop is causing issues with date selection
+                        // navLayout="around"
                         selected={{
                             from: dateRange.from,
                             to: dateRange.to,
@@ -189,7 +190,8 @@ const DateTimePicker = ({
         return (
             <DayPicker
                 mode="single"
-                navLayout="around"
+                // TODO: (Abhishek) Check why navLayout prop is causing issues with date selection
+                // navLayout="around"
                 selected={dateObject}
                 onSelect={handleSingleDateSelect}
                 disabled={getDisabledState()}

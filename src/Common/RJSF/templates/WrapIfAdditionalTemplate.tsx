@@ -23,8 +23,8 @@ export const WrapIfAdditionalTemplate = ({
     id,
     disabled,
     label,
-    onKeyChange,
-    onDropPropertyClick,
+    onKeyRename,
+    onRemoveProperty,
     readonly,
     schema,
     children,
@@ -44,7 +44,7 @@ export const WrapIfAdditionalTemplate = ({
                             type="text"
                             className="form__input cn-9 fs-13 lh-20 fw-4"
                             id={`${id}-key`}
-                            onBlur={(event) => onKeyChange(event.target.value)}
+                            onBlur={(event) => onKeyRename(event.target.value)}
                             placeholder={PLACEHOLDERS.OBJECT_KEY}
                             defaultValue={label}
                         />
@@ -53,7 +53,7 @@ export const WrapIfAdditionalTemplate = ({
                     <div className="dc__position-abs remove-btn__container" style={{ right: '-28px', top: '9px' }}>
                         <RemoveButton
                             disabled={disabled || readonly}
-                            onClick={onDropPropertyClick(label)}
+                            onClick={onRemoveProperty}
                             uiSchema={uiSchema}
                             registry={registry}
                         />

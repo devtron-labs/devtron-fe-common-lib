@@ -25,6 +25,7 @@ import { DescriptorProps } from './types'
 const FeatureTitleWithInfo = ({
     additionalContainerClasses,
     breadCrumbs = [],
+    pathPattern,
     children,
     iconClassName = 'icon-dim-20 fcn-6',
     title,
@@ -73,7 +74,7 @@ const FeatureTitleWithInfo = ({
                     {showInfoIcon && breadCrumbs?.length === 0 ? (
                         <span className="fs-16 fw-6 cn-9 lh-32">{title}</span>
                     ) : (
-                        <BreadCrumb breadcrumbs={breadCrumbs} />
+                        <BreadCrumb breadcrumbs={breadCrumbs} path={pathPattern} />
                     )}
                     <ICHelpOutline className={`${iconClassName} icon-dim-20 cursor fcn-6`} onClick={onClickInfoIcon} />
                 </div>

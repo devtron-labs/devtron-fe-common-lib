@@ -26,8 +26,9 @@ export interface DeploymentHistoryConfigDiffQueryParams {
     compareWfrId: number
 }
 
-export interface DeploymentHistoryConfigDiffProps
-    extends Required<Pick<HistoryLogsProps, 'renderRunSource' | 'resourceId'>> {
+export interface DeploymentHistoryConfigDiffProps extends Required<
+    Pick<HistoryLogsProps, 'renderRunSource' | 'resourceId' | 'pathPattern'>
+> {
     appName: string
     envName: string
     pipelineId: number
@@ -43,7 +44,13 @@ export type DeploymentHistoryDiffDetailedProps = Pick<
     Required<
         Pick<
             DeploymentHistoryConfigDiffProps,
-            'setFullScreenView' | 'wfrId' | 'envName' | 'renderRunSource' | 'resourceId' | 'triggerHistory'
+            | 'setFullScreenView'
+            | 'wfrId'
+            | 'envName'
+            | 'renderRunSource'
+            | 'resourceId'
+            | 'triggerHistory'
+            | 'pathPattern'
         >
     > & {
         pipelineDeployments: History[]
@@ -53,14 +60,14 @@ export type DeploymentHistoryDiffDetailedProps = Pick<
         urlFilters: UseUrlFiltersReturnType<string, DeploymentHistoryConfigDiffQueryParams>
     }
 
-export interface DeploymentHistoryConfigDiffRouteParams {
+export type DeploymentHistoryConfigDiffRouteParams = {
     appId: string
     envId: string
     resourceType: EnvResourceType
     resourceName: string
 }
 
-export interface DeploymentHistoryParamsType {
+export type DeploymentHistoryParamsType = {
     appId: string
     pipelineId?: string
     historyComponent?: string

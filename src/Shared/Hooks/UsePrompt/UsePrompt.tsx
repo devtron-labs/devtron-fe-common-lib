@@ -15,14 +15,16 @@
  */
 
 import { useCallback, useEffect } from 'react'
+import { useBlocker } from 'react-router-dom'
+
+import { DEFAULT_ROUTE_PROMPT_MESSAGE } from '@Shared/index'
 
 import { UsePromptProps } from './types'
 
 /**
  * Hook that shows a prompt when shouldPrompt is true and the user tries to leave the page through refresh
- * Meant to be used alongside the Prompt component from react-router-dom
  */
-const usePrompt = ({ shouldPrompt }: UsePromptProps) => {
+const usePrompt = ({ shouldPrompt, message = DEFAULT_ROUTE_PROMPT_MESSAGE }: UsePromptProps) => {
     const handlePageLeave = useCallback(
         (e: BeforeUnloadEvent) => {
             if (shouldPrompt) {
@@ -39,6 +41,28 @@ const usePrompt = ({ shouldPrompt }: UsePromptProps) => {
             window.removeEventListener('beforeunload', handlePageLeave)
         }
     }, [handlePageLeave])
+
+    const blocker = useBlocker(shouldPrompt)
+
+    useEffect(() => {
+        if (!blocker || blocker.state !== 'blocked') {
+            return
+        }
+
+        if (!shouldPrompt) {
+            blocker.proceed()
+            return
+        }
+
+        // eslint-disable-next-line no-alert
+        const proceed = window.confirm(message)
+
+        if (proceed) {
+            blocker.proceed()
+        } else {
+            blocker.reset()
+        }
+    }, [blocker, message, shouldPrompt])
 }
 
 export default usePrompt

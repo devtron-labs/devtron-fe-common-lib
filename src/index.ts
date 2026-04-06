@@ -190,6 +190,7 @@ export interface customEnv {
     /** Org ID for grafana */
     GRAFANA_ORG_ID?: number
 }
+
 declare global {
     interface Window {
         __BASE_URL__: string
