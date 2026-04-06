@@ -45,12 +45,12 @@ import {
     WebhookEventNameType,
     AppType,
 } from '../Shared'
-import { ReactComponent as ArrowDown } from '@Icons/ic-chevron-down.svg'
-import { ReactComponent as ICWebhook } from '@Icons/ic-webhook.svg'
-import { ReactComponent as ICBranch } from '@Icons/ic-branch.svg'
-import { ReactComponent as ICRegex } from '@Icons/ic-regex.svg'
-import { ReactComponent as ICPullRequest } from '@Icons/ic-pull-request.svg'
-import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
+import ArrowDown from '@Icons/ic-chevron-down.svg?react'
+import ICWebhook from '@Icons/ic-webhook.svg?react'
+import ICBranch from '@Icons/ic-branch.svg?react'
+import ICRegex from '@Icons/ic-regex.svg?react'
+import ICPullRequest from '@Icons/ic-pull-request.svg?react'
+import ICTag from '@Icons/ic-tag.svg?react'
 import { SourceTypeMap } from '@Common/Common.service'
 import { getIsRequestAborted } from './API'
 
@@ -213,12 +213,10 @@ export function getCookie(sKey) {
     if (!sKey) {
         return null
     }
-    return (
-        document.cookie.replace(
-            new RegExp(`(?:(?:^|.*;)\\s*${sKey.replace(/[\-\.\+\*]/g, '\\$&')}\\s*\\=\\s*([^;]*).*$)|^.*$`),
-            '$1',
-        ) || null
-    )
+    return (document.cookie.replace(
+        new RegExp(`(?:(?:^|.*;)\\s*${sKey.replace(/[\-\.\+\*]/g, '\\$&')}\\s*\\=\\s*([^;]*).*$)|^.*$`),
+        '$1',
+    ) || null)
 }
 
 export function handleUTCTime(ts: string, isRelativeTime = false) {

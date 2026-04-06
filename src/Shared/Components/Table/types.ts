@@ -26,12 +26,15 @@ import {
 import { GenericEmptyStateType } from '@Common/index'
 import { PageSizeOption } from '@Common/Pagination/types'
 import { SortableTableHeaderCellProps, useResizableTableConfig } from '@Common/SortableTableHeaderCell'
+import { IconsProps } from '@Shared/Components/Icon'
 
 import { useBulkSelection, UseBulkSelectionProps } from '../BulkSelection'
 
 export interface UseFiltersReturnType extends UseStateFiltersReturnType<string> {}
 
 export enum SignalEnum {
+    COLLAPSE_ROW = 'collapse-row',
+    EXPAND_ROW = 'expand-row',
     ENTER_PRESSED = 'enter-pressed',
     DELETE_PRESSED = 'delete-pressed',
     ESCAPE_PRESSED = 'escape-pressed',
@@ -89,11 +92,21 @@ type BaseColumnType = {
     size: SizeType
 
     horizontallySticky?: boolean
-}
+} & Pick<SortableTableHeaderCellProps, 'infoTooltipText'>
 
-export type RowType<Data extends unknown> = {
+type CommonRowType<Data extends unknown> = {
     id: string
     data: Data
+}
+
+export type ExpandedRowPrefixType = 'expanded-row-'
+
+export type ExpandedRowType<Data extends unknown> = CommonRowType<Data> & {
+    id: `${ExpandedRowPrefixType}${string}`
+}
+
+export type RowType<Data extends unknown> = CommonRowType<Data> & {
+    expandableRows?: Array<ExpandedRowType<Data>>
 }
 
 export type RowsType<Data extends unknown> = RowType<Data>[]
@@ -119,6 +132,10 @@ export type CellComponentProps<
               ? UseFiltersReturnType
               : UseUrlFiltersReturnType<string>
         isRowActive: boolean
+        isExpandedRow: boolean
+        isRowInExpandState: boolean
+        // NOTE: no action if the row is not expandable
+        expandRowCallback: (e: MouseEvent<HTMLButtonElement>) => void
     }
 
 export type RowActionsOnHoverComponentProps<
@@ -226,7 +243,11 @@ export type ViewWrapperProps<
             : {})
 >
 
-type FilterConfig<FilterVariant extends FiltersTypeEnum, RowData extends unknown> = {
+type FilterConfig<
+    FilterVariant extends FiltersTypeEnum,
+    RowData extends unknown,
+    AdditionalProps extends Record<string, any>,
+> = {
     filtersVariant: FilterVariant
     /**
      * Props for useUrlFilters/useStateFilters hooks
@@ -240,12 +261,14 @@ type FilterConfig<FilterVariant extends FiltersTypeEnum, RowData extends unknown
      */
     filter: FilterVariant extends FiltersTypeEnum.NONE
         ? null
-        : (row: RowType<RowData>, filterData: UseFiltersReturnType) => boolean
+        : (row: RowType<RowData>, filterData: UseFiltersReturnType, additionalProps: AdditionalProps) => boolean
     clearFilters?: FilterVariant extends FiltersTypeEnum.URL
         ? () => void
         : FilterVariant extends FiltersTypeEnum.STATE
           ? never
           : never
+
+    areFiltersApplied?: FilterVariant extends FiltersTypeEnum.NONE ? never : boolean
 }
 
 export type InternalTableProps<
@@ -272,7 +295,7 @@ export type InternalTableProps<
 
     emptyStateConfig: {
         noRowsConfig: Omit<GenericEmptyStateType, 'children'>
-        noRowsForFilterConfig?: Pick<GenericFilterEmptyStateProps, 'title' | 'subTitle'> & {
+        noRowsForFilterConfig?: Pick<GenericFilterEmptyStateProps, 'title' | 'subTitle' | 'handleClearFilters'> & {
             clearFilters?: () => void
         }
     }
@@ -311,6 +334,14 @@ export type InternalTableProps<
     handleToggleBulkSelectionOnRow: (row: RowType<RowData>) => void
 
     ViewWrapper?: FunctionComponent<ViewWrapperProps<RowData, FilterVariant, AdditionalProps>>
+
+    /**
+     * An icon as the first element of the row, that hides actions like expand or bulk select icons
+     * until user hovers over the row or the row has focus from keyboard navigation
+     */
+    rowStartIconConfig?: Omit<IconsProps, 'dataTestId'>
+
+    onRowClick?: (row: RowType<RowData>, isExpandedRow: boolean) => void
 } & (
         | {
               /**
@@ -341,7 +372,7 @@ export type InternalTableProps<
               pageSizeOptions?: never
           }
     ) &
-    FilterConfig<FilterVariant, RowData>
+    FilterConfig<FilterVariant, RowData, AdditionalProps>
 
 export type UseResizableTableConfigWrapperProps<
     RowData extends unknown,
@@ -394,6 +425,9 @@ export type TableProps<
     | 'ViewWrapper'
     | 'pageSizeOptions'
     | 'clearFilters'
+    | 'rowStartIconConfig'
+    | 'onRowClick'
+    | 'areFiltersApplied'
 >
 
 export type BulkActionStateType = string | null
@@ -448,6 +482,8 @@ export interface TableContentProps<
             | 'rowActionOnHoverConfig'
             | 'pageSizeOptions'
             | 'getRows'
+            | 'rowStartIconConfig'
+            | 'onRowClick'
         >,
         RowsResultType<RowData> {
     areFilteredRowsLoading: boolean

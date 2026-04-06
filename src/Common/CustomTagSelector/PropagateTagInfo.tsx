@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { ReactComponent as InjectTag } from '../../Assets/Icon/inject-tag.svg'
-import { ReactComponent as ICHelpOutline } from '../../Assets/Icon/ic-help-outline.svg'
+import InjectTag from '../../Assets/Icon/inject-tag.svg?react'
+import ICHelpOutline from '../../Assets/Icon/ic-help-outline.svg?react'
 import { TippyCustomized } from '../TippyCustomized'
 import { TippyTheme } from '../Types'
 

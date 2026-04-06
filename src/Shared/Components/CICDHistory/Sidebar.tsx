@@ -14,15 +14,15 @@
  * limitations under the License.
  */
 
-import React, { memo, useEffect, useRef } from 'react'
+import React, { type JSX, memo, useEffect, useRef } from 'react'
 import ReactGA from 'react-ga4'
 import { generatePath, NavLink, useLocation, useNavigate, useParams } from 'react-router-dom'
 import ReactSelect, { components } from 'react-select'
 import TippyHeadless from '@tippyjs/react/headless'
 import moment from 'moment'
 
-import { ReactComponent as ICArrowBackward } from '@Icons/ic-arrow-backward.svg'
-import { ReactComponent as ICDocker } from '@Icons/ic-docker.svg'
+import ICArrowBackward from '@Icons/ic-arrow-backward.svg?react'
+import ICDocker from '@Icons/ic-docker.svg?react'
 import { DeploymentStageType } from '@Shared/constants'
 
 import { ConditionalWrap, DATE_TIME_FORMATS, DropdownIndicator, Tooltip } from '../../../Common'

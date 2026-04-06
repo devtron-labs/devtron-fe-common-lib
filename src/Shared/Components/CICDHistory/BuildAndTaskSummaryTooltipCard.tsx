@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { memo } from 'react'
+import { type JSX, memo } from 'react'
 
-import { ReactComponent as ICCalendar } from '@Icons/ic-calendar.svg'
-import { ReactComponent as ICPerson } from '@Icons/ic-person.svg'
+import ICCalendar from '@Icons/ic-calendar.svg?react'
+import ICPerson from '@Icons/ic-person.svg?react'
 import { Tooltip } from '@Common/Tooltip'
 
 import { DEFAULT_CLUSTER_ID } from './constants'

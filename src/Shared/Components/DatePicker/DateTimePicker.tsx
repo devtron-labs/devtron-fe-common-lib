@@ -19,8 +19,8 @@ import { DateRange, DayPicker, OnSelectHandler } from 'react-day-picker'
 import { SelectInstance } from 'react-select'
 import dayjs from 'dayjs'
 
-import { ReactComponent as ClockIcon } from '@Icons/ic-clock.svg'
-import { ReactComponent as ICWarning } from '@Icons/ic-warning.svg'
+import ClockIcon from '@Icons/ic-clock.svg?react'
+import ICWarning from '@Icons/ic-warning.svg?react'
 import { DATE_TIME_FORMATS } from '@Common/Constants'
 import { ComponentSizeType } from '@Shared/constants'
 import { getUniqueId } from '@Shared/Helpers'
@@ -126,7 +126,11 @@ const DateTimePicker = ({
 
     const handleSingleDateSelect: OnSelectHandler<Date> = (date) => {
         if (!isDateUpdateRange(isRangePicker, onChange)) {
-            const updatedDate = date ? updateDate(dateObject, date) : null
+            if (!date) {
+                return
+            }
+
+            const updatedDate = updateDate(dateObject, date)
             onChange(updatedDate)
         }
     }
@@ -173,8 +177,7 @@ const DateTimePicker = ({
 
                     <DayPicker
                         mode="range"
-                        // TODO: (Abhishek) Check why navLayout prop is causing issues with date selection
-                        // navLayout="around"
+                        navLayout="around"
                         selected={{
                             from: dateRange.from,
                             to: dateRange.to,
@@ -190,8 +193,7 @@ const DateTimePicker = ({
         return (
             <DayPicker
                 mode="single"
-                // TODO: (Abhishek) Check why navLayout prop is causing issues with date selection
-                // navLayout="around"
+                navLayout="around"
                 selected={dateObject}
                 onSelect={handleSingleDateSelect}
                 disabled={getDisabledState()}

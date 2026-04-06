@@ -16,9 +16,9 @@
 
 import { ReactElement, ReactNode } from 'react'
 
-import { ReactComponent as ICInfo } from '@Icons/ic-medium-info.svg'
-import { ReactComponent as ICWarning } from '@Icons/ic-warning-y5.svg'
-import { ReactComponent as ICDelete } from '@Images/delete-medium.svg'
+import ICInfo from '@Icons/ic-medium-info.svg?react'
+import ICWarning from '@Icons/ic-warning-y5.svg?react'
+import ICDelete from '@Images/delete-medium.svg?react'
 
 import { ButtonStyleType } from '../Button'
 import { ConfirmationModalVariantType } from './types'

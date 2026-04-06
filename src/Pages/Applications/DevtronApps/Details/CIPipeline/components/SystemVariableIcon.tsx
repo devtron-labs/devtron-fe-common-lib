@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactComponent as Var } from '@Icons/ic-var-initial.svg'
+import Var from '@Icons/ic-var-initial.svg?react'
 import { Tooltip } from '@Common/Tooltip'
 
 const TIPPY_VAR_MSG = 'This is a variable. It will be replaced with the value during execution.'

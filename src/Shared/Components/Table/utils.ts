@@ -42,11 +42,12 @@ export const searchAndSortRows = <
     rows: TableProps<RowData, FilterVariant, AdditionalProps>['rows'],
     filter: TableProps<RowData, FilterVariant, AdditionalProps>['filter'],
     filterData: UseFiltersReturnType,
+    additionalProps: AdditionalProps,
     comparator?: Column<RowData, FilterVariant, AdditionalProps>['comparator'],
 ): Awaited<ReturnType<TableProps<RowData>['getRows']>> => {
     const { sortBy, sortOrder } = filterData ?? {}
 
-    const filteredRows = filter ? rows.filter((row) => filter(row, filterData)) : rows
+    const filteredRows = filter ? rows.filter((row) => filter(row, filterData, additionalProps)) : rows
 
     return {
         rows:

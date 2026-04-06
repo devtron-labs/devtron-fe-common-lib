@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react'
+import { type JSX, SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import { AnimatePresence, motion } from 'framer-motion'
 

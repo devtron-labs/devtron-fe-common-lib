@@ -16,7 +16,7 @@
 
 import Tippy from '@tippyjs/react'
 
-import { ReactComponent as ICBot } from '@Icons/ic-bot.svg'
+import ICBot from '@Icons/ic-bot.svg?react'
 import { Tooltip } from '@Common/Tooltip'
 import { Icon } from '@Shared/Components/Icon'
 import { RegistryIcon } from '@Shared/Components/RegistryIcon'

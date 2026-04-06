@@ -17,8 +17,8 @@
 import { RefCallback } from 'react'
 import DOMPurify from 'dompurify'
 
-import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
-import { ReactComponent as ICStack } from '@Icons/ic-stack.svg'
+import ICCaretDown from '@Icons/ic-caret-down.svg?react'
+import ICStack from '@Icons/ic-stack.svg?react'
 import { getTimeDifference } from '@Shared/Helpers'
 
 import { TargetPlatformListTooltip } from '../TargetPlatforms'

@@ -16,8 +16,8 @@
 
 import React, { useState } from 'react'
 
-import { ReactComponent as ICBack } from '@Icons/ic-caret-left-small.svg'
-import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
+import ICBack from '@Icons/ic-caret-left-small.svg?react'
+import ICClose from '@Icons/ic-close.svg?react'
 import {
     ClipboardButton,
     ErrorScreenManager,

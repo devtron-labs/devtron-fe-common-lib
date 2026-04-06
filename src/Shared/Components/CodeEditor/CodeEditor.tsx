@@ -101,7 +101,7 @@ const CodeEditor = <DiffView extends boolean = false>({
     const { appTheme } = useTheme()
 
     // REFS
-    const codeMirrorParentDivRef = useRef<HTMLDivElement>()
+    const codeMirrorParentDivRef = useRef<HTMLDivElement>(null)
     const codeEditorValues = useRef({ code: '', lhsCode: '' })
 
     // MEMOISED VALUES

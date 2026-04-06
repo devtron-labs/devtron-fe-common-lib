@@ -16,6 +16,7 @@
 
 import { ROUTES } from '@Common/Constants'
 import { get, getUrlWithSearchParams, patch, showError } from '@Common/index'
+import { ResourceKindType } from '@Shared/index'
 import { THEME_PREFERENCE_MAP } from '@Shared/Providers/ThemeProvider/types'
 
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from './constants'
@@ -177,12 +178,39 @@ export const updateUserPreferences = async ({
     }
 }
 
+const migrateUserPreferences = async () => {
+    try {
+        const userPreferences: UserPreferencesType = await JSON.parse(
+            localStorage.getItem(USER_PREFERENCES_ATTRIBUTE_KEY),
+        )
+        if (userPreferences && userPreferences.version !== 'v1') {
+            const migratedPreferences: UserPreferencesType = {
+                ...userPreferences,
+                resources: {
+                    ...userPreferences.resources,
+                    [ResourceKindType.devtronApplication]: {
+                        [UserPreferenceResourceActions.RECENTLY_VISITED]: (
+                            userPreferences.resources?.[ResourceKindType.devtronApplication]?.[
+                                UserPreferenceResourceActions.RECENTLY_VISITED
+                            ] || []
+                        ).map(({ id, name }) => ({ id: +id, name })),
+                    },
+                },
+                version: 'v1',
+            }
+            localStorage.setItem(USER_PREFERENCES_ATTRIBUTE_KEY, JSON.stringify(migratedPreferences))
+        }
+    } catch {
+        // do nothing
+    }
+}
+
 /**
  * Optimized function to get updated user preferences with resource filtering
  * Can work with provided userPreferences or fetch from server/localStorage
  * Centralizes all resource updating logic
  */
-export const getUpdatedUserPreferences = async ({
+const getUpdatedUserPreferences = async ({
     id,
     name,
     resourceKind,
@@ -190,6 +218,8 @@ export const getUpdatedUserPreferences = async ({
 }: UserPreferenceFilteredListTypes & {
     userPreferencesResponse?: UserPreferencesType
 }): Promise<UserPreferencesType> => {
+    await migrateUserPreferences()
+
     // Get base user preferences from multiple sources (priority: provided > localStorage > server)
     let baseUserPreferences: UserPreferencesType
 
@@ -197,7 +227,7 @@ export const getUpdatedUserPreferences = async ({
         baseUserPreferences = userPreferencesResponse
     } else {
         try {
-            const localStorageData = localStorage.getItem('userPreferences')
+            const localStorageData = localStorage.getItem(USER_PREFERENCES_ATTRIBUTE_KEY)
             if (localStorageData) {
                 baseUserPreferences = JSON.parse(localStorageData)
             } else {
@@ -257,7 +287,7 @@ export const updateAndPersistUserPreferences = async ({
 
     // Update localStorage if requested
     if (updateLocalStorage) {
-        localStorage.setItem('userPreferences', JSON.stringify(updatedPreferences))
+        localStorage.setItem(USER_PREFERENCES_ATTRIBUTE_KEY, JSON.stringify(updatedPreferences))
     }
 
     // Update server with the new resource list if resourceKind is provided
