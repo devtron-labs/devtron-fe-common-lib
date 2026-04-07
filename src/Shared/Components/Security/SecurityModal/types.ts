@@ -298,6 +298,7 @@ export interface ScanRecommendationsDTO {
     id: number
     pipelineId: number
     status: DockerScanStatusTypes
+    scanEnabled: boolean
 }
 
 export interface SidebarPropsType {
