@@ -16,10 +16,10 @@
 
 import { useCallback, useEffect } from 'react'
 
-import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
-import { ReactComponent as ICRestart } from '@Icons/ic-arrows-clockwise.svg'
-import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
-import { ReactComponent as ICInfo } from '@Icons/ic-info-outline.svg'
+import ICAborted from '@Icons/ic-aborted.svg?react'
+import ICRestart from '@Icons/ic-arrows-clockwise.svg?react'
+import ICClose from '@Icons/ic-close.svg?react'
+import ICInfo from '@Icons/ic-info-outline.svg?react'
 import { SortingOrder } from '@Common/Constants'
 import { stopPropagation } from '@Common/Helper'
 import { useStateFilters } from '@Common/Hooks'

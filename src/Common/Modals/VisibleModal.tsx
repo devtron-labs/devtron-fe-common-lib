@@ -14,21 +14,20 @@
  * limitations under the License.
  */
 
-import React, { SyntheticEvent } from 'react'
+import { Component, PropsWithChildren, SyntheticEvent } from 'react'
 
 import { DTFocusTrapType } from '@Shared/Components/DTFocusTrap'
 
 import { Backdrop, POP_UP_MENU_MODAL_ID } from '../../Shared'
 
-export class VisibleModal extends React.Component<{
+export class VisibleModal extends Component<PropsWithChildren<{
     className?: string
     parentClassName?: string
     noBackground?: boolean
     close?: (e?) => void
     onEscape?: (e?) => void
     initialFocus?: DTFocusTrapType['initialFocus']
-    avoidFocusTrap?: boolean
-}> {
+}>> {
     constructor(props) {
         super(props)
         this.escFunction = this.escFunction.bind(this)
@@ -57,7 +56,6 @@ export class VisibleModal extends React.Component<{
                 onEscape={this.escFunction}
                 onClick={this.handleBodyClick}
                 initialFocus={this.props.initialFocus ?? undefined}
-                avoidFocusTrap={this.props.avoidFocusTrap}
             >
                 <div className={this.props.parentClassName}>
                     <div className={`visible-modal__body ${this.props.className || ''}`}>{this.props.children}</div>

@@ -16,10 +16,10 @@
 
 import YAML from 'yaml'
 
-import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
-import { ReactComponent as ICCheckCircleDots } from '@Icons/ic-check-circle-dots.svg'
-import { ReactComponent as ICEditFile } from '@Icons/ic-edit-file.svg'
-import { ReactComponent as ICFileCode } from '@Icons/ic-file-code.svg'
+import ICCheck from '@Icons/ic-check.svg?react'
+import ICCheckCircleDots from '@Icons/ic-check-circle-dots.svg?react'
+import ICEditFile from '@Icons/ic-edit-file.svg?react'
+import ICFileCode from '@Icons/ic-file-code.svg?react'
 import { deepEqual, YAMLStringify } from '@Common/Helper'
 import {
     AppEnvDeploymentConfigListParams,

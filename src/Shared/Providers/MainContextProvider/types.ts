@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Dispatch, FunctionComponent, MutableRefObject, ReactNode, SetStateAction } from 'react'
+import { Dispatch, FunctionComponent, type JSX, MutableRefObject, ReactNode, SetStateAction } from 'react'
 
 import { SERVER_MODE } from '../../../Common'
 import {

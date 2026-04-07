@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { type Ref } from 'react'
+
 import { CHECKBOX_VALUE } from '../../../Common'
 
 export enum BulkSelectionEvents {
@@ -58,6 +60,7 @@ export interface BulkSelectionProps {
      * Will act as checkbox instead of opening up popup if list is not paginated
      */
     selectAllIfNotPaginated?: boolean
+    ref?: Ref<HTMLLabelElement>
 }
 
 export enum SelectAllDialogStatus {

@@ -87,18 +87,13 @@ const GenericModal = ({
     onEscape = noop,
     closeOnBackdropClick = false,
     children,
-    avoidFocusTrap = false,
     borderVariant = 'secondary',
     alignCenter = false,
 }: PropsWithChildren<GenericModalProps>) => (
     <AnimatePresence>
         {open && (
             <GenericModalProvider value={{ name, onClose }}>
-                <Backdrop
-                    onEscape={onEscape}
-                    onClick={closeOnBackdropClick ? onClose : noop}
-                    avoidFocusTrap={avoidFocusTrap}
-                >
+                <Backdrop onEscape={onEscape} onClick={closeOnBackdropClick ? onClose : noop}>
                     <motion.div
                         className={`shadow__modal flexbox-col bg__primary ${BORDER_VARIANT_TO_CLASS_NAME_MAP[borderVariant]} br-${borderRadius} dc__m-auto ${alignCenter ? '' : 'mt-40'} dc__overflow-hidden ${MODAL_WIDTH_TO_CLASS_NAME_MAP[width]}`}
                         exit={{ y: 100, opacity: 0, scale: 0.75, transition: { duration: 0.35 } }}

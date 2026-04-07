@@ -17,7 +17,7 @@
 import React, { memo, useCallback, useState } from 'react'
 import Tippy from '@tippyjs/react'
 
-import { ReactComponent as ICDrag } from '@Icons/ic-drag.svg'
+import ICDrag from '@Icons/ic-drag.svg?react'
 import { DraggablePositionVariant, DraggableWrapper } from '@Common/DraggableWrapper'
 import { useAsync } from '@Common/Helper'
 import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP } from '@Shared/constants'

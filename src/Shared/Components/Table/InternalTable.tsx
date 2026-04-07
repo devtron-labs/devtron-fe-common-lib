@@ -156,12 +156,12 @@ const InternalTable = <
         data: getRowsResult,
         error: getRowsError,
         refetch: reloadGetRows,
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
     } = useQuery<unknown, RowsResultType<RowData>, unknown[], false>({
         queryFn: async ({ signal }) => {
             const { rows: newRows, totalRows } = await getRows(filterData, signal)
             return { filteredRows: newRows, totalRows }
         },
-        // eslint-disable-next-line @tanstack/query/exhaustive-deps
         queryKey: [
             searchKey,
             sortBy,

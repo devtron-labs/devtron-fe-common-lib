@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactNode } from 'react'
+import { type JSX, ReactNode } from 'react'
 
 import { ButtonComponentType, ButtonProps } from '../Button'
 import { IconsProps } from '../Icon'

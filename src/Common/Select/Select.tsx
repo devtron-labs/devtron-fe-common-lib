@@ -19,7 +19,7 @@
 import React, { useEffect } from 'react'
 import { SelectComposition, SelectProps, OptionGroupProps, SelectAsync } from './types'
 
-import arrowTriangle from '../../Assets/Icon/ic-chevron-down.svg' // '../../../assets/icons/ic-chevron-down.svg'
+import arrowTriangle from '../../Assets/Icon/ic-chevron-down.svg?react' // '../../../assets/icons/ic-chevron-down.svg'
 
 import './select.scss'
 import PopupMenu from '../PopupMenu'

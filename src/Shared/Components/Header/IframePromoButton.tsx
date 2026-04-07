@@ -17,7 +17,7 @@
 import { useCallback, useState } from 'react'
 import ReactGA from 'react-ga4'
 
-import { ReactComponent as Close } from '@Icons/ic-close.svg'
+import Close from '@Icons/ic-close.svg?react'
 import { GenericEmptyState, stopPropagation, VisibleModal } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
 

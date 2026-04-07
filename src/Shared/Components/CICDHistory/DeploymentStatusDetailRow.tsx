@@ -22,7 +22,7 @@ import moment from 'moment'
 import { ShowMoreText } from '@Shared/Components/ShowMoreText'
 import { AppType, TIMELINE_STATUS } from '@Shared/types'
 
-import { ReactComponent as DropDownIcon } from '../../../Assets/Icon/ic-chevron-down.svg'
+import DropDownIcon from '../../../Assets/Icon/ic-chevron-down.svg?react'
 import { DATE_TIME_FORMATS, showError } from '../../../Common'
 import { ComponentSizeType, DEPLOYMENT_STATUS } from '../../constants'
 import { AppStatusContent } from '../AppStatusModal'

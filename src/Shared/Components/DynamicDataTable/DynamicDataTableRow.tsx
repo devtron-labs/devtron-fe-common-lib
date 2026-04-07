@@ -14,7 +14,17 @@
  * limitations under the License.
  */
 
-import { createElement, createRef, Fragment, ReactElement, RefObject, useEffect, useMemo, useRef } from 'react'
+import {
+    createElement,
+    createRef,
+    Fragment,
+    type JSX,
+    ReactElement,
+    RefObject,
+    useEffect,
+    useMemo,
+    useRef,
+} from 'react'
 // eslint-disable-next-line import/no-extraneous-dependencies
 import { followCursor } from 'tippy.js'
 

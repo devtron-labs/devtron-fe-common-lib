@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICInfoFilledOverride } from '@Icons/ic-info-filled-override.svg'
+import ICInfoFilledOverride from '@Icons/ic-info-filled-override.svg?react'
 import { Checkbox } from '@Common/Checkbox'
 import { Progressing } from '@Common/Progressing'
 import { Tooltip } from '@Common/Tooltip'

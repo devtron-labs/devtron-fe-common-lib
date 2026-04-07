@@ -63,15 +63,17 @@ export type AppStatusModalProps = {
       }
 )
 
-export interface AppStatusBodyProps
-    extends Required<Pick<AppStatusModalProps, 'appDetails' | 'type' | 'debugWithAIButton' | 'handleClose'>> {
+export interface AppStatusBodyProps extends Required<
+    Pick<AppStatusModalProps, 'appDetails' | 'type' | 'debugWithAIButton' | 'handleClose'>
+> {
     handleShowConfigDriftModal: () => void
     selectedTab: AppStatusModalTabType
     deploymentStatusDetailsBreakdownData: DeploymentStatusDetailsBreakdownDataType
 }
 
 export interface AppStatusContentProps
-    extends Required<Pick<AppStatusBodyProps, 'appDetails'>>,
+    extends
+        Required<Pick<AppStatusBodyProps, 'appDetails'>>,
         Partial<Pick<AppStatusBodyProps, 'handleShowConfigDriftModal'>> {
     /**
      * @default false
@@ -83,8 +85,10 @@ export interface AppStatusContentProps
     isCardLayout?: boolean
 }
 
-export interface GetFilteredFlattenedNodesFromAppDetailsParamsType
-    extends Pick<AppStatusContentProps, 'appDetails' | 'filterHealthyNodes'> {}
+export interface GetFilteredFlattenedNodesFromAppDetailsParamsType extends Pick<
+    AppStatusContentProps,
+    'appDetails' | 'filterHealthyNodes'
+> {}
 
 /**
  * Params for getAppDetails which is called in case of release [i.e, devtron apps]

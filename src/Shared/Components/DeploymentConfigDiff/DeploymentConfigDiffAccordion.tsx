@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
+import ICCaretDown from '@Icons/ic-caret-down.svg?react'
 
 import { Collapse } from '../Collapse'
 import { diffStateTextColorMap, diffStateTextMap } from './DeploymentConfigDiff.constants'

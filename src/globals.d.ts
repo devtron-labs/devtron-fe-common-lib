@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import { ComponentProps } from 'react'
-import Pride from 'react-canvas-confetti/dist/presets/pride'
+/**
+ * @types/react@^19 removed the global JSX namespace.
+ * Third-party libraries (e.g., react-select@5) still reference JSX.LibraryManagedAttributes
+ * in their type definitions to handle defaultProps on class components.
+ * Without this shim, those types resolve to `any`, breaking SelectPicker type safety.
+ */
+import type React from 'react'
 
-const Confetti = () => {
-    const decorateOptions: ComponentProps<typeof Pride>['decorateOptions'] = (options) => ({
-        ...options,
-        colors: ['#a864fd', '#29cdff', '#78ff44', '#ff718d', '#fdff6a'],
-    })
-
-    return <Pride autorun={{ speed: 60, duration: 500 }} decorateOptions={decorateOptions} />
+declare global {
+    namespace JSX {
+        type LibraryManagedAttributes<C, P> = React.JSX.LibraryManagedAttributes<C, P>
+    }
 }
-
-export default Confetti

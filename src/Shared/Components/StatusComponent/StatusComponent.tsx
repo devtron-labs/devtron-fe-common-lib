@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import type { JSX } from 'react'
+
 import { ConditionalWrap } from '@Common/Helper'
 import { Tooltip } from '@Common/Tooltip'
 

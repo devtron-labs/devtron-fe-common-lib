@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
-import React, { SyntheticEvent } from 'react'
+import { Component, PropsWithChildren, SyntheticEvent } from 'react'
 import { Backdrop } from '@Shared/Components'
 import { DTFocusTrapType } from '@Shared/Components/DTFocusTrap'
 import { noop } from '@Common/Helper'
 
-export class VisibleModal2 extends React.Component<{
+export class VisibleModal2 extends Component<PropsWithChildren<{
     className?: string
     close?: (e?) => void
     initialFocus?: DTFocusTrapType['initialFocus']
-}> {
+}>> {
     constructor(props) {
         super(props)
     }

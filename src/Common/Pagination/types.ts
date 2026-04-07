@@ -54,8 +54,10 @@ export interface CreatePageArrType extends Pick<PaginationProps, 'size' | 'pageS
     selectedPageNo: number
 }
 
-export interface PageSizeSelectorProps
-    extends Pick<PaginationProps, 'pageSizeOptions' | 'pageSize' | 'changePageSize'> {}
+export interface PageSizeSelectorProps extends Pick<
+    PaginationProps,
+    'pageSizeOptions' | 'pageSize' | 'changePageSize'
+> {}
 
 export interface PageSizeItemsProps extends Pick<PageSizeSelectorProps, 'changePageSize'> {
     optionValue: PageSizeOption['value']
