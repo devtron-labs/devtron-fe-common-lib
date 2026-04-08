@@ -17,7 +17,7 @@
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from '@Shared/Hooks/useUserPreferences/constants'
 import { AppThemeType, ThemeConfigType, ThemePreferenceType } from '@Shared/Providers/ThemeProvider/types'
 import { ResourceKindType } from '@Shared/types'
-import { NavigationItemID, NavigationSubMenuItemID } from '@PagesDevtron2.0/Navigation'
+import { NavigationItemID, NavigationRootItemID, NavigationSubMenuItemID } from '@PagesDevtron2.0/Navigation'
 
 export interface GetUserPreferencesQueryParamsType {
     key: typeof USER_PREFERENCES_ATTRIBUTE_KEY
@@ -78,7 +78,9 @@ export interface GetUserPreferencesParsedDTO {
      */
     resources?: UserPreferenceResourceType
     commandBar: {
-        recentNavigationActions: { id: NavigationItemID | NavigationSubMenuItemID | CommandBarAdditionalItemsId }[]
+        recentNavigationActions: {
+            id: NavigationItemID | NavigationRootItemID | NavigationSubMenuItemID | CommandBarAdditionalItemsId
+        }[]
     }
 }
 export interface UserPreferencesPayloadValueType extends GetUserPreferencesParsedDTO {}
