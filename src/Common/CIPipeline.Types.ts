@@ -275,6 +275,7 @@ export interface FormType {
     webhookConditionList: { selectorId: number; value: string }[]
     triggerType: string
     scanEnabled?: boolean
+    dockerfileScanEnabled?: boolean
     beforeDockerBuildScripts?: {
         id: number
         name: string

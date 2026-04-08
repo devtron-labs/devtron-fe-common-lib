@@ -39,6 +39,7 @@ import ICBgBuild from '@IconsV2/ic-bg-build.svg?react'
 import ICBgCluster from '@IconsV2/ic-bg-cluster.svg?react'
 import ICBgCpu from '@IconsV2/ic-bg-cpu.svg?react'
 import ICBgDeploy from '@IconsV2/ic-bg-deploy.svg?react'
+import ICBgDockerScanner from '@IconsV2/ic-bg-docker-scanner.svg?react'
 import ICBgEnvironment from '@IconsV2/ic-bg-environment.svg?react'
 import ICBgMemory from '@IconsV2/ic-bg-memory.svg?react'
 import ICBgPauseSchedule from '@IconsV2/ic-bg-pause-schedule.svg?react'
@@ -91,6 +92,7 @@ import ICCloudVms from '@IconsV2/ic-cloud-vms.svg?react'
 import ICCluster from '@IconsV2/ic-cluster.svg?react'
 import ICClusterIsolated from '@IconsV2/ic-cluster-isolated.svg?react'
 import ICCode from '@IconsV2/ic-code.svg?react'
+import ICCodeWrapped from '@IconsV2/ic-code-wrapped.svg?react'
 import ICCoins from '@IconsV2/ic-coins.svg?react'
 import ICCoinsColorAnimated from '@IconsV2/ic-coins-color-animated.svg?react'
 import ICComment from '@IconsV2/ic-comment.svg?react'
@@ -175,6 +177,7 @@ import ICGoogleGke from '@IconsV2/ic-google-gke.svg?react'
 import ICGridView from '@IconsV2/ic-grid-view.svg?react'
 import ICGroupFilter from '@IconsV2/ic-group-filter.svg?react'
 import ICGroupFilterApplied from '@IconsV2/ic-group-filter-applied.svg?react'
+import ICHadolint from '@IconsV2/ic-hadolint.svg?react'
 import ICHandPointing from '@IconsV2/ic-hand-pointing.svg?react'
 import ICHeartGreen from '@IconsV2/ic-heart-green.svg?react'
 import ICHeartRed from '@IconsV2/ic-heart-red.svg?react'
@@ -380,6 +383,7 @@ export const iconMap = {
     'ic-bg-cluster': ICBgCluster,
     'ic-bg-cpu': ICBgCpu,
     'ic-bg-deploy': ICBgDeploy,
+    'ic-bg-docker-scanner': ICBgDockerScanner,
     'ic-bg-environment': ICBgEnvironment,
     'ic-bg-memory': ICBgMemory,
     'ic-bg-pause-schedule': ICBgPauseSchedule,
@@ -431,6 +435,7 @@ export const iconMap = {
     'ic-cloud-vms': ICCloudVms,
     'ic-cluster-isolated': ICClusterIsolated,
     'ic-cluster': ICCluster,
+    'ic-code-wrapped': ICCodeWrapped,
     'ic-code': ICCode,
     'ic-coins-color-animated': ICCoinsColorAnimated,
     'ic-coins': ICCoins,
@@ -516,6 +521,7 @@ export const iconMap = {
     'ic-grid-view': ICGridView,
     'ic-group-filter-applied': ICGroupFilterApplied,
     'ic-group-filter': ICGroupFilter,
+    'ic-hadolint': ICHadolint,
     'ic-hand-pointing': ICHandPointing,
     'ic-heart-green': ICHeartGreen,
     'ic-heart-red-animated': ICHeartRedAnimated,

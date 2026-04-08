@@ -252,6 +252,55 @@ export type ScanResultDTO = {
     [CATEGORIES.KUBERNETES_MANIFEST]: KubernetesManifest
 }
 
+export type CodeSnippetLine = {
+    line: number
+    content: string
+    isIssue: boolean
+}
+
+export type CodeSnippet = {
+    before: CodeSnippetLine[]
+    current: CodeSnippetLine
+    after: CodeSnippetLine[]
+}
+
+export enum DockerScanStatusTypes {
+    PENDING = 0,
+    RUNNING = 1,
+    COMPLETED = 2,
+    FAILED = 3,
+    SKIPPED = 4,
+}
+
+export interface ScanRecommendationsDTO {
+    severity_summary: {
+        error: number
+        info: number
+        style: number
+        warning: number
+    }
+    results: {
+        code: string
+        file: string
+        line: number
+        level: string
+        title: string
+        message: string
+        severity: string
+        codeSnippet: CodeSnippet
+        documentationUrl: string
+    }[]
+    appId: number
+    buildId: number
+    createdOn: number
+    dockerfileScanEnabled: boolean
+    dockerfileHash: string
+    id: number
+    pipelineId: number
+    status: DockerScanStatusTypes
+    scanEnabled: boolean
+}
+
 export interface SidebarPropsType {
     modalState: SecurityModalStateType
     setModalState: React.Dispatch<React.SetStateAction<SecurityModalStateType>>
