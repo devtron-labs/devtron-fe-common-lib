@@ -70,10 +70,10 @@ const BulkOperations = ({
         try {
             setApiCallInProgress(true)
 
-            let timeout = -1
+            let timeout: ReturnType<typeof setTimeout> | number = -1
 
             const triggerUpdate = () => {
-                if (timeout >= 0) {
+                if ((timeout as number) >= 0) {
                     return
                 }
 
