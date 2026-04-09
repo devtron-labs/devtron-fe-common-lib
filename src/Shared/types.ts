@@ -347,6 +347,8 @@ export interface iNode extends Node {
     type: NodeType
     status: string
     pNode?: iNode
+    /** Marks a node as an init container, used for display purposes in the resource tree. */
+    isInitContainer?: boolean
 }
 
 export interface HelmReleaseStatus {

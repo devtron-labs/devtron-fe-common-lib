@@ -36,7 +36,7 @@ const UseRegisterShortcutProvider = ({
     const disableShortcutsRef = useRef<boolean>(false)
     const shortcutsRef = useRef<Record<string, ShortcutType>>({})
     const keysDownRef = useRef<Set<Uppercase<string>>>(new Set())
-    const keyDownTimeoutRef = useRef<ReturnType<typeof setTimeout>>(-1)
+    const keyDownTimeoutRef = useRef<ReturnType<typeof setTimeout> | number>(-1)
     const ignoredTags = ignoreTags ?? IGNORE_TAGS_FALLBACK
 
     const registerShortcut: UseRegisterShortcutContextType['registerShortcut'] = useCallback(
@@ -113,7 +113,7 @@ const UseRegisterShortcutProvider = ({
 
         keysDownRef.current.clear()
 
-        if (keyDownTimeoutRef.current > -1) {
+        if ((keyDownTimeoutRef.current as number) > -1) {
             clearTimeout(keyDownTimeoutRef.current)
             keyDownTimeoutRef.current = -1
         }
@@ -178,7 +178,7 @@ const UseRegisterShortcutProvider = ({
             window.removeEventListener('keyup', handleKeyupEvent)
             window.removeEventListener('blur', handleBlur)
 
-            if (keyDownTimeoutRef.current > -1) {
+            if ((keyDownTimeoutRef.current as number) > -1) {
                 clearTimeout(keyDownTimeoutRef.current)
             }
         }

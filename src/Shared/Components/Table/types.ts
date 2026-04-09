@@ -450,7 +450,7 @@ export type ConfigurableColumnsConfigType<
 > = Record<string, ConfigurableColumnsType<RowData, FilterVariant, AdditionalProps>['visibleColumns']>
 
 export interface GetFilteringPromiseProps<RowData extends unknown> {
-    searchSortTimeoutRef: React.MutableRefObject<number>
+    searchSortTimeoutRef: React.MutableRefObject<ReturnType<typeof setTimeout> | number>
     callback: () => Promise<RowsType<RowData>> | RowsType<RowData>
 }
 

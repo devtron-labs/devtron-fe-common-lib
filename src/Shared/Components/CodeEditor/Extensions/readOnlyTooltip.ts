@@ -74,7 +74,7 @@ const createTooltip = (view: EditorView): Tooltip => {
 // Plugin to show and remove tooltip on keypress
 const keypressTooltipPlugin = ViewPlugin.fromClass(
     class {
-        private timeoutId: number | null = null
+        private timeoutId: ReturnType<typeof setTimeout> | number | null = null
 
         constructor(public view: EditorView) {
             this.view.dom.addEventListener('keydown', this.handleKeyPress)
