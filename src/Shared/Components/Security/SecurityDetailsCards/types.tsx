@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { IconName } from '@Shared/Components/Icon'
+
 import { ScanResultDTO, SecurityModalPropsType, SeveritiesDTO } from '../SecurityModal/types'
 import { ScanCategories, ScanSubCategories } from '../types'
 
@@ -27,4 +29,10 @@ export interface SecurityCardProps {
 
 export interface SecurityDetailsCardsProps extends Pick<SecurityModalPropsType, 'Sidebar'> {
     scanResult: ScanResultDTO
+}
+
+export type ReportTabEmptyStateProps = {
+    title: string
+    subtitle: string
+    icon?: IconName
 }

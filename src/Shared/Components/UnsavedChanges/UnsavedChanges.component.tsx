@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
+import ICWarningY5 from '@Icons/ic-warning-y5.svg?react'
 
 const UnsavedChanges = () => (
     <div className="flexbox dc__align-item-center dc__gap-6">

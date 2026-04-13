@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICArrowCounterClockwise } from '@Icons/ic-arrow-counter-clockwise.svg'
+import ICArrowCounterClockwise from '@Icons/ic-arrow-counter-clockwise.svg?react'
 
 import { DEFAULT_INVALID_YAML_ERROR } from './constants'
 import { InvalidTippyProps, InvalidTippyTypeEnum } from './types'

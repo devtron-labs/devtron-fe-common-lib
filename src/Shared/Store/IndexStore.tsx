@@ -116,20 +116,33 @@ export function getiNodesByRootNodeWithChildNodes(
             })
         })
 
-        // Add containers to Pod type nodes
+        // Add init containers and containers to Pod type nodes
         children
             .filter((_child) => _child.kind.toLowerCase() == Nodes.Pod.toLowerCase())
             .map((_pn) => {
+                const podMeta = (podMetadata || _appDetailsSubject.getValue().resourceTree?.podMetadata)?.filter(
+                    (_pmd) => _pmd.uid === _pn.uid,
+                )[0]
+
+                const initNodes: iNode[] = (podMeta?.initContainers || []).map((_c: string) => {
+                    const initNode = {} as iNode
+                    initNode.kind = Nodes.Containers
+                    initNode.name = _c
+                    initNode.pNode = _pn
+                    initNode.isInitContainer = true
+                    return initNode
+                })
+
+                const containerNodes: iNode[] = (podMeta?.containers || []).map((_c: string) => {
+                    const childNode = {} as iNode
+                    childNode.kind = Nodes.Containers
+                    childNode.name = _c
+                    childNode.pNode = _pn
+                    return childNode
+                })
+
                 // eslint-disable-next-line no-param-reassign
-                _pn.childNodes = (podMetadata || _appDetailsSubject.getValue().resourceTree?.podMetadata)
-                    ?.filter((_pmd) => _pmd.uid === _pn.uid)[0]
-                    ?.containers?.map((_c) => {
-                        const childNode = {} as iNode
-                        childNode.kind = Nodes.Containers
-                        childNode.pNode = _pn
-                        childNode.name = _c
-                        return childNode
-                    })
+                _pn.childNodes = [...initNodes, ...containerNodes]
             })
         children = children.flatMap((_node) => _node.childNodes ?? [])
     }

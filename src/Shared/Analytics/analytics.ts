@@ -15,12 +15,11 @@
  */
 
 import ReactGA from 'react-ga4'
-import { UaEventOptions } from 'react-ga4/types/ga4'
 
 import { get } from '@Common/API'
 import { ROUTES } from '@Common/Constants'
 
-import { ServerAnalyticsEventType } from './types'
+import { HandleAnalyticsEventParams, ServerAnalyticsEventType } from './types'
 
 export const handleSendAnalyticsEventToServer = async (
     eventType: ServerAnalyticsEventType,
@@ -33,7 +32,7 @@ export const handleSendAnalyticsEventToServer = async (
     }
 }
 
-export const handleAnalyticsEvent = ({ category, action }: Pick<UaEventOptions, 'category' | 'action'>) => {
+export const handleAnalyticsEvent = ({ category, action }: HandleAnalyticsEventParams) => {
     if (window._env_.GA_ENABLED && ReactGA?.event)
         ReactGA.event({
             category,

@@ -17,7 +17,7 @@
 import React from 'react'
 import dayjs from 'dayjs'
 
-import { ReactComponent as ICClock } from '@Icons/ic-clock.svg'
+import ICClock from '@Icons/ic-clock.svg?react'
 import { SegmentedBarChart } from '@Common/SegmentedBarChart'
 import { ScannedByToolModal } from '@Shared/Components/ScannedByToolModal'
 

@@ -16,7 +16,7 @@
 
 import React from 'react'
 
-import { ReactComponent as ICScanFallback } from '@Icons/ic-scan-fallback.svg'
+import ICScanFallback from '@Icons/ic-scan-fallback.svg?react'
 
 import { ImageWithFallback } from '../ImageWithFallback'
 import { ScannedByToolModalProps } from './types'

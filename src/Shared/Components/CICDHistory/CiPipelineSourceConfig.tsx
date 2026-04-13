@@ -16,7 +16,7 @@
 
 import { type JSX, ReactNode, useEffect, useState } from 'react'
 
-import { ReactComponent as Info } from '@Icons/ic-info-outlined.svg'
+import Info from '@Icons/ic-info-outlined.svg?react'
 
 import { getBranchIcon, getWebhookEventsForEventId, SourceTypeMap, Tooltip } from '../../../Common'
 import { Icon } from '../Icon'

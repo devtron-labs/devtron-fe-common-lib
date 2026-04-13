@@ -16,7 +16,7 @@
 
 import { useState } from 'react'
 
-import { ReactComponent as ICDropdown } from '../../../Assets/Icon/ic-chevron-down.svg'
+import ICDropdown from '../../../Assets/Icon/ic-chevron-down.svg?react'
 import { PopupMenu } from '../../../Common'
 import { ButtonWithLoader } from '../ButtonWithLoader'
 import { ButtonWithSelectorProps } from './types'

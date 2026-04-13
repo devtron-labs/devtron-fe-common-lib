@@ -16,10 +16,10 @@
 
 import { ReactNode } from 'react'
 
-import { ReactComponent as ICCompare } from '@Icons/ic-compare.svg'
-import { ReactComponent as ErrorIcon } from '@Icons/ic-error-exclamation.svg'
-import { ReactComponent as Info } from '@Icons/ic-info-filled.svg'
-import { ReactComponent as ICWarningY5 } from '@Icons/ic-warning-y5.svg'
+import ICCompare from '@Icons/ic-compare.svg?react'
+import ErrorIcon from '@Icons/ic-error-exclamation.svg?react'
+import Info from '@Icons/ic-info-filled.svg?react'
+import ICWarningY5 from '@Icons/ic-warning-y5.svg?react'
 import { ClipboardButton } from '@Common/ClipboardButton'
 import { getComponentSpecificThemeClass } from '@Shared/Providers'
 

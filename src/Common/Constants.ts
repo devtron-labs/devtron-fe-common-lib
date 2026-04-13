@@ -79,6 +79,7 @@ export const ROUTES = {
     DEPLOYMENT_TEMPLATE_LIST: 'app/template/list',
     INFRA_CONFIG_PROFILE: 'infra-config/profile',
     SCAN_RESULT: 'scan-result',
+    SCAN_RESULT_RECOMMENDATIONS: 'security/scan/dockerfile/results',
     NOTIFIER: 'notification',
     TELEMETRY_EVENT: 'telemetry/event',
     SERVER_INFO_API: 'server',

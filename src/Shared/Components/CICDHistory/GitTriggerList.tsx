@@ -16,7 +16,7 @@
 
 import { type JSX, memo } from 'react'
 
-import { ReactComponent as ICBranch } from '@Icons/ic-branch.svg'
+import ICBranch from '@Icons/ic-branch.svg?react'
 import { createGitCommitUrl, SourceTypeMap } from '@Common/Common.service'
 import { getHandleOpenURL, renderMaterialIcon } from '@Shared/Helpers'
 import { GitTriggers } from '@Shared/types'

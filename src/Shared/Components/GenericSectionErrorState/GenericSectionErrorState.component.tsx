@@ -16,8 +16,8 @@
 
 import { ReactNode } from 'react'
 
-import { ReactComponent as ErrorIcon } from '@Icons/ic-error-exclamation.svg'
-import { ReactComponent as ICInfoOutline } from '@Icons/ic-info-outline.svg'
+import ErrorIcon from '@Icons/ic-error-exclamation.svg?react'
+import ICInfoOutline from '@Icons/ic-info-outline.svg?react'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonComponentType, ButtonVariantType } from '../Button'

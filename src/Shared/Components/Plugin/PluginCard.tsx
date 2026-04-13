@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICBookOpen } from '../../../Assets/Icon/ic-book-open.svg'
+import ICBookOpen from '../../../Assets/Icon/ic-book-open.svg?react'
 import { Checkbox, CHECKBOX_VALUE, stopPropagation } from '../../../Common'
 import PluginImageContainer from './PluginImageContainer'
 import PluginTagsContainer from './PluginTagsContainer'

@@ -47,7 +47,7 @@ const generateIllustrationComponent = () => {
             .map((segment) => segment.charAt(0).toUpperCase() + segment.slice(1))
             .join('')
         // Push imports statement
-        imports.push(`import { ReactComponent as ${importName} } from '@Illustrations/${file}'`)
+        imports.push(`import ${importName} from '@Illustrations/${file}?react'`)
         // Push illustrations to illustrationMap
         illustrationMapEntries.push(`["${illustrationName}"]: ${importName},`)
     })

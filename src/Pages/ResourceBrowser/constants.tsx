@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICCleanBrush } from '@Icons/ic-medium-clean-brush.svg'
-import { ReactComponent as ICMediumPause } from '@Icons/ic-medium-pause.svg'
-import { ReactComponent as ICMediumPlay } from '@Icons/ic-medium-play.svg'
+import ICCleanBrush from '@Icons/ic-medium-clean-brush.svg?react'
+import ICMediumPause from '@Icons/ic-medium-pause.svg?react'
+import ICMediumPlay from '@Icons/ic-medium-play.svg?react'
 import { SelectPickerOptionType } from '@Shared/Components'
 
 import { NodeDrainRequest } from './types'

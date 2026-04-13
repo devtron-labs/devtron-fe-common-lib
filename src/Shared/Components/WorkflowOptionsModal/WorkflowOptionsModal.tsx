@@ -16,7 +16,7 @@
 
 import { useEffect, useMemo, useState } from 'react'
 
-import { ReactComponent as ImgWorkflowOptionsModalHeader } from '@Images/workflow-options-modal-header.svg'
+import ImgWorkflowOptionsModalHeader from '@Images/workflow-options-modal-header.svg?react'
 import { noop, showError } from '@Common/Helper'
 import { PipelineType, WorkflowNodeType } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
