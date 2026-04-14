@@ -66,6 +66,7 @@ export type NavigationSubMenuItemID =
     | 'cost-visibility-cost-breakdown-applications'
     | 'global-configuration-authorization-user-permissions'
     | 'global-configuration-authorization-permission-groups'
+    | 'global-configuration-authorization-user-groups'
     | 'global-configuration-authorization-api-tokens'
 
 export type NavigationRootItemID =
