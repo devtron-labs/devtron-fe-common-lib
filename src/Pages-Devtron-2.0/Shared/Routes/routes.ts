@@ -1,7 +1,7 @@
 import { generatePath } from 'react-router-dom'
 
 import { InfrastructureManagementAppListType } from '@Common/Types'
-import { CostBreakdownItemViewParamsType, CostBreakdownViewType } from '@PagesDevtron2.0/index'
+import { CostBreakdownItemViewParamsType, CostBreakdownViewType } from '@PagesDevtron2.0/CostVisibility/Shared/types'
 
 const OVERVIEW = 'overview'
 
@@ -281,6 +281,7 @@ export const BASE_ROUTES = {
     },
     AUDIT_LOGS: {
         ROOT: 'audit-logs',
+        DETAIL: ':auditLogId',
     },
     GLOBAL_CONFIG: {
         ROOT: 'global-configuration',
@@ -410,6 +411,7 @@ const JOBS_ROOT =
 const JOB_DETAIL_ROOT = `${JOBS_ROOT}/${BASE_ROUTES.AUTOMATION_AND_ENABLEMENT.JOBS.DETAIL.ROOT}` as const
 
 const DATA_PROTECTION_MANAGEMENT_ROOT = `/${BASE_ROUTES.DATA_PROTECTION_MANAGEMENT.ROOT}` as const
+const AUDIT_LOGS_ROOT = `/${BASE_ROUTES.AUDIT_LOGS.ROOT}` as const
 const GLOBAL_CONFIG_ROOT = `/${BASE_ROUTES.GLOBAL_CONFIG.ROOT}` as const
 const GLOBAL_CONFIG_AUTH_ROOT = `${GLOBAL_CONFIG_ROOT}/${BASE_ROUTES.GLOBAL_CONFIG.AUTH.ROOT}` as const
 const NETWORK_STATUS_INTERFACE_ROOT = `/${BASE_ROUTES.NETWORK_STATUS_INTERFACE.ROOT}` as const
@@ -671,7 +673,8 @@ export const ROUTER_URLS = {
     DATA_PROTECTION_MANAGEMENT_BACKUP_LOCATIONS_DETAIL: `${DATA_PROTECTION_MANAGEMENT_ROOT}/${BASE_ROUTES.DATA_PROTECTION_MANAGEMENT.BACKUP_LOCATIONS.ROOT}/${BASE_ROUTES.DATA_PROTECTION_MANAGEMENT.BACKUP_LOCATIONS.DETAIL}`,
 
     // Audit Logs
-    AUDIT_LOGS: `${BASE_ROUTES.AUDIT_LOGS.ROOT}`,
+    AUDIT_LOGS: AUDIT_LOGS_ROOT,
+    AUDIT_LOGS_DETAIL: `${AUDIT_LOGS_ROOT}/${BASE_ROUTES.AUDIT_LOGS.DETAIL}`,
 
     // Global Config
     GLOBAL_CONFIG_HOST_URL: `${GLOBAL_CONFIG_ROOT}/${BASE_ROUTES.GLOBAL_CONFIG.HOST_URL}`,
