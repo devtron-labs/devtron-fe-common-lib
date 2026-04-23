@@ -22,7 +22,8 @@ import { ButtonComponentType, ButtonProps } from '../Button'
 import { FormFieldWrapperProps } from '../FormFieldWrapper'
 
 export interface CustomInputProps
-    extends Omit<FormFieldWrapperProps, 'children' | 'inputId'>,
+    extends
+        Omit<FormFieldWrapperProps, 'children' | 'inputId'>,
         Pick<InputHTMLAttributes<HTMLInputElement>, 'onBlur' | 'disabled' | 'autoFocus' | 'onFocus' | 'onKeyDown'>,
         Required<Pick<InputHTMLAttributes<HTMLInputElement>, 'placeholder' | 'onChange' | 'value' | 'name'>> {
     /**

@@ -1,36 +1,47 @@
 name: Node.js Package
 
 on:
-  release:
-    types: [created]
+    release:
+        types: [created]
 
 jobs:
-  build-and-publish:
-    name: Build and Publish to NPM Registry
+    build-and-publish:
+        name: Build and Publish to NPM Registry
 
-    runs-on: ubuntu-latest
+        runs-on: ubuntu-latest
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+        steps:
+            - name: Checkout repository
+              uses: actions/checkout@v4
 
-      - name: Use Node.js
-        uses: actions/setup-node@v4
-        with:
-          node-version-file: '.nvmrc'
-          cache: 'npm'
-          registry-url: 'https://registry.npmjs.org/'
+            - name: Use Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version-file: '.nvmrc'
+                  cache: 'npm'
+                  registry-url: 'https://registry.npmjs.org/'
 
-      - name: Install dependencies
-        run: npm ci
+            - name: Install dependencies
+              run: npm ci
 
-      - name: Execute test cases
-        run: npm test
+            - name: Execute test cases
+              run: npm test
 
-      - name: Build Lib
-        run: npm run build-lib
+            - name: Build Lib
+              run: npm run build-lib
 
-      - name: Publish to NPM Registry
-        run: npm publish --access public
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+            - name: Publish to NPM Registry
+              run: |
+                  VERSION=$(node -p "require('./package.json').version")
+                  
+                  if [[ $VERSION == *"-beta."* ]]; then
+                    npm publish --access public --tag beta
+
+                  elif [[ $VERSION == *"-"* ]]; then
+                    npm publish --access public --tag next
+
+                  else
+                    npm publish --access public
+                  fi
+              env:
+                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

@@ -16,7 +16,7 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
+import ICCaretDown from '@Icons/ic-caret-down.svg?react'
 import { SegmentType } from '@Common/SegmentedControl/types'
 import { ComponentSizeType } from '@Shared/constants'
 import { getUniqueId } from '@Shared/Helpers'

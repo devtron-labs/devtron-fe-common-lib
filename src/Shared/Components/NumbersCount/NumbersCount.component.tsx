@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICTilde } from '@Icons/ic-tilde.svg'
+import ICTilde from '@Icons/ic-tilde.svg?react'
 
 import { NumbersCountProps } from './types'
 

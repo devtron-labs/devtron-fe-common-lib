@@ -53,4 +53,3 @@ src/Common/Select/Select.tsx
 src/Common/ServerError.ts
 src/Common/TippyCustomized.tsx
 src/Common/ToastBody.tsx
-src/Common/Types.ts

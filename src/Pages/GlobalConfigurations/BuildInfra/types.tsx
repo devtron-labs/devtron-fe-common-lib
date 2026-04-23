@@ -555,8 +555,10 @@ export interface UseBuildInfraFormResponseType {
     handleSubmit: (e?: FormEvent<HTMLFormElement>) => Promise<void>
 }
 
-export interface BuildInfraConfigFormProps
-    extends Pick<UseBuildInfraFormResponseType, 'profileInput' | 'profileInputErrors' | 'handleProfileInputChange'> {
+export interface BuildInfraConfigFormProps extends Pick<
+    UseBuildInfraFormResponseType,
+    'profileInput' | 'profileInputErrors' | 'handleProfileInputChange'
+> {
     isGlobalProfile?: boolean
     unitsMap?: BuildInfraProfileResponseType['configurationUnits']
     configurationContainerLabel?: ReactNode
@@ -617,7 +619,8 @@ export interface FooterProps {
 }
 
 export interface UpsertBuildInfraProfileServiceParamsType
-    extends Pick<UseBuildInfraFormResponseType, 'profileInput'>,
+    extends
+        Pick<UseBuildInfraFormResponseType, 'profileInput'>,
         Pick<UseBuildInfraFormProps, 'canConfigureUseK8sDriver'> {
     /**
      * If not given would consider as create view
@@ -667,7 +670,8 @@ export interface BuildInfraProfileDTO extends BaseBuildInfraProfileDTO {
 }
 
 export interface BuildInfraProfileTransformerParamsType
-    extends BuildInfraProfileDTO,
+    extends
+        BuildInfraProfileDTO,
         Pick<GetBuildInfraProfileType, 'fromCreateView'>,
         Pick<GetBuildInfraProfileType, 'canConfigureUseK8sDriver'> {}
 
@@ -693,8 +697,10 @@ export type RequestLimitConfigType = Extract<
     | BuildInfraConfigTypes.MEMORY_REQUEST
 >
 
-export interface ValidateNodeSelectorParamsType
-    extends Pick<ReturnType<typeof useBuildInfraForm>, 'profileInputErrors'> {
+export interface ValidateNodeSelectorParamsType extends Pick<
+    ReturnType<typeof useBuildInfraForm>,
+    'profileInputErrors'
+> {
     selector: BuildInfraNodeSelectorValueType
     existingKeys: string[]
 }
@@ -708,5 +714,7 @@ export interface BuildInfraCMCSFormProps {
 export interface BuildInfraUtilityContextType {
     BuildInfraCMCSForm: FunctionComponent<BuildInfraCMCSFormProps>
 }
-export interface GetBaseProfileObjectParamsType
-    extends Pick<BuildInfraProfileTransformerParamsType, 'canConfigureUseK8sDriver' | 'fromCreateView' | 'profile'> {}
+export interface GetBaseProfileObjectParamsType extends Pick<
+    BuildInfraProfileTransformerParamsType,
+    'canConfigureUseK8sDriver' | 'fromCreateView' | 'profile'
+> {}

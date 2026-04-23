@@ -18,7 +18,7 @@ import React, { Fragment } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
 import Tippy, { TippyProps } from '@tippyjs/react'
 
-import { ReactComponent as ICExpand } from '@Icons/ic-expand.svg'
+import ICExpand from '@Icons/ic-expand.svg?react'
 import { ConditionalWrap } from '@Common/Helper'
 import { Tooltip } from '@Common/Tooltip'
 
@@ -97,7 +97,7 @@ export const CollapsibleList = <TabType extends TabOptions>({
     }
 
     const getNavLinkTabItem = (item: CollapsibleListItem<'navLink'>) => {
-        const { title, href, onClick, isActive, clearQueryParamsOnNavigation = false } = item
+        const { title, href, onClick, clearQueryParamsOnNavigation = false } = item
         return (
             <NavLink
                 key={title}
@@ -110,7 +110,6 @@ export const CollapsibleList = <TabType extends TabOptions>({
                     }
                     onClick?.(e)
                 }}
-                isActive={isActive}
             >
                 {getTabContent(item)}
             </NavLink>

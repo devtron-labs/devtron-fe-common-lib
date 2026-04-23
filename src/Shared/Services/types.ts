@@ -52,8 +52,10 @@ interface BaseGetApiUrlProps<T, K extends ResourceKindType | PolicyKindType, P e
 
 export interface GetResourceApiUrlProps<T> extends BaseGetApiUrlProps<T, ResourceKindType, ResourceVersionType> {}
 
-export interface GetPolicyApiUrlProps<T>
-    extends Omit<BaseGetApiUrlProps<T, PolicyKindType, ResourceVersionType>, 'baseUrl'> {}
+export interface GetPolicyApiUrlProps<T> extends Omit<
+    BaseGetApiUrlProps<T, PolicyKindType, ResourceVersionType>,
+    'baseUrl'
+> {}
 
 export interface EnvironmentDataValuesDTO extends Pick<MainContext, 'featureGitOpsFlags' | 'canFetchHelmAppStatus'> {
     isAirGapEnvironment: boolean
@@ -62,6 +64,7 @@ export interface EnvironmentDataValuesDTO extends Pick<MainContext, 'featureGitO
     devtronManagedLicensingEnabled: boolean
     isResourceRecommendationEnabled?: boolean
     featureAskDevtronExpert: boolean
+    forceDockerfileScan: boolean
 }
 
 export interface ClusterMinDTO {

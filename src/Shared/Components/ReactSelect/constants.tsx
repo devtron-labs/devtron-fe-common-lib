@@ -16,7 +16,7 @@
 
 import { components, DropdownIndicatorProps, StylesConfig } from 'react-select'
 
-import { ReactComponent as DropDownIcon } from '@Icons/ic-chevron-down.svg'
+import DropDownIcon from '@Icons/ic-chevron-down.svg?react'
 import { NO_MATCHING_RESULT, TYPE_3_CHARACTERS_TO_SEE_MATCHING_RESULTS } from '@Shared/constants'
 
 export const CommonGroupedDropdownStyles: StylesConfig = {

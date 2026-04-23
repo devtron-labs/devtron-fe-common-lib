@@ -22,10 +22,12 @@ export {
 } from './config'
 export { CATEGORY_LABELS, SEVERITIES_LABEL_COLOR_MAP } from './constants'
 export { default as SecurityModal } from './SecurityModal'
-export { getSecurityScan } from './service'
+export { getSecurityScan, getSecurityScanRecommendations } from './service'
 export type {
+    DockerScanStatusTypes,
     GetResourceScanDetailsPayloadType,
     GetResourceScanDetailsResponseType,
+    ScanRecommendationsDTO,
     ScanResultDTO,
     SidebarDataChildType,
     SidebarPropsType,

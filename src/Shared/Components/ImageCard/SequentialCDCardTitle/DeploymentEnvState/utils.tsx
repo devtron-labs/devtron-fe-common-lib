@@ -16,8 +16,8 @@
 
 import { Icon } from '@Shared/Components/Icon'
 
-import { ReactComponent as ICRocketFail } from '../../../../../Assets/Icon/ic-rocket-fail.svg'
-import { ReactComponent as ICWorld } from '../../../../../Assets/Icon/ic-world.svg'
+import ICRocketFail from '../../../../../Assets/Icon/ic-rocket-fail.svg?react'
+import ICWorld from '../../../../../Assets/Icon/ic-world.svg?react'
 import { DEPLOYMENT_ENV_TEXT } from './constants'
 import { GetDeploymentEnvConfigType } from './types'
 

@@ -17,7 +17,7 @@
 import { useState } from 'react'
 import Tippy from '@tippyjs/react'
 
-import { ReactComponent as ICMediumPaintBucket } from '@IconsV2/ic-medium-paintbucket.svg'
+import ICMediumPaintBucket from '@IconsV2/ic-medium-paintbucket.svg?react'
 import { handleAnalyticsEvent } from '@Shared/Analytics'
 import { ComponentSizeType } from '@Shared/constants'
 import { InstallationType } from '@Shared/types'

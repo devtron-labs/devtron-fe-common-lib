@@ -16,7 +16,7 @@
 
 import { KeyboardEvent, SyntheticEvent, useState } from 'react'
 
-import { ReactComponent as ICPencil } from '@Icons/ic-pencil.svg'
+import ICPencil from '@Icons/ic-pencil.svg?react'
 import { showError } from '@Common/Helper'
 import { ButtonWithLoader, ImageWithFallback } from '@Shared/Components'
 import { CustomInput } from '@Shared/Components/CustomInput'

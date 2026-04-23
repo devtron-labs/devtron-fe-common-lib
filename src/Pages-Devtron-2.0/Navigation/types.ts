@@ -1,6 +1,5 @@
-import { customEnv, Never } from 'src'
-
 import { IconsProps } from '@Shared/Components'
+import { customEnv, Never } from '@Shared/types'
 
 export type NavigationItemID =
     | 'application-management-overview'
@@ -67,6 +66,7 @@ export type NavigationSubMenuItemID =
     | 'cost-visibility-cost-breakdown-applications'
     | 'global-configuration-authorization-user-permissions'
     | 'global-configuration-authorization-permission-groups'
+    | 'global-configuration-authorization-user-groups'
     | 'global-configuration-authorization-api-tokens'
 
 export type NavigationRootItemID =
@@ -107,8 +107,10 @@ export type NavigationItemType = Pick<
           })
     )
 
-export interface NavigationGroupType
-    extends Pick<CommonNavigationItemType, 'title' | 'icon' | 'hideNav' | 'forceHideEnvKey' | 'isAvailableInEA'> {
+export interface NavigationGroupType extends Pick<
+    CommonNavigationItemType,
+    'title' | 'icon' | 'hideNav' | 'forceHideEnvKey' | 'isAvailableInEA'
+> {
     id: NavigationRootItemID
     items: NavigationItemType[]
     disabled?: boolean

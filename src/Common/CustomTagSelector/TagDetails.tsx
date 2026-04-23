@@ -15,8 +15,8 @@
  */
 
 import React, { useRef } from 'react'
-import { ReactComponent as DeleteCross } from '../../Assets/Icon/ic-cross.svg'
-import { ReactComponent as InjectTag } from '../../Assets/Icon/inject-tag.svg'
+import DeleteCross from '../../Assets/Icon/ic-cross.svg?react'
+import InjectTag from '../../Assets/Icon/inject-tag.svg?react'
 import { TagLabelValueSelector } from './TagLabelValueSelector'
 import { KEY_VALUE } from '../Constants'
 import { stopPropagation } from '../Helper'

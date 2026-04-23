@@ -16,7 +16,7 @@
 
 import { ChangeEvent, SyntheticEvent, useState } from 'react'
 
-import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
+import ICCross from '@Icons/ic-cross.svg?react'
 import { API_STATUS_CODES } from '@Common/Constants'
 import { showError } from '@Common/index'
 import {

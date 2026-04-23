@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactComponent as ICLegoBlock } from '../../../Assets/Icon/ic-lego-block.svg'
+import ICLegoBlock from '../../../Assets/Icon/ic-lego-block.svg?react'
 import { ImageWithFallback } from '../ImageWithFallback'
 import { PluginImageContainerProps } from './types'
 
