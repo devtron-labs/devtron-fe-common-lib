@@ -32,10 +32,12 @@ export const SelectPickerTextArea = ({
     maxHeight,
     refVar,
     dependentRefs,
+    filterOption: filterOptionProp,
     ...props
 }: SelectPickerTextAreaProps) => {
     // STATES
     const [inputValue, setInputValue] = useState((value as SingleValue<SelectPickerOptionType<string>>)?.value || '')
+    const [isInputDirty, setIsInputDirty] = useState(false)
 
     // REFS
     const selectRef = useRef<SelectInstance<SelectPickerOptionType<string>>>(null)
@@ -50,6 +52,7 @@ export const SelectPickerTextArea = ({
     useEffect(() => {
         const selectValue = value as SingleValue<SelectPickerOptionType<string>>
         setInputValue(selectValue?.value || '')
+        setIsInputDirty(false)
     }, [value])
 
     // METHODS
@@ -120,9 +123,23 @@ export const SelectPickerTextArea = ({
         return false
     }
 
+    const filterOption: SelectPickerTextAreaProps['filterOption'] = (...filterOptionArgs) => {
+        if (!isInputDirty) {
+            return true
+        }
+
+        if (filterOptionProp) {
+            return filterOptionProp(...filterOptionArgs)
+        }
+
+        const [option, rawInput] = filterOptionArgs
+        return option.label.toLowerCase().includes(rawInput.toLowerCase())
+    }
+
     const onInputChange = (newValue: string, { action }: InputActionMeta) => {
         if (action === ReactSelectInputAction.inputChange) {
             setInputValue(newValue)
+            setIsInputDirty(true)
 
             if (!newValue) {
                 onChange?.(null, {
@@ -137,6 +154,7 @@ export const SelectPickerTextArea = ({
             const selectValue = value as SingleValue<SelectPickerOptionType<string>>
             // Reverting input to previously selected value in case of blur event. (no-selection)
             setInputValue(selectValue?.value || '')
+            setIsInputDirty(false)
         }
     }
 
@@ -195,6 +213,7 @@ export const SelectPickerTextArea = ({
             selectRef={selectRef}
             inputValue={inputValue}
             value={value}
+            filterOption={filterOption}
             onInputChange={onInputChange}
             controlShouldRenderValue={false}
             onChange={onChange}

@@ -16,7 +16,7 @@
 
 import { MutableRefObject } from 'react'
 
-import { ConsequenceType, ServerErrors, VariableType } from '../../../Common'
+import { ConditionDetails, ConsequenceType, ServerErrors, VariableType } from '../../../Common'
 import { BaseFilterQueryParams } from '../../types'
 import { ImageWithFallbackProps } from '../ImageWithFallback'
 import { getPluginStoreData } from './service'
@@ -50,10 +50,19 @@ interface MinimalPluginVersionDataDTO {
     isLatest: boolean
 }
 
+export interface PluginStepConditionDTO extends Pick<ConditionDetails, 'conditionType' | 'conditionalValue'> {
+    conditionalOperator: ConditionDetails['conditionOperator']
+    id: number
+}
+
+interface PluginVariableType extends VariableType {
+    pluginStepCondition?: PluginStepConditionDTO[]
+}
+
 interface DetailedPluginVersionDTO extends MinimalPluginVersionDataDTO {
     tags: string[]
-    inputVariables: VariableType[]
-    outputVariables: VariableType[]
+    inputVariables: PluginVariableType[]
+    outputVariables: PluginVariableType[]
     /**
      * Present in case of shared plugin
      */
@@ -112,7 +121,7 @@ export interface ParentPluginType extends Pick<
     pluginVersions: MinimalPluginVersionDataDTO[]
 }
 
-interface DetailedPluginVersionType
+export interface DetailedPluginVersionType
     extends
         Pick<MinimalPluginVersionDataDTO, 'id' | 'description' | 'name' | 'pluginVersion'>,
         Pick<DetailedPluginVersionDTO, 'tags' | 'inputVariables' | 'outputVariables' | 'updatedBy' | 'docLink'>,
