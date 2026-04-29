@@ -190,6 +190,10 @@ export interface customEnv {
     FEATURE_ATHENA_DEBUG_MODE_ENABLE?: boolean
     /** Org ID for grafana */
     GRAFANA_ORG_ID?: number
+    /**
+     * @default false
+     */
+    FEATURE_NODE_AUTOSCALER_ENABLE?: boolean
 }
 
 declare global {
