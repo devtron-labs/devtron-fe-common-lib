@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useLayoutEffect, useMemo, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
+import { defaultRangeExtractor, useVirtualizer } from '@tanstack/react-virtual'
 import AnsiUp from 'ansi_up'
 import DOMPurify from 'dompurify'
 
@@ -47,18 +48,19 @@ import {
     LOGS_STAGE_STREAM_SEPARATOR,
     POD_STATUS,
 } from './constants'
-import LogStageAccordion from './LogStageAccordion'
+import LogStageHeader from './LogStageHeader'
 import {
     CreateMarkupPropsType,
     CreateMarkupReturnType,
     DeploymentHistoryBaseParamsType,
     HistoryComponentType,
     LogsRendererType,
+    LogVirtualItem,
     StageDetailType,
     StageInfoDTO,
     StageStatusType,
 } from './types'
-import { getLogSearchIndex } from './utils'
+import { findScrollableAncestor, getLogSearchIndex } from './utils'
 
 import './LogsRenderer.scss'
 
@@ -171,9 +173,31 @@ const useCIEventSource = (url: string, maxLength?: number): [string[], EventSour
     return [dataVal, eventSourceRef.current, logsNotAvailableError]
 }
 
+const STAGE_OVERHEAD_HEIGHT = 36
+// lh-20(20) + paddingBottom(4)
+const LOG_HEIGHT = 24
+const OVERSCAN_COUNT = 50
+
+const LogLine = ({ log, logIndex }: { log: string; logIndex: number }) => (
+    <div className="display-grid dc__column-gap-10 dc__align-start logs-renderer__log-item">
+        <span className="cn-5 col-2 lh-20 dc__text-align-end dc__word-break mono fs-14 dc__user-select-none">
+            {logIndex + 1}
+        </span>
+        <pre
+            className="mono fs-14 mb-0-imp text__white dc__word-break lh-20 dc__unset-pre dc__transparent--imp"
+            // eslint-disable-next-line react/no-danger
+            dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(log) }}
+        />
+    </div>
+)
+
 const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, fullScreenView }: LogsRendererType) => {
     const { pipelineId, envId, appId } = useParams<DeploymentHistoryBaseParamsType>()
     const logsRendererRef = useRef<HTMLDivElement>(null)
+    const listContainerRef = useRef<HTMLDivElement>(null)
+    const scrollElementRef = useRef<HTMLElement | null>(null)
+    const [scrollMargin, setScrollMargin] = useState(0)
+    const [scrollTrigger, setScrollTrigger] = useState(false)
 
     const logsURL =
         parentType === HistoryComponentType.CI
@@ -443,6 +467,7 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
                 currentIndex = currentSearchIndex > 0 ? currentSearchIndex - 1 : searchResults.length - 1
             }
             setCurrentSearchIndex(currentIndex)
+            setScrollTrigger((prev) => !prev)
             setStageList(getStageListFromStreamData(currentIndex, searchText))
         }
     }
@@ -474,6 +499,237 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
         const newLogs = structuredClone(stageList)
         newLogs[index].isOpen = true
         setStageList(newLogs)
+    }
+
+    /**
+     * Flattens stageList into a single ordered array for the virtualizer.
+     * Each stage contributes one 'header' item, followed by one 'log' item per line (only when open).
+     *
+     * headerFlatIndexSet  — Set of flat-array positions that hold a header.
+     *                       Used by rangeExtractor to always keep the active sticky header rendered.
+     *
+     * stageIndexToHeaderFlatIndex — Maps stageIndex → that stage's position in flatItems.
+     *                               Used to scroll to the correct log line when navigating search results.
+     */
+    const { flatItems, headerFlatIndexSet, stageIndexToHeaderFlatIndex } = useMemo(() => {
+        const items: LogVirtualItem[] = []
+        const headerIndexSet = new Set<number>()
+        const headerMap = new Map<number, number>()
+
+        stageList.forEach((stage, stageIndex) => {
+            const headerFlatIdx = items.length
+            items.push({ type: 'header', stageIndex })
+            headerIndexSet.add(headerFlatIdx)
+            headerMap.set(stageIndex, headerFlatIdx)
+
+            if (stage.isOpen) {
+                stage.logs.forEach((_, logIndex) => {
+                    items.push({ type: 'log', stageIndex, logIndex })
+                })
+            }
+        })
+
+        return { flatItems: items, headerFlatIndexSet: headerIndexSet, stageIndexToHeaderFlatIndex: headerMap }
+    }, [stageList])
+
+    // Find the scrollable ancestor once and measure the list container's offset within it.
+    // This is needed because the scroll container is a div (not window), so we use useVirtualizer
+    // with a custom getScrollElement, and scrollMargin = distance from scroll container top to list top.
+    useLayoutEffect(() => {
+        if (!listContainerRef.current) {
+            return
+        }
+        const scrollEl = findScrollableAncestor(listContainerRef.current)
+        scrollElementRef.current = scrollEl
+        if (scrollEl) {
+            const listRect = listContainerRef.current.getBoundingClientRect()
+            const containerRect = scrollEl.getBoundingClientRect()
+            setScrollMargin(listRect.top - containerRect.top + scrollEl.scrollTop)
+        }
+    }, [areStagesAvailable, fullScreenView])
+
+    const estimateSize = useCallback(
+        (index: number) => {
+            const item = flatItems[index]
+            if (!item) {
+                return LOG_HEIGHT
+            }
+            return item.type === 'header' ? STAGE_OVERHEAD_HEIGHT : LOG_HEIGHT
+        },
+        [flatItems],
+    )
+
+    const getItemKey = useCallback(
+        (index: number) => {
+            const item = flatItems[index]
+            if (!item) {
+                return `item-${index}`
+            }
+            return item.type === 'header' ? `header-${item.stageIndex}` : `log-${item.stageIndex}-${item.logIndex}`
+        },
+        [flatItems],
+    )
+
+    /**
+     * Extends TanStack's default visible range to always include the active sticky header —
+     * the last header whose flat index is <= the first visible row. Without this, the virtualizer
+     * would unmount that header as the user scrolls past it, breaking the sticky effect.
+     */
+    const rangeExtractor = useCallback(
+        (range: { startIndex: number; endIndex: number; overscan: number; count: number }) => {
+            const base = defaultRangeExtractor(range)
+            // NOTE: This can also be a binary search since headerFlatIndexSet is sorted, but in practice the number of stages (headers) is small so it doesn't matter
+            const activeStickyIdx = Array.from(headerFlatIndexSet).reduce(
+                (last, idx) => (idx <= range.startIndex ? idx : last),
+                -1,
+            )
+            if (activeStickyIdx === -1) {
+                return base
+            }
+            const next = new Set(base)
+            next.add(activeStickyIdx)
+            return Array.from(next).sort((a, b) => a - b)
+        },
+        [headerFlatIndexSet],
+    )
+
+    const virtualizer = useVirtualizer({
+        count: flatItems.length,
+        estimateSize,
+        overscan: OVERSCAN_COUNT,
+        scrollMargin,
+        getScrollElement: () => scrollElementRef.current,
+        getItemKey,
+        rangeExtractor,
+    })
+
+    /**
+     * Scrolls to the active search result whenever the user navigates matches.
+     * scrollTrigger toggles on every navigation so cycling back to the same
+     * result index still re-triggers the effect.
+     *
+     * targetSearchIdx encodes the match as "<stageIndex>-<logIndexInsideStage>".
+     * We look up the stage's header flat index, then offset by 1 (skip the header)
+     * plus the log's position within the stage to get its absolute flat index.
+     */
+    useEffect(() => {
+        const targetSearchIdx = searchResults[currentSearchIndex]
+        if (!targetSearchIdx || !areStagesAvailable) {
+            return
+        }
+
+        const [stageIdxStr, logIdxStr] = targetSearchIdx.split('-')
+        const headerFlatIdx = stageIndexToHeaderFlatIndex.get(Number(stageIdxStr))
+
+        if (headerFlatIdx === undefined) {
+            return
+        }
+
+        virtualizer.scrollToIndex(headerFlatIdx + 1 + Number(logIdxStr), { align: 'center', behavior: 'smooth' })
+    }, [currentSearchIndex, scrollTrigger])
+
+    const renderVirtualLogs = () => {
+        const stickyTop = fullScreenView ? 44 : 80
+        const scrollTop = scrollElementRef.current?.scrollTop ?? 0
+        const virtualItems = virtualizer.getVirtualItems()
+
+        // vItem.start already includes scrollMargin (TanStack adds it), so
+        // vItem.start - scrollTop = item's viewport position from the scroll container top.
+        //
+        // Active sticky = last header whose viewport position has gone above stickyTop.
+        // Next sticky   = first header below stickyTop after the active one.
+        //
+        // We track nextStickyFlatIdx so the active sticky can be pushed upward as the next
+        // header slides in — preventing both headers from being visible at the top simultaneously.
+        let activeStickyFlatIdx = -1
+        let nextStickyFlatIdx = -1
+        const vItemByIndex = new Map<number, (typeof virtualItems)[number]>()
+
+        virtualItems.forEach((vItem) => {
+            vItemByIndex.set(vItem.index, vItem)
+            if (flatItems[vItem.index]?.type !== 'header') {
+                return
+            }
+            const viewportTop = vItem.start - scrollTop
+            if (viewportTop < stickyTop) {
+                activeStickyFlatIdx = vItem.index
+                nextStickyFlatIdx = -1 // reset each time a newer active is found
+            } else if (nextStickyFlatIdx === -1) {
+                nextStickyFlatIdx = vItem.index
+            }
+        })
+
+        return virtualItems.map((virtualItem) => {
+            const item = flatItems[virtualItem.index]
+            if (!item) {
+                return null
+            }
+
+            const isActiveSticky = virtualItem.index === activeStickyFlatIdx
+
+            // Push-up: reduce the sticky top offset as the next header enters the sticky zone,
+            // so the active header slides off the top at the same rate the next one arrives.
+            let computedStickyTop = stickyTop
+            if (isActiveSticky && nextStickyFlatIdx !== -1) {
+                const activeHeight = vItemByIndex.get(activeStickyFlatIdx)?.size ?? STAGE_OVERHEAD_HEIGHT
+                const nextViewportTop = (vItemByIndex.get(nextStickyFlatIdx)?.start ?? Infinity) - scrollTop
+                computedStickyTop = stickyTop - Math.max(0, stickyTop + activeHeight - nextViewportTop)
+            }
+
+            const baseStyle: React.CSSProperties = isActiveSticky
+                ? {
+                      position: 'sticky',
+                      top: computedStickyTop,
+                      zIndex: 1,
+                      width: '100%',
+                      paddingLeft: 12,
+                      paddingRight: 12,
+                  }
+                : {
+                      position: 'absolute',
+                      top: 0,
+                      width: '100%',
+                      // item.start includes scrollMargin; subtract to get container-relative position
+                      transform: `translateY(${virtualItem.start - scrollMargin}px)`,
+                      paddingLeft: 12,
+                      paddingRight: 12,
+                  }
+
+            if (item.type === 'header') {
+                return (
+                    <div
+                        key={virtualItem.key as React.Key}
+                        data-index={virtualItem.index}
+                        ref={virtualizer.measureElement}
+                        style={{
+                            ...baseStyle,
+                            paddingBottom: 0,
+                        }}
+                    >
+                        <LogStageHeader
+                            {...stageList[item.stageIndex]}
+                            stageIndex={item.stageIndex}
+                            fullScreenView={fullScreenView}
+                            handleStageClose={handleStageClose}
+                            handleStageOpen={handleStageOpen}
+                            logsRendererRef={logsRendererRef}
+                            applySticky={false}
+                        />
+                    </div>
+                )
+            }
+
+            return (
+                <div
+                    key={virtualItem.key as React.Key}
+                    data-index={virtualItem.index}
+                    ref={virtualizer.measureElement}
+                    style={{ ...baseStyle, paddingBottom: 4 }}
+                >
+                    <LogLine log={stageList[item.stageIndex].logs[item.logIndex]} logIndex={item.logIndex} />
+                </div>
+            )
+        })
     }
 
     const renderLogs = () => {
@@ -557,29 +813,20 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
                         </div>
                     </div>
 
-                    <div className="flexbox-col px-12 dc__gap-4">
-                        {stageList.map(
-                            ({ stage, isOpen, logs, endTime, startTime, status, targetPlatforms }, index) => (
-                                <LogStageAccordion
-                                    key={`${stage}-${startTime}-log-stage-accordion`}
-                                    stage={stage}
-                                    isOpen={isOpen}
-                                    logs={logs}
-                                    endTime={endTime}
-                                    startTime={startTime}
-                                    targetPlatforms={targetPlatforms}
-                                    status={status}
-                                    handleStageClose={handleStageClose}
-                                    handleStageOpen={handleStageOpen}
-                                    stageIndex={index}
-                                    isLoading={index === stageList.length - 1 && areEventsProgressing}
-                                    fullScreenView={fullScreenView}
-                                    searchIndex={searchResults[currentSearchIndex]}
-                                    logsRendererRef={logsRendererRef}
-                                />
-                            ),
-                        )}
+                    <div
+                        ref={listContainerRef}
+                        style={{ height: `${virtualizer.getTotalSize()}px`, position: 'relative', width: '100%' }}
+                    >
+                        {renderVirtualLogs()}
                     </div>
+                    {areEventsProgressing && (
+                        <div className="px-12">
+                            <div className="display-grid dc__column-gap-10 dc__align-start logs-renderer__log-item">
+                                <span />
+                                <div className="dc__loading-dots text__white" />
+                            </div>
+                        </div>
+                    )}
                 </div>
             )
         }

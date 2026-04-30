@@ -463,3 +463,15 @@ export const getTriggerOutputTabs = (
 
 export const getSortedTriggerHistory = (triggerHistory: Map<number, History>) =>
     Array.from(triggerHistory).sort(([a], [b]) => b - a)
+
+export const findScrollableAncestor = (el: HTMLElement | null): HTMLElement | null => {
+    let current = el?.parentElement ?? null
+    while (current) {
+        const { overflowY } = window.getComputedStyle(current)
+        if (overflowY === 'auto' || overflowY === 'scroll') {
+            return current
+        }
+        current = current.parentElement
+    }
+    return null
+}
