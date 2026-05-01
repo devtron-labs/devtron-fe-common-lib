@@ -16,8 +16,6 @@
 
 import { GroupBase, MultiValue, OptionsOrGroups, StylesConfig } from 'react-select'
 
-import { noop } from '@Common/Helper'
-import { CHECKBOX_VALUE } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 
 import {
@@ -27,6 +25,9 @@ import {
     SELECT_PICKER_MULTI_VALUE_LABEL_SIZE_MAP,
 } from './constants'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
+
+import { noop } from '@Common/Helper'
+import { CHECKBOX_VALUE } from '@Common/Types'
 
 const getMenuWidthFromSize = <OptionValue, IsMulti extends boolean>(
     menuSize: SelectPickerProps<OptionValue, IsMulti>['menuSize'],
@@ -48,7 +49,6 @@ const getMenuWidthFromSize = <OptionValue, IsMulti extends boolean>(
                 minWidth: '100%',
             }
         }
-        case ComponentSizeType.small:
         default:
             return {
                 width: '100%',

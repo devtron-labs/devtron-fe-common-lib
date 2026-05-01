@@ -38,9 +38,9 @@ const ImageWithFallback = ({ imageProps, fallbackImage }: ImageWithFallbackProps
     // If the type is string, the fallback image would be directly added to the img element
     return (
         // Added for type consistency
-        // eslint-disable-next-line react/jsx-no-useless-fragment
         <>
             {imageUrl || (!imageUrl && typeof fallbackImage === 'string') ? (
+                // biome-ignore lint/a11y/noNoninteractiveElementInteractions: handler for onError event is valid reason to ignore
                 <img
                     loading="lazy"
                     alt=""

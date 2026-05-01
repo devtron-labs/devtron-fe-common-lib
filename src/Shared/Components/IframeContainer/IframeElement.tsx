@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { useState } from 'react'
 import Tippy from '@tippyjs/react'
+import { useState } from 'react'
 
 import ICClose from '../../../Assets/Icon/ic-close.svg?react'
 import ICFullScreen from '../../../Assets/Icon/ic-fullscreen-2.svg?react'
@@ -63,7 +63,8 @@ const IframeElement = ({ URL, width, height, title, maxHeight, maxWidth }: Ifram
                     </Tippy>
                 </div>
 
-                {/* eslint-disable-next-line jsx-a11y/iframe-has-title */}
+                {/** biome-ignore lint/a11y/noNoninteractiveElementInteractions: For error handling */}
+                {/** biome-ignore lint/a11y/useIframeTitle: Title not needed for this case */}
                 <iframe
                     src={URL}
                     width={Math.min(maxWidth, width)}
@@ -77,6 +78,7 @@ const IframeElement = ({ URL, width, height, title, maxHeight, maxWidth }: Ifram
 
             {showFullScreen && (
                 <VisibleModal className="" close={handleExitFullScreen}>
+                    {/* biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: for stop propagation */}
                     <div
                         className="dc__overflow-auto br-8 dc__position-rel bg__primary custom-panel--iframe-element flexbox-col dc__content-space"
                         onClick={stopPropagation}
@@ -93,7 +95,7 @@ const IframeElement = ({ URL, width, height, title, maxHeight, maxWidth }: Ifram
                             </button>
                         </div>
                         <div className="flex px-16 py-8 h-100">
-                            {/* eslint-disable-next-line jsx-a11y/iframe-has-title */}
+                            {/** biome-ignore lint/a11y/useIframeTitle: Title not needed for this case */}
                             <iframe
                                 src={URL}
                                 width="100%"

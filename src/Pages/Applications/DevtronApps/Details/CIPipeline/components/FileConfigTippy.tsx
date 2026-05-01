@@ -16,8 +16,8 @@
 
 import Tippy from '@tippyjs/react'
 
-import ICInfoOutline from '@Icons/ic-info-outline.svg?react'
 import { VariableType } from '@Common/CIPipeline.Types'
+import ICInfoOutline from '@Icons/ic-info-outline.svg?react'
 
 export const FileConfigTippy = ({ fileMountDir }: Pick<VariableType, 'fileMountDir'>) => (
     <Tippy

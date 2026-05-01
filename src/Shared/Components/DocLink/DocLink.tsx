@@ -16,7 +16,6 @@
 
 import { MouseEvent } from 'react'
 
-import { DOCUMENTATION_HOME_PAGE } from '@Common/Constants'
 import { Button, ButtonComponentType, ButtonVariantType, Icon } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
 import { useIsSecureConnection } from '@Shared/Hooks'
@@ -24,6 +23,8 @@ import { SidePanelTab, useMainContext } from '@Shared/Providers'
 
 import { DocLinkProps } from './types'
 import { getDocumentationUrl } from './utils'
+
+import { DOCUMENTATION_HOME_PAGE } from '@Common/Constants'
 
 export const DocLink = <T extends boolean = false>({
     docLinkKey,

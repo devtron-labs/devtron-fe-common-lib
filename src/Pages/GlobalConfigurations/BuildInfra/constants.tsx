@@ -14,11 +14,6 @@
  * limitations under the License.
  */
 
-import ICSprayCan from '@Icons/ic-spray-can.svg?react'
-import ICTag from '@Icons/ic-tag.svg?react'
-import ICTimer from '@Icons/ic-timer.svg?react'
-import ICCpu from '@IconsV2/ic-cpu.svg?react'
-import ICMemory from '@IconsV2/ic-memory.svg?react'
 import { CMSecretComponentType } from '@Shared/Services'
 
 import {
@@ -38,6 +33,12 @@ import {
     TargetPlatformErrorFields,
     ValidateRequestLimitType,
 } from './types'
+
+import ICSprayCan from '@Icons/ic-spray-can.svg?react'
+import ICTag from '@Icons/ic-tag.svg?react'
+import ICTimer from '@Icons/ic-timer.svg?react'
+import ICCpu from '@IconsV2/ic-cpu.svg?react'
+import ICMemory from '@IconsV2/ic-memory.svg?react'
 
 export const BUILD_INFRA_INPUT_CONSTRAINTS = {
     // Will not enforce any decimal specification on input field

@@ -14,17 +14,18 @@
  * limitations under the License.
  */
 
-import { useEffect, useRef, useState } from 'react'
 import { MergeView } from '@codemirror/merge'
 import CodeMirror, { EditorView, ReactCodeMirrorRef, ViewUpdate } from '@uiw/react-codemirror'
+import { useEffect, useRef, useState } from 'react'
 
-import { Progressing } from '@Common/Progressing'
 import { getComponentSpecificThemeClass } from '@Shared/Providers'
 
 import { useCodeEditorContext } from './CodeEditor.context'
 import { DiffMinimap } from './Extensions'
 import { CodeEditorRendererProps } from './types'
 import { getCodeEditorHeight, getRevertControlButton, getScanLimit, updateDiffMinimapValues } from './utils'
+
+import { Progressing } from '@Common/Progressing'
 
 export const CodeEditorRenderer = ({
     codemirrorMergeKey,

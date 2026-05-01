@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-import { get } from '@Common/API'
-import { ROUTES } from '@Common/Constants'
-import { getUrlWithSearchParams } from '@Common/Helper'
 import {
     AppDetails,
     AppType,
@@ -26,6 +23,10 @@ import {
 
 import { processDeploymentStatusDetailsData } from '../DeploymentStatusBreakdown'
 import { GetAppDetailsParamsType, GetDeploymentStatusWithTimelineParamsType } from './types'
+
+import { get } from '@Common/API'
+import { ROUTES } from '@Common/Constants'
+import { getUrlWithSearchParams } from '@Common/Helper'
 
 export const getAppDetails = async ({
     appId,

@@ -16,12 +16,13 @@
 
 import { ReactElement, ReactNode } from 'react'
 
-import ICInfo from '@Icons/ic-medium-info.svg?react'
-import ICWarning from '@Icons/ic-warning-y5.svg?react'
 import ICDelete from '@Images/delete-medium.svg?react'
 
 import { ButtonStyleType } from '../Button'
 import { ConfirmationModalVariantType } from './types'
+
+import ICInfo from '@Icons/ic-medium-info.svg?react'
+import ICWarning from '@Icons/ic-warning-y5.svg?react'
 
 export const getIconFromVariant = (variant: ConfirmationModalVariantType): ReactElement => {
     switch (variant) {

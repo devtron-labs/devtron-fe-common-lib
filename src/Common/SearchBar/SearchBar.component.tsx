@@ -16,13 +16,14 @@
 
 import { ChangeEvent, KeyboardEvent, useCallback, useEffect, useRef, useState } from 'react'
 
-import { useRegisterShortcut } from '@Common/Hooks'
 import { Button, ButtonStyleType, ButtonVariantType, Icon } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { debounce, noop } from '../Helper'
 import { SearchBarProps } from './types'
 import { getSearchBarHeightFromSize } from './utils'
+
+import { useRegisterShortcut } from '@Common/Hooks'
 
 import './searchBar.scss'
 
@@ -142,7 +143,6 @@ const SearchBar = ({
 
     const inputCallbackRef: React.RefCallback<HTMLInputElement> = (node = null) => {
         if (inputProps.ref) {
-            // eslint-disable-next-line no-param-reassign
             inputProps.ref.current = node
         }
         inputRef.current = node

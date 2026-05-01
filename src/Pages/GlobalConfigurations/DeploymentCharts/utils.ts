@@ -18,10 +18,10 @@ import { versionComparatorBySortOrder } from '@Shared/Helpers'
 
 import fallbackGuiSchema from './basicViewSchema.json'
 import {
+    DEVTRON_DEPLOYMENT_CHART_NAMES,
     DeploymentChartListDTO,
     DeploymentChartType,
     DeploymentChartVersionsType,
-    DEVTRON_DEPLOYMENT_CHART_NAMES,
 } from './types'
 
 export const convertDeploymentChartListToChartType = (data: DeploymentChartListDTO): DeploymentChartType[] => {

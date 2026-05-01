@@ -16,10 +16,10 @@
 
 import ReactGA from 'react-ga4'
 
+import { HandleAnalyticsEventParams, ServerAnalyticsEventType } from './types'
+
 import { get } from '@Common/API'
 import { ROUTES } from '@Common/Constants'
-
-import { HandleAnalyticsEventParams, ServerAnalyticsEventType } from './types'
 
 export const handleSendAnalyticsEventToServer = async (
     eventType: ServerAnalyticsEventType,

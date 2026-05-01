@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { EditorView, Extension, showTooltip, StateEffect, StateField, Tooltip, ViewPlugin } from '@uiw/react-codemirror'
+import { EditorView, Extension, StateEffect, StateField, showTooltip, Tooltip, ViewPlugin } from '@uiw/react-codemirror'
 
 import { READ_ONLY_TOOLTIP_TIMEOUT } from '../CodeEditor.constants'
 import { getReadOnlyElement } from '../utils'

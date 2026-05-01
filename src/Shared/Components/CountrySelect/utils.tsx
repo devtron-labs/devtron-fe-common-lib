@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { defaultCountries, parseCountry, ParsedCountry } from 'react-international-phone'
-
-import { Tooltip } from '@Common/Tooltip'
+import { defaultCountries, ParsedCountry, parseCountry } from 'react-international-phone'
 
 import { FlagImage } from '../FlagImage'
 import { SelectPickerOptionType } from '../SelectPicker'
 import { CountrySelectProps } from './types'
+
+import { Tooltip } from '@Common/Tooltip'
 
 export const getCountryOptions = (variant: CountrySelectProps['variant']): SelectPickerOptionType<ParsedCountry>[] =>
     defaultCountries.map((countryData) => {

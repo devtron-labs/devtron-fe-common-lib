@@ -16,11 +16,12 @@
 
 import { ReactElement, ReactNode } from 'react'
 
-import { TooltipProps } from '@Common/Tooltip'
-import { InfoIconTippyProps } from '@Common/Types'
 import { BorderConfigType, ComponentLayoutType } from '@Shared/types'
 
 import { IconsProps } from '../Icon'
+
+import { TooltipProps } from '@Common/Tooltip'
+import { InfoIconTippyProps } from '@Common/Types'
 
 export type LabelOrAriaLabelType =
     | {
@@ -85,8 +86,7 @@ export interface FormInfoItemProps {
 }
 
 export interface FormFieldWrapperProps
-    extends
-        Pick<
+    extends Pick<
             FormFieldLabelProps,
             'label' | 'required' | 'ariaLabel' | 'layout' | 'labelTippyCustomizedConfig' | 'labelTooltipConfig'
         >,

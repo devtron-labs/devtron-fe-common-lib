@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { Tooltip } from '@Common/Tooltip'
-
 import { InteractiveCellTextProps } from './types'
+
+import { Tooltip } from '@Common/Tooltip'
 /**
  * A reusable component for rendering text within a tooltip. The text can be interactive (clickable) or static.
  *

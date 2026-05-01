@@ -16,12 +16,13 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import { noop } from '@Common/Helper'
 import { isNullOrUndefined } from '@Shared/Helpers'
 
 import { OBSERVER_ROOT_MARGIN, OBSERVER_THRESHOLD } from './constants'
 import { UseStickyEventProps, UseStickyEventReturnType } from './types'
 import { getHeightForStickyElementTopOffset } from './utils'
+
+import { noop } from '@Common/Helper'
 
 import './styles.scss'
 

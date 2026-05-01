@@ -16,16 +16,17 @@
 
 import YAML from 'yaml'
 
-import { PATTERNS } from '@Common/Constants'
-import { YAMLStringify } from '@Common/Helper'
+import { hasESO } from '@Pages/index'
 import { UseFormValidation, UseFormValidations } from '@Shared/Hooks'
 import { CMSecretExternalType, ConfigMapSecretUseFormProps } from '@Shared/Services'
 import { validateCMVolumeMountPath } from '@Shared/validations'
-import { hasESO } from '@Pages/index'
 
 import { KeyValueTableData } from '../KeyValueTable'
 import { CONFIG_MAP_SECRET_YAML_PARSE_ERROR, SECRET_TOAST_INFO } from './constants'
 import { getESOSecretDataFromYAML } from './utils'
+
+import { PATTERNS } from '@Common/Constants'
+import { YAMLStringify } from '@Common/Helper'
 
 /**
  * Validates a YAML string for proper structure and specific key/value constraints.
@@ -50,8 +51,8 @@ const validateYaml = (yaml: string): UseFormValidation['custom'] => {
         if (typeof json === 'object') {
             // Regular expression pattern to validate ConfigMap and Secret keys.
             const keyPattern = new RegExp(PATTERNS.CONFIG_MAP_AND_SECRET_KEY)
-            const errorKeys = [] // To store keys that do not match the key pattern.
-            const errorValues = [] // To store values that are boolean or numeric, which should be quoted.
+            const errorKeys: string[] = [] // To store keys that do not match the key pattern.
+            const errorValues: string[] = [] // To store values that are boolean or numeric, which should be quoted.
 
             let updatedError = ''
 

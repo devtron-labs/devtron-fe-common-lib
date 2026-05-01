@@ -17,8 +17,6 @@
 import { useEffect, useMemo, useState } from 'react'
 
 import ImgWorkflowOptionsModalHeader from '@Images/workflow-options-modal-header.svg?react'
-import { noop, showError } from '@Common/Helper'
-import { PipelineType, WorkflowNodeType } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 import { saveCDPipeline, ToastManager, ToastVariantType } from '@Shared/Services'
 import { CIPipelineNodeType } from '@Shared/types'
@@ -36,6 +34,9 @@ import {
     getReceiveWorkflowCardsConfig,
     getSwitchToWebhookPayload,
 } from './utils'
+
+import { noop, showError } from '@Common/Helper'
+import { PipelineType, WorkflowNodeType } from '@Common/Types'
 
 import './styles.scss'
 
@@ -190,6 +191,7 @@ const WorkflowOptionsModal = ({
                 <h4 className="m-0 fs-13 lh-16 fw-6 cn-7">{title}</h4>
                 <div className="workflow-options-modal__cards-container dc__grid dc__gap-12">
                     {cardsConfig.map((props) => (
+                        // biome-ignore lint/correctness/useJsxKeyInIterable: Legacy
                         <SourceTypeCard
                             {...props}
                             onCardAction={handleCardAction}

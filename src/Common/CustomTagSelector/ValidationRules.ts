@@ -22,7 +22,7 @@ export class ValidationRules {
     }
 
     propagateTagValue = (value: string, key: string): { isValid: boolean; messages: string[] } => {
-        const errorList = []
+        const errorList: string[] = []
         if (!value) {
             errorList.push('Value is required')
         } else if (!key.startsWith('devtron.ai/')) {

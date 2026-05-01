@@ -16,8 +16,6 @@
 
 import { ComponentProps } from 'react'
 
-import { getAIAnalyticsEvents } from '@Common/Helper'
-import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 import { getAppDetailsURL } from '@Shared/Helpers'
 import { MainContext, useMainContext } from '@Shared/Providers'
@@ -33,6 +31,9 @@ import AppStatusContent from './AppStatusContent'
 import { APP_STATUS_CUSTOM_MESSAGES } from './constants'
 import { AppStatusBodyProps, AppStatusModalTabType, InfoCardItemProps, StatusHeadingContainerProps } from './types'
 import { getAppStatusMessageFromAppDetails } from './utils'
+
+import { getAIAnalyticsEvents } from '@Common/Helper'
+import { Tooltip } from '@Common/Tooltip'
 
 const InfoCardItem = ({ heading, value, isLast = false, alignCenter = false }: InfoCardItemProps) => (
     <div

@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import ICTilde from '@Icons/ic-tilde.svg?react'
-
 import { NumbersCountProps } from './types'
+
+import ICTilde from '@Icons/ic-tilde.svg?react'
 
 const NumbersCount = ({ count, isApprox, isSelected }: NumbersCountProps) => (
     <div

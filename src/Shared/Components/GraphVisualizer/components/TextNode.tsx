@@ -16,10 +16,10 @@
 
 import { NodeProps } from '@xyflow/react'
 
-import { Tooltip } from '@Common/Tooltip'
-
 import { BaseNode } from './BaseNode'
 import { TextNodeProps } from './types'
+
+import { Tooltip } from '@Common/Tooltip'
 
 export const TextNode = ({ id, data, isConnectable }: NodeProps<TextNodeProps>) => {
     const { icon, text } = data

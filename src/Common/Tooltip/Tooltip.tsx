@@ -14,15 +14,14 @@
  * limitations under the License.
  */
 
-import { cloneElement } from 'react'
 import TippyJS from '@tippyjs/react'
-// eslint-disable-next-line import/no-extraneous-dependencies
+import { cloneElement } from 'react'
 import { followCursor } from 'tippy.js'
-
-import { useIsTextTruncated } from '@Common/Hooks'
 
 import ShortcutKeyComboTooltipContent from './ShortcutKeyComboTooltipContent'
 import { TooltipProps } from './types'
+
+import { useIsTextTruncated } from '@Common/Hooks'
 
 import './styles.scss'
 

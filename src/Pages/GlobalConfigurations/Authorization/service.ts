@@ -16,7 +16,6 @@
 
 import { GroupBase } from 'react-select'
 
-import { get, ResponseType, ROUTES } from '@Common/index'
 import { SelectPickerOptionType } from '@Shared/Components'
 import { API_TOKEN_PREFIX } from '@Shared/constants'
 import { stringComparatorBySortOrder } from '@Shared/Helpers'
@@ -24,6 +23,8 @@ import { DefaultUserKey } from '@Shared/types'
 
 import { UserMinType } from './types'
 import { getUserAndApiTokenOption } from './utils'
+
+import { get, ResponseType, ROUTES } from '@Common/index'
 
 // FIXME: Common out the typing and url from dashboard
 export const getUserAndApiTokenOptions = async (): Promise<GroupBase<SelectPickerOptionType<string>>[]> => {

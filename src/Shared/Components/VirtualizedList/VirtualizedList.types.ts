@@ -22,6 +22,8 @@ import { AutoSizedStickyTreeProps, StickyTreeRowRenderer } from 'react-virtualiz
  * @template ListKeys - The type of the keys used to identify list items (e.g., `string` or `number`).
  * @template ExtendedType - An optional type to extend the base item structure with additional fields.
  */
+
+// biome-ignore lint/complexity/noBannedTypes: Legacy
 export type VirtualizedListItem<ListKeys, ExtendedType = {}> = ExtendedType & {
     /** The unique identifier of the item. */
     id: string | number
@@ -39,10 +41,13 @@ export type VirtualizedListItem<ListKeys, ExtendedType = {}> = ExtendedType & {
  * @template ListKeys - The type of the keys used to identify list items (e.g., `string` or `number`).
  * @template ExtendedType - An optional type to extend the base item structure with additional fields.
  */
-export interface VirtualizedListProps<ListKeys extends string | number, ExtendedType extends object = {}> extends Omit<
-    AutoSizedStickyTreeProps<VirtualizedListItem<ListKeys, ExtendedType>>,
-    'root' | 'renderRoot' | 'rowRenderer' | 'getChildren'
-> {
+
+// biome-ignore lint/complexity/noBannedTypes: Legacy
+export interface VirtualizedListProps<ListKeys extends string | number, ExtendedType extends object = {}>
+    extends Omit<
+        AutoSizedStickyTreeProps<VirtualizedListItem<ListKeys, ExtendedType>>,
+        'root' | 'renderRoot' | 'rowRenderer' | 'getChildren'
+    > {
     /**
      * A dictionary of items keyed by their unique identifiers.
      */

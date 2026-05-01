@@ -33,7 +33,6 @@ export const getClassNameAccToVariant = (
             return { styles: 'bcg-1 cg-7', iconColor: 'G700' }
         case 'neutral':
             return { styles: 'bg__secondary cn-700', iconColor: 'N700' }
-        case 'default':
         default:
             return { styles: 'bcb-1 cb-7', iconColor: 'B700' }
     }
@@ -45,7 +44,6 @@ export const getClassNameAccToSize = (size: BadgeProps['size']) => {
             return 'fs-11 lh-16 px-4 py-1'
         case ComponentSizeType.xxs:
             return 'fs-12 lh-16 px-6 py-2'
-        case ComponentSizeType.xs:
         default:
             return 'fs-13 lh-20 px-6 py-2'
     }

@@ -1,11 +1,7 @@
 import { useState } from 'react'
 import { generatePath, useNavigate, useParams } from 'react-router-dom'
 
-import { useQuery } from '@Common/API'
-import { Drawer } from '@Common/Drawer'
-import { showError, stopPropagation } from '@Common/Helper'
 import { ComponentSizeType } from '@Shared/constants'
-import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 import { APIResponseHandler } from '../APIResponseHandler'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
@@ -17,6 +13,11 @@ import {
     ResourceConflictDetailsModalProps,
     ResourceConflictItemType,
 } from './types'
+
+import { useQuery } from '@Common/API'
+import { Drawer } from '@Common/Drawer'
+import { showError, stopPropagation } from '@Common/Helper'
+import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 const ResourceConflictDetailsModal = ({ appName, environmentName, handleClose }: ResourceConflictDetailsModalProps) => {
     const { appId, envId, pipelineId, triggerId } = useParams<ResourceConflictDeployDialogURLParamsType>()
@@ -57,6 +58,7 @@ const ResourceConflictDetailsModal = ({ appName, environmentName, handleClose }:
 
     return (
         <Drawer width="800px" onClose={handleClose} onEscape={handleClose} position="right">
+            {/* biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: modal content click isolation */}
             <div
                 className="flexbox-col dc__content-space h-100 bg__modal--primary shadow__modal dc__overflow-auto"
                 onClick={stopPropagation}

@@ -24,6 +24,7 @@ const dashboardAPI = new CoreAPI({
 })
 
 export const { post, put, patch, get, trash, setGlobalAPITimeout } = dashboardAPI
+
 export { default as CoreAPI } from './CoreAPI'
 export { QueryClientProvider } from './QueryClientProvider'
 export * from './reactQueryHooks'

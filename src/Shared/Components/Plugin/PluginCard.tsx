@@ -15,7 +15,7 @@
  */
 
 import ICBookOpen from '../../../Assets/Icon/ic-book-open.svg?react'
-import { Checkbox, CHECKBOX_VALUE, stopPropagation } from '../../../Common'
+import { CHECKBOX_VALUE, Checkbox, stopPropagation } from '../../../Common'
 import PluginImageContainer from './PluginImageContainer'
 import PluginTagsContainer from './PluginTagsContainer'
 import { PluginCardProps } from './types'
@@ -43,6 +43,7 @@ const PluginCard = ({
     }
 
     return (
+        // biome-ignore lint/a11y/useSemanticElements: Its fine here since its a container
         <div
             className={`p-12 flexbox dc__gap-16 dc__tab-focus plugin-card dc__visible-hover dc__visible-hover--parent br-4 ${showCardBorder ? 'dc__border dc__hover-n50' : 'dc__border-transparent dc__hover-border-n1'}`}
             role="button"

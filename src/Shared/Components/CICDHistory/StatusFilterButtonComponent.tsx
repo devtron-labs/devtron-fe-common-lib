@@ -16,14 +16,15 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import ICCaretDown from '@Icons/ic-caret-down.svg?react'
-import { SegmentType } from '@Common/SegmentedControl/types'
 import { ComponentSizeType } from '@Shared/constants'
 import { getUniqueId } from '@Shared/Helpers'
 
 import { PopupMenu, SegmentedControl } from '../../../Common'
 import { StatusFilterButtonType } from './types'
 import { getAppStatusIcon, getNodesCount, getStatusFilters } from './utils'
+
+import { SegmentType } from '@Common/SegmentedControl/types'
+import ICCaretDown from '@Icons/ic-caret-down.svg?react'
 
 import './StatusFilterButton.scss'
 

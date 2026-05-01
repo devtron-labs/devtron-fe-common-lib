@@ -16,13 +16,13 @@
 
 import { type JSX, ReactNode, useEffect, useState } from 'react'
 
-import Info from '@Icons/ic-info-outlined.svg?react'
-
 import { getBranchIcon, getWebhookEventsForEventId, SourceTypeMap, Tooltip } from '../../../Common'
 import { Icon } from '../Icon'
 import { DEFAULT_GIT_BRANCH_VALUE, GIT_BRANCH_NOT_CONFIGURED } from './constants'
 import { CIPipelineSourceConfigInterface } from './types'
 import { buildHoverHtmlForWebhook } from './utils'
+
+import Info from '@Icons/ic-info-outlined.svg?react'
 
 export const CiPipelineSourceConfig = ({
     sourceType,
@@ -78,10 +78,8 @@ export const CiPipelineSourceConfig = ({
     // tippy content for regex type
     const renderRegexSourceVal = (): JSX.Element => (
         <>
-            <>
-                <div className="fw-6">Regex</div>
-                <p>{regex}</p>
-            </>
+            <div className="fw-6">Regex</div>
+            <p>{regex}</p>
 
             {window.location.href.includes('trigger') && (
                 <>

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import React from 'react'
 import ICDrag from '../../Assets/Icon/ic-drag.svg?react'
 import { DraggableButtonProps } from './types'
 

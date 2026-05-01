@@ -14,16 +14,16 @@
  * limitations under the License.
  */
 
+import Tippy, { TippyProps } from '@tippyjs/react'
 import React, { Fragment } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import Tippy, { TippyProps } from '@tippyjs/react'
-
-import ICExpand from '@Icons/ic-expand.svg?react'
-import { ConditionalWrap } from '@Common/Helper'
-import { Tooltip } from '@Common/Tooltip'
 
 import { Collapse } from '../Collapse'
 import { CollapsibleListItem, CollapsibleListProps, TabOptions } from './CollapsibleList.types'
+
+import { ConditionalWrap } from '@Common/Helper'
+import { Tooltip } from '@Common/Tooltip'
+import ICExpand from '@Icons/ic-expand.svg?react'
 
 import './CollapsibleList.scss'
 

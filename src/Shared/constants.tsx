@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import { DeploymentNodeType, OptionType } from '@Common/Types'
-
 import { InfoBlockProps } from './Components'
 import {
     CDMaterialSidebarType,
@@ -25,6 +23,8 @@ import {
     IconBaseColorType,
     RemoteConnectionType,
 } from './types'
+
+import { DeploymentNodeType, OptionType } from '@Common/Types'
 
 export const ARTIFACT_STATUS = {
     PROGRESSING: 'Progressing',
@@ -405,7 +405,7 @@ export enum K8sResourcePayloadAppType {
 }
 
 // Disallowing this rule since ansi specifically works with escape characters
-// eslint-disable-next-line no-control-regex
+// biome-ignore lint/suspicious/noControlCharactersInRegex: Legacy
 export const ANSI_UP_REGEX = /\x1B\[.*?m/g
 /**
  * Size variants for components
@@ -517,7 +517,7 @@ export const PRIVACY_POLICY_LINK = 'https://devtron.ai/privacy-policy'
 export const TERMS_OF_USE_LINK = 'https://devtron.ai/terms-of-use'
 export const CONTACT_SALES_LINK = 'https://devtron.ai/contact-sales'
 
-export const enum DeleteComponentsName {
+export enum DeleteComponentsName {
     Cluster = 'cluster',
     Job = 'job pipeline',
     BuildPipeline = 'build pipeline',

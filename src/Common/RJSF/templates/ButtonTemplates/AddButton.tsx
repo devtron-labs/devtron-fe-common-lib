@@ -16,8 +16,9 @@
 
 import { IconButtonProps } from '@rjsf/utils'
 
-import { Tooltip } from '@Common/Tooltip'
 import PlusIcon from '../../../../Assets/Icon/ic-add.svg?react'
+
+import { Tooltip } from '@Common/Tooltip'
 
 export const AddButton = ({
     label,

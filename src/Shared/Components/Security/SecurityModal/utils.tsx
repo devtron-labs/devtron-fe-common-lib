@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-import NoVulnerability from '@Icons/ic-vulnerability-not-found.svg?react'
-import { SegmentedBarChartProps } from '@Common/SegmentedBarChart'
-import { VulnerabilityType } from '@Common/Types'
 import { ScannedByToolModal } from '@Shared/Components/ScannedByToolModal'
 import { Severity } from '@Shared/types'
 
@@ -32,6 +29,10 @@ import {
     VulnerabilityCountType,
     VulnerabilityState,
 } from './types'
+
+import { SegmentedBarChartProps } from '@Common/SegmentedBarChart'
+import { VulnerabilityType } from '@Common/Types'
+import NoVulnerability from '@Icons/ic-vulnerability-not-found.svg?react'
 
 export const mapSeveritiesToSegmentedBarChartEntities = (
     severities: Partial<Record<keyof typeof SEVERITIES_LABEL_COLOR_MAP, number>>,

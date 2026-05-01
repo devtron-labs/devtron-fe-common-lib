@@ -1,7 +1,7 @@
+import { IconsProps } from '../Icon'
+
 import { SupportedKeyboardKeysType } from '@Common/Hooks'
 import { KEYBOARD_KEYS_MAP } from '@Common/Hooks/UseRegisterShortcut/types'
-
-import { IconsProps } from '../Icon'
 
 export const KEY_TO_UI_MAP: Record<SupportedKeyboardKeysType, string | Pick<IconsProps, 'name' | 'rotateBy'>> = {
     ...KEYBOARD_KEYS_MAP,

@@ -83,6 +83,7 @@ export const ActionMenu = <T extends string | number = string | number>({
         >
             <div className="flexbox-col mxh-320">
                 {isSearchable && (
+                    // biome-ignore lint/a11y/useSemanticElements: Legacy
                     <div
                         role="search"
                         className="action-menu__searchbox bg__primary border__secondary-translucent--bottom"
@@ -99,13 +100,16 @@ export const ActionMenu = <T extends string | number = string | number>({
                 )}
                 <ul
                     ref={scrollableRef}
+                    // biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: Legacy
                     role="menu"
                     className="action-menu m-0 p-0 flex-grow-1 dc__overflow-auto dc__overscroll-none"
                 >
                     {filteredOptions.length > 0 ? (
                         filteredOptions.map((option, sectionIndex) => (
+                            // biome-ignore lint/a11y/useFocusableInteractive: Legacy
                             <li
                                 key={option.groupLabel || `no-group-label-${sectionIndex}`}
+                                // biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: Legacy
                                 role="menuitem"
                                 className="action-menu__group flexbox-col dc__gap-4 py-4"
                             >
@@ -142,7 +146,7 @@ export const ActionMenu = <T extends string | number = string | number>({
                             </li>
                         ))
                     ) : (
-                        <li role="menuitem" className="py-8 px-12">
+                        <li className="py-8 px-12">
                             <p className="m-0 fs-13 lh-20 fw-4 cn-7">No options</p>
                         </li>
                     )}

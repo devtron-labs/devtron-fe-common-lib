@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { DetailedHTMLProps, KeyboardEvent, LegacyRef, MutableRefObject, ReactElement } from 'react'
 import { HTMLMotionProps } from 'framer-motion'
+import { DetailedHTMLProps, KeyboardEvent, LegacyRef, MutableRefObject, ReactElement } from 'react'
 
 import { BackdropProps } from '../Backdrop'
 import { ButtonProps } from '../Button'

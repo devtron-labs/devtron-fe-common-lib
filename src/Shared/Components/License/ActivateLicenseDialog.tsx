@@ -16,9 +16,6 @@
 
 import { ChangeEvent, SyntheticEvent, useState } from 'react'
 
-import ICCross from '@Icons/ic-cross.svg?react'
-import { API_STATUS_CODES } from '@Common/Constants'
-import { showError } from '@Common/index'
 import {
     ActivateLicenseDialogProps,
     Button,
@@ -38,6 +35,10 @@ import { GatekeeperQRDialog, ICDevtronWithBorder } from './License.components'
 import { activateLicense } from './services'
 import { getGateKeeperUrl } from './utils'
 
+import { API_STATUS_CODES } from '@Common/Constants'
+import { showError } from '@Common/index'
+import ICCross from '@Icons/ic-cross.svg?react'
+
 const ActivateLicenseDialog = ({
     fingerprint,
     enterpriseName,
@@ -50,7 +51,6 @@ const ActivateLicenseDialog = ({
     const [error, setError] = useState<string>('')
 
     const handleGetLicense = () => {
-        // eslint-disable-next-line @typescript-eslint/no-floating-promises
         handleSendAnalyticsEventToServer(ServerAnalyticsEventType.GET_LICENSE_CLICKED, true)
         const gateKeeperURL = getGateKeeperUrl(fingerprint)
 

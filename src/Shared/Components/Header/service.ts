@@ -22,7 +22,7 @@ export const updatePostHogEvent = (payload): Promise<ResponseType> => post(ROUTE
 let serverInfo: ServerInfoResponse
 
 const isValidServerInfo = (_serverInfo: ServerInfoResponse): boolean =>
-    !!(_serverInfo?.result && _serverInfo.result.releaseName && _serverInfo.result.installationType)
+    !!(_serverInfo?.result?.releaseName && _serverInfo.result.installationType)
 
 const getSavedServerInfo = (): ServerInfoResponse => {
     if (!isValidServerInfo(serverInfo)) {

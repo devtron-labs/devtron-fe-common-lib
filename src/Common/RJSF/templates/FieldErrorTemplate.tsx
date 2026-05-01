@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import React from 'react'
 import { errorId, FieldErrorProps } from '@rjsf/utils'
+import React from 'react'
 
-import Error from '../../../Assets/Icon/ic-warning.svg?react'
+import ErrorIcon from '../../../Assets/Icon/ic-warning.svg?react'
 
 export const FieldErrorTemplate = ({ errors = [], fieldPathId }: FieldErrorProps) => {
     const id = errorId(fieldPathId)
@@ -28,10 +28,11 @@ export const FieldErrorTemplate = ({ errors = [], fieldPathId }: FieldErrorProps
                 {errors
                     .filter((elem) => !!elem)
                     .map((error, index: number) => (
+                        // biome-ignore lint/suspicious/noArrayIndexKey: Using index as key is acceptable here because errors array is static and won't change order
                         <React.Fragment key={index}>
                             <span />
                             <span className="form__error">
-                                <Error className="form__icon form__icon--error" />
+                                <ErrorIcon className="form__icon form__icon--error" />
                                 {error}
                             </span>
                         </React.Fragment>

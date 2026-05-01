@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { GitProviderType } from '@Common/Constants'
-
 import { IconsProps } from '../Icon'
+
+import { GitProviderType } from '@Common/Constants'
 
 export type GitProviderIconProps = {
     /**

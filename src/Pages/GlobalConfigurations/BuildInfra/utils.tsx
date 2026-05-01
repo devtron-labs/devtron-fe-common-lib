@@ -255,7 +255,6 @@ const getConfigurationMapWithoutDefaultFallback = (
                         ...configValues,
                     }
 
-                    // eslint-disable-next-line no-param-reassign
                     configurationMap[configuration.key] = {
                         ...currentConfigValue,
                         ...parsePlatformConfigIntoValue(currentConfigValue),
@@ -310,7 +309,6 @@ const getPlatformConfigurationsWithDefaultValues = ({
             const defaultConfigurationValueMap = (defaultConfiguration.value as BuildInfraCMCSValueType[])?.reduce<
                 Record<string, BuildInfraCMCSValueType>
             >((defaultCMCSMap, configMapSecretData) => {
-                // eslint-disable-next-line no-param-reassign
                 defaultCMCSMap[configMapSecretData.useFormProps.name] = configMapSecretData
                 return defaultCMCSMap
             }, {})
@@ -332,7 +330,6 @@ const getPlatformConfigurationsWithDefaultValues = ({
 
             const overriddenValuesMap = finalValues.reduce<Record<string, BuildInfraCMCSValueType>>(
                 (overriddenValuesAcc, overriddenValue) => {
-                    // eslint-disable-next-line no-param-reassign
                     overriddenValuesAcc[overriddenValue.useFormProps.name] = overriddenValue
                     return overriddenValuesAcc
                 },
@@ -433,7 +430,6 @@ export const getTransformedBuildInfraProfileResponse = ({
                 const defaultValue = parsePlatformConfigIntoValue(globalPlatformConfig[configType])
 
                 // It does not matter what value we have in case its inheriting runner, since we show the values of runner
-                // eslint-disable-next-line no-param-reassign
                 fallbackAcc[configType] = {
                     ...baseValue,
                     defaultValue,

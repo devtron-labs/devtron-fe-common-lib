@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-import { getAlphabetIcon } from '@Common/Helper'
-import { Tooltip } from '@Common/Tooltip'
 import { API_TOKEN_PREFIX } from '@Shared/constants'
 import { useUserEmail } from '@Shared/Providers'
 
 import { Icon } from '../Icon'
 import { UserIdentifierProps } from './types'
+
+import { getAlphabetIcon } from '@Common/Helper'
+import { Tooltip } from '@Common/Tooltip'
 
 const UserIdentifierTooltip = ({
     children,

@@ -14,21 +14,23 @@
  * limitations under the License.
  */
 
+import Tippy from '@tippyjs/react'
 import React from 'react'
 import Select, { components } from 'react-select'
-import Tippy from '@tippyjs/react'
-import ICErrorCross from '@Icons/ic-error-cross.svg?react'
+
 import ClearIcon from '../Assets/Icon/ic-appstatus-cancelled.svg?react'
 import Check from '../Assets/Icon/ic-check.svg?react'
 import RedWarning from '../Assets/Icon/ic-error-medium.svg?react'
 import { Checkbox } from './Checkbox'
-import { CHECKBOX_VALUE } from './Types'
 import { ConditionalWrap } from './Helper'
+import { CHECKBOX_VALUE } from './Types'
+
+import ICErrorCross from '@Icons/ic-error-cross.svg?react'
 
 export const Option = (props) => {
     const { selectOption, data, isDisabled, showTippy, tippyPlacement } = props
 
-    const handleChange = (e) => {
+    const handleChange = () => {
         selectOption(data)
     }
 
@@ -72,12 +74,13 @@ export const Option = (props) => {
 export const SingleSelectOption = (props) => {
     const { selectOption, data } = props
     const style = { height: '16px', width: '16px', flex: '0 0 16px' }
-    const onClick = (e) => selectOption(data)
+    const onClick = () => selectOption(data)
     return (
         <div className="flex left pl-12" style={{ background: props.isFocused ? 'var(--N100)' : 'transparent' }}>
             {props.isSelected ? (
                 <Check onClick={onClick} className="mr-8 icon-dim-16" style={style} />
             ) : (
+                // biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: Legacy
                 <span onClick={onClick} className="mr-8" style={style} />
             )}
             <components.Option {...props} />
@@ -91,7 +94,7 @@ export const SingleSelectOption = (props) => {
 
 export const MultiValueContainer = (props) => {
     const { children, data, innerProps, selectProps } = props
-    const { label, value } = data
+    const { label } = data
     return (
         <components.MultiValueContainer {...{ data, innerProps, selectProps }}>
             <div className="flex fs-12 ml-4 cn-9">{label}</div>
@@ -144,7 +147,7 @@ export const MultiValueRemove = (props) => {
         <components.MultiValueRemove {...props}>
             <ICErrorCross
                 {...{ onClick, onMouseDown }}
-                onClick={(e) => onClick(data)}
+                onClick={() => onClick(data)}
                 className="icon-n5"
                 style={{ height: '14px', width: '14px' }}
             />
@@ -178,7 +181,7 @@ export const multiSelectStyles = {
         border: state.isFocused ? '1px solid var(--B500)' : '1px solid var(--N200)',
         boxShadow: 'none',
     }),
-    menu: (base, state) => ({
+    menu: (base) => ({
         ...base,
         backgroundColor: 'var(--bg-primary)',
     }),

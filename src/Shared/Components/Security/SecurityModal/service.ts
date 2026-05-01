@@ -14,12 +14,12 @@
  * limitations under the License.
  */
 
+import { ScanRecommendationsDTO, ScanResultDTO, ScanResultParamsType } from './types'
+
 import { get } from '@Common/API'
 import { ROUTES } from '@Common/Constants'
 import { getUrlWithSearchParams } from '@Common/Helper'
 import { ResponseType } from '@Common/Types'
-
-import { ScanRecommendationsDTO, ScanResultDTO, ScanResultParamsType } from './types'
 
 export const getSecurityScan = async ({
     appId,

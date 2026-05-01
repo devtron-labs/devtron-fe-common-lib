@@ -14,14 +14,14 @@
  * limitations under the License.
  */
 
-import { KeyboardEvent, useCallback, useEffect, useMemo, useRef } from 'react'
 import { deepEquals } from '@rjsf/utils'
-
-import { noop } from '@Common/Helper'
+import { KeyboardEvent, useCallback, useEffect, useMemo, useRef } from 'react'
 
 import { ShortcutType, UseRegisterShortcutContextType, UseRegisterShortcutProviderType } from './types'
 import { UseRegisterShortcutContext } from './UseRegisterShortcutContext'
 import { preprocessKeys, verifyCallbackStack } from './utils'
+
+import { noop } from '@Common/Helper'
 
 const IGNORE_TAGS_FALLBACK = ['input', 'textarea', 'select']
 const DEFAULT_TIMEOUT = 300

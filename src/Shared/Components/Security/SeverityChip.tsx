@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-import { capitalizeFirstLetter } from '@Common/Helper'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Badge, BadgeProps } from '../Badge'
 import { SeveritiesDTO } from './SecurityModal'
+
+import { capitalizeFirstLetter } from '@Common/Helper'
 
 const SeverityChip = ({ severity, count }: { severity: SeveritiesDTO; count?: number }) => {
     const label = count ? `${count} ${capitalizeFirstLetter(severity)}` : capitalizeFirstLetter(severity)

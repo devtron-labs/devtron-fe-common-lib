@@ -16,10 +16,7 @@
 
 import { type JSX, memo, useEffect, useState } from 'react'
 
-import ICClose from '@Icons/ic-cross.svg?react'
-import ICSearch from '@Icons/ic-search.svg?react'
 import NoVariables from '@Images/no-artifact.webp'
-import { DebouncedSearch, GenericEmptyState, Progressing, Reload } from '@Common/index'
 import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP, ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
@@ -28,6 +25,10 @@ import { DRAG_SELECTOR, NO_DEFINED_DESCRIPTION, NO_DEFINED_VALUE } from './const
 import SuggestionItem from './SuggestionItem'
 import SuggestionsInfo from './SuggestionsInfo'
 import { ScopedVariableType, SuggestionsProps } from './types'
+
+import { DebouncedSearch, GenericEmptyState, Progressing, Reload } from '@Common/index'
+import ICClose from '@Icons/ic-cross.svg?react'
+import ICSearch from '@Icons/ic-search.svg?react'
 
 const Suggestions = ({
     handleDeActivation,
@@ -102,6 +103,7 @@ const Suggestions = ({
             </div>
 
             {enableSearch && (
+                // biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions: Legacy
                 <div
                     onKeyDown={(e) => {
                         if (e.key === 'Enter') {

@@ -17,12 +17,12 @@
 import { useMemo, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
-import { getUrlWithSearchParams } from '@Common/Helper'
-
 import { DEFAULT_BASE_PAGE_SIZE, EXCLUDED_FALSY_VALUES, SortingOrder } from '../../Constants'
 import { DEFAULT_PAGE_NUMBER, URL_FILTER_KEYS } from './constants'
 import { UpdateSearchParamsOptionsType, UseUrlFiltersProps, UseUrlFiltersReturnType } from './types'
 import { areAnyAdditionalFiltersApplied, setItemInLocalStorageIfKeyExists } from './utils'
+
+import { getUrlWithSearchParams } from '@Common/Helper'
 
 const { PAGE_SIZE, PAGE_NUMBER, SEARCH_KEY, SORT_BY, SORT_ORDER } = URL_FILTER_KEYS
 
@@ -44,6 +44,7 @@ const { PAGE_SIZE, PAGE_NUMBER, SEARCH_KEY, SORT_BY, SORT_ORDER } = URL_FILTER_K
  *
  */
 
+// biome-ignore lint/complexity/noBannedTypes: Legacy
 const useUrlFilters = <T = string, K = {}>({
     initialSortKey,
     parseSearchParams,

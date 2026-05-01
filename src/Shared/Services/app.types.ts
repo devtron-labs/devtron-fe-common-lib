@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+import { OverrideMergeStrategyType } from '@Pages/Applications'
 import { KeyValueTableData } from '@Shared/Components'
 import { DeploymentStrategyType, TargetPlatformsDTO } from '@Shared/types'
-import { OverrideMergeStrategyType } from '@Pages/Applications'
 
 import { ReleaseTag, ResponseType, UserApprovalMetadataType } from '../../Common'
 
@@ -80,8 +80,10 @@ interface CIMaterialMetaType {
 }
 
 export interface CIMaterialType
-    extends
-        Pick<CIMaterialDTO, 'id' | 'gitMaterialId' | 'gitMaterialName' | 'type' | 'value' | 'active' | 'lastFetchTime'>,
+    extends Pick<
+            CIMaterialDTO,
+            'id' | 'gitMaterialId' | 'gitMaterialName' | 'type' | 'value' | 'active' | 'lastFetchTime'
+        >,
         CIMaterialMetaType {
     gitURL: CIMaterialDTO['url']
     history: MaterialHistoryType[]
@@ -104,10 +106,8 @@ interface ImageTaggingDataDTO {
     tagsEditable: boolean
 }
 
-interface ImageTaggingDataType extends Pick<
-    ImageTaggingDataDTO,
-    'imageReleaseTags' | 'appReleaseTags' | 'tagsEditable'
-> {
+interface ImageTaggingDataType
+    extends Pick<ImageTaggingDataDTO, 'imageReleaseTags' | 'appReleaseTags' | 'tagsEditable'> {
     imageComment: ImageCommentType
 }
 
@@ -125,8 +125,7 @@ export interface CIMaterialInfoDTO extends Pick<TargetPlatformsDTO, 'targetPlatf
 }
 
 export interface CIMaterialInfoType
-    extends
-        Pick<
+    extends Pick<
             CIMaterialInfoDTO,
             | 'triggeredByEmail'
             | 'lastDeployedTime'

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import ICArrowCounterClockwise from '@Icons/ic-arrow-counter-clockwise.svg?react'
-
 import { DEFAULT_INVALID_YAML_ERROR } from './constants'
 import { InvalidTippyProps, InvalidTippyTypeEnum } from './types'
+
+import ICArrowCounterClockwise from '@Icons/ic-arrow-counter-clockwise.svg?react'
 
 export const getInvalidTippyContent = ({
     type = InvalidTippyTypeEnum.YAML,

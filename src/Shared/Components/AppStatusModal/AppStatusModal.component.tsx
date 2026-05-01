@@ -17,12 +17,6 @@
 import { Fragment, useEffect, useRef, useState } from 'react'
 
 import NoAppStatusImage from '@Images/no-artifact.webp'
-import { abortPreviousRequests, getIsRequestAborted } from '@Common/API'
-import { DISCORD_LINK } from '@Common/Constants'
-import { Drawer } from '@Common/Drawer'
-import { GenericEmptyState } from '@Common/EmptyState'
-import { handleUTCTime, stopPropagation, useAsync } from '@Common/Helper'
-import { DeploymentAppTypes, ImageType } from '@Common/Types'
 import {
     APP_DETAILS_FALLBACK_POLLING_INTERVAL,
     ComponentSizeType,
@@ -41,6 +35,13 @@ import AppStatusModalTabList from './AppStatusModalTabList'
 import { getAppDetails, getDeploymentStatusWithTimeline } from './service'
 import { AppStatusModalProps, AppStatusModalTabType } from './types'
 import { getEmptyViewImageFromHelmDeploymentStatus, getShowDeploymentStatusModal } from './utils'
+
+import { abortPreviousRequests, getIsRequestAborted } from '@Common/API'
+import { DISCORD_LINK } from '@Common/Constants'
+import { Drawer } from '@Common/Drawer'
+import { GenericEmptyState } from '@Common/EmptyState'
+import { handleUTCTime, stopPropagation, useAsync } from '@Common/Helper'
+import { DeploymentAppTypes, ImageType } from '@Common/Types'
 
 import './AppStatusModal.scss'
 
@@ -142,23 +143,19 @@ const AppStatusModal = ({
         resetOnChange: false,
     })
 
-    const handleAppDetailsExternalSync = async () => {
-        appDetailsPollingTimeoutRef.current = setTimeout(
-            async () => {
-                try {
-                    const response = await getAppDetailsWrapper()
-                    setFetchedAppDetails(response)
-                } catch {
-                    // Do nothing
-                }
-                // eslint-disable-next-line @typescript-eslint/no-floating-promises
-                handleAppDetailsExternalSync()
-            },
-            Number(window._env_.DEVTRON_APP_DETAILS_POLLING_INTERVAL) || APP_DETAILS_FALLBACK_POLLING_INTERVAL,
-        )
+    const handleAppDetailsExternalSync = () => {
+        appDetailsPollingTimeoutRef.current = setTimeout(async () => {
+            try {
+                const response = await getAppDetailsWrapper()
+                setFetchedAppDetails(response)
+            } catch {
+                // Do nothing
+            }
+            handleAppDetailsExternalSync()
+        }, Number(window._env_.DEVTRON_APP_DETAILS_POLLING_INTERVAL) || APP_DETAILS_FALLBACK_POLLING_INTERVAL)
     }
 
-    const handleDeploymentStatusExternalSync = async () => {
+    const handleDeploymentStatusExternalSync = () => {
         const isDeploymentInProgress = PROGRESSING_DEPLOYMENT_STATUS.includes(
             deploymentStatusDetailsBreakdownData?.deploymentStatus,
         )
@@ -178,7 +175,6 @@ const AppStatusModal = ({
                 } catch {
                     // Do nothing
                 }
-                // eslint-disable-next-line @typescript-eslint/no-floating-promises
                 handleDeploymentStatusExternalSync()
             },
             isDeploymentInProgress ? PROGRESSING_DEPLOYMENT_STATUS_POLLING_INTERVAL : pollingIntervalFromFlag,
@@ -202,7 +198,6 @@ const AppStatusModal = ({
             fetchedAppDetails &&
             !appDetailsPollingTimeoutRef.current
         ) {
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             handleAppDetailsExternalSync()
         }
     }, [areInitialAppDetailsLoading, fetchedAppDetails, fetchedAppDetailsError])
@@ -214,7 +209,6 @@ const AppStatusModal = ({
             deploymentStatusDetailsBreakdownData &&
             !deploymentStatusPollingTimeoutRef.current
         ) {
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             handleDeploymentStatusExternalSync()
         }
     }, [isDeploymentTimelineLoading, deploymentStatusDetailsBreakdownData, deploymentStatusDetailsBreakdownDataError])
@@ -251,7 +245,7 @@ const AppStatusModal = ({
           }
         : null
 
-    const handleSelectTab = async (updatedTab: AppStatusModalTabType) => {
+    const handleSelectTab = (updatedTab: AppStatusModalTabType) => {
         handleClearDeploymentStatusTimeout()
         setSelectedTab(updatedTab)
     }
@@ -349,6 +343,7 @@ const AppStatusModal = ({
 
     return (
         <Drawer position="right" width="1024px" onClose={handleClose} onEscape={handleClose}>
+            {/* biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: modal content click isolation */}
             <div
                 className="flexbox-col dc__content-space h-100 bg__modal--primary shadow__modal app-status-modal"
                 onClick={stopPropagation}

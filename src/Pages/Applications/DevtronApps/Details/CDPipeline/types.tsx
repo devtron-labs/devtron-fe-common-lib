@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-import { BuildStageType, FormType } from '@Common/CIPipeline.Types'
-import { APIOptions, DeploymentAppTypes, DeploymentNodeType } from '@Common/Types'
+import { STAGE_MAP } from '@Pages/index'
 import { DeploymentStrategy } from '@Shared/Components'
 import { DeploymentStrategyType, EnvListMinDTO, RuntimeParamsTriggerPayloadType } from '@Shared/types'
-import { STAGE_MAP } from '@Pages/index'
+
+import { BuildStageType, FormType } from '@Common/CIPipeline.Types'
+import { APIOptions, DeploymentAppTypes, DeploymentNodeType } from '@Common/Types'
 
 interface ConfigSecretType {
     label: string
@@ -27,8 +28,7 @@ interface ConfigSecretType {
 }
 
 export interface Environment
-    extends
-        Pick<EnvListMinDTO, 'id' | 'active' | 'namespace' | 'isClusterCdActive'>,
+    extends Pick<EnvListMinDTO, 'id' | 'active' | 'namespace' | 'isClusterCdActive'>,
         Partial<
             Pick<
                 EnvListMinDTO,
@@ -142,8 +142,7 @@ export interface TriggerCDNodeServiceProps extends Pick<APIOptions, 'abortContro
 }
 
 export interface TriggerCDPipelinePayloadType
-    extends
-        Pick<
+    extends Pick<
             TriggerCDNodeServiceProps,
             'pipelineId' | 'appId' | 'ciArtifactId' | 'runtimeParamsPayload' | 'deploymentWithConfig'
         >,

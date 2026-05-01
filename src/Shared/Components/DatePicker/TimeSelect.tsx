@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-import ClockIcon from '@Icons/ic-clock.svg?react'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { SelectPicker } from '../SelectPicker'
 import { DATE_PICKER_IDS } from './constants'
 import { TimeSelectProps } from './types'
 import { DEFAULT_TIME_OPTIONS } from './utils'
+
+import ClockIcon from '@Icons/ic-clock.svg?react'
 
 export const TimePickerSelect = ({
     disabled = false,

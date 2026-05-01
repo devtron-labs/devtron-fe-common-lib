@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
+import { TargetPlatformListTooltipProps } from './types'
+
 import { stopPropagation } from '@Common/Helper'
 import { Tooltip } from '@Common/Tooltip'
 
-import { TargetPlatformListTooltipProps } from './types'
-
 const TooltipContent = ({ targetPlatforms }: Pick<TargetPlatformListTooltipProps, 'targetPlatforms'>) => (
+    // biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: stopPropagation
     <div className="flexbox-col dc__gap-4 cursor-text" onClick={stopPropagation}>
         <h6 className="m-0 fw-6 lh-18 fs-12">Target platforms</h6>
 

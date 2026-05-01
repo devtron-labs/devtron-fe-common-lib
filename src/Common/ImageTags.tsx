@@ -14,23 +14,24 @@
  * limitations under the License.
  */
 
-import { useEffect, useRef, useState, type JSX } from 'react'
 import Tippy from '@tippyjs/react'
+import { type JSX, useEffect, useRef, useState } from 'react'
+
 import Add from '../Assets/Icon/ic-add.svg?react'
-import Close from '../Assets/Icon/ic-cross.svg?react'
-import EditIcon from '../Assets/Icon/ic-pencil.svg?react'
 import Redo from '../Assets/Icon/ic-arrow-counter-clockwise.svg?react'
-import Minus from '../Assets/Icon/ic-minus.svg?react'
-import Info from '../Assets/Icon/ic-info-filled.svg?react'
-import Error from '../Assets/Icon/ic-warning.svg?react'
-import Warning from '../Assets/Icon/ic-error-exclamation.svg?react'
+import Close from '../Assets/Icon/ic-cross.svg?react'
 import Enter from '../Assets/Icon/ic-enter.svg?react'
-import { ImageButtonType, ImageTaggingContainerType, ReleaseTag } from './ImageTags.Types'
-import { showError, stopPropagation } from './Helper'
-import { setImageTags } from './Common.service'
-import { Progressing } from './Progressing'
+import Warning from '../Assets/Icon/ic-error-exclamation.svg?react'
+import Info from '../Assets/Icon/ic-info-filled.svg?react'
+import Minus from '../Assets/Icon/ic-minus.svg?react'
+import EditIcon from '../Assets/Icon/ic-pencil.svg?react'
+import ErrorIcon from '../Assets/Icon/ic-warning.svg?react'
 import { InfoIconTippy, Textarea, ToastManager, ToastVariantType } from '../Shared'
+import { setImageTags } from './Common.service'
 import { BULK_DEPLOY_LATEST_IMAGE_TAG } from './Constants'
+import { showError, stopPropagation } from './Helper'
+import { ImageButtonType, ImageTaggingContainerType, ReleaseTag } from './ImageTags.Types'
+import { Progressing } from './Progressing'
 
 export const ImageTagsContainer = ({
     // Setting it to zero in case of external pipeline
@@ -109,9 +110,12 @@ export const ImageTagsContainer = ({
 
     const validateTag = (lowercaseValue): boolean => {
         if (
+            // biome-ignore lint/suspicious/noDoubleEquals: Legacy
             lowercaseValue.length == 0 ||
             lowercaseValue.length >= 128 ||
+            // biome-ignore lint/suspicious/noDoubleEquals: Legacy
             lowercaseValue[0] == '.' ||
+            // biome-ignore lint/suspicious/noDoubleEquals: Legacy
             lowercaseValue[0] == '-'
         ) {
             setTagErrorMessage('Label name cannot be empty or exceed 128 characters or cannot start with . or -')
@@ -124,7 +128,10 @@ export const ImageTagsContainer = ({
             if (displayedTags[i].tagName.toLowerCase() === lowercaseValue) isTagExistsInDisplayedTags = true
         }
 
-        if (lowercaseValue === BULK_DEPLOY_LATEST_IMAGE_TAG.value || lowercaseValue === BULK_DEPLOY_LATEST_IMAGE_TAG.value) {
+        if (
+            lowercaseValue === BULK_DEPLOY_LATEST_IMAGE_TAG.value ||
+            lowercaseValue === BULK_DEPLOY_LATEST_IMAGE_TAG.value
+        ) {
             setTagErrorMessage('Label name cannot be "latest" or "active"')
             return false
         }
@@ -217,7 +224,7 @@ export const ImageTagsContainer = ({
         })
     }
 
-    const handleSave = async (tagsToBeCreated: ReleaseTag[]) => {
+    const handleSave = (tagsToBeCreated: ReleaseTag[]) => {
         if (tagErrorMessage) return
 
         const payload = {
@@ -357,6 +364,7 @@ export const ImageTagsContainer = ({
                             ref={creatableRef}
                         />
                         {textInput.length > 0 && (
+                            // biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: Legacy
                             <div
                                 onClick={enterTagCreate}
                                 className="dc__position-abs bg__primary flex cursor pt-2 pb-2 pr-4 pl-4 br-2 cn-7 dc__border dc__border-bottom-2"
@@ -375,7 +383,7 @@ export const ImageTagsContainer = ({
 
                     {tagErrorMessage && (
                         <div className="flex left">
-                            <Error className="form__icon form__icon--error" />
+                            <ErrorIcon className="form__icon form__icon--error" />
                             <div className="form__error">{tagErrorMessage}</div>
                         </div>
                     )}
@@ -576,6 +584,7 @@ const AddImageButton = ({ handleEditClick }) => {
 
     return (
         <button
+            type="button"
             className="dc__transparent px-8 py-4 flexbox dc__align-items-center dc__gap-4 dc__border-dashed--n3 br-4"
             data-testid="add-tags-button"
             onClick={handleClick}

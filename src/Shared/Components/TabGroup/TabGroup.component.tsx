@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
+import { motion } from 'framer-motion'
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { Link, NavLink, useLocation } from 'react-router-dom'
-import { motion } from 'framer-motion'
 
-import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { getTabBadge, getTabDescription, getTabIcon, getTabIndicator } from './TabGroup.helpers'
 import { AdditionalTabProps, TabGroupProps, TabProps } from './TabGroup.types'
 import { getClassNameBySizeMap, tabGroupClassMap } from './TabGroup.utils'
+
+import { Tooltip } from '@Common/Tooltip'
 
 import './TabGroup.scss'
 
@@ -176,6 +177,7 @@ export const TabGroup = ({
 
     return (
         <div className="flexbox dc__align-items-center dc__content-space">
+            {/** biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: This is correct here */}
             <ul role="tablist" className={`tab-group flexbox dc__align-items-center p-0 m-0 ${tabGroupClassMap[size]}`}>
                 {tabs.map(({ id, ...resProps }) => (
                     <Tab

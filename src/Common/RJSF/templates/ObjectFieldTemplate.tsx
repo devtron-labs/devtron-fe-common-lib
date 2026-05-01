@@ -17,13 +17,13 @@
 import { canExpand, deepEquals, ObjectFieldTemplateProps, titleId } from '@rjsf/utils'
 import { JSONPath } from 'jsonpath-plus'
 
-import { convertJSONPointerToJSONPath } from '@Common/Helper'
-
 import { FieldRowWithLabel } from '../common/FieldRow'
 import { RJSFFormSchema } from '../types'
 import { parseSchemaHiddenType } from '../utils'
 import { AddButton } from './ButtonTemplates'
 import { TitleField } from './TitleField'
+
+import { convertJSONPointerToJSONPath } from '@Common/Helper'
 
 const Field = ({
     disabled,

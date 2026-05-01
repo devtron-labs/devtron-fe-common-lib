@@ -14,48 +14,51 @@
  * limitations under the License.
  */
 
-import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import DOMPurify from 'dompurify'
-import { JSONPath, JSONPathOptions } from 'jsonpath-plus'
-import { compare as compareJSON, applyPatch, unescapePathComponent, deepClone } from 'fast-json-patch'
-import { components } from 'react-select'
-import * as Sentry from '@sentry/browser'
-import moment from 'moment'
-import { useLocation } from 'react-router-dom'
-import YAML from 'yaml'
 import { deepEquals } from '@rjsf/utils'
+import * as Sentry from '@sentry/browser'
+import DOMPurify from 'dompurify'
+import { applyPatch, compare as compareJSON, deepClone, unescapePathComponent } from 'fast-json-patch'
+import { JSONPath, JSONPathOptions } from 'jsonpath-plus'
+import moment from 'moment'
+import React, { SyntheticEvent, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useLocation } from 'react-router-dom'
+import { components } from 'react-select'
+import YAML from 'yaml'
+
 import {
-    ERROR_EMPTY_SCREEN,
-    SortingOrder,
-    EXCLUDED_FALSY_VALUES,
-    DISCORD_LINK,
-    ZERO_TIME_STRING,
-    TOAST_ACCESS_DENIED,
-    UNCHANGED_ARRAY_ELEMENT_SYMBOL,
-    DATE_TIME_FORMATS,
-} from './Constants'
-import { ServerErrors } from './ServerError'
-import { AsyncOptions, AsyncState, DeploymentNodeType, UseSearchString } from './Types'
-import {
-    scrollableInterface,
+    AppType,
     DATE_TIME_FORMAT_STRING,
+    scrollableInterface,
     ToastManager,
     ToastVariantType,
     versionComparatorBySortOrder,
     WebhookEventNameType,
-    AppType,
 } from '../Shared'
-import ArrowDown from '@Icons/ic-chevron-down.svg?react'
-import ICWebhook from '@Icons/ic-webhook.svg?react'
-import ICBranch from '@Icons/ic-branch.svg?react'
-import ICRegex from '@Icons/ic-regex.svg?react'
-import ICPullRequest from '@Icons/ic-pull-request.svg?react'
-import ICTag from '@Icons/ic-tag.svg?react'
-import { SourceTypeMap } from '@Common/Common.service'
 import { getIsRequestAborted } from './API'
+import {
+    DATE_TIME_FORMATS,
+    DISCORD_LINK,
+    ERROR_EMPTY_SCREEN,
+    EXCLUDED_FALSY_VALUES,
+    SortingOrder,
+    TOAST_ACCESS_DENIED,
+    UNCHANGED_ARRAY_ELEMENT_SYMBOL,
+    ZERO_TIME_STRING,
+} from './Constants'
+import { ServerErrors } from './ServerError'
+import { AsyncOptions, AsyncState, DeploymentNodeType, UseSearchString } from './Types'
+
+import { SourceTypeMap } from '@Common/Common.service'
+import ICBranch from '@Icons/ic-branch.svg?react'
+import ArrowDown from '@Icons/ic-chevron-down.svg?react'
+import ICPullRequest from '@Icons/ic-pull-request.svg?react'
+import ICRegex from '@Icons/ic-regex.svg?react'
+import ICTag from '@Icons/ic-tag.svg?react'
+import ICWebhook from '@Icons/ic-webhook.svg?react'
 
 export function showError(serverError, showToastOnUnknownError = true, hideAccessError = false) {
     if (serverError instanceof ServerErrors && Array.isArray(serverError.errors)) {
+        // biome-ignore lint/suspicious/useIterableCallbackReturn: Legacy
         serverError.errors.map(({ userMessage, internalMessage }) => {
             const userMessageInLowercase = userMessage?.toLowerCase()
 
@@ -104,6 +107,7 @@ interface ConditionalWrapper<T> {
     children: T
 }
 export const ConditionalWrap: React.FC<ConditionalWrapper<any>> = ({ condition, wrap, children }) =>
+    // biome-ignore lint/complexity/noUselessFragments: Legacy
     condition ? wrap(children) : <>{children}</>
 
 export function sortCallback(key: string, a: any, b: any, isCaseSensitive?: boolean) {
@@ -186,7 +190,7 @@ export const getAlphabetIcon = (str: string, rootClassName: string = '') => {
 
 export const getEmptyArrayOfLength = (length: number) => Array.from({ length })
 
-export function noop(...args): any {}
+export function noop(..._args): any {}
 
 export function not(e) {
     return !e
@@ -213,16 +217,18 @@ export function getCookie(sKey) {
     if (!sKey) {
         return null
     }
-    return (document.cookie.replace(
-        new RegExp(`(?:(?:^|.*;)\\s*${sKey.replace(/[\-\.\+\*]/g, '\\$&')}\\s*\\=\\s*([^;]*).*$)|^.*$`),
-        '$1',
-    ) || null)
+    return (
+        document.cookie.replace(
+            new RegExp(`(?:(?:^|.*;)\\s*${sKey.replace(/[-.+*]/g, '\\$&')}\\s*\\=\\s*([^;]*).*$)|^.*$`),
+            '$1',
+        ) || null
+    )
 }
 
 export function handleUTCTime(ts: string, isRelativeTime = false) {
     let timestamp = ''
     try {
-        if (ts && ts.length && ts !== ZERO_TIME_STRING) {
+        if (ts?.length && ts !== ZERO_TIME_STRING) {
             const date = moment(ts)
             if (isRelativeTime) {
                 timestamp = date.fromNow()
@@ -230,14 +236,17 @@ export function handleUTCTime(ts: string, isRelativeTime = false) {
                 timestamp = date.format(DATE_TIME_FORMAT_STRING)
             }
         }
-    } catch (error) {
+    } catch {
+        // biome-ignore lint/suspicious/noConsole: Legacy
         console.error('Error Parsing Date:', ts)
     }
     return timestamp
 }
 
 export const getFormattedUTCTimeForExport = (timeToConvert: string, fallback = '-') =>
-    timeToConvert ? `${moment(timeToConvert).utc().format(DATE_TIME_FORMATS.TWELVE_HOURS_EXPORT_FORMAT)} (UTC)` : '-'
+    timeToConvert
+        ? `${moment(timeToConvert).utc().format(DATE_TIME_FORMATS.TWELVE_HOURS_EXPORT_FORMAT)} (UTC)`
+        : fallback
 
 export function useSearchString(): UseSearchString {
     const location = useLocation()
@@ -246,7 +255,7 @@ export function useSearchString(): UseSearchString {
         return queryParams
     }, [location])
 
-    const searchParams = Array.from(queryParams.entries()).reduce((agg, curr, idx) => {
+    const searchParams = Array.from(queryParams.entries()).reduce((agg, curr) => {
         agg[curr[0]] = curr[1]
         return agg
     }, {})
@@ -271,8 +280,11 @@ export function useJsonYaml(value, tabSize = 4, language = 'json', shouldRun = f
 
     useEffect(() => {
         if (!shouldRun) return
+        // biome-ignore lint/suspicious/noEvolvingTypes lint/suspicious/noImplicitAnyLet: Legacy
         let obj
+        // biome-ignore lint/suspicious/noEvolvingTypes: Legacy
         let jsonError = null
+        // biome-ignore lint/suspicious/noEvolvingTypes: Legacy
         let yamlError = null
         if (language === 'json') {
             try {
@@ -353,12 +365,12 @@ export function cleanKubeManifest(manifestJsonString: string): string {
         }
 
         return JSON.stringify(obj)
-    } catch (e) {
+    } catch {
         return manifestJsonString
     }
 }
 const unsecureCopyToClipboard = (str: string) => {
-    const listener = function (ev) {
+    const listener = (ev) => {
         ev.preventDefault()
         ev.clipboardData.setData('text/plain', str)
     }
@@ -518,7 +530,7 @@ export const getUrlWithSearchParams = <T extends string | number = string | numb
 export const logExceptionToSentry: typeof Sentry.captureException = Sentry.captureException.bind(window)
 
 export const customStyles = {
-    control: (base, state) => ({
+    control: (base) => ({
         ...base,
         minHeight: '32px',
         boxShadow: 'none',
@@ -526,11 +538,11 @@ export const customStyles = {
         cursor: 'pointer',
         background: 'transparent',
     }),
-    indicatorSeparator: (base, state) => ({
+    indicatorSeparator: (base) => ({
         ...base,
         width: 0,
     }),
-    valueContainer: (base, state) => ({
+    valueContainer: (base) => ({
         ...base,
         padding: '0',
         fontSize: '13px',
@@ -668,7 +680,7 @@ export const powerSetOfSubstringsFromStart = (strings: string[], regex: RegExp) 
 export const convertJSONPointerToJSONPath = (pointer: string) =>
     unescapePathComponent(
         pointer
-            .replace(/\/([\*0-9]+)\//g, '[$1].')
+            .replace(/\/([*0-9]+)\//g, '[$1].')
             .replace(/\//g, '.')
             .replace(/\./, '$.'),
     )
@@ -689,14 +701,13 @@ export const applyCompareDiffOnUneditedDocument = (uneditedDocument: object, edi
  * @deprecated - It should use useRef instead, pls use useDebounce
  */
 export const debounce = (func, timeout = 500) => {
-    let timer
+    let timer: ReturnType<typeof setTimeout>
 
     return function (this, ...args) {
-        const context = this
         if (timer) clearTimeout(timer)
         timer = setTimeout(() => {
             timer = null
-            func.apply(context, args)
+            func.apply(this, args)
         }, timeout)
     }
 }
@@ -725,14 +736,14 @@ export const handleRelativeDateSorting = (dateStringA, dateStringB, sortOrder) =
     const dateA = new Date(dateStringA).getTime()
     const dateB = new Date(dateStringB).getTime()
 
-    if (isNaN(dateA) && isNaN(dateB)) {
+    if (Number.isNaN(dateA) && Number.isNaN(dateB)) {
         return 0 // Both dates are invalid, consider them equal
     }
-    if (isNaN(dateA)) {
+    if (Number.isNaN(dateA)) {
         // dateA is invalid, move it to the end if sorting ASC, otherwise to the beginning
         return sortOrder === SortingOrder.ASC ? 1 : -1
     }
-    if (isNaN(dateB)) {
+    if (Number.isNaN(dateB)) {
         // dateB is invalid, move it to the end if sorting ASC, otherwise to the beginning
         return sortOrder === SortingOrder.ASC ? -1 : 1
     }
@@ -888,7 +899,7 @@ export function useScrollable(options: scrollableInterface) {
         [scrollHeight, autoBottom],
     )
 
-    function scrollToTop(e) {
+    function scrollToTop() {
         targetRef.current.scrollBy({
             top: -1 * scrollTop,
             left: 0,
@@ -899,7 +910,7 @@ export function useScrollable(options: scrollableInterface) {
         }
     }
 
-    function scrollToBottom(e) {
+    function scrollToBottom() {
         toggleAutoBottom(true)
         targetRef.current.scrollBy({
             top: scrollHeight,
@@ -967,6 +978,7 @@ export const DropdownIndicator = (props) => (
 
 export function mapByKey<T = Map<any, any>>(arr: any[], id: string): T {
     if (!Array.isArray(arr)) {
+        // biome-ignore lint/suspicious/noConsole: Legacy
         console.error(arr, 'is not array')
         return new Map() as T
     }
@@ -1034,7 +1046,7 @@ export const getIframeWithDefaultAttributes = (iframeString: string, defaultName
 
     const iframe = parentDiv.querySelector('iframe')
     if (iframe) {
-        if (!iframe.hasAttribute('title') && !!defaultName) {
+        if (!iframe.hasAttribute('title') && defaultName) {
             iframe.setAttribute('title', defaultName)
         }
 
@@ -1131,5 +1143,3 @@ export const findRight = <T,>(arr: T[], predicate: (item: T) => boolean): T | nu
 
     return null
 }
-
-

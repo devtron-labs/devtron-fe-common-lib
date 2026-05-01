@@ -18,11 +18,11 @@ import { parse as parseCronExpression } from '@datasert/cronjs-parser'
 import { customizeValidator } from '@rjsf/validator-ajv8'
 import { parse } from 'yaml'
 
-import { PATTERNS } from '@Common/Constants'
-import { getSanitizedIframe } from '@Common/Helper'
-
 import { SKIP_LABEL_KEY_VALIDATION_PREFIX } from './constants'
 import { URLProtocolType } from './types'
+
+import { PATTERNS } from '@Common/Constants'
+import { getSanitizedIframe } from '@Common/Helper'
 
 export interface ValidationResponseType {
     isValid: boolean
@@ -51,7 +51,7 @@ const DISPLAY_NAME_CONSTRAINTS = {
 }
 
 export const validateLabelValue = (value: string): string[] => {
-    const errorList = []
+    const errorList: string[] = []
     if (value.length > 63) {
         errorList.push('Can be max 63 characters')
     }
@@ -70,7 +70,7 @@ export const validateLabelKey = (
     key: string,
     skipValidationIfSpecialPrefix: boolean = true,
 ): { isValid: boolean; messages: string[] } => {
-    const errorList = []
+    const errorList: string[] = []
     const skipValidation = skipValidationIfSpecialPrefix && key.startsWith(SKIP_LABEL_KEY_VALIDATION_PREFIX)
 
     if (!key) {
@@ -246,7 +246,6 @@ export const validateURL = (url: string, allowBase64Url: boolean = true): Valida
         if (!allowBase64Url && isBase64Url(url)) {
             throw new Error('Base64 URLs are not allowed')
         }
-        // eslint-disable-next-line no-new
         new URL(url)
     } catch (err) {
         return {

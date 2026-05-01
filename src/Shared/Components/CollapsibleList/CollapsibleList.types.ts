@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import React from 'react'
 import { TippyProps } from '@tippyjs/react'
+import React from 'react'
 
 interface ButtonTab {
     /**

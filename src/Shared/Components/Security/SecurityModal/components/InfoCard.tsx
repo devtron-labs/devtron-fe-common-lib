@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-import React from 'react'
 import dayjs from 'dayjs'
+import React from 'react'
 
-import ICClock from '@Icons/ic-clock.svg?react'
-import { SegmentedBarChart } from '@Common/SegmentedBarChart'
 import { ScannedByToolModal } from '@Shared/Components/ScannedByToolModal'
 
 import { DATE_TIME_FORMATS, ZERO_TIME_STRING } from '../../../../../Common/Constants'
 import { InfoCardPropsType } from '../types'
+
+import { SegmentedBarChart } from '@Common/SegmentedBarChart'
+import ICClock from '@Icons/ic-clock.svg?react'
 
 const InfoCard: React.FC<InfoCardPropsType> = ({ entities, lastScanTimeString, scanToolName, scanToolUrl }) => (
     <div className="info-card">

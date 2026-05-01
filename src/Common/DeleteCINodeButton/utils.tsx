@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+import { AppConfigProps, GetTemplateAPIRouteType } from '@Pages/index'
 import { Routes } from '@Shared/constants'
 import { getTemplateAPIRoute } from '@Shared/index'
-import { AppConfigProps, GetTemplateAPIRouteType } from '@Pages/index'
 
 import { post, trash } from '..'
 
@@ -29,7 +29,7 @@ export function savePipeline(
         isRegexMaterial?: boolean
     },
 ): Promise<any> {
-    let url
+    let url: string | undefined
     if (isRegexMaterial) {
         url = `${Routes.CI_PIPELINE_PATCH}/regex`
     } else {

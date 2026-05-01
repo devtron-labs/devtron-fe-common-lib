@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import ICArrowRight from '@Icons/ic-caret-down-small.svg?react'
-import ICError from '@Icons/ic-error-exclamation.svg?react'
-import ICShieldSecure from '@Icons/ic-shield-check.svg?react'
-import ICShieldWarning from '@Icons/ic-shield-warning-outline.svg?react'
-import { SegmentedBarChart } from '@Common/SegmentedBarChart'
-
 import { SECURITY_CONFIG } from '../constants'
 import { SEVERITIES_LABEL_COLOR_MAP } from '../SecurityModal/constants'
 import { SUB_CATEGORIES } from '../SecurityModal/types'
 import { getTotalSeverities } from '../utils'
 import { SecurityCardProps } from './types'
+
+import { SegmentedBarChart } from '@Common/SegmentedBarChart'
+import ICArrowRight from '@Icons/ic-caret-down-small.svg?react'
+import ICError from '@Icons/ic-error-exclamation.svg?react'
+import ICShieldSecure from '@Icons/ic-shield-check.svg?react'
+import ICShieldWarning from '@Icons/ic-shield-warning-outline.svg?react'
 
 import './securityCard.scss'
 
@@ -95,6 +95,7 @@ const SecurityCard = ({
     }
 
     return (
+        // biome-ignore lint/a11y/useSemanticElements: Legacy
         <div
             className={`w-100 p-20 flexbox-col dc__gap-16 br-8 dc__border security-card security-card${hasThreats || scanFailed ? '--threat' : '--secure'}`}
             role="button"

@@ -18,8 +18,6 @@ import { englishStringTranslator, TranslatableString } from '@rjsf/utils'
 import { applyPatch, compare } from 'fast-json-patch'
 import { JSONPath } from 'jsonpath-plus'
 
-import { buildObjectFromPath, convertJSONPointerToJSONPath, joinObjects } from '@Common/Helper'
-
 import {
     GetFormStateFromFormDataProps,
     HiddenType,
@@ -27,6 +25,8 @@ import {
     RJSFFormSchema,
     UpdateFormDataFromFormStateProps,
 } from './types'
+
+import { buildObjectFromPath, convertJSONPointerToJSONPath, joinObjects } from '@Common/Helper'
 
 /**
  * Override for the TranslatableString from RJSF
@@ -162,7 +162,6 @@ const _getSchemaPathToUpdatePathMap = (schema: RJSFFormSchema, path: string, map
         schema.type === 'number' ||
         schema.type === 'integer'
     ) {
-        // eslint-disable-next-line no-param-reassign
         map[path] = conformPathToPointers(schema.updatePath ?? path)
     }
 }
@@ -187,7 +186,6 @@ const _recursivelyRemoveElement = (obj: Record<string, any>, index: number, toke
     }
 
     if (obj[key]) {
-        // eslint-disable-next-line no-param-reassign
         obj[key] = _recursivelyRemoveElement(obj[key], index + 1, tokens)
     }
 
@@ -205,7 +203,7 @@ const recursivelyRemoveElement = (obj: Record<string, any>, path: string) => {
         throw new Error('Invalid object')
     }
 
-    if (!path || !path.startsWith('/')) {
+    if (!path?.startsWith('/')) {
         throw new Error('Invalid path')
     }
 

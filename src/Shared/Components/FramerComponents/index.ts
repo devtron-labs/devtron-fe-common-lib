@@ -15,8 +15,8 @@
  */
 
 import {
-    animate,
     AnimatePresence,
+    animate,
     motion,
     useAnimation,
     useAnimationControls,
@@ -24,4 +24,4 @@ import {
     useMotionValue,
 } from 'framer-motion'
 
-export { animate, AnimatePresence, motion, useAnimation, useAnimationControls, useMotionTemplate, useMotionValue }
+export { AnimatePresence, animate, motion, useAnimation, useAnimationControls, useMotionTemplate, useMotionValue }

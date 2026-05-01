@@ -22,6 +22,7 @@ const context = createContext<UseUserEmailContextType>(null)
 
 export const useUserEmail = () => useContext(context)
 
+// biome-ignore lint/complexity/noBannedTypes: Legacy
 export const UserEmailProvider: React.FC<PropsWithChildren<{}>> = ({ children }) => {
     const [email, setEmail] = useState<string>('')
 

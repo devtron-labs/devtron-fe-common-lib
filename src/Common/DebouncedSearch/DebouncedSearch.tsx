@@ -15,9 +15,10 @@
  */
 
 import React, { useEffect, useState } from 'react'
-import { useDebouncedEffect } from './Utils'
+
 import ICClear from '../../Assets/Icon/ic-error-cross.svg?react'
 import { DebouncedSearchProps } from './Types'
+import { useDebouncedEffect } from './Utils'
 
 /**
  * @deprecated Use `SearchBar` component instead.

@@ -15,12 +15,14 @@
  */
 
 import { WidgetProps } from '@rjsf/utils'
+import { useEffect, useState } from 'react'
+
+import { SelectPicker } from '@Shared/Components'
+import { getUniqueId } from '@Shared/Helpers'
+
 import { PLACEHOLDERS, RJSF_FORM_SELECT_PORTAL_TARGET_ID } from '../constants'
 
 import { deepEqual } from '@Common/Helper'
-import { SelectPicker } from '@Shared/Components'
-import { useEffect, useState } from 'react'
-import { getUniqueId } from '@Shared/Helpers'
 
 export const SelectWidget = (props: WidgetProps) => {
     const {
@@ -72,7 +74,7 @@ export const SelectWidget = (props: WidgetProps) => {
             placeholder={schema.placeholder || placeholder || PLACEHOLDERS.SELECT}
             isDisabled={disabled || readonly}
             menuPortalTarget={document.getElementById(RJSF_FORM_SELECT_PORTAL_TARGET_ID)}
-            menuPosition='fixed'
+            menuPosition="fixed"
         />
     )
 }

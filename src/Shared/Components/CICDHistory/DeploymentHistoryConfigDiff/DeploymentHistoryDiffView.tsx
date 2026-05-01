@@ -115,8 +115,13 @@ const DeploymentHistoryDiffView = ({
                             const baseValue = baseTemplateConfiguration.values[configKey]
                             const changeBGColor = previousConfigAvailable && currentValue?.value !== baseValue?.value
                             return (
-                                // eslint-disable-next-line react/no-array-index-key
-                                <div key={`deployment-history-diff-view-${index}`} className="dc__contents">
+                                <div
+                                    key={`deployment-history-diff-view-${
+                                        // biome-ignore lint/suspicious/noArrayIndexKey: Legacy
+                                        index
+                                    }`}
+                                    className="dc__contents"
+                                >
                                     {currentValue?.value ? (
                                         renderDetailedValue(
                                             changeBGColor ? 'code-editor-red-diff' : '',

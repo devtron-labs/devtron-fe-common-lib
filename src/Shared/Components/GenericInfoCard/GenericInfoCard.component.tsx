@@ -17,11 +17,11 @@
 import { cloneElement } from 'react'
 import { Link } from 'react-router-dom'
 
-import { Tooltip } from '@Common/Tooltip'
-
 import { Icon as IconComponent } from '../Icon'
 import { GenericInfoCardProps } from './types'
 import { getClassNameForBorderVariant } from './utils'
+
+import { Tooltip } from '@Common/Tooltip'
 
 import './styles.scss'
 
@@ -103,6 +103,7 @@ const GenericInfoCard = ({
     }
 
     return (
+        // biome-ignore lint/a11y/useKeyWithClickEvents lint/a11y/useSemanticElements: Legacy
         <div role="button" tabIndex={0} onClick={onClick} className="dc__unset-button-styles dc__align-unset">
             {renderContent()}
         </div>

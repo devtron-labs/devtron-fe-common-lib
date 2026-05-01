@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { useEffect } from 'react'
 import { animate, motion, useMotionValue, useTransform } from 'framer-motion'
-
-import { Tooltip } from '@Common/Tooltip'
+import { useEffect } from 'react'
 
 import { CX, CY, END_ANGLE, RADIUS, START_ANGLE } from './constants'
 import { AnimatedTimerProps } from './types'
+
+import { Tooltip } from '@Common/Tooltip'
 
 const polarToCartesian = (cx: number, cy: number, r: number, angleInDegrees: number) => {
     const angleInRadians = ((angleInDegrees - 90) * Math.PI) / 180.0
@@ -66,6 +66,7 @@ const AnimatedTimer = ({ duration, onComplete, size = 24, tooltipContent }: Anim
                     fill="none"
                     xmlns="http://www.w3.org/2000/svg"
                     className={`icon-dim-${size}`}
+                    aria-label="Timer"
                 >
                     <path
                         fillRule="evenodd"

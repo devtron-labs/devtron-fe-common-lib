@@ -17,18 +17,12 @@
 import { Fragment, type JSX, memo, useMemo, useState } from 'react'
 import { Link, useLocation, useParams } from 'react-router-dom'
 
-import ICAborted from '@Icons/ic-aborted.svg?react'
-import ICArrowRight from '@Icons/ic-arrow-right.svg?react'
-import ICEnvironment from '@Icons/ic-environment.svg?react'
-import ICPulsateStatus from '@Icons/ic-pulsate-status.svg?react'
-import { createGitCommitUrl } from '@Common/Common.service'
-import { ZERO_TIME_STRING } from '@Common/Constants'
+import { getDeploymentStageTitle } from '@Pages/Applications'
 import { CommitChipCell } from '@Shared/Components/CommitChipCell'
 import { ImageChipCell } from '@Shared/Components/ImageChipCell'
 import { getHandleOpenURL } from '@Shared/Helpers'
 import { useMainContext } from '@Shared/Providers'
 import { ToastManager, ToastVariantType } from '@Shared/Services'
-import { getDeploymentStageTitle } from '@Pages/Applications'
 
 import { ComponentSizeType, DeploymentStageType } from '../../constants'
 import { GitTriggers } from '../../types'
@@ -37,13 +31,13 @@ import { ConfirmationModal, ConfirmationModalVariantType } from '../Confirmation
 import { Icon } from '../Icon'
 import { InfoBlock } from '../InfoBlock'
 import {
+    statusColor as colorMap,
     DEFAULT_CLUSTER_ID,
     DEFAULT_ENV,
     EXECUTION_FINISHED_TEXT_MAP,
     PROGRESSING_STATUS,
     PULSATING_STATUS_MAP,
     RESOURCE_CONFLICT_DEPLOY_ERROR,
-    statusColor as colorMap,
     TERMINAL_STATUS_COLOR_CLASS_MAP,
 } from './constants'
 import ResourceConflictDeployDialog from './ResourceConflictDeployDialog'
@@ -67,6 +61,13 @@ import {
     sanitizeWorkflowExecutionStages,
 } from './utils'
 import WorkerStatus from './WorkerStatus'
+
+import { createGitCommitUrl } from '@Common/Common.service'
+import { ZERO_TIME_STRING } from '@Common/Constants'
+import ICAborted from '@Icons/ic-aborted.svg?react'
+import ICArrowRight from '@Icons/ic-arrow-right.svg?react'
+import ICEnvironment from '@Icons/ic-environment.svg?react'
+import ICPulsateStatus from '@Icons/ic-pulsate-status.svg?react'
 
 const Finished = memo(({ status, finishedOn, artifact, type, executionInfo }: FinishedType): JSX.Element => {
     const finishedOnTime = executionInfo?.finishedOn || finishedOn
@@ -123,7 +124,7 @@ const ProgressingStatus = memo(({ stage, type, label = 'In progress' }: Progress
         triggerId: string
         pipelineId: string
     }>()
-    let abort = null
+    let abort: ((isForceAbort: boolean) => Promise<unknown>) | null = null
     if (type === HistoryComponentType.CI) {
         abort = (isForceAbort: boolean) => cancelCiTrigger({ pipelineId, workflowId: buildId }, isForceAbort)
     } else if (stage !== DeploymentStageType.DEPLOY) {
@@ -341,7 +342,7 @@ const StartDetails = ({
                 <div />
 
                 {type === HistoryComponentType.CD ? (
-                    // eslint-disable-next-line react/jsx-no-useless-fragment
+                    // biome-ignore lint/complexity/noUselessFragments: Legacy
                     <>{artifact && <ImageChipCell imagePath={artifact} placement="top" />}</>
                 ) : (
                     Object.keys(gitTriggers ?? {}).length > 0 &&
@@ -402,6 +403,7 @@ const renderDetailsSuccessIconBlock = () => (
 
 const NonProgressingStatus = memo(
     ({ status }: { status: string }): JSX.Element => (
+        // biome-ignore lint/a11y/noSvgWithoutTitle: Decorative, text shown in next element to its side
         <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
             <circle
                 cx="10"

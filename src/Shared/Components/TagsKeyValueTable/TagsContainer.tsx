@@ -16,15 +16,15 @@
 
 import ReactGA from 'react-ga4'
 
-import ICPropagate from '@Icons/inject-tag.svg?react'
-import { PropagateTagInfo, validateTagKeyValue } from '@Common/CustomTagSelector'
-import { validateTagValue } from '@Common/CustomTagSelector/tags.utils'
-import { Tooltip } from '@Common/Tooltip'
-
 import { DynamicDataTable, DynamicDataTableRowType } from '../DynamicDataTable'
 import { DEVTRON_AI_URL, TAGS_TABLE_HEADERS } from './constants'
 import { TagsContainerProps, TagsTableColumnsType } from './types'
 import { getEmptyTagTableRow } from './utils'
+
+import { PropagateTagInfo, validateTagKeyValue } from '@Common/CustomTagSelector'
+import { validateTagValue } from '@Common/CustomTagSelector/tags.utils'
+import { Tooltip } from '@Common/Tooltip'
+import ICPropagate from '@Icons/inject-tag.svg?react'
 
 const TagsKeyValueTable = ({
     appType,

@@ -16,8 +16,6 @@
 
 import { NavLink } from 'react-router-dom'
 
-import ICDocker from '@Icons/ic-docker.svg?react'
-import ICFileCode from '@Icons/ic-file-code.svg?react'
 import {
     DeploymentConfigDiffProps,
     DeploymentConfigDiffState,
@@ -28,6 +26,9 @@ import {
 
 import { History } from '../types'
 import { DeploymentHistoryConfigDiffProps } from './types'
+
+import ICDocker from '@Icons/ic-docker.svg?react'
+import ICFileCode from '@Icons/ic-file-code.svg?react'
 
 const renderState = (diffState: DeploymentConfigDiffState) => {
     const Icon = diffStateIconMap[diffState]
@@ -99,6 +100,6 @@ export const renderPipelineDeploymentOptionDescription = ({
             <span className="dc__bullet dc__bullet--d2" />
             <span className="dc__truncate">{triggeredBy === 1 ? 'auto trigger' : triggeredByEmail}</span>
         </p>
-        {runSource && renderRunSource && renderRunSource(runSource, resourceId === runSource?.id)}
+        {runSource && renderRunSource?.(runSource, resourceId === runSource?.id)}
     </div>
 )

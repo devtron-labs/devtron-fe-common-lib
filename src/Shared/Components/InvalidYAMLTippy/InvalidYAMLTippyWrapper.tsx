@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { Tooltip } from '@Common/Tooltip'
-
 import { InvalidYAMLTippyWrapperProps } from './types'
 import { getInvalidTippyContent } from './utils'
+
+import { Tooltip } from '@Common/Tooltip'
 
 const InvalidYAMLTippy = ({ parsingError, restoreLastSavedYAML, children }: InvalidYAMLTippyWrapperProps) => (
     <Tooltip

@@ -14,11 +14,8 @@
  * limitations under the License.
  */
 
-import { useEffect, useMemo, useState } from 'react'
 import MDEditor, { commands, MDEditorProps } from '@uiw/react-md-editor'
-
-import Edit from '@Icons/ic-pencil.svg?react'
-import UnorderedListIcon from '@Icons/ic-unordered-list.svg?react'
+import { useEffect, useMemo, useState } from 'react'
 
 import {
     Button,
@@ -29,11 +26,14 @@ import {
     ToastManager,
     ToastVariantType,
 } from '../../Shared'
-import Markdown from '../Markdown/MarkDown'
 import { showError, Tooltip } from '..'
+import Markdown from '../Markdown/MarkDown'
 import { DESCRIPTION_EMPTY_ERROR_MSG, DESCRIPTION_UNSAVED_CHANGES_MSG, TOOLBAR_SECONDARY_COMMANDS } from './constant'
 import { GenericDescriptionProps } from './types'
 import { getParsedUpdatedOnDate } from './utils'
+
+import Edit from '@Icons/ic-pencil.svg?react'
+import UnorderedListIcon from '@Icons/ic-unordered-list.svg?react'
 
 import './genericDescription.scss'
 
@@ -87,7 +87,6 @@ const GenericDescription = ({
         let isConfirmed = true
 
         if (isDescriptionModified) {
-            // eslint-disable-next-line no-alert
             isConfirmed = window.confirm(DESCRIPTION_UNSAVED_CHANGES_MSG)
         }
 

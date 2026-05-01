@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { useState, useEffect } from 'react'
+import { useEffect, useState } from 'react'
 
-let timeout
+let timeout: ReturnType<typeof window.requestAnimationFrame>
 
 const getSize = () => ({
     width: window.innerWidth,
@@ -26,7 +26,7 @@ const getSize = () => ({
 export const useWindowSize = () => {
     const [windowSize, setWindowSize] = useState(getSize)
 
-    function handleResize(e) {
+    function handleResize() {
         if (timeout) {
             window.cancelAnimationFrame(timeout)
         }

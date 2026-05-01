@@ -14,9 +14,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-param-reassign */
-import { findRight, handleUTCTime, logExceptionToSentry } from '@Common/Helper'
-import { DeploymentAppTypes } from '@Common/Types'
 import { DEPLOYMENT_STATUS } from '@Shared/constants'
 import {
     DeploymentPhaseType,
@@ -38,6 +35,9 @@ import {
     WFR_STATUS_DTO_TO_DEPLOYMENT_STATUS_MAP,
 } from './constants'
 import { ProcessUnableToFetchOrTimedOutStatusType } from './types'
+
+import { findRight, handleUTCTime, logExceptionToSentry } from '@Common/Helper'
+import { DeploymentAppTypes } from '@Common/Types'
 
 const getDefaultDeploymentStatusTimeline = (
     deploymentAppType: DeploymentAppTypes,

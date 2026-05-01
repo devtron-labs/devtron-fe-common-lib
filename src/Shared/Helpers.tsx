@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-param-reassign */
-import { ReactElement, useEffect, useRef, useState } from 'react'
 import { parse as parseCronExpression } from '@datasert/cronjs-parser'
 import { StrictRJSFSchema } from '@rjsf/utils'
 import Tippy from '@tippyjs/react'
@@ -23,36 +21,29 @@ import cronstrue from 'cronstrue'
 import { animate } from 'framer-motion'
 import moment from 'moment'
 import { nanoid } from 'nanoid'
+import { ReactElement, useEffect, useRef, useState } from 'react'
 import { Pair, parse } from 'yaml'
 
-import ICAWSCodeCommit from '@Icons/ic-aws-codecommit.svg?react'
-import ICBitbucket from '@Icons/ic-bitbucket.svg?react'
-import ICGit from '@Icons/ic-git.svg?react'
-import ICGithub from '@Icons/ic-github.svg?react'
-import ICGitlab from '@Icons/ic-gitlab.svg?react'
-import ICPullRequest from '@Icons/ic-pull-request.svg?react'
-import ICTag from '@Icons/ic-tag.svg?react'
-import ICWebhook from '@Icons/ic-webhook.svg?react'
 import { MaterialHistoryType } from '@Shared/Services/app.types'
 
 import {
     ApprovalConfigDataType,
     DATE_TIME_FORMATS,
     ManualApprovalType,
-    mapByKey,
     MaterialInfo,
+    mapByKey,
     noop,
     PATTERNS,
-    shallowEqual,
     SortingOrder,
     SourceTypeMap,
+    shallowEqual,
     TOKEN_COOKIE_NAME,
     URLS,
     UserApprovalConfigType,
     UserApprovalInfo,
     ZERO_TIME_STRING,
 } from '../Common'
-import { getAggregator, GVKType } from '../Pages'
+import { GVKType, getAggregator } from '../Pages'
 import { AggregatedNodes } from './Components'
 import { CUBIC_BEZIER_CURVE } from './constants'
 import {
@@ -69,6 +60,15 @@ import {
     TargetPlatformsDTO,
     WebhookEventNameType,
 } from './types'
+
+import ICAWSCodeCommit from '@Icons/ic-aws-codecommit.svg?react'
+import ICBitbucket from '@Icons/ic-bitbucket.svg?react'
+import ICGit from '@Icons/ic-git.svg?react'
+import ICGithub from '@Icons/ic-github.svg?react'
+import ICGitlab from '@Icons/ic-gitlab.svg?react'
+import ICPullRequest from '@Icons/ic-pull-request.svg?react'
+import ICTag from '@Icons/ic-tag.svg?react'
+import ICWebhook from '@Icons/ic-webhook.svg?react'
 
 interface HighlightSearchTextProps {
     /**
@@ -201,7 +201,6 @@ export const yamlComparatorBySortOrder = (a: Pair, b: Pair, sortOrder: SortingOr
 
 export const useIntersection = (
     target: React.RefObject<Element> | Element | null,
-    // eslint-disable-next-line default-param-last
     options: IntersectionOptions = {},
     callback?: IntersectionChangeHandler,
 ) => {
@@ -254,7 +253,6 @@ export const useIntersection = (
 
         observer.observe(element)
 
-        // eslint-disable-next-line consistent-return
         return () => {
             if (once && intersectedRef.current) {
                 return
@@ -329,7 +327,7 @@ export function aggregateNodes(nodes: any[], podMetadata: PodMetaData[]): Aggreg
             const aggregator: AggregationKeys = getAggregator(nodeKind)
             agg.aggregation[aggregator] = agg.aggregation[aggregator] || {}
             agg.nodes[nodeKind] = nodesGroup[nodeKind]
-            if (curr.health && curr.health.status) {
+            if (curr.health?.status) {
                 agg.statusCount[curr.health.status] = (agg.statusCount[curr.health.status] || 0) + 1
 
                 agg.nodeStatusCount[curr.kind] = agg.nodeStatusCount[curr.kind] || {}
@@ -342,7 +340,7 @@ export function aggregateNodes(nodes: any[], podMetadata: PodMetaData[]): Aggreg
             }
             if (Array.isArray(curr.parentRefs)) {
                 curr.parentRefs.forEach(({ kind, name }) => {
-                    if (nodesGroup[kind] && nodesGroup[kind].has(name)) {
+                    if (nodesGroup[kind]?.has(name)) {
                         const parentRef = nodesGroup[kind].get(name)
                         const children = parentRef.children || {}
                         children[nodeKind] = children[nodeKind] || []
@@ -373,7 +371,6 @@ export const decode = (data, isEncoded: boolean = false) =>
     Object.keys(data)
         .map((m) => ({ key: m, value: data[m] ? getDecodedEncodedData(data[m], isEncoded) : data[m] }))
         .reduce((agg, curr) => {
-            // eslint-disable-next-line no-param-reassign
             agg[curr.key] = curr.value
             return agg
         }, {})
@@ -547,9 +544,6 @@ export const getNullValueFromType = (type: StrictRJSFSchema['type']) => {
             return {}
         case 'array':
             return []
-        case 'number':
-        case 'integer':
-        case 'null':
         default:
             return null
     }
@@ -674,6 +668,7 @@ export const getClassNameForStickyHeaderWithShadow = (isStuck: boolean, topClass
     `dc__position-sticky ${topClassName} dc__transition--box-shadow ${isStuck ? 'dc__box-shadow--header' : ''}`
 
 export const clearCookieOnLogout = () => {
+    // biome-ignore lint/suspicious/noDocumentCookie: Legacy
     document.cookie = `${TOKEN_COOKIE_NAME}=; expires=Thu, 01-Jan-1970 00:00:01 GMT;path=/`
 }
 

@@ -16,7 +16,6 @@
 
 import { FormEvent, FunctionComponent, useMemo } from 'react'
 
-import ErrorIcon from '@Icons/ic-warning.svg?react'
 import { SelectPicker } from '@Shared/Components/SelectPicker'
 import { ComponentSizeType } from '@Shared/constants'
 import { isNullOrUndefined } from '@Shared/Helpers'
@@ -24,6 +23,8 @@ import { isNullOrUndefined } from '@Shared/Helpers'
 import { OptionType } from '../../../Common'
 import { BUILD_INFRA_DEFAULT_PLATFORM_NAME, BUILD_INFRA_INPUT_CONSTRAINTS } from './constants'
 import { BuildInfraFormActionProps } from './types'
+
+import ErrorIcon from '@Icons/ic-warning.svg?react'
 
 import './BuildInfraUnitSelect.scss'
 
@@ -113,7 +114,6 @@ const BuildInfraFormAction: FunctionComponent<BuildInfraFormActionProps> = ({
                         autoComplete="off"
                         disabled={isDisabled}
                         id={`${actionType}-input`}
-                        // eslint-disable-next-line jsx-a11y/no-autofocus
                         autoFocus={autoFocus}
                     />
                 </div>

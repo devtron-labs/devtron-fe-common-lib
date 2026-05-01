@@ -16,8 +16,6 @@
 
 import { useState } from 'react'
 
-import NoVulnerability from '@Icons/ic-vulnerability-not-found.svg?react'
-import { GenericEmptyState } from '@Common/index'
 import { GenericSectionErrorState } from '@Shared/Components/GenericSectionErrorState'
 import { ScannedByToolModal } from '@Shared/Components/ScannedByToolModal'
 import { EMPTY_STATE_STATUS } from '@Shared/constants'
@@ -30,6 +28,9 @@ import { getCompiledSecurityThreats, getSecurityConfig, getStatusForScanList, ge
 import { ReportTabEmptyState } from './ReportTabEmptyState'
 import SecurityCard from './SecurityCard'
 import { SecurityCardProps, SecurityDetailsCardsProps } from './types'
+
+import { GenericEmptyState } from '@Common/index'
+import NoVulnerability from '@Icons/ic-vulnerability-not-found.svg?react'
 
 import './securityCard.scss'
 
@@ -147,6 +148,7 @@ const SecurityDetailsCards = ({ scanResult, Sidebar }: SecurityDetailsCardsProps
 
                     return (
                         <SecurityCard
+                            key={`${category}-${subCategory}-card`}
                             category={category}
                             subCategory={subCategory}
                             severities={severities}

@@ -16,10 +16,6 @@
 
 import dayjs from 'dayjs'
 
-import ICError from '@Icons/ic-error-cross.svg?react'
-import ICSuccess from '@Icons/ic-success.svg?react'
-import { Progressing } from '@Common/Progressing'
-
 import { DATE_TIME_FORMATS, ZERO_TIME_STRING } from '../../../../../Common/Constants'
 import SeverityChip from '../../SeverityChip'
 import { OpenDetailViewButton } from '../components'
@@ -49,6 +45,10 @@ import {
     stringifySeverities,
 } from '../utils'
 import { getCodeScanVulnerabilities } from './CodeScan'
+
+import { Progressing } from '@Common/Progressing'
+import ICError from '@Icons/ic-error-cross.svg?react'
+import ICSuccess from '@Icons/ic-success.svg?react'
 
 const getVulnerabilitiesDetailBaseData = (element: ImageScanVulnerabilityListType) => ({
     titlePrefix: 'Image',
@@ -382,8 +382,6 @@ export const getImageScanEmptyState = (
             return SCAN_FAILED_EMPTY_STATE
         case 'Completed':
             return getCompletedEmptyState(subCategory, detailViewData)
-        case 'Progressing':
-        case 'Running':
         default:
             return SCAN_IN_PROGRESS_EMPTY_STATE
     }

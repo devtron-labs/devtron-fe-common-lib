@@ -16,12 +16,13 @@
 
 import React, { type JSX } from 'react'
 
-import { Entity } from '@Common/SegmentedBarChart/types'
-import { ServerErrors } from '@Common/ServerError'
-import { GenericEmptyStateType } from '@Common/Types'
 import { LastExecutionResultType, Nodes, NodeType } from '@Shared/types'
 
 import { ScanCategories, ScanSubCategories } from '../types'
+
+import { Entity } from '@Common/SegmentedBarChart/types'
+import { ServerErrors } from '@Common/ServerError'
+import { GenericEmptyStateType } from '@Common/Types'
 
 export interface GetResourceScanDetailsPayloadType {
     name: string
@@ -58,8 +59,8 @@ export const SUB_CATEGORIES = {
 } as const
 
 export enum SortOrderEnum {
-    'ASC' = 1,
-    'DESC' = -1,
+    ASC = 1,
+    DESC = -1,
 }
 
 export type TableRowCellType = {

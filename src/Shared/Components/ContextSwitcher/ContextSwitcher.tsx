@@ -17,7 +17,6 @@
 import { useEffect, useRef } from 'react'
 import { SelectInstance } from 'react-select'
 
-import { useRegisterShortcut } from '@Common/Hooks/UseRegisterShortcut'
 import {
     getNoMatchingResultText,
     SelectPicker,
@@ -30,6 +29,8 @@ import { ToastManager, ToastVariantType } from '@Shared/Services'
 
 import { ContextSwitcherTypes } from './types'
 import { customSelectFilterOption, getDisabledOptions } from './utils'
+
+import { useRegisterShortcut } from '@Common/Hooks/UseRegisterShortcut'
 
 export const ContextSwitcher = ({
     inputId,

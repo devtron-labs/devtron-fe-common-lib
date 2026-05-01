@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import { createRoot } from 'react-dom/client'
-import { renderToString } from 'react-dom/server'
 import { json, jsonLanguage, jsonParseLinter } from '@codemirror/lang-json'
 import { yaml, yamlLanguage } from '@codemirror/lang-yaml'
 import { StreamLanguage } from '@codemirror/language'
@@ -32,25 +30,28 @@ import {
     jsonSchemaLinter,
     stateExtensions,
 } from 'codemirror-json-schema'
+import { yamlCompletion, yamlSchemaHover, yamlSchemaLinter } from 'codemirror-json-schema/yaml'
 import DOMPurify from 'dompurify'
+import { createRoot } from 'react-dom/client'
+import { renderToString } from 'react-dom/server'
 import * as YAML from 'yaml'
 
-import ICCaretDown from '@Icons/ic-caret-down.svg?react'
-import { MODES } from '@Common/Constants'
-import { debounce, noop, YAMLStringify } from '@Common/Helper'
-import { Tooltip } from '@Common/Tooltip'
 import { Icon } from '@Shared/Components'
-import { yamlCompletion, yamlSchemaHover, yamlSchemaLinter } from 'codemirror-json-schema/yaml'
 
 import { yamlParseLinter } from './Extensions'
 import { CodeEditorProps, FindReplaceToggleButtonProps, GetCodeEditorHeightReturnType, HoverTexts } from './types'
+
+import { MODES } from '@Common/Constants'
+import { debounce, noop, YAMLStringify } from '@Common/Helper'
+import { Tooltip } from '@Common/Tooltip'
+import ICCaretDown from '@Icons/ic-caret-down.svg?react'
 
 const syncAnnotationA = Annotation.define<boolean>()
 const syncAnnotationB = Annotation.define<boolean>()
 
 // UTILS
 export const parseValueToCode = (value: string, mode: string, tabSize: number) => {
-    let obj = null
+    let obj: any = null
 
     try {
         obj = JSON.parse(value)
@@ -211,7 +212,7 @@ const getHoverElement = (schemaURI: CodeEditorProps['schemaURI']) => (data: Hove
             {data.typeInfo && (
                 <p
                     className="m-0"
-                    // eslint-disable-next-line react/no-danger
+                    // biome-ignore lint/security/noDangerouslySetInnerHtml: Legacy
                     dangerouslySetInnerHTML={{
                         __html: DOMPurify.sanitize(data.typeInfo.replace(/`([^`]+)`/g, '<code>$1</code>')),
                     }}

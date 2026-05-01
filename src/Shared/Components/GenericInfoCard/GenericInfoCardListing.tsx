@@ -21,12 +21,13 @@
 import { useMemo } from 'react'
 
 import emptyList from '@Images/empty-create.png'
-import ErrorScreenManager from '@Common/ErrorScreenManager'
-import { GenericEmptyState, GenericFilterEmptyState } from '@Common/index'
 
 import GenericInfoCard from './GenericInfoCard.component'
 import { GenericInfoListSkeleton } from './GenericInfoListSkeleton'
 import { GenericInfoCardListingProps } from './types'
+
+import ErrorScreenManager from '@Common/ErrorScreenManager'
+import { GenericEmptyState, GenericFilterEmptyState } from '@Common/index'
 
 export const GenericInfoCardListing = ({
     isLoading,

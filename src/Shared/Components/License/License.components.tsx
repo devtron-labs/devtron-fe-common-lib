@@ -16,13 +16,13 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import ICCheck from '@Icons/ic-check.svg?react'
-import ICClipboard from '@Icons/ic-copy.svg?react'
-import { ClipboardButton, copyToClipboard, showError } from '@Common/index'
-
 import { Backdrop, Button, ButtonStyleType, ButtonVariantType, Icon, InfoIconTippy, QRCode } from '..'
 import { CopyButtonProps, GatekeeperQRDialogProps, InstallFingerprintInfoProps } from './types'
 import { getGateKeeperUrl } from './utils'
+
+import { ClipboardButton, copyToClipboard, showError } from '@Common/index'
+import ICCheck from '@Icons/ic-check.svg?react'
+import ICClipboard from '@Icons/ic-copy.svg?react'
 
 const CopyButton = ({ copyContent }: CopyButtonProps) => {
     const [clicked, setClicked] = useState<boolean>(false)

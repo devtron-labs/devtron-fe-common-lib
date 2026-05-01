@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { SSOProvider } from '@Common/Constants'
-
 import { IconsProps } from '../Icon'
+
+import { SSOProvider } from '@Common/Constants'
 
 export interface SSOProviderIconProps {
     provider: SSOProvider

@@ -16,11 +16,6 @@
 
 import { Fragment, useEffect, useState } from 'react'
 
-import ICSort from '@Icons/ic-arrow-up-down.svg?react'
-import ICSortArrowDown from '@Icons/ic-sort-arrow-down.svg?react'
-import { MODES, SortingOrder } from '@Common/Constants'
-import ErrorScreenManager from '@Common/ErrorScreenManager'
-import { Progressing } from '@Common/Progressing'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
@@ -36,6 +31,12 @@ import {
 } from './DeploymentConfigDiff.types'
 import { DeploymentConfigDiffAccordion } from './DeploymentConfigDiffAccordion'
 import DeploymentConfigDiffRadioSelect from './DeploymentConfigDiffRadioSelect'
+
+import { MODES, SortingOrder } from '@Common/Constants'
+import ErrorScreenManager from '@Common/ErrorScreenManager'
+import { Progressing } from '@Common/Progressing'
+import ICSort from '@Icons/ic-arrow-up-down.svg?react'
+import ICSortArrowDown from '@Icons/ic-sort-arrow-down.svg?react'
 
 export const DeploymentConfigDiffMain = ({
     isLoading,
@@ -76,6 +77,7 @@ export const DeploymentConfigDiffMain = ({
             setExpandedView(
                 configList.reduce(
                     (acc, curr) => ({
+                        // biome-ignore lint/performance/noAccumulatingSpread: Legacy
                         ...acc,
                         [curr.id]: scrollIntoViewId === curr.id || curr.diffState !== DeploymentConfigDiffState.NO_DIFF,
                     }),

@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { useEffect, useMemo, useRef, useState } from 'react'
 import {
     applyEdgeChanges,
     applyNodeChanges,
@@ -28,6 +27,7 @@ import {
     ReactFlowProvider,
     Viewport,
 } from '@xyflow/react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
 import { DEFAULT_VIEWPORT, NODE_TYPES, PADDING_X, PADDING_Y } from './constants'
 import { GraphVisualizerExtendedNode, GraphVisualizerProps } from './types'
@@ -107,16 +107,12 @@ export const GraphVisualizer = ({
     // METHODS
     const onNodesChange: OnNodesChange<GraphVisualizerExtendedNode> = (changes) => {
         setNodes((nds) =>
-            applyNodeChanges(changes, processNodes(nds, edges)).map(
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                ({ position, ...node }) => node,
-            ),
+            applyNodeChanges(changes, processNodes(nds, edges)).map(({ position: _position, ...node }) => node),
         )
     }
 
     const onEdgesChange: OnEdgesChange = (changes) => {
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        setEdges((eds) => applyEdgeChanges(changes, processEdges(eds)).map(({ type, ...edge }) => edge))
+        setEdges((eds) => applyEdgeChanges(changes, processEdges(eds)).map(({ type: _type, ...edge }) => edge))
     }
 
     const onViewportChange = (updatedViewport: Viewport) => {

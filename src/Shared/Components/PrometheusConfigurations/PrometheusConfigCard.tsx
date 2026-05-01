@@ -1,11 +1,12 @@
-import RadioGroup from '@Common/RadioGroup'
-import RadioGroupItem from '@Common/RadioGroupItem'
 import { AuthenticationType } from '@Shared/types'
 
 import { CustomInput, PasswordField } from '../CustomInput'
 import { InfoBlock } from '../InfoBlock'
 import { Textarea } from '../Textarea'
 import { PromoetheusConfigProps } from './types'
+
+import RadioGroup from '@Common/RadioGroup'
+import RadioGroupItem from '@Common/RadioGroupItem'
 
 const PromoetheusConfigCard = ({
     prometheusConfig,

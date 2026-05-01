@@ -142,10 +142,8 @@ export interface InstallationClusterConfigDTO {
     installedEntityId: number | 0
 }
 
-export interface InstallationClusterConfigType extends Pick<
-    InstallationClusterConfigDTO,
-    'installationType' | 'conditions'
-> {
+export interface InstallationClusterConfigType
+    extends Pick<InstallationClusterConfigDTO, 'installationType' | 'conditions'> {
     schema: object
     values: object
     installationId: number

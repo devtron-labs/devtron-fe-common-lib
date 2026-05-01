@@ -16,14 +16,15 @@
 
 import { useMemo } from 'react'
 
-import { getAppOptionsGroupedByProjects, getEnvironmentOptionsGroupedByClusters } from '@Common/Common.service'
-import { useAsync } from '@Common/Helper'
 import { getClusterOptions } from '@Shared/index'
 import { ResourceKindType } from '@Shared/types'
 
 import { getProjectOptions } from './service'
 import { UseGetResourceKindOptionsReturnType, UseGetResourceKindsOptionsProps } from './types'
 import { getResourcesToFetchMap } from './utils'
+
+import { getAppOptionsGroupedByProjects, getEnvironmentOptionsGroupedByClusters } from '@Common/Common.service'
+import { useAsync } from '@Common/Helper'
 
 /**
  * Generic hook to fetch the options list for the supported resource kinds.

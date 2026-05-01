@@ -14,20 +14,21 @@
  * limitations under the License.
  */
 
+import Tippy from '@tippyjs/react'
 import { useEffect, useState } from 'react'
 import { Link, NavLink } from 'react-router-dom'
-import Tippy from '@tippyjs/react'
 
-import ICClose from '@Icons/ic-close.svg?react'
-import ICError from '@Icons/ic-error.svg?react'
-import ICInfoOutlined from '@Icons/ic-info-outlined.svg?react'
-import { SegmentedControl } from '@Common/index'
-import { SegmentType } from '@Common/SegmentedControl/types'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { CollapsibleList, CollapsibleListConfig } from '../CollapsibleList'
 import { diffStateIconMap, diffStateTooltipTextMap } from './DeploymentConfigDiff.constants'
 import { DeploymentConfigDiffNavigationProps, DeploymentConfigDiffState } from './DeploymentConfigDiff.types'
+
+import { SegmentedControl } from '@Common/index'
+import { SegmentType } from '@Common/SegmentedControl/types'
+import ICClose from '@Icons/ic-close.svg?react'
+import ICError from '@Icons/ic-error.svg?react'
+import ICInfoOutlined from '@Icons/ic-info-outlined.svg?react'
 
 // LOADING SHIMMER
 const ShimmerText = ({ width }: { width: string }) => (
@@ -53,6 +54,7 @@ export const DeploymentConfigDiffNavigation = ({
     const [expandedIds, setExpandedIds] = useState<Record<string, boolean>>({})
 
     useEffect(() => {
+        // biome-ignore lint/performance/noAccumulatingSpread: Legacy
         setExpandedIds(collapsibleNavList.reduce((acc, curr) => ({ ...acc, [curr.id]: !!curr.items.length }), {}))
     }, [collapsibleNavList])
 

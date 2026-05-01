@@ -14,10 +14,6 @@
  * limitations under the License.
  */
 
-import { get, post, put, trash } from '@Common/API'
-import { ROUTES } from '@Common/Constants'
-import { APIOptions, ResponseType } from '@Common/Types'
-
 import {
     CreateResourceDTO,
     CreateResourcePayload,
@@ -28,6 +24,10 @@ import {
     ResourceType,
 } from './ResourceBrowser.Types'
 import { ClusterDetail, NodeCordonRequest } from './types'
+
+import { get, post, put, trash } from '@Common/API'
+import { ROUTES } from '@Common/Constants'
+import { APIOptions, ResponseType } from '@Common/Types'
 
 export const getK8sResourceList = (
     resourceListPayload: K8sResourceListPayloadType,

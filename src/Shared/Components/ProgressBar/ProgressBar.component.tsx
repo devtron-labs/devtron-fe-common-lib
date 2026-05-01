@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { useEffect } from 'react'
 import { AnimatePresence, motion, useMotionValue, useSpring, useTransform } from 'framer-motion'
+import { useEffect } from 'react'
 
 import { ProgressBarProps } from './types'
 
@@ -26,7 +26,7 @@ export const ProgressBar = ({ isLoading, intervalTime = 50 }: ProgressBarProps) 
     const width = useTransform(smoothProgress, (v) => `${v}%`)
 
     useEffect(() => {
-        let interval = null
+        let interval: ReturnType<typeof setInterval> = null
 
         if (isLoading) {
             interval = setInterval(() => {

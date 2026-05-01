@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { FunctionComponent, ReactElement } from 'react'
 import Tippy from '@tippyjs/react'
+import { FunctionComponent, ReactElement } from 'react'
 
 import { ConditionalWrap, Progressing } from '../../../Common'
 import { BUILD_INFRA_TEST_IDS, BUILD_INFRA_TEXT } from './constants'

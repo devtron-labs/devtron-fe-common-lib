@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { SyntheticEvent, useEffect, useRef, useState } from 'react'
 import { motion } from 'framer-motion'
-
-import DeployAudio from '@Sounds/DeployAudio.mp3'
+import { SyntheticEvent, useEffect, useRef, useState } from 'react'
 
 import { Button } from '../Button'
 import { AnimatedDeployButtonProps } from './types'
+
+import DeployAudio from '@Sounds/DeployAudio.mp3'
 
 import './animatedDeployButton.scss'
 
@@ -114,8 +114,7 @@ const AnimatedDeployButton = ({
                 }}
                 disabled={disabled}
             />
-            {/* Disabling es-lint as captions are not required */}
-            {/* eslint-disable-next-line jsx-a11y/media-has-caption */}
+            {/** biome-ignore lint/a11y/useMediaCaption: captions are not required here only a decorative sound */}
             <audio hidden ref={audioRef} src={DeployAudio} />
         </motion.div>
     )

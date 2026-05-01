@@ -25,12 +25,8 @@ import {
     useMemo,
     useRef,
 } from 'react'
-// eslint-disable-next-line import/no-extraneous-dependencies
 import { followCursor } from 'tippy.js'
 
-import { ResizableTagTextArea } from '@Common/CustomTagSelector'
-import { ConditionalWrap } from '@Common/Helper'
-import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
@@ -45,6 +41,10 @@ import {
 } from '../SelectPicker'
 import { DynamicDataTableRowDataType, DynamicDataTableRowProps, DynamicDataTableRowType } from './types'
 import { getActionButtonPosition, getRowGridTemplateColumn, rowTypeHasInputField } from './utils'
+
+import { ResizableTagTextArea } from '@Common/CustomTagSelector'
+import { ConditionalWrap } from '@Common/Helper'
+import { Tooltip } from '@Common/Tooltip'
 
 const getWrapperForButtonCell =
     <K extends string, CustomStateType = Record<string, unknown>>(
@@ -92,6 +92,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
     const cellRef = useRef<Record<string | number, Record<K, RefObject<HTMLTextAreaElement>>>>(null)
     if (!cellRef.current) {
         cellRef.current = rows.reduce((acc, curr) => {
+            // biome-ignore lint/performance/noAccumulatingSpread: Legacy
             acc[curr.id] = headers.reduce((headerAcc, { key }) => ({ ...headerAcc, [key]: createRef() }), {})
             return acc
         }, {})
@@ -105,6 +106,7 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
             if (cellRef.current[curr]) {
                 acc[curr] = cellRef.current[curr]
             } else {
+                // biome-ignore lint/performance/noAccumulatingSpread: Legacy
                 acc[curr] = headers.reduce((headerAcc, { key }) => ({ ...headerAcc, [key]: createRef() }), {})
             }
             return acc
@@ -129,7 +131,6 @@ export const DynamicDataTableRow = <K extends string, CustomStateType = Record<s
                     value = (e as File[])[0]?.name || ''
                     extraData.files = e as File[]
                     break
-                case DynamicDataTableRowDataType.TEXT:
                 default:
                     value = (e as React.ChangeEvent<HTMLTextAreaElement>).target.value
                     break

@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-import { WorkflowNodeType } from '@Common/Types'
-import { ChangeCIPayloadType, CIPipelineNodeType, WorkflowType } from '@Shared/types'
 import { AppConfigProps } from '@Pages/index'
+import { ChangeCIPayloadType, CIPipelineNodeType, WorkflowType } from '@Shared/types'
 
 import { GenericModalProps } from '../GenericModal'
 import { IconsProps } from '../Icon'
+
+import { WorkflowNodeType } from '@Common/Types'
 
 export interface SourceTypeCardProps {
     title: string
@@ -33,7 +34,8 @@ export interface SourceTypeCardProps {
 }
 
 export interface WorkflowOptionsModalProps
-    extends Required<Pick<AppConfigProps, 'isTemplateView'>>, Pick<GenericModalProps, 'open' | 'onClose'> {
+    extends Required<Pick<AppConfigProps, 'isTemplateView'>>,
+        Pick<GenericModalProps, 'open' | 'onClose'> {
     addCIPipeline: (type: CIPipelineNodeType, workflowId?: number | string) => void
     addWebhookCD: (workflowId?: number | string) => void
     addLinkedCD: (changeCIPayload?: ChangeCIPayloadType) => void

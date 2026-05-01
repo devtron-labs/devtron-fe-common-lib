@@ -1,3 +1,5 @@
 {
-    "*.{js,jsx,ts,tsx}": ["npx eslint"]
+    "*.{js,jsx,ts,tsx}": [
+        "npx @biomejs/biome check --no-errors-on-unmatched"
+    ]
 }

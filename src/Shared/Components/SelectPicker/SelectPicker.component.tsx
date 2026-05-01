@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import Tippy from '@tippyjs/react'
 import { ReactElement, useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import {
     GroupHeadingProps,
@@ -23,9 +24,7 @@ import {
     ValueContainerProps,
 } from 'react-select'
 import CreatableSelect from 'react-select/creatable'
-import Tippy from '@tippyjs/react'
 
-import { ConditionalWrap } from '@Common/Helper'
 import { ComponentSizeType } from '@Shared/constants'
 import { deriveBorderRadiusAndBorderClassFromConfig, isNullOrUndefined } from '@Shared/Helpers'
 
@@ -46,6 +45,8 @@ import {
 } from './common'
 import { SelectPickerOptionType, SelectPickerProps, SelectPickerVariantType } from './type'
 import { getCommonSelectStyle, getSelectPickerOptionByValue } from './utils'
+
+import { ConditionalWrap } from '@Common/Helper'
 
 /**
  * Generic component for select picker

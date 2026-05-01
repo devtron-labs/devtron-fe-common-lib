@@ -18,11 +18,10 @@ import ICCelebration from '@Images/ic-celebration.svg'
 import ICManOnRocket from '@Images/ic-man-on-rocket.svg'
 import ICPageNotFound from '@Images/ic-page-not-found.svg'
 import NoDeploymentStatusImage from '@Images/no-artifact.webp'
-import { DeploymentAppTypes, GenericEmptyStateType } from '@Common/Types'
+import { ReleaseMode } from '@Pages/index'
 import { DEPLOYMENT_STATUS } from '@Shared/constants'
 import { aggregateNodes } from '@Shared/Helpers'
 import { AppDetails, AppType, DeploymentStatusDetailsBreakdownDataType, Node } from '@Shared/types'
-import { ReleaseMode } from '@Pages/index'
 
 import { AggregatedNodes, STATUS_SORTING_ORDER } from '../CICDHistory'
 import {
@@ -34,6 +33,8 @@ import {
     AppStatusModalProps,
     GetFilteredFlattenedNodesFromAppDetailsParamsType as GetFlattenedNodesFromAppDetailsParamsType,
 } from './types'
+
+import { DeploymentAppTypes, GenericEmptyStateType } from '@Common/Types'
 
 export const getAppStatusMessageFromAppDetails = (appDetails: AppDetails): string => {
     if (!appDetails?.resourceTree) {

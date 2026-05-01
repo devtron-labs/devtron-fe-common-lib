@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { useEffect, useRef } from 'react'
 import DOMPurify from 'dompurify'
 import { marked, Tokens } from 'marked'
+import { useEffect, useRef } from 'react'
 
 import { MarkDownProps } from './Types'
 
@@ -106,7 +106,7 @@ const MarkDown = ({
             {...props}
             ref={mdeRef}
             className={`markdown ${className}`}
-            // eslint-disable-next-line react/no-danger
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: Sanitized using DOMPurify
             dangerouslySetInnerHTML={createMarkup()}
             data-testid="markdown-rendered-content"
         />

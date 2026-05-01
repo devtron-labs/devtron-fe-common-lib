@@ -16,12 +16,13 @@
 
 import moment from 'moment'
 
-import { DATE_TIME_FORMATS } from '@Common/Constants'
-import { getUrlWithSearchParams } from '@Common/index'
 import { DevtronLicenseDTO, LicensingErrorCodes } from '@Shared/types'
 
 import { ALLOWED_CLUSTER_IN_FREEMIUM } from './constants'
 import { DevtronLicenseCardProps, DevtronLicenseInfo, LicenseStatus } from './types'
+
+import { DATE_TIME_FORMATS } from '@Common/Constants'
+import { getUrlWithSearchParams } from '@Common/index'
 
 export const getLicenseColorsAccordingToStatus = ({
     isFreemium,

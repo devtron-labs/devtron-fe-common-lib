@@ -19,7 +19,8 @@ import { ImageCardAccordionProps } from '@Shared/Components/ImageCardAccordion/t
 import { MaterialSecurityInfoType } from '../../../types'
 
 export interface VulnerabilitiesProps
-    extends MaterialSecurityInfoType, Pick<ImageCardAccordionProps, 'SecurityModalSidebar'> {
+    extends MaterialSecurityInfoType,
+        Pick<ImageCardAccordionProps, 'SecurityModalSidebar'> {
     artifactId: number
     applicationId: number
     environmentId: number

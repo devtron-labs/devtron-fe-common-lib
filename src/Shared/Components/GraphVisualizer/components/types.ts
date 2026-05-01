@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { ReactElement, ReactNode } from 'react'
 import { Node } from '@xyflow/react'
+import { ReactElement, ReactNode } from 'react'
 
 import { SelectPickerProps } from '../../SelectPicker'
 

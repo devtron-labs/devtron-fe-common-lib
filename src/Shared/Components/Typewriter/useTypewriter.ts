@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { useEffect } from 'react'
 import { animate, useMotionValue, useTransform } from 'framer-motion'
+import { useEffect } from 'react'
 
 export const useTypewriter = (text: string) => {
     const progress = useMotionValue(0)

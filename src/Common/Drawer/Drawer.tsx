@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-import { useRef, useEffect } from 'react'
+import { useEffect, useRef } from 'react'
+
 import { VisibleModal } from '../Modals/VisibleModal'
 import './Drawer.scss'
+
 import { DTFocusTrapType } from '@Shared/Components/DTFocusTrap'
 
 export interface DrawerProps extends Pick<DTFocusTrapType, 'initialFocus'> {

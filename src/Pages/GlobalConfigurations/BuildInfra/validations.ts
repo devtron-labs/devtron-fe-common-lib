@@ -14,14 +14,6 @@
  * limitations under the License.
  */
 
-import { PATTERNS } from '@Common/Constants'
-import {
-    requiredField,
-    validateLabelKey,
-    validateRequiredPositiveNumber,
-    validateStringLength,
-    ValidationResponseType,
-} from '@Shared/validations'
 import {
     BUILD_INFRA_INPUT_CONSTRAINTS,
     BUILD_INFRA_TEXT,
@@ -31,6 +23,15 @@ import {
     ValidateRequestLimitResponseType,
     ValidateRequestLimitType,
 } from '@Pages/index'
+import {
+    requiredField,
+    ValidationResponseType,
+    validateLabelKey,
+    validateRequiredPositiveNumber,
+    validateStringLength,
+} from '@Shared/validations'
+
+import { PATTERNS } from '@Common/Constants'
 
 /**
  * @description A valid platform name should not be empty and be less than 128 characters. Plus profile can not have duplicate platform names
@@ -232,14 +233,11 @@ export const validateNodeSelector = ({
 
     if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]?.[id]) {
         if (!currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]) {
-            // eslint-disable-next-line no-param-reassign
             currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = {}
         }
-        // eslint-disable-next-line no-param-reassign
         currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {}
     }
 
-    // eslint-disable-next-line no-param-reassign
     currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id] = {
         ...(keyErrorMessages.length > 0 && { [NodeSelectorHeaderType.KEY]: keyErrorMessages }),
         ...(valueErrorMessages.length > 0 && { [NodeSelectorHeaderType.VALUE]: valueErrorMessages }),
@@ -247,11 +245,9 @@ export const validateNodeSelector = ({
 
     if (!hasError) {
         // Would delete id, and if not key left then delete key
-        // eslint-disable-next-line no-param-reassign
         delete currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR][id]
 
         if (Object.keys(currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR]).length === 0) {
-            // eslint-disable-next-line no-param-reassign
             currentInputErrors[BuildInfraConfigTypes.NODE_SELECTOR] = null
         }
     }

@@ -20,7 +20,6 @@ import { RadioGroupItemProps } from './Types'
 const RadioGroupItem = ({ value, disabled, children, dataTestId }: RadioGroupItemProps) => (
     <RadioGroupContext.Consumer>
         {(context) => (
-            // eslint-disable-next-line jsx-a11y/label-has-associated-control
             <label className={disabled || context.disabled ? 'form__radio-item disabled' : 'form__radio-item'}>
                 <input
                     type="radio"

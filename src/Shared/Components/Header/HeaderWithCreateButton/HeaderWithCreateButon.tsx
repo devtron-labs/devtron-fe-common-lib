@@ -16,9 +16,6 @@
 
 import { useLocation } from 'react-router-dom'
 
-import { SERVER_MODE } from '@Common/Constants'
-import { noop } from '@Common/Helper'
-import { BreadCrumb, BreadcrumbText, useBreadcrumb } from '@Common/index'
 import { ActionMenu } from '@Shared/Components/ActionMenu'
 import { ButtonComponentType } from '@Shared/Components/Button'
 import Button from '@Shared/Components/Button/Button.component'
@@ -26,14 +23,18 @@ import { DOCUMENTATION } from '@Shared/Components/DocLink'
 import { Icon } from '@Shared/Components/Icon'
 import { ComponentSizeType } from '@Shared/constants'
 import { useMainContext } from '@Shared/Providers'
-import { getApplicationManagementBreadcrumb } from '@PagesDevtron2.0/ApplicationManagement'
-import { getAutomationEnablementBreadcrumb } from '@PagesDevtron2.0/Automation&Enablement'
-import { getInfrastructureManagementBreadcrumb } from '@PagesDevtron2.0/InfrastructureManagement'
-import { ROUTER_URLS } from '@PagesDevtron2.0/Shared'
 
 import PageHeader from '../PageHeader'
 import { HeaderWithCreateButtonProps } from './types'
 import { getCreateActionMenuOptions } from './utils'
+
+import { SERVER_MODE } from '@Common/Constants'
+import { noop } from '@Common/Helper'
+import { BreadCrumb, BreadcrumbText, useBreadcrumb } from '@Common/index'
+import { getApplicationManagementBreadcrumb } from '@PagesDevtron2.0/ApplicationManagement'
+import { getAutomationEnablementBreadcrumb } from '@PagesDevtron2.0/Automation&Enablement'
+import { getInfrastructureManagementBreadcrumb } from '@PagesDevtron2.0/InfrastructureManagement'
+import { ROUTER_URLS } from '@PagesDevtron2.0/Shared'
 
 export const HeaderWithCreateButton = ({ viewType }: HeaderWithCreateButtonProps) => {
     // HOOKS
@@ -74,7 +75,6 @@ export const HeaderWithCreateButton = ({ viewType }: HeaderWithCreateButtonProps
                 return ROUTER_URLS.JOBS_LIST
             case 'infra-apps':
                 return ROUTER_URLS.INFRASTRUCTURE_MANAGEMENT_APP_LIST.ROUTE
-            case 'apps':
             default:
                 return ROUTER_URLS.DEVTRON_APP_LIST
         }
@@ -96,7 +96,6 @@ export const HeaderWithCreateButton = ({ viewType }: HeaderWithCreateButtonProps
                     apps: { component: <BreadcrumbText isActive heading="Applications" /> },
                     ':appType': null,
                 }
-            case 'apps':
             default:
                 return {
                     ...getApplicationManagementBreadcrumb(),

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { Dispatch, SetStateAction } from 'react'
 import { Edge } from '@xyflow/react'
+import { Dispatch, SetStateAction } from 'react'
 
 import { DropdownNodeProps, IconNodeProps, TextNodeProps } from './components'
 

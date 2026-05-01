@@ -14,11 +14,21 @@
  * limitations under the License.
  */
 
-/* eslint-disable eqeqeq */
-import type { JSX } from 'react'
 import Tippy from '@tippyjs/react'
 import moment from 'moment'
+import type { JSX } from 'react'
 
+import { getLowerCaseObject, getWebhookDate } from '@Shared/Helpers'
+
+import { MATERIAL_EXCLUDE_TIPPY_TEXT } from '../../constants'
+import { WEBHOOK_EVENT_ACTION_TYPE } from './constants'
+import GitMaterialInfoHeader from './GitMaterialInfoHeader'
+import { GitCommitInfoGenericProps } from './types'
+
+import { ClipboardButton } from '@Common/ClipboardButton/ClipboardButton'
+import { createGitCommitUrl, getGitBranchUrl, SourceTypeMap } from '@Common/Common.service'
+import { DATE_TIME_FORMATS, GitProviderType } from '@Common/Constants'
+import { stopPropagation } from '@Common/Helper'
 import Abort from '@Icons/ic-abort.svg?react'
 import CalendarIcon from '@Icons/ic-calendar.svg?react'
 import Check from '@Icons/ic-check-circle.svg?react'
@@ -29,16 +39,6 @@ import MessageIcon from '@Icons/ic-message.svg?react'
 import PersonIcon from '@Icons/ic-person.svg?react'
 import PullRequestIcon from '@Icons/ic-pull-request.svg?react'
 import Tag from '@Icons/ic-tag.svg?react'
-import { ClipboardButton } from '@Common/ClipboardButton/ClipboardButton'
-import { createGitCommitUrl, getGitBranchUrl, SourceTypeMap } from '@Common/Common.service'
-import { DATE_TIME_FORMATS, GitProviderType } from '@Common/Constants'
-import { stopPropagation } from '@Common/Helper'
-import { getLowerCaseObject, getWebhookDate } from '@Shared/Helpers'
-
-import { MATERIAL_EXCLUDE_TIPPY_TEXT } from '../../constants'
-import { WEBHOOK_EVENT_ACTION_TYPE } from './constants'
-import GitMaterialInfoHeader from './GitMaterialInfoHeader'
-import { GitCommitInfoGenericProps } from './types'
 
 const GitCommitInfoGeneric = ({
     materialSourceType,
@@ -53,9 +53,8 @@ const GitCommitInfoGeneric = ({
     const lowerCaseCommitInfo = getLowerCaseObject(commitInfo)
     const _isWebhook =
         materialSourceType === SourceTypeMap.WEBHOOK ||
-        (lowerCaseCommitInfo && lowerCaseCommitInfo.webhookdata && lowerCaseCommitInfo.webhookdata.id !== 0)
+        (lowerCaseCommitInfo?.webhookdata && lowerCaseCommitInfo.webhookdata.id !== 0)
     const _webhookData = _isWebhook ? lowerCaseCommitInfo.webhookdata : {}
-    // eslint-disable-next-line no-nested-ternary
     const _commitUrl = _isWebhook
         ? null
         : lowerCaseCommitInfo.commiturl

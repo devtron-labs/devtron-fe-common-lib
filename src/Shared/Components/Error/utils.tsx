@@ -39,6 +39,7 @@ export const renderErrorHeaderMessage = (appDetails: AppDetails, key: string, on
         {appDetails.ipsAccessProvided ? ' could not' : ' does not have permission to'} pull container image from ‘
         {appDetails.dockerRegistryId}’ registry.
         {key === 'sync-error' && (
+            // biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: Legacy
             <span className="cb-5 cursor fw-6 ml-8" onClick={onClickActionButton}>
                 {appDetails.ipsAccessProvided ? 'Possible issues?' : 'How to resolve?'}
             </span>

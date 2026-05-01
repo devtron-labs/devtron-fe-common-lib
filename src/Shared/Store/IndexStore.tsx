@@ -13,9 +13,8 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+/** biome-ignore-all lint/suspicious/noDoubleEquals: Legacy */
 
-/* eslint-disable eqeqeq */
-/* eslint-disable array-callback-return */
 import { BehaviorSubject } from 'rxjs'
 
 import { NodeFilters } from '@Shared/Components'
@@ -92,7 +91,6 @@ export function getiNodesByRootNodeWithChildNodes(
             if (_nodesByParent.get(_groupKindName)) {
                 _matchingNodes.push(..._nodesByParent.get(_groupKindName))
                 if (!_node.childNodes) {
-                    // eslint-disable-next-line no-param-reassign
                     _node.childNodes = [] as Array<iNode>
                 }
                 _node.childNodes.push(..._nodesByParent.get(_groupKindName))
@@ -119,6 +117,7 @@ export function getiNodesByRootNodeWithChildNodes(
         // Add init containers and containers to Pod type nodes
         children
             .filter((_child) => _child.kind.toLowerCase() == Nodes.Pod.toLowerCase())
+            // biome-ignore lint/suspicious/useIterableCallbackReturn: Legacy
             .map((_pn) => {
                 const podMeta = (podMetadata || _appDetailsSubject.getValue().resourceTree?.podMetadata)?.filter(
                     (_pmd) => _pmd.uid === _pn.uid,
@@ -141,7 +140,6 @@ export function getiNodesByRootNodeWithChildNodes(
                     return childNode
                 })
 
-                // eslint-disable-next-line no-param-reassign
                 _pn.childNodes = [...initNodes, ...containerNodes]
             })
         children = children.flatMap((_node) => _node.childNodes ?? [])
@@ -197,6 +195,7 @@ export function getPodsRootParentNameAndStatus(_nodes: Array<Node>): Array<[stri
     while (uniqueParents.size > 0) {
         const _uniqueParents = new Map<string, string>()
         uniqueParents.forEach((_status, _parent) => {
+            // biome-ignore lint/suspicious/useIterableCallbackReturn: Legacy
             ;(_nodesById.get(_parent)?.parentRefs ?? []).forEach((parent) =>
                 _uniqueParents.set(`${parent.group}/${parent.kind}/${parent.name}`, _status),
             )
@@ -327,7 +326,7 @@ export const IndexStore = {
         _appDetailsSubject.getValue().resourceTree?.podMetadata?.find((pod) => pod.name === _name)?.containers,
 
     getAllContainers: () => {
-        const containers = []
+        const containers: string[] = []
 
         const pods = _appDetailsSubject.getValue().resourceTree.podMetadata
 
@@ -341,7 +340,7 @@ export const IndexStore = {
     },
 
     getAllNewContainers: () => {
-        const containers = []
+        const containers: string[] = []
 
         const pods = _appDetailsSubject.getValue().resourceTree.podMetadata.filter((p) => p.isNew)
 
@@ -355,7 +354,7 @@ export const IndexStore = {
     },
 
     getAllOldContainers: () => {
-        const containers = []
+        const containers: string[] = []
 
         const pods = _appDetailsSubject.getValue().resourceTree.podMetadata.filter((p) => !p.isNew)
 
@@ -387,9 +386,10 @@ export const IndexStore = {
     },
 
     getPodForAContainer: (_c: string) => {
-        let podeName
+        let podeName: string
 
         _appDetailsSubject.getValue().resourceTree.podMetadata.forEach((p) => {
+            // biome-ignore lint/suspicious/useIterableCallbackReturn: Legacy
             p.containers.find((c) => {
                 if (c === _c) {
                     podeName = p.name

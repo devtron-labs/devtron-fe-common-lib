@@ -16,9 +16,9 @@
 
 import { ObjectFieldTemplateProps, TitleFieldProps } from '@rjsf/utils'
 
-import { Tooltip } from '@Common/Tooltip'
-
 import { RJSFFormSchema } from '../types'
+
+import { Tooltip } from '@Common/Tooltip'
 
 export const TitleField = ({
     id,

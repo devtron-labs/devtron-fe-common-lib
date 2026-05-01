@@ -16,8 +16,6 @@
 
 import { useCallback, useEffect, useMemo, useState } from 'react'
 
-import { noop, useResizableTableConfig, useStateFilters, useUrlFilters } from '@Common/index'
-
 import { BulkSelectionEvents, BulkSelectionProvider, useBulkSelection } from '../BulkSelection'
 import { BULK_ACTION_GUTTER_LABEL } from './constants'
 import InternalTable from './InternalTable'
@@ -33,10 +31,12 @@ import {
 } from './types'
 import { getVisibleColumns, setVisibleColumnsToLocalStorage } from './utils'
 
+import { noop, useResizableTableConfig, useStateFilters, useUrlFilters } from '@Common/index'
+
 import './styles.scss'
 
 const UseResizableTableConfigWrapper = <
-    RowData extends unknown,
+    RowData,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
 >(
@@ -72,7 +72,7 @@ const UseResizableTableConfigWrapper = <
 }
 
 const TableWithResizableConfigWrapper = <
-    RowData extends unknown,
+    RowData,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
 >(
@@ -104,8 +104,9 @@ const TableWithResizableConfigWrapper = <
 }
 
 const TableWithUseBulkSelectionReturnValue = <
-    RowData extends unknown = unknown,
+    RowData = unknown,
     FilterVariant extends FiltersTypeEnum = FiltersTypeEnum.NONE,
+    // biome-ignore lint/complexity/noBannedTypes: it is necessary to allow any additional props to be passed down to the table component
     AdditionalProps extends Record<string, any> = {},
 >(
     tableProps: TableWithBulkSelectionProps<RowData, FilterVariant, AdditionalProps>,
@@ -165,7 +166,7 @@ const TableWithUseBulkSelectionReturnValue = <
 }
 
 const TableWithBulkSelection = <
-    RowData extends unknown,
+    RowData,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
 >(
@@ -188,7 +189,7 @@ const TableWithBulkSelection = <
 }
 
 const VisibleColumnsWrapper = <
-    RowData extends unknown,
+    RowData,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
 >(
@@ -216,7 +217,7 @@ const VisibleColumnsWrapper = <
     )
 }
 
-const UseStateFilterWrapper = <RowData extends unknown, AdditionalProps extends Record<string, any>>(
+const UseStateFilterWrapper = <RowData, AdditionalProps extends Record<string, any>>(
     props: FilterWrapperProps<RowData, FiltersTypeEnum.STATE, AdditionalProps>,
 ) => {
     const { additionalFilterProps } = props
@@ -226,7 +227,7 @@ const UseStateFilterWrapper = <RowData extends unknown, AdditionalProps extends 
     return <VisibleColumnsWrapper {...props} filterData={filterData} />
 }
 
-const UseUrlFilterWrapper = <RowData extends unknown, AdditionalProps extends Record<string, any>>(
+const UseUrlFilterWrapper = <RowData, AdditionalProps extends Record<string, any>>(
     props: FilterWrapperProps<RowData, FiltersTypeEnum.URL, AdditionalProps>,
 ) => {
     const { additionalFilterProps } = props
@@ -237,8 +238,9 @@ const UseUrlFilterWrapper = <RowData extends unknown, AdditionalProps extends Re
 }
 
 const TableWrapper = <
-    RowData extends unknown = unknown,
+    RowData = unknown,
     FilterVariant extends FiltersTypeEnum = FiltersTypeEnum.NONE,
+    // biome-ignore lint/complexity/noBannedTypes: it is necessary to allow any additional props to be passed down to the table component
     AdditionalProps extends Record<string, any> = {},
 >(
     tableProps: TableProps<RowData, FilterVariant, AdditionalProps>,

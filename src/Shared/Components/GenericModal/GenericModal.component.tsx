@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-import { PropsWithChildren } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { PropsWithChildren } from 'react'
 
-import { noop, stopPropagation } from '@Common/Helper'
 import { Backdrop, Button, ButtonStyleType, ButtonVariantType, Icon } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { BORDER_VARIANT_TO_CLASS_NAME_MAP, MODAL_WIDTH_TO_CLASS_NAME_MAP } from './constants'
 import { GenericModalProvider, useGenericModalContext } from './GenericModal.context'
 import { GenericModalFooterProps, GenericModalHeaderProps, GenericModalProps } from './types'
+
+import { noop, stopPropagation } from '@Common/Helper'
 
 const GenericModalHeader = ({ title }: GenericModalHeaderProps) => {
     const { name, onClose } = useGenericModalContext()
@@ -75,7 +76,7 @@ const GenericModalFooter = ({
     </div>
 )
 
-// eslint-disable-next-line react/jsx-no-useless-fragment
+// biome-ignore lint/complexity/noBannedTypes: Legacy
 const GenericModalBody = ({ children }: PropsWithChildren<{}>) => <>{children}</>
 
 const GenericModal = ({

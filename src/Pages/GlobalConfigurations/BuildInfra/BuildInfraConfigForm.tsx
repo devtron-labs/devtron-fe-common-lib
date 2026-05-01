@@ -34,7 +34,6 @@ const InheritingHeader = ({ defaultHeading, inheritingData, isInheriting, isGlob
 
     if (isGlobalProfile || !isInheriting) {
         // For typing issues
-        // eslint-disable-next-line react/jsx-no-useless-fragment
         return <>{defaultHeading}</>
     }
 

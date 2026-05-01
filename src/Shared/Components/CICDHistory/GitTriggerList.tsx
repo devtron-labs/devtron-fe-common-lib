@@ -16,14 +16,15 @@
 
 import { type JSX, memo } from 'react'
 
-import ICBranch from '@Icons/ic-branch.svg?react'
-import { createGitCommitUrl, SourceTypeMap } from '@Common/Common.service'
 import { getHandleOpenURL, renderMaterialIcon } from '@Shared/Helpers'
 import { GitTriggers } from '@Shared/types'
 
 import { CommitChipCell } from '../CommitChipCell'
 import { CiPipelineSourceConfig } from './CiPipelineSourceConfig'
 import { DeploymentSummaryTooltipCardType } from './types'
+
+import { createGitCommitUrl, SourceTypeMap } from '@Common/Common.service'
+import ICBranch from '@Icons/ic-branch.svg?react'
 
 const GitTriggerList = memo(
     ({
@@ -33,7 +34,6 @@ const GitTriggerList = memo(
     }: Pick<DeploymentSummaryTooltipCardType, 'ciMaterials' | 'gitTriggers'> & {
         addMarginTop?: boolean
     }): JSX.Element => (
-        // eslint-disable-next-line react/jsx-no-useless-fragment
         <>
             {Object.keys(gitTriggers ?? {}).length > 0 &&
                 ciMaterials?.map((ciMaterial) => {

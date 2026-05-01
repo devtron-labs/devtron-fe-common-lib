@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import React from 'react'
 import { RegistryWidgetsType } from '@rjsf/utils'
 
 import {
@@ -22,16 +21,16 @@ import {
     ArrayFieldItemTemplate,
     ArrayFieldTemplate,
     BaseInputTemplate,
-    FieldTemplate,
     FieldErrorTemplate,
+    FieldTemplate,
     ObjectFieldTemplate,
     RemoveButton,
     SubmitButton,
     TitleFieldTemplate,
     WrapIfAdditionalTemplate,
 } from './templates'
-import { CheckboxWidget, SelectWidget } from './widgets'
 import { FormProps } from './types'
+import { CheckboxWidget, SelectWidget } from './widgets'
 
 export const widgets: RegistryWidgetsType = {
     CheckboxWidget,

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { useMemo } from 'react'
 import RJSF from '@rjsf/core'
+import { useMemo } from 'react'
 
 import { SCHEMA_07_VALIDATOR } from '@Shared/validations'
 

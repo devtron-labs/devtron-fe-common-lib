@@ -14,9 +14,11 @@
  * limitations under the License.
  */
 
-import { TooltipProps } from '@Common/Tooltip'
 import { TargetPlatformsDTO } from '@Shared/types'
+
+import { TooltipProps } from '@Common/Tooltip'
 
 export interface TargetPlatformBadgeListProps extends Required<Pick<TargetPlatformsDTO, 'targetPlatforms'>> {}
 export interface TargetPlatformListTooltipProps
-    extends Pick<TargetPlatformsDTO, 'targetPlatforms'>, Pick<TooltipProps, 'children' | 'appendTo'> {}
+    extends Pick<TargetPlatformsDTO, 'targetPlatforms'>,
+        Pick<TooltipProps, 'children' | 'appendTo'> {}

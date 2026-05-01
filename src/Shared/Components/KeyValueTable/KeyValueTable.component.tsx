@@ -16,9 +16,6 @@
 
 import { useEffect, useMemo, useState } from 'react'
 
-import { useEffectAfterMount } from '@Common/Helper'
-import { useStateFilters } from '@Common/Hooks'
-
 import { DynamicDataTable } from '../DynamicDataTable'
 import { KeyValueTableDataType, KeyValueTableInternalProps, KeyValueTableProps } from './KeyValueTable.types'
 import {
@@ -29,6 +26,9 @@ import {
     getKeyValueTableSortedRows,
     getModifiedDataForOnChange,
 } from './utils'
+
+import { useEffectAfterMount } from '@Common/Helper'
+import { useStateFilters } from '@Common/Hooks'
 
 import './KeyValueTable.scss'
 

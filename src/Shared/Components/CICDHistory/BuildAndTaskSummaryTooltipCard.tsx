@@ -16,15 +16,15 @@
 
 import { type JSX, memo } from 'react'
 
-import ICCalendar from '@Icons/ic-calendar.svg?react'
-import ICPerson from '@Icons/ic-person.svg?react'
-import { Tooltip } from '@Common/Tooltip'
-
 import { DEFAULT_CLUSTER_ID } from './constants'
 import GitTriggerList from './GitTriggerList'
 import { BuildAndTaskSummaryTooltipCardProps } from './types'
 import { getFormattedTriggerTime, sanitizeWorkflowExecutionStages } from './utils'
 import WorkerStatus from './WorkerStatus'
+
+import { Tooltip } from '@Common/Tooltip'
+import ICCalendar from '@Icons/ic-calendar.svg?react'
+import ICPerson from '@Icons/ic-person.svg?react'
 
 const BASE_ICON_CLASS = 'icon-dim-20 dc__no-shrink'
 

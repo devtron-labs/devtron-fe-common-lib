@@ -16,13 +16,13 @@
 
 import { type JSX, SyntheticEvent } from 'react'
 
-import { TooltipProps } from '@Common/Tooltip'
 import { DataAttributes, Never } from '@Shared/types'
 
 import { IconsProps } from '../Icon'
 import { TrailingItemProps } from '../TrailingItem'
 
-// eslint-disable-next-line no-use-before-define
+import { TooltipProps } from '@Common/Tooltip'
+
 export type TreeNode<DataAttributeType = null> = TreeHeading<DataAttributeType> | TreeItem<DataAttributeType>
 
 /**
@@ -238,29 +238,22 @@ export type TreeViewProps<DataAttributeType = null> = {
 )
 
 export interface TreeViewNodeContentProps
-    extends
-        Pick<BaseNode, 'startIconConfig' | 'title' | 'subtitle' | 'customTooltipConfig' | 'strikeThrough'>,
+    extends Pick<BaseNode, 'startIconConfig' | 'title' | 'subtitle' | 'customTooltipConfig' | 'strikeThrough'>,
         Required<Pick<TreeViewProps, 'variant'>> {
     type: 'heading' | 'item'
     isSelected: boolean
 }
 
-export interface GetSelectedIdParentNodesProps<DataAttributeType = null> extends Pick<
-    TreeViewProps<DataAttributeType>,
-    'nodes' | 'selectedId'
-> {}
+export interface GetSelectedIdParentNodesProps<DataAttributeType = null>
+    extends Pick<TreeViewProps<DataAttributeType>, 'nodes' | 'selectedId'> {}
 
-export interface FindSelectedIdParentNodesProps<DataAttributeType = null> extends Pick<
-    GetSelectedIdParentNodesProps<DataAttributeType>,
-    'selectedId'
-> {
+export interface FindSelectedIdParentNodesProps<DataAttributeType = null>
+    extends Pick<GetSelectedIdParentNodesProps<DataAttributeType>, 'selectedId'> {
     node: TreeNode<DataAttributeType>
     onFindParentNode: (id: string) => void
 }
 
-export interface GetVisibleNodesProps<DataAttributeType = null> extends Pick<
-    TreeViewProps<DataAttributeType>,
-    'expandedMap'
-> {
+export interface GetVisibleNodesProps<DataAttributeType = null>
+    extends Pick<TreeViewProps<DataAttributeType>, 'expandedMap'> {
     nodeList: TreeNode<DataAttributeType>[]
 }

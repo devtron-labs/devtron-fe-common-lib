@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import MechanicalOperation from '@Icons/ic-mechanical-operation.svg?react'
 import PageNotFound from '@Images/ic-page-not-found.svg'
 
 import { ScanCategoriesWithLicense } from '../types'
@@ -26,6 +25,8 @@ import {
     SortOrderEnum,
     SUB_CATEGORIES,
 } from './types'
+
+import MechanicalOperation from '@Icons/ic-mechanical-operation.svg?react'
 
 export const DEFAULT_SECURITY_MODAL_IMAGE_STATE = {
     category: CATEGORIES.IMAGE_SCAN,

@@ -17,7 +17,7 @@
 import { GroupBase, OptionsOrGroups } from 'react-select'
 import YAML from 'yaml'
 
-import { noop, YAMLStringify } from '@Common/Helper'
+import { hasESO, OverrideMergeStrategyType } from '@Pages/index'
 import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
 import { decode } from '@Shared/Helpers'
 import {
@@ -33,7 +33,6 @@ import {
     GetConfigMapSecretFormInitialValuesParamsType,
     ProcessCMCSCurrentDataParamsType,
 } from '@Shared/Services'
-import { hasESO, OverrideMergeStrategyType } from '@Pages/index'
 
 import { KeyValueTableData } from '../KeyValueTable'
 import { getSelectPickerOptionByValue } from '../SelectPicker'
@@ -43,6 +42,8 @@ import {
     configMapSecretMountDataMap,
 } from './constants'
 import { ConfigMapSecretDataTypeOptionType, GetConfigMapSecretReadOnlyValuesParamsType } from './types'
+
+import { noop, YAMLStringify } from '@Common/Helper'
 
 export const getSecretDataTypeOptions = (
     isJob: boolean,
@@ -151,6 +152,7 @@ const processExternalSubPathValues = ({
 }
 
 export const convertKeyValuePairToYAML = (currentData: KeyValueTableData[]) =>
+    // biome-ignore lint/performance/noAccumulatingSpread: Legacy
     currentData.length ? YAMLStringify(currentData.reduce((agg, { key, value }) => ({ ...agg, [key]: value }), {})) : ''
 
 const getSecretDataFromConfigData = ({
@@ -391,7 +393,8 @@ export const convertYAMLToKeyValuePair = (yaml: string): KeyValueTableData[] => 
             }
             const value = obj[key] && typeof obj[key] === 'object' ? YAMLStringify(obj[key]) : obj[key].toString()
 
-            return [...agg, { key, value: value ?? '', id }]
+            agg.push({ key, value: value ?? '', id })
+            return agg
         }, [])
         return keyValueArray
     } catch {
@@ -454,11 +457,8 @@ export const getConfigMapSecretPayload = ({
             return acc
         }
         const value = curr.value ?? ''
-
-        return {
-            ...acc,
-            [curr.key]: isSecret && externalType === '' ? btoa(value) : value,
-        }
+        acc[curr.key] = isSecret && externalType === '' ? btoa(value) : value
+        return acc
     }, {})
 
     const payload: CMSecretPayloadType = {

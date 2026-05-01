@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import { ROUTES } from '@Common/Constants'
-import { get, getUrlWithSearchParams, patch, showError } from '@Common/index'
 import { ResourceKindType } from '@Shared/index'
 import { THEME_PREFERENCE_MAP } from '@Shared/Providers/ThemeProvider/types'
 
@@ -34,6 +32,9 @@ import {
     ViewIsPipelineRBACConfiguredRadioTabs,
 } from './types'
 import { getFilteredUniqueAppList, getParsedResourcesMap } from './utils'
+
+import { ROUTES } from '@Common/Constants'
+import { get, getUrlWithSearchParams, patch, showError } from '@Common/index'
 
 /**
  * @returns UserPreferencesType
@@ -105,12 +106,12 @@ const buildUpdatedResourcesMap = (
  * @returns
  */
 
-const getUserPreferencePayload = async ({
+const getUserPreferencePayload = ({
     path,
     value,
     resourceKind,
     userPreferencesResponse,
-}: GetUserPreferencePayloadParams): Promise<Partial<UserPreferencesPayloadValueType>> => {
+}: GetUserPreferencePayloadParams): Partial<UserPreferencesPayloadValueType> => {
     switch (path) {
         case 'themePreference':
             return {
@@ -157,7 +158,7 @@ export const updateUserPreferences = async ({
         const payload: UpdateUserPreferencesPayloadType = {
             key: USER_PREFERENCES_ATTRIBUTE_KEY,
             value: JSON.stringify(
-                await getUserPreferencePayload({
+                getUserPreferencePayload({
                     path,
                     value,
                     resourceKind,

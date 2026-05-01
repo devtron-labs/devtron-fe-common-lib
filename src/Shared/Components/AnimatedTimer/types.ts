@@ -16,8 +16,9 @@
 
 import { animate } from 'framer-motion'
 
-import { TooltipProps } from '@Common/Tooltip'
 import { IconBaseSizeType } from '@Shared/index'
+
+import { TooltipProps } from '@Common/Tooltip'
 
 export interface AnimatedTimerProps extends Pick<Parameters<typeof animate>[2], 'onComplete'> {
     /**

@@ -16,14 +16,15 @@
 
 import React, { useState } from 'react'
 
-import { showError, stopPropagation } from '@Common/Helper'
-import { ServerErrors } from '@Common/ServerError'
 import { ToastManager, ToastVariantType } from '@Shared/Services/ToastManager'
 
 import { CannotDeleteModal } from './CannotDeleteModal'
 import ConfirmationModal from './ConfirmationModal'
 import { ForceDeleteConfirmationModal } from './ForceDeleteConfirmationModal'
 import { ConfirmationModalVariantType, DeleteConfirmationModalProps } from './types'
+
+import { showError, stopPropagation } from '@Common/Helper'
+import { ServerErrors } from '@Common/ServerError'
 
 export const DeleteConfirmationModal: React.FC<DeleteConfirmationModalProps> = ({
     title,

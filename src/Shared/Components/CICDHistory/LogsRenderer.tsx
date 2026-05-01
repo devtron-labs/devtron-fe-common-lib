@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
-import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react'
-import { useParams } from 'react-router-dom'
 import { AnsiUp } from 'ansi_up'
 import DOMPurify from 'dompurify'
+import { type JSX, useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { useParams } from 'react-router-dom'
 
-import ICArrow from '@Icons/ic-caret-down.svg?react'
-import ICCollapseAll from '@Icons/ic-collapse-all.svg?react'
-import ICExpandAll from '@Icons/ic-expand-all.svg?react'
 import { ANSI_UP_REGEX, ComponentSizeType } from '@Shared/constants'
 import { escapeRegExp, sanitizeTargetPlatforms } from '@Shared/Helpers'
 import { AppThemeType, getComponentSpecificThemeClass } from '@Shared/Providers'
@@ -59,6 +56,10 @@ import {
     StageStatusType,
 } from './types'
 import { getLogSearchIndex } from './utils'
+
+import ICArrow from '@Icons/ic-caret-down.svg?react'
+import ICCollapseAll from '@Icons/ic-collapse-all.svg?react'
+import ICExpandAll from '@Icons/ic-expand-all.svg?react'
 
 import './LogsRenderer.scss'
 
@@ -112,7 +113,7 @@ const useCIEventSource = (url: string, maxLength?: number): [string[], EventSour
     useInterval(populateData, interval)
 
     function closeEventSource() {
-        if (eventSourceRef.current && eventSourceRef.current.close) {
+        if (eventSourceRef.current?.close) {
             eventSourceRef.current.close()
         }
     }
@@ -145,12 +146,10 @@ const useCIEventSource = (url: string, maxLength?: number): [string[], EventSour
         eventSourceRef.current.addEventListener(EVENT_STREAM_EVENTS_MAP.MESSAGE, handleMessage)
         eventSourceRef.current.addEventListener(EVENT_STREAM_EVENTS_MAP.START_OF_STREAM, handleStreamStart)
         eventSourceRef.current.addEventListener(EVENT_STREAM_EVENTS_MAP.END_OF_STREAM, handleStreamEnd)
-        // eslint-disable-next-line no-use-before-define
         eventSourceRef.current.addEventListener(EVENT_STREAM_EVENTS_MAP.ERROR, handleError)
     }
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    function handleError(error: any) {
+    function handleError() {
         retryCount -= 1
         if (eventSourceRef.current) {
             eventSourceRef.current.close()
@@ -209,7 +208,6 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
     }: CreateMarkupPropsType): CreateMarkupReturnType {
         let isSearchKeyPresent = false
         try {
-            // eslint-disable-next-line no-param-reassign
             log = log.replace(/\[[.]*m/, (m) => `\x1B[${m}m`)
 
             // This piece of code, would highlight the search key in the logs
@@ -241,7 +239,6 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
                     }
                     return acc
                 }, [])
-                // eslint-disable-next-line no-param-reassign
                 log = parts.join('')
             }
             const ansiUp = new AnsiUp()
@@ -308,7 +305,7 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
         // Map of stage as key and value as object with key as start time and value as boolean depicting if search key is present or not
         const searchKeyStatusMap: Record<string, Record<string, boolean>> = {}
 
-        const searchMatchResults = []
+        const searchMatchResults: string[] = []
 
         const newStageList = streamDataList.reduce((acc, streamItem: string, index) => {
             if (streamItem.startsWith(LOGS_STAGE_IDENTIFIER)) {
@@ -590,13 +587,17 @@ const LogsRenderer = ({ triggerDetails, isBlobStorageConfigured, parentType, ful
         return (
             <div className="logs__body dark-background flex-grow-1" data-testid="check-logs-detail">
                 {logsList.map((log: string, index: number) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <div className="flex top left mb-10 lh-24" key={`logs-${index}`}>
+                    <div
+                        className="flex top left mb-10 lh-24"
+                        key={`logs-${
+                            // biome-ignore lint/suspicious/noArrayIndexKey: Since logs are immutable and order is also important, using index as key is acceptable
+                            index
+                        }`}
+                    >
                         <span className="cn-4 col-2 pr-10">{index + 1}</span>
-                        {/* eslint-disable-next-line react/no-danger */}
                         <p
                             className="mono fs-14 mb-0-imp"
-                            // eslint-disable-next-line react/no-danger
+                            // biome-ignore lint/security/noDangerouslySetInnerHtml: Logs are sanitized using DOMPurify before being rendered
                             dangerouslySetInnerHTML={{
                                 __html: DOMPurify.sanitize(log),
                             }}

@@ -33,7 +33,7 @@ import { PaginationType, UseStateFiltersProps, UseStateFiltersReturnType } from 
  *
  * To be extended to be used with pagination and search as and when required
  */
-const useStateFilters = <T = string,>({
+const useStateFilters = <T = string>({
     initialSortKey,
     defaultPageSize = DEFAULT_BASE_PAGE_SIZE,
 }: UseStateFiltersProps<T> = {}): UseStateFiltersReturnType<T> => {

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { SECURITY_CONFIG } from './constants'
+import { ScanResultDTO, SeveritiesDTO } from './SecurityModal'
 import {
     CATEGORIES,
     ImageScanLicenseListType,
@@ -21,8 +23,6 @@ import {
     StatusType,
     SUB_CATEGORIES,
 } from './SecurityModal/types'
-import { SECURITY_CONFIG } from './constants'
-import { ScanResultDTO, SeveritiesDTO } from './SecurityModal'
 import { CategoriesConfig, ScanCategories, ScanSubCategories, SecurityConfigType } from './types'
 
 export const getCVEUrlFromCVEName = (cveName: string): string =>

@@ -54,7 +54,6 @@ const usePrompt = ({ shouldPrompt, message = DEFAULT_ROUTE_PROMPT_MESSAGE }: Use
             return
         }
 
-        // eslint-disable-next-line no-alert
         const proceed = window.confirm(message)
 
         if (proceed) {

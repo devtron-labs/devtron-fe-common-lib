@@ -1,10 +1,11 @@
-import { DetailsProgressing, VisibleModal } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
 import { Icon } from '../Icon'
 import { ExportToCsvDialogProps } from './types'
+
+import { DetailsProgressing, VisibleModal } from '@Common/index'
 
 const ExportToCsvDialog = ({
     exportDataError,

@@ -1,4 +1,3 @@
-import { ReactNode, useEffect, useRef, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import {
     ArcElement,
@@ -6,6 +5,7 @@ import {
     BarElement,
     CategoryScale,
     Chart as ChartJS,
+    Tooltip as ChartJSTooltip,
     DoughnutController,
     Filler,
     Legend,
@@ -15,10 +15,9 @@ import {
     PointElement,
     TimeScale,
     Title,
-    Tooltip as ChartJSTooltip,
 } from 'chart.js'
+import { ReactNode, useEffect, useRef, useState } from 'react'
 
-import { noop, useDebounce } from '@Common/Helper'
 import { DEVTRON_BASE_MAIN_ID } from '@Shared/constants'
 import { useTheme } from '@Shared/Providers'
 
@@ -31,6 +30,8 @@ import {
     getDefaultOptions,
     transformDataForChart,
 } from './utils'
+
+import { noop, useDebounce } from '@Common/Helper'
 
 // Register Chart.js components
 ChartJS.register(
@@ -64,7 +65,7 @@ ChartJSTooltip.positioners.barElementCenterPositioner = (items, eventPosition) =
 
     for (i = 0, len = items.length; i < len; ++i) {
         const el = items[i].element
-        if (el && el.hasValue()) {
+        if (el?.hasValue()) {
             const center = (el as BarElement).getCenterPoint()
             const d = distanceBetweenPoints(eventPosition, center)
 

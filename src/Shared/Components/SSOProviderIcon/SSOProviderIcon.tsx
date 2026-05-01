@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { SSOProvider } from '@Common/Constants'
-
 import { Icon, IconName } from '../Icon'
 import { SSOProviderIconProps } from './types'
+
+import { SSOProvider } from '@Common/Constants'
 
 const ssoProviderIconMap: Record<SSOProvider, IconName> = {
     [SSOProvider.google]: 'ic-google',

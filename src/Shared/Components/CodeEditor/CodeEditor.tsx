@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { useEffect, useMemo, useRef, useState } from 'react'
 import { autocompletion } from '@codemirror/autocomplete'
 import { foldGutter } from '@codemirror/language'
 import { lintGutter } from '@codemirror/lint'
@@ -23,8 +22,8 @@ import { indentationMarkers } from '@replit/codemirror-indentation-markers'
 import { vscodeKeymap } from '@replit/codemirror-vscode-keymap'
 import { hyperLink } from '@uiw/codemirror-extensions-hyper-link'
 import {
-    basicSetup,
     BasicSetupOptions,
+    basicSetup,
     Compartment,
     EditorState,
     EditorView,
@@ -32,9 +31,8 @@ import {
     keymap,
     ReactCodeMirrorProps,
 } from '@uiw/react-codemirror'
+import { useEffect, useMemo, useRef, useState } from 'react'
 
-import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
-import { cleanKubeManifest, noop } from '@Common/Helper'
 import { getUniqueId } from '@Shared/Helpers'
 import { AppThemeType, useTheme } from '@Shared/Providers'
 
@@ -52,6 +50,9 @@ import {
 import { getCodeEditorFindReplace, readOnlyTooltip, yamlHighlight } from './Extensions'
 import { CodeEditorContextProps, CodeEditorProps } from './types'
 import { getFoldGutterElement, getLanguageExtension, getValidationSchema, parseValueToCode } from './utils'
+
+import { DEFAULT_JSON_SCHEMA_URI, MODES } from '@Common/Constants'
+import { cleanKubeManifest, noop } from '@Common/Helper'
 
 import './codeEditor.scss'
 

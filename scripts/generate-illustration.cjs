@@ -9,19 +9,19 @@ const basePath = path.resolve(__dirname, '../src')
 const illustrationsDir = path.join(basePath, 'Assets', 'Illustration')
 const outputFile = path.join(basePath, 'Shared', 'Components', 'Illustration', 'Illustration.tsx')
 
-const runESLint = (filePath) => {
-    execFile('npx', ['eslint', filePath, '--fix'], (error, stdout, stderr) => {
+const runBiome = (filePath) => {
+    execFile('npx', ['@biomejs/biome', 'check', '--fix', filePath], (error, stdout, stderr) => {
         if (error) {
-            console.error(`Error running ESLint: ${error.message}`)
+            console.error(`Error running Biome: ${error.message}`)
             return
         }
         if (stderr) {
-            console.error(`ESLint stderr: ${stderr}`)
+            console.error(`Biome stderr: ${stderr}`)
         }
         if (stdout) {
-            console.log(`ESLint output:\n${stdout}`)
+            console.log(`Biome output:\n${stdout}`)
         }
-        console.log('ESLint completed successfully.')
+        console.log('Biome completed successfully.')
     })
 }
 
@@ -69,7 +69,6 @@ const generateIllustrationComponent = () => {
 
     ${imports.join('\n')}
 
-    // eslint-disable-next-line no-restricted-imports
     import { IllustrationBase } from './IllustrationBase';
     import { IllustrationBaseProps } from './types';
 
@@ -96,8 +95,8 @@ const generateIllustrationComponent = () => {
     fs.writeFileSync(outputFile, content.trim(), 'utf-8')
     console.log(`Illustration component file generated at: ${outputFile}`)
 
-    // Run ESLint on the generated file
-    runESLint(outputFile)
+    // Run Biome on the generated file
+    runBiome(outputFile)
 }
 
 // Run the script

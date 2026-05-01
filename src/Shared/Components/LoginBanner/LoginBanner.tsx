@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { useEffect, useState } from 'react'
 import { motion } from 'framer-motion'
+import { useEffect, useState } from 'react'
 
 import LoginBannerImg from '@Images/login-screen-ui.webp'
 
@@ -24,6 +24,7 @@ import { TESTIMONIAL_CARD_DATA, TESTIMONIAL_CARD_INTERVAL, TRANSITION_EASE_CURVE
 
 const AnimatedBackground = () => (
     <motion.div>
+        {/** biome-ignore lint/a11y/noSvgWithoutTitle: Decorative SVG, no title needed */}
         <svg
             width="2400"
             height="3600"

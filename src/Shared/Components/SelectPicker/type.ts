@@ -20,10 +20,6 @@ import { GroupBase, GroupHeadingProps, Props as ReactSelectProps, SelectInstance
 import type {} from 'react-select/base'
 import { CreatableProps } from 'react-select/creatable'
 
-import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
-import { ServerErrors } from '@Common/ServerError'
-import { TooltipProps } from '@Common/Tooltip'
-import { OptionType } from '@Common/Types'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { ActionMenuProps } from '../ActionMenu'
@@ -31,10 +27,13 @@ import { ButtonComponentType, ButtonProps, ButtonVariantType } from '../Button'
 import { FormFieldWrapperProps } from '../FormFieldWrapper/types'
 import { UsePopoverProps, UsePopoverReturnType } from '../Popover'
 
-export interface SelectPickerOptionType<OptionValue = string | number, OptionLabel = ReactNode> extends OptionType<
-    OptionValue,
-    OptionLabel
-> {
+import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
+import { ServerErrors } from '@Common/ServerError'
+import { TooltipProps } from '@Common/Tooltip'
+import { OptionType } from '@Common/Types'
+
+export interface SelectPickerOptionType<OptionValue = string | number, OptionLabel = ReactNode>
+    extends OptionType<OptionValue, OptionLabel> {
     /**
      * Description to be displayed for the option
      */
@@ -85,7 +84,6 @@ type MenuListFooterConfigType =
       }
 
 declare module 'react-select/base' {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     export interface Props<Option, IsMulti extends boolean, Group extends GroupBase<Option>> {
         /**
          * Config for the footer at the bottom of menu list. It is sticky by default
@@ -341,8 +339,7 @@ export type SelectPickerGroupHeadingProps<OptionValue> = GroupHeadingProps<Selec
 }
 
 export interface FilterSelectPickerProps
-    extends
-        Required<
+    extends Required<
             Pick<SelectPickerProps<number | string, true>, 'options' | 'isDisabled' | 'placeholder' | 'isLoading'>
         >,
         Pick<
@@ -398,10 +395,11 @@ export type GroupedFilterSelectPickerMapValue =
     | FilterSelectPickerMapSelectPickerVariant
     | FilterSelectPickerMapPopOverVariant
 
-export interface GroupedFilterSelectPickerProps<T extends string | number = string | number> extends Omit<
-    ActionMenuProps<T>,
-    'onClick' | 'disableDescriptionEllipsis' | 'children' | 'buttonProps' | 'isSearchable'
-> {
+export interface GroupedFilterSelectPickerProps<T extends string | number = string | number>
+    extends Omit<
+        ActionMenuProps<T>,
+        'onClick' | 'disableDescriptionEllipsis' | 'children' | 'buttonProps' | 'isSearchable'
+    > {
     isFilterApplied?: boolean
     filterSelectPickerPropsMap: Record<T, GroupedFilterSelectPickerMapValue>
 }

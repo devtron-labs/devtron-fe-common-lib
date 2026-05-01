@@ -16,12 +16,13 @@
 
 import { useMemo, useState } from 'react'
 
-import ICVisibilityOff from '@Icons/ic-visibility-off.svg?react'
-import ICVisibilityOn from '@Icons/ic-visibility-on.svg?react'
 import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
 
 import CustomInput from './CustomInput'
 import { CustomInputProps, PasswordFieldProps } from './types'
+
+import ICVisibilityOff from '@Icons/ic-visibility-off.svg?react'
+import ICVisibilityOn from '@Icons/ic-visibility-on.svg?react'
 
 const PasswordField = ({ onFocus, onBlur, shouldShowDefaultPlaceholderOnBlur, ...props }: PasswordFieldProps) => {
     const [fieldType, setFieldType] = useState<CustomInputProps['type']>('password')

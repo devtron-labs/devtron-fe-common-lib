@@ -14,17 +14,15 @@
  * limitations under the License.
  */
 
-import { useEffect, useRef, useState } from 'react'
 import Tippy from '@tippyjs/react'
 import { SliderButton } from '@typeform/embed-react'
+import { useEffect, useRef, useState } from 'react'
 
-import { DOCUMENTATION_HOME_PAGE, MAX_LOGIN_COUNT } from '@Common/Constants'
 import { handleAnalyticsEvent } from '@Shared/Analytics'
 import { ComponentSizeType } from '@Shared/constants'
 import { useIsSecureConnection } from '@Shared/Hooks'
 import { AppThemeType, SidePanelTab, useMainContext, useTheme } from '@Shared/Providers'
 import { InstallationType } from '@Shared/types'
-import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 import { ActionMenu } from '../ActionMenu'
 import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
@@ -32,6 +30,9 @@ import GettingStartedCard from '../GettingStartedCard/GettingStarted'
 import { Icon } from '../Icon'
 import { HelpButtonActionMenuProps, HelpButtonProps, HelpMenuItems } from './types'
 import { getHelpActionMenuOptions } from './utils'
+
+import { DOCUMENTATION_HOME_PAGE, MAX_LOGIN_COUNT } from '@Common/Constants'
+import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 const CheckForUpdates = ({
     serverInfo,
@@ -137,7 +138,7 @@ export const HelpButton = ({
 
     const getExpired = (): boolean => {
         // Render Getting started tippy card if the time gets expired
-        const now = new Date().valueOf()
+        const now = Date.now()
         return now > expiryDate
     }
 

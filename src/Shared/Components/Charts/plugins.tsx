@@ -1,18 +1,19 @@
+import { LegendItem, Plugin } from 'chart.js'
 import { RefObject } from 'react'
 import { createRoot, Root } from 'react-dom/client'
-import { LegendItem, Plugin } from 'chart.js'
 
-import { Tooltip } from '@Common/Tooltip'
 import { AppThemeType } from '@Shared/Providers'
 
 import { CHART_AXIS_LABELS_COLOR, CHART_COLORS } from './constants'
 import { CenterTextConfig, ChartType, HTMLLegendProps, ReferenceLineConfigType } from './types'
 
+import { Tooltip } from '@Common/Tooltip'
+
 export const drawReferenceLine = (config: ReferenceLineConfigType, id: string, appTheme: AppThemeType): Plugin => ({
     id,
     afterDraw: (chart) => {
         const { ctx, chartArea, scales } = chart
-        if (!scales || !scales.y || !config?.value) {
+        if (!scales?.y || !config?.value) {
             return
         }
         const yValue = scales.y.getPixelForValue(config.value)

@@ -16,13 +16,13 @@
 
 import { KeyboardEvent, useEffect, useMemo, useRef, useState } from 'react'
 
-import { useRegisterShortcut } from '@Common/Hooks'
-
 import { ActionMenu, ActionMenuItemType, ActionMenuProps } from '../ActionMenu'
 import { Icon } from '../Icon'
 import { Popover, usePopover } from '../Popover'
 import FilterSelectPicker from './FilterSelectPicker'
 import { FilterSelectPickerMapSelectPickerVariant, GroupedFilterSelectPickerProps } from './type'
+
+import { useRegisterShortcut } from '@Common/Hooks'
 
 import './selectPicker.scss'
 
@@ -141,7 +141,6 @@ export const GroupedFilterSelectPicker = <T extends string | number>({
         if (selectedActionMenuItem) {
             const config = filterSelectPickerPropsMap[selectedActionMenuItem]
             if (config.variant !== 'popover') {
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
                 const { variant: _variant, ...filterProps } = config as FilterSelectPickerMapSelectPickerVariant
                 return (
                     <div className="grouped-filter-select-picker w-200">

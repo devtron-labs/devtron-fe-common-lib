@@ -19,7 +19,6 @@ import { generatePath, useLocation, useNavigate, useParams } from 'react-router-
 
 import { IndexStore } from '@Shared/Store'
 import { DeploymentStatusDetailsBreakdownDataType, DeploymentStatusDetailsType, TIMELINE_STATUS } from '@Shared/types'
-import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 import Arrow from '../../../Assets/Icon/ic-arrow-forward.svg?react'
 import mechanicalOperation from '../../../Assets/Icon/ic-mechanical-operation.svg'
@@ -33,7 +32,10 @@ import DeploymentStatusDetailBreakdown from './DeploymentStatusBreakdown'
 import { getDeploymentStatusDetail } from './service'
 import { DeploymentDetailStepsType } from './types'
 
-let deploymentStatusTimer = null
+import { ROUTER_URLS } from '@PagesDevtron2.0/index'
+
+let deploymentStatusTimer: ReturnType<typeof setTimeout> = null
+
 const DeploymentDetailSteps = ({
     deploymentStatus,
     deploymentAppType,
@@ -76,7 +78,6 @@ const DeploymentDetailSteps = ({
         getDeploymentStatusDetail(appId, envId, true, triggerId, isHelmApps, installedAppVersionHistoryId)
             .then((deploymentStatusDetailRes) => {
                 if (deploymentStatus !== 'Aborted') {
-                    // eslint-disable-next-line no-use-before-define
                     processDeploymentStatusData({
                         ...deploymentStatusDetailRes.result,
                         isDeploymentWithoutApproval: isDeploymentWithoutApprovalRef.current,
@@ -123,7 +124,6 @@ const DeploymentDetailSteps = ({
         clearDeploymentStatusTimer()
         // If deployment status is in progress then fetch data in every 10 seconds
 
-        // eslint-disable-next-line dot-notation
         if (processedDeploymentStatusDetailsData['deploymentStatus'] === DEPLOYMENT_STATUS.INPROGRESS) {
             deploymentStatusTimer = setTimeout(() => {
                 getDeploymentDetailStepsData()

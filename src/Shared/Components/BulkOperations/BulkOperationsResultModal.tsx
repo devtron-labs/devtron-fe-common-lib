@@ -16,17 +16,6 @@
 
 import { useCallback, useEffect } from 'react'
 
-import ICAborted from '@Icons/ic-aborted.svg?react'
-import ICRestart from '@Icons/ic-arrows-clockwise.svg?react'
-import ICClose from '@Icons/ic-close.svg?react'
-import ICInfo from '@Icons/ic-info-outline.svg?react'
-import { SortingOrder } from '@Common/Constants'
-import { stopPropagation } from '@Common/Helper'
-import { useStateFilters } from '@Common/Hooks'
-import { Drawer } from '@Common/index'
-import { SegmentedBarChart } from '@Common/SegmentedBarChart'
-import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
-import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 import { stringComparatorBySortOrder } from '@Shared/Helpers'
 
@@ -34,6 +23,18 @@ import { Button, ButtonComponentType, ButtonStyleType, ButtonVariantType } from 
 import { getProgressingStateForStatus } from '../Security'
 import { RESULTS_MODAL_HEADERS, SORT_KEY_TO_NORMALIZER, SORT_ORDER_TO_KEY } from './constants'
 import { BulkOperationResultType, BulkOperationsResultModalProps } from './types'
+
+import { SortingOrder } from '@Common/Constants'
+import { stopPropagation } from '@Common/Helper'
+import { useStateFilters } from '@Common/Hooks'
+import { Drawer } from '@Common/index'
+import { SegmentedBarChart } from '@Common/SegmentedBarChart'
+import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
+import { Tooltip } from '@Common/Tooltip'
+import ICAborted from '@Icons/ic-aborted.svg?react'
+import ICRestart from '@Icons/ic-arrows-clockwise.svg?react'
+import ICClose from '@Icons/ic-close.svg?react'
+import ICInfo from '@Icons/ic-info-outline.svg?react'
 
 const BulkOperationsResultModal = ({
     apiCallInProgress,
@@ -115,6 +116,7 @@ const BulkOperationsResultModal = ({
             width="1024px"
             parentClassName="h-100"
         >
+            {/** biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/useKeyWithClickEvents: Used for stop propagation only */}
             <dialog
                 className="bg__primary h-100 cn-9 w-100 flexbox-col dc__overflow-hidden p-0 bulk-operation__results-modal"
                 onClick={stopPropagation}
@@ -194,7 +196,7 @@ const BulkOperationsResultModal = ({
                                     </Tooltip>
 
                                     {result.additionalKeys?.map((item) => (
-                                        <Tooltip content={item.value}>
+                                        <Tooltip key={`${item.label}-${item.value}`} content={item.value}>
                                             <span className="dc__word-break">{item.value || '-'}</span>
                                         </Tooltip>
                                     ))}

@@ -16,9 +16,9 @@
 
 import { createContext, PropsWithChildren, useContext, useMemo } from 'react'
 
-import { noop } from '@Common/Helper'
-
 import { GenericModalContextType } from './types'
+
+import { noop } from '@Common/Helper'
 
 const GenericModalContext = createContext<GenericModalContextType>({
     name: 'dummy-generic-modal-name',

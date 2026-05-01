@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-import RadioGroup from '@Common/RadioGroup'
-import RadioGroupItem from '@Common/RadioGroupItem'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
-import { Popover, usePopover, UsePopoverProps } from '../Popover'
+import { Popover, UsePopoverProps, usePopover } from '../Popover'
 import { DeploymentConfigDiffRadioSelectConfig } from './DeploymentConfigDiff.types'
+
+import RadioGroup from '@Common/RadioGroup'
+import RadioGroupItem from '@Common/RadioGroupItem'
 
 import './DeploymentConfigDiff.scss'
 
@@ -73,6 +74,7 @@ const DeploymentConfigDiffRadioSelect = ({
                 </div>
                 <div className="flexbox-col dc__gap-12 p-12 config-strategy-radio">
                     {radioGroupConfig.map(({ name, title, options, groupValue, onChange }) => (
+                        // biome-ignore lint/correctness/useJsxKeyInIterable: Legacy
                         <div className="flexbox-col dc__gap-6">
                             <span className="fs-13 fw-6 lh-20 cn-9">{title}</span>
                             <RadioGroup
@@ -82,6 +84,7 @@ const DeploymentConfigDiffRadioSelect = ({
                                 onChange={onChange}
                             >
                                 {options.map(({ label, value, description }) => (
+                                    // biome-ignore lint/correctness/useJsxKeyInIterable: Legacy
                                     <RadioGroupItem value={value}>
                                         <div className="flexbox-col">
                                             <span>{label}</span>

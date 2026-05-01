@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { TooltipProps } from '@Common/Tooltip'
-
 import { DynamicDataTableProps } from '../DynamicDataTable'
+
+import { TooltipProps } from '@Common/Tooltip'
 
 export type KeyValueTableDataType = 'key' | 'value'
 

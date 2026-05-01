@@ -16,7 +16,7 @@
 
 import { ChangeEvent, createRef, RefObject, useEffect, useRef, useState } from 'react'
 
-import { usePopover, UsePopoverProps } from '../Popover'
+import { UsePopoverProps, usePopover } from '../Popover'
 import { UseActionMenuProps } from './types'
 import { filterActionMenuOptions, getActionMenuFlatOptions } from './utils'
 

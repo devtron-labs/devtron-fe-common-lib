@@ -17,15 +17,16 @@
 import { useMemo } from 'react'
 import { Link } from 'react-router-dom'
 
-import { getAlphabetIcon } from '@Common/Helper'
 import { clearCookieOnLogout } from '@Shared/Helpers'
 import { useMainContext } from '@Shared/Providers'
-import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 import { Icon } from '../Icon'
 import { Popover, usePopover } from '../Popover'
 import { ThemeSwitcher } from '../ThemeSwitcher'
 import { ProfileMenuProps } from './types'
+
+import { getAlphabetIcon } from '@Common/Helper'
+import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 export const ProfileMenu = ({ user, onClick }: ProfileMenuProps) => {
     // HOOKS

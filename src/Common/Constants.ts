@@ -41,8 +41,7 @@ export const PATTERNS = {
     NUMBERS_WITH_SCOPE_VARIABLES: /^(\d+(\.\d+)?|@{{([a-zA-Z0-9-_\s]+)}})$/,
     BOOLEAN_WITH_SCOPE_VARIABLES: /^(TRUE|FALSE|true|false|True|False|@{{([a-zA-Z0-9-_\s]+)}})$/,
     ALL_DIGITS_BETWEEN_0_AND_7: /^[0-7]*$/,
-    // eslint-disable-next-line no-useless-escape
-    CONFIG_MAP_AND_SECRET_MULTIPLE_KEYS: /^[-._a-zA-Z0-9\,\?\s]*[-._a-zA-Z0-9\s]$/,
+    CONFIG_MAP_AND_SECRET_MULTIPLE_KEYS: /^[-._a-zA-Z0-9,?\s]*[-._a-zA-Z0-9\s]$/,
     CONFIG_MAP_AND_SECRET_KEY: /^[-._a-zA-Z0-9]+$/,
     CONFIGMAP_AND_SECRET_NAME: /^[a-z0-9][a-z0-9-.]*[a-z0-9]$/,
     ALPHANUMERIC_WITH_SPECIAL_CHAR_AND_SLASH: /^[A-Za-z0-9._/-]+$/, // allow alphanumeric,(.) ,(-),(_),(/)

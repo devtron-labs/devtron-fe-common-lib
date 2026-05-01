@@ -17,11 +17,12 @@
 import type { JSX } from 'react'
 import { LinkProps, NavLinkProps } from 'react-router-dom'
 
-import { TooltipProps } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 import { DataAttributes } from '@Shared/types'
 
 import { IconName } from '../Icon'
+
+import { TooltipProps } from '@Common/Tooltip'
 
 type TabComponentProps<TabTypeProps> = TabTypeProps & DataAttributes
 

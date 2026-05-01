@@ -1,5 +1,6 @@
 import { Button, ButtonComponentType, ButtonVariantType, Icon } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
+
 import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 export const InfrastructureManagementIcon = () => (

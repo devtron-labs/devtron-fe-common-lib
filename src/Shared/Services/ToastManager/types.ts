@@ -16,8 +16,9 @@
 
 import { ReactElement } from 'react'
 
-import { SupportedKeyboardKeysType } from '@Common/Hooks'
 import { ButtonComponentType, ButtonProps } from '@Shared/Components'
+
+import { SupportedKeyboardKeysType } from '@Common/Hooks'
 
 export enum ToastVariantType {
     info = 'info',

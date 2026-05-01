@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable import/prefer-default-export */
 // Disabling since might need to export types as well
 export { LARGE_PAGE_SIZE_OPTIONS } from './constants'
 export { default as Pagination } from './Pagination'

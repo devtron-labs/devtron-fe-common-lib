@@ -16,12 +16,12 @@
 
 import React, { useMemo, useState } from 'react'
 
-import ICExpand from '@Icons/ic-expand.svg?react'
-import { SortingOrder } from '@Common/Constants'
-import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
-
 import { SortOrderEnum, TablePropsType, TableSortStateType } from '../types'
 import { compareStringAndObject } from '../utils'
+
+import { SortingOrder } from '@Common/Constants'
+import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
+import ICExpand from '@Icons/ic-expand.svg?react'
 
 const Table: React.FC<TablePropsType> = ({ headers, rows, defaultSortIndex, hasExpandableRows, headerTopPosition }) => {
     /* TODO: should the sort order by default be DESC or should it be DESC only for severity? (product-team) */
@@ -80,6 +80,7 @@ const Table: React.FC<TablePropsType> = ({ headers, rows, defaultSortIndex, hasE
                 )}
                 <div className="flexbox dc__content-space w-100">
                     {headers.map((header, index) => (
+                        // biome-ignore lint/correctness/useJsxKeyInIterable: Legacy
                         <div className="dc__uppercase fs-12 lh-20 fw-6" style={{ width: `${header.width}px` }}>
                             {header.isSortable ? (
                                 <SortableTableHeaderCell
@@ -99,6 +100,7 @@ const Table: React.FC<TablePropsType> = ({ headers, rows, defaultSortIndex, hasE
                 </div>
             </div>
             {sortedRows.map((row, rowIndex) => (
+                // biome-ignore lint/correctness/useJsxKeyInIterable: Legacy
                 <div
                     className={`flexbox-col dc__gap-16 dc__border-bottom-n1 ${hasExpandableRows ? 'pt-16 pb-16' : 'pt-10 pb-10'}`}
                 >
@@ -125,7 +127,7 @@ const Table: React.FC<TablePropsType> = ({ headers, rows, defaultSortIndex, hasE
                                     cell.component ?? (typeof cell.cellContent === 'string' ? cell.cellContent : null)
                                 return CellComponent ? (
                                     <div
-                                        // eslint-disable-next-line react/no-array-index-key
+                                        // biome-ignore lint/suspicious/noArrayIndexKey: Legacy
                                         key={index}
                                         className="flexbox dc__align-start dc__content-start fs-13 lh-20 fw-4 dc__word-break"
                                         style={{ width: `${headers[index].width}px` }}

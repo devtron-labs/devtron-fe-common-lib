@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import { TooltipProps } from '@Common/Tooltip'
 import { IconsProps, SelectPickerOptionType } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
+
+import { TooltipProps } from '@Common/Tooltip'
 
 type SegmentTooltipProps = Omit<
     TooltipProps,
@@ -101,9 +102,8 @@ export type SegmentedControlProps<T = string | number> = {
       }
 )
 
-export interface SegmentProps<T> extends Required<
-    Pick<SegmentedControlProps<T>, 'name' | 'onChange' | 'fullWidth' | 'size' | 'disabled'>
-> {
+export interface SegmentProps<T>
+    extends Required<Pick<SegmentedControlProps<T>, 'name' | 'onChange' | 'fullWidth' | 'size' | 'disabled'>> {
     isSelected: boolean
     segment: SegmentType<T>
 }

@@ -1,5 +1,8 @@
 // NOTE: This file is auto-generated. Do not edit directly. Run the script `npm run generate-illustration` to update.
 
+import { IllustrationBase } from './IllustrationBase'
+import { IllustrationBaseProps } from './types'
+
 import CreateBackupSchedule from '@Illustrations/create-backup-schedule.webp'
 import CreateBackupSnapshot from '@Illustrations/create-backup-snapshot.webp'
 import EmptyStateKey from '@Illustrations/empty-state-key.svg?react'
@@ -20,30 +23,26 @@ import ImgPageNotFound from '@Illustrations/img-page-not-found.svg?react'
 import ImgUserGroups from '@Illustrations/img-user-groups.svg?react'
 import NoClusterCostEnabled from '@Illustrations/no-cluster-cost-enabled.webp'
 
-// eslint-disable-next-line no-restricted-imports
-import { IllustrationBase } from './IllustrationBase'
-import { IllustrationBaseProps } from './types'
-
 export const illustrationMap = {
-    'empty-state-key': EmptyStateKey,
-    'img-celebration': ImgCelebration,
-    'img-folder-create': ImgFolderCreate,
-    'img-folder-empty': ImgFolderEmpty,
-    'img-install-freemium-saas': ImgInstallFreemiumSaas,
-    'img-install-via-aws-marketplace': ImgInstallViaAwsMarketplace,
-    'img-installing-devtron': ImgInstallingDevtron,
-    'img-mechanical-operation': ImgMechanicalOperation,
-    'img-no-backup-location': ImgNoBackupLocation,
-    'img-no-restores': ImgNoRestores,
-    'img-page-not-found': ImgPageNotFound,
-    'img-user-groups': ImgUserGroups,
-    'create-backup-schedule': CreateBackupSchedule,
-    'create-backup-snapshot': CreateBackupSnapshot,
-    'img-code': ImgCode,
-    'img-devtron-freemium': ImgDevtronFreemium,
-    'img-man-on-rocket': ImgManOnRocket,
-    'img-no-result': ImgNoResult,
-    'no-cluster-cost-enabled': NoClusterCostEnabled,
+    ['empty-state-key']: EmptyStateKey,
+    ['img-celebration']: ImgCelebration,
+    ['img-folder-create']: ImgFolderCreate,
+    ['img-folder-empty']: ImgFolderEmpty,
+    ['img-install-freemium-saas']: ImgInstallFreemiumSaas,
+    ['img-install-via-aws-marketplace']: ImgInstallViaAwsMarketplace,
+    ['img-installing-devtron']: ImgInstallingDevtron,
+    ['img-mechanical-operation']: ImgMechanicalOperation,
+    ['img-no-backup-location']: ImgNoBackupLocation,
+    ['img-no-restores']: ImgNoRestores,
+    ['img-page-not-found']: ImgPageNotFound,
+    ['img-user-groups']: ImgUserGroups,
+    ['create-backup-schedule']: CreateBackupSchedule,
+    ['create-backup-snapshot']: CreateBackupSnapshot,
+    ['img-code']: ImgCode,
+    ['img-devtron-freemium']: ImgDevtronFreemium,
+    ['img-man-on-rocket']: ImgManOnRocket,
+    ['img-no-result']: ImgNoResult,
+    ['no-cluster-cost-enabled']: NoClusterCostEnabled,
 }
 
 export type IllustrationName = keyof typeof illustrationMap
@@ -56,6 +55,6 @@ export interface IllustrationProps extends Omit<IllustrationBaseProps, 'name' | 
     name: keyof typeof illustrationMap
 }
 
-export const Illustration = (props: IllustrationProps) => (
-    <IllustrationBase {...props} illustrationMap={illustrationMap} />
-)
+export const Illustration = (props: IllustrationProps) => {
+    return <IllustrationBase {...props} illustrationMap={illustrationMap} />
+}

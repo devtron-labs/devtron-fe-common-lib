@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import React from 'react'
 import { motion } from 'framer-motion'
+import React from 'react'
 
 import { ComponentSizeType } from '@Shared/constants'
 
@@ -68,7 +68,7 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
     const renderContent = () => {
         if (isProportional) {
             return filteredEntities.map((entity, idx) => (
-                // eslint-disable-next-line react/no-array-index-key
+                // biome-ignore lint/suspicious/noArrayIndexKey: Legacy
                 <div key={idx} className={`flexbox-col ${isLoading ? 'dc__gap-10' : ''}`}>
                     {renderValue(entity.value, entity.label)}
 
@@ -84,7 +84,7 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
         }
 
         return entities.map((entity, idx) => (
-            // eslint-disable-next-line react/no-array-index-key
+            // biome-ignore lint/suspicious/noArrayIndexKey: Legacy
             <div key={idx} className="flexbox  dc__gap-4 dc__align-items-center">
                 {!isLoading && (
                     <div className="dot" style={{ backgroundColor: entity.color, width: '10px', height: '10px' }} />
@@ -122,7 +122,7 @@ const SegmentedBarChart: React.FC<SegmentedBarChartProps> = ({
         >
             {filteredEntities.map((entity, index, map) => (
                 <div
-                    // eslint-disable-next-line react/no-array-index-key
+                    // biome-ignore lint/suspicious/noArrayIndexKey: Legacy
                     key={index}
                     className={`${barHeight} ${index === 0 ? 'dc__left-radius-4' : ''} ${
                         index === map.length - 1 ? 'dc__right-radius-4' : ''

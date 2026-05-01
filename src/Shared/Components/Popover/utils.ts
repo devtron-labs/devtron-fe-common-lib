@@ -25,7 +25,6 @@ export const getPopoverAlignmentStyle = ({ position, alignment }: Pick<UsePopove
                 return { right: 0 }
             case 'middle':
                 return { left: '50%' }
-            case 'start':
             default:
                 return { left: 0 }
         }
@@ -36,7 +35,6 @@ export const getPopoverAlignmentStyle = ({ position, alignment }: Pick<UsePopove
             return { bottom: 0 }
         case 'middle':
             return { top: '50%' }
-        case 'start':
         default:
             return { top: 0 }
     }
@@ -50,7 +48,6 @@ export const getPopoverPositionStyle = ({ position }: Pick<UsePopoverProps, 'pos
             return { right: '100%', marginRight: 6 }
         case 'right':
             return { left: '100%', marginLeft: 6 }
-        case 'bottom':
         default:
             return { top: '100%', marginTop: 6 }
     }

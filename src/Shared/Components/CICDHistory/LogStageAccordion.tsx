@@ -14,16 +14,17 @@
  * limitations under the License.
  */
 
-import { RefCallback } from 'react'
 import DOMPurify from 'dompurify'
+import { RefCallback } from 'react'
 
-import ICCaretDown from '@Icons/ic-caret-down.svg?react'
-import ICStack from '@Icons/ic-stack.svg?react'
 import { getTimeDifference } from '@Shared/Helpers'
 
 import { TargetPlatformListTooltip } from '../TargetPlatforms'
 import { LogStageAccordionProps } from './types'
 import { getLogSearchIndex, getStageStatusIcon } from './utils'
+
+import ICCaretDown from '@Icons/ic-caret-down.svg?react'
+import ICStack from '@Icons/ic-stack.svg?react'
 
 const LogsItemContainer = ({ children }: { children: React.ReactNode }) => (
     <div className="display-grid dc__column-gap-10 dc__align-start logs-renderer__log-item">{children}</div>
@@ -67,14 +68,12 @@ const LogStageAccordion = ({
         }
 
         if (node.dataset.containsMatch === 'true' && node.dataset.triggered !== 'true') {
-            // eslint-disable-next-line no-param-reassign
             node.dataset.triggered = 'true'
             // TODO: this will additionally scroll the top most scrollbar. Need to check into that
             node.scrollIntoView({ block: 'center', behavior: 'smooth' })
         }
 
         if (node.dataset.containsMatch === 'false') {
-            // eslint-disable-next-line no-param-reassign
             node.dataset.triggered = 'false'
         }
     }
@@ -135,8 +134,10 @@ const LogStageAccordion = ({
 
                         return (
                             <LogsItemContainer
-                                // eslint-disable-next-line react/no-array-index-key
-                                key={`logs-${stage}-${startTime}-${logsIndex}`}
+                                key={`logs-${stage}-${startTime}-${
+                                    // biome-ignore lint/suspicious/noArrayIndexKey: Legacy
+                                    logsIndex
+                                }`}
                             >
                                 <span
                                     ref={scrollIntoView}
@@ -147,7 +148,7 @@ const LogStageAccordion = ({
                                 </span>
                                 <pre
                                     className="mono fs-14 mb-0-imp text__white dc__word-break lh-20 dc__unset-pre dc__transparent--imp"
-                                    // eslint-disable-next-line react/no-danger
+                                    // biome-ignore lint/security/noDangerouslySetInnerHtml: Sanitization is handled by DOMPurify
                                     dangerouslySetInnerHTML={{
                                         __html: DOMPurify.sanitize(log),
                                     }}

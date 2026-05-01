@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import { useState } from 'react'
 import Tippy from '@tippyjs/react'
+import { useState } from 'react'
 
-import ICMediumPaintBucket from '@IconsV2/ic-medium-paintbucket.svg?react'
 import { handleAnalyticsEvent } from '@Shared/Analytics'
 import { ComponentSizeType } from '@Shared/constants'
 import { InstallationType } from '@Shared/types'
@@ -35,6 +34,8 @@ import { ProfileMenu } from './ProfileMenu'
 import { getServerInfo } from './service'
 import { PageHeaderType, ServerInfo } from './types'
 import { handlePostHogEventUpdate, setActionWithExpiry } from './utils'
+
+import ICMediumPaintBucket from '@IconsV2/ic-medium-paintbucket.svg?react'
 
 import './pageHeader.scss'
 
@@ -91,7 +92,7 @@ const PageHeader = ({
                 serverInfo: currentServerInfo.serverInfo,
                 fetchingServerInfo: false,
             })
-            // eslint-disable-next-line no-console
+            // biome-ignore lint/suspicious/noConsole: Legacy
             console.error('Error in fetching server info')
         }
     }
@@ -222,7 +223,7 @@ const PageHeader = ({
                             )}
                         </div>
                     )}
-                    {additionalHeaderInfo && additionalHeaderInfo()}
+                    {additionalHeaderInfo?.()}
                     {isBreadcrumbs && breadCrumbs()}
                     {tippyProps &&
                         (isTippyCustomized ? (

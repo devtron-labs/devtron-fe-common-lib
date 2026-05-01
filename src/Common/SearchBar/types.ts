@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
 import { ComponentSizeType } from '@Shared/constants'
+
+import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
 
 export interface SearchBarProps {
     /**

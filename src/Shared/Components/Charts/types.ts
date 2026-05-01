@@ -1,9 +1,10 @@
-import { Dispatch, ReactNode, SetStateAction } from 'react'
 import { TooltipOptions, TooltipPositionerFunction } from 'chart.js'
+import { Dispatch, ReactNode, SetStateAction } from 'react'
 
-import { TooltipProps } from '@Common/Tooltip'
 import { AppThemeType } from '@Shared/Providers'
 import { Never } from '@Shared/types'
+
+import { TooltipProps } from '@Common/Tooltip'
 
 export type ChartType = 'area' | 'pie' | 'semiPie' | 'stackedBar' | 'stackedBarHorizontal' | 'line'
 

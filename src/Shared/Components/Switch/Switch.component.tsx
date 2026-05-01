@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import { AriaAttributes, useRef } from 'react'
 import { motion } from 'framer-motion'
+import { AriaAttributes, useRef } from 'react'
 
-import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 import { getUniqueId } from '@Shared/Helpers'
 
@@ -33,6 +32,8 @@ import {
     getThumbPadding,
     getThumbPosition,
 } from './utils'
+
+import { Tooltip } from '@Common/Tooltip'
 
 import './switch.scss'
 
@@ -125,10 +126,10 @@ const Switch = ({
                     hidden
                 />
 
+                {/** biome-ignore lint/a11y/useSemanticElements: it is correct usage here */}
                 <button
                     type="button"
                     role="checkbox"
-                    // eslint-disable-next-line jsx-a11y/no-autofocus
                     autoFocus={autoFocus}
                     aria-checked={ariaCheckedValue}
                     aria-labelledby={inputId.current}

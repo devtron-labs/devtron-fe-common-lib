@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-import { MODES } from '@Common/Constants'
-import { Progressing } from '@Common/Progressing'
 import { hasHashiOrAWS } from '@Pages/index'
 
 import { CodeEditor } from '../CodeEditor'
 import { renderHashiOrAwsDeprecatedInfo } from './helpers'
 import { ConfigMapSecretReadyOnlyProps } from './types'
 import { getConfigMapSecretReadOnlyValues } from './utils'
+
+import { MODES } from '@Common/Constants'
+import { Progressing } from '@Common/Progressing'
 
 const ConfigMapSecretReadyOnly = ({
     componentType,

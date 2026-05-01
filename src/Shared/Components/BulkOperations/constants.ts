@@ -39,6 +39,7 @@ const STATUS_TO_VALUE: Record<Exclude<BulkOperationResultType['status'], 'Pendin
     Progressing: -3,
 }
 
+// biome-ignore lint/complexity/noBannedTypes: Legacy
 export const SORT_KEY_TO_NORMALIZER: Partial<Record<(typeof RESULTS_MODAL_HEADERS)[number]['label'], Function | null>> =
     {
         resource: null,

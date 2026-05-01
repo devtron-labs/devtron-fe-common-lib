@@ -23,8 +23,8 @@
     ],
     "scripts": {
         "prepare": "node -e \"try { require('husky').install() } catch (e) {}\"",
-        "lint": "tsc --noEmit && NODE_OPTIONS=--max_old_space_size=3072 eslint 'src/**/*.{js,jsx,ts,tsx}' --max-warnings 0",
-        "lint-fix": "eslint 'src/**/*.{js,jsx,ts,tsx}' --fix",
+        "lint": "tsc --noEmit && NODE_OPTIONS=--max_old_space_size=3072 && biome check src/",
+        "lint-fix": "biome check --fix src/",
         "test": "exit 0",
         "dev": "NODE_OPTIONS=--max_old_space_size=3072 vite",
         "build": "NODE_OPTIONS=--max_old_space_size=3072 vite build --sourcemap",
@@ -37,10 +37,10 @@
         "generate-illustration": "node ./scripts/generate-illustration.cjs"
     },
     "devDependencies": {
+        "@biomejs/biome": "^2.4.13",
         "@esbuild-plugins/node-globals-polyfill": "0.2.3",
         "@laynezh/vite-plugin-lib-assets": "2.2.0",
         "@sentry/browser": "^7.119.1",
-        "@tanstack/eslint-plugin-query": "^5.91.4",
         "@tanstack/react-query-devtools": "^5.91.3",
         "@tippyjs/react": "^4.2.0",
         "@typeform/embed-react": "2.20.0",
@@ -49,19 +49,7 @@
         "@types/react": "^19.2.14",
         "@types/react-csv": "^1.1.10",
         "@types/react-dom": "^19.2.3",
-        "@typescript-eslint/eslint-plugin": "8.3.0",
-        "@typescript-eslint/parser": "8.3.0",
         "@vitejs/plugin-react": "6.0.1",
-        "eslint": "^8.57.1",
-        "eslint-config-airbnb": "^19.0.4",
-        "eslint-config-prettier": "^9.1.0",
-        "eslint-import-resolver-typescript": "^3.6.1",
-        "eslint-plugin-import": "^2.29.1",
-        "eslint-plugin-jsx-a11y": "^6.8.0",
-        "eslint-plugin-prettier": "^5.1.2",
-        "eslint-plugin-react": "^7.33.2",
-        "eslint-plugin-react-hooks": "^5.2.0",
-        "eslint-plugin-simple-import-sort": "^12.1.1",
         "glob": "^10.3.3",
         "husky": "^7.0.4",
         "json-schema": "^0.4.0",
@@ -136,7 +124,6 @@
     "overrides": {
         "react": "^19.2.4",
         "react-dom": "^19.2.4",
-        "eslint-plugin-react-hooks": "^5.2.0",
         "cross-spawn": "^7.0.5",
         "vite-plugin-svgr": {
             "vite": "8.0.8"

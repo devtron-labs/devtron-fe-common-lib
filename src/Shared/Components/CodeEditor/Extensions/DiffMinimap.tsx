@@ -140,6 +140,7 @@ export const DiffMinimap = ({ view, theme, diffMinimapParentRef, scalingFactor }
     }
 
     return (
+        // biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: Legacy
         <div
             ref={minimapContainerRef}
             className={`code-editor__minimap-container dc__position-rel dc__no-shrink cursor ${componentSpecificThemeClass}`}
@@ -152,6 +153,7 @@ export const DiffMinimap = ({ view, theme, diffMinimapParentRef, scalingFactor }
                     fontSize: `${scalingFactor * CODE_EDITOR_FONT_SIZE}px`,
                 }}
             />
+            {/** biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions: Legacy */}
             <div
                 ref={overlayRef}
                 className="code-editor__minimap-overlay dc__position-abs dc__left-0 w-100 dc__zi-1"

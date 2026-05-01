@@ -17,13 +17,14 @@
 import { Children } from 'react'
 import { Link } from 'react-router-dom'
 
-import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonComponentType, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import { ChipProps, ChipWrapperProps } from './types'
 import { getFontSize, getIconSize, getPadding, getSupportedChipSizes } from './utils'
+
+import { Tooltip } from '@Common/Tooltip'
 
 import './styles.scss'
 
