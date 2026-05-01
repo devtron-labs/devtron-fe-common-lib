@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
+import { AdditionalConfirmationModalOptionsProps } from './types'
+
 import { Checkbox } from '@Common/Checkbox'
 import { CHECKBOX_VALUE } from '@Common/Types'
-
-import { AdditionalConfirmationModalOptionsProps } from './types'
 
 const ForceDeleteOption = ({
     optionsData,

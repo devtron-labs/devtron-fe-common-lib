@@ -14,12 +14,10 @@
  * limitations under the License.
  */
 
-import { useEffect, useRef } from 'react'
 import { animate, motion, useMotionTemplate, useMotionValue, useTransform } from 'framer-motion'
+import { useEffect, useRef } from 'react'
 
-import ICChatSupport from '@IconsV2/ic-chat-circle-dots.svg?react'
 import TexturedBG from '@Images/licenseCardBG.svg?react'
-import { ClipboardButton, getTTLInHumanReadableFormat } from '@Common/index'
 import { CONTACT_SUPPORT_LINK, ENTERPRISE_SUPPORT_LINK } from '@Shared/constants'
 import { AppThemeType } from '@Shared/Providers'
 import { getThemeOppositeThemeClass } from '@Shared/Providers/ThemeProvider/utils'
@@ -29,6 +27,9 @@ import { Button, ButtonComponentType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import { DevtronLicenseCardProps, LicenseCardSubTextProps, LicenseStatus } from './types'
 import { getLicenseColorsAccordingToStatus } from './utils'
+
+import { ClipboardButton, getTTLInHumanReadableFormat } from '@Common/index'
+import ICChatSupport from '@IconsV2/ic-chat-circle-dots.svg?react'
 
 import './licenseCard.scss'
 

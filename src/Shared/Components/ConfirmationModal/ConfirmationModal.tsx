@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import { ButtonHTMLAttributes, ChangeEvent, cloneElement, ReactElement, useCallback, useEffect, useState } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { ButtonHTMLAttributes, ChangeEvent, cloneElement, ReactElement, useCallback, useEffect, useState } from 'react'
 
-import { noop, stopPropagation, useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
 import { getUniqueId } from '@Shared/Helpers'
 
@@ -28,6 +27,8 @@ import { Icon } from '../Icon'
 import { useConfirmationModalContext } from './ConfirmationModalContext'
 import { ConfirmationModalBodyProps, ConfirmationModalProps, ConfirmationModalVariantType } from './types'
 import { getConfirmationLabel, getIconFromVariant, getPrimaryButtonStyleFromVariant } from './utils'
+
+import { noop, stopPropagation, UseRegisterShortcutProvider, useRegisterShortcut } from '@Common/index'
 
 import './confirmationModal.scss'
 

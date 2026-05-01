@@ -15,9 +15,12 @@
  */
 
 import React, { useEffect } from 'react'
-import { ModalType } from '../Types'
-import { POP_UP_MENU_MODAL_ID } from '@Shared/constants'
+
 import { Backdrop } from '@Shared/Components'
+import { POP_UP_MENU_MODAL_ID } from '@Shared/constants'
+
+import { ModalType } from '../Types'
+
 import { noop } from '@Common/Helper'
 
 /**
@@ -36,7 +39,7 @@ export const Modal = ({
     function handleClick(e) {
         e.stopPropagation()
         if (typeof onClick !== 'function') return
-        if (innerRef && innerRef.current?.contains(e.target)) {
+        if (innerRef?.current?.contains(e.target)) {
             onClick(e, 'in')
         } else {
             onClick(e, 'out')
@@ -63,7 +66,9 @@ export const Modal = ({
 
     return (
         <Backdrop onEscape={noop} onClick={handleClick} hasClearBackground={noBackDrop}>
+            {/* biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: Legacy */}
             <div
+                // biome-ignore lint/a11y/noNoninteractiveTabindex: Legacy
                 tabIndex={0}
                 onClick={handleClick}
                 data-testid="common-modal"

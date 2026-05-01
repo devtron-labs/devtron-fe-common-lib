@@ -14,19 +14,20 @@
  * limitations under the License.
  */
 
-import React, { memo, useCallback, useState } from 'react'
 import Tippy from '@tippyjs/react'
+import React, { memo, useCallback, useState } from 'react'
 
-import ICDrag from '@Icons/ic-drag.svg?react'
-import { DraggablePositionVariant, DraggableWrapper } from '@Common/DraggableWrapper'
-import { useAsync } from '@Common/Helper'
 import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP } from '@Shared/constants'
 
 import { Icon } from '../Icon'
 import { DRAG_SELECTOR } from './constants'
-import { getScopedVariables } from './service'
 import Suggestions from './Suggestions'
+import { getScopedVariables } from './service'
 import { FloatingVariablesSuggestionsProps } from './types'
+
+import { DraggablePositionVariant, DraggableWrapper } from '@Common/DraggableWrapper'
+import { useAsync } from '@Common/Helper'
+import ICDrag from '@Icons/ic-drag.svg?react'
 
 /**
  * Component uses react-draggable and handles the re-sizing and positioning of the suggestions on the assumption that the suggestions are going to expand to the right and bottom of the collapsed state

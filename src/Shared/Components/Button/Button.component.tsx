@@ -17,12 +17,13 @@
 import { MutableRefObject, PropsWithChildren, useCallback, useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
-import { Progressing } from '@Common/Progressing'
-import { Tooltip, TooltipProps } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { ButtonComponentType, ButtonProps, ButtonStyleType, ButtonVariantType } from './types'
 import { getButtonDerivedClass, getButtonIconClassName, getButtonLoaderSize } from './utils'
+
+import { Progressing } from '@Common/Progressing'
+import { Tooltip, TooltipProps } from '@Common/Tooltip'
 
 import './button.scss'
 
@@ -70,11 +71,9 @@ const ButtonElement = ({
                 return
             }
 
-            // eslint-disable-next-line no-param-reassign
             elementRef.current = el
 
             if (ref && typeof ref === 'object' && Object.hasOwn(ref, 'current')) {
-                // eslint-disable-next-line no-param-reassign
                 ;(ref as MutableRefObject<HTMLButtonElement | HTMLAnchorElement>).current = el
             } else if (typeof ref === 'function') {
                 ;(ref as (instance: HTMLButtonElement | HTMLAnchorElement | null) => void)(el)
@@ -97,12 +96,14 @@ const ButtonElement = ({
 
     if (component === ButtonComponentType.anchor) {
         return (
+            // biome-ignore lint/a11y/noStaticElementInteractions: Its expected here, since click is for stuff like GA and href comes from props
             <a
                 target="_blank"
                 rel="noopener noreferrer"
                 {...anchorProps}
                 {...props}
                 className={linkOrAnchorClassName}
+                // biome-ignore lint/a11y/useValidAnchor: used for GA tracking, href is not required for this
                 onClick={onClick as ButtonProps<typeof component>['onClick']}
                 ref={refCallback}
             >
@@ -115,7 +116,6 @@ const ButtonElement = ({
         <button
             {...buttonProps}
             {...props}
-            // eslint-disable-next-line react/button-has-type
             type={buttonProps?.type || 'button'}
             onClick={onClick as ButtonProps<typeof component>['onClick']}
             ref={refCallback}

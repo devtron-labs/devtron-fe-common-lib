@@ -41,6 +41,7 @@ export const Popover = ({
         <AnimatePresence>
             {open && (
                 <Backdrop {...overlayProps}>
+                    {/* biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: Legacy */}
                     <div
                         className="dc__position-abs"
                         style={{ left: bounds.left, top: bounds.top }}

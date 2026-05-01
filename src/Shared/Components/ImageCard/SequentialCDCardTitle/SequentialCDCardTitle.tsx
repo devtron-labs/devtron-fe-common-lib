@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-import ICStack from '@Icons/ic-stack.svg?react'
 import { TargetPlatformListTooltip } from '@Shared/Components/TargetPlatforms'
 
 import { ImageTagButton } from '../../../../Common'
 import { ARTIFACT_STATUS, STAGE_TYPE } from '../../../constants'
 import { SequentialCDCardTitleProps } from '../types'
-import { DEPLOYMENT_ENV_TEXT } from './DeploymentEnvState/constants'
 import { DeploymentEnvState } from './DeploymentEnvState'
+import { DEPLOYMENT_ENV_TEXT } from './DeploymentEnvState/constants'
+
+import ICStack from '@Icons/ic-stack.svg?react'
 
 const SequentialCDCardTitle = ({
     isLatest,

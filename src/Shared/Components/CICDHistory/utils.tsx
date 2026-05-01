@@ -13,18 +13,13 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-import { ComponentProps, type JSX, ReactElement } from 'react'
-import moment from 'moment'
 
-import ICCheck from '@Icons/ic-check.svg?react'
-import Close from '@Icons/ic-close.svg?react'
-import ICInProgress from '@Icons/ic-in-progress.svg?react'
-import { DATE_TIME_FORMATS } from '@Common/Constants'
-import { DeploymentAppTypes } from '@Common/Types'
+import moment from 'moment'
+import { ComponentProps, type JSX, ReactElement } from 'react'
+
+import { K8S_EMPTY_GROUP } from '@Pages/ResourceBrowser'
 import { ALL_RESOURCE_KIND_FILTER } from '@Shared/constants'
 import { isTimeStringAvailable } from '@Shared/Helpers'
-import { K8S_EMPTY_GROUP } from '@Pages/ResourceBrowser'
-import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 import { DeploymentStatusBreakdownItemType, Node, ResourceKindType, WorkflowStatusEnum } from '../../types'
 import { Icon } from '../Icon'
@@ -52,6 +47,13 @@ import {
     WorkflowExecutionStageType,
     WorkflowStageStatusType,
 } from './types'
+
+import { DATE_TIME_FORMATS } from '@Common/Constants'
+import { DeploymentAppTypes } from '@Common/Types'
+import ICCheck from '@Icons/ic-check.svg?react'
+import Close from '@Icons/ic-close.svg?react'
+import ICInProgress from '@Icons/ic-in-progress.svg?react'
+import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 export const getTriggerHistoryFilterCriteria = ({
     appId,
@@ -98,9 +100,9 @@ export const getParsedTriggerHistory = (result): DeploymentHistoryResultObject =
 }
 
 export const buildHoverHtmlForWebhook = (eventName, condition, selectors) => {
-    const _conditions = []
+    const _conditions: Array<{ name: string; value: string }> = []
     Object.keys(condition).forEach((_selectorId) => {
-        // eslint-disable-next-line eqeqeq
+        // biome-ignore lint/suspicious/noDoubleEquals: Legacy
         const _selector = selectors.find((i) => i.id == _selectorId)
         _conditions.push({ name: _selector ? _selector.name : '', value: condition[_selectorId] })
     })
@@ -111,7 +113,7 @@ export const buildHoverHtmlForWebhook = (eventName, condition, selectors) => {
             <br />
             <ul className="m-0">
                 {_conditions.map((_condition, index) => (
-                    // eslint-disable-next-line react/no-array-index-key
+                    // biome-ignore lint/suspicious/noArrayIndexKey: Legacy
                     <li key={index}>
                         {_condition.name} : {_condition.value}
                     </li>

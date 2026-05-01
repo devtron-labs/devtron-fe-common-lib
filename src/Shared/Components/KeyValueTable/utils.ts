@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { UseStateFiltersReturnType } from '@Common/Hooks'
 import { DEFAULT_SECRET_PLACEHOLDER } from '@Shared/constants'
 import { getUniqueId, stringComparatorBySortOrder } from '@Shared/Helpers'
 
@@ -27,6 +26,8 @@ import {
     KeyValueTableProps,
     KeyValueValidationSchemaProps,
 } from './KeyValueTable.types'
+
+import { UseStateFiltersReturnType } from '@Common/Hooks'
 
 export const getModifiedDataForOnChange = (rows: KeyValueTableInternalProps['rows']): KeyValueTableData[] =>
     rows.map(({ data, id }) => ({ id, key: data.key.value, value: data.value.value }))

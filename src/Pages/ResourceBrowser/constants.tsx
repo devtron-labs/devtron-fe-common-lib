@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-import ICCleanBrush from '@Icons/ic-medium-clean-brush.svg?react'
-import ICMediumPause from '@Icons/ic-medium-pause.svg?react'
-import ICMediumPlay from '@Icons/ic-medium-play.svg?react'
 import { SelectPickerOptionType } from '@Shared/Components'
 
 import { NodeDrainRequest } from './types'
+
+import ICCleanBrush from '@Icons/ic-medium-clean-brush.svg?react'
+import ICMediumPause from '@Icons/ic-medium-pause.svg?react'
+import ICMediumPlay from '@Icons/ic-medium-play.svg?react'
 
 export const ALL_NAMESPACE_OPTION: Readonly<Pick<SelectPickerOptionType<string>, 'value' | 'label'>> = {
     value: 'all',

@@ -56,7 +56,6 @@ export const getCommonSelectStyle = (styleOverrides = {}): StylesConfig => ({
     option: (base, state) => ({
         ...base,
         color: 'var(--N900)',
-        // eslint-disable-next-line no-nested-ternary
         backgroundColor: state.isSelected ? 'var(--B100)' : state.isFocused ? 'var(--N100)' : 'var(--bg-primary)',
         padding: '10px 12px',
         cursor: 'pointer',

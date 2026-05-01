@@ -16,12 +16,6 @@
 
 import { MouseEvent, useEffect, useMemo, useRef, useState } from 'react'
 
-import { Checkbox } from '@Common/Checkbox'
-import { DEFAULT_BASE_PAGE_SIZE } from '@Common/Constants'
-import { useEffectAfterMount } from '@Common/Helper'
-import { Pagination } from '@Common/Pagination'
-import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
-import { CHECKBOX_VALUE } from '@Common/Types'
 import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components/Button'
 import { Icon } from '@Shared/Components/Icon'
 import { ComponentSizeType } from '@Shared/constants'
@@ -42,11 +36,14 @@ import {
 import useTableWithKeyboardShortcuts from './useTableWithKeyboardShortcuts'
 import { getStickyColumnConfig, scrollToShowActiveElementIfNeeded } from './utils'
 
-const TableContent = <
-    RowData extends unknown,
-    FilterVariant extends FiltersTypeEnum,
-    AdditionalProps extends Record<string, any>,
->({
+import { Checkbox } from '@Common/Checkbox'
+import { DEFAULT_BASE_PAGE_SIZE } from '@Common/Constants'
+import { useEffectAfterMount } from '@Common/Helper'
+import { Pagination } from '@Common/Pagination'
+import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
+import { CHECKBOX_VALUE } from '@Common/Types'
+
+const TableContent = <RowData, FilterVariant extends FiltersTypeEnum, AdditionalProps extends Record<string, any>>({
     filterData,
     rows,
     resizableConfig,
@@ -283,7 +280,6 @@ const TableContent = <
         ) {
             node.focus({ preventScroll: true })
             scrollToShowActiveElementIfNeeded(node, rowsContainerRef.current, headerRef.current?.offsetHeight)
-            // eslint-disable-next-line no-param-reassign
             node.dataset.active = 'false'
         }
     }
@@ -329,12 +325,12 @@ const TableContent = <
                     }}
                 >
                     {showIconOrExpandActionGutter ? (
-                        <div className="py-12 flex" aria-label="Loading...">
+                        <div className="py-12 flex">
                             <div className="shimmer h-16 w-20" />
                         </div>
                     ) : null}
                     {visibleColumns.map(({ label }) => (
-                        <div key={label} className="py-12 flex" aria-label="Loading...">
+                        <div key={label} className="py-12 flex">
                             <div className="shimmer h-16 w-100" />
                         </div>
                     ))}
@@ -377,6 +373,7 @@ const TableContent = <
             const expandBtnOrRowStartIconGutterStickyConfig = getStickyColumnConfig(gridTemplateColumns, 0)
 
             return (
+                // biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/useKeyWithClickEvents lint/a11y/noStaticElementInteractions: Its fine here
                 <div
                     key={row.id}
                     ref={isRowActive ? focusActiveRow : null}
@@ -408,7 +405,7 @@ const TableContent = <
                         </div>
                     )}
 
-                    {!isExpandedRow && !!(row as RowType<RowData>).expandableRows ? (
+                    {!isExpandedRow && (row as RowType<RowData>).expandableRows ? (
                         <div
                             className={`flex expand-row-btn ${expandBtnOrRowStartIconGutterStickyConfig.className}`}
                             style={{ left: expandBtnOrRowStartIconGutterStickyConfig.left }}
@@ -521,6 +518,7 @@ const TableContent = <
     const expandAllBtnStickyConfig = getStickyColumnConfig(gridTemplateColumns, 0)
 
     return (
+        // biome-ignore lint/a11y/useSemanticElements: its fine here
         <div
             {...shortcutContainerProps}
             tabIndex={-1}

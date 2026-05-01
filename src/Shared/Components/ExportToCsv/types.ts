@@ -1,9 +1,9 @@
 import type { JSX } from 'react'
 
+import { ButtonProps } from '../Button'
+
 import { ServerErrors } from '@Common/ServerError'
 import { APIOptions } from '@Common/Types'
-
-import { ButtonProps } from '../Button'
 
 type TriggerElementConfigType =
     | {

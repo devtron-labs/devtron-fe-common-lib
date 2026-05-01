@@ -15,17 +15,11 @@
  */
 
 import { WidgetProps } from '@rjsf/utils'
-import { isNullOrUndefined } from '@Shared/Helpers'
-import { DTSwitch } from '@Shared/Components'
 
-export const Checkbox = ({
-    id,
-    onChange,
-    value,
-    disabled,
-    readonly,
-    autofocus,
-}: WidgetProps) => {
+import { DTSwitch } from '@Shared/Components'
+import { isNullOrUndefined } from '@Shared/Helpers'
+
+export const Checkbox = ({ id, onChange, value, disabled, readonly, autofocus }: WidgetProps) => {
     const isSelected: boolean = isNullOrUndefined(value) ? false : value
 
     const handleChange = () => {

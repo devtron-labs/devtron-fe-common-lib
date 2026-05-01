@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { ComponentProps } from 'react'
 import RJSFForm from '@rjsf/core'
 import { StrictRJSFSchema } from '@rjsf/utils'
+import { ComponentProps } from 'react'
 
 export interface MetaHiddenType {
     value: any
@@ -53,7 +53,5 @@ export interface UpdateFormDataFromFormStateProps {
     schemaPathToUpdatePathMap: Record<string, string>
 }
 
-export interface GetFormStateFromFormDataProps extends Pick<
-    UpdateFormDataFromFormStateProps,
-    'formData' | 'schemaPathToUpdatePathMap'
-> {}
+export interface GetFormStateFromFormDataProps
+    extends Pick<UpdateFormDataFromFormStateProps, 'formData' | 'schemaPathToUpdatePathMap'> {}

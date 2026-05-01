@@ -15,6 +15,7 @@
  */
 
 import React, { useEffect } from 'react'
+
 import { Modal } from './Modals/Modal'
 import { PopupMenuBodyType, PopupMenuButtonType, PopupMenuType } from './Types'
 
@@ -44,7 +45,7 @@ const PopupMenu = ({
     React.useEffect(() => {
         observer.current = window.IntersectionObserver ? new IntersectionObserver(intersectionCallback, options) : null
         return () => {
-            if (observer && observer.current && observer.current.disconnect) observer.current.disconnect()
+            if (observer?.current?.disconnect) observer.current.disconnect()
         }
     }, [])
 
@@ -65,7 +66,7 @@ const PopupMenu = ({
         }
     }, [buttonRef?.current?.clientHeight])
 
-    let options = {
+    const options = {
         root: null,
         rootMargin: '0px',
         threshold: 1.0,
@@ -73,23 +74,14 @@ const PopupMenu = ({
 
     if (!children) return children
 
-    function intersectionCallback(entries, observer) {
+    function intersectionCallback(entries) {
         entries.forEach((entry) => {
             if (entry.isIntersecting && entry.intersectionRatio >= 1) {
                 setOpacity(1)
             } else {
                 const { boundingClientRect, rootBounds } = entry
                 const { x, y, height, width } = boundingClientRect
-                const {
-                    x: buttonX,
-                    y: buttonY,
-                    height: buttonHeight,
-                    width: buttonWidth,
-                    left: buttonLeft,
-                    right: buttonRight,
-                    top: buttonTop,
-                    bottom: buttonBottom,
-                } = buttonRef.current.getBoundingClientRect()
+                const { x: buttonX, y: buttonY } = buttonRef.current.getBoundingClientRect()
                 if (y + height > rootBounds.height) {
                     setPopupPosition({ left: buttonX, bottom: document.documentElement.clientHeight - buttonY })
                     setOpacity(1)
@@ -115,7 +107,7 @@ const PopupMenu = ({
 
     const handleClose = (e, inOrOut) => {
         if (autoClose || inOrOut === 'out') {
-            if (observer && observer.current && observer.current.disconnect) observer.current.disconnect()
+            if (observer?.current?.disconnect) observer.current.disconnect()
             setOpacity(0)
             setPopupPosition(null)
         } else {
@@ -132,7 +124,7 @@ const PopupMenu = ({
     function initialiseButtonWidth(buttonEl) {
         if (!buttonEl) return
         buttonRef.current = buttonEl
-        const { bottom, height, left, right, top, width, x, y } = buttonEl.getBoundingClientRect()
+        const { width } = buttonEl.getBoundingClientRect()
         buttonWidth.current = width
     }
 
@@ -164,7 +156,7 @@ const Button = ({
     isKebab = false,
     dataTestId = '',
 }: PopupMenuButtonType) => {
-    const { handleOpen, popupPosition, buttonRef, initialiseButtonWidth } = usePopupContext()
+    const { handleOpen, popupPosition, initialiseButtonWidth } = usePopupContext()
     return (
         <button
             ref={initialiseButtonWidth}

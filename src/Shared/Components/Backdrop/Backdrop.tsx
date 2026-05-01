@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+import { motion } from 'framer-motion'
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { motion } from 'framer-motion'
 
 import { getUniqueId } from '@Shared/Helpers'
 

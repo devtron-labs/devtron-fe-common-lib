@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { ROUTER_URLS } from '@PagesDevtron2.0/Shared'
-
 import { CreateActionMenuItems, CreateActionMenuProps } from './types'
+
+import { ROUTER_URLS } from '@PagesDevtron2.0/Shared'
 
 export const getCreateActionMenuOptions = (
     createCustomAppURL: string,

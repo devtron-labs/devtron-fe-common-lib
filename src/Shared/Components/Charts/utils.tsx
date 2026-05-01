@@ -1,14 +1,14 @@
-import { ReactNode } from 'react'
 import {
     ActiveElement,
     ChartDataset,
-    ChartOptions,
     ChartType as ChartJSChartType,
+    ChartOptions,
     Point,
     ScaleOptions,
     TooltipLabelStyle,
     TooltipOptions,
 } from 'chart.js'
+import { ReactNode } from 'react'
 
 import { AppThemeType } from '@Shared/Providers'
 
@@ -89,7 +89,6 @@ const handleChartHover =
         const { canvas } = chart
 
         if (!elements || elements.length === 0 || !datasets || (Array.isArray(datasets) && datasets.length === 0)) {
-            // eslint-disable-next-line no-param-reassign
             canvas.style.cursor = 'default'
             return
         }
@@ -98,21 +97,17 @@ const handleChartHover =
 
         if (type === 'pie' || type === 'semiPie') {
             if (!datasets.isClickable?.[index]) {
-                // eslint-disable-next-line no-param-reassign
                 canvas.style.cursor = 'default'
                 return
             }
 
-            // eslint-disable-next-line no-param-reassign
             canvas.style.cursor = 'pointer'
         } else if (type !== 'area' && type !== 'line') {
             if (!datasets[datasetIndex]?.isClickable) {
-                // eslint-disable-next-line no-param-reassign
                 canvas.style.cursor = 'default'
                 return
             }
 
-            // eslint-disable-next-line no-param-reassign
             canvas.style.cursor = 'pointer'
         }
     }
@@ -459,9 +454,6 @@ const transformDataset = (props: TransformDatasetProps) => {
             } satisfies ChartDataset<'line'>
         case 'area':
             return commonLineAndAreaConfig
-        case 'pie':
-        case 'stackedBar':
-        case 'stackedBarHorizontal':
         default:
             return baseDataset
     }
@@ -471,13 +463,13 @@ export const transformDataForChart = (props: TransformDataForChartProps) => {
     const { type, datasets, appTheme } = props
 
     if (!datasets) {
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: Legacy
         console.error('No datasets provided for chart transformation')
         return []
     }
 
     if (type !== 'pie' && type !== 'semiPie' && type !== 'area' && !Array.isArray(datasets)) {
-        // eslint-disable-next-line no-console
+        // biome-ignore lint/suspicious/noConsole: Legacy
         console.error('Invalid datasets format. Expected an array.')
         return []
     }
@@ -545,7 +537,7 @@ export const buildChartTooltipFromContext = ({
         <div className="flexbox-col dc__overflow-auto mxh-200">
             <div className="flexbox-col dc__gap-2">
                 {titleLines.map((titleLine, index) => (
-                    // eslint-disable-next-line react/no-array-index-key
+                    // biome-ignore lint/suspicious/noArrayIndexKey: Legacy
                     <h6 key={index} className="m-0 fs-12 fw-6 lh-20 dc__word-break-all">
                         {titleLine}
                     </h6>
@@ -553,7 +545,7 @@ export const buildChartTooltipFromContext = ({
 
                 {/* Will show a rounded label color and next it will paste bodyline */}
                 {bodyLines.map((bodyLine, index) => (
-                    // eslint-disable-next-line react/no-array-index-key
+                    // biome-ignore lint/suspicious/noArrayIndexKey: Legacy
                     <div key={index} className="flexbox dc__gap-4 dc__align-items-center">
                         {labelColors[index] &&
                             typeof labelColors[index].backgroundColor === 'string' &&

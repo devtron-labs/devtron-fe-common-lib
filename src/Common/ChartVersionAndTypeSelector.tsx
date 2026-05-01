@@ -15,10 +15,12 @@
  */
 
 import { useEffect, useState } from 'react'
+
 import { SelectPicker, SelectPickerVariantType } from '@Shared/Components'
+
 import { fetchChartTemplateVersions } from './Common.service'
-import { ChartVersionAndTypeSelectorProps } from './Types'
 import { getFilteredChartVersions, showError } from './Helper'
+import { ChartVersionAndTypeSelectorProps } from './Types'
 
 interface DeploymentChartVersionType {
     chartRefId: number

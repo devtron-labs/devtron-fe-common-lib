@@ -14,8 +14,12 @@
  * limitations under the License.
  */
 
-// eslint-disable-next-line no-restricted-imports
 import { ToastContainerProps, ToastOptions } from 'react-toastify'
+
+import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components'
+import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP, ComponentSizeType } from '@Shared/constants'
+
+import { BaseToastProps, ToastProps, ToastVariantType } from './types'
 
 import ICCross from '@Icons/ic-cross.svg?react'
 import ICError from '@Icons/ic-error.svg?react'
@@ -23,10 +27,6 @@ import ICInfoFilled from '@Icons/ic-info-filled.svg?react'
 import ICLocked from '@Icons/ic-locked.svg?react'
 import ICSuccess from '@Icons/ic-success.svg?react'
 import ICWarning from '@Icons/ic-warning.svg?react'
-import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components'
-import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP, ComponentSizeType } from '@Shared/constants'
-
-import { BaseToastProps, ToastProps, ToastVariantType } from './types'
 
 export const TOAST_BASE_CONFIG: ToastContainerProps = {
     autoClose: 5000,

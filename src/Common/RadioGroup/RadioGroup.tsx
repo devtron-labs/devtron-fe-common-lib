@@ -14,13 +14,12 @@
  * limitations under the License.
  */
 
-/* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useEffect, useMemo, useState } from 'react'
-
-import { Tooltip } from '@Common/Tooltip'
 
 import { ConditionalWrap } from '../Helper'
 import { RadioGroupComposition, RadioGroupInterface, RadioInterface } from '../Types'
+
+import { Tooltip } from '@Common/Tooltip'
 
 import './radioGroup.scss'
 

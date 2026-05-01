@@ -116,7 +116,9 @@ const calculateNodePositions = (nodes: GraphVisualizerProps['nodes'], edges: Gra
     const nodeMap = new Map(nodes.map((node) => [node.id, node]))
 
     // Initialize adjacency list (each node starts with an empty children array)
+    // biome-ignore lint/suspicious/useIterableCallbackReturn: Legacy
     nodes.forEach((node) => childrenMap.set(node.id, []))
+    // biome-ignore lint/suspicious/useIterableCallbackReturn: Legacy
     edges.forEach((edge) => (childrenMap.get(edge.source) ?? []).push(edge.target))
 
     // Identify all the root nodes (the nodes that are never a target in edges)

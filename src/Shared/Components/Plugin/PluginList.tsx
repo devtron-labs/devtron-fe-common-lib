@@ -67,7 +67,7 @@ const PluginList = ({
     }
 
     if (!pluginList.length) {
-        if (!!searchKey || !!selectedTags.length) {
+        if (searchKey || selectedTags.length) {
             return <GenericFilterEmptyState handleClearFilters={handleClearFilters} imageType={ImageType.Large} />
         }
 

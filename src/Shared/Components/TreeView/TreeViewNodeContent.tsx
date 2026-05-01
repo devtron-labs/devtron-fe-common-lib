@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { ConditionalWrap } from '@Common/Helper'
-import { useIsTextTruncated } from '@Common/Hooks'
-import { Tooltip, TooltipProps } from '@Common/Tooltip'
-
 import { Icon } from '../Icon'
 import { VARIANT_TO_TEXT_CLASS_MAP } from './constants'
 import { TreeViewNodeContentProps } from './types'
+
+import { ConditionalWrap } from '@Common/Helper'
+import { useIsTextTruncated } from '@Common/Hooks'
+import { Tooltip, TooltipProps } from '@Common/Tooltip'
 
 const wrapWithTooltip =
     (customTooltipConfig: TooltipProps, isTextTruncated: boolean, title: string, subtitle: string) =>
@@ -91,6 +91,7 @@ const TreeViewNodeContent = ({
                 condition={!!customTooltipConfig || isTextTruncated}
             >
                 <span className="flexbox-col tree-view__container--title-wrapper">
+                    {/** biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions: Hover interaction only */}
                     <span
                         className={`tree-view__container--title tree-view__container--title--${variant} dc__truncate dc__align-left ${VARIANT_TO_TEXT_CLASS_MAP[variant]} fs-13 lh-1-5 ${type === 'heading' || isSelected ? 'fw-6' : 'fw-4'} ${customTooltipConfig && type === 'item' ? 'title-with-tooltip' : ''} ${strikeThrough ? 'dc__strike-through' : ''}`}
                         onMouseEnter={handleTitleMouseEnter}
@@ -98,6 +99,7 @@ const TreeViewNodeContent = ({
                         {title}
                     </span>
                     {subtitle && (
+                        // biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions: Hover interaction only
                         <span
                             className="dc__align-left dc__truncate cn-7 fs-12 fw-4 lh-1-5"
                             onMouseEnter={handleSubtitleMouseEnter}

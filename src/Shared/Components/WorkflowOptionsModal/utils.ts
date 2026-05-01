@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-import { PipelineType, WorkflowNodeType } from '@Common/Types'
 import { ChangeCIPayloadType, CIPipelineNodeType, TriggerType } from '@Shared/types'
 
 import { SOURCE_TYPE_CARD_VARIANTS } from './constants'
 import { SourceTypeCardProps, WorkflowOptionsModalProps } from './types'
+
+import { PipelineType, WorkflowNodeType } from '@Common/Types'
 
 export const getSwitchToWebhookPayload = (changeCIPayload: ChangeCIPayloadType) => ({
     appId: changeCIPayload.appId,

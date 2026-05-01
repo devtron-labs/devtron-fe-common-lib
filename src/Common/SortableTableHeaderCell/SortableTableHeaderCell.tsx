@@ -17,14 +17,15 @@
 import { useRef } from 'react'
 import Draggable, { DraggableProps } from 'react-draggable'
 
-import SortIcon from '@Icons/ic-arrow-up-down.svg?react'
-import SortArrowDown from '@Icons/ic-sort-arrow-down.svg?react'
-import { Tooltip } from '@Common/Tooltip'
 import { Icon } from '@Shared/Components/Icon'
 
 import { SortingOrder } from '../Constants'
 import { noop } from '../Helper'
 import { SortableTableHeaderCellProps } from './types'
+
+import { Tooltip } from '@Common/Tooltip'
+import SortIcon from '@Icons/ic-arrow-up-down.svg?react'
+import SortArrowDown from '@Icons/ic-sort-arrow-down.svg?react'
 
 import './sortableTableHeaderCell.scss'
 

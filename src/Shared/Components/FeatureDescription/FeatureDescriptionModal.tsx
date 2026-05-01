@@ -110,6 +110,7 @@ export const FeatureDescriptionModal = ({
 
     return (
         <VisibleModal className="" close={closeModal}>
+            {/* biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: modal content click isolation */}
             <div
                 className="feature-description modal__body w-600 mt-40 flex column p-0 fs-13 dc__overflow-hidden"
                 onClick={stopPropagation}

@@ -14,15 +14,16 @@
  * limitations under the License.
  */
 
-import { API_STATUS_CODES, FALLBACK_REQUEST_TIMEOUT, Host } from '@Common/Constants'
-import { noop } from '@Common/Helper'
-import { ServerErrors } from '@Common/ServerError'
-import { APIOptions, ResponseType } from '@Common/Types'
 import { INVALID_LICENSE_KEY } from '@Shared/constants'
 import { ResponseHeaders } from '@Shared/types'
 
 import { CoreAPIConstructorParamsType, FetchAPIParamsType, FetchInTimeParamsType } from './types'
 import { handleServerError } from './utils'
+
+import { API_STATUS_CODES, FALLBACK_REQUEST_TIMEOUT, Host } from '@Common/Constants'
+import { noop } from '@Common/Helper'
+import { ServerErrors } from '@Common/ServerError'
+import { APIOptions, ResponseType } from '@Common/Types'
 
 class CoreAPI {
     handleLogout: () => void
@@ -40,7 +41,7 @@ class CoreAPI {
         this.handleRedirectToLicenseActivation = handleRedirectToLicenseActivation || noop
     }
 
-    private fetchAPI = async <K = object>({
+    private fetchAPI = <K = object>({
         url,
         type,
         data,
@@ -63,7 +64,6 @@ class CoreAPI {
                   }
                 : {}),
         }
-        // eslint-disable-next-line dot-notation
         options['credentials'] = 'include' as RequestCredentials
         return fetch(
             `${isProxyHost ? '/proxy' : this.host}/${url}`,
@@ -74,7 +74,6 @@ class CoreAPI {
                       body: data,
                   } as RequestInit),
         ).then(
-            // eslint-disable-next-line consistent-return
             async (response) => {
                 const isLicenseInvalid = response.headers.get(ResponseHeaders.LICENSE_STATUS) === INVALID_LICENSE_KEY
 
@@ -112,7 +111,6 @@ class CoreAPI {
                         // and the component has enough time to get unmounted otherwise the component re-renders
                         // and try to access some property of a variable and log exception to sentry
                         // FIXME: Fix this later after analyzing impact
-                        // eslint-disable-next-line no-return-await
                         return await new Promise((resolve) => {
                             setTimeout(() => {
                                 resolve({ code: API_STATUS_CODES.UNAUTHORIZED, status: 'Unauthorized', result: [] })
@@ -121,7 +119,6 @@ class CoreAPI {
                     }
                 } else if (response.status >= 300 && response.status <= 599) {
                     // FIXME: Fix this later after analyzing impact
-                    // eslint-disable-next-line no-return-await
                     return await handleServerError(contentType, response)
                 } else {
                     if (contentType === 'application/json') {
@@ -189,6 +186,7 @@ class CoreAPI {
         controller.signal.addEventListener(
             'abort',
             () => {
+                // biome-ignore lint/suspicious/useIterableCallbackReturn: Legacy
                 cleanupFns.forEach((fn) => fn())
             },
             // This ensures the listener is only run once
@@ -216,14 +214,12 @@ class CoreAPI {
             setTimeout(() => {
                 controller.abort()
                 if (options?.abortControllerRef?.current) {
-                    // eslint-disable-next-line no-param-reassign
                     options.abortControllerRef.current = new AbortController()
                 }
 
                 // Note: This is not catered in case abortControllerRef is passed since
                 // the API is rejected with abort signal from line 202
                 // FIXME: Remove once signal is removed
-                // eslint-disable-next-line prefer-promise-reject-errors
                 reject({
                     code: API_STATUS_CODES.REQUEST_TIMEOUT,
                     errors: [

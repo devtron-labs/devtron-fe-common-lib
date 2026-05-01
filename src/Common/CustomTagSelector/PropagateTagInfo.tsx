@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import InjectTag from '../../Assets/Icon/inject-tag.svg?react'
 import ICHelpOutline from '../../Assets/Icon/ic-help-outline.svg?react'
+import InjectTag from '../../Assets/Icon/inject-tag.svg?react'
 import { TippyCustomized } from '../TippyCustomized'
 import { TippyTheme } from '../Types'
 
@@ -45,7 +45,7 @@ export default function PropagateTagInfo({ isCreateApp }: { isCreateApp: boolean
             showCloseButton
             trigger="click"
             interactive
-            documentationLink={isCreateApp ? "APP_TAGS" : "APP_OVERVIEW_TAGS"}
+            documentationLink={isCreateApp ? 'APP_TAGS' : 'APP_OVERVIEW_TAGS'}
             documentationLinkText="View Documentation"
             openInNewTab
         >

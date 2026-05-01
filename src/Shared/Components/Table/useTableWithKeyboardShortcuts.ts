@@ -16,15 +16,15 @@
 
 import { useCallback, useEffect, useRef, useState } from 'react'
 
-import { noop } from '@Common/Helper'
-import { useRegisterShortcut } from '@Common/Hooks'
-
 import { BulkSelectionEvents } from '../BulkSelection'
 import { EVENT_TARGET } from './constants'
 import { FiltersTypeEnum, InternalTableProps, RowsType, SignalEnum } from './types'
 
+import { noop } from '@Common/Helper'
+import { useRegisterShortcut } from '@Common/Hooks'
+
 const useTableWithKeyboardShortcuts = <
-    RowData extends unknown,
+    RowData,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
 >(

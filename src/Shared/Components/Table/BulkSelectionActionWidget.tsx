@@ -20,13 +20,14 @@
 
 import { MouseEvent } from 'react'
 
-import ICClose from '@Icons/ic-close.svg?react'
-import { DraggableButton, DraggablePositionVariant, DraggableWrapper } from '@Common/DraggableWrapper'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonComponentType, ButtonStyleType, ButtonVariantType } from '../Button'
 import { DRAG_SELECTOR_IDENTIFIER } from './constants'
 import { BulkSelectionActionWidgetProps } from './types'
+
+import { DraggableButton, DraggablePositionVariant, DraggableWrapper } from '@Common/DraggableWrapper'
+import ICClose from '@Icons/ic-close.svg?react'
 
 const BulkSelectionActionWidget = ({
     count,

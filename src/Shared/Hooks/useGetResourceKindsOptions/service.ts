@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
+import { stringComparatorBySortOrder } from '@Shared/Helpers'
+
 import { getTeamListMin } from '@Common/Common.service'
 import { Teams } from '@Common/Types'
-import { stringComparatorBySortOrder } from '@Shared/Helpers'
 
 export const getProjectOptions = async (): Promise<Pick<Teams, 'id' | 'name'>[]> => {
     const { result } = await getTeamListMin()

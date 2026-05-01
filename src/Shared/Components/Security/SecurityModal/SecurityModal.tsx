@@ -16,8 +16,15 @@
 
 import React, { useState } from 'react'
 
-import ICBack from '@Icons/ic-caret-left-small.svg?react'
-import ICClose from '@Icons/ic-close.svg?react'
+import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components/Button'
+import { ComponentSizeType } from '@Shared/constants'
+
+import { InfoCard, Table } from './components'
+import { getInfoCardData, getTableData } from './config'
+import { getEmptyStateValues } from './config/EmptyState'
+import { getDefaultSecurityModalState } from './constants'
+import { DetailViewDataType, SecurityModalPropsType, SecurityModalStateType } from './types'
+
 import {
     ClipboardButton,
     ErrorScreenManager,
@@ -27,14 +34,8 @@ import {
     stopPropagation,
     VisibleModal2,
 } from '@Common/index'
-import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components/Button'
-import { ComponentSizeType } from '@Shared/constants'
-
-import { getEmptyStateValues } from './config/EmptyState'
-import { InfoCard, Table } from './components'
-import { getInfoCardData, getTableData } from './config'
-import { getDefaultSecurityModalState } from './constants'
-import { DetailViewDataType, SecurityModalPropsType, SecurityModalStateType } from './types'
+import ICBack from '@Icons/ic-caret-left-small.svg?react'
+import ICClose from '@Icons/ic-close.svg?react'
 
 import './styles.scss'
 
@@ -194,6 +195,7 @@ const SecurityModal: React.FC<SecurityModalPropsType> = ({
 
     return (
         <VisibleModal2 className="dc__position-rel" close={handleModalClose}>
+            {/* biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: for stop propagation */}
             <div
                 className={`${Sidebar ? 'w-1024' : 'w-800'} h-100 bg__modal--primary flexbox-col dc__right-0 dc__top-0 dc__position-abs dc__overflow-hidden`}
                 onClick={stopPropagation}

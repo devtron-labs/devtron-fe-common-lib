@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { DraggableWrapperProps } from '@Common/DraggableWrapper'
 import { AppConfigProps } from '@Pages/index'
+
+import { DraggableWrapperProps } from '@Common/DraggableWrapper'
 
 export interface ScopedVariableType {
     variableName: string
@@ -27,7 +28,8 @@ export interface ScopedVariableType {
 }
 
 export interface FloatingVariablesSuggestionsProps
-    extends Required<Pick<AppConfigProps, 'isTemplateView'>>, Pick<DraggableWrapperProps, 'boundaryGap'> {
+    extends Required<Pick<AppConfigProps, 'isTemplateView'>>,
+        Pick<DraggableWrapperProps, 'boundaryGap'> {
     appId?: string
     envId?: string
     clusterId?: string

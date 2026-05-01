@@ -21,7 +21,7 @@ import { ComponentSizeType } from '@Shared/constants'
 import EditIcon from '../../../Assets/Icon/ic-pencil.svg?react'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Textarea } from '../Textarea'
-import type { EditableTextAreaProps, Error } from './types'
+import type { EditableTextAreaProps, Error as ErrorType } from './types'
 
 const TextArea = (
     props: Omit<EditableTextAreaProps, 'emptyState'> & {
@@ -31,7 +31,7 @@ const TextArea = (
     const { placeholder, initialText, setIsEditable, updateContent, validations } = props
     const [text, setText] = useState<EditableTextAreaProps['initialText']>(initialText)
     const [isLoading, setIsLoading] = useState(false)
-    const [error, setError] = useState<Error>({ isValid: true, message: '' })
+    const [error, setError] = useState<ErrorType>({ isValid: true, message: '' })
 
     const handleCancelEdit = () => {
         setText(initialText)
@@ -51,12 +51,12 @@ const TextArea = (
             })
     }
 
-    const validateInput = (value: string): Error => {
+    const validateInput = (value: string): ErrorType => {
         if (validations) {
             const trimmedValue = value.trim()
             const { maxLength } = validations
 
-            if (!!maxLength && trimmedValue.length > maxLength.value) {
+            if (maxLength && trimmedValue.length > maxLength.value) {
                 return {
                     isValid: false,
                     message: maxLength.message,

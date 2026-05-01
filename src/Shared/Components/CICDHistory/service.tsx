@@ -14,12 +14,11 @@
  * limitations under the License.
  */
 
-/* eslint-disable dot-notation */
-import { generatePath } from 'react-router-dom'
 import moment from 'moment'
+import { generatePath } from 'react-router-dom'
 
-import { ToastManager, ToastVariantType } from '@Shared/Services'
 import { GVKType, K8S_EMPTY_GROUP } from '@Pages/ResourceBrowser'
+import { ToastManager, ToastVariantType } from '@Shared/Services'
 
 import {
     get,
@@ -108,12 +107,7 @@ export function getDeploymentStatusDetail(
     isHelmApps?: boolean,
     installedAppVersionHistoryId?: number,
 ): Promise<DeploymentStatusDetailsResponse> {
-    let appendUrl
-    if (isHelmApps) {
-        appendUrl = ROUTES.HELM_DEPLOYMENT_STATUS_TIMELINE_INSTALLED_APP
-    } else {
-        appendUrl = ROUTES.DEPLOYMENT_STATUS
-    }
+    const appendUrl = isHelmApps ? ROUTES.HELM_DEPLOYMENT_STATUS_TIMELINE_INSTALLED_APP : ROUTES.DEPLOYMENT_STATUS
     return get(
         `${appendUrl}/${appId}/${envId}${`?showTimeline=${showTimeline}`}${triggerId ? `&wfrId=${triggerId}` : ``}${installedAppVersionHistoryId ? `&installedAppVersionHistoryId=${installedAppVersionHistoryId}` : ''}`,
     )
@@ -202,11 +196,9 @@ const prepareConfigMapAndSecretData = (
                 const decodeNotRequired =
                     skipDecode || Object.keys(secretData).some((data) => secretData[data] === '*****') // Don't decode in case of non admin user
 
-                // eslint-disable-next-line no-param-reassign
                 historyData.codeEditorValue.value = decodeNotRequired
                     ? historyData.codeEditorValue.value
                     : JSON.stringify(decode(secretData))
-                // eslint-disable-next-line no-param-reassign
                 historyData.codeEditorValue.resolvedValue = decodeNotRequired
                     ? historyData.codeEditorValue.resolvedValue
                     : JSON.stringify(decode(resolvedSecretData))
@@ -265,9 +257,8 @@ export const prepareHistoryData = (
     historyComponent: string,
     skipDecode?: boolean,
 ): DeploymentHistoryDetail => {
-    let values
+    let values: Record<string, DeploymentHistorySingleValue>
     const historyData = { codeEditorValue: rawData.codeEditorValue, values: {} }
-    // eslint-disable-next-line no-param-reassign
     delete rawData.codeEditorValue
     if (historyComponent === DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP.DEPLOYMENT_TEMPLATE.VALUE) {
         values = prepareDeploymentTemplateData(rawData)

@@ -16,10 +16,10 @@
 
 import React from 'react'
 
-import ICInfoOutline from '@Icons/ic-info-outlined.svg?react'
-import { ClipboardButton } from '@Common/index'
-
 import { IndexedTextDisplayPropsType } from '../types'
+
+import { ClipboardButton } from '@Common/index'
+import ICInfoOutline from '@Icons/ic-info-outlined.svg?react'
 
 const EmptyState: React.FC<{ href: string }> = ({ href }) => (
     <div className="flex flex-grow-1">
@@ -50,6 +50,7 @@ const IndexedTextDisplay: React.FC<IndexedTextDisplayPropsType> = ({ title, line
 
         <pre className="flexbox-col p-6 m-0 mh-150 bg__primary dc__no-border">
             {lines?.map((line) => (
+                // biome-ignore lint/correctness/useJsxKeyInIterable: Legacy
                 <div className="flexbox dc__gap-12 mono">
                     <span className={line.isCause ? 'cr-5' : ''}>{line.number}</span>
                     <span key={line.number}>{line.content}</span>

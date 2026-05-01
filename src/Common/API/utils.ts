@@ -16,11 +16,11 @@
 
 import { MutableRefObject } from 'react'
 
+import { RESPONSE_MESSAGES } from './constants'
+
 import { getUrlWithSearchParams } from '@Common/Helper'
 import { ServerErrors } from '@Common/ServerError'
 import { ROUTER_URLS } from '@PagesDevtron2.0/index'
-
-import { RESPONSE_MESSAGES } from './constants'
 
 export const handleServerError = async (contentType: string, response: Response) => {
     // Test for HTTP Status Code
@@ -49,7 +49,6 @@ export const abortPreviousRequests = <T>(
     abortControllerRef: MutableRefObject<AbortController>,
 ): Promise<T> => {
     abortControllerRef.current.abort()
-    // eslint-disable-next-line no-param-reassign
     abortControllerRef.current = new AbortController()
     return callback()
 }

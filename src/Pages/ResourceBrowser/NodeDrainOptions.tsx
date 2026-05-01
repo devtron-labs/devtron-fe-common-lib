@@ -16,13 +16,13 @@
 
 import { ChangeEvent, FocusEvent, useEffect } from 'react'
 
-import ICTimer from '@Icons/ic-timer.svg?react'
+import { DRAIN_NODE_MODAL_MESSAGING, NODE_DRAIN_OPTIONS_CHECKBOX_CONFIG } from './constants'
+import { AdditionalConfirmationModalOptionsProps, NodeDrainRequest } from './types'
+
 import { Checkbox } from '@Common/Checkbox'
 import { Tooltip } from '@Common/Tooltip'
 import { CHECKBOX_VALUE } from '@Common/Types'
-
-import { DRAIN_NODE_MODAL_MESSAGING, NODE_DRAIN_OPTIONS_CHECKBOX_CONFIG } from './constants'
-import { AdditionalConfirmationModalOptionsProps, NodeDrainRequest } from './types'
+import ICTimer from '@Icons/ic-timer.svg?react'
 
 const NodeDrainOptions = ({
     optionsData,

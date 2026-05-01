@@ -17,10 +17,6 @@
 import type { JSX } from 'react'
 import { useParams } from 'react-router-dom'
 
-import Down from '@Icons/ic-arrow-forward.svg?react'
-import OpenInNew from '@Icons/ic-arrow-out.svg?react'
-import Download from '@Icons/ic-download.svg?react'
-import ICHelpOutline from '@Icons/ic-help.svg?react'
 import noartifact from '@Images/no-artifact.webp'
 import { getIsApprovalPolicyConfigured } from '@Shared/Helpers'
 import { useDownload } from '@Shared/Hooks'
@@ -33,6 +29,11 @@ import { RegistryIcon } from '../RegistryIcon'
 import { TargetPlatformBadgeList } from '../TargetPlatforms'
 import { TERMINAL_STATUS_MAP } from './constants'
 import { ArtifactType, CIListItemType } from './types'
+
+import Down from '@Icons/ic-arrow-forward.svg?react'
+import OpenInNew from '@Icons/ic-arrow-out.svg?react'
+import Download from '@Icons/ic-download.svg?react'
+import ICHelpOutline from '@Icons/ic-help.svg?react'
 
 const CIProgressView = (): JSX.Element => (
     <GenericEmptyState

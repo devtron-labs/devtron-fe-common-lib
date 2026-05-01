@@ -14,15 +14,20 @@
  * limitations under the License.
  */
 
-import React, { useMemo, useEffect } from 'react'
+import React, { useEffect, useMemo } from 'react'
 import { generatePath, Link, useParams } from 'react-router-dom'
-import { useBreadcrumbContext, getBreadCrumbSeparator } from './BreadcrumbStore'
+
 import { ConditionalWrap } from '../Helper'
+import { getBreadCrumbSeparator, useBreadcrumbContext } from './BreadcrumbStore'
 import { Breadcrumb, Breadcrumbs, UseBreadcrumbOptionalProps, UseBreadcrumbState } from './Types'
 
 export const BreadcrumbContext = React.createContext(null)
 
-export function useBreadcrumb(pathPattern: string, props?: UseBreadcrumbOptionalProps, deps?: any[]): UseBreadcrumbState {
+export function useBreadcrumb(
+    pathPattern: string,
+    props?: UseBreadcrumbOptionalProps,
+    deps?: any[],
+): UseBreadcrumbState {
     const sep = props?.sep || '/'
     deps = deps || []
     const params = useParams()
@@ -30,7 +35,7 @@ export function useBreadcrumb(pathPattern: string, props?: UseBreadcrumbOptional
     const { state, setState } = useBreadcrumbContext()
 
     useEffect(() => {
-        if (!props || !props.alias) return
+        if (!props?.alias) return
         setState((state) => ({ ...state, alias: { ...state.alias, ...props.alias } }))
         return () => resetCrumb(Object.keys(props.alias))
     }, deps)
@@ -40,7 +45,7 @@ export function useBreadcrumb(pathPattern: string, props?: UseBreadcrumbOptional
     }
 
     function resetCrumb(props: string[]) {
-        const tempAlias = props.reduce((agg, curr, idx) => {
+        const tempAlias = props.reduce((agg, curr) => {
             delete agg[curr]
             return agg
         }, state.alias)
@@ -99,6 +104,7 @@ export const BreadCrumb: React.FC<Breadcrumbs> = ({
     return (
         <>
             {filteredCrumbs.map((breadcrumb, idx) => (
+                // biome-ignore lint/suspicious/noArrayIndexKey: Legacy
                 <React.Fragment key={idx}>
                     <ConditionalWrap
                         condition={!!breadcrumb.to}

@@ -16,15 +16,16 @@
 
 import { ReactNode } from 'react'
 
-import ICCompare from '@Icons/ic-compare.svg?react'
-import ErrorIcon from '@Icons/ic-error-exclamation.svg?react'
-import Info from '@Icons/ic-info-filled.svg?react'
-import ICWarningY5 from '@Icons/ic-warning-y5.svg?react'
-import { ClipboardButton } from '@Common/ClipboardButton'
 import { getComponentSpecificThemeClass } from '@Shared/Providers'
 
 import { useCodeEditorContext } from './CodeEditor.context'
 import { CodeEditorHeaderProps, CodeEditorStatusBarProps } from './types'
+
+import { ClipboardButton } from '@Common/ClipboardButton'
+import ICCompare from '@Icons/ic-compare.svg?react'
+import ErrorIcon from '@Icons/ic-error-exclamation.svg?react'
+import Info from '@Icons/ic-info-filled.svg?react'
+import ICWarningY5 from '@Icons/ic-warning-y5.svg?react'
 
 const SplitPane = () => {
     const { diffMode, setDiffMode, readOnly } = useCodeEditorContext()
@@ -37,6 +38,7 @@ const SplitPane = () => {
     }
 
     return (
+        // biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: Legacy
         <div className="code-editor__split-pane flex pointer cn-7 fcn-7 ml-auto" onClick={handleToggle}>
             <ICCompare className="icon-dim-20 mr-4" />
             {diffMode ? 'Hide comparison' : 'Compare with default'}

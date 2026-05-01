@@ -37,7 +37,7 @@ const APIResponseHandler = ({
     }
 
     if (isLoading) {
-        // eslint-disable-next-line react/jsx-no-useless-fragment
+        // biome-ignore lint/complexity/noUselessFragments: Legacy
         return customLoader ? <>{customLoader}</> : <Progressing {...progressingProps} />
     }
 
@@ -64,7 +64,6 @@ const APIResponseHandler = ({
     }
 
     // Had to add this since while using it is throwing ts error
-    // eslint-disable-next-line react/jsx-no-useless-fragment
     return <>{children}</>
 }
 

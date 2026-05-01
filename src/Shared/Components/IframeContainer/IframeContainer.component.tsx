@@ -24,7 +24,7 @@ const IframeContainer = ({ iframeList, maxHeight = 300, maxWidth = 300 }: Iframe
         <div className="flexbox dc__gap-16 flex-wrap w-100">
             {sortedIframeList.map((iframeData, index) => (
                 <IframeElement
-                    // eslint-disable-next-line react/no-array-index-key
+                    // biome-ignore lint/suspicious/noArrayIndexKey: Legacy
                     key={index}
                     URL={iframeData.URL}
                     width={iframeData.width}

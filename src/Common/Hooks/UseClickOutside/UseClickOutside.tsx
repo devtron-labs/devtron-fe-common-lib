@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React, { useEffect } from 'react'
+import { useEffect } from 'react'
 
 export const useClickOutside = (ref: any, callback: () => void) => {
     useEffect(() => {

@@ -496,8 +496,6 @@ export const getCodeScanEmptyState = (
             return SCAN_FAILED_EMPTY_STATE
         case 'Completed':
             return getCompletedEmptyState(data[CATEGORIES.CODE_SCAN], subCategory, detailViewData)
-        case 'Progressing':
-        case 'Running':
         default: /* FIXME: backend is sending empty status after re-deployment */
             return SCAN_IN_PROGRESS_EMPTY_STATE
     }

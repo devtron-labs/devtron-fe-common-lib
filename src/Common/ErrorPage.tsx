@@ -16,12 +16,12 @@
 
 import { useNavigate } from 'react-router-dom'
 
-import { ROUTER_URLS } from '@PagesDevtron2.0/Shared'
-
-import GenericEmptyState from './EmptyState/GenericEmptyState'
 import { ERROR_EMPTY_SCREEN, ERROR_STATUS_CODE } from './Constants'
+import GenericEmptyState from './EmptyState/GenericEmptyState'
 import { noop, refresh, reportIssue } from './Helper'
 import { ErrorPageType } from './Types'
+
+import { ROUTER_URLS } from '@PagesDevtron2.0/Shared'
 
 const ErrorPage = ({ code, image, title, subTitle, imageType, redirectURL, reload, on404Redirect }: ErrorPageType) => {
     const navigate = useNavigate()

@@ -16,14 +16,15 @@
 
 import { Link } from 'react-router-dom'
 
-import { getRandomColor } from '@Common/Helper'
 import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
-import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 import TrashIcon from '../../../../../../Assets/Icon/ic-delete-interactive.svg?react'
 import { UserRoleGroup } from '../../../types'
 import { UserRoleGroupsTableProps } from './types'
+
+import { getRandomColor } from '@Common/Helper'
+import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 const UserRoleGroupTableRow = ({
     id,

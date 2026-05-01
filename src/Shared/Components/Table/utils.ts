@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import { SortingOrder } from '@Common/Constants'
-import { showError } from '@Common/Helper'
 import { isNullOrUndefined } from '@Shared/Helpers'
 
 import {
@@ -34,8 +32,11 @@ import {
     UseFiltersReturnType,
 } from './types'
 
+import { SortingOrder } from '@Common/Constants'
+import { showError } from '@Common/Helper'
+
 export const searchAndSortRows = <
-    RowData extends unknown,
+    RowData,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
 >(
@@ -62,7 +63,7 @@ export const searchAndSortRows = <
 }
 
 export const getVisibleColumnsFromLocalStorage = <
-    RowData extends unknown,
+    RowData,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
 >({
@@ -102,7 +103,7 @@ export const getVisibleColumnsFromLocalStorage = <
 }
 
 export const setVisibleColumnsToLocalStorage = <
-    RowData extends unknown,
+    RowData,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
 >({
@@ -128,7 +129,7 @@ export const setVisibleColumnsToLocalStorage = <
 }
 
 export const getVisibleColumns = <
-    RowData extends unknown,
+    RowData,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
 >({
@@ -138,16 +139,12 @@ export const getVisibleColumns = <
 }: Pick<TableProps<RowData, FilterVariant, AdditionalProps>, 'areColumnsConfigurable' | 'columns' | 'id'>) =>
     areColumnsConfigurable ? getVisibleColumnsFromLocalStorage({ allColumns: columns, id }) : columns
 
-export const getFilteringPromise = <RowData extends unknown>({
-    searchSortTimeoutRef,
-    callback,
-}: GetFilteringPromiseProps<RowData>) =>
+export const getFilteringPromise = <RowData>({ searchSortTimeoutRef, callback }: GetFilteringPromiseProps<RowData>) =>
     new Promise<RowsType<RowData>>((resolve, reject) => {
         if (searchSortTimeoutRef.current !== -1) {
             clearTimeout(searchSortTimeoutRef.current)
         }
 
-        // eslint-disable-next-line no-param-reassign
         searchSortTimeoutRef.current = setTimeout(async () => {
             try {
                 resolve(await callback())
@@ -156,7 +153,6 @@ export const getFilteringPromise = <RowData extends unknown>({
                 reject(error)
             }
 
-            // eslint-disable-next-line no-param-reassign
             searchSortTimeoutRef.current = -1
         }, SEARCH_SORT_CHANGE_DEBOUNCE_TIME)
     })
@@ -195,12 +191,10 @@ export const scrollToShowActiveElementIfNeeded = (
     // NOTE: please look into https://developer.mozilla.org/en-US/docs/Web/API/Element/getBoundingClientRect
     // for more information what left and right pertain to
     if (top < parentTop) {
-        // eslint-disable-next-line no-param-reassign
         scrollTop += top - parentTop - topMargin
     }
 
     if (bottom > parentBottom) {
-        // eslint-disable-next-line no-param-reassign
         scrollTop += bottom - parentBottom
     }
 

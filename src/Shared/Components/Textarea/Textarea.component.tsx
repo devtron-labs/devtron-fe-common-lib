@@ -16,7 +16,6 @@
 
 import { TextareaHTMLAttributes, useCallback, useEffect, useRef, useState } from 'react'
 
-import { useThrottledEffect } from '@Common/Helper'
 import {
     COMPONENT_SIZE_TYPE_TO_FONT_AND_BLOCK_PADDING_MAP,
     COMPONENT_SIZE_TYPE_TO_INLINE_PADDING_MAP,
@@ -27,6 +26,8 @@ import { deriveBorderRadiusAndBorderClassFromConfig } from '@Shared/Helpers'
 import { FormFieldWrapper, getFormFieldAriaAttributes } from '../FormFieldWrapper'
 import { TextareaProps } from './types'
 import { getTextAreaConstraintsForSize } from './utils'
+
+import { useThrottledEffect } from '@Common/Helper'
 
 import './textarea.scss'
 
@@ -73,7 +74,6 @@ const Textarea = ({
             if (typeof textareaRefProp === 'function') {
                 textareaRefProp(node)
             } else {
-                // eslint-disable-next-line no-param-reassign
                 textareaRefProp.current = node
             }
         }
@@ -120,7 +120,6 @@ const Textarea = ({
 
             if (event.target.value !== trimmedValue) {
                 event.stopPropagation()
-                // eslint-disable-next-line no-param-reassign
                 event.target.value = trimmedValue
                 props.onChange(event)
             }

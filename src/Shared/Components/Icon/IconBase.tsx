@@ -16,12 +16,13 @@
 
 import type { JSX } from 'react'
 
-import { ConditionalWrap } from '@Common/Helper'
-import { Tooltip } from '@Common/Tooltip'
 import { isNullOrUndefined } from '@Shared/Helpers'
 
 import { ICON_STROKE_WIDTH_MAP } from './constants'
 import { IconBaseProps } from './types'
+
+import { ConditionalWrap } from '@Common/Helper'
+import { Tooltip } from '@Common/Tooltip'
 
 import './styles.scss'
 

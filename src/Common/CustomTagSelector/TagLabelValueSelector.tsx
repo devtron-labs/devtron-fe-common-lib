@@ -14,13 +14,14 @@
  * limitations under the License.
  */
 
-import { useState, useEffect, type JSX } from 'react'
 import Tippy from '@tippyjs/react'
-import PopupMenu from '../PopupMenu'
+import { type JSX, useEffect, useState } from 'react'
+
 import ErrorCross from '../../Assets/Icon/ic-cross.svg?react'
 import Info from '../../Assets/Icon/ic-info-outlined.svg?react'
 import { KEY_VALUE } from '../Constants'
 import { stopPropagation } from '../Helper'
+import PopupMenu from '../PopupMenu'
 import { ResizableTagTextArea } from './ResizableTagTextArea'
 import { SuggestedTagOptionType, TagLabelValueSelectorType } from './Types'
 import { ValidationRules } from './ValidationRules'
@@ -46,17 +47,13 @@ export const TagLabelValueSelector = ({
         setSelectedValue(tagData?.[tagInputType] || '')
     }, [selectedTagIndex, tagData, tagInputType])
 
-    const handleOnFocus = (e) => {
+    const handleOnFocus = () => {
         setTimeout(() => {
             setActiveElement(`tag-${tagInputType}-${selectedTagIndex}`)
         }, 300)
     }
     const handleOnBlur = (e) => {
-        if (
-            !e.relatedTarget ||
-            !e.relatedTarget.classList.value ||
-            !e.relatedTarget.classList.value.includes(`tag-${selectedTagIndex}-class`)
-        ) {
+        if (!e.relatedTarget?.classList.value?.includes(`tag-${selectedTagIndex}-class`)) {
             setActiveElement('')
             const _tagData = { ...tagData }
             _tagData[tagInputType] = selectedValue
@@ -100,6 +97,7 @@ export const TagLabelValueSelector = ({
         }
         if (!field.isValid) {
             return (
+                // biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: modal content click isolation
                 <div className="p-4" onClick={stopPropagation} data-testid="tag-label-cross-stop-propagation">
                     {field.messages.map((error) => (
                         <div key={error} className="flexbox pr-4 pl-4">
@@ -124,6 +122,7 @@ export const TagLabelValueSelector = ({
     }
 
     const option = (tag: SuggestedTagOptionType, index: number): JSX.Element => (
+        // biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: Legacy
         <div
             key={`${tag.value}-${index}`}
             data-key={tag.label}

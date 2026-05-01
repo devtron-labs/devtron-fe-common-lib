@@ -41,6 +41,7 @@ const GettingStartedCard = ({ hideGettingStartedCard }: GettingStartedType) => {
     }
 
     return (
+        // biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: for stopPropagation
         <div className="cn-0 p-20 br-8 fs-13 bg__overlay--primary dc__border w-300" onClick={stopPropagation}>
             <img className="mb-12 icon-dim-32" src={GettingToast} alt="getting started icon" />
             <div className="flex column left fw-6 cn-7">Getting started</div>

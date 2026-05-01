@@ -14,15 +14,13 @@
  * limitations under the License.
  */
 
+import TippyHeadless from '@tippyjs/react/headless'
+import moment from 'moment'
 import React, { type JSX, memo, useEffect, useRef } from 'react'
 import ReactGA from 'react-ga4'
 import { generatePath, NavLink, useLocation, useNavigate, useParams } from 'react-router-dom'
 import ReactSelect, { components } from 'react-select'
-import TippyHeadless from '@tippyjs/react/headless'
-import moment from 'moment'
 
-import ICArrowBackward from '@Icons/ic-arrow-backward.svg?react'
-import ICDocker from '@Icons/ic-docker.svg?react'
 import { DeploymentStageType } from '@Shared/constants'
 
 import { ConditionalWrap, DATE_TIME_FORMATS, DropdownIndicator, Tooltip } from '../../../Common'
@@ -31,7 +29,7 @@ import { Icon } from '../Icon'
 import { getCustomOptionSelectionStyle } from '../ReactSelect'
 import { DeploymentStatus } from '../StatusComponent'
 import BuildAndTaskSummaryTooltipCard from './BuildAndTaskSummaryTooltipCard'
-import { FILTER_STYLE, HISTORY_LABEL, statusColor as colorMap } from './constants'
+import { statusColor as colorMap, FILTER_STYLE, HISTORY_LABEL } from './constants'
 import GitTriggerList from './GitTriggerList'
 import {
     CICDSidebarFilterOptionType,
@@ -47,6 +45,9 @@ import {
     getTriggerStatusIcon,
     getWorkflowNodeStatusTitle,
 } from './utils'
+
+import ICArrowBackward from '@Icons/ic-arrow-backward.svg?react'
+import ICDocker from '@Icons/ic-docker.svg?react'
 
 /**
  * @description To be shown on deployment history or when we don't have workflowExecutionStages
@@ -169,7 +170,6 @@ const HistorySummaryCard = memo(
         return (
             <ConditionalWrap
                 condition={Array.isArray(ciMaterials)}
-                // eslint-disable-next-line react/no-unstable-nested-components
                 wrap={(children) => (
                     <TippyHeadless
                         placement="right"
@@ -249,7 +249,7 @@ const HistorySummaryCard = memo(
                                     </div>
                                 </div>
                             </div>
-                            {runSource && renderRunSource && renderRunSource(runSource, isDeployedInThisResource)}
+                            {runSource && renderRunSource?.(runSource, isDeployedInThisResource)}
                         </div>
                     </div>
                 </NavLink>
@@ -337,7 +337,6 @@ const Sidebar = React.memo(
         }
 
         const ciPipelineBuildTypeOption = (props): JSX.Element => {
-            // eslint-disable-next-line no-param-reassign
             props.selectProps.styles.option = getCustomOptionSelectionStyle()
             return (
                 <components.Option {...props}>

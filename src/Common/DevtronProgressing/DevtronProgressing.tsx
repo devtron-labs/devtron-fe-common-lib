@@ -15,6 +15,7 @@
  */
 
 import { type JSX } from 'react'
+
 import ICRotateDevtron from '../../Assets/Icon/ic-rotate-devtron.svg?react'
 import { DevtronProgressingProps } from './types'
 

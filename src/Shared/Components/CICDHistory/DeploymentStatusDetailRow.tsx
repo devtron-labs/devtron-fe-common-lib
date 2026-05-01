@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-/* eslint-disable no-nested-ternary */
+import moment from 'moment'
 import { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import moment from 'moment'
 
 import { ShowMoreText } from '@Shared/Components/ShowMoreText'
 import { AppType, TIMELINE_STATUS } from '@Shared/types'
@@ -79,8 +78,12 @@ export const DeploymentStatusDetailRow = ({
         return (
             <div className="px-8 py-12">
                 {statusBreakDownType.subSteps?.map((items, index) => (
-                    // eslint-disable-next-line react/no-array-index-key
-                    <div key={`item-${index}`}>
+                    <div
+                        key={`item-${
+                            // biome-ignore lint/suspicious/noArrayIndexKey: Legacy
+                            index
+                        }`}
+                    >
                         <div className="flex left lh-20 mb-8">
                             {renderDeploymentTimelineIcon(items.icon)}
                             <span className="ml-12">{items.message}</span>
@@ -91,7 +94,7 @@ export const DeploymentStatusDetailRow = ({
                     <div className="pl-32">
                         <div className="app-status-row dc__border-bottom py-8">
                             {MANIFEST_STATUS_HEADERS.map((headerKey, index) => (
-                                // eslint-disable-next-line react/no-array-index-key
+                                // biome-ignore lint/suspicious/noArrayIndexKey: Legacy
                                 <div className="fs-13 fw-6 cn-7" key={`header_${index}`}>
                                     {headerKey}
                                 </div>

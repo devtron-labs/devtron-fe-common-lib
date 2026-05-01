@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import { ChangeEvent, KeyboardEvent as ReactKeyboardEvent, MouseEvent, useEffect, useState } from 'react'
-import { createRoot, Root } from 'react-dom/client'
 import {
     closeSearchPanel,
     findNext,
@@ -28,17 +26,9 @@ import {
     setSearchQuery,
 } from '@codemirror/search'
 import { EditorView, Panel, runScopeHandlers, ViewUpdate } from '@uiw/react-codemirror'
+import { ChangeEvent, MouseEvent, KeyboardEvent as ReactKeyboardEvent, useEffect, useState } from 'react'
+import { createRoot, Root } from 'react-dom/client'
 
-import ICArrowDown from '@Icons/ic-arrow-down.svg?react'
-import ICCaretDown from '@Icons/ic-caret-down.svg?react'
-import ICClose from '@Icons/ic-close.svg?react'
-import ICMatchCase from '@Icons/ic-match-case.svg?react'
-import ICMatchWord from '@Icons/ic-match-word.svg?react'
-import ICRegex from '@Icons/ic-regex.svg?react'
-import ICReplaceAllText from '@Icons/ic-replace-all-text.svg?react'
-import ICReplaceText from '@Icons/ic-replace-text.svg?react'
-import ICWorld from '@Icons/ic-world.svg?react'
-import { Tooltip } from '@Common/Tooltip'
 import { Button, ButtonStyleType, ButtonVariantType, Collapse } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
 
@@ -52,6 +42,17 @@ import {
 import { getShowReplaceField, setShowReplaceField } from '../Commands'
 import { CodeEditorProps, FindReplaceProps, FindReplaceQuery, FindReplaceToggleButtonProps } from '../types'
 import { getFindReplaceToggleButtonIconClass, getUpdatedSearchMatchesCount } from '../utils'
+
+import { Tooltip } from '@Common/Tooltip'
+import ICArrowDown from '@Icons/ic-arrow-down.svg?react'
+import ICCaretDown from '@Icons/ic-caret-down.svg?react'
+import ICClose from '@Icons/ic-close.svg?react'
+import ICMatchCase from '@Icons/ic-match-case.svg?react'
+import ICMatchWord from '@Icons/ic-match-word.svg?react'
+import ICRegex from '@Icons/ic-regex.svg?react'
+import ICReplaceAllText from '@Icons/ic-replace-all-text.svg?react'
+import ICReplaceText from '@Icons/ic-replace-text.svg?react'
+import ICWorld from '@Icons/ic-world.svg?react'
 
 const FindReplaceToggleButton = ({
     isChecked,

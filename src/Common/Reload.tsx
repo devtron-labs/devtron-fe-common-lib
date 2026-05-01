@@ -15,17 +15,15 @@
  */
 
 import loadingFailure from '../Assets/Img/ic-loading-failure.png'
-import { ReloadType } from './Types'
 import { refresh } from './Helper'
+import { ReloadType } from './Types'
 
 /**
  * @deprecated Use APIResponseHandler (Preferred) or error screen manager instead
  */
 export default function Reload({ reload, className = '' }: ReloadType) {
     return (
-        <article
-            className={`flex w-100 h-100 ${className}`}
-        >
+        <article className={`flex w-100 h-100 ${className}`}>
             <div className="flex column w-250 dc__align-center" data-testid="reload">
                 <img src={loadingFailure} style={{ height: 'auto' }} className="w-100 mb-12" alt="load-error" />
                 <h3 className="title dc__bold">Failed to load</h3>

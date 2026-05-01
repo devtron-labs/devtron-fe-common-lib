@@ -20,8 +20,8 @@ export type {
     BulkOperationModalProps as TableBulkOperationModalProps,
     CellComponentProps as TableCellComponentProps,
     Column as TableColumnType,
-    TableProps,
     RowActionsOnHoverComponentProps as TableRowActionsOnHoverComponentProps,
+    TableProps,
     ViewWrapperProps as TableViewWrapperProps,
 } from './types'
 export { FiltersTypeEnum, PaginationEnum, SignalEnum as TableSignalEnum } from './types'

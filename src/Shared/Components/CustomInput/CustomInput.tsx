@@ -73,7 +73,6 @@ const CustomInput = ({
 
             if (event.target.value !== trimmedValue) {
                 event.stopPropagation()
-                // eslint-disable-next-line no-param-reassign
                 event.target.value = trimmedValue
                 props.onChange(event)
             }
@@ -112,6 +111,7 @@ const CustomInput = ({
             labelTooltipConfig={labelTooltipConfig}
             hideFormFieldInfo={hideFormFieldInfo}
         >
+            {/** biome-ignore lint/complexity/noUselessFragments: Required by FormFieldWrapper to be a single container */}
             <>
                 <input
                     {...props}

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { type JSX, useState } from 'react'
 import DOMPurify from 'dompurify'
-
-import { ClipboardButton, ConditionalWrap, copyToClipboard, Tooltip, YAMLStringify } from '@Common/index'
+import { type JSX, useState } from 'react'
 
 import { NO_DEFINED_DESCRIPTION } from './constants'
 import { SuggestionsItemProps } from './types'
+
+import { ClipboardButton, ConditionalWrap, copyToClipboard, Tooltip, YAMLStringify } from '@Common/index'
 
 const SuggestionItem = ({
     variableName,
@@ -82,7 +82,7 @@ const SuggestionItem = ({
         return (
             <p
                 className="m-0 fs-12 fw-4 lh-18 dc__word-break-all"
-                // eslint-disable-next-line react/no-danger
+                // biome-ignore lint/security/noDangerouslySetInnerHtml: Text is sanitized and highlighted before being set as inner HTML
                 dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(highlightedText(description)) }}
             />
         )
@@ -91,7 +91,7 @@ const SuggestionItem = ({
     const renderVariableName = (): JSX.Element => (
         <p
             className="m-0 fs-13 fw-6 lh-20 cn-9 dc__ellipsis-right"
-            // eslint-disable-next-line react/no-danger
+            // biome-ignore lint/security/noDangerouslySetInnerHtml: Text is sanitized and highlighted before being set as inner HTML
             dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(highlightedText(variableName)) }}
         />
     )
@@ -120,6 +120,7 @@ const SuggestionItem = ({
     return (
         // TODO: conditional wrap is not required since handled through alwaysShowTippyOnHover in tooltip
         <ConditionalWrap condition={showValueOnHover} wrap={renderTooltip}>
+            {/* biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: Container getting click events for copy functionality */}
             <div
                 className="flexbox-col pt-8 pb-8 pl-12 pr-12 dc__align-self-stretch bg__primary dc__border-bottom-n1 dc__hover-n50"
                 onClick={handleCopyTrigger}

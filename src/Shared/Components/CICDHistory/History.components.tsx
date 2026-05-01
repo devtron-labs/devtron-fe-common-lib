@@ -159,8 +159,10 @@ export const GitChanges = ({
                 const gitTrigger = gitTriggers[ciMaterial.id]
                 return gitTrigger && (gitTrigger.Commit || gitTrigger.WebhookData?.data) ? (
                     <div
-                        // eslint-disable-next-line react/no-array-index-key
-                        key={`mat-${gitTrigger?.Commit}-${index}`}
+                        key={`mat-${gitTrigger?.Commit}-${
+                            // biome-ignore lint/suspicious/noArrayIndexKey: Legacy
+                            index
+                        }`}
                         className="bg__primary br-4 en-2 bw-1"
                         data-testid="source-code-git-hash"
                         style={{ width: 'min( 100%, 800px )' }}

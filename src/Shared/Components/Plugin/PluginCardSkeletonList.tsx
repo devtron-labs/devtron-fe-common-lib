@@ -40,7 +40,7 @@ const PluginCardSkeletonList = ({ count = 2 }: PluginCardSkeletonListProps) => (
         {Array(count)
             .fill(0)
             .map((_, index) => (
-                // eslint-disable-next-line react/no-array-index-key
+                // biome-ignore lint/suspicious/noArrayIndexKey: Legacy
                 <PluginCardSkeleton key={index} />
             ))}
     </>

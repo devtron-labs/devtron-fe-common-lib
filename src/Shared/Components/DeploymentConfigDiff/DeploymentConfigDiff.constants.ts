@@ -16,11 +16,11 @@
 
 import { FunctionComponent, SVGProps } from 'react'
 
+import { DeploymentConfigDiffState } from './DeploymentConfigDiff.types'
+
 import ICDiffFileAdded from '@Icons/ic-diff-file-added.svg?react'
 import ICDiffFileRemoved from '@Icons/ic-diff-file-removed.svg?react'
 import ICDiffFileUpdated from '@Icons/ic-diff-file-updated.svg?react'
-
-import { DeploymentConfigDiffState } from './DeploymentConfigDiff.types'
 
 export const diffStateTextMap: Record<DeploymentConfigDiffState, string> = {
     hasDiff: 'Has difference',

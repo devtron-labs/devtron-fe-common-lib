@@ -14,16 +14,20 @@
  * limitations under the License.
  */
 
-import { useRef, useState } from 'react'
 import Tippy from '@tippyjs/react'
+import { useRef, useState } from 'react'
+
 import CloseIcon from '../Assets/Icon/ic-cross.svg?react'
 import Help from '../Assets/Icon/ic-help.svg?react'
 import ICHelpOutline from '../Assets/Icon/ic-help-outline.svg?react'
 import 'tippy.js/animations/shift-toward-subtle.css'
 import 'tippy.js/animations/shift-toward.css'
-import { TippyCustomizedProps, TippyTheme } from './Types'
+
+import { Button, ButtonStyleType, ButtonVariantType, DocLink } from '@Shared/Components'
+import { ComponentSizeType } from '@Shared/index'
+
 import { not, stopPropagation } from './Helper'
-import { DocLink } from '@Shared/Components'
+import { TippyCustomizedProps, TippyTheme } from './Types'
 
 // This component will handle some of the new tippy designs and interactions
 // So this can be updated to support further for new features or interactions
@@ -59,7 +63,7 @@ export const TippyCustomized = <T extends boolean = false>(props: TippyCustomize
         }
     }
 
-    const toggleHeadingInfo = (e) => {
+    const toggleHeadingInfo = () => {
         setShowHeadingInfo(not)
     }
 
@@ -93,6 +97,7 @@ export const TippyCustomized = <T extends boolean = false>(props: TippyCustomize
                         }`}
                     >
                         {iconPath ? (
+                            // biome-ignore lint/a11y/noNoninteractiveElementInteractions: This is image handler only
                             <img
                                 className={`icon-dim-${iconSize || 20} mr-6 ${iconClass || ''}`}
                                 src={iconPath}
@@ -110,9 +115,16 @@ export const TippyCustomized = <T extends boolean = false>(props: TippyCustomize
                             <span className={`fs-14 fw-6 lh-20 ${showCloseButton ? 'mr-12' : ''}`}>{heading}</span>
                         )}
                         {headingInfo && (
-                            <div className="icon-dim-20 cursor" onClick={toggleHeadingInfo}>
-                                <ICHelpOutline className="icon-dim-20" />
-                            </div>
+                            <Button
+                                dataTestId="tippy-heading-info-button"
+                                icon={<ICHelpOutline />}
+                                onClick={toggleHeadingInfo}
+                                ariaLabel="Toggle heading information"
+                                showAriaLabelInTippy={false}
+                                variant={ButtonVariantType.borderLess}
+                                style={ButtonStyleType.neutral}
+                                size={ComponentSizeType.xs}
+                            />
                         )}
                         {showCloseButton && (
                             <div className="icon-dim-16 ml-auto">
@@ -187,7 +199,7 @@ export const TippyCustomized = <T extends boolean = false>(props: TippyCustomize
             content={getTippyContent()}
             trigger={trigger || 'mouseenter'}
             onMount={onTippyMount}
-            onClickOutside={(tippyInstance, e) => closeTippy(e)}
+            onClickOutside={(_tippyInstance, e) => closeTippy(e)}
             showOnCreate={showOnCreate || false}
             animation={animation || 'fade'}
             duration={duration || 300}

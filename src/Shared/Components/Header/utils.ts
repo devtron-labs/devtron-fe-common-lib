@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-import { LOGIN_COUNT } from '@Common/Constants'
-
 import {
     ENTERPRISE_HELP_ACTION_MENU_ITEMS,
     ENTERPRISE_TRIAL_HELP_ACTION_MENU_ITEMS,
@@ -25,8 +23,10 @@ import {
 import { updatePostHogEvent } from './service'
 import { HelpActionOptionTypes, HelpButtonActionMenuProps } from './types'
 
+import { LOGIN_COUNT } from '@Common/Constants'
+
 const millisecondsInDay = 86400000
-export const getDateInMilliseconds = (days) => 1 + new Date().valueOf() + (days ?? 0) * millisecondsInDay
+export const getDateInMilliseconds = (days) => 1 + Date.now() + (days ?? 0) * millisecondsInDay
 
 export const handlePostHogEventUpdate = async (eventName: string): Promise<void> => {
     const payload = {

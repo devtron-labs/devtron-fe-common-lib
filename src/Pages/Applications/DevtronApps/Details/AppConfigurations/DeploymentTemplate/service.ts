@@ -16,11 +16,6 @@
 
 import YAML from 'yaml'
 
-import { getIsRequestAborted, post } from '@Common/API'
-import { ROUTES } from '@Common/Constants'
-import { showError, YAMLStringify } from '@Common/Helper'
-import { ResponseType } from '@Common/Types'
-
 import { GET_RESOLVED_DEPLOYMENT_TEMPLATE_EMPTY_RESPONSE } from './constants'
 import {
     GetDeploymentManifestPayloadType,
@@ -31,6 +26,11 @@ import {
     ResolvedDeploymentTemplateDTO,
     ValuesAndManifestFlagDTO,
 } from './types'
+
+import { getIsRequestAborted, post } from '@Common/API'
+import { ROUTES } from '@Common/Constants'
+import { showError, YAMLStringify } from '@Common/Helper'
+import { ResponseType } from '@Common/Types'
 
 export const getDeploymentManifest = async (
     params: GetDeploymentManifestProps,

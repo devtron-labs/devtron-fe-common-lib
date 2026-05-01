@@ -14,16 +14,21 @@
  * limitations under the License.
  */
 
-import { ProgressingProps } from './Types'
-
 import type { JSX } from 'react'
+
+import { ProgressingProps } from './Types'
 
 export const Progressing = ({ pageLoader, size, theme, styles, fillColor }: ProgressingProps): JSX.Element => {
     const loaderSize = size ? `${size}px` : pageLoader ? '48px' : '20px'
     return (
         <div className={`loader ${theme || 'default'}-background`} style={styles} data-testid="progressing">
             <div style={{ width: loaderSize, height: loaderSize }}>
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="loader__svg">
+                <svg
+                    aria-label="Progressing Loader"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    className="loader__svg"
+                >
                     <g fill="none" fillRule="evenodd" strokeLinecap="round">
                         <animateTransform
                             attributeName="transform"

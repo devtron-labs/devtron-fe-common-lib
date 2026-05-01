@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import { WorkflowNodeType } from '@Common/Types'
 import { CIPipelineNodeType } from '@Shared/types'
 
 import { SourceTypeCardProps } from './types'
+
+import { WorkflowNodeType } from '@Common/Types'
 
 export const SOURCE_TYPE_CARD_VARIANTS = {
     BUILD: {

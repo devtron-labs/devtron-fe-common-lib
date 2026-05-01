@@ -53,7 +53,6 @@ const MaterialHistory = ({ material, pipelineName, selectCommit, isCommitInfoMod
 
     return (
         // added for consistent typing
-        // eslint-disable-next-line react/jsx-no-useless-fragment
         <div className="flexbox-col dc__gap-12">
             {dateKeys.map((date) => {
                 const historyList = materialHistoryMapWithTime[date]
@@ -73,6 +72,7 @@ const MaterialHistory = ({ material, pipelineName, selectCommit, isCommitInfoMod
                                     : history.commit
 
                             return (
+                                // biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: Legacy
                                 <div
                                     data-testid={`material-history-${index}`}
                                     key={_commitId}

@@ -15,8 +15,9 @@
  */
 
 import Tippy from '@tippyjs/react'
-import { AddCDButtonProps, TooltipContentProps } from './types'
+
 import { AddCDPositions } from '../Types'
+import { AddCDButtonProps, TooltipContentProps } from './types'
 
 const TooltipContent = ({ tooltipContent }: TooltipContentProps) => {
     if (tooltipContent) {
@@ -53,6 +54,7 @@ export default function AddCDButton({
                 className="default-tt"
                 arrow={false}
             >
+                {/* biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/useKeyWithClickEvents: Legacy */}
                 <svg
                     x={referenceNode.x + (position === AddCDPositions.RIGHT ? -20 - 5 : referenceNode.width + 5)}
                     // Here 10 is the height of the button / 2
@@ -64,6 +66,7 @@ export default function AddCDButton({
                     xmlns="http://www.w3.org/2000/svg"
                     data-testid={`add-cd-to-${position}`}
                     onClick={handleAddCDClick}
+                    aria-label="Add CD Node"
                     className="dc__outline-none-imp"
                 >
                     <rect width="20" height="20" rx="10" fill="#664BEE" className="add-cd-edge-btn" />

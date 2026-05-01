@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { useCallback, useEffect } from 'react'
 import FocusTrap from 'focus-trap-react'
+import { useCallback, useEffect } from 'react'
 
 import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP } from '@Shared/constants'
 import { preventBodyScroll } from '@Shared/Helpers'
@@ -55,7 +55,7 @@ const DTFocusTrap = ({
                     let el = event.target as Element | null
                     let depth = 0
                     while (el && depth < 4) {
-                        if (el.classList && el.classList.contains(ALLOW_ACTION_OUTSIDE_FOCUS_TRAP)) {
+                        if (el.classList?.contains(ALLOW_ACTION_OUTSIDE_FOCUS_TRAP)) {
                             return true
                         }
                         el = el.parentElement

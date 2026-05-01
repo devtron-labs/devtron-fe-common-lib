@@ -16,8 +16,6 @@
 
 import { useState } from 'react'
 
-import { useAsync } from '@Common/Helper'
-import { ServerErrors } from '@Common/ServerError'
 import { useTheme } from '@Shared/Providers'
 
 import { getUserPreferences, updateAndPersistUserPreferences } from './service'
@@ -28,6 +26,9 @@ import {
     UseUserPreferencesProps,
     ViewIsPipelineRBACConfiguredRadioTabs,
 } from './types'
+
+import { useAsync } from '@Common/Helper'
+import { ServerErrors } from '@Common/ServerError'
 
 export const useUserPreferences = ({ migrateUserPreferences, recentlyVisitedFetchConfig }: UseUserPreferencesProps) => {
     const [userPreferences, setUserPreferences] = useState<UserPreferencesType>(null)

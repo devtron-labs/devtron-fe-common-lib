@@ -45,7 +45,6 @@ const Card = ({
                         <div className="shimmer w-100 flex-grow-1 mh-48" />
                     </div>
                 )
-            case 'A':
             default:
                 return (
                     <div className="flexbox-col dc__gap-8 p-16">

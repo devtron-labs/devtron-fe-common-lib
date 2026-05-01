@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import ICCaretDown from '@Icons/ic-caret-down.svg?react'
-
 import { Collapse } from '../Collapse'
 import { diffStateTextColorMap, diffStateTextMap } from './DeploymentConfigDiff.constants'
 import { DeploymentConfigDiffAccordionProps, DeploymentConfigDiffState } from './DeploymentConfigDiff.types'
+
+import ICCaretDown from '@Icons/ic-caret-down.svg?react'
 
 export const DeploymentConfigDiffAccordion = ({
     diffState,

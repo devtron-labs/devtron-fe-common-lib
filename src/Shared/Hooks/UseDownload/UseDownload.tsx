@@ -16,15 +16,16 @@
 
 import { useState } from 'react'
 
-import { API_STATUS_CODES, Host } from '@Common/Constants'
-import { showError } from '@Common/Helper'
-import { ServerErrors } from '@Common/ServerError'
 import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP } from '@Shared/constants'
 import { getFileNameFromHeaders } from '@Shared/Helpers'
 import { ToastManager, ToastVariantType } from '@Shared/Services'
 
 import { getDownloadResponse } from './service'
 import { UseDownloadProps, UseDownloadReturnType } from './types'
+
+import { API_STATUS_CODES, Host } from '@Common/Constants'
+import { showError } from '@Common/Helper'
+import { ServerErrors } from '@Common/ServerError'
 
 const useDownload = ({ shouldOpenInNewTab }: UseDownloadProps = {}): UseDownloadReturnType => {
     const [isDownloading, setIsDownloading] = useState<boolean>(false)

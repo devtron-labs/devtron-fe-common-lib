@@ -17,10 +17,10 @@
 import { MouseEventHandler, ReactElement } from 'react'
 import { LinkProps } from 'react-router-dom'
 
+import { APIResponseHandlerProps } from '../APIResponseHandler'
+
 import { GenericFilterEmptyStateProps } from '@Common/EmptyState/types'
 import { GenericEmptyStateType } from '@Common/Types'
-
-import { APIResponseHandlerProps } from '../APIResponseHandler'
 
 type BaseGenericInfoCardProps = {
     title: string
@@ -53,7 +53,8 @@ export type GenericInfoCardProps = { borderVariant: GenericInfoCardBorderVariant
 )
 
 export interface GenericInfoCardListingProps
-    extends Pick<GenericInfoCardProps, 'borderVariant'>, Pick<GenericFilterEmptyStateProps, 'handleClearFilters'> {
+    extends Pick<GenericInfoCardProps, 'borderVariant'>,
+        Pick<GenericFilterEmptyStateProps, 'handleClearFilters'> {
     list: (Pick<GenericInfoCardProps, 'Icon' | 'author' | 'description' | 'linkProps' | 'onClick' | 'title'> &
         Record<'id', string>)[]
     emptyStateConfig: Pick<GenericEmptyStateType, 'title' | 'subTitle' | 'image' | 'renderButton' | 'renderButton'>

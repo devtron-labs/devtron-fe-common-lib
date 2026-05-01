@@ -16,22 +16,18 @@
 
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 
+import { NO_ROWS_OR_GET_ROWS_ERROR } from './constants'
+import TableContent from './TableContent'
+import { FiltersTypeEnum, InternalTableProps, RowsResultType } from './types'
+import { getFilteringPromise, searchAndSortRows } from './utils'
+
 import { useQuery } from '@Common/API'
 import { GenericEmptyState, GenericFilterEmptyState } from '@Common/EmptyState'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
 import { noop, useAsync } from '@Common/Helper'
 import { UseRegisterShortcutProvider } from '@Common/Hooks'
 
-import { NO_ROWS_OR_GET_ROWS_ERROR } from './constants'
-import TableContent from './TableContent'
-import { FiltersTypeEnum, InternalTableProps, RowsResultType } from './types'
-import { getFilteringPromise, searchAndSortRows } from './utils'
-
-const InternalTable = <
-    RowData extends unknown,
-    FilterVariant extends FiltersTypeEnum,
-    AdditionalProps extends Record<string, any>,
->({
+const InternalTable = <RowData, FilterVariant extends FiltersTypeEnum, AdditionalProps extends Record<string, any>>({
     filtersVariant,
     filterData,
     rows,
@@ -64,18 +60,14 @@ const InternalTable = <
         sortBy,
         sortOrder,
         searchKey = '',
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        handleSorting,
+        handleSorting: _handleSorting,
         pageSize,
         offset,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        changePage,
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
-        changePageSize,
+        changePage: _changePage,
+        changePageSize: _changePageSize,
         clearFilters,
         areFiltersApplied,
         // Destructuring specific filters, grouping the rest with the rest operator
-        // eslint-disable-next-line @typescript-eslint/no-unused-vars
         handleSearch,
         ...otherFilters
     } = filterData ?? {}
@@ -156,7 +148,6 @@ const InternalTable = <
         data: getRowsResult,
         error: getRowsError,
         refetch: reloadGetRows,
-        // eslint-disable-next-line @tanstack/query/exhaustive-deps
     } = useQuery<unknown, RowsResultType<RowData>, unknown[], false>({
         queryFn: async ({ signal }) => {
             const { rows: newRows, totalRows } = await getRows(filterData, signal)

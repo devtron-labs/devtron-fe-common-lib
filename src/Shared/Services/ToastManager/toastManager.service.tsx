@@ -14,8 +14,7 @@
  * limitations under the License.
  */
 
-// eslint-disable-next-line no-restricted-imports
-import { toast, ToastContainer, ToastOptions } from 'react-toastify'
+import { ToastContainer, ToastOptions, toast } from 'react-toastify'
 
 import { TOAST_BASE_CONFIG, TOAST_VARIANT_TO_CONFIG_MAP } from './constants'
 import { ShortcutToastContent, ToastContent } from './ToastContent'
@@ -83,7 +82,6 @@ import './toastManager.scss'
  * ```
  */
 class ToastManager {
-    // eslint-disable-next-line no-use-before-define
     static #instance: ToastManager
 
     public static get instance(): ToastManager {
@@ -97,7 +95,6 @@ class ToastManager {
     /**
      * Handler for showing the toast
      */
-    // eslint-disable-next-line class-methods-use-this
     showToast = (
         {
             variant = ToastVariantType.info,

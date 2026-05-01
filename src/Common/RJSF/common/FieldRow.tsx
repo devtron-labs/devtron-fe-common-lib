@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { Tooltip } from '@Common/Tooltip'
-
 import { DEFAULT_FIELD_TITLE } from '../constants'
 import { FieldRowProps } from './types'
+
+import { Tooltip } from '@Common/Tooltip'
 
 export const FieldRowWithLabel = ({
     showLabel,

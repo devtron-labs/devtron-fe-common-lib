@@ -17,7 +17,6 @@
 import { useEffect, useState } from 'react'
 import { generatePath, useParams } from 'react-router-dom'
 
-import { DEFAULT_BASE_PAGE_SIZE, SortingOrder } from '@Common/Constants'
 import { Button, ButtonVariantType } from '@Shared/Components/Button'
 import {
     DEPLOYMENT_CONFIG_DIFF_SORT_KEY,
@@ -34,6 +33,8 @@ import { ComponentSizeType } from '@Shared/constants'
 import { getTriggerHistory } from '../service'
 import { DeploymentHistoryConfigDiffRouteParams, DeploymentHistoryDiffDetailedProps } from './types'
 import { getPipelineDeployments, getPipelineDeploymentsOptions } from './utils'
+
+import { DEFAULT_BASE_PAGE_SIZE, SortingOrder } from '@Common/Constants'
 
 export const DeploymentHistoryConfigDiffCompare = ({
     envName,

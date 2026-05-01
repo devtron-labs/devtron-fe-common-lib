@@ -14,10 +14,9 @@
  * limitations under the License.
  */
 
-import { ReactElement, useMemo } from 'react'
 import { AnimatePresence, motion } from 'framer-motion'
+import { ReactElement, useMemo } from 'react'
 
-import { Tooltip } from '@Common/Tooltip'
 import { Icon } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
 import { getUniqueId } from '@Shared/Helpers'
@@ -25,6 +24,8 @@ import { getUniqueId } from '@Shared/Helpers'
 import { ConditionalWrap } from '../Helper'
 import { COMPONENT_SIZE_TO_ICON_CLASS_MAP, COMPONENT_SIZE_TO_SEGMENT_CLASS_MAP } from './constants'
 import { SegmentProps, SegmentType } from './types'
+
+import { Tooltip } from '@Common/Tooltip'
 
 const wrapWithTooltip = (tooltipProps: SegmentType['tooltipProps']) => (children: ReactElement) => (
     <Tooltip content={tooltipProps.content} placement="bottom" {...tooltipProps} alwaysShowTippyOnHover>

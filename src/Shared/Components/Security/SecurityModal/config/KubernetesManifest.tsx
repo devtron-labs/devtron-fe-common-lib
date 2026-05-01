@@ -136,8 +136,6 @@ export const getKubernetesManifestEmptyState = (
         /* FIXME: api is sending empty state for status after re-deployment */
         case 'Completed':
             return getCompletedEmptyState(data[CATEGORIES.KUBERNETES_MANIFEST], subCategory, detailViewData)
-        case 'Progressing':
-        case 'Running':
         default:
             return SCAN_IN_PROGRESS_EMPTY_STATE
     }

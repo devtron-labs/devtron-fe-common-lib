@@ -56,6 +56,7 @@ export const getSelectedOptions = <T>(
 
     return options.reduce((acc, project) => {
         const selectedApps = project.options.filter((option) => selectedEnvironmentsMap[option.label])
+        // biome-ignore lint/performance/noAccumulatingSpread: Legacy
         return [...acc, ...selectedApps]
     }, [] as OptionType[])
 }

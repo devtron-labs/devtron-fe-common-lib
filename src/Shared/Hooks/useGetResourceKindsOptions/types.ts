@@ -16,13 +16,14 @@
 
 // ====== Service Types: Start ====== //
 
-import { getAppOptionsGroupedByProjects } from '@Common/Common.service'
-import { ServerErrors } from '@Common/ServerError'
-import { EnvironmentsGroupedByClustersType } from '@Common/Types'
 import { getClusterOptions } from '@Shared/index'
 import { ResourceKindType } from '@Shared/types'
 
 import { getProjectOptions } from './service'
+
+import { getAppOptionsGroupedByProjects } from '@Common/Common.service'
+import { ServerErrors } from '@Common/ServerError'
+import { EnvironmentsGroupedByClustersType } from '@Common/Types'
 
 // ====== Service Types: End ====== //
 

@@ -16,8 +16,6 @@
 
 import { useState } from 'react'
 
-import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
-import { Tooltip } from '@Common/Tooltip'
 import { ALL_RESOURCE_KIND_FILTER, APP_STATUS_HEADERS, ComponentSizeType } from '@Shared/constants'
 import { Node } from '@Shared/types'
 
@@ -27,6 +25,9 @@ import { Icon } from '../Icon'
 import { ShowMoreText } from '../ShowMoreText'
 import { AppStatusContentProps } from './types'
 import { getFlattenedNodesFromAppDetails, getResourceKey } from './utils'
+
+import { SortableTableHeaderCell } from '@Common/SortableTableHeaderCell'
+import { Tooltip } from '@Common/Tooltip'
 
 import './AppStatusContent.scss'
 
@@ -64,11 +65,8 @@ const AppStatusContent = ({
     const getNodeMessage = (nodeDetails: Node) => {
         const resourceKey = getResourceKey(nodeDetails)
 
-        if (
-            appDetails.resourceTree?.resourcesSyncResult &&
-            // eslint-disable-next-line no-prototype-builtins
-            appDetails.resourceTree.resourcesSyncResult.hasOwnProperty(resourceKey)
-        ) {
+        // biome-ignore lint/suspicious/noPrototypeBuiltins: Legacy
+        if (appDetails.resourceTree?.resourcesSyncResult?.hasOwnProperty(resourceKey)) {
             return appDetails.resourceTree.resourcesSyncResult[resourceKey]
         }
         return ''

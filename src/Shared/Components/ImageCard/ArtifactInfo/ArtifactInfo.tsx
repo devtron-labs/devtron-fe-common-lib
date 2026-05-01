@@ -16,8 +16,6 @@
 
 import Tippy from '@tippyjs/react'
 
-import ICBot from '@Icons/ic-bot.svg?react'
-import { Tooltip } from '@Common/Tooltip'
 import { Icon } from '@Shared/Components/Icon'
 import { RegistryIcon } from '@Shared/Components/RegistryIcon'
 
@@ -25,6 +23,9 @@ import { ConditionalWrap, getRandomColor } from '../../../../Common/Helper'
 import { DefaultUserKey } from '../../../types'
 import { ArtifactInfoProps } from '../types'
 import { ImagePathTippyContentProps } from './types'
+
+import { Tooltip } from '@Common/Tooltip'
+import ICBot from '@Icons/ic-bot.svg?react'
 
 const ImagePathTippyContent = ({ imagePath, registryName }: ImagePathTippyContentProps) => (
     <div>

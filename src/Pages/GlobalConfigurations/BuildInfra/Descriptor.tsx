@@ -14,12 +14,13 @@
  * limitations under the License.
  */
 
-import { NestedBreadCrumb } from '@Common/index'
 import { InfoIconTippy } from '@Shared/Components/InfoIconTippy'
-import { ROUTER_URLS } from '@PagesDevtron2.0/Shared'
 
 import { BUILD_INFRA_TEXT } from './constants'
 import { BuildInfraDescriptorProps } from './types'
+
+import { NestedBreadCrumb } from '@Common/index'
+import { ROUTER_URLS } from '@PagesDevtron2.0/Shared'
 
 const Descriptor = ({
     additionalContainerClasses,

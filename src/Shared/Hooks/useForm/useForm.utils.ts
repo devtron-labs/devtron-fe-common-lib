@@ -24,6 +24,8 @@ import { UseFormValidation } from './useForm.types'
  * @param validation - The validation rules for the form field.
  * @returns Returns error message(s) or null if valid.
  */
+
+// biome-ignore lint/complexity/noBannedTypes: Legacy
 export const checkValidation = <T extends Record<keyof T, any> = {}>(
     value: T[keyof T],
     validation: UseFormValidation,
@@ -36,7 +38,7 @@ export const checkValidation = <T extends Record<keyof T, any> = {}>(
         return [typeof validation.required === 'object' ? validation.required.message : 'This is a required field']
     }
 
-    const errors = []
+    const errors: string[] = []
     const pattern = validation?.pattern
     if (Array.isArray(pattern)) {
         const error = pattern.reduce<string[]>((acc, p) => {

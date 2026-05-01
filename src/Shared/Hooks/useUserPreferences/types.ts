@@ -17,6 +17,7 @@
 import { USER_PREFERENCES_ATTRIBUTE_KEY } from '@Shared/Hooks/useUserPreferences/constants'
 import { AppThemeType, ThemeConfigType, ThemePreferenceType } from '@Shared/Providers/ThemeProvider/types'
 import { ResourceKindType } from '@Shared/types'
+
 import { NavigationItemID, NavigationSubMenuItemID } from '@PagesDevtron2.0/Navigation'
 
 export interface GetUserPreferencesQueryParamsType {

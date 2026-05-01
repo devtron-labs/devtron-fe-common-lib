@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { KEYBOARD_KEYS_MAP } from '@Common/Hooks/UseRegisterShortcut/types'
-
 import { TooltipProps } from './types'
+
+import { KEYBOARD_KEYS_MAP } from '@Common/Hooks/UseRegisterShortcut/types'
 
 const ShortcutKeyComboTooltipContent = ({ text, combo }: TooltipProps['shortcutKeyCombo']) => (
     <div className="flexbox dc__gap-8 px-8 py-4 flex-wrap">

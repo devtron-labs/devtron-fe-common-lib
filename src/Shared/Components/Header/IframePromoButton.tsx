@@ -17,11 +17,12 @@
 import { useCallback, useState } from 'react'
 import ReactGA from 'react-ga4'
 
-import Close from '@Icons/ic-close.svg?react'
-import { GenericEmptyState, stopPropagation, VisibleModal } from '@Common/index'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
+
+import { GenericEmptyState, stopPropagation, VisibleModal } from '@Common/index'
+import Close from '@Icons/ic-close.svg?react'
 
 export const IframePromoButton = () => {
     const [showEmbeddedIframeModal, setEmbeddedIframeModal] = useState(false)
@@ -43,6 +44,7 @@ export const IframePromoButton = () => {
 
     const renderIframeDrawer = () => (
         <VisibleModal close={onClickCloseIframeModal}>
+            {/* biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: for stop propagation */}
             <div
                 className="modal-body--ci-material h-100 dc__overflow-hidden dc__border-left flex column dc__content-space w-100"
                 // NOTE: needed to prevent closing of modal on body click; clicking outside this div

@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import React from 'react'
-import { FieldTemplateProps, getUiOptions, getTemplate, ADDITIONAL_PROPERTY_FLAG } from '@rjsf/utils'
+import { ADDITIONAL_PROPERTY_FLAG, FieldTemplateProps, getTemplate, getUiOptions } from '@rjsf/utils'
+
 import { FieldRowWithLabel } from '../common/FieldRow'
 import { TitleField } from './TitleField'
 

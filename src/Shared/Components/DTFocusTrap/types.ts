@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { ReactNode } from 'react'
 import { Props as FocusTrapProps } from 'focus-trap-react'
+import { ReactNode } from 'react'
 
 /* Mimicking types from Focus React Library */
 type FocusTargetValue = HTMLElement | SVGElement | string

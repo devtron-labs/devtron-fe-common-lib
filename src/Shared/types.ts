@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
+import { Dayjs } from 'dayjs'
 import { ReactNode } from 'react'
 import { ParsedCountry } from 'react-international-phone'
-import { Dayjs } from 'dayjs'
 
-import { APIOptions, ApprovalConfigDataType, Strategy } from '@Common/Types'
 import { OverrideMergeStrategyType, ReleaseMode } from '@Pages/index'
 
 import {
@@ -38,6 +37,8 @@ import {
 } from '../Common'
 import { SelectPickerOptionType, WorkflowRunnerStatusDTO } from './Components'
 import { BASE_CONFIGURATION_ENV_ID, DEPLOYMENT_STATUS, EnvironmentTypeEnum, PatchOperationType } from './constants'
+
+import { APIOptions, ApprovalConfigDataType, Strategy } from '@Common/Types'
 
 export interface customEnv {
     SENTRY_ENV?: string
@@ -339,7 +340,6 @@ export interface Node {
     status?: string
 }
 
-// eslint-disable-next-line no-use-before-define
 export interface iNodes extends Array<iNode> {}
 
 export interface iNode extends Node {
@@ -545,10 +545,8 @@ export interface GitTriggers {
     CiConfigureSourceValue: string
 }
 
-export interface RuntimePluginVariables extends Pick<
-    VariableType,
-    'name' | 'value' | 'defaultValue' | 'format' | 'fileReferenceId' | 'fileMountDir'
-> {
+export interface RuntimePluginVariables
+    extends Pick<VariableType, 'name' | 'value' | 'defaultValue' | 'format' | 'fileReferenceId' | 'fileMountDir'> {
     variableStepScope: string
     valueConstraint: ValueConstraintType & { id: number }
     stepVariableId: number
@@ -768,7 +766,7 @@ export enum AggregationKeys {
     'Other Resources' = 'Other Resources',
     Events = 'Events',
     Namespaces = 'Namespaces',
-    'Nodes' = 'Nodes',
+    Nodes = 'Nodes',
 }
 
 export type AggregationKeysType = keyof typeof AggregationKeys
@@ -1120,10 +1118,8 @@ export interface ResourceApprovalPolicyConfigDTO {
     approvalConfigurations: ApprovalConfigDataType[]
 }
 
-export interface ResourceApprovalPolicyConfigType extends Omit<
-    ResourceApprovalPolicyConfigDTO,
-    'state' | 'approvalConfigurations'
-> {
+export interface ResourceApprovalPolicyConfigType
+    extends Omit<ResourceApprovalPolicyConfigDTO, 'state' | 'approvalConfigurations'> {
     isApprovalApplicable: boolean
     approvalConfigurationMap: Record<ApprovalConfigDataType['kind'], ApprovalConfigDataType>
 }
@@ -1454,10 +1450,8 @@ export enum TIMELINE_STATUS {
     HELM_MANIFEST_PUSHED_TO_HELM_REPO_FAILED = 'HELM_MANIFEST_PUSHED_TO_HELM_REPO_FAILED',
 }
 
-export interface DeploymentStatusDetailsTimelineType extends Pick<
-    SyncStageResourceDetail,
-    'id' | 'cdWorkflowRunnerId'
-> {
+export interface DeploymentStatusDetailsTimelineType
+    extends Pick<SyncStageResourceDetail, 'id' | 'cdWorkflowRunnerId'> {
     status: TIMELINE_STATUS
     statusDetail: string
     statusTime: string

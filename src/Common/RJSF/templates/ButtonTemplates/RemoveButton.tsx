@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import React from 'react'
 import { IconButtonProps } from '@rjsf/utils'
 
 import CrossIcon from '../../../../Assets/Icon/ic-cross.svg?react'

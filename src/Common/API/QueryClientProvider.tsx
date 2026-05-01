@@ -14,7 +14,6 @@
  * limitations under the License.
  */
 
-import { PropsWithChildren } from 'react'
 import {
     MutationCache,
     QueryCache,
@@ -22,6 +21,7 @@ import {
     QueryClientProvider as RQQueryClientProvider,
 } from '@tanstack/react-query'
 import { ReactQueryDevtools } from '@tanstack/react-query-devtools'
+import { PropsWithChildren } from 'react'
 
 import { showError } from '@Common/Helper'
 
@@ -56,6 +56,7 @@ const queryClient = new QueryClient({
     }),
 })
 
+// biome-ignore lint/complexity/noBannedTypes: Legacy
 export const QueryClientProvider = ({ children }: PropsWithChildren<{}>) => (
     <RQQueryClientProvider client={queryClient}>
         <ReactQueryDevtools initialIsOpen={false} />

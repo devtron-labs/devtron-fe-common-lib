@@ -53,7 +53,7 @@ const FilterChip = ({
 /**
  * Component for rendering the applied filter chips
  */
-const FilterChips = <T = Record<string, unknown>,>({
+const FilterChips = <T = Record<string, unknown>>({
     filterConfig,
     clearFilters,
     onRemoveFilter,

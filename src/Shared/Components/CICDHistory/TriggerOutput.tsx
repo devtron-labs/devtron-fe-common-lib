@@ -45,9 +45,9 @@ import {
     HistoryComponentType,
     HistoryLogsProps,
     statusSet,
-    terminalStatus,
     TriggerOutputProps,
     TriggerOutputURLParamsType,
+    terminalStatus,
 } from './types'
 import { getSortedTriggerHistory, getTriggerOutputTabs } from './utils'
 
@@ -236,7 +236,6 @@ const HistoryLogs: React.FC<HistoryLogsProps> = ({
                         element={
                             <Navigate
                                 to={`${
-                                    // eslint-disable-next-line no-nested-ternary
                                     triggerDetails.stage === 'DEPLOY'
                                         ? 'deployment-steps'
                                         : triggerDetails.status.toLowerCase() === 'succeeded' ||

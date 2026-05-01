@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import ICStack from '@Icons/ic-stack.svg?react'
-import { Tooltip } from '@Common/Tooltip'
-
 import { TargetPlatformBadgeListProps } from './types'
+
+import { Tooltip } from '@Common/Tooltip'
+import ICStack from '@Icons/ic-stack.svg?react'
 
 const TargetPlatformBadge = ({ name }: TargetPlatformBadgeListProps['targetPlatforms'][number]) => (
     <div className="bg__secondary py-2 px-6 dc__mxw-200 br-4">

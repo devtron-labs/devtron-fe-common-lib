@@ -16,8 +16,6 @@
 
 import { BaseSyntheticEvent, ChangeEvent, useEffect, useRef, useState } from 'react'
 
-import { deepEqual, noop } from '@Common/Helper'
-
 import {
     DirtyFields,
     TouchedFields,
@@ -29,12 +27,16 @@ import {
 } from './useForm.types'
 import { checkValidation } from './useForm.utils'
 
+import { deepEqual, noop } from '@Common/Helper'
+
 /**
  * A custom hook to manage form state, validation, and submission handling.
  *
  * @param options - Optional configuration object for the form.
  * @returns The form state and utility methods
  */
+
+// biome-ignore lint/complexity/noBannedTypes: Legacy
 export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
     /** An object containing validation rules for each form field. */
     validations?: UseFormValidations<T>
@@ -109,6 +111,7 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
 
             // Enables validation for all form fields if not enabled yet after form submission.
             if (Object.keys(enableValidationOnChange).length !== Object.keys(data).length) {
+                // biome-ignore lint/performance/noAccumulatingSpread: Legacy
                 setEnableValidationOnChange(Object.keys(data).reduce((acc, key) => ({ ...acc, [key]: true }), {}))
             }
 
@@ -131,7 +134,6 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
     useEffect(() => {
         // Do i need to set enableValidationOnChange here?
         if (options?.shouldValidateOnMount) {
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             handleSubmit(noop)()
         }
     }, [])
@@ -150,11 +152,7 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
      * @returns The event handler for input changes. The event type will be `Value` if `isCustomComponent` is `true`, otherwise it will be a `ChangeEvent<HTMLInputElement>`.
      */
     const onChange =
-        <
-            Value extends unknown = unknown,
-            SFnReturnType extends unknown = unknown,
-            CustomComponent extends boolean = false,
-        >(
+        <Value = unknown, SFnReturnType = unknown, CustomComponent extends boolean = false>(
             key: keyof T,
             sanitizeFn?: (value: CustomComponent extends true ? Value : string) => SFnReturnType,
             isCustomComponent?: CustomComponent,
@@ -366,6 +364,7 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
             const initialValues = initialValuesRef.current
             const _dirtyFields = Object.keys(formData).reduce(
                 (acc, key) => ({
+                    // biome-ignore lint/performance/noAccumulatingSpread: Legacy
                     ...acc,
                     [key]: !deepEqual(formData[key], initialValues[key]),
                 }),
@@ -392,7 +391,7 @@ export const useForm = <T extends Record<keyof T, any> = {}>(options?: {
      *  - `onFocus`: A handler function that can be used to manage focus state.
      *  - `name`: The key of the form field being registered.
      */
-    const register = <Value extends unknown, SFnReturnType extends unknown, CustomComponent extends boolean>(
+    const register = <Value, SFnReturnType, CustomComponent extends boolean>(
         name: keyof T,
         registerOptions?: {
             /**

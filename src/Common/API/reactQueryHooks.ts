@@ -17,15 +17,15 @@
 import {
     QueryKey,
     useInfiniteQuery as rqUseInfiniteQuery,
+    useMutation as rqUseMutation,
+    useQuery as rqUseQuery,
     UseInfiniteQueryOptions,
     UseInfiniteQueryResult,
-    useMutation as rqUseMutation,
     UseMutationOptions,
     UseMutationResult,
-    useQuery as rqUseQuery,
-    useQueryClient,
     UseQueryOptions,
     UseQueryResult,
+    useQueryClient,
 } from '@tanstack/react-query'
 
 import { ServerErrors } from '@Common/ServerError'

@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
+import { FloatingVariablesSuggestionsProps, ScopedVariableType } from './types'
+
 import { get } from '@Common/API'
 import { ROUTES } from '@Common/Constants'
-
-import { FloatingVariablesSuggestionsProps, ScopedVariableType } from './types'
 
 const generateScope = (key: string | number, value: string | number) => {
     if (key && value) {

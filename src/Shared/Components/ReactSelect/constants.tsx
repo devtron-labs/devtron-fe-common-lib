@@ -16,8 +16,9 @@
 
 import { components, DropdownIndicatorProps, StylesConfig } from 'react-select'
 
-import DropDownIcon from '@Icons/ic-chevron-down.svg?react'
 import { NO_MATCHING_RESULT, TYPE_3_CHARACTERS_TO_SEE_MATCHING_RESULTS } from '@Shared/constants'
+
+import DropDownIcon from '@Icons/ic-chevron-down.svg?react'
 
 export const CommonGroupedDropdownStyles: StylesConfig = {
     container: (base, state) => ({
@@ -157,7 +158,6 @@ export const APP_SELECTOR_STYLES: StylesConfig = {
         ...base,
         borderRadius: '4px',
         color: state.isSelected ? 'var(--B500)' : 'var(--N900)',
-        // eslint-disable-next-line no-nested-ternary
         backgroundColor: state.isSelected ? 'var(--B100)' : state.isFocused ? 'var(--N100)' : 'var(--bg-primary)',
         fontWeight: state.isSelected ? 600 : 'normal',
         marginRight: '8px',

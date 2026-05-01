@@ -16,12 +16,13 @@
 
 import { Fragment } from 'react'
 
-import { DeploymentAppTypes } from '@Common/Types'
 import { TIMELINE_STATUS } from '@Shared/types'
 
 import { InfoBlock } from '../InfoBlock'
 import { DeploymentStatusDetailRow } from './DeploymentStatusDetailRow'
 import { DeploymentStatusDetailBreakdownType, DeploymentStatusDetailRowType } from './types'
+
+import { DeploymentAppTypes } from '@Common/Types'
 
 import './DeploymentStatusBreakdown.scss'
 

@@ -38,8 +38,10 @@ export interface UseUrlFiltersProps<T, K extends {}> {
     defaultPageSize?: number
 }
 
+// biome-ignore lint/complexity/noBannedTypes: Legacy
 export type UpdateSearchParamsOptionsType<T, K = {}> = Partial<Pick<UseUrlFiltersProps<T, K>, 'redirectionMethod'>>
 
+// biome-ignore lint/complexity/noBannedTypes: Legacy
 export type UseUrlFiltersReturnType<T, K = {}> = K & {
     /**
      * Currently applied page size

@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { Fragment, ReactNode } from 'react'
 import Tippy from '@tippyjs/react'
-
-import { ConditionalWrap } from '@Common/Helper'
+import { Fragment, ReactNode } from 'react'
 
 import { Icon } from '../Icon'
 import { SourceTypeCardProps } from './types'
+
+import { ConditionalWrap } from '@Common/Helper'
 
 const renderTippy =
     ({ disableInfo }: Required<Pick<SourceTypeCardProps, 'disableInfo'>>) =>
@@ -46,6 +46,7 @@ const SourceTypeCard = ({
 
     return (
         <ConditionalWrap wrap={renderTippy({ disableInfo })} condition={!!disableInfo}>
+            {/** biome-ignore lint/a11y/useSemanticElements: Its fine here since its a container */}
             <div
                 role="button"
                 aria-label={`source-type-card-${type}`}

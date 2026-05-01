@@ -17,8 +17,8 @@
 import { ChangeEvent, Children, MouseEventHandler } from 'react'
 import {
     ClearIndicatorProps,
-    components,
     ControlProps,
+    components,
     DropdownIndicatorProps,
     InputProps,
     MenuListProps,
@@ -28,14 +28,6 @@ import {
     ValueContainerProps,
 } from 'react-select'
 
-import ICCaretDown from '@Icons/ic-caret-down.svg?react'
-import ICClose from '@Icons/ic-close.svg?react'
-import { Checkbox } from '@Common/Checkbox'
-import { ReactSelectInputAction } from '@Common/Constants'
-import { getAlphabetIcon, noop } from '@Common/Helper'
-import { Progressing } from '@Common/Progressing'
-import { Tooltip, TooltipProps } from '@Common/Tooltip'
-import { CHECKBOX_VALUE } from '@Common/Types'
 import { API_TOKEN_PREFIX, ComponentSizeType } from '@Shared/constants'
 import { isNullOrUndefined } from '@Shared/Helpers'
 
@@ -44,6 +36,15 @@ import { Chip } from '../Chip'
 import { Icon } from '../Icon'
 import { SelectPickerGroupHeadingProps, SelectPickerOptionType, SelectPickerProps } from './type'
 import { getGroupCheckboxValue } from './utils'
+
+import { Checkbox } from '@Common/Checkbox'
+import { ReactSelectInputAction } from '@Common/Constants'
+import { getAlphabetIcon, noop } from '@Common/Helper'
+import { Progressing } from '@Common/Progressing'
+import { Tooltip, TooltipProps } from '@Common/Tooltip'
+import { CHECKBOX_VALUE } from '@Common/Types'
+import ICCaretDown from '@Icons/ic-caret-down.svg?react'
+import ICClose from '@Icons/ic-close.svg?react'
 
 export const getTooltipProps = (tooltipProps: SelectPickerOptionType['tooltipProps'] = {}): TooltipProps => {
     if (tooltipProps) {

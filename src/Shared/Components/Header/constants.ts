@@ -14,11 +14,12 @@
  * limitations under the License.
  */
 
-import { DEVTRON_GPT_LINK, DISCORD_LINK, DOCUMENTATION_HOME_PAGE } from '@Common/Constants'
 import { CONTACT_SUPPORT_LINK, OPEN_NEW_TICKET, RAISE_ISSUE, VIEW_ALL_TICKETS } from '@Shared/constants'
-import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 import { HelpButtonActionMenuProps, HelpMenuItems, PageHeaderType } from './types'
+
+import { DEVTRON_GPT_LINK, DISCORD_LINK, DOCUMENTATION_HOME_PAGE } from '@Common/Constants'
+import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 export const getCommonHelpActionMenuItems = ({
     docPath,

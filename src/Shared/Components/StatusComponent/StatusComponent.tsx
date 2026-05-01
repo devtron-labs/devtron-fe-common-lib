@@ -16,12 +16,12 @@
 
 import type { JSX } from 'react'
 
-import { ConditionalWrap } from '@Common/Helper'
-import { Tooltip } from '@Common/Tooltip'
-
 import { Icon } from '../Icon'
 import { StatusComponentProps } from './types'
 import { getIconColor, getIconName } from './utils'
+
+import { ConditionalWrap } from '@Common/Helper'
+import { Tooltip } from '@Common/Tooltip'
 
 const statusWrapComponent = (children: JSX.Element) => (
     <div className="flexbox dc__align-items-center dc__gap-6">{children}</div>

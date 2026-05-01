@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { useState } from 'react'
 import Tippy from '@tippyjs/react'
+import { useState } from 'react'
 
 import { RegistryType } from '@Shared/types'
 

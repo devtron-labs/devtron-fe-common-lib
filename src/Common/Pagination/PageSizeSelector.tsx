@@ -38,6 +38,7 @@ const PageSizeItems = ({
     }
 
     return (
+        // biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/noStaticElementInteractions lint/a11y/useKeyWithClickEvents: Legacy
         <div key={optionValue} className="select__item" onClick={handlePageSizeSelect}>
             {optionValue}
         </div>
@@ -72,6 +73,7 @@ const PageSizeSelector = ({ pageSizeOptions, pageSize, changePageSize }: PageSiz
                 <div className="pagination__select-menu">
                     {options.map((_option) => (
                         <PageSizeItems
+                            key={_option.value}
                             optionValue={_option.value}
                             options={options}
                             setOptions={setOptions}

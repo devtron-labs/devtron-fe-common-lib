@@ -92,9 +92,8 @@ export interface UserGroupDTO {
     userEmails?: string[]
 }
 
-export interface UserGroupType extends Required<
-    Pick<UserGroupDTO, 'description' | 'name' | 'usersCount' | 'identifier' | 'userEmails'>
-> {
+export interface UserGroupType
+    extends Required<Pick<UserGroupDTO, 'description' | 'name' | 'usersCount' | 'identifier' | 'userEmails'>> {
     /**
      * Unique id of the user group
      *

@@ -16,12 +16,12 @@
 
 import { DetailedHTMLProps, ReactElement, ReactNode } from 'react'
 
+import { FileUploadProps } from '../FileUpload'
+import { SelectPickerOptionType, SelectPickerProps, SelectPickerTextAreaProps } from '../SelectPicker'
+
 import { ResizableTagTextAreaProps } from '@Common/CustomTagSelector'
 import { UseStateFiltersReturnType } from '@Common/Hooks'
 import { TooltipProps } from '@Common/Tooltip'
-
-import { FileUploadProps } from '../FileUpload'
-import { SelectPickerOptionType, SelectPickerProps, SelectPickerTextAreaProps } from '../SelectPicker'
 
 /**
  * Interface representing header for a dynamic data table.
@@ -236,34 +236,36 @@ export type DynamicDataTableProps<K extends string, CustomStateType = Record<str
     shouldAutoFocusOnMount?: boolean
 }
 
-export interface DynamicDataTableHeaderProps<K extends string, CustomStateType = Record<string, unknown>> extends Pick<
-    DynamicDataTableProps<K, CustomStateType>,
-    | 'headers'
-    | 'rows'
-    | 'headerComponent'
-    | 'sortingConfig'
-    | 'addBtnTooltip'
-    | 'onRowAdd'
-    | 'readOnly'
-    | 'isAdditionNotAllowed'
-    | 'isDeletionNotAllowed'
-    | 'actionButtonConfig'
-> {}
+export interface DynamicDataTableHeaderProps<K extends string, CustomStateType = Record<string, unknown>>
+    extends Pick<
+        DynamicDataTableProps<K, CustomStateType>,
+        | 'headers'
+        | 'rows'
+        | 'headerComponent'
+        | 'sortingConfig'
+        | 'addBtnTooltip'
+        | 'onRowAdd'
+        | 'readOnly'
+        | 'isAdditionNotAllowed'
+        | 'isDeletionNotAllowed'
+        | 'actionButtonConfig'
+    > {}
 
-export interface DynamicDataTableRowProps<K extends string, CustomStateType = Record<string, unknown>> extends Pick<
-    DynamicDataTableProps<K, CustomStateType>,
-    | 'rows'
-    | 'headers'
-    | 'isAdditionNotAllowed'
-    | 'isDeletionNotAllowed'
-    | 'readOnly'
-    | 'onRowEdit'
-    | 'onRowDelete'
-    | 'actionButtonConfig'
-    | 'cellError'
-    | 'leadingCellIcon'
-    | 'trailingCellIcon'
-    | 'buttonCellWrapComponent'
-    | 'focusableFieldKey'
-    | 'shouldAutoFocusOnMount'
-> {}
+export interface DynamicDataTableRowProps<K extends string, CustomStateType = Record<string, unknown>>
+    extends Pick<
+        DynamicDataTableProps<K, CustomStateType>,
+        | 'rows'
+        | 'headers'
+        | 'isAdditionNotAllowed'
+        | 'isDeletionNotAllowed'
+        | 'readOnly'
+        | 'onRowEdit'
+        | 'onRowDelete'
+        | 'actionButtonConfig'
+        | 'cellError'
+        | 'leadingCellIcon'
+        | 'trailingCellIcon'
+        | 'buttonCellWrapComponent'
+        | 'focusableFieldKey'
+        | 'shouldAutoFocusOnMount'
+    > {}

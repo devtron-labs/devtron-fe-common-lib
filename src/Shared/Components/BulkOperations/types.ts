@@ -16,11 +16,11 @@
 
 import { ReactNode } from 'react'
 
-import { APIOptions, DrawerProps } from '@Common/index'
-import { Entity } from '@Common/SegmentedBarChart/types'
-
 import { ConfirmationModalProps } from '../ConfirmationModal/types'
 import { getProgressingStateForStatus } from '../Security'
+
+import { APIOptions, DrawerProps } from '@Common/index'
+import { Entity } from '@Common/SegmentedBarChart/types'
 
 interface BulkOperationAdditionalKeysType {
     label: string
@@ -38,6 +38,7 @@ export interface BulkOperation {
      * Would show these keys beside the name
      */
     additionalKeys?: BulkOperationAdditionalKeysType[]
+    // biome-ignore lint/suspicious/noConfusingVoidType: Legacy
     operation: (abortControllerRef: APIOptions['abortControllerRef'], data?: unknown) => Promise<unknown | void>
     renderContentAtResultRowEnd?: (data: Awaited<ReturnType<BulkOperation['operation']>>) => ReactNode
 }
@@ -98,8 +99,7 @@ export type BulkOperationModalProps = {
     Pick<DrawerProps, 'disableTransition'>
 
 export interface BulkOperationsResultModalProps
-    extends
-        Pick<BulkOperationModalProps, 'handleModalClose' | 'getResultsChartSummaryText' | 'disableTransition'>,
+    extends Pick<BulkOperationModalProps, 'handleModalClose' | 'getResultsChartSummaryText' | 'disableTransition'>,
         Pick<BulkOperationModalProps['textConfig'], 'resultsHeader'> {
     resultsStore: OperationResultStoreType
     apiCallInProgress: boolean

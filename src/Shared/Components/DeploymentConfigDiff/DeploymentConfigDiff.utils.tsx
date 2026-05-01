@@ -16,11 +16,7 @@
 
 import YAML from 'yaml'
 
-import ICCheck from '@Icons/ic-check.svg?react'
-import ICCheckCircleDots from '@Icons/ic-check-circle-dots.svg?react'
-import ICEditFile from '@Icons/ic-edit-file.svg?react'
-import ICFileCode from '@Icons/ic-file-code.svg?react'
-import { deepEqual, YAMLStringify } from '@Common/Helper'
+import { ManifestTemplateDTO } from '@Pages/Applications'
 import {
     AppEnvDeploymentConfigListParams,
     DeploymentConfigDiffProps,
@@ -32,7 +28,6 @@ import {
 } from '@Shared/Components'
 import { DEPLOYMENT_HISTORY_CONFIGURATION_LIST_MAP } from '@Shared/constants'
 import { stringComparatorBySortOrder, yamlComparatorBySortOrder } from '@Shared/Helpers'
-import { ManifestTemplateDTO } from '@Pages/Applications'
 
 import {
     CMSecretExternalType,
@@ -46,6 +41,12 @@ import {
     TemplateListDTO,
     TemplateListType,
 } from '../../Services/app.types'
+
+import { deepEqual, YAMLStringify } from '@Common/Helper'
+import ICCheck from '@Icons/ic-check.svg?react'
+import ICCheckCircleDots from '@Icons/ic-check-circle-dots.svg?react'
+import ICEditFile from '@Icons/ic-edit-file.svg?react'
+import ICFileCode from '@Icons/ic-file-code.svg?react'
 
 export const getDeploymentTemplateData = (data: DeploymentTemplateDTO) => {
     const parsedDraftData = JSON.parse(data?.deploymentDraftData?.configData[0].draftMetadata.data || null)
@@ -115,6 +116,7 @@ export const mergeConfigDataArraysByName = (
         .map(getDraftData)
         .sort((a, b) => stringComparatorBySortOrder(a.name, b.name))
 
+    // biome-ignore lint/suspicious/useIterableCallbackReturn: Legacy
     sortedPrimaryArray.forEach((item) => dataMap.set(item.name, [item, null]))
     sortedSecondaryArray.forEach((item) => {
         const key = item.name
@@ -347,8 +349,7 @@ const getCMSecretHistoryDataForDiffState = (
 ) => {
     // CHECKING FOR EXTERNAL CM/CS
     if (
-        configMapSecretData &&
-        configMapSecretData.external &&
+        configMapSecretData?.external &&
         (configMapSecretData.externalType === '' ||
             configMapSecretData.externalType === CMSecretExternalType.KubernetesSecret)
     ) {
@@ -675,8 +676,7 @@ const removeTooltipContent = (
         Object.entries(valuesObj).map(([key, val]) => {
             if (val && typeof val === 'object' && 'tooltipContent' in val) {
                 // Remove tooltipContent so that diff is not checked in this property
-                // eslint-disable-next-line @typescript-eslint/no-unused-vars
-                const { tooltipContent, ...rest } = val
+                const { tooltipContent: _tooltipContent, ...rest } = val
                 return [key, rest]
             }
             return [key, val]
@@ -920,6 +920,7 @@ export const getAppEnvDeploymentConfigList = <ManifestView extends boolean = fal
 export const getDefaultVersionAndPreviousDeploymentOptions = (data: TemplateListDTO[]) =>
     data.reduce<{ previousDeployments: TemplateListDTO[]; defaultVersions: TemplateListDTO[] }>(
         (acc, curr) => ({
+            // biome-ignore lint/performance/noAccumulatingSpread: Legacy
             ...acc,
             ...(curr.type === TemplateListType.DefaultVersions && curr.chartType === 'Deployment'
                 ? {

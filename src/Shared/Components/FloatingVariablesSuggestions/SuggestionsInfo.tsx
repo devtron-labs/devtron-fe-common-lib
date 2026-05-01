@@ -17,11 +17,11 @@
 import { memo, useState } from 'react'
 import { Link } from 'react-router-dom'
 
+import { SUGGESTIONS_INFO_TITLE } from './constants'
+
 import ICDown from '@Icons/ic-chevron-down.svg?react'
 import ICHelp from '@Icons/ic-help.svg?react'
 import { ROUTER_URLS } from '@PagesDevtron2.0/index'
-
-import { SUGGESTIONS_INFO_TITLE } from './constants'
 
 const SuggestionsInfo = () => {
     const [expanded, setExpanded] = useState<boolean>(false)

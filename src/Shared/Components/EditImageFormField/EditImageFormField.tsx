@@ -16,8 +16,6 @@
 
 import { KeyboardEvent, SyntheticEvent, useState } from 'react'
 
-import ICPencil from '@Icons/ic-pencil.svg?react'
-import { showError } from '@Common/Helper'
 import { ButtonWithLoader, ImageWithFallback } from '@Shared/Components'
 import { CustomInput } from '@Shared/Components/CustomInput'
 import { ToastManager, ToastVariantType } from '@Shared/Services'
@@ -30,6 +28,9 @@ import {
     EMPTY_PREVIEW_URL_ERROR_MESSAGE,
 } from './constants'
 import { EditImageFormFieldProps, FallbackImageProps } from './types'
+
+import { showError } from '@Common/Helper'
+import ICPencil from '@Icons/ic-pencil.svg?react'
 
 import './EditImageFormField.scss'
 

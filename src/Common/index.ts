@@ -17,7 +17,7 @@
 export * from './AddCDButton'
 export * from './API'
 export { BreadCrumb, useBreadcrumb } from './BreadCrumb/BreadCrumb'
-export { default as BreadcrumbStore, BreadcrumbText } from './BreadCrumb/BreadcrumbStore'
+export { BreadcrumbText, default as BreadcrumbStore } from './BreadCrumb/BreadcrumbStore'
 export { NestedBreadCrumb } from './BreadCrumb/NestedBreadCrumb'
 export { default as ChartVersionAndTypeSelector } from './ChartVersionAndTypeSelector'
 export * from './Checkbox'

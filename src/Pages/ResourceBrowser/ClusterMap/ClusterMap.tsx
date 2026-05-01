@@ -18,10 +18,10 @@
  * Copyright (c) 2024. Devtron Inc.
  */
 
-import { SegmentedBarChart } from '@Common/SegmentedBarChart'
-
 import { ClusterMapProps } from './types'
 import { getEntities } from './utils'
+
+import { SegmentedBarChart } from '@Common/SegmentedBarChart'
 
 export const ClusterMap = ({ filteredList, isLoading }: ClusterMapProps) => {
     if (!filteredList?.length) {

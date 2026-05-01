@@ -1,12 +1,13 @@
+import { motion } from 'framer-motion'
 import { ReactNode, useState } from 'react'
 import { NavLink } from 'react-router-dom'
-import { motion } from 'framer-motion'
 
-import { ConditionalWrap } from '@Common/Helper'
-import { Tooltip } from '@Common/Tooltip'
 import { Button, ButtonStyleType, ButtonVariantType, Icon } from '@Shared/Components'
 
 import { MetricsInfoCardProps, SectionEmptyStateProps } from './types'
+
+import { ConditionalWrap } from '@Common/Helper'
+import { Tooltip } from '@Common/Tooltip'
 
 export const SectionEmptyState = ({
     iconName = 'ic-priority-medium-fill',

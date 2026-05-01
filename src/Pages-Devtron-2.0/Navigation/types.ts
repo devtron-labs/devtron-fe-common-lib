@@ -107,10 +107,8 @@ export type NavigationItemType = Pick<
           })
     )
 
-export interface NavigationGroupType extends Pick<
-    CommonNavigationItemType,
-    'title' | 'icon' | 'hideNav' | 'forceHideEnvKey' | 'isAvailableInEA'
-> {
+export interface NavigationGroupType
+    extends Pick<CommonNavigationItemType, 'title' | 'icon' | 'hideNav' | 'forceHideEnvKey' | 'isAvailableInEA'> {
     id: NavigationRootItemID
     items: NavigationItemType[]
     disabled?: boolean

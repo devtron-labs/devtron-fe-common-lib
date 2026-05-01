@@ -16,13 +16,13 @@
 
 import { NavLink } from 'react-router-dom'
 
-import { ROUTER_URLS } from '@PagesDevtron2.0/Shared'
-
 import { AppType } from '../../types'
 import { Icon } from '../Icon'
 import { InfoBlock } from '../InfoBlock'
 import { ErrorBarType } from './types'
 import { getIsImagePullBackOff } from './utils'
+
+import { ROUTER_URLS } from '@PagesDevtron2.0/Shared'
 
 const ErrorBar = ({ appDetails, useParentMargin = true }: ErrorBarType) => {
     if (

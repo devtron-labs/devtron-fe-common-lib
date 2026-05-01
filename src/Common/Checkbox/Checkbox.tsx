@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { stopPropagation } from '@Common/Helper'
-
 import { CheckboxProps } from '../Types'
+
+import { stopPropagation } from '@Common/Helper'
 
 import './Checkbox.scss'
 
@@ -47,7 +47,7 @@ export const Checkbox = ({
     const rootClass = `${rootClassName || ''}`
 
     return (
-        // eslint-disable-next-line jsx-a11y/label-has-associated-control
+        // biome-ignore lint/a11y/noNoninteractiveElementInteractions lint/a11y/useKeyWithClickEvents: Legacy
         <label ref={ref} className={`dc__position-rel flex left cursor ${rootClass}`} onClick={onClick}>
             <input
                 {...(name ? { name } : {})}

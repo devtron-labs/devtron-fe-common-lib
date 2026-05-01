@@ -17,7 +17,6 @@
 import { LegacyRef, MouseEvent, Ref } from 'react'
 import { Link } from 'react-router-dom'
 
-import { Tooltip } from '@Common/Tooltip'
 import { useMainContext } from '@Shared/Providers'
 
 import { getUTMPathAppended } from '../DocLink/utils'
@@ -25,6 +24,8 @@ import { Icon } from '../Icon'
 import { getTooltipProps } from '../SelectPicker/common'
 import { TrailingItem } from '../TrailingItem'
 import { ActionMenuItemProps } from './types'
+
+import { Tooltip } from '@Common/Tooltip'
 
 export const ActionMenuItem = <T extends string | number>({
     item,
@@ -135,7 +136,6 @@ export const ActionMenuItem = <T extends string | number>({
                         {renderContent()}
                     </Link>
                 )
-            case 'button':
             default:
                 return (
                     <button
@@ -155,6 +155,7 @@ export const ActionMenuItem = <T extends string | number>({
         <Tooltip {...getTooltipProps(tooltipProps)}>
             <li
                 ref={ref}
+                // biome-ignore lint/a11y/noNoninteractiveElementToInteractiveRole: Legacy
                 role="menuitem"
                 data-testid={`action-menu-item-${id}`}
                 onMouseEnter={onMouseEnter}

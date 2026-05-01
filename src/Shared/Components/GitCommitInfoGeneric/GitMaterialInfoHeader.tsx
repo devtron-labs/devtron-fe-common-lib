@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable react/prop-types */
-
 import { CiPipelineSourceConfig } from '../CICDHistory/CiPipelineSourceConfig'
 import { GitProviderIcon } from '../GitProviderIcon'
 
@@ -29,7 +27,6 @@ const GitMaterialInfoHeader = ({
     style = {},
     ...props
 }) => {
-    // eslint-disable-next-line no-param-reassign
     repoUrl = repoUrl.replace('.git', '')
     const tokens = repoUrl.split('/')
     const { length, [length - 1]: repo } = tokens

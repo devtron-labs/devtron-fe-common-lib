@@ -16,8 +16,6 @@
 
 import { useLayoutEffect, useRef, useState } from 'react'
 
-import { stopPropagation } from '@Common/Helper'
-
 import { UsePopoverProps, UsePopoverReturnType } from './types'
 import {
     getPopoverActualPositionAlignment,
@@ -25,6 +23,8 @@ import {
     getPopoverFramerProps,
     getPopoverPositionStyle,
 } from './utils'
+
+import { stopPropagation } from '@Common/Helper'
 
 export const usePopover = ({
     id,
@@ -143,7 +143,6 @@ export const usePopover = ({
         scrollableRef.current.addEventListener('wheel', handleWheel, { passive: false })
         window.addEventListener('resize', updatePopoverPosition)
 
-        // eslint-disable-next-line consistent-return
         return () => {
             scrollableRef.current?.removeEventListener('wheel', handleWheel)
             window.removeEventListener('resize', updatePopoverPosition)

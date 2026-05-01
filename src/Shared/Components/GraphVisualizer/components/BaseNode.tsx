@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { useMemo } from 'react'
 import { Handle, Position, useEdges } from '@xyflow/react'
+import { useMemo } from 'react'
 
 import { BaseNodeProps } from './types'
 

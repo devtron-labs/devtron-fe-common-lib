@@ -14,14 +14,11 @@
  * limitations under the License.
  */
 
+import dayjs from 'dayjs'
 import { useMemo, useRef } from 'react'
 import { DateRange, DayPicker, OnSelectHandler } from 'react-day-picker'
 import { SelectInstance } from 'react-select'
-import dayjs from 'dayjs'
 
-import ClockIcon from '@Icons/ic-clock.svg?react'
-import ICWarning from '@Icons/ic-warning.svg?react'
-import { DATE_TIME_FORMATS } from '@Common/Constants'
 import { ComponentSizeType } from '@Shared/constants'
 import { getUniqueId } from '@Shared/Helpers'
 
@@ -31,6 +28,10 @@ import { SelectPicker, SelectPickerOptionType } from '../SelectPicker'
 import { DATE_PICKER_CUSTOM_COMPONENTS, DATE_PICKER_IDS, DATE_PICKER_PLACEHOLDER } from './constants'
 import { DateTimePickerProps, UpdateDateRangeType } from './types'
 import { DEFAULT_TIME_OPTIONS, getTimeValue, updateDate, updateTime } from './utils'
+
+import { DATE_TIME_FORMATS } from '@Common/Constants'
+import ClockIcon from '@Icons/ic-clock.svg?react'
+import ICWarning from '@Icons/ic-warning.svg?react'
 
 import 'react-day-picker/style.css'
 import './DateTimePicker.scss'

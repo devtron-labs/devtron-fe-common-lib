@@ -22,8 +22,7 @@ export const RadioGroupContext = createContext({
     name: '',
     value: '',
     disabled: false,
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    onChange: (event: React.ChangeEvent<HTMLInputElement>) => {},
+    onChange: (_event: React.ChangeEvent<HTMLInputElement>) => {},
 })
 
 const RadioGroup = ({ name, value, disabled, onChange, className, children }: RadioGroupProps) => {

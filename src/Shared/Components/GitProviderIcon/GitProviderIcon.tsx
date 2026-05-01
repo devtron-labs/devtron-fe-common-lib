@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { GitProviderType } from '@Common/Constants'
-
 import { Icon, IconName } from '../Icon'
 import { GitProviderIconProps } from './types'
 import { getGitIconName } from './utils'
+
+import { GitProviderType } from '@Common/Constants'
 
 const gitProviderIconMap: Record<GitProviderType, IconName> = {
     [GitProviderType.GIT]: 'ic-git',

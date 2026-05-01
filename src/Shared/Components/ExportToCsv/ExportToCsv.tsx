@@ -1,11 +1,7 @@
+import moment from 'moment'
 import { useEffect, useRef, useState } from 'react'
 import { CSVLink } from 'react-csv'
-import moment from 'moment'
 
-import { getIsRequestAborted } from '@Common/API'
-import { DATE_TIME_FORMATS } from '@Common/Constants'
-import { showError } from '@Common/Helper'
-import { ServerErrors } from '@Common/ServerError'
 import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP, ComponentSizeType } from '@Shared/constants'
 import { isNullOrUndefined } from '@Shared/Helpers'
 
@@ -13,6 +9,11 @@ import { Button, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import ExportToCsvDialog from './ExportToCsvDialog'
 import { ExportToCsvProps } from './types'
+
+import { getIsRequestAborted } from '@Common/API'
+import { DATE_TIME_FORMATS } from '@Common/Constants'
+import { showError } from '@Common/Helper'
+import { ServerErrors } from '@Common/ServerError'
 
 const ExportToCsv = <HeaderItemType extends string>({
     apiPromise,
@@ -73,7 +74,6 @@ const ExportToCsv = <HeaderItemType extends string>({
 
     useEffect(() => {
         if (!isNullOrUndefined(downloadRequestId)) {
-            // eslint-disable-next-line @typescript-eslint/no-floating-promises
             handleExportButtonClick()
         }
     }, [downloadRequestId])

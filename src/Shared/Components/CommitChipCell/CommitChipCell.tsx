@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { noop } from '@Common/Helper'
-
 import CommitIcon from '../../../Assets/Icon/ic-code-commit.svg?react'
 import { CommitChipCellProps } from './types'
+
+import { noop } from '@Common/Helper'
 
 const CommitChipCell = ({ handleClick = noop, commits }: CommitChipCellProps) =>
     commits?.length > 0 ? (

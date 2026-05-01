@@ -21,7 +21,7 @@ import { CreatePageArrType, Page, PageSizeOption } from './types'
  * Returns an array of pages numbers and whether they are selected, visible or not
  */
 export const createPageArr = ({ size, pageSize, selectedPageNo }: CreatePageArrType): Page[] => {
-    const arr = []
+    const arr: Page[] = []
     const numberOfPages = Math.ceil(size / pageSize)
     // we are showing 2 numbers before and after the selected page, so computing the lower and upper bounds
     const lowerBound = selectedPageNo - 2 < 1 ? 1 : selectedPageNo - 2

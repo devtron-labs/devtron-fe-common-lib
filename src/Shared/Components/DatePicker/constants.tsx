@@ -17,11 +17,12 @@
 import { ButtonHTMLAttributes } from 'react'
 import { CustomComponents } from 'react-day-picker'
 
-import { noop } from '@Common/Helper'
 import { ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
+
+import { noop } from '@Common/Helper'
 
 export const MONTHLY_DATES_CONFIG = {
     'Day 1': '1',

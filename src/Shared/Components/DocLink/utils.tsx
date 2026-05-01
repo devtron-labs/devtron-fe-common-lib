@@ -14,10 +14,10 @@
  * limitations under the License.
  */
 
-import { DOCUMENTATION_HOME_PAGE, DOCUMENTATION_VERSION } from '@Common/Constants'
-
 import { DOCUMENTATION } from './constants'
 import { BaseDocLink, URLWithUTMSource } from './types'
+
+import { DOCUMENTATION_HOME_PAGE, DOCUMENTATION_VERSION } from '@Common/Constants'
 
 export const getUTMPathAppended = ({ isEnterprise, link = '' }: URLWithUTMSource) =>
     `${link}?utm_source=product_${isEnterprise ? 'ent' : 'oss'}&utm_medium=product_app&utm_campaign=docs_navigation`

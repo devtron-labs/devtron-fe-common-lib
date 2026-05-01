@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import { ServerErrors } from '@Common/ServerError'
 import { DraftMetadataDTO, TemplateListType } from '@Shared/Services'
 
 import { OverrideMergeStrategyType } from '../types'
+
+import { ServerErrors } from '@Common/ServerError'
 
 export type DeploymentChartOptionkind = 'base' | 'env' | 'chartVersion' | 'deployment'
 

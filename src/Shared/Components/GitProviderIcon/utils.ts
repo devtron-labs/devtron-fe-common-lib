@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
-import { GitProviderType } from '@Common/Constants'
-
 import { IconName } from '../Icon'
+
+import { GitProviderType } from '@Common/Constants'
 
 export const isAWSCodeCommitURL = (url: string = ''): boolean =>
     url.includes('git-codecommit.') && url.includes('.amazonaws.com')

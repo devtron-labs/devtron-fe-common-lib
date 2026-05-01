@@ -14,9 +14,9 @@
  * limitations under the License.
  */
 
+import { AnimatePresence, motion } from 'framer-motion'
 import { type JSX, SyntheticEvent, useEffect, useMemo, useRef, useState } from 'react'
 import { NavLink, useLocation } from 'react-router-dom'
-import { AnimatePresence, motion } from 'framer-motion'
 
 import { Icon } from '../Icon'
 import { TrailingItem } from '../TrailingItem'
@@ -39,7 +39,7 @@ const Divider = () => (
     </span>
 )
 
-const TreeView = <DataAttributeType = null,>({
+const TreeView = <DataAttributeType = null>({
     nodes,
     isControlled = false,
     expandedMap: expandedMapProp = {},
@@ -283,8 +283,14 @@ const TreeView = <DataAttributeType = null,>({
 
                 const dividerPrefix =
                     depth > 1 &&
-                    // eslint-disable-next-line react/no-array-index-key
-                    Array.from({ length: depth - 1 }).map((_, index) => <Divider key={`divider-${index}`} />)
+                    Array.from({ length: depth - 1 }).map((_, index) => (
+                        <Divider
+                            key={`divider-${
+                                // biome-ignore lint/suspicious/noArrayIndexKey: Legacy
+                                index
+                            }`}
+                        />
+                    ))
 
                 const content = (
                     <TreeViewNodeContent
@@ -303,6 +309,7 @@ const TreeView = <DataAttributeType = null,>({
                     const isExpanded = expandedMap[node.id] ?? false
 
                     return (
+                        // biome-ignore lint/a11y/useFocusableInteractive: Legacy
                         <div
                             key={node.id}
                             role="treeitem"
@@ -431,6 +438,7 @@ const TreeView = <DataAttributeType = null,>({
                     ) : null
 
                 return (
+                    // biome-ignore lint/a11y/useFocusableInteractive: Legacy
                     <div
                         key={node.id}
                         role="treeitem"

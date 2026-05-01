@@ -20,11 +20,9 @@ const eachCall = (batchConfig, functionCalls, resolve, reject, shouldRejectOnErr
     const callIndex = batchConfig.lastIndex
     Promise.resolve(functionCalls[callIndex]())
         .then((result) => {
-            // eslint-disable-next-line no-param-reassign
             batchConfig.results[callIndex] = { status: PromiseAllStatusType.FULFILLED, value: result }
         })
         .catch((error) => {
-            // eslint-disable-next-line no-param-reassign
             batchConfig.results[callIndex] = { status: PromiseAllStatusType.REJECTED, reason: error }
         })
         .finally(() => {
@@ -33,11 +31,9 @@ const eachCall = (batchConfig, functionCalls, resolve, reject, shouldRejectOnErr
                 return
             }
 
-            // eslint-disable-next-line no-plusplus, no-param-reassign
             batchConfig.completedCalls++
             if (batchConfig.lastIndex < functionCalls.length) {
                 eachCall(batchConfig, functionCalls, resolve, reject, shouldRejectOnError)
-                // eslint-disable-next-line no-plusplus, no-param-reassign
                 batchConfig.lastIndex++
             } else if (batchConfig.completedCalls === functionCalls.length) {
                 resolve(batchConfig.results)
@@ -63,7 +59,6 @@ const ApiQueuingWithBatch = <T>(
     )
 
     if (!batchSize || batchSize <= 0) {
-        // eslint-disable-next-line no-param-reassign
         batchSize = ['http/0.9', 'http/1.0', 'http/1.1'].indexOf(httpProtocol) !== -1 ? 5 : 30
     }
 

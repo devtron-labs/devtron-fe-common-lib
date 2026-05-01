@@ -17,11 +17,6 @@
 import { useMemo, useState } from 'react'
 import { generatePath, Route, Routes, useLocation, useParams } from 'react-router-dom'
 
-import ErrorScreenManager from '@Common/ErrorScreenManager'
-import { useAsync } from '@Common/Helper'
-import { useUrlFilters } from '@Common/Hooks'
-import { GenericEmptyState, SortingOrder } from '@Common/index'
-import { Progressing } from '@Common/Progressing'
 import { DEPLOYMENT_CONFIG_DIFF_SORT_KEY, getAppEnvDeploymentConfigList } from '@Shared/Components/DeploymentConfigDiff'
 import { InfoBlock } from '@Shared/Components/InfoBlock'
 import { groupArrayByObjectKey } from '@Shared/Helpers'
@@ -38,6 +33,12 @@ import {
     isDeploymentHistoryConfigDiffNotFoundError,
     parseDeploymentHistoryDiffSearchParams,
 } from './utils'
+
+import ErrorScreenManager from '@Common/ErrorScreenManager'
+import { useAsync } from '@Common/Helper'
+import { useUrlFilters } from '@Common/Hooks'
+import { GenericEmptyState, SortingOrder } from '@Common/index'
+import { Progressing } from '@Common/Progressing'
 
 export const DeploymentHistoryConfigDiff = ({
     appName,

@@ -16,6 +16,10 @@
 
 import { Dispatch, FunctionComponent, MouseEvent, PropsWithChildren, SetStateAction } from 'react'
 
+import { IconsProps } from '@Shared/Components/Icon'
+
+import { UseBulkSelectionProps, useBulkSelection } from '../BulkSelection'
+
 import { GenericFilterEmptyStateProps } from '@Common/EmptyState/types'
 import {
     UseStateFiltersProps,
@@ -26,9 +30,6 @@ import {
 import { GenericEmptyStateType } from '@Common/index'
 import { PageSizeOption } from '@Common/Pagination/types'
 import { SortableTableHeaderCellProps, useResizableTableConfig } from '@Common/SortableTableHeaderCell'
-import { IconsProps } from '@Shared/Components/Icon'
-
-import { useBulkSelection, UseBulkSelectionProps } from '../BulkSelection'
 
 export interface UseFiltersReturnType extends UseStateFiltersReturnType<string> {}
 
@@ -44,10 +45,8 @@ export enum SignalEnum {
     ROW_CLICKED = 'row-clicked',
 }
 
-export interface SignalsType<T extends string = SignalEnum> extends Pick<
-    EventTarget,
-    'addEventListener' | 'removeEventListener'
-> {
+export interface SignalsType<T extends string = SignalEnum>
+    extends Pick<EventTarget, 'addEventListener' | 'removeEventListener'> {
     addEventListener: (
         type: T,
         callback: (event: CustomEvent) => void,
@@ -94,22 +93,22 @@ type BaseColumnType = {
     horizontallySticky?: boolean
 } & Pick<SortableTableHeaderCellProps, 'infoTooltipText'>
 
-type CommonRowType<Data extends unknown> = {
+type CommonRowType<Data> = {
     id: string
     data: Data
 }
 
 export type ExpandedRowPrefixType = 'expanded-row-'
 
-export type ExpandedRowType<Data extends unknown> = CommonRowType<Data> & {
+export type ExpandedRowType<Data> = CommonRowType<Data> & {
     id: `${ExpandedRowPrefixType}${string}`
 }
 
-export type RowType<Data extends unknown> = CommonRowType<Data> & {
+export type RowType<Data> = CommonRowType<Data> & {
     expandableRows?: Array<ExpandedRowType<Data>>
 }
 
-export type RowsType<Data extends unknown> = RowType<Data>[]
+export type RowsType<Data> = RowType<Data>[]
 
 export enum FiltersTypeEnum {
     STATE = 'state',
@@ -118,8 +117,9 @@ export enum FiltersTypeEnum {
 }
 
 export type CellComponentProps<
-    RowData extends unknown = unknown,
+    RowData = unknown,
     FilterVariant extends FiltersTypeEnum = FiltersTypeEnum.NONE,
+    // biome-ignore lint/complexity/noBannedTypes: it is necessary to allow any additional props to be passed down to the table component
     AdditionalProps extends Record<string, any> = {},
 > = Pick<BaseColumnType, 'field'> &
     AdditionalProps & {
@@ -138,16 +138,15 @@ export type CellComponentProps<
         expandRowCallback: (e: MouseEvent<HTMLButtonElement>) => void
     }
 
-export type RowActionsOnHoverComponentProps<
-    RowData extends unknown = unknown,
-    AdditionalProps extends Record<string, any> = {},
-> = {
+// biome-ignore lint/complexity/noBannedTypes: it is necessary to allow any additional props to be passed down to the table component
+export type RowActionsOnHoverComponentProps<RowData = unknown, AdditionalProps extends Record<string, any> = {}> = {
     row: RowType<RowData>
 } & AdditionalProps
 
 export type Column<
-    RowData extends unknown = unknown,
+    RowData = unknown,
     FilterVariant extends FiltersTypeEnum = FiltersTypeEnum.NONE,
+    // biome-ignore lint/complexity/noBannedTypes: it is necessary to allow any additional props to be passed down to the table component
     AdditionalProps extends Record<string, any> = {},
 > = Pick<SortableTableHeaderCellProps, 'showTippyOnTruncate'> &
     BaseColumnType & {
@@ -199,7 +198,7 @@ export enum PaginationEnum {
 }
 
 export interface ConfigurableColumnsType<
-    RowData extends unknown,
+    RowData,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
 > {
@@ -208,10 +207,8 @@ export interface ConfigurableColumnsType<
     setVisibleColumns: Dispatch<SetStateAction<Column<RowData, FilterVariant, AdditionalProps>[]>>
 }
 
-interface GetRowsProps extends Pick<
-    UseFiltersReturnType,
-    'offset' | 'pageSize' | 'searchKey' | 'sortBy' | 'sortOrder'
-> {}
+interface GetRowsProps
+    extends Pick<UseFiltersReturnType, 'offset' | 'pageSize' | 'searchKey' | 'sortBy' | 'sortOrder'> {}
 
 type AdditionalFilterPropsType<T extends FiltersTypeEnum> = T extends FiltersTypeEnum.URL
     ? Pick<
@@ -223,12 +220,14 @@ type AdditionalFilterPropsType<T extends FiltersTypeEnum> = T extends FiltersTyp
       : never
 
 export type ViewWrapperProps<
-    RowData extends unknown = unknown,
+    RowData = unknown,
     FilterVariant extends FiltersTypeEnum = FiltersTypeEnum.NONE,
+    // biome-ignore lint/complexity/noBannedTypes: it is necessary to allow any additional props to be passed down to the table component
     AdditionalProps extends Record<string, any> = {},
 > = PropsWithChildren<
     (FilterVariant extends FiltersTypeEnum.NONE
-        ? {}
+        ? // biome-ignore lint/complexity/noBannedTypes: it is necessary to allow any additional props to be passed down to the table component
+          {}
         : Pick<
               UseFiltersReturnType,
               'offset' | 'handleSearch' | 'searchKey' | 'sortBy' | 'sortOrder' | 'clearFilters' | 'areFiltersApplied'
@@ -240,14 +239,11 @@ export type ViewWrapperProps<
             rows: RowsType<RowData> | null
         } & (FilterVariant extends FiltersTypeEnum.URL
             ? Pick<UseUrlFiltersReturnType<string>, 'updateSearchParams'>
-            : {})
+            : // biome-ignore lint/complexity/noBannedTypes: it is necessary to allow any additional props to be passed down to the table component
+              {})
 >
 
-type FilterConfig<
-    FilterVariant extends FiltersTypeEnum,
-    RowData extends unknown,
-    AdditionalProps extends Record<string, any>,
-> = {
+type FilterConfig<FilterVariant extends FiltersTypeEnum, RowData, AdditionalProps extends Record<string, any>> = {
     filtersVariant: FilterVariant
     /**
      * Props for useUrlFilters/useStateFilters hooks
@@ -272,7 +268,7 @@ type FilterConfig<
 }
 
 export type InternalTableProps<
-    RowData extends unknown,
+    RowData,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
 > = Required<
@@ -375,13 +371,13 @@ export type InternalTableProps<
     FilterConfig<FilterVariant, RowData, AdditionalProps>
 
 export type UseResizableTableConfigWrapperProps<
-    RowData extends unknown,
+    RowData,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
 > = Omit<InternalTableProps<RowData, FilterVariant, AdditionalProps>, 'resizableConfig'>
 
 export type TableWithBulkSelectionProps<
-    RowData extends unknown,
+    RowData,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
 > = Omit<
@@ -390,20 +386,21 @@ export type TableWithBulkSelectionProps<
 >
 
 export type VisibleColumnsWrapperProps<
-    RowData extends unknown,
+    RowData,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
 > = Omit<TableWithBulkSelectionProps<RowData, FilterVariant, AdditionalProps>, 'visibleColumns' | 'setVisibleColumns'>
 
 export type FilterWrapperProps<
-    RowData extends unknown,
+    RowData,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
 > = Omit<VisibleColumnsWrapperProps<RowData, FilterVariant, AdditionalProps>, 'filterData'>
 
 export type TableProps<
-    RowData extends unknown = unknown,
+    RowData = unknown,
     FilterVariant extends FiltersTypeEnum = FiltersTypeEnum.NONE,
+    // biome-ignore lint/complexity/noBannedTypes: it is necessary to allow any additional props to be passed down to the table component
     AdditionalProps extends Record<string, any> = {},
 > = Pick<
     FilterWrapperProps<RowData, FilterVariant, AdditionalProps>,
@@ -432,10 +429,8 @@ export type TableProps<
 
 export type BulkActionStateType = string | null
 
-export interface BulkSelectionActionWidgetProps extends Pick<
-    BulkSelectionConfigType,
-    'BulkActionsComponent' | 'bulkActionsData'
-> {
+export interface BulkSelectionActionWidgetProps
+    extends Pick<BulkSelectionConfigType, 'BulkActionsComponent' | 'bulkActionsData'> {
     count: number
     handleClearBulkSelection: () => void
     parentRef: React.RefObject<HTMLDivElement>
@@ -444,28 +439,26 @@ export interface BulkSelectionActionWidgetProps extends Pick<
 }
 
 export type ConfigurableColumnsConfigType<
-    RowData extends unknown,
+    RowData,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
 > = Record<string, ConfigurableColumnsType<RowData, FilterVariant, AdditionalProps>['visibleColumns']>
 
-export interface GetFilteringPromiseProps<RowData extends unknown> {
+export interface GetFilteringPromiseProps<RowData> {
     searchSortTimeoutRef: React.MutableRefObject<ReturnType<typeof setTimeout> | number>
     callback: () => Promise<RowsType<RowData>> | RowsType<RowData>
 }
 
-export interface RowsResultType<RowData extends unknown> {
+export interface RowsResultType<RowData> {
     filteredRows: RowsType<RowData>
     totalRows: number
 }
 
 export interface TableContentProps<
-    RowData extends unknown,
+    RowData,
     FilterVariant extends FiltersTypeEnum,
     AdditionalProps extends Record<string, any>,
->
-    extends
-        Pick<
+> extends Pick<
             InternalTableProps<RowData, FilterVariant, AdditionalProps>,
             | 'filterData'
             | 'rows'

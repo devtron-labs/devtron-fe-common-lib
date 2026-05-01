@@ -14,6 +14,10 @@
  * limitations under the License.
  */
 
+import { MergeView } from '@codemirror/merge'
+import { SearchQuery } from '@codemirror/search'
+import { EditorView, Extension, ReactCodeMirrorProps } from '@uiw/react-codemirror'
+import { JSONSchema7 } from 'json-schema'
 import {
     Dispatch,
     FunctionComponent,
@@ -24,14 +28,11 @@ import {
     SetStateAction,
     SVGProps,
 } from 'react'
-import { MergeView } from '@codemirror/merge'
-import { SearchQuery } from '@codemirror/search'
-import { EditorView, Extension, ReactCodeMirrorProps } from '@uiw/react-codemirror'
-import { JSONSchema7 } from 'json-schema'
 
-import { MODES } from '@Common/Constants'
 import { AppThemeType } from '@Shared/Providers'
 import { Never } from '@Shared/types'
+
+import { MODES } from '@Common/Constants'
 
 // COMPONENT PROPS
 export interface CodeEditorStatusBarProps {

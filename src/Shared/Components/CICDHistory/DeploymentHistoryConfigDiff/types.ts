@@ -16,19 +16,19 @@
 
 import { Dispatch, SetStateAction } from 'react'
 
-import { UseUrlFiltersReturnType } from '@Common/Hooks'
 import { DeploymentConfigDiffProps } from '@Shared/Components/DeploymentConfigDiff'
 import { EnvResourceType } from '@Shared/Services'
 
 import { History, HistoryLogsProps } from '../types'
 
+import { UseUrlFiltersReturnType } from '@Common/Hooks'
+
 export interface DeploymentHistoryConfigDiffQueryParams {
     compareWfrId: number
 }
 
-export interface DeploymentHistoryConfigDiffProps extends Required<
-    Pick<HistoryLogsProps, 'renderRunSource' | 'resourceId' | 'pathPattern'>
-> {
+export interface DeploymentHistoryConfigDiffProps
+    extends Required<Pick<HistoryLogsProps, 'renderRunSource' | 'resourceId' | 'pathPattern'>> {
     appName: string
     envName: string
     pipelineId: number

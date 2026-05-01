@@ -14,8 +14,11 @@
  * limitations under the License.
  */
 
-import { MutableRefObject } from 'react'
 import moment from 'moment'
+import { MutableRefObject } from 'react'
+
+import { StatusType } from '@Shared/Components'
+import { EnvironmentTypeEnum } from '@Shared/constants'
 import {
     getIsApprovalPolicyConfigured,
     sanitizeApprovalConfigData,
@@ -23,51 +26,56 @@ import {
     sanitizeUserApprovalList,
     stringComparatorBySortOrder,
 } from '@Shared/Helpers'
-import { EnvListMinDTO, PolicyBlockInfo, RegistryType, RuntimeParamsAPIResponseType, RuntimePluginVariables } from '@Shared/types'
+import {
+    EnvListMinDTO,
+    PolicyBlockInfo,
+    RegistryType,
+    RuntimeParamsAPIResponseType,
+    RuntimePluginVariables,
+} from '@Shared/types'
+
+import { ApiResourceType, STAGE_MAP } from '../Pages'
+import { get, post } from './API'
+import { RefVariableType, VariableTypeFormat } from './CIPipeline.Types'
 import { GitProviderType, ROUTES } from './Constants'
 import { getUrlWithSearchParams, sortCallback } from './Helper'
 import {
-    TeamList,
-    ResponseType,
-    DeploymentNodeType,
-    CDModalTab,
-    FilterStates,
-    CDMaterialServiceEnum,
-    CDMaterialServiceQueryParams,
-    CDMaterialResponseType,
-    CDMaterialsMetaInfo,
-    CDMaterialsApprovalInfo,
-    CDMaterialFilterQuery,
-    ImagePromotionMaterialInfo,
-    EnvironmentListHelmResponse,
-    UserApprovalMetadataType,
-    CDMaterialListModalServiceUtilProps,
-    CDMaterialType,
-    GlobalVariableDTO,
-    GlobalVariableOptionType,
-    UserRole,
     APIOptions,
-    EnvAppsMetaDTO,
-    GetAppsInfoForEnvProps,
     AppMeta,
     ApprovalRuntimeStateType,
-    EnvironmentsGroupedByClustersType,
     AppsGroupedByProjectsType,
-    ClusterDetailListType,
+    CDMaterialFilterQuery,
+    CDMaterialListModalServiceUtilProps,
+    CDMaterialResponseType,
+    CDMaterialServiceEnum,
+    CDMaterialServiceQueryParams,
+    CDMaterialsApprovalInfo,
+    CDMaterialsMetaInfo,
+    CDMaterialType,
+    CDModalTab,
     ClusterDetailDTO,
+    ClusterDetailListType,
+    DeploymentNodeType,
+    EnvAppsMetaDTO,
+    EnvironmentListHelmResponse,
+    EnvironmentsGroupedByClustersType,
+    FilterStates,
+    GetAppsInfoForEnvProps,
+    GlobalVariableDTO,
+    GlobalVariableOptionType,
+    ImagePromotionMaterialInfo,
+    ResponseType,
+    TeamList,
+    UserApprovalMetadataType,
+    UserRole,
 } from './Types'
-import { ApiResourceType, STAGE_MAP } from '../Pages'
-import { RefVariableType, VariableTypeFormat } from './CIPipeline.Types'
-import { get, post } from './API'
-import { StatusType } from '@Shared/Components'
-import { EnvironmentTypeEnum } from '@Shared/constants'
 
 export const getTeamListMin = (): Promise<TeamList> => {
     // ignore active field
     const URL = `${ROUTES.PROJECT_LIST_MIN}`
-    return get(URL).then((response) => {
-        let list = []
-        if (response && response.result && Array.isArray(response.result)) {
+    return get<TeamList['result']>(URL).then((response) => {
+        let list: TeamList['result'] = []
+        if (response?.result && Array.isArray(response.result)) {
             list = response.result
         }
         list = list.sort((a, b) => sortCallback('name', a, b))
@@ -126,7 +134,7 @@ const cdMaterialListModal = ({
     isExceptionUser,
     isApprovalConfigured,
 }: CDMaterialListModalServiceUtilProps) => {
-    if (!artifacts || !artifacts.length) return []
+    if (!artifacts?.length) return []
 
     const markFirstSelected = offset === 0
     const startIndex = offset
@@ -272,7 +280,7 @@ export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType): Runt
         variableStepScope: RefVariableType.GLOBAL,
         stepName: null,
         stepType: null,
-        stepVariableId: Math.floor(new Date().valueOf() * Math.random()),
+        stepVariableId: Math.floor(Date.now() * Math.random()),
         valueConstraint: null,
         description: null,
         fileReferenceId: null,
@@ -282,7 +290,7 @@ export const parseRuntimeParams = (response: RuntimeParamsAPIResponseType): Runt
     const runtimeParams = (response?.runtimePluginVariables ?? []).map<RuntimePluginVariables>((variable) => ({
         ...variable,
         defaultValue: variable.value,
-        stepVariableId: variable.stepVariableId || Math.floor(new Date().valueOf() * Math.random()),
+        stepVariableId: variable.stepVariableId || Math.floor(Date.now() * Math.random()),
     }))
 
     runtimeParams.push(...envVariables)
@@ -402,7 +410,7 @@ export const genericCDMaterialsService = (
     // TODO: On update of service would remove from here
     const manipulatedParams = getSanitizedQueryParams(queryParams)
 
-    let URL
+    let URL: string | undefined
     switch (serviceType) {
         case CDMaterialServiceEnum.ROLLBACK:
             URL = getUrlWithSearchParams(
@@ -442,6 +450,7 @@ export function createGitCommitUrl(url: string, revision: string): string {
         if (urlpart.length > 1) {
             return `https://${urlpart[1].split('.git')[0]}/commit/${revision}`
         }
+        // biome-ignore lint/suspicious/noDoubleEquals: Legacy
         if (urlpart.length == 1) {
             return `${urlpart[0].split('.git')[0]}/commit/${revision}`
         }
@@ -451,6 +460,7 @@ export function createGitCommitUrl(url: string, revision: string): string {
         if (urlpart.length > 1) {
             return `https://${urlpart[1].split('.git')[0]}/commits/${revision}`
         }
+        // biome-ignore lint/suspicious/noDoubleEquals: Legacy
         if (urlpart.length == 1) {
             return `${urlpart[0].split('.git')[0]}/commits/${revision}`
         }
@@ -520,31 +530,27 @@ export const getGlobalVariables = async ({
     isCD?: boolean
     abortControllerRef?: MutableRefObject<AbortController>
 }): Promise<GlobalVariableOptionType[]> => {
-    try {
-        const { result } = await get<GlobalVariableDTO[]>(
-            getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_VARIABLES, { appId }),
-            {
-                abortControllerRef,
-            },
-        )
-        const variableList = (result ?? [])
-            .filter((item) => (isCD ? item.stageType !== 'ci' : item.stageType === 'ci'))
-            .map<GlobalVariableOptionType>((variable) => {
-                const { name, ...updatedVariable } = variable
+    const { result } = await get<GlobalVariableDTO[]>(
+        getUrlWithSearchParams(ROUTES.PLUGIN_GLOBAL_VARIABLES, { appId }),
+        {
+            abortControllerRef,
+        },
+    )
+    const variableList = (result ?? [])
+        .filter((item) => (isCD ? item.stageType !== 'ci' : item.stageType === 'ci'))
+        .map<GlobalVariableOptionType>((variable) => {
+            const { name, ...updatedVariable } = variable
 
-                return {
-                    ...updatedVariable,
-                    label: name,
-                    value: name,
-                    description: updatedVariable.description || '',
-                    variableType: RefVariableType.GLOBAL,
-                }
-            })
+            return {
+                ...updatedVariable,
+                label: name,
+                value: name,
+                description: updatedVariable.description || '',
+                variableType: RefVariableType.GLOBAL,
+            }
+        })
 
-        return variableList
-    } catch (err) {
-        throw err
-    }
+    return variableList
 }
 
 export const getAppsInfoForEnv = async ({ envId, appIds }: GetAppsInfoForEnvProps): Promise<EnvAppsMetaDTO> => {
@@ -686,7 +692,8 @@ export const getDetailedClusterList = async (
 
 export const getDockerRegistriesListMin = async (
     signal: AbortSignal,
-): Promise<ResponseType<{ id: string; registryType: RegistryType; isDefault: boolean }[]>> => get(ROUTES.DOCKER_REGISTRY_MIN, { signal })
+): Promise<ResponseType<{ id: string; registryType: RegistryType; isDefault: boolean }[]>> =>
+    get(ROUTES.DOCKER_REGISTRY_MIN, { signal })
 
 export const getGitProvidersListMin = async (
     signal: AbortSignal,

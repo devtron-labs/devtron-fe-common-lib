@@ -16,12 +16,12 @@
 
 import { ReactElement } from 'react'
 
-import { ConditionalWrap } from '@Common/Helper'
-import { Tooltip, TooltipProps } from '@Common/Tooltip'
-
 import { InfoIconTippy } from '..'
 import { FormFieldLabelProps } from './types'
 import { getFormLabelElementId } from './utils'
+
+import { ConditionalWrap } from '@Common/Helper'
+import { Tooltip, TooltipProps } from '@Common/Tooltip'
 
 const FormFieldLabel = ({
     label,

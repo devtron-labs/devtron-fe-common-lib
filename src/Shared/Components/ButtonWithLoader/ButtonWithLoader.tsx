@@ -14,8 +14,6 @@
  * limitations under the License.
  */
 
-/* eslint-disable react/prop-types */
-/* eslint-disable react/destructuring-assignment */
 import React, { Component } from 'react'
 
 import { Progressing } from '../../../Common'
@@ -48,7 +46,6 @@ export class ButtonWithLoader extends Component<ButtonWithLoaderProps> {
     render() {
         return (
             <button
-                // eslint-disable-next-line react/button-has-type
                 type={this.props.type ?? 'button'}
                 data-testid={this.props.dataTestId}
                 disabled={!!this.props.disabled}

@@ -1,14 +1,14 @@
 import { useState } from 'react'
 import { generatePath, useNavigate, useParams } from 'react-router-dom'
 
-import { showError } from '@Common/Helper'
-import { ROUTER_URLS } from '@PagesDevtron2.0/index'
-
 import { ButtonStyleType } from '../Button'
 import { ConfirmationModal, ConfirmationModalVariantType } from '../ConfirmationModal'
 import { Icon } from '../Icon'
 import { resourceConflictRedeploy } from './service'
 import { ResourceConflictDeployDialogProps, ResourceConflictDeployDialogURLParamsType } from './types'
+
+import { showError } from '@Common/Helper'
+import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 const ResourceConflictDeployDialog = ({ appName, environmentName, handleClose }: ResourceConflictDeployDialogProps) => {
     const navigate = useNavigate()

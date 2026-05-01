@@ -14,14 +14,13 @@
  * limitations under the License.
  */
 
+import { TippyProps } from '@tippyjs/react'
 import React, { CSSProperties, type JSX, MutableRefObject, ReactElement, ReactNode, Ref } from 'react'
 import { useLocation, useNavigate, useParams } from 'react-router-dom'
-import { TippyProps } from '@tippyjs/react'
 
-import { IllustrationName, SelectPickerOptionType } from '@Shared/Components'
 import { UserGroupDTO } from '@Pages/GlobalConfigurations'
 import { ClusterStatusType } from '@Pages/ResourceBrowser'
-import { ClusterProviderType } from '@PagesDevtron2.0/CostVisibility'
+import { IllustrationName, SelectPickerOptionType } from '@Shared/Components'
 
 import {
     ComponentLayoutType,
@@ -36,7 +35,6 @@ import {
     StatusType,
     TargetPlatformItemDTO,
 } from '../Shared'
-import { ImageComment, ReleaseTag } from './ImageTags.Types'
 import {
     ACTION_STATE,
     DEPLOYMENT_WINDOW_TYPE,
@@ -46,6 +44,9 @@ import {
     TaskErrorObj,
     VariableTypeFormat,
 } from '.'
+import { ImageComment, ReleaseTag } from './ImageTags.Types'
+
+import { ClusterProviderType } from '@PagesDevtron2.0/CostVisibility'
 
 /**
  * Generic response type object with support for overriding the result type
@@ -132,10 +133,8 @@ export interface CheckboxProps {
     ref?: Ref<HTMLLabelElement>
 }
 
-export interface TippyWithBaseDocLinkTypes<T extends boolean> extends Pick<
-    DocLinkProps<T>,
-    'isExternalLink' | 'openInNewTab'
-> {
+export interface TippyWithBaseDocLinkTypes<T extends boolean>
+    extends Pick<DocLinkProps<T>, 'isExternalLink' | 'openInNewTab'> {
     documentationLink?: DocLinkProps<T>['docLinkKey']
 }
 
@@ -170,20 +169,21 @@ export type TippyCustomizedProps<T extends boolean> = Pick<TippyProps, 'appendTo
         disableClose?: boolean
     }
 
-export interface InfoIconTippyProps<T extends boolean = false> extends Pick<
-    TippyCustomizedProps<T>,
-    | 'heading'
-    | 'infoText'
-    | 'iconClass'
-    | 'documentationLinkText'
-    | 'additionalContent'
-    | 'placement'
-    | 'Icon'
-    | 'headingInfo'
-    | 'documentationLink'
-    | 'isExternalLink'
-    | 'openInNewTab'
-> {
+export interface InfoIconTippyProps<T extends boolean = false>
+    extends Pick<
+        TippyCustomizedProps<T>,
+        | 'heading'
+        | 'infoText'
+        | 'iconClass'
+        | 'documentationLinkText'
+        | 'additionalContent'
+        | 'placement'
+        | 'Icon'
+        | 'headingInfo'
+        | 'documentationLink'
+        | 'isExternalLink'
+        | 'openInNewTab'
+    > {
     dataTestid?: string
     children?: TippyCustomizedProps<T>['children']
     iconClassName?: string
@@ -244,8 +244,7 @@ export type ErrorScreenManagerProps = {
 )
 
 export interface ErrorPageType
-    extends
-        Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>,
+    extends Pick<GenericEmptyStateType, 'image' | 'title' | 'subTitle' | 'renderButton' | 'imageType'>,
         Pick<ErrorScreenManagerProps, 'reload' | 'redirectURL'> {
     code: number
     redirectURL?: string
@@ -773,7 +772,9 @@ export interface ImagePromotionMaterialInfo {
 }
 
 export interface CDMaterialResponseType
-    extends CDMaterialsMetaInfo, CDMaterialsApprovalInfo, ImagePromotionMaterialInfo {
+    extends CDMaterialsMetaInfo,
+        CDMaterialsApprovalInfo,
+        ImagePromotionMaterialInfo {
     materials: CDMaterialType[]
 }
 
@@ -852,7 +853,8 @@ export interface CDStageConfigMapSecretNames {
 }
 
 export interface PrePostDeployStageType
-    extends MandatoryPluginBaseStateType, Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
+    extends MandatoryPluginBaseStateType,
+        Partial<Pick<CommonNodeAttr, 'triggerBlockedInfo'>> {
     isValid: boolean
     steps: TaskErrorObj[]
     triggerType: string
@@ -1168,10 +1170,11 @@ export interface ClusterDetailDTO {
     costModuleConfig: ClusterCostModuleDetailsDTO
 }
 
-export interface ClusterDetailListType extends Omit<
-    ClusterDetailDTO,
-    'server_url' | 'cluster_name' | 'prometheus_url' | 'id' | 'category' | 'clusterStatus'
-> {
+export interface ClusterDetailListType
+    extends Omit<
+        ClusterDetailDTO,
+        'server_url' | 'cluster_name' | 'prometheus_url' | 'id' | 'category' | 'clusterStatus'
+    > {
     serverUrl: ClusterDetailDTO['server_url']
     clusterName: ClusterDetailDTO['cluster_name']
     prometheusUrl: ClusterDetailDTO['prometheus_url']

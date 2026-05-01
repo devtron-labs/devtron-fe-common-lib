@@ -16,15 +16,16 @@
 
 import { ChangeEvent, useMemo } from 'react'
 
-import ICCross from '@Icons/ic-cross.svg?react'
-import ICFileText from '@Icons/ic-file-text.svg?react'
-import ICUploadArrowAnimated from '@Icons/ic-upload-arrow-animated.svg?react'
-import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 import { getUniqueId } from '@Shared/Helpers'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { FileUploadProps } from './types'
+
+import { Tooltip } from '@Common/Tooltip'
+import ICCross from '@Icons/ic-cross.svg?react'
+import ICFileText from '@Icons/ic-file-text.svg?react'
+import ICUploadArrowAnimated from '@Icons/ic-upload-arrow-animated.svg?react'
 
 import './styles.scss'
 
@@ -89,7 +90,6 @@ export const FileUpload = ({
                 </div>
             ) : (
                 <div className="dc__position-rel flex">
-                    {/* eslint-disable-next-line jsx-a11y/label-has-associated-control */}
                     <label htmlFor={id} className="m-0 fw-4 cb-5 fs-13 lh-20 flex-grow-1 cursor">
                         {label || 'Upload file…'}
                     </label>

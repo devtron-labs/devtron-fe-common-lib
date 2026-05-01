@@ -14,10 +14,11 @@
  * limitations under the License.
  */
 
-import { RegistryTypeDetailType } from '@Common/Types'
 import { RegistryType } from '@Shared/types'
 
 import { RegistryIcon } from './RegistryIcon'
+
+import { RegistryTypeDetailType } from '@Common/Types'
 
 export const REGISTRY_TYPE_MAP: Record<string, RegistryTypeDetailType> = {
     ecr: {

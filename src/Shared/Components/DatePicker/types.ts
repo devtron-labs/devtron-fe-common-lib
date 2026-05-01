@@ -14,8 +14,8 @@
  * limitations under the License.
  */
 
-import { SelectInstance } from 'react-select'
 import { Moment } from 'moment'
+import { SelectInstance } from 'react-select'
 
 import { SelectPickerOptionType } from '../SelectPicker'
 

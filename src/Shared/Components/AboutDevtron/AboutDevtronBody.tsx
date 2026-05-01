@@ -16,12 +16,13 @@
 
 import ReactGA from 'react-ga4'
 
-import DevtronCopyright from '@Common/DevtronCopyright'
 import { EULA_LINK, PRIVACY_POLICY_LINK, TERMS_OF_USE_LINK } from '@Shared/constants'
 import { useMainContext } from '@Shared/Providers'
 
 import { Button, ButtonComponentType, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
+
+import DevtronCopyright from '@Common/DevtronCopyright'
 
 const AboutDevtronBody = () => {
     const { currentServerInfo, isEnterprise, isFELibAvailable } = useMainContext()

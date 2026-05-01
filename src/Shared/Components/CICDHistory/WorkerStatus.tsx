@@ -14,11 +14,10 @@
  * limitations under the License.
  */
 
+import moment from 'moment'
 import { type JSX, memo } from 'react'
 import { NavLink } from 'react-router-dom'
-import moment from 'moment'
 
-import ICLines from '@Icons/ic-lines.svg?react'
 import { DeploymentStageType } from '@Shared/constants'
 import { isTimeStringAvailable } from '@Shared/Helpers'
 
@@ -27,6 +26,8 @@ import { ShowMoreText } from '../ShowMoreText'
 import { FAILED_WORKFLOW_STAGE_STATUS_MAP, TIMEOUT_VALUE, WORKFLOW_STAGE_STATUS_TO_TEXT_MAP } from './constants'
 import { WorkerStatusType } from './types'
 import { getWorkerPodBaseUrl } from './utils'
+
+import ICLines from '@Icons/ic-lines.svg?react'
 
 const WorkerStatus = memo(
     ({

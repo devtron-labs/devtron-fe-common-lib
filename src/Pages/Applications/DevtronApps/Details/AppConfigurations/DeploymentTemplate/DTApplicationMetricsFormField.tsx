@@ -14,14 +14,15 @@
  * limitations under the License.
  */
 
-import ICInfoFilledOverride from '@Icons/ic-info-filled-override.svg?react'
+import { InfoIconTippy, InvalidYAMLTippyWrapper } from '@Shared/Components'
+
+import { DTApplicationMetricsFormFieldProps } from './types'
+
 import { Checkbox } from '@Common/Checkbox'
 import { Progressing } from '@Common/Progressing'
 import { Tooltip } from '@Common/Tooltip'
 import { CHECKBOX_VALUE } from '@Common/Types'
-import { InfoIconTippy, InvalidYAMLTippyWrapper } from '@Shared/Components'
-
-import { DTApplicationMetricsFormFieldProps } from './types'
+import ICInfoFilledOverride from '@Icons/ic-info-filled-override.svg?react'
 
 const DTApplicationMetricsFormField = ({
     showApplicationMetrics,

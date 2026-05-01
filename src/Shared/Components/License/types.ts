@@ -46,10 +46,8 @@ export type DevtronLicenseCardProps = {
       }
 )
 
-export interface LicenseCardSubTextProps extends Pick<
-    DevtronLicenseCardProps,
-    'isFreemium' | 'licenseStatus' | 'licenseStatusError'
-> {
+export interface LicenseCardSubTextProps
+    extends Pick<DevtronLicenseCardProps, 'isFreemium' | 'licenseStatus' | 'licenseStatusError'> {
     isFreeForever: boolean
 }
 

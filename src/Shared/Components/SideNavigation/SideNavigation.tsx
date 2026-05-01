@@ -1,9 +1,9 @@
 import { Fragment } from 'react'
 import { NavLink } from 'react-router-dom'
 
-import { Tooltip } from '@Common/Tooltip'
-
 import { SideNavigationItemLink, SideNavigationProps } from './types'
+
+import { Tooltip } from '@Common/Tooltip'
 
 const NavItem = ({ dataTestId, href, title, tooltipProps }: SideNavigationItemLink) => (
     <Tooltip {...tooltipProps}>

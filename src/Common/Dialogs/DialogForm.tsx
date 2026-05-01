@@ -15,12 +15,15 @@
  */
 
 import { Component, createContext, PropsWithChildren } from 'react'
+
+import { Icon } from '@Shared/Components'
+
 import { VisibleModal } from '../Modals/VisibleModal'
 import { Progressing } from '../Progressing'
 import { DialogFormProps } from './Types'
-import { Icon } from '@Shared/Components'
+
 // TODO: may not need context
-const DialogFormContext = createContext({ title: '', isLoading: false, close: (event) => {}, onSave: (event) => {} })
+const DialogFormContext = createContext({ title: '', isLoading: false, close: (_event) => {}, onSave: (_event) => {} })
 
 export class DialogForm extends Component<PropsWithChildren<DialogFormProps>> {
     constructor(props) {

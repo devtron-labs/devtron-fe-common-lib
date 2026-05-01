@@ -20,6 +20,7 @@ import { ConfirmationModalContextType } from './types'
 
 export const ConfirmationModalContext = createContext<ConfirmationModalContextType>(null)
 
+// biome-ignore lint/complexity/noBannedTypes: Legacy
 export const ConfirmationModalProvider = ({ children }: PropsWithChildren<{}>) => {
     const settersRef = useRef<ConfirmationModalContextType['settersRef']['current']>(null)
     const [modalKey, setModalKey] = useState('')
