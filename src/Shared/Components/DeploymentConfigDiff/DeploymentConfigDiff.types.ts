@@ -87,14 +87,18 @@ export type DeploymentConfigDiffSelectPickerProps =
           selectPickerProps?: never
       }
 
-export interface DeploymentConfigDiffNavigationItem
-    extends Pick<CollapsibleListItem<'navLink'>, 'href' | 'title' | 'onClick'> {
+export interface DeploymentConfigDiffNavigationItem extends Pick<
+    CollapsibleListItem<'navLink'>,
+    'href' | 'title' | 'onClick'
+> {
     Icon?: React.FunctionComponent<React.SVGProps<SVGSVGElement>>
     diffState: DeploymentConfigListItem['diffState']
 }
 
-export interface DeploymentConfigDiffNavigationCollapsibleItem
-    extends Pick<CollapsibleListConfig<'navLink'>, 'id' | 'header' | 'noItemsText'> {
+export interface DeploymentConfigDiffNavigationCollapsibleItem extends Pick<
+    CollapsibleListConfig<'navLink'>,
+    'id' | 'header' | 'noItemsText'
+> {
     items: DeploymentConfigDiffNavigationItem[]
 }
 
@@ -140,36 +144,34 @@ export interface DeploymentConfigDiffProps {
     renderedInDrawer?: boolean
 }
 
-export interface DeploymentConfigDiffNavigationProps
-    extends Pick<
-        DeploymentConfigDiffProps,
-        | 'isLoading'
-        | 'navList'
-        | 'collapsibleNavList'
-        | 'goBackURL'
-        | 'navHeading'
-        | 'navHelpText'
-        | 'tabConfig'
-        | 'errorConfig'
-        | 'isNavHelpTextShowingError'
-        | 'showDetailedDiffState'
-        | 'hideDiffState'
-    > {}
+export interface DeploymentConfigDiffNavigationProps extends Pick<
+    DeploymentConfigDiffProps,
+    | 'isLoading'
+    | 'navList'
+    | 'collapsibleNavList'
+    | 'goBackURL'
+    | 'navHeading'
+    | 'navHelpText'
+    | 'tabConfig'
+    | 'errorConfig'
+    | 'isNavHelpTextShowingError'
+    | 'showDetailedDiffState'
+    | 'hideDiffState'
+> {}
 
-export interface DeploymentConfigDiffMainProps
-    extends Pick<
-        DeploymentConfigDiffProps,
-        | 'isLoading'
-        | 'errorConfig'
-        | 'headerText'
-        | 'configList'
-        | 'scrollIntoViewId'
-        | 'selectorsConfig'
-        | 'sortingConfig'
-        | 'scopeVariablesConfig'
-        | 'showDetailedDiffState'
-        | 'hideDiffState'
-    > {}
+export interface DeploymentConfigDiffMainProps extends Pick<
+    DeploymentConfigDiffProps,
+    | 'isLoading'
+    | 'errorConfig'
+    | 'headerText'
+    | 'configList'
+    | 'scrollIntoViewId'
+    | 'selectorsConfig'
+    | 'sortingConfig'
+    | 'scopeVariablesConfig'
+    | 'showDetailedDiffState'
+    | 'hideDiffState'
+> {}
 
 export type DeploymentConfigDiffAccordionProps = Pick<CollapseProps, 'onTransitionEnd'> &
     Pick<DeploymentConfigDiffProps, 'showDetailedDiffState' | 'hideDiffState'> & {

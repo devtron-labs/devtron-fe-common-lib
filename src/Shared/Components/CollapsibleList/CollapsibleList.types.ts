@@ -15,7 +15,6 @@
  */
 
 import React from 'react'
-import { NavLinkProps } from 'react-router-dom'
 import { TippyProps } from '@tippyjs/react'
 
 interface ButtonTab {
@@ -30,7 +29,7 @@ interface ButtonTab {
     href?: never
 }
 
-interface NavLinkTab extends Pick<NavLinkProps, 'isActive'> {
+interface NavLinkTab {
     /**
      * The URL of the nav link.
      */

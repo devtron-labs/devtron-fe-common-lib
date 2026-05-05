@@ -1,3 +1,5 @@
+import type { JSX } from 'react'
+
 import { ServerErrors } from '@Common/ServerError'
 import { APIOptions } from '@Common/Types'
 

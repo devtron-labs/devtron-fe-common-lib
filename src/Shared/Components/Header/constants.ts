@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { DEVTRON_GPT_LINK, DISCORD_LINK, DOCUMENTATION_HOME_PAGE, URLS } from '@Common/Constants'
+import { DEVTRON_GPT_LINK, DISCORD_LINK, DOCUMENTATION_HOME_PAGE } from '@Common/Constants'
 import { CONTACT_SUPPORT_LINK, OPEN_NEW_TICKET, RAISE_ISSUE, VIEW_ALL_TICKETS } from '@Shared/constants'
+import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
 import { HelpButtonActionMenuProps, HelpMenuItems, PageHeaderType } from './types'
 
@@ -29,7 +30,7 @@ export const getCommonHelpActionMenuItems = ({
                   label: 'Getting started',
                   startIcon: { name: 'ic-path' },
                   componentType: 'link',
-                  to: `/${URLS.GETTING_STARTED}`,
+                  to: ROUTER_URLS.GETTING_STARTED,
               },
           ]
         : []) satisfies HelpButtonActionMenuProps['options'][number]['items']),
@@ -76,6 +77,13 @@ export const OSS_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options'][nu
         startIcon: { name: 'ic-file-edit' },
         componentType: 'anchor',
         href: RAISE_ISSUE,
+    },
+    {
+        id: HelpMenuItems.UPGRADE_TO_OSS_PLUS,
+        label: 'Upgrade to OSS Plus',
+        startIcon: { name: 'ic-arrow-up-circle' },
+        componentType: 'button',
+        description: 'Run Devtron OSS with Expert Support',
     },
 ]
 

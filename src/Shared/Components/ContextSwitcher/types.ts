@@ -18,22 +18,21 @@ import { GroupBase } from 'react-select'
 
 import { SelectPickerOptionType, SelectPickerProps } from '../SelectPicker'
 
-export interface ContextSwitcherTypes
-    extends Pick<
-        SelectPickerProps,
-        | 'placeholder'
-        | 'onChange'
-        | 'value'
-        | 'isLoading'
-        | 'onInputChange'
-        | 'inputValue'
-        | 'inputId'
-        | 'formatOptionLabel'
-        | 'filterOption'
-        | 'optionListError'
-        | 'reloadOptionList'
-        | 'classNamePrefix'
-    > {
+export interface ContextSwitcherTypes extends Pick<
+    SelectPickerProps,
+    | 'placeholder'
+    | 'onChange'
+    | 'value'
+    | 'isLoading'
+    | 'onInputChange'
+    | 'inputValue'
+    | 'inputId'
+    | 'formatOptionLabel'
+    | 'filterOption'
+    | 'optionListError'
+    | 'reloadOptionList'
+    | 'classNamePrefix'
+> {
     options: GroupBase<SelectPickerOptionType<string | number>>[]
     isAppDataAvailable?: boolean
     resource: 'Cluster' | 'Release' | 'Tenant' | 'Application' | 'Job' | 'Application Group' | 'Chart Store'

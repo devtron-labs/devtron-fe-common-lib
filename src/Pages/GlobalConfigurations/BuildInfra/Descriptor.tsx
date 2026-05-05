@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { NestedBreadCrumb, URLS } from '@Common/index'
+import { NestedBreadCrumb } from '@Common/index'
 import { InfoIconTippy } from '@Shared/Components/InfoIconTippy'
+import { ROUTER_URLS } from '@PagesDevtron2.0/Shared'
 
 import { BUILD_INFRA_TEXT } from './constants'
 import { BuildInfraDescriptorProps } from './types'
@@ -34,7 +35,7 @@ const Descriptor = ({
             {tooltipNode || (
                 <>
                     <NestedBreadCrumb
-                        redirectUrl={URLS.APPLICATION_MANAGEMENT_CONFIGURATIONS_BUILD_INFRA_PROFILES}
+                        redirectUrl={ROUTER_URLS.APPLICATION_MANAGEMENT_CONFIGURATIONS.BUILD_INFRA.PROFILES}
                         linkText={BUILD_INFRA_TEXT.HEADING}
                         profileName={profileName}
                         nestedBreadCrumbsText="Profiles"

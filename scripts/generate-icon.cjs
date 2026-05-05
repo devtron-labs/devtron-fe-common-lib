@@ -44,7 +44,7 @@ const generateIconComponent = () => {
             .replace(/(^\w+)/, (match) => match.toUpperCase())
             .replace(/-./g, (match) => match[1].toUpperCase())
         // Push imports statement
-        imports.push(`import { ReactComponent as ${importName} } from '@IconsV2/${file}'`)
+        imports.push(`import ${importName} from '@IconsV2/${file}?react'`)
         // Push icons to iconMap
         iconMapEntries.push(`["${iconName}"]: ${importName},`)
     })

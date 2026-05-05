@@ -16,7 +16,6 @@
 
 import React from 'react'
 
-import AppNotDeployed from '../../../Assets/Img/app-not-deployed.svg'
 import { GenericEmptyState, ImageType } from '../../../Common'
 import { EMPTY_STATE_STATUS } from '../../constants'
 
@@ -57,7 +56,7 @@ const CDEmptyState = ({
     return (
         <div className="dc__position-rel" style={{ backgroundColor: 'var(--bg-tertiary)' }}>
             <GenericEmptyState
-                image={imgSource || AppNotDeployed}
+                image={imgSource}
                 classname="fs-16"
                 title={title || EMPTY_STATE_STATUS.CD_EMPTY_STATE.TITLE}
                 subTitle={subtitle || EMPTY_STATE_STATUS.CD_EMPTY_STATE.SUBTITLE}

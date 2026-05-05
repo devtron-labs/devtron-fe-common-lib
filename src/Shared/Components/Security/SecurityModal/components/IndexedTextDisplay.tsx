@@ -16,7 +16,7 @@
 
 import React from 'react'
 
-import { ReactComponent as ICInfoOutline } from '@Icons/ic-info-outlined.svg'
+import ICInfoOutline from '@Icons/ic-info-outlined.svg?react'
 import { ClipboardButton } from '@Common/index'
 
 import { IndexedTextDisplayPropsType } from '../types'

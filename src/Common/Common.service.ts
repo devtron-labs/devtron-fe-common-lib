@@ -23,7 +23,7 @@ import {
     sanitizeUserApprovalList,
     stringComparatorBySortOrder,
 } from '@Shared/Helpers'
-import { EnvListMinDTO, PolicyBlockInfo, RuntimeParamsAPIResponseType, RuntimePluginVariables } from '@Shared/types'
+import { EnvListMinDTO, PolicyBlockInfo, RegistryType, RuntimeParamsAPIResponseType, RuntimePluginVariables } from '@Shared/types'
 import { GitProviderType, ROUTES } from './Constants'
 import { getUrlWithSearchParams, sortCallback } from './Helper'
 import {
@@ -683,3 +683,13 @@ export const getDetailedClusterList = async (
         )
         .sort((a, b) => stringComparatorBySortOrder(a.clusterName, b.clusterName))
 }
+
+export const getDockerRegistriesListMin = async (
+    signal: AbortSignal,
+): Promise<ResponseType<{ id: string; registryType: RegistryType; isDefault: boolean }[]>> => get(ROUTES.DOCKER_REGISTRY_MIN, { signal })
+
+export const getGitProvidersListMin = async (
+    signal: AbortSignal,
+): Promise<
+    ResponseType<{ id: number; name: string; url: string; authMode: 'SSH' | 'USERNAME_PASSWORD' | 'ANONYMOUS' }[]>
+> => get(ROUTES.GIT_PROVIDER_MIN, { signal })

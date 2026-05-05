@@ -38,6 +38,7 @@ export interface customEnv {
     GTM_ID?: string
     RECOMMEND_SECURITY_SCANNING?: boolean
     FORCE_SECURITY_SCANNING?: boolean
+    FORCE_DOCKERFILE_SCAN?: boolean
     ENABLE_CI_JOB?: boolean
     HIDE_DISCORD?: boolean
     POSTHOG_ENABLED?: boolean
@@ -55,7 +56,6 @@ export interface customEnv {
     HIDE_EXCLUDE_INCLUDE_GIT_COMMITS?: boolean
     ENABLE_BUILD_CONTEXT?: boolean
     CLAIR_TOOL_VERSION?: string
-    ENABLE_RESTART_WORKLOAD?: boolean
     ENABLE_SCOPED_VARIABLES?: boolean
     DEFAULT_CI_TRIGGER_TYPE_MANUAL: boolean
     ANNOUNCEMENT_BANNER_MSG?: string
@@ -155,7 +155,6 @@ export interface customEnv {
     GATEKEEPER_URL?: string
     FEATURE_AI_INTEGRATION_ENABLE?: boolean
     LOGIN_PAGE_IMAGE?: string
-    FEATURE_ASK_DEVTRON_EXPERT?: boolean
     /**
      * If true, the manage traffic feature is enabled in apps & app groups.
      *
@@ -188,7 +187,11 @@ export interface customEnv {
      * @default false
      */
     FEATURE_STORAGE_ENABLE?: boolean
+    FEATURE_ATHENA_DEBUG_MODE_ENABLE?: boolean
+    /** Org ID for grafana */
+    GRAFANA_ORG_ID?: number
 }
+
 declare global {
     interface Window {
         __BASE_URL__: string
@@ -198,19 +201,21 @@ declare global {
 }
 
 declare module '@tanstack/react-query' {
-    export interface QueryMeta {
-        /**
-         * Optional flag indicating whether to display a toast notification for errors.
-         * @default true
-         */
-        showToastError?: boolean
-    }
-    export interface MutationMeta {
-        /**
-         * Optional flag indicating whether to display a toast notification for errors.
-         * @default true
-         */
-        showToastError?: boolean
+    export interface Register {
+        queryMeta: {
+            /**
+             * Optional flag indicating whether to display a toast notification for errors.
+             * @default true
+             */
+            showToastError?: boolean
+        }
+        mutationMeta: {
+            /**
+             * Optional flag indicating whether to display a toast notification for errors.
+             * @default true
+             */
+            showToastError?: boolean
+        }
     }
 }
 

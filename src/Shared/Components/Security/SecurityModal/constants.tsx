@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactComponent as MechanicalOperation } from '@Icons/ic-mechanical-operation.svg'
+import MechanicalOperation from '@Icons/ic-mechanical-operation.svg?react'
 import PageNotFound from '@Images/ic-page-not-found.svg'
 
 import { ScanCategoriesWithLicense } from '../types'

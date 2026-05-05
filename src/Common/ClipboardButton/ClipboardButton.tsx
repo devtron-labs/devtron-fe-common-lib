@@ -19,8 +19,8 @@ import { useEffect, useRef, useState } from 'react'
 import Tooltip from '@Common/Tooltip/Tooltip'
 import { Button, ButtonStyleType, ButtonVariantType } from '@Shared/Components/Button'
 
-import { ReactComponent as Check } from '../../Assets/Icon/ic-check.svg'
-import { ReactComponent as ICCopy } from '../../Assets/Icon/ic-copy.svg'
+import Check from '../../Assets/Icon/ic-check.svg?react'
+import ICCopy from '../../Assets/Icon/ic-copy.svg?react'
 import { copyToClipboard, noop, stopPropagation } from '../Helper'
 import { ClipboardProps } from './types'
 
@@ -45,7 +45,7 @@ export const ClipboardButton = ({
     size,
 }: ClipboardProps) => {
     const [copied, setCopied] = useState<boolean>(false)
-    const setCopiedFalseTimeoutRef = useRef<ReturnType<typeof setTimeout>>(-1)
+    const setCopiedFalseTimeoutRef = useRef<ReturnType<typeof setTimeout> | number>(-1)
 
     const handleTriggerCopy = () => {
         setCopied(true)
@@ -90,7 +90,7 @@ export const ClipboardButton = ({
 
     useEffect(
         () => () => {
-            if (setCopiedFalseTimeoutRef.current > -1) {
+            if ((setCopiedFalseTimeoutRef.current as number) > -1) {
                 clearTimeout(setCopiedFalseTimeoutRef.current)
             }
         },
@@ -98,8 +98,6 @@ export const ClipboardButton = ({
     )
 
     const iconClassName = `icon-dim-${iconSize} dc__no-shrink`
-
-    const ariaLabel = `Copy ${content}`
 
     const renderIcon = () => (
         <div className="flex">
@@ -109,10 +107,10 @@ export const ClipboardButton = ({
 
     const tooltipContent = copied ? copiedTippyText : initialTippyText
 
-    if (variant === 'button--secondary') {
+    if (variant === 'button--secondary' || variant === 'borderLess') {
         return (
             <Button
-                variant={ButtonVariantType.secondary}
+                variant={variant === 'button--secondary' ? ButtonVariantType.secondary : ButtonVariantType.borderLess}
                 dataTestId="clippy-button"
                 icon={renderIcon()}
                 size={size}
@@ -121,7 +119,7 @@ export const ClipboardButton = ({
                     content: tooltipContent,
                 }}
                 showTooltip
-                ariaLabel={ariaLabel}
+                ariaLabel="Copy to Clipboard"
                 style={ButtonStyleType.neutral}
             />
         )
@@ -129,11 +127,10 @@ export const ClipboardButton = ({
 
     return (
         <Tooltip content={tooltipContent} alwaysShowTippyOnHover>
-            {/* TODO: semantically buttons should not be nested; fix later */}
             <button
                 type="button"
                 className={`dc__outline-none-imp p-0 flex dc__transparent--unstyled dc__no-border ${rootClassName}`}
-                aria-label={ariaLabel}
+                aria-label="Copy to Clipboard"
                 onClick={handleCopyContent}
             >
                 {renderIcon()}

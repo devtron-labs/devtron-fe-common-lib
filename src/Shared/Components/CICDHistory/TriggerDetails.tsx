@@ -14,13 +14,13 @@
  * limitations under the License.
  */
 
-import { Fragment, memo, useMemo, useState } from 'react'
-import { Link, useLocation, useParams, useRouteMatch } from 'react-router-dom'
+import { Fragment, type JSX, memo, useMemo, useState } from 'react'
+import { Link, useLocation, useParams } from 'react-router-dom'
 
-import { ReactComponent as ICAborted } from '@Icons/ic-aborted.svg'
-import { ReactComponent as ICArrowRight } from '@Icons/ic-arrow-right.svg'
-import { ReactComponent as ICEnvironment } from '@Icons/ic-environment.svg'
-import { ReactComponent as ICPulsateStatus } from '@Icons/ic-pulsate-status.svg'
+import ICAborted from '@Icons/ic-aborted.svg?react'
+import ICArrowRight from '@Icons/ic-arrow-right.svg?react'
+import ICEnvironment from '@Icons/ic-environment.svg?react'
+import ICPulsateStatus from '@Icons/ic-pulsate-status.svg?react'
 import { createGitCommitUrl } from '@Common/Common.service'
 import { ZERO_TIME_STRING } from '@Common/Constants'
 import { CommitChipCell } from '@Shared/Components/CommitChipCell'
@@ -305,7 +305,6 @@ const StartDetails = ({
     renderTargetConfigInfo,
     stage,
 }: StartDetailsType): JSX.Element => {
-    const { url } = useRouteMatch()
     const { pathname } = useLocation()
 
     return (
@@ -376,7 +375,7 @@ const StartDetails = ({
                 )}
 
                 {!pathname.includes('source-code') && (
-                    <Link to={`${url}/source-code`} className="anchor fs-13" data-testid="commit-details-link">
+                    <Link to="source-code" className="anchor fs-13" data-testid="commit-details-link">
                         Commit details
                     </Link>
                 )}

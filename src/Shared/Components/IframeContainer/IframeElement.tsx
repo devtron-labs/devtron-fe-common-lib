@@ -17,8 +17,8 @@
 import { useState } from 'react'
 import Tippy from '@tippyjs/react'
 
-import { ReactComponent as ICClose } from '../../../Assets/Icon/ic-close.svg'
-import { ReactComponent as ICFullScreen } from '../../../Assets/Icon/ic-fullscreen-2.svg'
+import ICClose from '../../../Assets/Icon/ic-close.svg?react'
+import ICFullScreen from '../../../Assets/Icon/ic-fullscreen-2.svg?react'
 import { stopPropagation, VisibleModal } from '../../../Common'
 import { GenericSectionErrorState } from '../GenericSectionErrorState'
 import { IframeElementProps } from './types'

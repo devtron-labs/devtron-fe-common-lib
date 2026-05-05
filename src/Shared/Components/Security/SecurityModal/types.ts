@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import React from 'react'
+import React, { type JSX } from 'react'
 
 import { Entity } from '@Common/SegmentedBarChart/types'
 import { ServerErrors } from '@Common/ServerError'
@@ -250,6 +250,55 @@ export type ScanResultDTO = {
     [CATEGORIES.IMAGE_SCAN]: ImageScan
     [CATEGORIES.CODE_SCAN]: CodeScan
     [CATEGORIES.KUBERNETES_MANIFEST]: KubernetesManifest
+}
+
+export type CodeSnippetLine = {
+    line: number
+    content: string
+    isIssue: boolean
+}
+
+export type CodeSnippet = {
+    before: CodeSnippetLine[]
+    current: CodeSnippetLine
+    after: CodeSnippetLine[]
+}
+
+export enum DockerScanStatusTypes {
+    PENDING = 0,
+    RUNNING = 1,
+    COMPLETED = 2,
+    FAILED = 3,
+    SKIPPED = 4,
+}
+
+export interface ScanRecommendationsDTO {
+    severity_summary: {
+        error: number
+        info: number
+        style: number
+        warning: number
+    }
+    results: {
+        code: string
+        file: string
+        line: number
+        level: string
+        title: string
+        message: string
+        severity: string
+        codeSnippet: CodeSnippet
+        documentationUrl: string
+    }[]
+    appId: number
+    buildId: number
+    createdOn: number
+    dockerfileScanEnabled: boolean
+    dockerfileHash: string
+    id: number
+    pipelineId: number
+    status: DockerScanStatusTypes
+    scanEnabled: boolean
 }
 
 export interface SidebarPropsType {

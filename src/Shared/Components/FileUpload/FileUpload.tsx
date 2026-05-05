@@ -16,9 +16,9 @@
 
 import { ChangeEvent, useMemo } from 'react'
 
-import { ReactComponent as ICCross } from '@Icons/ic-cross.svg'
-import { ReactComponent as ICFileText } from '@Icons/ic-file-text.svg'
-import { ReactComponent as ICUploadArrowAnimated } from '@Icons/ic-upload-arrow-animated.svg'
+import ICCross from '@Icons/ic-cross.svg?react'
+import ICFileText from '@Icons/ic-file-text.svg?react'
+import ICUploadArrowAnimated from '@Icons/ic-upload-arrow-animated.svg?react'
 import { Tooltip } from '@Common/Tooltip'
 import { ComponentSizeType } from '@Shared/constants'
 import { getUniqueId } from '@Shared/Helpers'

@@ -15,7 +15,7 @@
  */
 
 import { ChangeEvent, KeyboardEvent as ReactKeyboardEvent, MouseEvent, useEffect, useState } from 'react'
-import { render } from 'react-dom'
+import { createRoot, Root } from 'react-dom/client'
 import {
     closeSearchPanel,
     findNext,
@@ -29,15 +29,15 @@ import {
 } from '@codemirror/search'
 import { EditorView, Panel, runScopeHandlers, ViewUpdate } from '@uiw/react-codemirror'
 
-import { ReactComponent as ICArrowDown } from '@Icons/ic-arrow-down.svg'
-import { ReactComponent as ICCaretDown } from '@Icons/ic-caret-down.svg'
-import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
-import { ReactComponent as ICMatchCase } from '@Icons/ic-match-case.svg'
-import { ReactComponent as ICMatchWord } from '@Icons/ic-match-word.svg'
-import { ReactComponent as ICRegex } from '@Icons/ic-regex.svg'
-import { ReactComponent as ICReplaceAllText } from '@Icons/ic-replace-all-text.svg'
-import { ReactComponent as ICReplaceText } from '@Icons/ic-replace-text.svg'
-import { ReactComponent as ICWorld } from '@Icons/ic-world.svg'
+import ICArrowDown from '@Icons/ic-arrow-down.svg?react'
+import ICCaretDown from '@Icons/ic-caret-down.svg?react'
+import ICClose from '@Icons/ic-close.svg?react'
+import ICMatchCase from '@Icons/ic-match-case.svg?react'
+import ICMatchWord from '@Icons/ic-match-word.svg?react'
+import ICRegex from '@Icons/ic-regex.svg?react'
+import ICReplaceAllText from '@Icons/ic-replace-all-text.svg?react'
+import ICReplaceText from '@Icons/ic-replace-text.svg?react'
+import ICWorld from '@Icons/ic-world.svg?react'
 import { Tooltip } from '@Common/Tooltip'
 import { Button, ButtonStyleType, ButtonVariantType, Collapse } from '@Shared/Components'
 import { ComponentSizeType } from '@Shared/constants'
@@ -456,15 +456,19 @@ export const getCodeEditorFindReplace =
             'code-editor__search mt-8 mb-4 mr-8 ml-auto p-5 bg__secondary dc__border br-4 dc__w-fit-content fs-14'
         dom.onkeydown = keydown
 
+        let root: Root | null = null
+
         const renderFindReplace = () => {
-            render(
+            if (!root) {
+                root = createRoot(dom)
+            }
+            root.render(
                 <FindReplace
                     view={view}
                     defaultQuery={getSearchQuery(view.state)}
                     defaultShowReplace={getShowReplaceField(view.state)}
                     onSearchBarAction={onSearchBarAction}
                 />,
-                dom,
             )
         }
 
