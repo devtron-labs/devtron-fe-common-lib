@@ -889,11 +889,7 @@ export function useScrollable(options: scrollableInterface) {
     )
 
     function scrollToTop(e) {
-        targetRef.current.scrollBy({
-            top: -1 * scrollTop,
-            left: 0,
-            behavior: 'smooth',
-        })
+        targetRef.current.scrollTop = 0
         if (options.autoBottomScroll) {
             toggleAutoBottom(false)
         }
