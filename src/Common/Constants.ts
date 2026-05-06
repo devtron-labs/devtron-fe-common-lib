@@ -49,8 +49,6 @@ export const PATTERNS = {
     EMAIL: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 }
 
-const OBSERVABILITY_ROOT = '/observability'
-
 /** @deprecated */
 export const URLS = {
     APP_CI_DETAILS: 'ci-details',
@@ -62,15 +60,6 @@ export const URLS = {
     DETAILS: '/details',
     DEPLOYMENT_HISTORY_CONFIGURATIONS: 'configuration',
     APP_CONFIG: 'edit',
-
-    // OBSERVABILITY
-    OBSERVABILITY: OBSERVABILITY_ROOT,
-    OBSERVABILITY_OVERVIEW: `${OBSERVABILITY_ROOT}/overview`,
-    OBSERVABILITY_TENANTS: `${OBSERVABILITY_ROOT}/tenants`,
-    OBSERVABILITY_TENANT_DETAILS: `${OBSERVABILITY_ROOT}/tenants/:tenantName`,
-    OBSERVABILITY_TENANT_OVERVIEW: `${OBSERVABILITY_ROOT}/tenants/:tenantName/overview`,
-    OBSERVABILITY_TENANT_VMS: `${OBSERVABILITY_ROOT}/tenants/:tenantName/vms`,
-    OBSERVABILITY_TENANT_VM_DETAILS: `${OBSERVABILITY_ROOT}/tenants/:tenantName/vms/:vmName`,
     APPLICATION_MANAGEMENT_APP: '/application-management/devtron-app',
     GLOBAL_CONFIG_EDIT_CLUSTER: '/global-configuration/cluster-env/edit/:clusterId',
 } as const
