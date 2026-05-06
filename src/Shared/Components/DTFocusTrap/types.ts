@@ -15,6 +15,7 @@
  */
 
 import { ReactNode } from 'react'
+import { Props as FocusTrapProps } from 'focus-trap-react'
 
 /* Mimicking types from Focus React Library */
 type FocusTargetValue = HTMLElement | SVGElement | string
@@ -27,7 +28,7 @@ type FocusTargetValueOrFalse = FocusTargetValue | false
  */
 type FocusTargetOrFalse = FocusTargetValueOrFalse | (() => FocusTargetValueOrFalse)
 
-export interface DTFocusTrapType {
+export interface DTFocusTrapType extends Pick<FocusTrapProps['focusTrapOptions'], 'returnFocusOnDeactivate'> {
     /**
      * Callback function that gets triggered when the Escape key is pressed. \
      * Should be wrapped in useCallback to prevent unnecessary re-renders.

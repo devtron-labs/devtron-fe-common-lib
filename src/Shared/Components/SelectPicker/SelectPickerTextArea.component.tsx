@@ -32,10 +32,12 @@ export const SelectPickerTextArea = ({
     maxHeight,
     refVar,
     dependentRefs,
+    filterOption: filterOptionProp,
     ...props
 }: SelectPickerTextAreaProps) => {
     // STATES
     const [inputValue, setInputValue] = useState((value as SingleValue<SelectPickerOptionType<string>>)?.value || '')
+    const [isInputDirty, setIsInputDirty] = useState(false)
 
     // REFS
     const selectRef = useRef<SelectInstance<SelectPickerOptionType<string>>>(null)
@@ -50,6 +52,7 @@ export const SelectPickerTextArea = ({
     useEffect(() => {
         const selectValue = value as SingleValue<SelectPickerOptionType<string>>
         setInputValue(selectValue?.value || '')
+        setIsInputDirty(false)
     }, [value])
 
     // METHODS
@@ -97,9 +100,46 @@ export const SelectPickerTextArea = ({
 
     useThrottledEffect(reInitHeight, 500, [inputValue])
 
+    const handleCreateOption = (newValue: string) => {
+        onChange?.(
+            { label: newValue, value: newValue },
+            { action: 'create-option', option: { label: newValue, value: newValue } },
+        )
+        selectRef.current.blurInput()
+    }
+
+    /**
+     * Create an option if no option preselectec & input is dirty
+     * @returns boolean - true if option was created
+     */
+    const updateValueIfOnlyDirty = (): boolean => {
+        const selectValue = value as SingleValue<SelectPickerOptionType<string>>
+
+        if (isCreatable && (!selectValue?.value || selectValue.value !== inputValue)) {
+            handleCreateOption(inputValue)
+            return true
+        }
+
+        return false
+    }
+
+    const filterOption: SelectPickerTextAreaProps['filterOption'] = (...filterOptionArgs) => {
+        if (!isInputDirty) {
+            return true
+        }
+
+        if (filterOptionProp) {
+            return filterOptionProp(...filterOptionArgs)
+        }
+
+        const [option, rawInput] = filterOptionArgs
+        return option.label.toLowerCase().includes(rawInput.toLowerCase())
+    }
+
     const onInputChange = (newValue: string, { action }: InputActionMeta) => {
         if (action === ReactSelectInputAction.inputChange) {
             setInputValue(newValue)
+            setIsInputDirty(true)
 
             if (!newValue) {
                 onChange?.(null, {
@@ -108,18 +148,14 @@ export const SelectPickerTextArea = ({
                 })
             }
         } else if (action === ReactSelectInputAction.inputBlur) {
-            // Reverting input to previously selected value in case of blur event. (no-selection)
+            if (updateValueIfOnlyDirty()) {
+                return
+            }
             const selectValue = value as SingleValue<SelectPickerOptionType<string>>
+            // Reverting input to previously selected value in case of blur event. (no-selection)
             setInputValue(selectValue?.value || '')
+            setIsInputDirty(false)
         }
-    }
-
-    const handleCreateOption = (newValue: string) => {
-        onChange?.(
-            { label: newValue, value: newValue },
-            { action: 'create-option', option: { label: newValue, value: newValue } },
-        )
-        selectRef.current.blurInput()
     }
 
     const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>) => {
@@ -165,11 +201,7 @@ export const SelectPickerTextArea = ({
                 selectRef.current.inputRef.selectionEnd = selectionStart + 1
             })
 
-            return
-        }
-
-        if (isCreatable && event.key === 'Enter') {
-            handleCreateOption(inputValue)
+            updateValueIfOnlyDirty()
         }
     }
 
@@ -181,6 +213,7 @@ export const SelectPickerTextArea = ({
             selectRef={selectRef}
             inputValue={inputValue}
             value={value}
+            filterOption={filterOption}
             onInputChange={onInputChange}
             controlShouldRenderValue={false}
             onChange={onChange}

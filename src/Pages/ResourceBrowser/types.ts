@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { Dispatch, ReactElement, SetStateAction } from 'react'
+import { Dispatch, type JSX, ReactElement, SetStateAction } from 'react'
 
 import { TabProps } from '@Shared/Components'
 import { InstallationClusterType } from '@Shared/types'
@@ -25,6 +25,7 @@ export enum ClusterFiltersType {
     ALL_CLUSTERS = 'all',
     HEALTHY = 'healthy',
     UNHEALTHY = 'unhealthy',
+    CONNECTION_FAILED = 'connectionFailed',
 }
 
 export enum InstallationClusterStatus {
@@ -141,8 +142,10 @@ export interface InstallationClusterConfigDTO {
     installedEntityId: number | 0
 }
 
-export interface InstallationClusterConfigType
-    extends Pick<InstallationClusterConfigDTO, 'installationType' | 'conditions'> {
+export interface InstallationClusterConfigType extends Pick<
+    InstallationClusterConfigDTO,
+    'installationType' | 'conditions'
+> {
     schema: object
     values: object
     installationId: number

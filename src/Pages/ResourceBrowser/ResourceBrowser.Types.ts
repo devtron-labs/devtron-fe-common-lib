@@ -14,8 +14,9 @@
  * limitations under the License.
  */
 
-import { ReactNode, RefObject } from 'react'
+import { RefObject } from 'react'
 
+import { FiltersTypeEnum, TableViewWrapperProps } from '@Shared/Components'
 import { Nodes, NodeType } from '@Shared/types'
 
 export interface GVKType {
@@ -148,7 +149,8 @@ export interface ResourceManifestDTO {
 }
 
 export interface CreateResourceRequestBodyParamsType
-    extends Pick<CreateResourceRequestBodyType, 'clusterId'>,
+    extends
+        Pick<CreateResourceRequestBodyType, 'clusterId'>,
         Required<Pick<K8sRequestResourceIdentifierType, 'name' | 'namespace'>> {
     updatedManifest?: string
     group: GVKType['Group']
@@ -200,7 +202,9 @@ export interface GVKOptionValueType {
     apiVersion: string
 }
 
-export interface ResourceRecommenderActionMenuProps {
-    children: ReactNode
+export interface ResourceRecommenderActionMenuProps extends Pick<
+    TableViewWrapperProps<K8sResourceDetailDataType, FiltersTypeEnum.URL>,
+    'filteredRows'
+> {
     lastScannedOn: string
 }

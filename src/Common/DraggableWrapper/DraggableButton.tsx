@@ -15,7 +15,7 @@
  */
 
 import React from 'react'
-import { ReactComponent as ICDrag } from '../../Assets/Icon/ic-drag.svg'
+import ICDrag from '../../Assets/Icon/ic-drag.svg?react'
 import { DraggableButtonProps } from './types'
 
 export default function DraggableButton({ dragClassName }: DraggableButtonProps) {

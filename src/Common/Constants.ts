@@ -21,7 +21,7 @@ export const Host = window?.__ORCHESTRATOR_ROOT__ ?? '/orchestrator'
 
 export const DOCUMENTATION_HOME_PAGE = 'https://docs.devtron.ai'
 export const DEVTRON_HOME_PAGE = 'https://devtron.ai/'
-export const DOCUMENTATION_VERSION = '/devtron/v1.7'
+export const DOCUMENTATION_VERSION = '/devtron/v2.0'
 export const DISCORD_LINK = 'https://discord.devtron.ai/'
 export const DEFAULT_JSON_SCHEMA_URI = 'https://json-schema.org/draft/2020-12/schema'
 export const LICENSE_DASHBOARD_HOME_PAGE = 'https://license.devtron.ai/dashboard'
@@ -29,6 +29,7 @@ export const DEVTRON_GPT_LINK = 'https://chatgpt.com/g/g-6826efa4362c8191b23e7bf
 
 export const PATTERNS = {
     STRING: /^[a-zA-Z0-9_]+$/,
+    APP_NAME: '^[a-z][a-z0-9-]*[a-z0-9]$/*',
     DECIMAL_NUMBERS: /^-?\d*\.?\d*$/,
     POSITIVE_DECIMAL_NUMBERS: /^\d*\.?\d*$/,
     NATURAL_NUMBERS: /^[1-9]\d*$/,
@@ -48,47 +49,19 @@ export const PATTERNS = {
     EMAIL: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 }
 
-const GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP = '/global-config/templates/devtron-apps'
 const OBSERVABILITY_ROOT = '/observability'
 
+/** @deprecated */
 export const URLS = {
-    LOGIN: '/login',
-    LOGIN_SSO: '/login/sso',
-    PERMISSION_GROUPS: '/global-config/auth/groups',
-    APP: '/app',
-    APP_LIST: 'list',
-    CHARTS_DISCOVER: '/chart-store/discover',
-    JOB: '/job',
-    CREATE_JOB: 'create-job',
-    GETTING_STARTED: 'getting-started',
-    STACK_MANAGER_ABOUT: '/stack-manager/about',
     APP_CI_DETAILS: 'ci-details',
     LOGS: 'Logs',
-    CREATE: '/create',
-    RELEASES: '/releases',
-    DEVTRON_CHARTS: 'dc',
-    APP_DEPLOYMNENT_HISTORY: 'deployments',
     APP_DETAILS: 'details',
     APP_DETAILS_K8: 'k8s-resources', // for V2
+    EXTERNAL_ARGO_APP: 'eaa',
+    EXTERNAL_FLUX_APP: 'external-flux',
     DETAILS: '/details',
-    CD_DETAILS: 'cd-details',
-    APP_TRIGGER: 'trigger',
-    GLOBAL_CONFIG_DOCKER: '/global-config/docker',
-    DEPLOYMENT_HISTORY_CONFIGURATIONS: '/configuration',
-    GLOBAL_CONFIG_SCOPED_VARIABLES: '/global-config/scoped-variables',
-    GLOBAL_CONFIG_DEPLOYMENT_CHARTS_LIST: '/global-config/deployment-charts',
-    GLOBAL_CONFIG_DEPLOYMENT_CHARTS_UPLOAD_CHART: '/global-config/deployment-charts/upload-chart',
-    NETWORK_STATUS_INTERFACE: '/network-status-interface',
-    RESOURCE_BROWSER: '/resource-browser',
-    COMPARE_CLUSTERS: '/compare-clusters',
+    DEPLOYMENT_HISTORY_CONFIGURATIONS: 'configuration',
     APP_CONFIG: 'edit',
-    GLOBAL_CONFIG: '/global-config',
-    GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP,
-    GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_CREATE: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/create`,
-    // NOTE: using appId since we are re-using AppConfig component
-    GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP_DETAIL: `${GLOBAL_CONFIG_TEMPLATES_DEVTRON_APP}/detail/:appId`,
-    LICENSE_AUTH: '/license-auth',
-    GLOBAL_CONFIG_EDIT_CLUSTER: '/global-config/cluster-env/edit/:clusterId',
 
     // OBSERVABILITY
     OBSERVABILITY: OBSERVABILITY_ROOT,
@@ -98,10 +71,13 @@ export const URLS = {
     OBSERVABILITY_TENANT_OVERVIEW: `${OBSERVABILITY_ROOT}/tenants/:tenantName/overview`,
     OBSERVABILITY_TENANT_VMS: `${OBSERVABILITY_ROOT}/tenants/:tenantName/vms`,
     OBSERVABILITY_TENANT_VM_DETAILS: `${OBSERVABILITY_ROOT}/tenants/:tenantName/vms/:vmName`,
+    APPLICATION_MANAGEMENT_APP: '/application-management/devtron-app',
+    GLOBAL_CONFIG_EDIT_CLUSTER: '/global-configuration/cluster-env/edit/:clusterId',
 } as const
 
 export const ROUTES = {
     APP: 'app',
+    ATHENA: 'athena',
     APP_ARTIFACT_PROMOTE_MATERIAL: 'app/artifact/promotion-request/material',
     APP_TEMPLATE_DATA: 'app/template/data',
     ENVIRONMENT_CATEGORIES: 'env/categories',
@@ -115,8 +91,8 @@ export const ROUTES = {
     DEPLOYMENT_TEMPLATE_LIST: 'app/template/list',
     INFRA_CONFIG_PROFILE: 'infra-config/profile',
     SCAN_RESULT: 'scan-result',
+    SCAN_RESULT_RECOMMENDATIONS: 'security/scan/dockerfile/results',
     NOTIFIER: 'notification',
-    APP_LIST: 'app/list',
     TELEMETRY_EVENT: 'telemetry/event',
     SERVER_INFO_API: 'server',
     ATTRIBUTES_USER: 'attributes/user',
@@ -125,6 +101,7 @@ export const ROUTES = {
     PATCH: 'patch',
     ENVIRONMENT_LIST_MIN: 'env/autocomplete',
     CLUSTER: 'cluster',
+    CLUSTER_MIN: 'cluster/min',
     API_RESOURCE: 'k8s/api-resources',
     GVK: 'gvk',
     NAMESPACE: 'env/namespace',
@@ -167,6 +144,9 @@ export const ROUTES = {
     LICENSE_DATA: 'license/data',
     ENV: 'env',
     APP_METADATA: 'app-metadata',
+    RESOURCE_CONFLICTS_LIST: 'app/:appId/cd-pipeline/:pipelineId/history/:wfrId/helm-ownership-conflicts',
+    GIT_PROVIDER_MIN: 'git/provider/autocomplete',
+    DOCKER_REGISTRY_MIN: 'docker/registry/autocomplete',
 } as const
 
 export enum KEY_VALUE {
@@ -430,6 +410,15 @@ export const DATE_TIME_FORMATS = {
     DD_MMM_YYYY: 'DD MMM YYYY',
     'DD/MM/YYYY': 'DD/MM/YYYY',
     FULL_DATE_WITH_TIME: 'DD-MM-YYYY hh:mm:ss',
+    DD_MMM: 'DD MMM',
+    TWENTY_FOUR_HOUR_FORMAT_HOUR: 'HH',
+    ABBREVIATED_MONTH: 'MMM',
+    DATE_WITH_ABBREVIATED_MONTH: 'DD MMM',
+    WEEKDAY_WITH_DATE_MONTH_AND_YEAR: 'ddd, DD MMM YYYY',
+    WEEKDAY_DATE_MONTH_YEAR_AND_HOUR: 'ddd, DD MMM YYYY, HH:00',
+    DAY_OF_MONTH_WITH_ORDINAL: 'Do',
+    ABBREVIATED_WEEKDAY: 'ddd',
+    DAY_OF_MONTH: 'DD',
 }
 
 export const SEMANTIC_VERSION_DOCUMENTATION_LINK = 'https://semver.org/'

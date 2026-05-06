@@ -17,7 +17,7 @@
 import { prefixZeroIfSingleDigit } from '@Common/Helper'
 
 import { SelectPickerOptionType } from '../SelectPicker'
-import { DayPickerRangeControllerPresets, MONTHLY_DATES_CONFIG, TIME_OPTIONS_CONFIG } from './constants'
+import { MONTHLY_DATES_CONFIG, TIME_OPTIONS_CONFIG } from './constants'
 
 /**
  * Return the options for the dates in label and value format
@@ -31,8 +31,7 @@ export const MONTHLY_DATE_OPTIONS = Object.entries(MONTHLY_DATES_CONFIG).map(([l
  * Return the options for the time in label and value format
  * @type {SelectPickerOptionType[]}
  */
-// eslint-disable-next-line import/prefer-default-export
-export const DEFAULT_TIME_OPTIONS: SelectPickerOptionType[] = Object.entries(TIME_OPTIONS_CONFIG).map(
+export const DEFAULT_TIME_OPTIONS: SelectPickerOptionType<string>[] = Object.entries(TIME_OPTIONS_CONFIG).map(
     ([label, value]) => ({
         label,
         value,
@@ -114,30 +113,6 @@ export const getDefaultDateFromTimeToLive = (timeToLive: string, isTomorrow?: bo
     const nextDate = new Date(date)
     nextDate.setHours(hours, minutes, 0)
     return nextDate
-}
-
-/**
- * Returns a string representing the range of dates
- * given by the start and end dates. If the end date
- * is 'now' and the start date includes 'now',
- * it will return the corresponding range from the
- * DayPickerRangeControllerPresets array.
- * @param startDateStr - the start date string
- * @param endDateStr - the end date string
- * @returns - a string representing the range of dates
- */
-
-export const getCalendarValue = (startDateStr: string, endDateStr: string): string => {
-    let str: string = `${startDateStr} - ${endDateStr}`
-    if (endDateStr === 'now' && startDateStr.includes('now')) {
-        const range = DayPickerRangeControllerPresets.find((d) => d.endStr === startDateStr)
-        if (range) {
-            str = range.text
-        } else {
-            str = `${startDateStr} - ${endDateStr}`
-        }
-    }
-    return str
 }
 
 // Need to send either the relative time like: now-5m or the timestamp to grafana

@@ -91,13 +91,13 @@ const ExportToCsv = <HeaderItemType extends string>({
                 <Button
                     {...(triggerElementConfig?.showOnlyIcon
                         ? {
-                              icon: <Icon name="ic-download" color={null} />,
+                              icon: <Icon name="ic-arrow-line-down" color={null} />,
                               ariaLabel: 'Export CSV',
                               showAriaLabelInTippy: false,
                           }
                         : {
                               text: 'Export CSV',
-                              startIcon: <Icon name="ic-download" color={null} />,
+                              startIcon: <Icon name="ic-arrow-line-down" color={null} />,
                           })}
                     onClick={handleExportButtonClick}
                     size={ComponentSizeType.medium}

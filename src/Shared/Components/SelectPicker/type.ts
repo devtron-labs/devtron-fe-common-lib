@@ -29,9 +29,12 @@ import { ComponentSizeType } from '@Shared/constants'
 import { ActionMenuProps } from '../ActionMenu'
 import { ButtonComponentType, ButtonProps, ButtonVariantType } from '../Button'
 import { FormFieldWrapperProps } from '../FormFieldWrapper/types'
+import { UsePopoverProps, UsePopoverReturnType } from '../Popover'
 
-export interface SelectPickerOptionType<OptionValue = string | number, OptionLabel = ReactNode>
-    extends OptionType<OptionValue, OptionLabel> {
+export interface SelectPickerOptionType<OptionValue = string | number, OptionLabel = ReactNode> extends OptionType<
+    OptionValue,
+    OptionLabel
+> {
     /**
      * Description to be displayed for the option
      */
@@ -310,6 +313,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
     } & (IsMulti extends true
         ? {
               isMulti: IsMulti | boolean
+              isUserIdentifier?: boolean
               multiSelectProps?: Partial<Pick<SelectProps<OptionValue, IsMulti>, 'customDisplayText'>> & {
                   /**
                    * If true, the group heading can be selected
@@ -328,6 +332,7 @@ export type SelectPickerProps<OptionValue = number | string, IsMulti extends boo
         : {
               isMulti?: never
               multiSelectProps?: never
+              isUserIdentifier?: never
           })
 
 // Doing like this, because of global export error GroupHeadingPropsDefinedProps
@@ -336,7 +341,8 @@ export type SelectPickerGroupHeadingProps<OptionValue> = GroupHeadingProps<Selec
 }
 
 export interface FilterSelectPickerProps
-    extends Required<
+    extends
+        Required<
             Pick<SelectPickerProps<number | string, true>, 'options' | 'isDisabled' | 'placeholder' | 'isLoading'>
         >,
         Pick<
@@ -353,6 +359,7 @@ export interface FilterSelectPickerProps
             | 'onMenuClose'
             | 'menuIsOpen'
             | 'onKeyDown'
+            | 'isUserIdentifier'
         > {
     appliedFilterOptions: SelectPickerOptionType[]
     handleApplyFilter: (filtersToApply: SelectPickerOptionType<number | string>[]) => void
@@ -370,14 +377,31 @@ export type SelectPickerTextAreaProps = Omit<
 > &
     Pick<ResizableTagTextAreaProps, 'maxHeight' | 'minHeight' | 'refVar' | 'dependentRefs'>
 
-export interface GroupedFilterSelectPickerProps<T extends string | number = string | number>
-    extends Omit<
-        ActionMenuProps<T>,
-        'onClick' | 'disableDescriptionEllipsis' | 'children' | 'buttonProps' | 'isSearchable'
-    > {
+export type FilterSelectPickerMapSelectPickerVariant = {
+    variant?: 'selectPicker'
+} & Omit<FilterSelectPickerProps, 'autoFocus' | 'menuIsOpen' | 'onMenuClose' | 'onKeyDown' | 'selectRef'>
+
+type FilterSelectPickerMapPopOverVariant = {
+    variant: 'popover'
+    /**
+     * Component rendered inside the Popover.
+     * Receives `closePopover` as a prop to allow programmatic closing.
+     */
+    component: (closePopover: () => void, scrollableRef: UsePopoverReturnType['scrollableRef']) => ReactElement
+    /**
+     * Optional positioning config forwarded to usePopover
+     */
+    popoverConfig?: Pick<UsePopoverProps, 'position' | 'alignment' | 'width'>
+}
+
+export type GroupedFilterSelectPickerMapValue =
+    | FilterSelectPickerMapSelectPickerVariant
+    | FilterSelectPickerMapPopOverVariant
+
+export interface GroupedFilterSelectPickerProps<T extends string | number = string | number> extends Omit<
+    ActionMenuProps<T>,
+    'onClick' | 'disableDescriptionEllipsis' | 'children' | 'buttonProps' | 'isSearchable'
+> {
     isFilterApplied?: boolean
-    filterSelectPickerPropsMap: Record<
-        T,
-        Omit<FilterSelectPickerProps, 'autoFocus' | 'menuIsOpen' | 'onMenuClose' | 'onKeyDown' | 'selectRef'>
-    >
+    filterSelectPickerPropsMap: Record<T, GroupedFilterSelectPickerMapValue>
 }

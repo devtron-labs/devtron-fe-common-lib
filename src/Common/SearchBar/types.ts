@@ -71,4 +71,12 @@ export interface SearchBarProps {
      * @note This is displayed in place of the dropdown indicator
      */
     keyboardShortcut?: SupportedKeyboardKeysType
+    /**
+     * @default 'default'
+     */
+    variant?: 'default' | 'sidenav'
+    /**
+     * If true, would convert the magnifying glass icon to a loading spinner
+     */
+    isLoading?: boolean
 }

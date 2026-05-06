@@ -14,26 +14,32 @@
  * limitations under the License.
  */
 
+import { NestedBreadCrumb } from '@Common/index'
 import { InfoIconTippy } from '@Shared/Components/InfoIconTippy'
+import { ROUTER_URLS } from '@PagesDevtron2.0/Shared'
 
-import { BreadCrumb } from '../../../Common'
 import { BUILD_INFRA_TEXT } from './constants'
 import { BuildInfraDescriptorProps } from './types'
 
 const Descriptor = ({
     additionalContainerClasses,
-    breadCrumbs,
     children,
+    tooltipNode,
     tippyInfoText,
     tippyAdditionalContent,
-    tooltipNode,
     tooltipHeading,
+    profileName,
 }: BuildInfraDescriptorProps) => (
     <div className={`flexbox dc__content-space dc__align-items-center w-100 ${additionalContainerClasses ?? ''}`}>
         <div className="flexbox dc__align-items-center dc__gap-4">
             {tooltipNode || (
                 <>
-                    <BreadCrumb breadcrumbs={breadCrumbs} />
+                    <NestedBreadCrumb
+                        redirectUrl={ROUTER_URLS.APPLICATION_MANAGEMENT_CONFIGURATIONS.BUILD_INFRA.PROFILES}
+                        linkText={BUILD_INFRA_TEXT.HEADING}
+                        profileName={profileName}
+                        nestedBreadCrumbsText="Profiles"
+                    />
                     <InfoIconTippy
                         infoText={tippyInfoText ?? BUILD_INFRA_TEXT.EDIT_DEFAULT_TOOLTIP}
                         additionalContent={tippyAdditionalContent}

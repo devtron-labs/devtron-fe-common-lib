@@ -76,6 +76,8 @@ export const getIconName = (status: string, showAnimatedIcon: boolean): IconName
             return 'ic-delete-dots'
         case 'deleted':
             return 'ic-delete'
+        case 'warning':
+            return 'ic-warning-fill'
         default:
             return null
     }
@@ -102,6 +104,8 @@ export const getIconColor = (status: string): IconsProps['color'] => {
         case 'deleting':
         case 'deleted':
             return 'R500'
+        case 'warning':
+            return 'Y500'
         default:
             return null
     }

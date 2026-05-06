@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { SyntheticEvent } from 'react'
+import { type JSX, SyntheticEvent } from 'react'
 
 import { TooltipProps } from '@Common/Tooltip'
 import { DataAttributes, Never } from '@Shared/types'
@@ -122,10 +122,12 @@ export type TreeItem<DataAttributeType = null> = BaseNode<DataAttributeType> & {
               onClick?: (e: SyntheticEvent) => void
               href?: never
               clearQueryParamsOnNavigation?: never
+              activeClassName?: never
           }
         | {
               as: 'link'
               href: string
+              activeClassName?: string
               /**
                * The callback function to handle click events on the nav link.
                */
@@ -141,6 +143,7 @@ export type TreeItem<DataAttributeType = null> = BaseNode<DataAttributeType> & {
               href?: never
               onClick?: never
               clearQueryParamsOnNavigation?: never
+              activeClassName?: never
           }
     )
 
@@ -181,14 +184,25 @@ export type TreeViewProps<DataAttributeType = null> = {
      */
     mode?: 'navigation' | 'form'
     /**
-     * If primary the background color will be bg__primary and bg__hover--opaque, if secondary the background color will be bg__secondary bg__hover-secondary--opaque.
+     * If primary the background color will be bg__primary and bg__hover--opaque \
+     * if secondary the background color will be bg__secondary bg__hover-secondary--opaque,
+     * if sidenav the background color will be bg__transparent bg__hover-sidebar-item.
      * @default 'primary'
      */
-    variant?: 'primary' | 'secondary'
+    variant?: 'primary' | 'secondary' | 'sidenav'
     /**
      * @default {}
      */
     defaultExpandedMap?: Record<string, boolean>
+    /**
+     * When true, the selected heading (`selectedId`) will be highlighted only when it is collapsed.
+     * @default false
+     */
+    highlightSelectedHeadingOnlyWhenCollapsed?: boolean
+    /**
+     * @default true
+     */
+    useOverflowAuto?: boolean
 } /**
  * WARNING: For internal use only.
  */ & (
@@ -224,21 +238,29 @@ export type TreeViewProps<DataAttributeType = null> = {
 )
 
 export interface TreeViewNodeContentProps
-    extends Pick<BaseNode, 'startIconConfig' | 'title' | 'subtitle' | 'customTooltipConfig' | 'strikeThrough'> {
+    extends
+        Pick<BaseNode, 'startIconConfig' | 'title' | 'subtitle' | 'customTooltipConfig' | 'strikeThrough'>,
+        Required<Pick<TreeViewProps, 'variant'>> {
     type: 'heading' | 'item'
     isSelected: boolean
 }
 
-export interface GetSelectedIdParentNodesProps<DataAttributeType = null>
-    extends Pick<TreeViewProps<DataAttributeType>, 'nodes' | 'selectedId'> {}
+export interface GetSelectedIdParentNodesProps<DataAttributeType = null> extends Pick<
+    TreeViewProps<DataAttributeType>,
+    'nodes' | 'selectedId'
+> {}
 
-export interface FindSelectedIdParentNodesProps<DataAttributeType = null>
-    extends Pick<GetSelectedIdParentNodesProps<DataAttributeType>, 'selectedId'> {
+export interface FindSelectedIdParentNodesProps<DataAttributeType = null> extends Pick<
+    GetSelectedIdParentNodesProps<DataAttributeType>,
+    'selectedId'
+> {
     node: TreeNode<DataAttributeType>
     onFindParentNode: (id: string) => void
 }
 
-export interface GetVisibleNodesProps<DataAttributeType = null>
-    extends Pick<TreeViewProps<DataAttributeType>, 'expandedMap'> {
+export interface GetVisibleNodesProps<DataAttributeType = null> extends Pick<
+    TreeViewProps<DataAttributeType>,
+    'expandedMap'
+> {
     nodeList: TreeNode<DataAttributeType>[]
 }

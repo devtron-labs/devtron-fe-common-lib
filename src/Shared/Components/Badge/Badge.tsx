@@ -18,7 +18,7 @@ import { ComponentSizeType } from '@Shared/constants'
 
 import { Icon } from '../Icon'
 import { BadgeProps } from './types'
-import { getClassNameAccToSize, getClassNameAccToVariant } from './utils'
+import { COMPONENT_SIZE_TO_ICON_SIZE_MAP, getClassNameAccToSize, getClassNameAccToVariant } from './utils'
 
 const Badge = ({
     label,
@@ -30,11 +30,11 @@ const Badge = ({
     size = ComponentSizeType.xs,
 }: BadgeProps) => {
     const { styles, iconColor } = getClassNameAccToVariant(variant)
-    const iconSize = size === ComponentSizeType.xs ? 20 : 16
+    const iconSize = COMPONENT_SIZE_TO_ICON_SIZE_MAP[size]
 
     return (
         <div
-            className={`flex dc__gap-4 br-4 fw-5 dc__w-fit-content ${getClassNameAccToSize(size)} ${styles}`}
+            className={`flex dc__gap-4 br-4 fw-5 dc__w-fit-content dc__no-shrink ${getClassNameAccToSize(size)} ${styles}`}
             {...(bgColor && fontColor
                 ? {
                       style: {

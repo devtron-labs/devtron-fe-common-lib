@@ -373,7 +373,7 @@ export const getCommonSelectStyle = <OptionValue, IsMulti extends boolean>({
         }),
         menuPortal: (base) => ({
             ...base,
-            zIndex: 2,
+            zIndex: 3,
         }),
     }
 }
@@ -434,4 +434,19 @@ export const getSelectPickerOptionByValue = <OptionValue>(
             return optionValue === value
         }) ?? defaultOption
     )
+}
+
+export const getSelectPickerOptionsByValue = <OptionValue>(
+    optionsList: OptionsOrGroups<SelectPickerOptionType<OptionValue>, GroupBase<SelectPickerOptionType<OptionValue>>>,
+    values: OptionValue[],
+): SelectPickerOptionType<OptionValue>[] => {
+    if (!Array.isArray(optionsList)) {
+        return []
+    }
+
+    const flatOptionsList = optionsList.flatMap<SelectPickerOptionType<OptionValue>>((groupOrBaseOption) =>
+        'options' in groupOrBaseOption ? groupOrBaseOption.options : [groupOrBaseOption],
+    )
+
+    return flatOptionsList.filter((option) => values.includes(option.value))
 }

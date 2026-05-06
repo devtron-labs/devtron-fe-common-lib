@@ -14,29 +14,35 @@
  * limitations under the License.
  */
 
-import { useLocation, useParams } from 'react-router-dom'
+import { useLocation } from 'react-router-dom'
 
-import { SERVER_MODE, URLS } from '@Common/Constants'
+import { SERVER_MODE } from '@Common/Constants'
 import { noop } from '@Common/Helper'
+import { BreadCrumb, BreadcrumbText, useBreadcrumb } from '@Common/index'
 import { ActionMenu } from '@Shared/Components/ActionMenu'
 import { ButtonComponentType } from '@Shared/Components/Button'
 import Button from '@Shared/Components/Button/Button.component'
+import { DOCUMENTATION } from '@Shared/Components/DocLink'
 import { Icon } from '@Shared/Components/Icon'
-import { AppListConstants, ComponentSizeType } from '@Shared/constants'
+import { ComponentSizeType } from '@Shared/constants'
 import { useMainContext } from '@Shared/Providers'
+import { getApplicationManagementBreadcrumb } from '@PagesDevtron2.0/ApplicationManagement'
+import { getAutomationEnablementBreadcrumb } from '@PagesDevtron2.0/Automation&Enablement'
+import { getInfrastructureManagementBreadcrumb } from '@PagesDevtron2.0/InfrastructureManagement'
+import { ROUTER_URLS } from '@PagesDevtron2.0/Shared'
 
 import PageHeader from '../PageHeader'
 import { HeaderWithCreateButtonProps } from './types'
 import { getCreateActionMenuOptions } from './utils'
 
-export const HeaderWithCreateButton = ({ headerName, additionalHeaderInfo }: HeaderWithCreateButtonProps) => {
+export const HeaderWithCreateButton = ({ viewType }: HeaderWithCreateButtonProps) => {
     // HOOKS
-    const { serverMode } = useMainContext()
-    const params = useParams<{ appType: string }>()
     const location = useLocation()
+    const { serverMode } = useMainContext()
 
     // CONSTANTS
-    const createCustomAppURL = `${URLS.APP}/${URLS.APP_LIST}/${params.appType ?? AppListConstants.AppType.DEVTRON_APPS}/${AppListConstants.CREATE_DEVTRON_APP_URL}${location.search}`
+    const createCustomAppURL = `${ROUTER_URLS.CREATE_DEVTRON_APP}${location.search}`
+    const createJobURL = `${ROUTER_URLS.CREATE_JOB}${location.search}`
 
     const renderActionButtons = () =>
         serverMode === SERVER_MODE.FULL ? (
@@ -44,7 +50,7 @@ export const HeaderWithCreateButton = ({ headerName, additionalHeaderInfo }: Hea
                 id="page-header-create-app-action-menu"
                 alignment="end"
                 onClick={noop}
-                options={getCreateActionMenuOptions(createCustomAppURL)}
+                options={getCreateActionMenuOptions(createCustomAppURL, createJobURL)}
                 buttonProps={{
                     text: 'Create',
                     dataTestId: 'create-app-button-on-header',
@@ -56,18 +62,87 @@ export const HeaderWithCreateButton = ({ headerName, additionalHeaderInfo }: Hea
             <Button
                 text="Deploy helm charts"
                 component={ButtonComponentType.link}
-                linkProps={{ to: URLS.CHARTS_DISCOVER }}
+                linkProps={{ to: ROUTER_URLS.CHART_STORE }}
                 dataTestId="deploy-helm-chart-on-header"
                 size={ComponentSizeType.small}
             />
         )
 
+    const getPathPattern = () => {
+        switch (viewType) {
+            case 'jobs':
+                return ROUTER_URLS.JOBS_LIST
+            case 'infra-apps':
+                return ROUTER_URLS.INFRASTRUCTURE_MANAGEMENT_APP_LIST.ROUTE
+            case 'apps':
+            default:
+                return ROUTER_URLS.DEVTRON_APP_LIST
+        }
+    }
+
+    const pathPattern = getPathPattern()
+
+    const getBreadcrumbs = () => {
+        switch (viewType) {
+            case 'jobs':
+                return {
+                    ...getAutomationEnablementBreadcrumb(),
+                    job: null,
+                    list: { component: <BreadcrumbText isActive heading="Jobs" /> },
+                }
+            case 'infra-apps':
+                return {
+                    ...getInfrastructureManagementBreadcrumb(),
+                    apps: { component: <BreadcrumbText isActive heading="Applications" /> },
+                    ':appType': null,
+                }
+            case 'apps':
+            default:
+                return {
+                    ...getApplicationManagementBreadcrumb(),
+                    'devtron-app': { component: <BreadcrumbText isActive heading="Devtron Applications" /> },
+                    list: null,
+                }
+        }
+    }
+
+    const { breadcrumbs } = useBreadcrumb(
+        pathPattern,
+        {
+            alias: getBreadcrumbs(),
+        },
+        [location.pathname],
+    )
+    const renderBreadcrumbs = () => <BreadCrumb breadcrumbs={breadcrumbs} path={pathPattern} />
+
+    const getDocPath = () => {
+        if (viewType === 'jobs') {
+            return DOCUMENTATION.AUTOMATION_AND_ENABLEMENT
+        }
+        if (viewType === 'infra-apps') {
+            return DOCUMENTATION.INFRA_MANAGEMENT
+        }
+        return DOCUMENTATION.APP_MANAGEMENT
+    }
+
     return (
         <div className="create-button-container dc__position-sticky dc__top-0 bg__primary dc__zi-4">
             <PageHeader
-                headerName={headerName}
+                isBreadcrumbs
+                breadCrumbs={renderBreadcrumbs}
                 renderActionButtons={renderActionButtons}
-                additionalHeaderInfo={additionalHeaderInfo}
+                {...(viewType === 'jobs'
+                    ? {
+                          tippyProps: {
+                              isTippyCustomized: true,
+                              tippyRedirectLink: 'JOBS',
+                              tippyMessage:
+                                  'Job allows execution of repetitive tasks in a manual or automated manner. Execute custom tasks or choose from a library of preset plugins in your job pipeline.',
+                              tippyHeader: 'Job',
+                          },
+                      }
+                    : {})}
+                docPath={getDocPath()}
             />
         </div>
     )

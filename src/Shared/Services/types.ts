@@ -16,7 +16,7 @@
 
 import { MainContext } from '@Shared/Providers'
 
-import { getUrlWithSearchParams } from '../../Common'
+import { ClusterDetailDTO, getUrlWithSearchParams } from '../../Common'
 import { PolicyKindType, ResourceKindType, ResourceVersionType } from '../types'
 
 export interface BaseAppMetaData {
@@ -52,8 +52,10 @@ interface BaseGetApiUrlProps<T, K extends ResourceKindType | PolicyKindType, P e
 
 export interface GetResourceApiUrlProps<T> extends BaseGetApiUrlProps<T, ResourceKindType, ResourceVersionType> {}
 
-export interface GetPolicyApiUrlProps<T>
-    extends Omit<BaseGetApiUrlProps<T, PolicyKindType, ResourceVersionType>, 'baseUrl'> {}
+export interface GetPolicyApiUrlProps<T> extends Omit<
+    BaseGetApiUrlProps<T, PolicyKindType, ResourceVersionType>,
+    'baseUrl'
+> {}
 
 export interface EnvironmentDataValuesDTO extends Pick<MainContext, 'featureGitOpsFlags' | 'canFetchHelmAppStatus'> {
     isAirGapEnvironment: boolean
@@ -61,4 +63,17 @@ export interface EnvironmentDataValuesDTO extends Pick<MainContext, 'featureGitO
     canOnlyViewPermittedEnvOrgLevel: boolean
     devtronManagedLicensingEnabled: boolean
     isResourceRecommendationEnabled?: boolean
+    featureAskDevtronExpert: boolean
+    forceDockerfileScan: boolean
+}
+
+export interface ClusterMinDTO {
+    id: number
+    cluster_name: string
+    isVirtualCluster: boolean
+    isProd: boolean
+}
+
+export type AllClusterListMinItemDTO = Pick<ClusterDetailDTO, 'id' | 'cluster_name' | 'isVirtualCluster' | 'isProd'> & {
+    costModuleConfig: Pick<ClusterDetailDTO['costModuleConfig'], 'enabled' | 'installationStatus'>
 }

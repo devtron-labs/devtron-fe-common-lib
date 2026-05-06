@@ -14,12 +14,15 @@
  * limitations under the License.
  */
 
-import { DEVTRON_GPT_LINK, DISCORD_LINK, DOCUMENTATION_HOME_PAGE, URLS } from '@Common/Constants'
+import { DEVTRON_GPT_LINK, DISCORD_LINK, DOCUMENTATION_HOME_PAGE } from '@Common/Constants'
 import { CONTACT_SUPPORT_LINK, OPEN_NEW_TICKET, RAISE_ISSUE, VIEW_ALL_TICKETS } from '@Shared/constants'
+import { ROUTER_URLS } from '@PagesDevtron2.0/index'
 
-import { HelpButtonActionMenuProps, HelpMenuItems } from './types'
+import { HelpButtonActionMenuProps, HelpMenuItems, PageHeaderType } from './types'
 
-export const COMMON_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options'][number]['items'] = [
+export const getCommonHelpActionMenuItems = ({
+    docPath,
+}: Pick<PageHeaderType, 'docPath'>): HelpButtonActionMenuProps['options'][number]['items'] => [
     ...((!window._env_?.K8S_CLIENT
         ? [
               {
@@ -27,7 +30,7 @@ export const COMMON_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options']
                   label: 'Getting started',
                   startIcon: { name: 'ic-path' },
                   componentType: 'link',
-                  to: `/${URLS.GETTING_STARTED}`,
+                  to: ROUTER_URLS.GETTING_STARTED,
               },
           ]
         : []) satisfies HelpButtonActionMenuProps['options'][number]['items']),
@@ -36,7 +39,7 @@ export const COMMON_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options']
         label: 'View documentation',
         startIcon: { name: 'ic-book-open' },
         componentType: 'anchor',
-        href: DOCUMENTATION_HOME_PAGE,
+        href: `${DOCUMENTATION_HOME_PAGE}${docPath ? `/${docPath}` : ''}`,
     },
     {
         id: HelpMenuItems.DEVTRON_GPT,
@@ -74,6 +77,13 @@ export const OSS_HELP_ACTION_MENU_ITEMS: HelpButtonActionMenuProps['options'][nu
         startIcon: { name: 'ic-file-edit' },
         componentType: 'anchor',
         href: RAISE_ISSUE,
+    },
+    {
+        id: HelpMenuItems.UPGRADE_TO_OSS_PLUS,
+        label: 'Upgrade to OSS Plus',
+        startIcon: { name: 'ic-arrow-up-circle' },
+        componentType: 'button',
+        description: 'Run Devtron OSS with Expert Support',
     },
 ]
 

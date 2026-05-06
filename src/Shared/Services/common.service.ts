@@ -17,7 +17,13 @@
 import { AppConfigProps, GetTemplateAPIRouteType } from '@Pages/index'
 
 import { get, getUrlWithSearchParams, post, ROUTES } from '../../Common'
-import { getTemplateAPIRoute } from '..'
+import {
+    AllClusterListMinItemDTO,
+    ClusterMinDTO,
+    ClusterType,
+    getTemplateAPIRoute,
+    stringComparatorBySortOrder,
+} from '..'
 import { EnvironmentDataValuesDTO, GetPolicyApiUrlProps, GetResourceApiUrlProps } from './types'
 
 export const getResourceApiUrl = <T>({ baseUrl, kind, version, suffix, queryParams }: GetResourceApiUrlProps<T>) =>
@@ -40,3 +46,28 @@ export const saveCDPipeline = (request, { isTemplateView }: Required<Pick<AppCon
 }
 
 export const getEnvironmentData = () => get<EnvironmentDataValuesDTO>(ROUTES.ENVIRONMENT_DATA)
+
+export const getClusterOptions = async (signal?: AbortSignal): Promise<ClusterType[]> => {
+    const { result } = await get<ClusterMinDTO[]>(ROUTES.CLUSTER_LIST_MIN, { signal })
+
+    if (!result) {
+        return []
+    }
+
+    return result
+        .map(({ id, cluster_name: name, isVirtualCluster, isProd }) => ({
+            id,
+            name,
+            isVirtual: isVirtualCluster ?? false,
+            isProd: isProd ?? false,
+        }))
+        .sort((a, b) => stringComparatorBySortOrder(a.name, b.name))
+}
+
+export const getAllClusterListMin = async (signal: AbortSignal) => {
+    const response = await get<AllClusterListMinItemDTO[]>(ROUTES.CLUSTER_MIN, {
+        signal,
+    })
+
+    return response
+}

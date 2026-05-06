@@ -16,7 +16,7 @@
 
 import { Fragment, useEffect, useMemo, useRef } from 'react'
 
-import { abortPreviousRequests, getIsRequestAborted } from '@Common/API/utils'
+import { useQuery } from '@Common/API'
 import { GenericEmptyState, GenericFilterEmptyState } from '@Common/EmptyState'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
 import { noop, useAsync } from '@Common/Helper'
@@ -24,7 +24,7 @@ import { UseRegisterShortcutProvider } from '@Common/Hooks'
 
 import { NO_ROWS_OR_GET_ROWS_ERROR } from './constants'
 import TableContent from './TableContent'
-import { FiltersTypeEnum, InternalTableProps, PaginationEnum } from './types'
+import { FiltersTypeEnum, InternalTableProps, RowsResultType } from './types'
 import { getFilteringPromise, searchAndSortRows } from './utils'
 
 const InternalTable = <
@@ -49,12 +49,16 @@ const InternalTable = <
     loading,
     bulkSelectionConfig,
     bulkSelectionReturnValue,
+    id,
     handleClearBulkSelection,
     handleToggleBulkSelectionOnRow,
     paginationVariant,
-    RowActionsOnHoverComponent,
+    rowActionOnHoverConfig,
     pageSizeOptions,
     clearFilters: userGivenUrlClearFilters,
+    rowStartIconConfig,
+    onRowClick,
+    areFiltersApplied: userProvidedAreFiltersApplied,
 }: InternalTableProps<RowData, FilterVariant, AdditionalProps>) => {
     const {
         sortBy,
@@ -76,11 +80,7 @@ const InternalTable = <
         ...otherFilters
     } = filterData ?? {}
 
-    const abortControllerRef = useRef<AbortController>(new AbortController())
-
     const wrapperDivRef = useRef<HTMLDivElement>(null)
-
-    const { setIdentifiers } = bulkSelectionReturnValue ?? {}
 
     const searchSortTimeoutRef = useRef<number>(-1)
 
@@ -118,49 +118,62 @@ const InternalTable = <
         handleClearBulkSelection()
     }, [rows])
 
+    const handleFiltering = async () => {
+        let totalRows = rows.length
+        const filteredRows = await getFilteringPromise({
+            searchSortTimeoutRef,
+            callback: () => {
+                const { rows: filteredAndSortedRows, totalRows: total } = searchAndSortRows(
+                    rows,
+                    filter,
+                    filterData,
+                    additionalProps,
+                    visibleColumns.find(({ field }) => field === sortBy)?.comparator,
+                )
+
+                totalRows = total
+
+                return filteredAndSortedRows
+            },
+        })
+        return { filteredRows, totalRows }
+    }
+
     // useAsync hook for 'rows' scenario
     const [_areRowsLoading, rowsResult, rowsError, reloadRows] = useAsync(
-        async () => {
-            let totalRows = rows.length
-            const filteredRows = await getFilteringPromise({
-                searchSortTimeoutRef,
-                callback: () => {
-                    const { rows: filteredAndSortedRows, totalRows: total } = searchAndSortRows(
-                        rows,
-                        filter,
-                        filterData,
-                        visibleColumns.find(({ field }) => field === sortBy)?.comparator,
-                    )
-
-                    totalRows = total
-
-                    return filteredAndSortedRows
-                },
-            })
-            return { filteredRows, totalRows }
-        },
-        [searchKey, sortBy, sortOrder, rows, JSON.stringify(otherFilters), visibleColumns],
+        handleFiltering,
+        [searchKey, filter, sortBy, sortOrder, rows, JSON.stringify(otherFilters), visibleColumns],
         !!rows,
     )
 
+    // NOTE: passing getRows to queryKey won't trigger a refetch
+    // since it is a function
+    const lastUpdatedGetRowsInstance = useMemo(() => new Date().toISOString(), [getRows])
+
     // useAsync hook for 'getRows' scenario
-    const [_areGetRowsLoadingWithoutAbortError, getRowsResult, getRowsErrorWithAbortError, reloadGetRows] = useAsync(
-        () =>
-            abortPreviousRequests(async () => {
-                let totalRows = 0
-                const { rows: newRows, totalRows: total } = await getRows(filterData, abortControllerRef)
-                totalRows = total
-                return { filteredRows: newRows, totalRows }
-            }, abortControllerRef),
-        [searchKey, sortBy, sortOrder, getRows, offset, pageSize, JSON.stringify(otherFilters), visibleColumns],
-        !!getRows,
-        { resetOnChange: false },
-    )
-
-    const _areGetRowsLoading = _areGetRowsLoadingWithoutAbortError || !!getIsRequestAborted(getRowsErrorWithAbortError)
-
-    const getRowsError =
-        !getIsRequestAborted(getRowsErrorWithAbortError) && !_areGetRowsLoading ? getRowsErrorWithAbortError : null
+    const {
+        isFetching: _areGetRowsLoading,
+        data: getRowsResult,
+        error: getRowsError,
+        refetch: reloadGetRows,
+        // eslint-disable-next-line @tanstack/query/exhaustive-deps
+    } = useQuery<unknown, RowsResultType<RowData>, unknown[], false>({
+        queryFn: async ({ signal }) => {
+            const { rows: newRows, totalRows } = await getRows(filterData, signal)
+            return { filteredRows: newRows, totalRows }
+        },
+        queryKey: [
+            searchKey,
+            sortBy,
+            sortOrder,
+            lastUpdatedGetRowsInstance,
+            offset,
+            pageSize,
+            JSON.stringify(otherFilters),
+            visibleColumns,
+        ],
+        enabled: !!getRows,
+    })
 
     // Combine results based on whether getRows is provided
     const _areFilteredRowsLoading = getRows ? _areGetRowsLoading : _areRowsLoading
@@ -168,29 +181,12 @@ const InternalTable = <
     const filteredRowsError = getRows ? getRowsError : rowsError
     const reloadFilteredRows = getRows ? reloadGetRows : reloadRows
 
-    const { filteredRows, totalRows } = filteredRowsResult ?? { filteredRows: [], totalRows: 0 }
+    const { filteredRows, totalRows } = useMemo(
+        () => filteredRowsResult ?? { filteredRows: [], totalRows: 0 },
+        [filteredRowsResult],
+    )
 
     const areFilteredRowsLoading = _areFilteredRowsLoading || filteredRowsError === NO_ROWS_OR_GET_ROWS_ERROR
-
-    const visibleRows = useMemo(() => {
-        const normalizedFilteredRows = filteredRows ?? []
-
-        const paginatedRows =
-            paginationVariant !== PaginationEnum.PAGINATED
-                ? normalizedFilteredRows
-                : normalizedFilteredRows.slice(offset, offset + pageSize)
-
-        return paginatedRows
-    }, [paginationVariant, offset, pageSize, filteredRows])
-
-    useEffect(() => {
-        setIdentifiers?.(
-            visibleRows.reduce((acc, row) => {
-                acc[row.id] = row
-                return acc
-            }, {}),
-        )
-    }, [visibleRows])
 
     const Wrapper = ViewWrapper ?? Fragment
 
@@ -200,10 +196,14 @@ const InternalTable = <
         }
 
         if (!areFilteredRowsLoading && !filteredRows?.length && !loading) {
-            return filtersVariant !== FiltersTypeEnum.NONE && areFiltersApplied ? (
+            return filtersVariant !== FiltersTypeEnum.NONE &&
+                (userProvidedAreFiltersApplied !== undefined ? userProvidedAreFiltersApplied : areFiltersApplied) ? (
                 <GenericFilterEmptyState
                     {...emptyStateConfig.noRowsForFilterConfig}
-                    handleClearFilters={userGivenUrlClearFilters ?? clearFilters}
+                    handleClearFilters={
+                        emptyStateConfig.noRowsForFilterConfig?.handleClearFilters ||
+                        (userGivenUrlClearFilters ?? clearFilters)
+                    }
                 />
             ) : (
                 <GenericEmptyState {...emptyStateConfig.noRowsConfig} />
@@ -222,7 +222,7 @@ const InternalTable = <
                     filterData={filterData}
                     handleClearBulkSelection={handleClearBulkSelection}
                     handleToggleBulkSelectionOnRow={handleToggleBulkSelectionOnRow}
-                    RowActionsOnHoverComponent={RowActionsOnHoverComponent}
+                    rowActionOnHoverConfig={rowActionOnHoverConfig}
                     additionalProps={additionalProps}
                     bulkSelectionConfig={bulkSelectionConfig}
                     loading={loading}
@@ -231,13 +231,15 @@ const InternalTable = <
                     stylesConfig={stylesConfig}
                     getRows={getRows}
                     totalRows={totalRows}
+                    rowStartIconConfig={rowStartIconConfig}
+                    onRowClick={onRowClick}
                 />
             </UseRegisterShortcutProvider>
         )
     }
 
     return (
-        <div ref={wrapperDivRef} className="flexbox-col flex-grow-1 dc__overflow-hidden">
+        <div ref={wrapperDivRef} className="flexbox-col flex-grow-1 dc__overflow-hidden" id={`table-wrapper-${id}`}>
             <Wrapper
                 areRowsLoading={areFilteredRowsLoading}
                 clearFilters={clearFilters}

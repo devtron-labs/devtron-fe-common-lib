@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { ChangeEvent, useState } from 'react'
+import { useState } from 'react'
 
 import { ComponentSizeType } from '@Shared/constants'
 
-import { stopPropagation, StyledRadioGroup, VisibleModal } from '../../../Common'
+import { SegmentedControl, stopPropagation, VisibleModal } from '../../../Common'
 import { Button, ButtonVariantType } from '../Button'
 import { DocLink } from '../DocLink'
 import { BUTTON_TEXT } from './constant'
@@ -104,8 +104,8 @@ export const FeatureDescriptionModal = ({
     const [selectedTabId, setSelectedTabId] = useState(tabsConfig?.[0]?.id ?? null)
     const selectedTab = tabsConfig?.find((tab) => tab.id === selectedTabId) ?? null
 
-    const handleSelectedTabChange = (e: ChangeEvent<HTMLInputElement>) => {
-        setSelectedTabId(e.target.value)
+    const handleSegmentSelectedTabChange = (selectedSegment) => {
+        setSelectedTabId(selectedSegment.value)
     }
 
     return (
@@ -120,19 +120,12 @@ export const FeatureDescriptionModal = ({
                     tabsConfig.length > 0 && (
                         <>
                             <div className="px-20 pb-8 flex left w-100">
-                                <StyledRadioGroup
-                                    className="gui-yaml-switch"
+                                <SegmentedControl
+                                    segments={tabsConfig.map((tab) => ({ label: tab.title, value: tab.id }))}
+                                    value={selectedTabId}
+                                    onChange={handleSegmentSelectedTabChange}
                                     name="feature-description-modal-tabs"
-                                    initialTab={selectedTab.id}
-                                    disabled={false}
-                                    onChange={handleSelectedTabChange}
-                                >
-                                    {tabsConfig.map((tab) => (
-                                        <StyledRadioGroup.Radio value={tab.id} key={tab.id}>
-                                            {tab.title}
-                                        </StyledRadioGroup.Radio>
-                                    ))}
-                                </StyledRadioGroup>
+                                />
                             </div>
                             <FeatureDescriptionModalContent
                                 SVGImage={selectedTab.SVGImage}

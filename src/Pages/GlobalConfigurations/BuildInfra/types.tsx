@@ -19,7 +19,6 @@ import { FormEvent, FunctionComponent, ReactNode, SyntheticEvent } from 'react'
 import { BUILD_INFRA_INHERIT_ACTIONS, useBuildInfraForm } from '@Pages/index'
 
 import { ServerErrors } from '../../../Common'
-import { Breadcrumb } from '../../../Common/BreadCrumb/Types'
 import {
     CMSecretComponentType,
     CMSecretConfigData,
@@ -76,21 +75,31 @@ export enum BuildInfraProfileVariants {
     CUSTOM = 'CUSTOM',
 }
 
-export interface BuildInfraDescriptorProps {
+export type BuildInfraDescriptorProps = {
     /**
      * In case we want to restrict the max-width
      */
     additionalContainerClasses?: string
-    breadCrumbs: Breadcrumb[]
     /**
      * Would stick at right of div
      */
     children?: ReactNode
-    tippyInfoText?: string
-    tippyAdditionalContent?: ReactNode
-    tooltipNode?: ReactNode
-    tooltipHeading?: string
-}
+} & (
+    | {
+          tooltipNode: ReactNode
+          tippyInfoText?: never
+          tooltipHeading?: never
+          tippyAdditionalContent?: never
+          profileName?: never
+      }
+    | {
+          tooltipNode?: never
+          tippyInfoText: string
+          tooltipHeading?: string
+          tippyAdditionalContent?: ReactNode
+          profileName?: string
+      }
+)
 
 export type NumericBuildInfraConfigTypes = Extract<
     BuildInfraConfigTypes,
@@ -546,8 +555,10 @@ export interface UseBuildInfraFormResponseType {
     handleSubmit: (e?: FormEvent<HTMLFormElement>) => Promise<void>
 }
 
-export interface BuildInfraConfigFormProps
-    extends Pick<UseBuildInfraFormResponseType, 'profileInput' | 'profileInputErrors' | 'handleProfileInputChange'> {
+export interface BuildInfraConfigFormProps extends Pick<
+    UseBuildInfraFormResponseType,
+    'profileInput' | 'profileInputErrors' | 'handleProfileInputChange'
+> {
     isGlobalProfile?: boolean
     unitsMap?: BuildInfraProfileResponseType['configurationUnits']
     configurationContainerLabel?: ReactNode
@@ -608,7 +619,8 @@ export interface FooterProps {
 }
 
 export interface UpsertBuildInfraProfileServiceParamsType
-    extends Pick<UseBuildInfraFormResponseType, 'profileInput'>,
+    extends
+        Pick<UseBuildInfraFormResponseType, 'profileInput'>,
         Pick<UseBuildInfraFormProps, 'canConfigureUseK8sDriver'> {
     /**
      * If not given would consider as create view
@@ -658,7 +670,8 @@ export interface BuildInfraProfileDTO extends BaseBuildInfraProfileDTO {
 }
 
 export interface BuildInfraProfileTransformerParamsType
-    extends BuildInfraProfileDTO,
+    extends
+        BuildInfraProfileDTO,
         Pick<GetBuildInfraProfileType, 'fromCreateView'>,
         Pick<GetBuildInfraProfileType, 'canConfigureUseK8sDriver'> {}
 
@@ -684,8 +697,10 @@ export type RequestLimitConfigType = Extract<
     | BuildInfraConfigTypes.MEMORY_REQUEST
 >
 
-export interface ValidateNodeSelectorParamsType
-    extends Pick<ReturnType<typeof useBuildInfraForm>, 'profileInputErrors'> {
+export interface ValidateNodeSelectorParamsType extends Pick<
+    ReturnType<typeof useBuildInfraForm>,
+    'profileInputErrors'
+> {
     selector: BuildInfraNodeSelectorValueType
     existingKeys: string[]
 }
@@ -699,5 +714,7 @@ export interface BuildInfraCMCSFormProps {
 export interface BuildInfraUtilityContextType {
     BuildInfraCMCSForm: FunctionComponent<BuildInfraCMCSFormProps>
 }
-export interface GetBaseProfileObjectParamsType
-    extends Pick<BuildInfraProfileTransformerParamsType, 'canConfigureUseK8sDriver' | 'fromCreateView' | 'profile'> {}
+export interface GetBaseProfileObjectParamsType extends Pick<
+    BuildInfraProfileTransformerParamsType,
+    'canConfigureUseK8sDriver' | 'fromCreateView' | 'profile'
+> {}

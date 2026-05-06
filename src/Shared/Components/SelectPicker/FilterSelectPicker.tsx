@@ -16,8 +16,8 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react'
 
-import { ReactComponent as ICFilter } from '@Icons/ic-filter.svg'
-import { ReactComponent as ICFilterApplied } from '@Icons/ic-filter-applied.svg'
+import ICFilter from '@Icons/ic-filter.svg?react'
+import ICFilterApplied from '@Icons/ic-filter-applied.svg?react'
 import { IS_PLATFORM_MAC_OS } from '@Common/Constants'
 import { useRegisterShortcut, UseRegisterShortcutProvider } from '@Common/Hooks'
 import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
@@ -34,9 +34,10 @@ const FilterSelectPicker = ({
     options,
     menuIsOpen = false,
     onMenuClose,
+    isUserIdentifier,
     ...props
 }: FilterSelectPickerProps) => {
-    const selectRef = useRef<SelectPickerProps<string | number, true>['selectRef']['current']>()
+    const selectRef = useRef<SelectPickerProps<string | number, true>['selectRef']['current']>(null)
 
     const [isMenuOpen, setIsMenuOpen] = useState(menuIsOpen)
     const { triggerAutoClickTimestamp, setTriggerAutoClickTimestampToNow, resetTriggerAutoClickTimestamp } =
@@ -110,6 +111,7 @@ const FilterSelectPicker = ({
         <div className="dc__mxw-250">
             <SelectPicker<string | number, true>
                 {...props}
+                isUserIdentifier={isUserIdentifier}
                 selectRef={selectRef}
                 options={options}
                 value={selectedOptions}

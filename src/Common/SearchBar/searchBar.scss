@@ -15,6 +15,8 @@
  */
 
 .search-bar {
+    $root: &;
+
     &:focus,
     &:focus-within {
         outline: none;
@@ -29,6 +31,30 @@
         }
     }
 
+    &#{$root}--sidenav {
+        background: transparent;
+        border-color: var(--sidenav-input-border);
+        min-width: 0;
+
+        &:hover {
+            border-color: var(--sidenav-input-border-hover);
+        }
+
+        &:focus,
+        &:focus-within {
+            border: solid 1px var(--sidenav-input-border-focus) !important;
+        }
+
+        #{$root}__input {
+            color: var(--sidenav-text);
+            background: transparent;
+
+            &::placeholder {
+                color: var(--sidenav-input-placeholder);
+            }
+        }
+    }
+
     &__icon {
         z-index: 1;
         top: 50%;
@@ -36,11 +62,19 @@
         transform: translateY(-50%);
     }
 
-    &__clear-button {
-        right: 0;
+    &__clear-btn {
+        right: 2px;
         top: 50%;
         transform: translateY(-50%);
         z-index: 1;
+
+        &#{$root}__clear-btn--sidenav {
+            .button {
+                svg *[stroke^='#']:not([data-style-override='false']) {
+                    stroke: var(--sidenav-input-icon);
+                }
+            }
+        }
     }
 
     &__kbd-shortcut {

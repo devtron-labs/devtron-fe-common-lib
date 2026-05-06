@@ -16,22 +16,23 @@
 
 /* eslint-disable no-param-reassign */
 import { ReactElement, useEffect, useRef, useState } from 'react'
-import { PromptProps } from 'react-router-dom'
+import { parse as parseCronExpression } from '@datasert/cronjs-parser'
 import { StrictRJSFSchema } from '@rjsf/utils'
 import Tippy from '@tippyjs/react'
+import cronstrue from 'cronstrue'
 import { animate } from 'framer-motion'
 import moment from 'moment'
 import { nanoid } from 'nanoid'
-import { Pair } from 'yaml'
+import { Pair, parse } from 'yaml'
 
-import { ReactComponent as ICAWSCodeCommit } from '@Icons/ic-aws-codecommit.svg'
-import { ReactComponent as ICBitbucket } from '@Icons/ic-bitbucket.svg'
-import { ReactComponent as ICGit } from '@Icons/ic-git.svg'
-import { ReactComponent as ICGithub } from '@Icons/ic-github.svg'
-import { ReactComponent as ICGitlab } from '@Icons/ic-gitlab.svg'
-import { ReactComponent as ICPullRequest } from '@Icons/ic-pull-request.svg'
-import { ReactComponent as ICTag } from '@Icons/ic-tag.svg'
-import { ReactComponent as ICWebhook } from '@Icons/ic-webhook.svg'
+import ICAWSCodeCommit from '@Icons/ic-aws-codecommit.svg?react'
+import ICBitbucket from '@Icons/ic-bitbucket.svg?react'
+import ICGit from '@Icons/ic-git.svg?react'
+import ICGithub from '@Icons/ic-github.svg?react'
+import ICGitlab from '@Icons/ic-gitlab.svg?react'
+import ICPullRequest from '@Icons/ic-pull-request.svg?react'
+import ICTag from '@Icons/ic-tag.svg?react'
+import ICWebhook from '@Icons/ic-webhook.svg?react'
 import { MaterialHistoryType } from '@Shared/Services/app.types'
 
 import {
@@ -51,9 +52,9 @@ import {
     UserApprovalInfo,
     ZERO_TIME_STRING,
 } from '../Common'
-import { getAggregator } from '../Pages'
-import { AggregatedNodes, PodMetadatum } from './Components'
-import { CUBIC_BEZIER_CURVE, UNSAVED_CHANGES_PROMPT_MESSAGE } from './constants'
+import { getAggregator, GVKType } from '../Pages'
+import { AggregatedNodes } from './Components'
+import { CUBIC_BEZIER_CURVE } from './constants'
 import {
     AggregationKeys,
     BorderConfigType,
@@ -63,6 +64,7 @@ import {
     IntersectionOptions,
     Node,
     Nodes,
+    PodMetaData,
     TargetPlatformItemDTO,
     TargetPlatformsDTO,
     WebhookEventNameType,
@@ -296,7 +298,7 @@ export const renderValidInputButtonTippy = (children: ReactElement) => (
     </Tippy>
 )
 
-export function aggregateNodes(nodes: any[], podMetadata: PodMetadatum[]): AggregatedNodes {
+export function aggregateNodes(nodes: any[], podMetadata: PodMetaData[]): AggregatedNodes {
     const podMetadataMap = mapByKey(podMetadata, 'name')
     // group nodes
     const nodesGroup = nodes.reduce((agg, curr) => {
@@ -591,19 +593,6 @@ export const getWebhookDate = (materialSourceType: string, history: MaterialHist
 
 export const getUniqueId = (size?: number): string => nanoid(size)
 
-/**
- * Checks if the provided pathname matches the current path.
- * If the paths do not match, returns a custom message or a default unsaved changes prompt.
- *
- * @param currentPathName - The current path to compare against.
- * @param customMessage - Optional custom message to display when the path does not match.
- * @returns A function that takes an object with a `pathname` property and performs the path match check.
- */
-export const checkIfPathIsMatching =
-    (currentPathName: string, customMessage = ''): PromptProps['message'] =>
-    ({ pathname }: { pathname: string }) =>
-        currentPathName === pathname || customMessage || UNSAVED_CHANGES_PROMPT_MESSAGE
-
 export const sanitizeTargetPlatforms = (
     targetPlatforms: TargetPlatformsDTO['targetPlatforms'],
 ): TargetPlatformItemDTO[] => {
@@ -689,7 +678,7 @@ export const clearCookieOnLogout = () => {
 }
 
 export const getAppDetailsURL = (appId: number | string, envId?: number | string): string => {
-    const baseURL = `${URLS.APP}/${appId}/${URLS.APP_DETAILS}`
+    const baseURL = `${URLS.APPLICATION_MANAGEMENT_APP}/${appId}/${URLS.APP_DETAILS}`
     if (envId) {
         return `${baseURL}/${envId}`
     }
@@ -726,4 +715,63 @@ export const getGroupVersionFromApiVersion = (apiVersion: string): Pick<Node, 'g
 
     // If the apiVersion has more than two parts, we consider the first part as group and the rest as version
     return { group: parts[0], version: parts.slice(1).join('/') }
+}
+
+export const YAMLtoJSON = (yamlString: string) => {
+    try {
+        const obj = parse(yamlString)
+        const jsonStr = JSON.stringify(obj)
+        return jsonStr
+    } catch {
+        return ''
+    }
+}
+
+export const formatNumberToCurrency = (value: number, currency: string, minimumFractionDigits?: number): string => {
+    const precision = minimumFractionDigits ?? 2
+    try {
+        const data = new Intl.NumberFormat('en-US', {
+            style: 'currency',
+            currency,
+            minimumFractionDigits: precision,
+        }).format(value)
+
+        return data
+    } catch {
+        return value.toFixed(precision)
+    }
+}
+
+/**
+ * Returns the human readable explanation of the expression
+ * NOTE: expectation is that the expression is valid
+ *
+ * @throws Error - if given expression is incorrect
+ * @param expression
+ * @returns string - helper text explaining the expression in a human readable format
+ */
+export const explainCronExpression = (expression: string): string => {
+    parseCronExpression(expression, { hasSeconds: expression.trim().split(' ').length > 5 })
+    return cronstrue.toString(expression)
+}
+
+export const getGVKTitle = (gvk: GVKType): string => {
+    if (!gvk) {
+        return ''
+    }
+
+    let title: string = ''
+    if (gvk.Group) {
+        title += gvk.Group
+    }
+
+    if (gvk.Version) {
+        title += title ? ` / ${gvk.Version}` : gvk.Version
+    }
+
+    if (gvk.Kind) {
+        title += title ? ` / ${gvk.Kind}` : gvk.Kind
+    }
+
+    return title
 }

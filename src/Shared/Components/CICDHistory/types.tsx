@@ -14,9 +14,10 @@
  * limitations under the License.
  */
 
-import { CSSProperties, MutableRefObject, ReactElement, ReactNode } from 'react'
+import { CSSProperties, type JSX, MutableRefObject, ReactElement, ReactNode } from 'react'
 
 import { SupportedKeyboardKeysType } from '@Common/Hooks/UseRegisterShortcut/types'
+import { GVKType } from '@Pages/ResourceBrowser'
 
 import {
     DeploymentAppTypes,
@@ -35,6 +36,7 @@ import { DeploymentStageType } from '../../constants'
 import {
     AggregationKeys,
     AppDetails,
+    BaseURLParams,
     DeploymentStatusDetailsBreakdownDataType,
     DeploymentStatusDetailsType,
     DeploymentStatusTimelineType,
@@ -244,11 +246,14 @@ export interface SidebarType extends RenderRunSourceType {
     handleViewAllHistory?: () => void
     children?: React.ReactNode
     resourceId?: number
+    path: string
 }
 
 export interface HistorySummaryCardType
-    extends RenderRunSourceType,
-        Pick<History, 'workflowExecutionStages' | 'podName' | 'namespace'> {
+    extends
+        RenderRunSourceType,
+        Pick<History, 'workflowExecutionStages' | 'podName' | 'namespace'>,
+        Pick<SidebarType, 'path'> {
     id: number
     status: string
     startedOn: string
@@ -277,7 +282,8 @@ export interface DeploymentSummaryTooltipCardType {
 }
 
 export interface BuildAndTaskSummaryTooltipCardProps
-    extends Pick<History, 'workflowExecutionStages' | 'triggeredByEmail' | 'namespace' | 'podName' | 'stage'>,
+    extends
+        Pick<History, 'workflowExecutionStages' | 'triggeredByEmail' | 'namespace' | 'podName' | 'stage'>,
         Pick<HistorySummaryCardType, 'gitTriggers' | 'ciMaterials'> {}
 
 export interface DeploymentTemplateList {
@@ -312,8 +318,7 @@ export interface StartDetailsType {
 }
 
 export interface TriggerDetailsType
-    extends Pick<StartDetailsType, 'renderTargetConfigInfo'>,
-        Pick<History, 'workflowExecutionStages' | 'namespace'> {
+    extends Pick<StartDetailsType, 'renderTargetConfigInfo'>, Pick<History, 'workflowExecutionStages' | 'namespace'> {
     status: string
     startedOn: string
     finishedOn: string
@@ -331,6 +336,32 @@ export interface TriggerDetailsType
     workerPodName?: string
     triggerMetadata?: string
     renderDeploymentHistoryTriggerMetaText: (triggerMetaData: string, onlyRenderIcon?: boolean) => JSX.Element
+    /**
+     * Only present in case of CD trigger details as of now
+     */
+    isLatest?: boolean
+    /**
+     * Only present in case of CD trigger details as of now
+     */
+    appName?: string
+}
+
+export enum ResourceConflictModalType {
+    DEPLOY_DIALOG = 'DEPLOY_DIALOG',
+    RESOURCE_DETAIL_MODAL = 'RESOURCE_DETAIL_MODAL',
+}
+
+interface ResourceConflictDialogBaseProps extends Required<Pick<TriggerDetailsType, 'appName' | 'environmentName'>> {
+    handleClose: () => void
+}
+
+export interface ResourceConflictDeployDialogProps extends ResourceConflictDialogBaseProps {}
+
+export interface ResourceConflictDetailsModalProps extends ResourceConflictDialogBaseProps {}
+
+export type TriggerOutputURLParamsType = Pick<BaseURLParams, 'appId' | 'envId'> & {
+    triggerId: string
+    pipelineId: string
 }
 
 export type ProgressingStatusType = {
@@ -348,8 +379,7 @@ export interface CurrentStatusIconProps {
 }
 
 export interface WorkerStatusType
-    extends Pick<ExecutionInfoType['workerDetails'], 'clusterId'>,
-        Pick<TriggerDetailsType, 'namespace'> {
+    extends Pick<ExecutionInfoType['workerDetails'], 'clusterId'>, Pick<TriggerDetailsType, 'namespace'> {
     message: string
     podStatus: string
     stage: DeploymentStageType
@@ -362,6 +392,7 @@ export interface WorkerStatusType
      * @default false
      */
     hideShowMoreMessageButton?: boolean
+    children?: ReactNode
 }
 
 export type FinishedType = { artifact: string; type: HistoryComponentType } & (
@@ -478,10 +509,12 @@ export interface TriggerOutputProps extends RenderRunSourceType, Pick<TriggerDet
     setTriggerHistory: React.Dispatch<React.SetStateAction<Map<Number, History>>>
     scrollToTop: ReturnType<typeof useScrollable>[1]
     scrollToBottom: ReturnType<typeof useScrollable>[2]
+    pathPattern: string
 }
 
 export interface HistoryLogsProps
-    extends Pick<
+    extends
+        Pick<
             TriggerOutputProps,
             | 'scrollToTop'
             | 'scrollToBottom'
@@ -499,6 +532,7 @@ export interface HistoryLogsProps
             | 'fullScreenView'
             | 'appName'
             | 'triggerHistory'
+            | 'pathPattern'
         >,
         Pick<TargetPlatformBadgeListProps, 'targetPlatforms'> {
     triggerDetails: History
@@ -511,8 +545,10 @@ export interface HistoryLogsProps
     renderRunSource: (runSource: RunSourceType, isDeployedInThisResource: boolean) => JSX.Element
 }
 
-export interface LogsRendererType
-    extends Pick<HistoryLogsProps, 'fullScreenView' | 'triggerDetails' | 'isBlobStorageConfigured'> {
+export interface LogsRendererType extends Pick<
+    HistoryLogsProps,
+    'fullScreenView' | 'triggerDetails' | 'isBlobStorageConfigured'
+> {
     parentType: HistoryComponentType
 }
 
@@ -611,13 +647,6 @@ export interface AggregatedNodes {
             [status: string]: number
         }
     }
-}
-
-export interface PodMetadatum {
-    name: string
-    uid: string
-    containers: string[]
-    isNew: boolean
 }
 
 export const STATUS_SORTING_ORDER = {
@@ -764,7 +793,7 @@ export interface ModuleConfigResponse extends ResponseType {
     }
 }
 
-export interface DeploymentHistoryBaseParamsType {
+export type DeploymentHistoryBaseParamsType = {
     appId: string
     envId: string
     pipelineId: string
@@ -808,16 +837,21 @@ export interface StageDetailType extends Pick<StageInfoDTO, 'stage' | 'startTime
     targetPlatforms?: StageInfoDTO['metadata']['targetPlatforms']
 }
 
-export interface LogStageAccordionProps extends StageDetailType, Pick<LogsRendererType, 'fullScreenView'> {
+export type LogVirtualItem =
+    | { type: 'header'; stageIndex: number }
+    | { type: 'log'; stageIndex: number; logIndex: number }
+
+export interface LogStageHeaderProps extends Omit<StageDetailType, 'logs'>, Pick<LogsRendererType, 'fullScreenView'> {
     handleStageClose: (index: number) => void
     handleStageOpen: (index: number) => void
     stageIndex: number
-    /**
-     * A stage is loading if it is last in current stage list and event is not closed
-     */
-    isLoading: boolean
-    searchIndex: string
     logsRendererRef: MutableRefObject<HTMLDivElement>
+    /**
+     * When false, the sticky CSS is not applied to the button.
+     * The virtual list wrapper div controls positioning instead.
+     * @default true
+     */
+    applySticky?: boolean
 }
 
 export interface CreateMarkupReturnType {
@@ -855,4 +889,57 @@ export interface CIPipelineSourceConfigInterface {
     isRegex?: boolean
     primaryBranchAfterRegex?: string
     rootClassName?: string
+}
+
+export interface ResourceConflictItemType {
+    name: string
+    namespace: string
+    gvk: GVKType
+    gvkTitle: string
+    clusterId: number
+    /**
+     * Generated at ui
+     */
+    id: string
+}
+
+export interface ConflictedResourcesTableProps {
+    resourceConflictDetails: ResourceConflictItemType[]
+}
+
+export interface ResourceConflictDeployDialogURLParamsType extends Pick<
+    TriggerOutputURLParamsType,
+    'appId' | 'envId' | 'pipelineId' | 'triggerId'
+> {}
+
+export interface ResourceConflictRedeployParamsType extends Pick<
+    ResourceConflictDeployDialogURLParamsType,
+    'pipelineId' | 'triggerId' | 'appId'
+> {}
+
+export interface ResourceConflictRedeployPayloadType {
+    pipelineId: number
+    appId: number
+    wfrIdForDeploymentWithSpecificTrigger: number
+    helmRedeploymentRequest: true
+}
+
+export interface GetResourceConflictDetailsParamsType extends Pick<
+    ResourceConflictDeployDialogURLParamsType,
+    'pipelineId' | 'triggerId' | 'appId'
+> {
+    signal: AbortSignal
+}
+
+export interface ResourceConflictListItemDTO {
+    clusterId: number
+    conflictingResources: {
+        name: string
+        namespace: string
+        groupVersionKind: {
+            Group: string
+            Version: string
+            Kind: NodeType
+        }
+    }[]
 }

@@ -59,11 +59,11 @@ export const CodeEditorRenderer = ({
     const [scalingFactor, setScalingFactor] = useState<number>(1)
 
     // REFS
-    const codeMirrorRef = useRef<ReactCodeMirrorRef>()
-    const codeMirrorMergeParentRef = useRef<HTMLDivElement>()
-    const codeMirrorMergeRef = useRef<MergeView>()
-    const diffMinimapRef = useRef<MergeView>()
-    const diffMinimapParentRef = useRef<HTMLDivElement>()
+    const codeMirrorRef = useRef<ReactCodeMirrorRef>(null)
+    const codeMirrorMergeParentRef = useRef<HTMLDivElement>(null)
+    const codeMirrorMergeRef = useRef<MergeView>(null)
+    const diffMinimapRef = useRef<MergeView>(null)
+    const diffMinimapParentRef = useRef<HTMLDivElement>(null)
 
     // CONSTANTS
     const componentSpecificThemeClass = getComponentSpecificThemeClass(theme)

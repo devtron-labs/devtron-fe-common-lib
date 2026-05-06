@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ReactComponent as MechanicalOperation } from '@Icons/ic-mechanical-operation.svg'
+import MechanicalOperation from '@Icons/ic-mechanical-operation.svg?react'
 import PageNotFound from '@Images/ic-page-not-found.svg'
 
 import { ScanCategoriesWithLicense } from '../types'
@@ -73,7 +73,7 @@ export const SUB_CATEGORY_LABELS = {
     EXPOSED_SECRETS: 'Exposed Secrets',
 } as const
 
-export const SEVERITIES = {
+export const SEVERITIES_LABEL_COLOR_MAP = {
     [SeveritiesDTO.CRITICAL]: {
         label: 'Critical',
         color: 'var(--R700)',

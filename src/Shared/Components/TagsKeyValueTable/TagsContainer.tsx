@@ -16,7 +16,7 @@
 
 import ReactGA from 'react-ga4'
 
-import { ReactComponent as ICPropagate } from '@Icons/inject-tag.svg'
+import ICPropagate from '@Icons/inject-tag.svg?react'
 import { PropagateTagInfo, validateTagKeyValue } from '@Common/CustomTagSelector'
 import { validateTagValue } from '@Common/CustomTagSelector/tags.utils'
 import { Tooltip } from '@Common/Tooltip'

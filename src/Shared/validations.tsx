@@ -14,6 +14,7 @@
  * limitations under the License.
  */
 
+import { parse as parseCronExpression } from '@datasert/cronjs-parser'
 import { customizeValidator } from '@rjsf/validator-ajv8'
 import { parse } from 'yaml'
 
@@ -530,4 +531,61 @@ export const validateEmail = (email: string): ValidationResponseType => {
         isValid: false,
         message: 'Please provide a valid email address',
     }
+}
+
+export const getIsRegexValid = (regexString: string): ValidationResponseType => {
+    try {
+        RegExp(regexString)
+        return {
+            isValid: true,
+        }
+    } catch (error) {
+        return {
+            isValid: false,
+            message: error.message || 'Invalid regex pattern',
+        }
+    }
+}
+
+export const validateCronExpression = (expression: string): ValidationResponseType => {
+    try {
+        parseCronExpression(expression, { hasSeconds: expression.trim().split(' ').length > 5 })
+
+        return {
+            isValid: true,
+        }
+    } catch (err) {
+        return {
+            isValid: false,
+            message: (err as Error).message,
+        }
+    }
+}
+
+export const validateAppName = (value: string): Required<ValidationResponseType> => {
+    const re = PATTERNS.APP_NAME
+    const regExp = new RegExp(re)
+    const test = regExp.test(value)
+
+    if (value.length === 0) {
+        return { isValid: false, message: 'Please provide app name' }
+    }
+
+    if (value.length < 3) {
+        return { isValid: false, message: MESSAGES.getMinCharMessage(3) }
+    }
+
+    if (value.length > 30) {
+        return { isValid: false, message: MESSAGES.getMaxCharMessage(30) }
+    }
+
+    if (!test) {
+        return {
+            isValid: false,
+            message:
+                "Min 3 chars; Start with alphabet; End with alphanumeric; Use only lowercase; Allowed:(-); Do not use 'spaces'",
+        }
+    }
+
+    return { isValid: true, message: '' }
 }

@@ -20,7 +20,7 @@
 
 import { MouseEvent } from 'react'
 
-import { ReactComponent as ICClose } from '@Icons/ic-close.svg'
+import ICClose from '@Icons/ic-close.svg?react'
 import { DraggableButton, DraggablePositionVariant, DraggableWrapper } from '@Common/DraggableWrapper'
 import { ComponentSizeType } from '@Shared/constants'
 

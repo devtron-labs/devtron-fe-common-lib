@@ -17,14 +17,14 @@
 import { useState } from 'react'
 import Tippy from '@tippyjs/react'
 
-import { ReactComponent as ICMediumPaintBucket } from '@IconsV2/ic-medium-paintbucket.svg'
+import ICMediumPaintBucket from '@IconsV2/ic-medium-paintbucket.svg?react'
 import { handleAnalyticsEvent } from '@Shared/Analytics'
 import { ComponentSizeType } from '@Shared/constants'
 import { InstallationType } from '@Shared/types'
 
-import { TippyCustomized, TippyTheme, Tooltip } from '../../../Common'
+import { TippyCustomized, TippyTheme } from '../../../Common'
 import { POSTHOG_EVENT_ONBOARDING } from '../../../Common/Constants'
-import { SidePanelTab, useMainContext, useTheme, useUserEmail } from '../../Providers'
+import { useMainContext, useTheme, useUserEmail } from '../../Providers'
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
 import { ImageWithFallback } from '../ImageWithFallback'
@@ -49,12 +49,28 @@ const PageHeader = ({
     renderActionButtons,
     onClose,
     tippyProps,
+    closeIcon,
+    docPath,
 }: PageHeaderType) => {
-    const { setLoginCount, setShowGettingStartedCard, setSidePanelConfig, sidePanelConfig } = useMainContext()
+    const {
+        setLoginCount,
+        setShowGettingStartedCard,
+        sidePanelConfig,
+        tempAppWindowConfig,
+        featureAskDevtronExpert,
+        AskDevtronButton,
+    } = useMainContext()
     const { showSwitchThemeLocationTippy, handleShowSwitchThemeLocationTippyChange } = useTheme()
 
-    const { isTippyCustomized, tippyRedirectLink, TippyIcon, tippyMessage, onClickTippyButton, additionalContent } =
-        tippyProps || {}
+    const {
+        isTippyCustomized,
+        tippyRedirectLink,
+        TippyIcon,
+        tippyMessage,
+        onClickTippyButton,
+        additionalContent,
+        tippyHeader,
+    } = tippyProps || {}
     const { email } = useUserEmail()
     const [currentServerInfo, setCurrentServerInfo] = useState<{ serverInfo: ServerInfo; fetchingServerInfo: boolean }>(
         {
@@ -120,33 +136,19 @@ const PageHeader = ({
         </div>
     )
 
-    const onAskButtonClick = () => {
-        handleAnalyticsEvent({
-            category: 'AI',
-            action: `HELP_ASK_DEVTRON_AI`,
-        })
-        setSidePanelConfig((prev) => ({ ...prev, state: SidePanelTab.ASK_DEVTRON }))
-    }
-
     const renderLogoutHelpSection = () => (
         <>
-            {window._env_?.FEATURE_ASK_DEVTRON_EXPERT && sidePanelConfig.state === 'closed' && (
-                <Tooltip content="Ask Devtron AI" placement="bottom" alwaysShowTippyOnHover delay={[500, null]}>
-                    <button
-                        className="enable-svg-animation--hover flex dc__no-background p-2 dc__outline-none-imp dc__no-border"
-                        onClick={onAskButtonClick}
-                        type="button"
-                        aria-label="Ask Devtron Expert"
-                    >
-                        <Icon name="ic-devtron-ai" color={null} size={28} />
-                    </button>
-                </Tooltip>
-            )}
+            {AskDevtronButton &&
+                featureAskDevtronExpert &&
+                sidePanelConfig.state === 'closed' &&
+                !tempAppWindowConfig.open && <AskDevtronButton />}
+
             <HelpButton
                 serverInfo={currentServerInfo.serverInfo}
                 fetchingServerInfo={currentServerInfo.fetchingServerInfo}
                 onClick={handleHelpButtonClick}
                 hideGettingStartedCard={hideGettingStartedCard}
+                docPath={docPath}
             />
             {!window._env_.K8S_CLIENT && (
                 <TippyCustomized
@@ -189,7 +191,7 @@ const PageHeader = ({
                                 <Button
                                     dataTestId="page-header-close-button"
                                     ariaLabel="page-header-close-button"
-                                    icon={<Icon name="ic-close-large" color={null} />}
+                                    icon={closeIcon ?? <Icon name="ic-close-large" color={null} />}
                                     variant={ButtonVariantType.secondary}
                                     style={ButtonStyleType.negativeGrey}
                                     size={ComponentSizeType.xs}
@@ -226,8 +228,8 @@ const PageHeader = ({
                         (isTippyCustomized ? (
                             <InfoIconTippy
                                 infoText={tippyMessage}
-                                heading={headerName}
-                                iconClassName="icon-dim-20 ml-8 fcn-5"
+                                heading={headerName || tippyHeader}
+                                iconClassName="icon-dim-20 ml-8 fcn-7"
                                 documentationLink={tippyRedirectLink}
                                 documentationLinkText="View Documentation"
                                 additionalContent={additionalContent}

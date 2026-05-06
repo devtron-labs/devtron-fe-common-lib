@@ -16,8 +16,8 @@
 
 import { Fragment, useEffect, useState } from 'react'
 
-import { ReactComponent as ICSort } from '@Icons/ic-arrow-up-down.svg'
-import { ReactComponent as ICSortArrowDown } from '@Icons/ic-sort-arrow-down.svg'
+import ICSort from '@Icons/ic-arrow-up-down.svg?react'
+import ICSortArrowDown from '@Icons/ic-sort-arrow-down.svg?react'
 import { MODES, SortingOrder } from '@Common/Constants'
 import ErrorScreenManager from '@Common/ErrorScreenManager'
 import { Progressing } from '@Common/Progressing'

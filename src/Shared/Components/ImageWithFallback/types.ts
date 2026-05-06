@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { ImgHTMLAttributes } from 'react'
+import { ImgHTMLAttributes, type JSX } from 'react'
 
 export interface ImageWithFallbackProps {
     /**

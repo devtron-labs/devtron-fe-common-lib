@@ -19,7 +19,7 @@ import { ROUTES } from '@Common/Constants'
 import { getUrlWithSearchParams } from '@Common/Helper'
 import { ResponseType } from '@Common/Types'
 
-import { ScanResultDTO, ScanResultParamsType } from './types'
+import { ScanRecommendationsDTO, ScanResultDTO, ScanResultParamsType } from './types'
 
 export const getSecurityScan = async ({
     appId,
@@ -37,5 +37,18 @@ export const getSecurityScan = async ({
     }
     const url = getUrlWithSearchParams(ROUTES.SCAN_RESULT, params)
     const response = await get<ScanResultDTO>(url)
+    return response
+}
+
+export const getSecurityScanRecommendations = async ({
+    appId,
+    buildId,
+}): Promise<ResponseType<ScanRecommendationsDTO>> => {
+    const params = {
+        appId,
+        buildId,
+    }
+    const url = getUrlWithSearchParams(ROUTES.SCAN_RESULT_RECOMMENDATIONS, params)
+    const response = await get<ScanRecommendationsDTO>(url)
     return response
 }

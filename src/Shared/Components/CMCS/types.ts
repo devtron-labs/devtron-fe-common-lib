@@ -38,15 +38,9 @@ export interface ConfigMapSecretReadyOnlyProps {
     isBorderLess?: boolean
 }
 
-export interface GetConfigMapSecretReadOnlyValuesParamsType
-    extends Pick<
-        ConfigMapSecretReadyOnlyProps,
-        | 'componentType'
-        | 'configMapSecretData'
-        | 'cmSecretStateLabel'
-        | 'isJob'
-        | 'fallbackMergeStrategy'
-        | 'displayKeys'
-    > {}
+export interface GetConfigMapSecretReadOnlyValuesParamsType extends Pick<
+    ConfigMapSecretReadyOnlyProps,
+    'componentType' | 'configMapSecretData' | 'cmSecretStateLabel' | 'isJob' | 'fallbackMergeStrategy' | 'displayKeys'
+> {}
 
 export type ConfigMapSecretDataTypeOptionType = SelectPickerOptionType<string>

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import type { JSX } from 'react'
+
 import { InstallationType, ModuleStatus } from '@Shared/types'
 
 import { ResponseType, TippyCustomizedProps } from '../../../Common'
@@ -35,8 +37,11 @@ export interface PageHeaderType {
         TippyIcon?: React.FunctionComponent<any>
         tippyMessage?: string
         onClickTippyButton?: () => void
+        tippyHeader?: string
     }
     onClose?: () => void
+    closeIcon?: JSX.Element
+    docPath?: string
 }
 
 export interface ServerInfo {
@@ -50,7 +55,7 @@ export interface ServerInfoResponse extends ResponseType {
     result?: ServerInfo
 }
 
-export interface HelpButtonProps {
+export interface HelpButtonProps extends Pick<PageHeaderType, 'docPath'> {
     serverInfo: ServerInfo
     fetchingServerInfo: boolean
     onClick: () => void
@@ -68,6 +73,7 @@ export enum HelpMenuItems {
     GIVE_FEEDBACK = 'give-feedback',
     CHAT_WITH_SUPPORT = 'chat-with-support',
     RAISE_ISSUE_REQUEST = 'raise-issue-request',
+    UPGRADE_TO_OSS_PLUS = 'upgrade-to-oss-plus',
     DEVTRON_GPT = 'devtron-gpt',
 }
 
@@ -76,4 +82,9 @@ export type HelpButtonActionMenuProps = ActionMenuProps<HelpMenuItems>
 export interface ProfileMenuProps {
     user: string
     onClick?: () => void
+}
+
+export interface HelpActionOptionTypes extends Pick<PageHeaderType, 'docPath'> {
+    isEnterprise: boolean
+    isTrialOrFreemium: boolean
 }

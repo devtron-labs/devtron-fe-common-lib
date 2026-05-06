@@ -10,6 +10,7 @@
             "@Common/*": ["./src/Common/*"],
             "@Shared/*": ["./src/Shared/*"],
             "@Pages/*": ["./src/Pages/*"],
+            "@PagesDevtron2.0/*": ["./src/Pages-Devtron-2.0/*"],
             "codemirror-json-schema/yaml": ["./node_modules/codemirror-json-schema/dist/yaml"]
         },
         "target": "ES2020",

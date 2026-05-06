@@ -32,7 +32,15 @@ const wrapWithTooltip = (tooltipProps: SegmentType['tooltipProps']) => (children
     </Tooltip>
 )
 
-const Segment = ({ segment, isSelected, name, onChange, fullWidth, size, disabled }: SegmentProps) => {
+const Segment = <T extends string | number>({
+    segment,
+    isSelected,
+    name,
+    onChange,
+    fullWidth,
+    size,
+    disabled,
+}: SegmentProps<T>) => {
     const inputId = useMemo(getUniqueId, [])
 
     const { value, icon, isError, label, tooltipProps, ariaLabel } = segment

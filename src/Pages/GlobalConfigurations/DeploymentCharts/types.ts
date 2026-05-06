@@ -25,8 +25,10 @@ interface DeploymentChartInfo {
 
 export type DeploymentChartListDTO = DeploymentChartInfo[]
 
-export interface DeploymentChartVersionsType
-    extends Pick<DeploymentChartInfo, 'id' | 'version' | 'uploadedBy' | 'isUserUploaded'> {
+export interface DeploymentChartVersionsType extends Pick<
+    DeploymentChartInfo,
+    'id' | 'version' | 'uploadedBy' | 'isUserUploaded'
+> {
     description: string
 }
 

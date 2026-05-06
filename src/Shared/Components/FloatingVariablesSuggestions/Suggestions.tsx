@@ -14,17 +14,17 @@
  * limitations under the License.
  */
 
-import { memo, useEffect, useState } from 'react'
+import { type JSX, memo, useEffect, useState } from 'react'
 
-import { ReactComponent as ICClose } from '@Icons/ic-cross.svg'
-import { ReactComponent as ICSearch } from '@Icons/ic-search.svg'
+import ICClose from '@Icons/ic-cross.svg?react'
+import ICSearch from '@Icons/ic-search.svg?react'
 import NoVariables from '@Images/no-artifact.webp'
 import { DebouncedSearch, GenericEmptyState, Progressing, Reload } from '@Common/index'
 import { ALLOW_ACTION_OUTSIDE_FOCUS_TRAP, ComponentSizeType } from '@Shared/constants'
 
 import { Button, ButtonStyleType, ButtonVariantType } from '../Button'
 import { Icon } from '../Icon'
-import { NO_DEFINED_DESCRIPTION, NO_DEFINED_VALUE } from './constants'
+import { DRAG_SELECTOR, NO_DEFINED_DESCRIPTION, NO_DEFINED_VALUE } from './constants'
 import SuggestionItem from './SuggestionItem'
 import SuggestionsInfo from './SuggestionsInfo'
 import { ScopedVariableType, SuggestionsProps } from './types'
@@ -75,7 +75,9 @@ const Suggestions = ({
 
     const renderHeader = (): JSX.Element => (
         <div className="flexbox-col dc__align-self-stretch">
-            <div className="handle-drag flexbox pt-8 pl-12 pr-12 dc__gap-16 dc__align-start dc__align-self-stretch dc__grabbable dc__border-bottom">
+            <div
+                className={`${DRAG_SELECTOR} flexbox pt-8 pl-12 pr-12 dc__gap-16 dc__align-start dc__align-self-stretch dc__grabbable dc__border-bottom`}
+            >
                 <div className="flexbox-col dc__content-center dc__align-start flex-grow-1 dc__no-shrink">
                     <div className="flex center dc__gap-4">
                         <p className="m-0 cn-7 fs-13 fw-6 lh-20 dc__align-self-stretch">Scoped variables</p>

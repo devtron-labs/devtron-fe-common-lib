@@ -16,7 +16,7 @@
 
 import { MutableRefObject } from 'react'
 
-import { ConsequenceType, ServerErrors, VariableType } from '../../../Common'
+import { ConditionDetails, ConsequenceType, ServerErrors, VariableType } from '../../../Common'
 import { BaseFilterQueryParams } from '../../types'
 import { ImageWithFallbackProps } from '../ImageWithFallback'
 import { getPluginStoreData } from './service'
@@ -50,10 +50,19 @@ interface MinimalPluginVersionDataDTO {
     isLatest: boolean
 }
 
+export interface PluginStepConditionDTO extends Pick<ConditionDetails, 'conditionType' | 'conditionalValue'> {
+    conditionalOperator: ConditionDetails['conditionOperator']
+    id: number
+}
+
+interface PluginVariableType extends VariableType {
+    pluginStepCondition?: PluginStepConditionDTO[]
+}
+
 interface DetailedPluginVersionDTO extends MinimalPluginVersionDataDTO {
     tags: string[]
-    inputVariables: VariableType[]
-    outputVariables: VariableType[]
+    inputVariables: PluginVariableType[]
+    outputVariables: PluginVariableType[]
     /**
      * Present in case of shared plugin
      */
@@ -95,24 +104,26 @@ export interface PluginDetailServiceParamsType {
     signal?: AbortSignal
 }
 
-export interface PluginDetailPayloadType
-    extends Pick<
-        PluginDetailServiceParamsType,
-        'appId' | 'parentPluginIds' | 'pluginIds' | 'parentPluginIdentifiers'
-    > {}
+export interface PluginDetailPayloadType extends Pick<
+    PluginDetailServiceParamsType,
+    'appId' | 'parentPluginIds' | 'pluginIds' | 'parentPluginIdentifiers'
+> {}
 
 export interface PluginListFiltersType extends Pick<BaseFilterQueryParams<unknown>, 'searchKey'> {
     selectedTags: string[]
 }
 
-export interface ParentPluginType
-    extends Pick<ParentPluginDTO, 'id' | 'name' | 'description' | 'type' | 'icon' | 'pluginIdentifier'> {
+export interface ParentPluginType extends Pick<
+    ParentPluginDTO,
+    'id' | 'name' | 'description' | 'type' | 'icon' | 'pluginIdentifier'
+> {
     latestVersionId: MinimalPluginVersionDataDTO['id']
     pluginVersions: MinimalPluginVersionDataDTO[]
 }
 
-interface DetailedPluginVersionType
-    extends Pick<MinimalPluginVersionDataDTO, 'id' | 'description' | 'name' | 'pluginVersion'>,
+export interface DetailedPluginVersionType
+    extends
+        Pick<MinimalPluginVersionDataDTO, 'id' | 'description' | 'name' | 'pluginVersion'>,
         Pick<DetailedPluginVersionDTO, 'tags' | 'inputVariables' | 'outputVariables' | 'updatedBy' | 'docLink'>,
         Pick<ParentPluginType, 'icon' | 'type' | 'pluginIdentifier'> {
     parentPluginId: ParentPluginType['id']
@@ -182,8 +193,10 @@ export interface GetPluginStoreDataServiceParamsType extends Pick<PluginListFilt
     offset?: number
 }
 
-export interface GetPluginListPayloadType
-    extends Pick<GetPluginStoreDataServiceParamsType, 'searchKey' | 'offset' | 'appId'> {
+export interface GetPluginListPayloadType extends Pick<
+    GetPluginStoreDataServiceParamsType,
+    'searchKey' | 'offset' | 'appId'
+> {
     tag: PluginListFiltersType['selectedTags']
     size: number
 }
@@ -197,7 +210,7 @@ export interface GetPluginStoreDataReturnType {
     parentPluginIdList: number[]
 }
 
-export interface PluginListParamsType {
+export type PluginListParamsType = {
     appId?: string
 }
 
@@ -209,11 +222,10 @@ export interface PluginTagSelectProps extends Pick<BasePluginListContainerProps,
     handleUpdateSelectedTags: (tags: string[]) => void
 }
 
-export interface PluginListProps
-    extends Pick<
-        PluginListContainerProps,
-        'pluginDataStore' | 'handlePluginSelection' | 'selectedPluginsMap' | 'isSelectable' | 'showCardBorder'
-    > {
+export interface PluginListProps extends Pick<
+    PluginListContainerProps,
+    'pluginDataStore' | 'handlePluginSelection' | 'selectedPluginsMap' | 'isSelectable' | 'showCardBorder'
+> {
     handleDataUpdateForPluginResponse: (
         pluginResponse: Awaited<ReturnType<typeof getPluginStoreData>>,
         /**
@@ -230,8 +242,10 @@ export interface PluginListProps
     getPluginStoreRef: MutableRefObject<AbortController>
 }
 
-export interface PluginCardProps
-    extends Pick<PluginListProps, 'isSelectable' | 'pluginDataStore' | 'handlePluginSelection' | 'showCardBorder'> {
+export interface PluginCardProps extends Pick<
+    PluginListProps,
+    'isSelectable' | 'pluginDataStore' | 'handlePluginSelection' | 'showCardBorder'
+> {
     parentPluginId: PluginDetailType['parentPluginId']
     isSelected: boolean
 }

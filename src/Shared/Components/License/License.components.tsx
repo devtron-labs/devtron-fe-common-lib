@@ -16,8 +16,8 @@
 
 import { useEffect, useRef, useState } from 'react'
 
-import { ReactComponent as ICCheck } from '@Icons/ic-check.svg'
-import { ReactComponent as ICClipboard } from '@Icons/ic-copy.svg'
+import ICCheck from '@Icons/ic-check.svg?react'
+import ICClipboard from '@Icons/ic-copy.svg?react'
 import { ClipboardButton, copyToClipboard, showError } from '@Common/index'
 
 import { Backdrop, Button, ButtonStyleType, ButtonVariantType, Icon, InfoIconTippy, QRCode } from '..'

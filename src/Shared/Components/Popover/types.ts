@@ -115,6 +115,10 @@ export interface UsePopoverReturnType {
      * A function to close the popover.
      */
     closePopover: () => void
+    /**
+     * A function to open the popover.
+     */
+    openPopover: () => void
 }
 
 export type PopoverProps = Pick<UsePopoverReturnType, 'open' | 'overlayProps' | 'popoverProps' | 'triggerProps'> & {

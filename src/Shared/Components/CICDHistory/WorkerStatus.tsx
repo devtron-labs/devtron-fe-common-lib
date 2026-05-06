@@ -14,11 +14,11 @@
  * limitations under the License.
  */
 
-import { memo } from 'react'
+import { type JSX, memo } from 'react'
 import { NavLink } from 'react-router-dom'
 import moment from 'moment'
 
-import { ReactComponent as ICLines } from '@Icons/ic-lines.svg'
+import ICLines from '@Icons/ic-lines.svg?react'
 import { DeploymentStageType } from '@Shared/constants'
 import { isTimeStringAvailable } from '@Shared/Helpers'
 
@@ -41,6 +41,7 @@ const WorkerStatus = memo(
         titleClassName = 'cn-9 fs-13 fw-4 lh-20',
         viewWorkerPodClassName = 'fs-13',
         hideShowMoreMessageButton = false,
+        children,
     }: WorkerStatusType): JSX.Element | null => {
         if (!message && !podStatus) {
             return null
@@ -98,6 +99,8 @@ const WorkerStatus = memo(
                             hideShowMore={hideShowMoreMessageButton}
                         />
                     )}
+
+                    {children}
                 </div>
             </>
         )
