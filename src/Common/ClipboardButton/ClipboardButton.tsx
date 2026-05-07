@@ -45,7 +45,7 @@ export const ClipboardButton = ({
     size,
 }: ClipboardProps) => {
     const [copied, setCopied] = useState<boolean>(false)
-    const setCopiedFalseTimeoutRef = useRef<ReturnType<typeof setTimeout>>(-1)
+    const setCopiedFalseTimeoutRef = useRef<ReturnType<typeof setTimeout> | number>(-1)
 
     const handleTriggerCopy = () => {
         setCopied(true)
@@ -90,7 +90,7 @@ export const ClipboardButton = ({
 
     useEffect(
         () => () => {
-            if (setCopiedFalseTimeoutRef.current > -1) {
+            if ((setCopiedFalseTimeoutRef.current as number) > -1) {
                 clearTimeout(setCopiedFalseTimeoutRef.current)
             }
         },

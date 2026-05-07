@@ -84,10 +84,16 @@ export interface UserGroupDTO {
      * @default 0
      */
     usersCount?: number
+    /**
+     * User Email Ids of the users assigned to the group
+     *
+     * @default []
+     */
+    userEmails?: string[]
 }
 
 export interface UserGroupType extends Required<
-    Pick<UserGroupDTO, 'description' | 'name' | 'usersCount' | 'identifier'>
+    Pick<UserGroupDTO, 'description' | 'name' | 'usersCount' | 'identifier' | 'userEmails'>
 > {
     /**
      * Unique id of the user group
