@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "4.0.4-beta-5",
+    "version": "4.0.4-beta-6",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -133,9 +133,6 @@
         "react-virtualized-sticky-tree": "^3.0.0-beta18",
         "sass": "^1.69.7",
         "tslib": "2.7.0"
-    },
-    "publishConfig": {
-        "registry": "https://npm.pkg.github.com/"
     },
     "overrides": {
         "react": "^19.2.4",
