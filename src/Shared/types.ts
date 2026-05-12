@@ -18,8 +18,8 @@ import { ReactNode } from 'react'
 import { ParsedCountry } from 'react-international-phone'
 import { Dayjs } from 'dayjs'
 
-import { APIOptions, ApprovalConfigDataType, Strategy } from '@Common/Types'
-import { OverrideMergeStrategyType, ReleaseMode } from '@Pages/index'
+import { ActionTypes, APIOptions, ApprovalConfigDataType, Strategy } from '@Common/Types'
+import { OverrideMergeStrategyType, ReleaseMode, UserStatus } from '@Pages/index'
 
 import {
     CommonNodeAttr,
@@ -963,6 +963,7 @@ export enum EntityTypes {
     GIT = 'git',
     CLUSTER = 'cluster',
     NOTIFICATION = 'notification',
+    OBSERVABILITY = 'observe',
 }
 
 export interface CustomRoles {
@@ -1558,6 +1559,14 @@ export interface PipelineDeploymentStrategy {
     error: ServerError
 }
 
+export interface ObservabilityPermissionFilter {
+    entityName: OptionType[]
+    action: ActionTypes.VIEW | ActionTypes.ADMIN
+    tenant: OptionType
+    entityNameError?: boolean
+    status: UserStatus
+    timeToLive: string
+}
 export enum RemoteConnectionType {
     Direct = 'DIRECT',
     Proxy = 'PROXY',

@@ -48,6 +48,7 @@ export const PATTERNS = {
     ALPHANUMERIC_WITH_SPECIAL_CHAR_AND_SLASH: /^[A-Za-z0-9._/-]+$/, // allow alphanumeric,(.) ,(-),(_),(/)
     EMAIL: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
 }
+
 /** @deprecated */
 export const URLS = {
     APP_CI_DETAILS: 'ci-details',
@@ -397,6 +398,7 @@ export const DATE_TIME_FORMATS = {
     DD_MMM_YYYY_HH_MM: 'DD MMM YYYY, hh:mm',
     DD_MMM_YYYY: 'DD MMM YYYY',
     'DD/MM/YYYY': 'DD/MM/YYYY',
+    FULL_DATE_WITH_TIME: 'DD-MM-YYYY hh:mm:ss',
     DD_MMM: 'DD MMM',
     TWENTY_FOUR_HOUR_FORMAT_HOUR: 'HH',
     ABBREVIATED_MONTH: 'MMM',
