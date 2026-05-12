@@ -78,6 +78,7 @@ export type NavigationRootItemID =
     | 'automation-and-enablement'
     | 'data-protection-management'
     | 'global-configuration'
+    | 'audit-logs'
 
 export type CommonNavigationItemType = {
     title: string
@@ -107,11 +108,19 @@ export type NavigationItemType = Pick<
           })
     )
 
-export interface NavigationGroupType extends Pick<
+export type NavigationGroupType = Pick<
     CommonNavigationItemType,
     'title' | 'icon' | 'hideNav' | 'forceHideEnvKey' | 'isAvailableInEA'
-> {
+> & {
     id: NavigationRootItemID
-    items: NavigationItemType[]
     disabled?: boolean
-}
+} & (
+        | {
+              items: NavigationItemType[]
+              href?: never
+          }
+        | {
+              items?: never
+              href: string
+          }
+    )

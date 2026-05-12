@@ -149,6 +149,7 @@ import ICFileCode from '@IconsV2/ic-file-code.svg?react'
 import ICFileDownload from '@IconsV2/ic-file-download.svg?react'
 import ICFileEdit from '@IconsV2/ic-file-edit.svg?react'
 import ICFileKey from '@IconsV2/ic-file-key.svg?react'
+import ICFileLogSearch from '@IconsV2/ic-file-log-search.svg?react'
 import ICFiles from '@IconsV2/ic-files.svg?react'
 import ICFilesChanged from '@IconsV2/ic-files-changed.svg?react'
 import ICFilter from '@IconsV2/ic-filter.svg?react'
@@ -492,6 +493,7 @@ export const iconMap = {
     'ic-file-download': ICFileDownload,
     'ic-file-edit': ICFileEdit,
     'ic-file-key': ICFileKey,
+    'ic-file-log-search': ICFileLogSearch,
     'ic-file': ICFile,
     'ic-files-changed': ICFilesChanged,
     'ic-files': ICFiles,
