@@ -104,7 +104,10 @@ const DateTimePicker = ({
         onChange(updateTime(dateObject, option.value).value)
     }
 
-    const handleDateRangeChange = (range: DateRange) => {
+    const handleDateRangeChange = (range: DateRange | undefined) => {
+        if (!range) {
+            return
+        }
         if (isDateUpdateRange(isRangePicker, onChange)) {
             const fromDate = range.from ? range.from : new Date()
             const toDate = range.to ? range.to : undefined
