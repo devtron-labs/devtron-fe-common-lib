@@ -837,16 +837,21 @@ export interface StageDetailType extends Pick<StageInfoDTO, 'stage' | 'startTime
     targetPlatforms?: StageInfoDTO['metadata']['targetPlatforms']
 }
 
-export interface LogStageAccordionProps extends StageDetailType, Pick<LogsRendererType, 'fullScreenView'> {
+export type LogVirtualItem =
+    | { type: 'header'; stageIndex: number }
+    | { type: 'log'; stageIndex: number; logIndex: number }
+
+export interface LogStageHeaderProps extends Omit<StageDetailType, 'logs'>, Pick<LogsRendererType, 'fullScreenView'> {
     handleStageClose: (index: number) => void
     handleStageOpen: (index: number) => void
     stageIndex: number
-    /**
-     * A stage is loading if it is last in current stage list and event is not closed
-     */
-    isLoading: boolean
-    searchIndex: string
     logsRendererRef: MutableRefObject<HTMLDivElement>
+    /**
+     * When false, the sticky CSS is not applied to the button.
+     * The virtual list wrapper div controls positioning instead.
+     * @default true
+     */
+    applySticky?: boolean
 }
 
 export interface CreateMarkupReturnType {
