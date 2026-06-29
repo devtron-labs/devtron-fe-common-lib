@@ -20,7 +20,10 @@ export const getAPIOptionsWithTriggerTimeout = (options?: APIOptions): APIOption
     const _options: APIOptions = options ? structuredClone(options) : {}
 
     if (window._env_.TRIGGER_API_TIMEOUT) {
-        _options.timeout = window._env_.TRIGGER_API_TIMEOUT
+        const triggerTimeout = Number(window._env_.TRIGGER_API_TIMEOUT)
+        if (!Number.isNaN(triggerTimeout) && triggerTimeout > 0) {
+            _options.timeout = triggerTimeout
+        }
     }
 
     return _options
