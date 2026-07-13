@@ -291,6 +291,11 @@ export const BASE_ROUTES = {
             ROOT: 'cluster-env',
             MANAGE_CATEGORIES: 'manage-categories',
         },
+        NODE_AUTOSCALER: {
+            ROOT: 'node-autoscaler',
+            CREATE_PROFILE: 'create-profile',
+            EDIT_PROFILE: 'edit/:profileId',
+        },
         DOCKER: 'docker',
         PROJECTS: 'projects',
         AUTH: {
