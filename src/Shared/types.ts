@@ -777,6 +777,8 @@ export enum GitOpsAuthModeType {
     SSH = 'SSH',
     PASSWORD = 'PASSWORD',
     SSH_AND_PASSWORD = 'PAT_AND_SSH',
+    API_TOKEN = 'API_TOKEN',
+    ACCESS_TOKEN = 'ACCESS_TOKEN',
 }
 
 export interface BaseGitOpsType {
