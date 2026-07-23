@@ -24,12 +24,13 @@ const ExportToCsv = <HeaderItemType extends string>({
     downloadRequestId,
 }: ExportToCsvProps<HeaderItemType>) => {
     const csvRef = useRef(null)
-    const abortControllerRef = useRef<AbortController>(new AbortController())
+    const abortControllerRef = useRef<AbortController>(null)
 
     const [dataToExport, setDataToExport] = useState<Awaited<ReturnType<typeof apiPromise>>>([])
     const [confirmationModalType, setConfirmationModalType] = useState<'default' | 'custom' | null>(null)
     const [isLoading, setIsLoading] = useState(false)
     const [dataFetchError, setDataFetchError] = useState<ServerErrors>(null)
+    const [pendingDownload, setPendingDownload] = useState(false)
 
     const handleInitiateDownload = async () => {
         if (disabled) {
@@ -41,8 +42,7 @@ const ExportToCsv = <HeaderItemType extends string>({
             setDataFetchError(null)
             const data = await apiPromise({ signal: abortControllerRef.current.signal })
             setDataToExport(data)
-
-            csvRef.current?.link?.click()
+            setPendingDownload(true)
         } catch (error) {
             if (!getIsRequestAborted(error)) {
                 showError(error)
@@ -64,12 +64,12 @@ const ExportToCsv = <HeaderItemType extends string>({
         }
     }
 
-    useEffect(
-        () => () => {
-            abortControllerRef.current.abort()
-        },
-        [],
-    )
+    useEffect(() => {
+        abortControllerRef.current = new AbortController()
+        return () => {
+            abortControllerRef.current?.abort()
+        }
+    }, [])
 
     useEffect(() => {
         if (!isNullOrUndefined(downloadRequestId)) {
@@ -77,6 +77,13 @@ const ExportToCsv = <HeaderItemType extends string>({
             handleExportButtonClick()
         }
     }, [downloadRequestId])
+
+    useEffect(() => {
+        if (pendingDownload) {
+            csvRef.current?.link?.click()
+            setPendingDownload(false)
+        }
+    }, [pendingDownload])
 
     const handleCancelRequest = () => {
         abortControllerRef.current.abort()
