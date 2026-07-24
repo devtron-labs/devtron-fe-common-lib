@@ -210,6 +210,7 @@ export interface customEnv {
     FEATURE_ATHENA_DEBUG_MODE_ENABLE?: boolean
     /** Org ID for grafana */
     GRAFANA_ORG_ID?: number
+    ENABLE_AUDIT_LOG?: boolean
 }
 
 export enum InstallationType {
