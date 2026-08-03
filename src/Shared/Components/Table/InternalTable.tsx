@@ -245,6 +245,7 @@ const InternalTable = <
                 clearFilters={clearFilters}
                 rows={rows}
                 filteredRows={filteredRows}
+                totalRows={totalRows}
                 handleSearch={handleSearch}
                 updateSearchParams={noop}
                 offset={offset}

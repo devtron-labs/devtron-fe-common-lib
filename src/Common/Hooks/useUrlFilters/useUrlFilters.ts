@@ -14,7 +14,7 @@
  * limitations under the License.
  */
 
-import { useMemo, useRef } from 'react'
+import { useEffect, useMemo, useRef } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 
 import { getUrlWithSearchParams } from '@Common/Helper'
@@ -56,6 +56,10 @@ const useUrlFilters = <T = string, K = {}>({
 
     const isAlreadyReadFromLocalStorage = useRef<boolean>(false)
 
+    // Holds the search string to restore from local storage. The actual navigation
+    // is deferred to an effect since react-router v6 disallows navigate() during render.
+    const pendingLocalStorageSearch = useRef<string | null>(null)
+
     const getSearchParams = () => {
         const locationSearchParams = new URLSearchParams(location.search)
         if (!isAlreadyReadFromLocalStorage.current && localStorageKey) {
@@ -67,8 +71,9 @@ const useUrlFilters = <T = string, K = {}>({
                         const localSearchString = getUrlWithSearchParams('', JSON.parse(localStorageValue))
                         const localSearchParams = new URLSearchParams(localSearchString.split('?')[1] ?? '')
 
-                        // This would remain replace since the initial value is being set from local storage
-                        navigate({ search: localSearchParams.toString() }, { replace: true })
+                        // Defer the navigation to an effect (see below). react-router v6 ignores
+                        // navigate() called during render. Returning the params here keeps the first render correct.
+                        pendingLocalStorageSearch.current = localSearchParams.toString()
                         return localSearchParams
                     } catch {
                         localStorage.removeItem(localStorageKey)
@@ -86,6 +91,17 @@ const useUrlFilters = <T = string, K = {}>({
     }
 
     const searchParams = getSearchParams()
+
+    // Apply the restored-from-local-storage search params to the URL after the initial render.
+    // The value is only ever set during the first render, so this runs once on mount.
+    useEffect(() => {
+        if (pendingLocalStorageSearch.current !== null) {
+            const search = pendingLocalStorageSearch.current
+            pendingLocalStorageSearch.current = null
+            // This remains replace since the initial value is being set from local storage
+            navigate({ search }, { replace: true })
+        }
+    }, [])
 
     const getParsedSearchParams: UseUrlFiltersProps<T, K>['parseSearchParams'] = (searchParamsToParse) => {
         if (parseSearchParams) {

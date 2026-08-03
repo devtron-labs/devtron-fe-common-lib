@@ -238,6 +238,7 @@ export type ViewWrapperProps<
             areRowsLoading: boolean
             filteredRows: RowsType<RowData> | null
             rows: RowsType<RowData> | null
+            totalRows: number
         } & (FilterVariant extends FiltersTypeEnum.URL
             ? Pick<UseUrlFiltersReturnType<string>, 'updateSearchParams'>
             : {})
