@@ -194,6 +194,7 @@ export interface customEnv {
      * @default false
      */
     FEATURE_NODE_AUTOSCALER_ENABLE?: boolean
+    FEATURE_AUDIT_LOG_ENABLE?: boolean
 }
 
 declare global {
