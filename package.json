@@ -1,6 +1,6 @@
 {
     "name": "@devtron-labs/devtron-fe-common-lib",
-    "version": "4.0.11-pre-1",
+    "version": "4.0.12-pre-0",
     "description": "Supporting common component library",
     "type": "module",
     "main": "dist/index.js",
@@ -161,7 +161,6 @@
         }, 
         "patch-package": {
             "tmp": "^0.2.6"
-        },
-        "brace-expansion": "^5.0.7"
+        }
     }
 }
