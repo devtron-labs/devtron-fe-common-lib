@@ -110,7 +110,7 @@
         "@uiw/codemirror-extensions-hyper-link": "4.23.10",
         "@uiw/codemirror-theme-github": "4.23.7",
         "@uiw/react-codemirror": "4.23.7",
-        "@uiw/react-md-editor": "^4.0.11",
+        "@uiw/react-md-editor": "^4.1.1",
         "@xyflow/react": "12.4.2",
         "ansi_up": "6.0.6",
         "chart.js": "4.5.0",
@@ -122,7 +122,7 @@
         "framer-motion": "^11.18.2",
         "jsonpath-plus": "^10.3.0",
         "marked": "^13.0.3",
-        "nanoid": "^3.3.8",
+        "nanoid": "^3.3.17",
         "qrcode.react": "^4.2.0",
         "react-csv": "^2.2.2",
         "react-day-picker": "^9.11.2",
@@ -130,7 +130,7 @@
         "react-ga4": "3.0.1",
         "react-international-phone": "^4.5.0",
         "react-virtualized-sticky-tree": "^3.0.0-beta18",
-        "sass": "^1.69.7",
+        "sass": "1.102.0",
         "tslib": "2.7.0"
     },
     "overrides": {
@@ -152,15 +152,11 @@
             "markdown-it": {
                 "linkify-it": "^5.0.2"
             }
-        }, 
-        "sass": {
-            "immutable": "^5.1.8"
-        }, 
-        "eslint": {
-            "js-yaml": "^4.2.0"
-        }, 
+        },
         "patch-package": {
             "tmp": "^0.2.6"
-        }
+        },
+        "js-yaml": "^4.3.1",
+        "lodash-es": "^4.18.0"
     }
 }
