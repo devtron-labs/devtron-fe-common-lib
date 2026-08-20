@@ -575,8 +575,8 @@ export const validateAppName = (value: string): Required<ValidationResponseType>
         return { isValid: false, message: MESSAGES.getMinCharMessage(3) }
     }
 
-    if (value.length > 30) {
-        return { isValid: false, message: MESSAGES.getMaxCharMessage(30) }
+    if (value.length > 40) {
+        return { isValid: false, message: MESSAGES.getMaxCharMessage(40) }
     }
 
     if (!test) {
