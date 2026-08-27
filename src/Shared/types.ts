@@ -709,7 +709,7 @@ export interface SeverityCount {
 }
 export enum PolicyKindType {
     lockConfiguration = 'lock-configuration',
-    imagePromotion = 'image-promotion',
+    imagePromotion = 'artifact-promotion',
     plugins = 'plugin',
     approval = 'approval',
 }
