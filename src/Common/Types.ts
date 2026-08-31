@@ -405,6 +405,7 @@ export interface UserApprovalInfo {
     currentCount: number
     approverList: {
         hasApproved: boolean
+        hasDeclined: boolean
         canApprove: boolean
         identifier: string
     }[]
@@ -442,6 +443,7 @@ export interface UserApprovalMetadataType {
     approvalRuntimeState: ApprovalRuntimeStateType
     requestedUserData: ApprovalUserDataType
     hasCurrentUserApproved: boolean
+    hasCurrentUserDeclined: boolean
     canCurrentUserApprove: boolean
     approvalConfigData: ApprovalConfigDataType
 }

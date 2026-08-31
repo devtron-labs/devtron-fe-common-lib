@@ -98,6 +98,7 @@ export const sanitizeUserApprovalMetadata = (
 ): UserApprovalMetadataType => ({
     ...userApprovalMetadata,
     hasCurrentUserApproved: userApprovalMetadata?.hasCurrentUserApproved ?? false,
+    hasCurrentUserDeclined: userApprovalMetadata?.hasCurrentUserDeclined ?? false,
     canCurrentUserApprove: userApprovalMetadata?.canCurrentUserApprove ?? false,
     approvalConfigData: sanitizeApprovalConfigData(userApprovalMetadata?.approvalConfigData),
 })
