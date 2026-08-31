@@ -232,6 +232,12 @@ export interface BuildPackConfigType {
     args?: Record<string, string>
 }
 
+export interface BuildSecretType {
+    id: string
+    secretName: string
+    key: string
+}
+
 export interface DockerBuildConfigType {
     dockerfileContent: string
     dockerfileRelativePath: string
@@ -242,6 +248,8 @@ export interface DockerBuildConfigType {
     targetPlatform?: any
     language?: string
     languageFramework?: string
+    secrets?: BuildSecretType[]
+    ssh?: BuildSecretType[]
 }
 
 export interface CIBuildConfigType {
