@@ -232,7 +232,13 @@ export interface BuildPackConfigType {
     args?: Record<string, string>
 }
 
+export enum BuildSecretSourceType {
+    BUILD_INFRA = 'BUILD_INFRA',
+    SOURCE_CODE = 'SOURCE_CODE',
+}
+
 export interface BuildSecretType {
+    type: BuildSecretSourceType
     id: string
     secretName: string
     key: string
