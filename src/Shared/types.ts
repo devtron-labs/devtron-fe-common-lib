@@ -956,6 +956,8 @@ export enum ACCESS_TYPE_MAP {
     DEVTRON_APPS = 'devtron-app', // devtron app work flow
     HELM_APPS = 'helm-app', // helm app work flow
     JOBS = '', // Empty string is intentional since there is no bifurcation in jobs as of now
+    ARGO_APPS = 'argo-app', // argo cd app work flow
+    FLUX_APPS = 'flux-app', // flux cd app work flow
 }
 
 export enum EntityTypes {
@@ -974,7 +976,11 @@ export interface CustomRoles {
     roleDisplayName: string
     roleDescription: string
     entity: EntityTypes
-    accessType: ACCESS_TYPE_MAP.DEVTRON_APPS | ACCESS_TYPE_MAP.HELM_APPS
+    accessType:
+        | ACCESS_TYPE_MAP.DEVTRON_APPS
+        | ACCESS_TYPE_MAP.HELM_APPS
+        | ACCESS_TYPE_MAP.ARGO_APPS
+        | ACCESS_TYPE_MAP.FLUX_APPS
 }
 
 export type MetaPossibleRoles = Record<

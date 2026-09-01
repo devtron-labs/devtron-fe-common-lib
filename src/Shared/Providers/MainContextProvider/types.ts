@@ -155,6 +155,16 @@ type CommonMainContextProps = {
     }
     isAirgapped: boolean
     isSuperAdmin: boolean
+    /**
+     * Whether the logged-in user holds at least one Argo CD app permission row (or is a super-admin).
+     * Used to show/hide the Argo Apps tab in the Applications listing.
+     */
+    hasArgoAppAccess: boolean
+    /**
+     * Whether the logged-in user holds at least one Flux CD app permission row (or is a super-admin).
+     * Used to show/hide the Flux Apps tab in the Applications listing.
+     */
+    hasFluxAppAccess: boolean
     featureGitOpsFlags: {
         /**
          * Would define whether gitops (Global config tab) feature is enabled or not
