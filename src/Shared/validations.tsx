@@ -561,11 +561,11 @@ export const validateCronExpression = (expression: string): ValidationResponseTy
         }
     }
 }
-
-export const validateAppName = (value: string): Required<ValidationResponseType> => {
+export const validateAppName = (value: string, maxLen?: number): Required<ValidationResponseType> => {
     const re = PATTERNS.APP_NAME
     const regExp = new RegExp(re)
     const test = regExp.test(value)
+    const maxLength = maxLen ?? (window._env_.FEATURE_APP_NAME_40_CHAR_ENABLE ? 40 : 30)
 
     if (value.length === 0) {
         return { isValid: false, message: 'Please provide app name' }
@@ -575,8 +575,8 @@ export const validateAppName = (value: string): Required<ValidationResponseType>
         return { isValid: false, message: MESSAGES.getMinCharMessage(3) }
     }
 
-    if (value.length > 30) {
-        return { isValid: false, message: MESSAGES.getMaxCharMessage(30) }
+    if (value.length > maxLength) {
+        return { isValid: false, message: MESSAGES.getMaxCharMessage(maxLength) }
     }
 
     if (!test) {
