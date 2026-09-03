@@ -195,6 +195,11 @@ export interface customEnv {
      */
     FEATURE_NODE_AUTOSCALER_ENABLE?: boolean
     FEATURE_AUDIT_LOG_ENABLE?: boolean
+    /**
+     * If true, allows app names up to 40 characters; otherwise the limit is 30
+     * @default false
+     */
+    FEATURE_APP_NAME_40_CHAR_ENABLE?: boolean
 }
 
 declare global {
