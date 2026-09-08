@@ -211,6 +211,11 @@ export interface customEnv {
     /** Org ID for grafana */
     GRAFANA_ORG_ID?: number
     FEATURE_AUDIT_LOG_ENABLE?: boolean
+    /**
+     * If true, allows app names up to 40 characters; otherwise the limit is 30
+     * @default false
+     */
+    FEATURE_APP_NAME_40_CHAR_ENABLE?: boolean
 }
 
 export enum InstallationType {
