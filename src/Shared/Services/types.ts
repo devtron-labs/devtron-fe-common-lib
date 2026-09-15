@@ -65,6 +65,10 @@ export interface EnvironmentDataValuesDTO extends Pick<MainContext, 'featureGitO
     isResourceRecommendationEnabled?: boolean
     featureAskDevtronExpert: boolean
     forceDockerfileScan: boolean
+    /**
+     * If enabled, deleting a CD pipeline will not delete the underlying deployed resource (helm release/argocd application/flux release) unless the request explicitly overrides it via payload.
+     */
+    foregroundDeleteCdPipeline: boolean
 }
 
 export interface ClusterMinDTO {
