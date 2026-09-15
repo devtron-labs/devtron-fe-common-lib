@@ -182,7 +182,10 @@ type CommonMainContextProps = {
     setDebugAgentContext: (aiAgentContext: DebugAgentContextType | null) => void
     setAIAgentContext: (aiAgentContext: AIAgentContextType) => void
     setSidePanelConfig: Dispatch<SetStateAction<SidePanelConfig>>
-} & Pick<EnvironmentDataValuesDTO, 'isResourceRecommendationEnabled' | 'forceDockerfileScan'>
+} & Pick<
+    EnvironmentDataValuesDTO,
+    'isResourceRecommendationEnabled' | 'forceDockerfileScan' | 'foregroundDeleteCdPipeline'
+>
 
 export type MainContext = CommonMainContextProps &
     (
