@@ -89,7 +89,6 @@ export interface customEnv {
     REACT_APP_GIT_SHA?: string
     NODE_ENV?: string
     SIDEBAR_DT_LOGO?: string
-    ENABLE_EXTERNAL_ARGO_CD: boolean
     API_BATCH_SIZE: number
     SERVICE_WORKER_TIMEOUT?: string
     /**
@@ -97,7 +96,6 @@ export interface customEnv {
      */
     FEATURE_USER_DEFINED_GITOPS_REPO_ENABLE: boolean
     ORGANIZATION_NAME: string
-    FEATURE_EXTERNAL_FLUX_CD_ENABLE: boolean
     /**
      * If true, the direct permissions are hidden for non-super admins in user permissions
      *
@@ -961,6 +959,8 @@ export enum ACCESS_TYPE_MAP {
     DEVTRON_APPS = 'devtron-app', // devtron app work flow
     HELM_APPS = 'helm-app', // helm app work flow
     JOBS = '', // Empty string is intentional since there is no bifurcation in jobs as of now
+    ARGO_APPS = 'argo-app', // argo cd app work flow
+    FLUX_APPS = 'flux-app', // flux cd app work flow
 }
 
 export enum EntityTypes {
@@ -979,7 +979,11 @@ export interface CustomRoles {
     roleDisplayName: string
     roleDescription: string
     entity: EntityTypes
-    accessType: ACCESS_TYPE_MAP.DEVTRON_APPS | ACCESS_TYPE_MAP.HELM_APPS
+    accessType:
+        | ACCESS_TYPE_MAP.DEVTRON_APPS
+        | ACCESS_TYPE_MAP.HELM_APPS
+        | ACCESS_TYPE_MAP.ARGO_APPS
+        | ACCESS_TYPE_MAP.FLUX_APPS
 }
 
 export type MetaPossibleRoles = Record<
