@@ -69,7 +69,6 @@ export interface customEnv {
     REACT_APP_GIT_SHA?: string
     NODE_ENV?: string
     SIDEBAR_DT_LOGO?: string
-    ENABLE_EXTERNAL_ARGO_CD: boolean
     API_BATCH_SIZE: number
     SERVICE_WORKER_TIMEOUT?: string
     /**
@@ -77,7 +76,6 @@ export interface customEnv {
      */
     FEATURE_USER_DEFINED_GITOPS_REPO_ENABLE: boolean
     ORGANIZATION_NAME: string
-    FEATURE_EXTERNAL_FLUX_CD_ENABLE: boolean
     /**
      * If true, the direct permissions are hidden for non-super admins in user permissions
      *
