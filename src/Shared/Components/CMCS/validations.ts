@@ -237,7 +237,7 @@ export const getConfigMapSecretFormValidations: UseFormValidations<ConfigMapSecr
         name: {
             required: true,
             pattern: {
-                value: PATTERNS.CONFIGMAP_AND_SECRET_NAME,
+                value: PATTERNS.CONFIGMAP_AND_SECRET_NAME_WITH_SCOPE_VARIABLES,
                 message:
                     "Name must start and end with an alphanumeric character. It can contain only lowercase alphanumeric characters, '-' or '.'",
             },
