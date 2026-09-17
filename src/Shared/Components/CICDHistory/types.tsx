@@ -922,6 +922,11 @@ export interface ResourceConflictRedeployPayloadType {
     appId: number
     wfrIdForDeploymentWithSpecificTrigger: number
     helmRedeploymentRequest: true
+    /**
+     * A take-ownership re-deploy is a rollback to a previously deployed trigger; the orchestrator
+     * marks it as one server-side. Send it explicitly so the audited trigger payload matches.
+     */
+    isRollbackDeployment: true
 }
 
 export interface GetResourceConflictDetailsParamsType extends Pick<
