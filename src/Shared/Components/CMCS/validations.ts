@@ -239,7 +239,7 @@ export const getConfigMapSecretFormValidations: UseFormValidations<ConfigMapSecr
             pattern: {
                 value: PATTERNS.CONFIGMAP_AND_SECRET_NAME_WITH_SCOPE_VARIABLES,
                 message:
-                    "Name must start and end with an alphanumeric character. It can contain only lowercase alphanumeric characters, '-' or '.'",
+                    "Name must start and end with an alphanumeric character. It can contain only lowercase alphanumeric characters, '-' or '.'. Alternatively, a scope variable can be used in the format @{{variable-name}}",
             },
             custom: {
                 isValid: (value) => value.length <= 253,
