@@ -14,6 +14,7 @@ export type NavigationItemID =
     | 'infrastructure-management-chart-store'
     | 'infrastructure-management-resource-browser'
     | 'infrastructure-management-resource-watcher'
+    | 'infrastructure-management-observability'
     | 'infrastructure-management-catalog-framework'
     | 'software-release-management-overview'
     | 'software-release-management-release-hub'

@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { prefixZeroIfSingleDigit } from '@Common/Helper'
+
 import { SelectPickerOptionType } from '../SelectPicker'
 import { MONTHLY_DATES_CONFIG, TIME_OPTIONS_CONFIG } from './constants'
 
@@ -111,4 +113,23 @@ export const getDefaultDateFromTimeToLive = (timeToLive: string, isTomorrow?: bo
     const nextDate = new Date(date)
     nextDate.setHours(hours, minutes, 0)
     return nextDate
+}
+
+// Need to send either the relative time like: now-5m or the timestamp to grafana
+// Assuming format is 'DD-MM-YYYY hh:mm:ss'
+export const getTimestampFromDateIfAvailable = (dateString: string): string => {
+    try {
+        const [day, month, yearAndTime] = dateString.split('-')
+        const [year, time] = yearAndTime.split(' ')
+        const updatedTime = time
+            .split(':')
+            .map((item) => (['0', '00'].includes(item) ? '00' : prefixZeroIfSingleDigit(Number(item))))
+            .join(':')
+        const formattedDate = `${year}-${prefixZeroIfSingleDigit(Number(month))}-${prefixZeroIfSingleDigit(Number(day))}T${updatedTime}`
+        const parsedDate = new Date(formattedDate).getTime()
+
+        return Number.isNaN(parsedDate) ? dateString : parsedDate.toString()
+    } catch {
+        return dateString
+    }
 }
