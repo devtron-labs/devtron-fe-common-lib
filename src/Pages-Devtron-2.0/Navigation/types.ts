@@ -37,6 +37,7 @@ export type NavigationItemID =
     | 'global-configuration-container-oci-registry'
     | 'global-configuration-authorization'
     | 'global-configuration-projects'
+    | 'global-configuration-plugins'
     | 'data-protection-overview'
     | 'data-protection-backup-and-schedule'
     | 'data-protection-restores'
