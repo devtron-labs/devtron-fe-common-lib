@@ -14,6 +14,8 @@
  * limitations under the License.
  */
 
+import { Easing } from 'framer-motion'
+
 import { TestimonialCardConfig } from './types'
 
 export const TESTIMONIAL_CARD_DATA: TestimonialCardConfig[] = [
@@ -68,4 +70,4 @@ export const TESTIMONIAL_CARD_DATA: TestimonialCardConfig[] = [
 ]
 
 export const TESTIMONIAL_CARD_INTERVAL = 5000 // duration (in ms) for each testimonial card slide animation
-export const TRANSITION_EASE_CURVE = [0.25, 0.8, 0.25, 1]
+export const TRANSITION_EASE_CURVE: Easing = [0.25, 0.8, 0.25, 1]
