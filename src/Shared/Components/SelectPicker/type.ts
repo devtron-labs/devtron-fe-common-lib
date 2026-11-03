@@ -360,6 +360,7 @@ export interface FilterSelectPickerProps
             | 'menuIsOpen'
             | 'onKeyDown'
             | 'isUserIdentifier'
+            | 'multiSelectProps'
         > {
     appliedFilterOptions: SelectPickerOptionType[]
     handleApplyFilter: (filtersToApply: SelectPickerOptionType<number | string>[]) => void
