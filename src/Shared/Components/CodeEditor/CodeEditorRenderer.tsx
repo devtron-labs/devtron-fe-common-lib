@@ -248,6 +248,8 @@ export const CodeEditorRenderer = ({
         }
 
         return () => {
+            codeMirrorMergeRef.current?.destroy()
+            diffMinimapRef.current?.destroy()
             setCodeMirrorMergeInstance(null)
             setDiffMinimapInstance(null)
             codeMirrorMergeRef.current = null
