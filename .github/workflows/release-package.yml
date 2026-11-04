@@ -4,6 +4,10 @@ on:
     release:
         types: [created]
 
+permissions:
+    contents: read
+    id-token: write
+
 jobs:
     build-and-publish:
         name: Build and Publish to NPM Registry
@@ -34,14 +38,12 @@ jobs:
               run: |
                   VERSION=$(node -p "require('./package.json').version")
                   
-                  if [[ $VERSION == *"-beta."* ]]; then
-                    npm publish --access public --tag beta
+                  if [[ $VERSION == *"-beta"* ]]; then
+                    npm publish --provenance --access public --tag beta
 
                   elif [[ $VERSION == *"-"* ]]; then
-                    npm publish --access public --tag next
+                    npm publish --provenance --access public --tag next
 
                   else
-                    npm publish --access public
+                    npm publish --provenance --access public
                   fi
-              env:
-                  NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
