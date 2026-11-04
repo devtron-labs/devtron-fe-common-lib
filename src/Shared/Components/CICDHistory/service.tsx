@@ -320,6 +320,7 @@ export const resourceConflictRedeploy = async ({
         wfrIdForDeploymentWithSpecificTrigger: +triggerId,
         appId: +appId,
         helmRedeploymentRequest: true,
+        isRollbackDeployment: true,
     })
 
     ToastManager.showToast({
